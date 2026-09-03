@@ -1,42 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="utf-8">
 
-<meta name="theme-color" content="#07070c">
-<meta name="description"
-      content="CrowRules Entertainment Admin v5.0 — Command Center">
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>CrowRules Entertainment — Admin v5.0</title>
+<meta
+  name="theme-color"
+  content="#050509">
+
+<meta
+  name="description"
+  content="CrowRules Entertainment Admin v5.1 — Universal Supabase Command Center">
+
+<title>CrowRules Entertainment — Admin v5.1</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap"
-      rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap"
+  rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
+/* =========================================================
+   CROWRULES ENTERTAINMENT
+   ADMIN v5.1
+   UNIVERSAL SUPABASE COMMAND CENTER
+========================================================= */
+
 :root{
-  --bg:#07070c;
-  --bg2:#0c0c14;
-  --panel:#10101a;
-  --panel2:#151521;
-  --panel3:#1b1b29;
-  --border:#29293a;
-  --text:#f4f4f8;
-  --muted:#9999ad;
-  --purple:#9b5cff;
-  --purple2:#7137d9;
-  --cyan:#29d9ff;
-  --green:#42e69b;
+  --bg:#050509;
+  --bg2:#090910;
+  --panel:#0d0d16;
+  --panel2:#11111b;
+  --panel3:#161621;
+  --border:#252536;
+
+  --text:#f4f4f7;
+  --muted:#8f8fa3;
+  --muted2:#66667a;
+
+  --purple:#9d5cff;
+  --purple2:#6d32d9;
+  --cyan:#28d9ff;
+  --green:#48e69d;
   --yellow:#ffd166;
+  --orange:#ff9d42;
   --red:#ff5d73;
-  --orange:#ff9f43;
-  --shadow:0 15px 50px rgba(0,0,0,.35);
-  --radius:16px;
+
+  --shadow:0 20px 70px rgba(0,0,0,.45);
+
+  --radius:15px;
+
+  --sidebar:275px;
 }
 
 *{
@@ -59,8 +81,8 @@ body{
 
 button,
 input,
-select,
-textarea{
+textarea,
+select{
   font:inherit;
 }
 
@@ -68,10 +90,40 @@ button{
   cursor:pointer;
 }
 
-a{
-  color:inherit;
-  text-decoration:none;
+button:disabled{
+  cursor:not-allowed;
+  opacity:.45;
 }
+
+input,
+textarea,
+select{
+  width:100%;
+  background:#07070d;
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:9px;
+  padding:11px 12px;
+  outline:none;
+  transition:.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px rgba(157,92,255,.12);
+}
+
+textarea{
+  min-height:125px;
+  resize:vertical;
+}
+
+.hidden{
+  display:none!important;
+}
+
 
 /* =========================================================
    LOGIN
@@ -82,24 +134,34 @@ a{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:30px;
+  padding:25px;
+
   background:
-    radial-gradient(circle at 20% 20%,rgba(155,92,255,.16),transparent 35%),
-    radial-gradient(circle at 80% 70%,rgba(41,217,255,.10),transparent 35%),
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(157,92,255,.16),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(40,217,255,.10),
+      transparent 35%
+    ),
     var(--bg);
 }
 
 .login-card{
-  width:min(460px,100%);
-  background:rgba(16,16,26,.95);
+  width:min(480px,100%);
+  padding:38px;
+  background:rgba(13,13,22,.96);
   border:1px solid var(--border);
-  border-radius:24px;
-  padding:36px;
+  border-radius:23px;
   box-shadow:var(--shadow);
 }
 
 .logo{
   font-family:Orbitron,sans-serif;
+  font-size:22px;
   font-weight:900;
   letter-spacing:2px;
 }
@@ -108,64 +170,54 @@ a{
   color:var(--purple);
 }
 
+.login-version{
+  margin-top:5px;
+  color:var(--muted2);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.4px;
+}
+
 .login-card h1{
-  margin:0 0 8px;
+  margin:32px 0 8px;
   font-family:Orbitron,sans-serif;
   font-size:25px;
 }
 
 .login-card p{
   color:var(--muted);
-  line-height:1.6;
+  line-height:1.65;
+  font-size:12px;
 }
 
 .login-form{
   display:grid;
-  gap:14px;
+  gap:13px;
   margin-top:25px;
 }
 
-.field-label{
-  color:#cfcfe0;
-  font-size:12px;
-  font-weight:800;
+.form-field{
+  display:grid;
+  gap:6px;
+}
+
+.form-field label{
+  color:#aaaabb;
+  font-size:9px;
+  font-weight:900;
   text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-input,
-select,
-textarea{
-  width:100%;
-  color:var(--text);
-  background:#090910;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:12px 13px;
-  outline:none;
-  transition:.2s;
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:var(--purple);
-  box-shadow:0 0 0 3px rgba(155,92,255,.12);
-}
-
-textarea{
-  min-height:120px;
-  resize:vertical;
+  letter-spacing:.9px;
 }
 
 .login-status{
-  min-height:22px;
+  min-height:20px;
   color:var(--red);
-  font-size:13px;
+  font-size:11px;
 }
 
+
 /* =========================================================
-   APP
+   APPLICATION
 ========================================================= */
 
 .app{
@@ -174,8 +226,9 @@ textarea{
 }
 
 .app.active{
-  display:flex;
+  display:block;
 }
+
 
 /* =========================================================
    SIDEBAR
@@ -183,152 +236,194 @@ textarea{
 
 .sidebar{
   position:fixed;
-  inset:0 auto 0 0;
-  width:265px;
-  background:#090910;
-  border-right:1px solid var(--border);
+  z-index:200;
+  left:0;
+  top:0;
+  bottom:0;
+  width:var(--sidebar);
+
   display:flex;
   flex-direction:column;
-  z-index:100;
+
+  background:#08080e;
+  border-right:1px solid var(--border);
 }
 
 .sidebar-header{
-  padding:22px 20px;
+  padding:20px;
   border-bottom:1px solid var(--border);
 }
 
-.brand{
+.sidebar-brand{
   font-family:Orbitron,sans-serif;
   font-size:18px;
   font-weight:900;
   letter-spacing:1px;
 }
 
-.brand span{
+.sidebar-brand span{
   color:var(--purple);
 }
 
-.admin-label{
-  margin-top:6px;
-  color:var(--muted);
-  font-size:11px;
-  letter-spacing:1px;
+.sidebar-sub{
+  margin-top:5px;
+  color:var(--muted2);
+  font-size:9px;
   text-transform:uppercase;
+  letter-spacing:1.2px;
 }
 
 .nav{
   flex:1;
   overflow-y:auto;
-  padding:12px;
+  padding:11px;
 }
 
 .nav-section{
-  margin:18px 8px 7px;
-  color:#66667b;
-  font-size:10px;
+  margin:17px 8px 7px;
+  color:#555568;
+  font-size:9px;
   font-weight:900;
   text-transform:uppercase;
   letter-spacing:1.5px;
 }
 
-.nav button{
+.nav-btn{
   width:100%;
   display:flex;
   align-items:center;
-  gap:11px;
-  padding:10px 11px;
+  gap:10px;
+
+  padding:9px 10px;
   margin-bottom:3px;
-  color:#aaaabd;
+
   background:transparent;
   border:1px solid transparent;
-  border-radius:9px;
+  border-radius:8px;
+
+  color:#a2a2b5;
   text-align:left;
-  font-size:12px;
-  font-weight:600;
+  font-size:11px;
+  font-weight:700;
 }
 
-.nav button:hover{
-  background:#11111b;
+.nav-btn:hover{
+  background:#11111a;
   color:white;
 }
 
-.nav button.active{
+.nav-btn.active{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(157,92,255,.22),
+      rgba(157,92,255,.04)
+    );
+
+  border-color:rgba(157,92,255,.28);
   color:white;
-  background:linear-gradient(
-    90deg,
-    rgba(155,92,255,.22),
-    rgba(155,92,255,.06)
-  );
-  border-color:rgba(155,92,255,.25);
 }
 
 .nav-icon{
   width:22px;
   text-align:center;
+  font-size:13px;
+}
+
+.nav-count{
+  margin-left:auto;
+  color:#77778a;
+  font-size:9px;
 }
 
 .sidebar-footer{
-  padding:12px;
+  padding:11px;
   border-top:1px solid var(--border);
 }
 
-.user-box{
-  padding:12px;
-  background:#10101a;
+.user-card{
+  padding:11px;
+  background:#0e0e17;
   border:1px solid var(--border);
-  border-radius:10px;
-  margin-bottom:10px;
+  border-radius:9px;
+  margin-bottom:9px;
+}
+
+.user-label{
+  color:#555568;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
 .user-email{
+  margin-top:5px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
-  color:#d9d9e5;
-  font-size:11px;
+  color:#d7d7e2;
+  font-size:10px;
 }
+
 
 /* =========================================================
    MAIN
 ========================================================= */
 
 .main{
-  width:calc(100% - 265px);
-  margin-left:265px;
+  margin-left:var(--sidebar);
   min-height:100vh;
 }
 
 .topbar{
   position:sticky;
   top:0;
-  z-index:50;
+  z-index:100;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+
+  min-height:62px;
+  padding:11px 22px;
+
+  background:rgba(5,5,9,.91);
+  backdrop-filter:blur(18px);
+
+  border-bottom:1px solid var(--border);
+}
+
+.topbar-left{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  padding:15px 25px;
-  background:rgba(7,7,12,.92);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
+  gap:10px;
+  min-width:0;
 }
 
 .topbar-title{
   font-family:Orbitron,sans-serif;
-  font-size:15px;
+  font-size:14px;
   font-weight:800;
+}
+
+.topbar-subtitle{
+  color:var(--muted);
+  font-size:9px;
 }
 
 .topbar-right{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:7px;
 }
 
 .page{
-  padding:25px;
-  max-width:1700px;
+  max-width:1800px;
   margin:auto;
+  padding:24px;
 }
+
 
 /* =========================================================
    BUTTONS
@@ -336,48 +431,65 @@ textarea{
 
 .btn{
   border:1px solid var(--border);
-  border-radius:9px;
-  background:#151521;
-  color:#e9e9f0;
-  padding:9px 13px;
-  font-size:12px;
+  border-radius:8px;
+
+  background:#14141e;
+  color:#e7e7ee;
+
+  padding:9px 12px;
+
+  font-size:10px;
   font-weight:800;
+
   transition:.2s;
 }
 
 .btn:hover{
-  border-color:#45455b;
+  border-color:#414156;
   transform:translateY(-1px);
 }
 
 .btn.primary{
-  background:linear-gradient(135deg,var(--purple),var(--purple2));
-  border-color:transparent;
   color:white;
+  border-color:transparent;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--purple2)
+    );
 }
 
 .btn.cyan{
-  background:rgba(41,217,255,.12);
   color:var(--cyan);
-  border-color:rgba(41,217,255,.25);
+  background:rgba(40,217,255,.08);
+  border-color:rgba(40,217,255,.24);
 }
 
 .btn.green{
-  background:rgba(66,230,155,.11);
   color:var(--green);
-  border-color:rgba(66,230,155,.25);
+  background:rgba(72,230,157,.08);
+  border-color:rgba(72,230,157,.24);
+}
+
+.btn.yellow{
+  color:var(--yellow);
+  background:rgba(255,209,102,.08);
+  border-color:rgba(255,209,102,.24);
 }
 
 .btn.red{
-  background:rgba(255,93,115,.1);
   color:var(--red);
-  border-color:rgba(255,93,115,.25);
+  background:rgba(255,93,115,.08);
+  border-color:rgba(255,93,115,.24);
 }
 
 .btn.small{
-  padding:6px 9px;
-  font-size:10px;
+  padding:6px 8px;
+  font-size:9px;
 }
+
 
 /* =========================================================
    PAGE HEADER
@@ -388,72 +500,35 @@ textarea{
   justify-content:space-between;
   align-items:flex-start;
   gap:20px;
-  margin-bottom:22px;
+
+  margin-bottom:19px;
 }
 
 .page-header h1{
   margin:0;
+
   font-family:Orbitron,sans-serif;
-  font-size:24px;
+  font-size:23px;
 }
 
 .page-header p{
-  margin:8px 0 0;
+  margin:7px 0 0;
+
   color:var(--muted);
-  font-size:13px;
+  font-size:11px;
+  line-height:1.5;
 }
 
 .page-actions{
   display:flex;
-  gap:8px;
   flex-wrap:wrap;
+  gap:7px;
 }
+
 
 /* =========================================================
-   DASHBOARD
+   PANELS
 ========================================================= */
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.stat{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:17px;
-  box-shadow:0 8px 30px rgba(0,0,0,.16);
-}
-
-.stat-label{
-  color:var(--muted);
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  font-weight:800;
-}
-
-.stat-value{
-  margin-top:8px;
-  font-family:Orbitron,sans-serif;
-  font-size:25px;
-  font-weight:800;
-}
-
-.stat-sub{
-  margin-top:5px;
-  color:#77778b;
-  font-size:10px;
-}
-
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:1.5fr 1fr;
-  gap:16px;
-}
 
 .panel{
   background:var(--panel);
@@ -464,78 +539,140 @@ textarea{
 
 .panel-header{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   gap:12px;
-  padding:15px 17px;
+
+  padding:14px 16px;
   border-bottom:1px solid var(--border);
 }
 
 .panel-title{
   font-family:Orbitron,sans-serif;
-  font-size:12px;
+  font-size:10px;
   font-weight:800;
+  letter-spacing:.7px;
 }
 
 .panel-body{
   padding:16px;
 }
 
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.stat{
+  padding:15px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:13px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:900;
+}
+
+.stat-value{
+  margin-top:7px;
+
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+  font-weight:800;
+}
+
+.stat-sub{
+  margin-top:5px;
+  color:var(--muted2);
+  font-size:9px;
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:14px;
+}
+
 .quick-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:10px;
+  gap:9px;
 }
 
-.quick{
-  padding:15px;
+.quick-card{
+  display:block;
+  width:100%;
+
+  padding:14px;
+
+  background:#0a0a11;
   border:1px solid var(--border);
-  border-radius:11px;
-  background:#0c0c14;
+  border-radius:10px;
+
   text-align:left;
+  color:var(--text);
 }
 
-.quick:hover{
+.quick-card:hover{
   border-color:var(--purple);
 }
 
 .quick-icon{
-  font-size:20px;
+  font-size:18px;
 }
 
 .quick-title{
   margin-top:8px;
-  font-size:12px;
-  font-weight:800;
+  font-size:10px;
+  font-weight:900;
 }
 
 .quick-desc{
   margin-top:4px;
   color:var(--muted);
-  font-size:10px;
-  line-height:1.4;
+  font-size:9px;
+  line-height:1.45;
 }
 
+
 /* =========================================================
-   TABLE TOOLBAR
+   TABLE
 ========================================================= */
 
 .toolbar{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:10px;
+  align-items:center;
+  gap:9px;
   flex-wrap:wrap;
-  padding:13px;
-  background:#0d0d16;
+
+  padding:11px;
+
+  background:#0b0b12;
   border-bottom:1px solid var(--border);
 }
 
-.toolbar-left,
-.toolbar-right{
+.toolbar-group{
   display:flex;
   align-items:center;
-  gap:7px;
+  gap:6px;
   flex-wrap:wrap;
 }
 
@@ -544,42 +681,57 @@ textarea{
 }
 
 .table-wrap{
+  width:100%;
+  max-height:62vh;
   overflow:auto;
-  max-height:65vh;
 }
 
 table{
   width:100%;
+  min-width:900px;
   border-collapse:collapse;
-  min-width:850px;
 }
 
 th,
 td{
-  padding:10px 12px;
-  border-bottom:1px solid #1f1f2c;
+  padding:9px 11px;
+
+  border-bottom:1px solid #1c1c28;
+
   text-align:left;
   vertical-align:top;
-  font-size:11px;
+
+  font-size:10px;
 }
 
 th{
   position:sticky;
   top:0;
-  z-index:2;
+  z-index:5;
+
   background:#10101a;
-  color:#9f9fb2;
-  font-size:9px;
+
+  color:#9292a6;
+
+  font-size:8px;
   text-transform:uppercase;
-  letter-spacing:.8px;
+  letter-spacing:.7px;
+}
+
+th.sortable{
+  cursor:pointer;
+}
+
+th.sortable:hover{
+  color:white;
 }
 
 td{
-  color:#d8d8e1;
+  color:#d5d5df;
 }
 
 tr:hover td{
-  background:#13131e;
+  background:#12121b;
 }
 
 .cell{
@@ -591,9 +743,10 @@ tr:hover td{
 
 .actions{
   display:flex;
-  gap:5px;
+  gap:4px;
   white-space:nowrap;
 }
+
 
 /* =========================================================
    BADGES
@@ -602,40 +755,50 @@ tr:hover td{
 .badge{
   display:inline-flex;
   align-items:center;
-  padding:4px 7px;
+
+  padding:3px 6px;
+
   border-radius:999px;
-  font-size:9px;
+
+  background:#20202d;
+  color:#aaaabd;
+
+  font-size:8px;
   font-weight:900;
   text-transform:uppercase;
-  letter-spacing:.4px;
-  background:#20202d;
-  color:#bcbccc;
+  letter-spacing:.35px;
 }
 
 .badge.green{
   color:var(--green);
-  background:rgba(66,230,155,.09);
+  background:rgba(72,230,157,.08);
 }
 
 .badge.red{
   color:var(--red);
-  background:rgba(255,93,115,.09);
+  background:rgba(255,93,115,.08);
 }
 
 .badge.yellow{
   color:var(--yellow);
-  background:rgba(255,209,102,.09);
-}
-
-.badge.purple{
-  color:#c69fff;
-  background:rgba(155,92,255,.10);
+  background:rgba(255,209,102,.08);
 }
 
 .badge.cyan{
   color:var(--cyan);
-  background:rgba(41,217,255,.09);
+  background:rgba(40,217,255,.08);
 }
+
+.badge.purple{
+  color:#c7a2ff;
+  background:rgba(157,92,255,.09);
+}
+
+.badge.orange{
+  color:var(--orange);
+  background:rgba(255,157,66,.08);
+}
+
 
 /* =========================================================
    PAGINATION
@@ -646,59 +809,78 @@ tr:hover td{
   justify-content:space-between;
   align-items:center;
   gap:10px;
-  padding:12px 14px;
+
+  padding:11px 13px;
+
   border-top:1px solid var(--border);
 }
 
 .pagination-info{
   color:var(--muted);
-  font-size:11px;
+  font-size:9px;
 }
 
 .pagination-buttons{
   display:flex;
-  gap:6px;
+  align-items:center;
+  gap:5px;
 }
+
 
 /* =========================================================
-   HEALTH
+   DATABASE RESOURCE CARDS
 ========================================================= */
 
-.health-grid{
+.resource-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:9px;
 }
 
-.health-card{
-  padding:15px;
-  background:#0d0d16;
+.resource-card{
+  padding:13px;
+
+  background:#0a0a11;
   border:1px solid var(--border);
-  border-radius:12px;
+  border-radius:11px;
+
+  cursor:pointer;
 }
 
-.health-card.ok{
-  border-color:rgba(66,230,155,.3);
+.resource-card:hover{
+  border-color:var(--purple);
 }
 
-.health-card.warn{
-  border-color:rgba(255,209,102,.3);
+.resource-icon{
+  font-size:17px;
 }
 
-.health-card.error{
-  border-color:rgba(255,93,115,.35);
-}
-
-.health-name{
-  font-weight:800;
-  font-size:12px;
-}
-
-.health-meta{
-  margin-top:6px;
-  color:var(--muted);
+.resource-name{
+  margin-top:8px;
   font-size:10px;
+  font-weight:900;
 }
+
+.resource-table{
+  margin-top:3px;
+  color:var(--muted2);
+  font-family:monospace;
+  font-size:8px;
+}
+
+.resource-count{
+  margin-top:10px;
+
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+}
+
+.resource-type{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:8px;
+}
+
 
 /* =========================================================
    SCHEMA
@@ -706,231 +888,74 @@ tr:hover td{
 
 .schema-list{
   display:grid;
-  gap:7px;
+  gap:5px;
 }
 
-.schema-item{
+.schema-row{
   display:grid;
-  grid-template-columns:1fr 100px 90px;
-  gap:10px;
-  padding:9px 10px;
-  background:#0c0c14;
-  border:1px solid #1d1d2a;
-  border-radius:8px;
-  font-size:10px;
-}
-
-.schema-item strong{
-  color:#e9e9f2;
-}
-
-.schema-item span{
-  color:var(--muted);
-}
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal-backdrop{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:500;
-  padding:30px;
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(8px);
-  overflow:auto;
-}
-
-.modal-backdrop.open{
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-}
-
-.modal{
-  width:min(900px,100%);
-  margin:auto;
-  background:#10101a;
-  border:1px solid var(--border);
-  border-radius:20px;
-  box-shadow:var(--shadow);
-}
-
-.modal-header{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  align-items:center;
-  padding:18px 20px;
-  border-bottom:1px solid var(--border);
-}
-
-.modal-title{
-  font-family:Orbitron,sans-serif;
-  font-size:14px;
-}
-
-.modal-body{
-  padding:20px;
-}
-
-.modal-footer{
-  display:flex;
-  justify-content:flex-end;
+  grid-template-columns:1.2fr .8fr .7fr .7fr;
   gap:8px;
-  padding:15px 20px;
-  border-top:1px solid var(--border);
-}
 
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-}
+  padding:8px 9px;
 
-.form-field{
-  display:grid;
-  gap:6px;
-}
+  background:#0a0a11;
+  border:1px solid #1b1b27;
+  border-radius:7px;
 
-.form-field.full{
-  grid-column:1/-1;
-}
-
-.form-field label{
-  color:#aaaabd;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:.8px;
-  font-weight:800;
-}
-
-.form-field small{
-  color:#66667a;
   font-size:9px;
 }
 
-/* =========================================================
-   TOAST
-========================================================= */
-
-.toast-container{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  z-index:900;
-  display:grid;
-  gap:8px;
-  width:min(380px,calc(100% - 40px));
+.schema-row strong{
+  color:#e4e4ed;
 }
 
-.toast{
-  padding:13px 15px;
-  background:#151521;
-  border:1px solid var(--border);
-  border-radius:11px;
-  box-shadow:var(--shadow);
-  font-size:11px;
-  animation:toastIn .2s ease;
-}
-
-.toast.success{
-  border-color:rgba(66,230,155,.35);
-}
-
-.toast.error{
-  border-color:rgba(255,93,115,.35);
-}
-
-.toast.info{
-  border-color:rgba(41,217,255,.35);
-}
-
-@keyframes toastIn{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.loading{
-  padding:35px;
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-}
-
-.spinner{
-  width:22px;
-  height:22px;
-  margin:0 auto 10px;
-  border:2px solid #29293a;
-  border-top-color:var(--purple);
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-/* =========================================================
-   EMPTY
-========================================================= */
-
-.empty{
-  padding:40px 20px;
-  text-align:center;
+.schema-row span{
   color:var(--muted);
 }
 
+
 /* =========================================================
-   SEARCH
+   HEALTH
 ========================================================= */
 
-.search-results{
+.health-grid{
   display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:10px;
 }
 
-.search-result{
-  padding:14px;
-  background:#0d0d16;
+.health-card{
+  padding:13px;
+
+  background:#0a0a11;
   border:1px solid var(--border);
-  border-radius:11px;
+  border-radius:10px;
 }
 
-.search-result-head{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
+.health-card.ok{
+  border-color:rgba(72,230,157,.27);
 }
 
-.search-table{
-  color:var(--purple);
-  font-family:Orbitron,sans-serif;
+.health-card.error{
+  border-color:rgba(255,93,115,.3);
+}
+
+.health-card.warn{
+  border-color:rgba(255,209,102,.3);
+}
+
+.health-name{
   font-size:10px;
+  font-weight:900;
 }
 
-.search-preview{
-  margin-top:8px;
-  color:#b8b8c7;
-  font-size:11px;
+.health-detail{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:8px;
   line-height:1.5;
-  white-space:pre-wrap;
-  overflow:hidden;
-  max-height:100px;
 }
+
 
 /* =========================================================
    ACTIVITY
@@ -938,25 +963,28 @@ tr:hover td{
 
 .activity-list{
   display:grid;
-  gap:8px;
+  gap:7px;
 }
 
 .activity-item{
   display:flex;
-  gap:12px;
-  padding:12px;
-  border:1px solid #1f1f2b;
-  border-radius:10px;
-  background:#0c0c14;
+  gap:10px;
+
+  padding:11px;
+
+  background:#0a0a11;
+  border:1px solid #1c1c28;
+  border-radius:9px;
 }
 
 .activity-dot{
-  width:8px;
-  height:8px;
-  margin-top:5px;
-  border-radius:50%;
-  background:var(--purple);
+  width:7px;
+  height:7px;
+  margin-top:4px;
   flex:none;
+
+  background:var(--purple);
+  border-radius:50%;
 }
 
 .activity-main{
@@ -965,15 +993,245 @@ tr:hover td{
 }
 
 .activity-title{
-  font-size:11px;
+  font-size:10px;
   font-weight:800;
 }
 
 .activity-meta{
   margin-top:4px;
   color:var(--muted);
+  font-size:8px;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-results{
+  display:grid;
+  gap:8px;
+}
+
+.search-result{
+  padding:12px;
+
+  background:#0a0a11;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
+
+.search-result-header{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.search-resource{
+  color:var(--purple);
+  font-family:Orbitron,sans-serif;
   font-size:9px;
 }
+
+.search-preview{
+  margin-top:8px;
+
+  color:#b6b6c5;
+
+  font-family:monospace;
+  font-size:9px;
+  line-height:1.5;
+
+  white-space:pre-wrap;
+  overflow:hidden;
+  max-height:120px;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-backdrop{
+  display:none;
+
+  position:fixed;
+  inset:0;
+  z-index:800;
+
+  align-items:flex-start;
+  justify-content:center;
+
+  padding:25px;
+
+  overflow:auto;
+
+  background:rgba(0,0,0,.76);
+  backdrop-filter:blur(8px);
+}
+
+.modal-backdrop.open{
+  display:flex;
+}
+
+.modal{
+  width:min(950px,100%);
+  margin:auto;
+
+  background:#10101a;
+
+  border:1px solid var(--border);
+  border-radius:19px;
+
+  box-shadow:var(--shadow);
+
+  overflow:hidden;
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+
+  padding:16px 18px;
+
+  border-bottom:1px solid var(--border);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:800;
+}
+
+.modal-body{
+  padding:19px;
+}
+
+.modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:7px;
+
+  padding:13px 18px;
+
+  border-top:1px solid var(--border);
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.field-full{
+  grid-column:1/-1;
+}
+
+.field-help{
+  color:var(--muted2);
+  font-size:8px;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast-container{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:1200;
+
+  display:grid;
+  gap:7px;
+
+  width:min(390px,calc(100% - 36px));
+}
+
+.toast{
+  padding:12px 14px;
+
+  background:#15151f;
+
+  border:1px solid var(--border);
+  border-radius:9px;
+
+  box-shadow:var(--shadow);
+
+  font-size:10px;
+
+  animation:toastIn .2s ease;
+}
+
+.toast.success{
+  border-color:rgba(72,230,157,.35);
+}
+
+.toast.error{
+  border-color:rgba(255,93,115,.35);
+}
+
+.toast.info{
+  border-color:rgba(40,217,255,.35);
+}
+
+@keyframes toastIn{
+  from{
+    opacity:0;
+    transform:translateY(8px);
+  }
+
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+
+/* =========================================================
+   LOADING / EMPTY
+========================================================= */
+
+.loading{
+  padding:40px;
+  text-align:center;
+
+  color:var(--muted);
+
+  font-size:10px;
+}
+
+.spinner{
+  width:21px;
+  height:21px;
+
+  margin:0 auto 9px;
+
+  border:2px solid #29293a;
+  border-top-color:var(--purple);
+
+  border-radius:50%;
+
+  animation:spin .7s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.empty{
+  padding:38px 20px;
+  text-align:center;
+
+  color:var(--muted);
+  font-size:10px;
+}
+
 
 /* =========================================================
    MOBILE
@@ -983,8 +1241,13 @@ tr:hover td{
   display:none;
 }
 
-@media(max-width:1200px){
+@media(max-width:1250px){
+
   .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .resource-grid{
     grid-template-columns:repeat(3,1fr);
   }
 
@@ -992,12 +1255,14 @@ tr:hover td{
     grid-template-columns:1fr;
   }
 
-  .health-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
 }
 
-@media(max-width:800px){
+@media(max-width:900px){
+
+  :root{
+    --sidebar:275px;
+  }
+
   .sidebar{
     transform:translateX(-100%);
     transition:.25s;
@@ -1008,7 +1273,6 @@ tr:hover td{
   }
 
   .main{
-    width:100%;
     margin-left:0;
   }
 
@@ -1016,8 +1280,36 @@ tr:hover td{
     display:inline-flex;
   }
 
+  .resource-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .health-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:650px){
+
+  .page{
+    padding:15px;
+  }
+
+  .topbar{
+    padding:10px 13px;
+  }
+
+  .topbar-subtitle{
+    display:none;
+  }
+
   .stats{
     grid-template-columns:repeat(2,1fr);
+  }
+
+  .resource-grid{
+    grid-template-columns:1fr;
   }
 
   .health-grid{
@@ -1032,22 +1324,8 @@ tr:hover td{
     grid-template-columns:1fr;
   }
 
-  .page{
-    padding:17px;
-  }
-
-  .topbar{
-    padding:12px 15px;
-  }
-}
-
-@media(max-width:500px){
-  .stats{
-    grid-template-columns:1fr;
-  }
-
-  .quick-grid{
-    grid-template-columns:1fr;
+  .field-full{
+    grid-column:auto;
   }
 
   .page-header{
@@ -1058,20 +1336,37 @@ tr:hover td{
     min-width:170px;
   }
 
+}
+
+@media(max-width:430px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .quick-grid{
+    grid-template-columns:1fr;
+  }
+
   .login-card{
     padding:25px;
   }
+
 }
+
 </style>
 </head>
 
 <body>
 
+
 <!-- =========================================================
      LOGIN
 ========================================================= -->
 
-<section id="loginScreen" class="login-screen">
+<section
+  id="loginScreen"
+  class="login-screen">
 
   <div class="login-card">
 
@@ -1079,45 +1374,66 @@ tr:hover td{
       CROW<span>RULES</span>
     </div>
 
-    <div style="margin-top:4px;color:#77778a;font-size:11px;">
-      ENTERTAINMENT
+    <div class="login-version">
+      Entertainment Administration
+      ·
+      v5.1
     </div>
 
-    <h1 style="margin-top:28px;">
-      Admin v5.0
+    <h1>
+      Universal Command Center
     </h1>
 
     <p>
-      Command Center access for CrowRules Entertainment.
-      Authenticate with your Supabase admin account.
+      Secure administration interface for the
+      CrowRules Entertainment Supabase backend.
     </p>
 
-    <form id="loginForm" class="login-form">
+    <form
+      id="loginForm"
+      class="login-form">
 
       <div class="form-field">
-        <label>Email</label>
+
+        <label>
+          Administrator Email
+        </label>
+
         <input
           id="loginEmail"
           type="email"
           autocomplete="username"
           required
           placeholder="admin@example.com">
+
       </div>
 
       <div class="form-field">
-        <label>Password</label>
+
+        <label>
+          Password
+        </label>
+
         <input
           id="loginPassword"
           type="password"
           autocomplete="current-password"
           required
           placeholder="••••••••">
+
       </div>
 
-      <div id="loginStatus" class="login-status"></div>
+      <div
+        id="loginStatus"
+        class="login-status">
+      </div>
 
-      <button class="btn primary" type="submit">
+      <button
+        class="btn primary"
+        type="submit">
+
         Sign In
+
       </button>
 
     </form>
@@ -1131,197 +1447,389 @@ tr:hover td{
      APPLICATION
 ========================================================= -->
 
-<div id="app" class="app">
+<div
+  id="app"
+  class="app">
 
-  <!-- SIDEBAR -->
 
-  <aside id="sidebar" class="sidebar">
+  <!-- =======================================================
+       SIDEBAR
+  ======================================================== -->
+
+  <aside
+    id="sidebar"
+    class="sidebar">
 
     <div class="sidebar-header">
 
-      <div class="brand">
+      <div class="sidebar-brand">
         CROW<span>RULES</span>
       </div>
 
-      <div class="admin-label">
-        Entertainment Admin v5.0
+      <div class="sidebar-sub">
+        Admin v5.1 · Supabase Command Center
       </div>
 
     </div>
 
-    <nav id="nav" class="nav">
 
-      <div class="nav-section">Command Center</div>
+    <nav
+      id="nav"
+      class="nav">
 
-      <button data-page="dashboard">
+      <div class="nav-section">
+        Command Center
+      </div>
+
+      <button
+        class="nav-btn"
+        data-page="dashboard">
+
         <span class="nav-icon">⌂</span>
         Dashboard
+
       </button>
 
-      <button data-page="activity">
+      <button
+        class="nav-btn"
+        data-page="activity">
+
         <span class="nav-icon">◉</span>
         Activity
+
       </button>
 
-      <button data-page="search">
+      <button
+        class="nav-btn"
+        data-page="global-search">
+
         <span class="nav-icon">⌕</span>
         Global Search
+
       </button>
 
-      <button data-page="health">
-        <span class="nav-icon">♥</span>
-        System Health
-      </button>
+      <button
+        class="nav-btn"
+        data-page="database">
 
-      <button data-page="database">
         <span class="nav-icon">▦</span>
         Database
+
+      </button>
+
+      <button
+        class="nav-btn"
+        data-page="health">
+
+        <span class="nav-icon">♥</span>
+        System Health
+
       </button>
 
 
-      <div class="nav-section">CrowRules Entertainment</div>
+      <div class="nav-section">
+        Entertainment
+      </div>
 
-      <button data-page="divisions">
+      <button
+        class="nav-btn"
+        data-page="divisions">
+
         <span class="nav-icon">◆</span>
         Divisions
+
       </button>
 
-      <button data-page="productions">
-        <span class="nav-icon">🎬</span>
-        Productions
-      </button>
+      <button
+        class="nav-btn"
+        data-page="projects">
 
-      <button data-page="episodes">
-        <span class="nav-icon">▶</span>
-        Episodes
-      </button>
-
-      <button data-page="projects">
         <span class="nav-icon">◇</span>
         Projects
+
       </button>
 
-      <button data-page="media">
+      <button
+        class="nav-btn"
+        data-page="productions">
+
+        <span class="nav-icon">🎬</span>
+        Productions
+
+      </button>
+
+      <button
+        class="nav-btn"
+        data-page="episodes">
+
+        <span class="nav-icon">▶</span>
+        Episodes
+
+      </button>
+
+      <button
+        class="nav-btn"
+        data-page="media">
+
         <span class="nav-icon">▣</span>
         Media
+
       </button>
 
 
-      <div class="nav-section">Publishing</div>
+      <div class="nav-section">
+        Publishing
+      </div>
 
-      <button data-page="news">
+      <button
+        class="nav-btn"
+        data-page="news">
+
         <span class="nav-icon">📰</span>
         News
+
       </button>
 
-      <button data-page="updates">
+      <button
+        class="nav-btn"
+        data-page="updates">
+
         <span class="nav-icon">↗</span>
         Updates
+
       </button>
 
-      <button data-page="announcements">
+      <button
+        class="nav-btn"
+        data-page="announcements">
+
         <span class="nav-icon">!</span>
         Announcements
+
       </button>
 
-      <button data-page="events">
-        <span class="nav-icon">★</span>
-        Events
+      <button
+        class="nav-btn"
+        data-page="comments">
+
+        <span class="nav-icon">☵</span>
+        Comments
+
       </button>
 
-      <button data-page="schedule">
+
+      <div class="nav-section">
+        Broadcast
+      </div>
+
+      <button
+        class="nav-btn"
+        data-page="schedule">
+
         <span class="nav-icon">▤</span>
         Schedule
+
       </button>
 
+      <button
+        class="nav-btn"
+        data-page="events">
 
-      <div class="nav-section">Networks</div>
+        <span class="nav-icon">★</span>
+        Events
 
-      <button data-page="tv">
+      </button>
+
+      <button
+        class="nav-btn"
+        data-page="tv">
+
         <span class="nav-icon">▣</span>
         CrowRules TV
+
       </button>
 
-      <button data-page="tacoma">
+
+      <div class="nav-section">
+        Networks
+      </div>
+
+      <button
+        class="nav-btn"
+        data-page="tacoma">
+
         <span class="nav-icon">🌲</span>
         Tacoma Nights
+
       </button>
 
-      <button data-page="podcasting">
+      <button
+        class="nav-btn"
+        data-page="podcasting">
+
         <span class="nav-icon">🎙</span>
         Podcasting
+
       </button>
 
-      <button data-page="sports">
+      <button
+        class="nav-btn"
+        data-page="sports">
+
         <span class="nav-icon">🏆</span>
         Sports
+
       </button>
 
 
-      <div class="nav-section">Business</div>
+      <div class="nav-section">
+        Business
+      </div>
 
-      <button data-page="partners">
+      <button
+        class="nav-btn"
+        data-page="contacts">
+
+        <span class="nav-icon">✉</span>
+        Contacts
+
+      </button>
+
+      <button
+        class="nav-btn"
+        data-page="partners">
+
         <span class="nav-icon">🤝</span>
         Partners
+
       </button>
 
-      <button data-page="inquiries">
-        <span class="nav-icon">✉</span>
+      <button
+        class="nav-btn"
+        data-page="inquiries">
+
+        <span class="nav-icon">?</span>
         Partnership Inquiries
+
       </button>
 
-      <button data-page="donation_campaigns">
+      <button
+        class="nav-btn"
+        data-page="donation-campaigns">
+
         <span class="nav-icon">♥</span>
         Donation Campaigns
+
       </button>
 
-      <button data-page="donations">
+      <button
+        class="nav-btn"
+        data-page="donations">
+
         <span class="nav-icon">$</span>
         Donations
+
       </button>
 
-      <button data-page="subscribers">
+      <button
+        class="nav-btn"
+        data-page="subscribers">
+
         <span class="nav-icon">♟</span>
         Subscribers
+
       </button>
 
 
-      <div class="nav-section">Planning</div>
+      <div class="nav-section">
+        Planning
+      </div>
 
-      <button data-page="roadmap">
+      <button
+        class="nav-btn"
+        data-page="roadmap">
+
         <span class="nav-icon">➜</span>
         Roadmap
+
       </button>
 
 
-      <div class="nav-section">Administration</div>
+      <div class="nav-section">
+        Administration
+      </div>
 
-      <button data-page="admins">
+      <button
+        class="nav-btn"
+        data-page="admins">
+
         <span class="nav-icon">♙</span>
         Admins
+
       </button>
 
-      <button data-page="audit">
+      <button
+        class="nav-btn"
+        data-page="audit">
+
         <span class="nav-icon">⌁</span>
         Audit Log
+
+      </button>
+
+      <button
+        class="nav-btn"
+        data-page="settings">
+
+        <span class="nav-icon">⚙</span>
+        Site Settings
+
+      </button>
+
+      <div class="nav-section">
+        Supabase
+      </div>
+
+      <button
+        class="nav-btn"
+        data-page="all-resources">
+
+        <span class="nav-icon">✚</span>
+        All Resources
+        <span
+          id="resourceCount"
+          class="nav-count">
+          —
+        </span>
+
       </button>
 
     </nav>
 
+
     <div class="sidebar-footer">
 
-      <div class="user-box">
-        <div style="font-size:9px;color:#66667a;text-transform:uppercase;">
-          Signed in
+      <div class="user-card">
+
+        <div class="user-label">
+          Authenticated Administrator
         </div>
 
-        <div id="userEmail" class="user-email">
+        <div
+          id="userEmail"
+          class="user-email">
           —
         </div>
+
       </div>
 
-      <button id="logoutBtn" class="btn red" style="width:100%;">
+      <button
+        id="logoutBtn"
+        class="btn red"
+        style="width:100%;">
+
         Sign Out
+
       </button>
 
     </div>
@@ -1329,38 +1837,71 @@ tr:hover td{
   </aside>
 
 
-  <!-- MAIN -->
+  <!-- =======================================================
+       MAIN
+  ======================================================== -->
 
   <main class="main">
 
     <header class="topbar">
 
-      <div style="display:flex;align-items:center;gap:10px;">
+      <div class="topbar-left">
 
         <button
           id="mobileMenu"
-          class="btn mobile-menu small">
+          class="btn small mobile-menu">
+
           ☰
+
         </button>
 
-        <div id="topbarTitle" class="topbar-title">
-          Command Center
+        <div>
+
+          <div
+            id="topbarTitle"
+            class="topbar-title">
+
+            Command Center
+
+          </div>
+
+          <div
+            id="topbarSubtitle"
+            class="topbar-subtitle">
+
+            Universal Supabase administration
+
+          </div>
+
         </div>
 
       </div>
 
+
       <div class="topbar-right">
+
+        <span
+          id="authBadge"
+          class="badge green">
+
+          ADMIN VERIFIED
+
+        </span>
 
         <span
           id="realtimeBadge"
           class="badge cyan">
-          REALTIME READY
+
+          REALTIME
+
         </span>
 
         <button
           id="refreshBtn"
           class="btn small">
-          ↻ Refresh
+
+          ↻
+
         </button>
 
       </div>
@@ -1368,8 +1909,10 @@ tr:hover td{
     </header>
 
 
-    <section id="page" class="page">
-      <!-- PAGE CONTENT -->
+    <section
+      id="page"
+      class="page">
+
     </section>
 
   </main>
@@ -1378,42 +1921,59 @@ tr:hover td{
 
 
 <!-- =========================================================
-     MODAL
+     RECORD MODAL
 ========================================================= -->
 
-<div id="modalBackdrop" class="modal-backdrop">
+<div
+  id="modalBackdrop"
+  class="modal-backdrop">
 
   <div class="modal">
 
     <div class="modal-header">
 
-      <div id="modalTitle" class="modal-title">
-        Record
+      <div
+        id="modalTitle"
+        class="modal-title">
+
+        Record Editor
+
       </div>
 
       <button
         id="modalClose"
         class="btn small">
+
         ✕
+
       </button>
 
     </div>
 
-    <div id="modalBody" class="modal-body">
+    <div
+      id="modalBody"
+      class="modal-body">
+
     </div>
 
-    <div id="modalFooter" class="modal-footer">
+    <div
+      id="modalFooter"
+      class="modal-footer">
 
       <button
         id="modalCancel"
         class="btn">
+
         Cancel
+
       </button>
 
       <button
         id="modalSave"
         class="btn primary">
-        Save
+
+        Save Record
+
       </button>
 
     </div>
@@ -1424,16 +1984,19 @@ tr:hover td{
 
 
 <!-- =========================================================
-     TOASTS
+     TOAST
 ========================================================= -->
 
-<div id="toastContainer" class="toast-container"></div>
+<div
+  id="toastContainer"
+  class="toast-container">
+</div>
 
 
 <script>
+
 /* =========================================================
-   CROWRULES ENTERTAINMENT
-   ADMIN v5.0
+   CONFIGURATION
 ========================================================= */
 
 const SUPABASE_URL =
@@ -1457,199 +2020,238 @@ const sb =
 
 
 /* =========================================================
-   TABLE DEFINITIONS
+   KNOWN CROWRULES RESOURCES
 ========================================================= */
 
-const TABLES = {
+const KNOWN_RESOURCES = {
 
   cr_activity_feed:{
     label:'Activity Feed',
+    group:'Administration',
     icon:'◉'
   },
 
   cr_admin_audit_log:{
     label:'Admin Audit Log',
+    group:'Administration',
     icon:'⌁'
   },
 
   cr_admins:{
     label:'Administrators',
-    icon:'♙'
+    group:'Administration',
+    icon:'♙',
+    protected:true
   },
 
   cr_analytics_events:{
     label:'Analytics Events',
+    group:'Analytics',
     icon:'◌'
   },
 
   cr_announcements:{
     label:'Announcements',
+    group:'Publishing',
     icon:'!'
   },
 
   cr_audit_log:{
     label:'Audit Log',
+    group:'Administration',
     icon:'⌁'
   },
 
   cr_business_hub_modules:{
     label:'Business Hub Modules',
+    group:'Business',
     icon:'◆'
   },
 
   cr_business_hub_tasks:{
     label:'Business Hub Tasks',
+    group:'Business',
     icon:'✓'
   },
 
   cr_comments:{
     label:'Comments',
+    group:'Publishing',
     icon:'☵'
   },
 
   cr_contacts:{
     label:'Contacts',
+    group:'Business',
     icon:'✉'
   },
 
   cr_content:{
     label:'Content',
+    group:'Publishing',
     icon:'▤'
   },
 
   cr_divisions:{
     label:'Divisions',
+    group:'Entertainment',
     icon:'◆'
   },
 
   cr_donation_campaigns:{
     label:'Donation Campaigns',
+    group:'Business',
     icon:'♥'
   },
 
   cr_donation_events:{
     label:'Donation Events',
+    group:'Business',
     icon:'$'
   },
 
   cr_donation_settings:{
     label:'Donation Settings',
+    group:'Business',
     icon:'⚙'
   },
 
   cr_donation_stats:{
     label:'Donation Stats',
+    group:'Business',
     icon:'$'
   },
 
   cr_episodes:{
     label:'Episodes',
+    group:'Entertainment',
     icon:'▶'
   },
 
   cr_events:{
     label:'Events',
+    group:'Broadcast',
     icon:'★'
   },
 
   cr_media:{
     label:'Media',
+    group:'Entertainment',
     icon:'▣'
   },
 
   cr_nav_links:{
     label:'Navigation Links',
+    group:'Publishing',
     icon:'☰'
   },
 
   cr_news:{
     label:'News',
+    group:'Publishing',
     icon:'📰'
   },
 
   cr_news_sources:{
     label:'News Sources',
+    group:'Publishing',
     icon:'◎'
   },
 
   cr_notifications:{
     label:'Notifications',
+    group:'Administration',
     icon:'🔔'
   },
 
   cr_original_productions:{
     label:'Original Productions',
+    group:'Entertainment',
     icon:'🎬'
   },
 
   cr_partners:{
     label:'Partners',
+    group:'Business',
     icon:'🤝'
   },
 
   cr_partnership_inquiries:{
     label:'Partnership Inquiries',
-    icon:'✉'
+    group:'Business',
+    icon:'?'
   },
 
   cr_production_features:{
     label:'Production Features',
+    group:'Entertainment',
     icon:'⚙'
   },
 
   cr_profiles:{
     label:'Profiles',
+    group:'Members',
     icon:'♟'
   },
 
   cr_projects:{
     label:'Projects',
+    group:'Entertainment',
     icon:'◇'
   },
 
   cr_public_donation_stats:{
     label:'Public Donation Stats',
+    group:'Business',
     icon:'$',
     readonly:true
   },
 
   cr_roadmap:{
     label:'Roadmap',
+    group:'Planning',
     icon:'➜'
   },
 
   cr_schedule:{
     label:'Schedule',
+    group:'Broadcast',
     icon:'▤'
   },
 
   cr_site_settings:{
     label:'Site Settings',
+    group:'Administration',
     icon:'⚙'
   },
 
   cr_social_links:{
     label:'Social Links',
+    group:'Publishing',
     icon:'●'
   },
 
   cr_subscribers:{
     label:'Subscribers',
+    group:'Members',
     icon:'♟'
   },
 
   cr_updates:{
     label:'Updates',
+    group:'Publishing',
     icon:'↗'
   },
 
   donations:{
     label:'Donations',
+    group:'Business',
     icon:'$'
   },
 
   tacoma_nights_episodes:{
     label:'Tacoma Nights Episodes',
+    group:'Tacoma Nights',
     icon:'🌲'
   }
 
@@ -1657,7 +2259,85 @@ const TABLES = {
 
 
 /* =========================================================
-   SPECIAL PAGE CONFIG
+   POSSIBLE EXPANSION TABLES
+========================================================= */
+
+const RESOURCE_ALIASES = {
+
+  /*
+   * Existing / future CrowRules TV resources
+   */
+
+  tv_channels:'CrowRules TV Channels',
+  tv_channel_playlist:'TV Channel Playlist',
+  schedule_items:'TV Schedule Items',
+  shows:'Shows',
+  episodes:'Episodes',
+  movie_catalog:'Movie Catalog',
+  tv_movies:'TV Movies',
+  tv_episodes:'TV Episodes',
+  tv_live_events:'TV Live Events',
+  tv_members:'TV Members',
+  watch_history:'Watch History',
+  watch_time:'Watch Time',
+  favorites:'Favorites',
+  creator_channels:'Creator Channels',
+
+  /*
+   * Podcasting
+   */
+
+  podcasts:'Podcasts',
+  podcast_shows:'Podcast Shows',
+  podcast_episodes:'Podcast Episodes',
+  podcast_hosts:'Podcast Hosts',
+  podcast_guests:'Podcast Guests',
+  podcast_applications:'Podcast Applications',
+  podcast_submissions:'Podcast Submissions',
+
+  /*
+   * Sports
+   */
+
+  sports_leagues:'Sports Leagues',
+  sports_teams:'Sports Teams',
+  sports_games:'Sports Games',
+  sports_scores:'Sports Scores',
+  sports_standings:'Sports Standings',
+  sports_news:'Sports News',
+  sports_events:'Sports Events',
+
+  /*
+   * Studios
+   */
+
+  studio_projects:'Studio Projects',
+  studio_productions:'Studio Productions',
+  studio_episodes:'Studio Episodes',
+
+  /*
+   * Members
+   */
+
+  members:'Members',
+  member_profiles:'Member Profiles',
+  member_points:'Member Points',
+  member_favorites:'Member Favorites',
+  member_watch_history:'Member Watch History',
+
+  /*
+   * Memorials / special programming
+   */
+
+  celebrity_deaths:'Celebrity Deaths',
+  celebrity_memorials:'Celebrity Memorials',
+  memorials:'Memorials'
+
+};
+
+
+/* =========================================================
+   PAGE CONFIGURATION
 ========================================================= */
 
 const PAGES = {
@@ -1669,28 +2349,34 @@ const PAGES = {
 
   activity:{
     title:'Activity',
-    subtitle:'Recent administrative activity and system events.'
+    subtitle:'Administrative activity and system events.'
   },
 
-  search:{
+  'global-search':{
     title:'Global Search',
-    subtitle:'Search across the CrowRules administration database.'
-  },
-
-  health:{
-    title:'System Health',
-    subtitle:'Database connectivity and operational diagnostics.'
+    subtitle:'Search across discovered Supabase resources.'
   },
 
   database:{
     title:'Database',
-    subtitle:'Browse and manage connected Supabase tables.'
+    subtitle:'Universal database explorer.'
+  },
+
+  health:{
+    title:'System Health',
+    subtitle:'Connectivity and Supabase resource diagnostics.'
   },
 
   divisions:{
     title:'Divisions',
-    subtitle:'CrowRules Entertainment business divisions.',
+    subtitle:'CrowRules Entertainment divisions.',
     table:'cr_divisions'
+  },
+
+  projects:{
+    title:'Projects',
+    subtitle:'Current and future CrowRules projects.',
+    table:'cr_projects'
   },
 
   productions:{
@@ -1705,15 +2391,9 @@ const PAGES = {
     table:'cr_episodes'
   },
 
-  projects:{
-    title:'Projects',
-    subtitle:'Current and future CrowRules projects.',
-    table:'cr_projects'
-  },
-
   media:{
     title:'Media',
-    subtitle:'Images, video, audio and other media records.',
+    subtitle:'Images, video, audio and media records.',
     table:'cr_media'
   },
 
@@ -1725,26 +2405,32 @@ const PAGES = {
 
   updates:{
     title:'Updates',
-    subtitle:'CrowRules announcements and company updates.',
+    subtitle:'Company and network updates.',
     table:'cr_updates'
   },
 
   announcements:{
     title:'Announcements',
-    subtitle:'Site and network announcements.',
+    subtitle:'Public-facing announcements.',
     table:'cr_announcements'
+  },
+
+  comments:{
+    title:'Comments',
+    subtitle:'Audience and community comments.',
+    table:'cr_comments'
+  },
+
+  schedule:{
+    title:'Schedule',
+    subtitle:'Broadcast and programming schedule.',
+    table:'cr_schedule'
   },
 
   events:{
     title:'Events',
     subtitle:'Live events and special programming.',
     table:'cr_events'
-  },
-
-  schedule:{
-    title:'Schedule',
-    subtitle:'Programming and broadcast schedule.',
-    table:'cr_schedule'
   },
 
   tv:{
@@ -1761,55 +2447,61 @@ const PAGES = {
 
   podcasting:{
     title:'CrowRules Podcasting',
-    subtitle:'Podcasting-ready production administration.',
+    subtitle:'Podcasting administration.',
     table:'cr_original_productions'
   },
 
   sports:{
     title:'CrowRules Sports',
-    subtitle:'Sports-ready content and production administration.',
+    subtitle:'Sports administration.',
     table:'cr_original_productions'
+  },
+
+  contacts:{
+    title:'Contacts',
+    subtitle:'Business and audience contacts.',
+    table:'cr_contacts'
   },
 
   partners:{
     title:'Partners',
-    subtitle:'Business partners and relationships.',
+    subtitle:'Business partners.',
     table:'cr_partners'
   },
 
   inquiries:{
     title:'Partnership Inquiries',
-    subtitle:'Incoming business and partnership inquiries.',
+    subtitle:'Incoming partnership requests.',
     table:'cr_partnership_inquiries'
   },
 
-  donation_campaigns:{
+  'donation-campaigns':{
     title:'Donation Campaigns',
-    subtitle:'Support campaigns and fundraising configuration.',
+    subtitle:'CrowRules support campaigns.',
     table:'cr_donation_campaigns'
   },
 
   donations:{
     title:'Donations',
-    subtitle:'Donation transaction records.',
+    subtitle:'Donation transactions.',
     table:'donations'
   },
 
   subscribers:{
     title:'Subscribers',
-    subtitle:'CrowRules audience and subscriber records.',
+    subtitle:'Audience subscribers.',
     table:'cr_subscribers'
   },
 
   roadmap:{
     title:'Roadmap',
-    subtitle:'Product, network and company roadmap.',
+    subtitle:'CrowRules product and business roadmap.',
     table:'cr_roadmap'
   },
 
   admins:{
     title:'Administrators',
-    subtitle:'Authorized CrowRules administration accounts.',
+    subtitle:'Authorized CrowRules administrators.',
     table:'cr_admins'
   },
 
@@ -1817,6 +2509,17 @@ const PAGES = {
     title:'Audit Log',
     subtitle:'Administrative change history.',
     table:'cr_admin_audit_log'
+  },
+
+  settings:{
+    title:'Site Settings',
+    subtitle:'CrowRules global configuration.',
+    table:'cr_site_settings'
+  },
+
+  'all-resources':{
+    title:'All Resources',
+    subtitle:'Every Supabase resource available to this client.'
   }
 
 };
@@ -1834,44 +2537,53 @@ const state = {
 
   page:'dashboard',
 
-  table:'cr_original_productions',
+  table:null,
 
   rows:[],
 
   filtered:[],
 
+  schema:[],
+
+  resources:[],
+
+  counts:{},
+
   pageNum:1,
 
   pageSize:25,
 
-  sort:'',
+  sort:null,
 
   sortDir:'desc',
 
   search:'',
 
+  realtime:null,
+
+  realtimeReady:false,
+
+  editing:false,
+
   editingId:null,
 
   editingRow:null,
 
-  schema:[],
+  resourceFilter:'',
 
-  counts:{},
-
-  health:[],
-
-  realtime:null
+  loading:false
 
 };
 
 
 /* =========================================================
-   HELPERS
+   UTILITY
 ========================================================= */
 
 function esc(value){
 
-  if(value === null || value === undefined){
+  if(value===null ||
+     value===undefined){
     return '';
   }
 
@@ -1881,49 +2593,40 @@ function esc(value){
     .replaceAll('>','&gt;')
     .replaceAll('"','&quot;')
     .replaceAll("'","&#039;");
+
 }
 
 
-function toast(message,type='info'){
+function prettyName(table){
 
-  const box =
-    document.createElement('div');
+  if(KNOWN_RESOURCES[table]){
+    return KNOWN_RESOURCES[table].label;
+  }
 
-  box.className =
-    `toast ${type}`;
+  if(RESOURCE_ALIASES[table]){
+    return RESOURCE_ALIASES[table];
+  }
 
-  box.textContent =
-    message;
+  return String(table || '')
+    .replace(/^cr_/,'')
+    .replaceAll('_',' ')
+    .replace(/\b\w/g,c=>c.toUpperCase());
 
-  document
-    .getElementById('toastContainer')
-    .appendChild(box);
-
-  setTimeout(()=>{
-    box.remove();
-  },4000);
-}
-
-
-function prettyTable(table){
-
-  return TABLES[table]?.label ||
-    table.replaceAll('_',' ');
 }
 
 
 function prettyKey(key){
 
-  return key
+  return String(key || '')
     .replaceAll('_',' ')
-    .replace(/\b\w/g,
-      x=>x.toUpperCase());
+    .replace(/\b\w/g,c=>c.toUpperCase());
+
 }
 
 
 function isUUID(value){
 
-  return typeof value === 'string' &&
+  return typeof value==='string' &&
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
       .test(value);
 
@@ -1943,99 +2646,6 @@ function slugify(value){
 }
 
 
-function formatDate(value){
-
-  if(!value){
-    return '—';
-  }
-
-  const d = new Date(value);
-
-  if(Number.isNaN(d.getTime())){
-    return value;
-  }
-
-  return d.toLocaleString();
-}
-
-
-function formatMoney(value){
-
-  if(value === null || value === undefined || value === ''){
-    return '—';
-  }
-
-  const n = Number(value);
-
-  if(Number.isNaN(n)){
-    return value;
-  }
-
-  return new Intl.NumberFormat(
-    'en-US',
-    {
-      style:'currency',
-      currency:'USD'
-    }
-  ).format(n);
-
-}
-
-
-function valueBadge(key,value){
-
-  const k =
-    String(key || '').toLowerCase();
-
-  if(
-    value === true ||
-    value === false
-  ){
-
-    return value
-      ? '<span class="badge green">TRUE</span>'
-      : '<span class="badge red">FALSE</span>';
-
-  }
-
-  if(
-    k.includes('status') ||
-    k.includes('state')
-  ){
-
-    const v =
-      String(value || '').toLowerCase();
-
-    let cls='';
-
-    if(
-      ['published','active','live','approved','complete','completed']
-        .includes(v)
-    ){
-      cls='green';
-    }
-
-    if(
-      ['draft','pending','scheduled','planned']
-        .includes(v)
-    ){
-      cls='yellow';
-    }
-
-    if(
-      ['cancelled','canceled','failed','rejected','archived']
-        .includes(v)
-    ){
-      cls='red';
-    }
-
-    return `<span class="badge ${cls}">${esc(value)}</span>`;
-  }
-
-  return esc(value);
-}
-
-
 function safeJson(value){
 
   try{
@@ -2047,55 +2657,98 @@ function safeJson(value){
 }
 
 
-/* =========================================================
-   AUTH
-========================================================= */
+function formatDate(value){
 
-async function checkAdmin(user){
-
-  if(!user){
-    return false;
+  if(!value){
+    return '—';
   }
 
-  try{
+  const d=new Date(value);
 
-    const {
-      data,
-      error
-    } = await sb
-      .from('cr_admins')
-      .select('*')
-      .eq('user_id',user.id)
-      .limit(1)
-      .maybeSingle();
-
-    if(error){
-      console.warn('Admin check:',error);
-      return false;
-    }
-
-    if(!data){
-      return false;
-    }
-
-    if(
-      data.is_active === false ||
-      data.active === false
-    ){
-      return false;
-    }
-
-    return true;
-
-  }catch(error){
-
-    console.error(error);
-
-    return false;
+  if(Number.isNaN(d.getTime())){
+    return String(value);
   }
+
+  return d.toLocaleString();
 
 }
 
+
+function formatMoney(value){
+
+  const number=Number(value);
+
+  if(!Number.isFinite(number)){
+    return String(value ?? '—');
+  }
+
+  return new Intl.NumberFormat(
+    'en-US',
+    {
+      style:'currency',
+      currency:'USD'
+    }
+  ).format(number);
+
+}
+
+
+function toast(message,type='info'){
+
+  const node =
+    document.createElement('div');
+
+  node.className =
+    `toast ${type}`;
+
+  node.textContent =
+    message;
+
+  document
+    .getElementById('toastContainer')
+    .appendChild(node);
+
+  setTimeout(()=>{
+    node.remove();
+  },4200);
+
+}
+
+
+function errorHtml(message){
+
+  return `
+
+    <div style="
+      padding:25px;
+      color:var(--red);
+    ">
+
+      <strong>
+        Supabase request failed
+      </strong>
+
+      <div style="
+        margin-top:8px;
+        color:#aaaabb;
+        font-size:10px;
+        line-height:1.6;
+      ">
+
+        ${esc(message)}
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
 
 async function initializeAuth(){
 
@@ -2106,12 +2759,15 @@ async function initializeAuth(){
   } =
     await sb.auth.getSession();
 
+
   if(!session){
 
     showLogin();
 
     return;
+
   }
+
 
   const {
     data:{
@@ -2121,36 +2777,98 @@ async function initializeAuth(){
   } =
     await sb.auth.getUser();
 
+
   if(error || !user){
 
     await sb.auth.signOut();
 
-    showLogin();
+    showLogin(
+      'Unable to verify authenticated user.'
+    );
 
     return;
+
   }
 
+
   const admin =
-    await checkAdmin(user);
+    await verifyAdmin(user);
+
 
   if(!admin){
 
     await sb.auth.signOut();
 
     showLogin(
-      'Authenticated account is not authorized for Admin v5.0.'
+      'This authenticated account is not authorized for CrowRules Admin.'
     );
 
     return;
+
   }
 
-  state.user =
-    user;
 
-  state.isAdmin =
-    true;
+  state.user=user;
+  state.isAdmin=true;
+
 
   showApp();
+
+}
+
+
+async function verifyAdmin(user){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await sb
+        .from('cr_admins')
+        .select('*')
+        .eq('user_id',user.id)
+        .limit(1)
+        .maybeSingle();
+
+
+    if(error){
+
+      console.warn(
+        'Admin verification:',
+        error
+      );
+
+      return false;
+
+    }
+
+
+    if(!data){
+      return false;
+    }
+
+
+    if(
+      data.is_active===false ||
+      data.active===false
+    ){
+
+      return false;
+
+    }
+
+
+    return true;
+
+  }catch(error){
+
+    console.error(error);
+
+    return false;
+
+  }
 
 }
 
@@ -2182,10 +2900,14 @@ async function showApp(){
     .getElementById('app')
     .classList.add('active');
 
+
   document
     .getElementById('userEmail')
-    .textContent=
-      state.user?.email || 'Admin';
+    .textContent =
+      state.user?.email || 'Administrator';
+
+
+  await discoverResources();
 
   await renderPage();
 
@@ -2194,74 +2916,91 @@ async function showApp(){
 }
 
 
+/* =========================================================
+   LOGIN EVENTS
+========================================================= */
+
 document
   .getElementById('loginForm')
-  .addEventListener('submit',async event=>{
+  .addEventListener(
+    'submit',
+    async event=>{
 
-    event.preventDefault();
+      event.preventDefault();
 
-    const email =
-      document
-        .getElementById('loginEmail')
-        .value
-        .trim();
 
-    const password =
-      document
-        .getElementById('loginPassword')
-        .value;
+      const email =
+        document
+          .getElementById('loginEmail')
+          .value
+          .trim();
 
-    const status =
-      document
-        .getElementById('loginStatus');
 
-    status.textContent =
-      'Authenticating…';
+      const password =
+        document
+          .getElementById('loginPassword')
+          .value;
 
-    const {
-      error
-    } =
-      await sb.auth.signInWithPassword({
-        email,
-        password
-      });
 
-    if(error){
+      const status =
+        document
+          .getElementById('loginStatus');
+
 
       status.textContent =
-        error.message;
+        'Authenticating…';
 
-      return;
+
+      const {
+        error
+      } =
+        await sb.auth.signInWithPassword({
+          email,
+          password
+        });
+
+
+      if(error){
+
+        status.textContent =
+          error.message;
+
+        return;
+
+      }
+
+
+      status.textContent =
+        'Verifying administrator access…';
+
+
+      await initializeAuth();
+
     }
-
-    status.textContent =
-      'Verifying administrator access…';
-
-    await initializeAuth();
-
-  });
+  );
 
 
 document
   .getElementById('logoutBtn')
-  .addEventListener('click',async()=>{
+  .addEventListener(
+    'click',
+    async()=>{
 
-    await sb.auth.signOut();
+      await sb.auth.signOut();
 
-    state.user=null;
-    state.isAdmin=false;
+      state.user=null;
+      state.isAdmin=false;
 
-    showLogin();
+      showLogin();
 
-  });
+    }
+  );
 
 
 sb.auth.onAuthStateChange(
-  async(event,session)=>{
+  async(event)=>{
 
-    if(
-      event === 'SIGNED_OUT'
-    ){
+    if(event==='SIGNED_OUT'){
 
       state.user=null;
       state.isAdmin=false;
@@ -2275,62 +3014,391 @@ sb.auth.onAuthStateChange(
 
 
 /* =========================================================
+   RESOURCE DISCOVERY
+========================================================= */
+
+async function discoverResources(){
+
+  /*
+   * The browser cannot safely enumerate PostgreSQL
+   * system catalogs with the publishable key.
+   *
+   * Therefore we start with the known CrowRules
+   * resource registry and probe the resources.
+   *
+   * An optional secured RPC can later replace this
+   * discovery method.
+   */
+
+
+  const known =
+    Object.keys(KNOWN_RESOURCES);
+
+
+  const possible =
+    Object.keys(RESOURCE_ALIASES);
+
+
+  const candidates =
+    [...new Set([
+      ...known,
+      ...possible
+    ])];
+
+
+  const found=[];
+
+
+  /*
+   * Probe resources in batches rather than creating
+   * hundreds of simultaneous requests.
+   */
+
+  const batchSize=8;
+
+
+  for(
+    let i=0;
+    i<candidates.length;
+    i+=batchSize
+  ){
+
+    const batch =
+      candidates.slice(
+        i,
+        i+batchSize
+      );
+
+
+    const results =
+      await Promise.all(
+        batch.map(
+          table=>probeResource(table)
+        )
+      );
+
+
+    results
+      .filter(Boolean)
+      .forEach(resource=>{
+        found.push(resource);
+      });
+
+  }
+
+
+  state.resources =
+    found.sort(
+      (a,b)=>
+        a.group.localeCompare(b.group) ||
+        a.name.localeCompare(b.name)
+    );
+
+
+  document
+    .getElementById('resourceCount')
+    .textContent =
+      state.resources.length;
+
+
+  /*
+   * Populate sidebar count cache.
+   */
+
+  await refreshResourceCounts();
+
+}
+
+
+async function probeResource(table){
+
+  const started =
+    performance.now();
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await sb
+        .from(table)
+        .select('*')
+        .limit(1);
+
+
+    if(error){
+
+      return null;
+
+    }
+
+
+    const row =
+      data?.[0] || {};
+
+
+    return {
+
+      table,
+
+      name:
+        prettyName(table),
+
+      group:
+        KNOWN_RESOURCES[table]?.group ||
+        inferResourceGroup(table),
+
+      icon:
+        KNOWN_RESOURCES[table]?.icon ||
+        '▦',
+
+      readonly:
+        KNOWN_RESOURCES[table]?.readonly ||
+        false,
+
+      protected:
+        KNOWN_RESOURCES[table]?.protected ||
+        false,
+
+      columns:
+        Object.keys(row),
+
+      responseMs:
+        Math.round(
+          performance.now()-started
+        )
+
+    };
+
+  }catch{
+
+    return null;
+
+  }
+
+}
+
+
+function inferResourceGroup(table){
+
+  const t =
+    String(table).toLowerCase();
+
+
+  if(
+    t.includes('podcast')
+  ){
+    return 'Podcasting';
+  }
+
+
+  if(
+    t.includes('sport') ||
+    t.includes('team') ||
+    t.includes('league') ||
+    t.includes('game')
+  ){
+    return 'Sports';
+  }
+
+
+  if(
+    t.includes('tv') ||
+    t.includes('movie') ||
+    t.includes('watch') ||
+    t.includes('channel')
+  ){
+    return 'CrowRules TV';
+  }
+
+
+  if(
+    t.includes('member') ||
+    t.includes('profile') ||
+    t.includes('subscriber')
+  ){
+    return 'Members';
+  }
+
+
+  if(
+    t.includes('donation') ||
+    t==='donations' ||
+    t.includes('partner') ||
+    t.includes('contact')
+  ){
+    return 'Business';
+  }
+
+
+  if(
+    t.includes('schedule') ||
+    t.includes('event')
+  ){
+    return 'Broadcast';
+  }
+
+
+  if(
+    t.includes('news') ||
+    t.includes('content') ||
+    t.includes('comment') ||
+    t.includes('update')
+  ){
+    return 'Publishing';
+  }
+
+
+  if(
+    t.includes('admin') ||
+    t.includes('audit') ||
+    t.includes('setting')
+  ){
+    return 'Administration';
+  }
+
+
+  return 'Other';
+
+}
+
+
+/* =========================================================
+   RESOURCE COUNTS
+========================================================= */
+
+async function refreshResourceCounts(){
+
+  const resources =
+    state.resources;
+
+
+  for(
+    let i=0;
+    i<resources.length;
+    i++
+  ){
+
+    const resource =
+      resources[i];
+
+
+    const count =
+      await countResource(
+        resource.table
+      );
+
+
+    state.counts[
+      resource.table
+    ] =
+      count;
+
+  }
+
+}
+
+
+async function countResource(table){
+
+  try{
+
+    const {
+      count,
+      error
+    } =
+      await sb
+        .from(table)
+        .select('*',{
+          count:'exact',
+          head:true
+        });
+
+
+    if(error){
+      return null;
+    }
+
+
+    return count ?? 0;
+
+  }catch{
+
+    return null;
+
+  }
+
+}
+
+
+/* =========================================================
    NAVIGATION
 ========================================================= */
 
 document
-  .querySelectorAll('#nav button')
+  .querySelectorAll('.nav-btn')
   .forEach(button=>{
 
-    button.addEventListener('click',()=>{
+    button.addEventListener(
+      'click',
+      ()=>{
 
-      state.page =
-        button.dataset.page;
+        state.page =
+          button.dataset.page;
 
-      document
-        .getElementById('sidebar')
-        .classList.remove('open');
+        document
+          .getElementById('sidebar')
+          .classList.remove('open');
 
-      renderPage();
+        renderPage();
 
-    });
+      }
+    );
 
   });
 
 
 document
   .getElementById('mobileMenu')
-  .addEventListener('click',()=>{
+  .addEventListener(
+    'click',
+    ()=>{
 
-    document
-      .getElementById('sidebar')
-      .classList.toggle('open');
+      document
+        .getElementById('sidebar')
+        .classList.toggle('open');
 
-  });
+    }
+  );
 
 
 document
   .getElementById('refreshBtn')
-  .addEventListener('click',async()=>{
+  .addEventListener(
+    'click',
+    async()=>{
 
-    await renderPage();
+      await refreshCurrentPage();
 
-    toast(
-      'Page refreshed.',
-      'success'
-    );
+      toast(
+        'Command Center refreshed.',
+        'success'
+      );
 
-  });
+    }
+  );
 
 
 /* =========================================================
-   RENDER PAGE
+   PAGE RENDERING
 ========================================================= */
 
 async function renderPage(){
 
   document
-    .querySelectorAll('#nav button')
+    .querySelectorAll('.nav-btn')
     .forEach(button=>{
 
       button.classList.toggle(
@@ -2340,49 +3408,77 @@ async function renderPage(){
 
     });
 
+
   const config =
     PAGES[state.page] ||
     PAGES.dashboard;
+
 
   document
     .getElementById('topbarTitle')
     .textContent =
       config.title;
 
-  if(state.page === 'dashboard'){
+
+  document
+    .getElementById('topbarSubtitle')
+    .textContent =
+      config.subtitle;
+
+
+  if(state.page==='dashboard'){
 
     await renderDashboard();
 
     return;
+
   }
 
-  if(state.page === 'activity'){
+
+  if(state.page==='activity'){
 
     await renderActivity();
 
     return;
+
   }
 
-  if(state.page === 'search'){
 
-    renderSearch();
+  if(state.page==='global-search'){
+
+    renderGlobalSearch();
 
     return;
+
   }
 
-  if(state.page === 'health'){
 
-    await renderHealth();
-
-    return;
-  }
-
-  if(state.page === 'database'){
+  if(state.page==='database'){
 
     await renderDatabase();
 
     return;
+
   }
+
+
+  if(state.page==='health'){
+
+    await renderHealth();
+
+    return;
+
+  }
+
+
+  if(state.page==='all-resources'){
+
+    renderAllResources();
+
+    return;
+
+  }
+
 
   if(config.table){
 
@@ -2396,42 +3492,11 @@ async function renderPage(){
     );
 
     return;
+
   }
 
-}
 
-
-/* =========================================================
-   PAGE HEADER
-========================================================= */
-
-function pageHeader(
-  title,
-  subtitle,
-  actions=''
-){
-
-  return `
-
-    <div class="page-header">
-
-      <div>
-
-        <h1>${esc(title)}</h1>
-
-        <p>${esc(subtitle)}</p>
-
-      </div>
-
-      <div class="page-actions">
-
-        ${actions}
-
-      </div>
-
-    </div>
-
-  `;
+  renderAllResources();
 
 }
 
@@ -2445,118 +3510,115 @@ async function renderDashboard(){
   const page =
     document.getElementById('page');
 
-  page.innerHTML =
 
-    pageHeader(
-      'Command Center',
-      'CrowRules Entertainment operational overview.',
-      `
+  page.innerHTML = `
+
+    <div class="page-header">
+
+      <div>
+
+        <h1>
+          Command Center
+        </h1>
+
+        <p>
+          Universal CrowRules Entertainment
+          Supabase administration.
+        </p>
+
+      </div>
+
+      <div class="page-actions">
+
         <button
           class="btn primary"
           onclick="openAddModal('cr_original_productions')">
-          + New Production
+
+          + Production
+
         </button>
 
         <button
           class="btn cyan"
-          onclick="state.page='health';renderPage()">
-          System Health
+          onclick="state.page='database';renderPage()">
+
+          Database
+
         </button>
-      `
-    ) +
 
-    `
-      <div id="dashboardContent">
-        <div class="loading">
-          <div class="spinner"></div>
-          Loading Command Center…
-        </div>
+        <button
+          class="btn"
+          onclick="state.page='health';renderPage()">
+
+          Health
+
+        </button>
+
       </div>
-    `;
 
-  await refreshDashboard();
-
-}
+    </div>
 
 
-async function countTable(table){
+    <div id="dashboardContent">
 
-  const {
-    count,
-    error
-  } =
-    await sb
-      .from(table)
-      .select('*',{
-        count:'exact',
-        head:true
-      });
+      <div class="loading">
 
-  if(error){
+        <div class="spinner"></div>
 
-    console.warn(
-      `Count ${table}:`,
-      error.message
-    );
+        Loading Command Center…
 
-    return null;
-  }
+      </div>
 
-  return count ?? 0;
+    </div>
+
+  `;
+
+
+  await populateDashboard();
 
 }
 
 
-async function refreshDashboard(){
+async function populateDashboard(){
 
-  const names = [
+  const relevant = [
 
+    'cr_divisions',
+    'cr_projects',
     'cr_original_productions',
     'cr_episodes',
     'cr_news',
-    'cr_updates',
-    'cr_events',
     'cr_schedule',
+    'cr_events',
     'donations',
     'cr_subscribers',
-    'cr_projects',
     'cr_partners'
 
   ];
 
-  const results =
-    await Promise.all(
-      names.map(async table=>[
-        table,
-        await countTable(table)
-      ])
-    );
 
-  results.forEach(
-    ([table,count])=>{
-      state.counts[table]=count;
-    }
+  await Promise.all(
+    relevant.map(
+      async table=>{
+
+        if(
+          state.resources.some(
+            x=>x.table===table
+          )
+        ){
+
+          state.counts[table] =
+            await countResource(table);
+
+        }
+
+      }
+    )
   );
 
 
-  const [
-    productions,
-    episodes,
-    news,
-    donations,
-    subscribers,
-    projects
-  ] = [
-    state.counts.cr_original_productions,
-    state.counts.cr_episodes,
-    state.counts.cr_news,
-    state.counts.donations,
-    state.counts.cr_subscribers,
-    state.counts.cr_projects
-  ];
-
-
   let donationTotal=0;
+
 
   try{
 
@@ -2566,23 +3628,54 @@ async function refreshDashboard(){
       await sb
         .from('donations')
         .select('amount')
-        .limit(500);
+        .limit(1000);
 
-    if(data){
 
-      donationTotal =
-        data.reduce(
+    donationTotal =
+      (data || [])
+        .reduce(
           (sum,row)=>
-            sum + Number(row.amount || 0),
+            sum+
+            Number(row.amount || 0),
           0
         );
+
+  }catch{}
+
+
+  let liveCount=0;
+
+
+  try{
+
+    if(
+      state.resources.some(
+        x=>x.table==='cr_original_productions'
+      )
+    ){
+
+      const {
+        count
+      } =
+        await sb
+          .from('cr_original_productions')
+          .select('*',{
+            count:'exact',
+            head:true
+          })
+          .eq('is_live',true);
+
+
+      liveCount =
+        count || 0;
 
     }
 
   }catch{}
 
 
-  let latestProductions=[];
+  let productions=[];
+
 
   try{
 
@@ -2592,18 +3685,21 @@ async function refreshDashboard(){
       await sb
         .from('cr_original_productions')
         .select('*')
-        .order('created_at',{
-          ascending:false
-        })
+        .order(
+          'created_at',
+          {ascending:false}
+        )
         .limit(6);
 
-    latestProductions =
+
+    productions =
       data || [];
 
   }catch{}
 
 
-  let latestEpisodes=[];
+  let episodes=[];
+
 
   try{
 
@@ -2613,61 +3709,64 @@ async function refreshDashboard(){
       await sb
         .from('cr_episodes')
         .select('*')
-        .order('created_at',{
-          ascending:false
-        })
+        .order(
+          'created_at',
+          {ascending:false}
+        )
         .limit(6);
 
-    latestEpisodes =
+
+    episodes =
       data || [];
 
   }catch{}
 
 
-  const html = `
+  const content = `
 
     <div class="stats">
 
       ${statCard(
+        'Resources',
+        state.resources.length,
+        'Detected Supabase resources'
+      )}
+
+      ${statCard(
         'Productions',
-        productions,
+        state.counts.cr_original_productions,
         'Original productions'
       )}
 
       ${statCard(
         'Episodes',
-        episodes,
+        state.counts.cr_episodes,
         'Episode records'
       )}
 
       ${statCard(
-        'News',
-        news,
-        'Published/news records'
-      )}
-
-      ${statCard(
-        'Donations',
-        donations,
-        'Donation records'
+        'Live',
+        liveCount,
+        'Currently marked live'
       )}
 
       ${statCard(
         'Subscribers',
-        subscribers,
+        state.counts.cr_subscribers,
         'Audience records'
       )}
 
       ${statCard(
-        'Projects',
-        projects,
-        'Company projects'
+        'Donations',
+        formatMoney(donationTotal),
+        'Retrieved donation total'
       )}
 
     </div>
 
 
     <div class="dashboard-grid">
+
 
       <div class="panel">
 
@@ -2686,43 +3785,64 @@ async function refreshDashboard(){
             ${quickCard(
               '🎬',
               'New Production',
-              'Create a show or original production.',
+              'Create an original show.',
               "openAddModal('cr_original_productions')"
             )}
 
             ${quickCard(
               '▶',
               'New Episode',
-              'Add a production episode.',
+              'Create an episode.',
               "openAddModal('cr_episodes')"
             )}
 
             ${quickCard(
               '▤',
               'Schedule',
-              'Manage programming and broadcasts.',
+              'Manage programming.',
               "state.page='schedule';renderPage()"
             )}
 
             ${quickCard(
               '📰',
-              'Publish News',
-              'Create a CrowRules news item.',
-              "openAddModal('cr_news')"
+              'News',
+              'Create publishing content.',
+              "state.page='news';renderPage()"
+            )}
+
+            ${quickCard(
+              '🎙',
+              'Podcasting',
+              'Open podcast administration.',
+              "state.page='podcasting';renderPage()"
+            )}
+
+            ${quickCard(
+              '🏆',
+              'Sports',
+              'Open sports administration.',
+              "state.page='sports';renderPage()"
             )}
 
             ${quickCard(
               '$',
               'Donations',
-              'Review support and donation records.',
+              'Review support activity.',
               "state.page='donations';renderPage()"
             )}
 
             ${quickCard(
-              '♥',
-              'Health Check',
-              'Test connected database tables.',
-              "state.page='health';renderPage()"
+              '🌲',
+              'Tacoma Nights',
+              'Manage Tacoma Nights.',
+              "state.page='tacoma';renderPage()"
+            )}
+
+            ${quickCard(
+              '▦',
+              'All Resources',
+              'Browse every discovered resource.',
+              "state.page='all-resources';renderPage()"
             )}
 
           </div>
@@ -2737,44 +3857,46 @@ async function refreshDashboard(){
         <div class="panel-header">
 
           <div class="panel-title">
-            DONATION PULSE
+            PLATFORM STATUS
           </div>
 
         </div>
 
         <div class="panel-body">
 
-          <div style="
-            font-family:Orbitron;
-            font-size:30px;
-            font-weight:800;
-          ">
-            ${formatMoney(donationTotal)}
-          </div>
+          <div class="activity-list">
 
-          <div style="
-            color:var(--muted);
-            font-size:11px;
-            margin-top:7px;
-          ">
-            Donation amount represented by currently
-            retrieved donation records.
-          </div>
+            ${statusRow(
+              'Supabase Authentication',
+              'Authenticated administrator',
+              'green'
+            )}
 
-          <div style="
-            margin-top:18px;
-            display:flex;
-            gap:7px;
-            flex-wrap:wrap;
-          ">
+            ${statusRow(
+              'Database',
+              `${state.resources.length} resources detected`,
+              'green'
+            )}
 
-            <span class="badge purple">
-              SUPPORT CROWRULES
-            </span>
+            ${statusRow(
+              'Realtime',
+              state.realtimeReady
+                ? 'Connected'
+                : 'Initializing',
+              state.realtimeReady
+                ? 'green'
+                : 'yellow'
+            )}
 
-            <span class="badge cyan">
-              PAYPAL READY
-            </span>
+            ${statusRow(
+              'Admin Authorization',
+              state.isAdmin
+                ? 'Verified'
+                : 'Not verified',
+              state.isAdmin
+                ? 'green'
+                : 'red'
+            )}
 
           </div>
 
@@ -2794,7 +3916,9 @@ async function refreshDashboard(){
           <button
             class="btn small"
             onclick="state.page='productions';renderPage()">
+
             View All
+
           </button>
 
         </div>
@@ -2802,50 +3926,57 @@ async function refreshDashboard(){
         <div class="panel-body">
 
           ${
-            latestProductions.length
+            productions.length
             ? `
               <div class="activity-list">
 
-                ${latestProductions
-                  .map(row=>`
+                ${
+                  productions
+                    .map(row=>`
 
-                    <div class="activity-item">
+                      <div class="activity-item">
 
-                      <div class="activity-dot"></div>
+                        <div class="activity-dot"></div>
 
-                      <div class="activity-main">
+                        <div class="activity-main">
 
-                        <div class="activity-title">
-                          ${esc(
-                            row.title ||
-                            row.name ||
-                            'Untitled Production'
-                          )}
-                        </div>
+                          <div class="activity-title">
 
-                        <div class="activity-meta">
-                          ${esc(
-                            row.status ||
-                            'No status'
-                          )}
-                          ·
-                          ${formatDate(
-                            row.created_at
-                          )}
+                            ${esc(
+                              row.title ||
+                              'Untitled Production'
+                            )}
+
+                          </div>
+
+                          <div class="activity-meta">
+
+                            ${esc(
+                              row.status ||
+                              'No status'
+                            )}
+
+                            ·
+
+                            ${formatDate(
+                              row.created_at
+                            )}
+
+                          </div>
+
                         </div>
 
                       </div>
 
-                    </div>
-
-                  `)
-                  .join('')}
+                    `)
+                    .join('')
+                }
 
               </div>
             `
             : `
               <div class="empty">
-                No production records found.
+                No productions found.
               </div>
             `
           }
@@ -2866,7 +3997,9 @@ async function refreshDashboard(){
           <button
             class="btn small"
             onclick="state.page='episodes';renderPage()">
+
             View All
+
           </button>
 
         </div>
@@ -2874,49 +4007,57 @@ async function refreshDashboard(){
         <div class="panel-body">
 
           ${
-            latestEpisodes.length
+            episodes.length
             ? `
               <div class="activity-list">
 
-                ${latestEpisodes
-                  .map(row=>`
+                ${
+                  episodes
+                    .map(row=>`
 
-                    <div class="activity-item">
+                      <div class="activity-item">
 
-                      <div class="activity-dot"></div>
+                        <div class="activity-dot"></div>
 
-                      <div class="activity-main">
+                        <div class="activity-main">
 
-                        <div class="activity-title">
-                          ${esc(
-                            row.title ||
-                            'Untitled Episode'
-                          )}
-                        </div>
+                          <div class="activity-title">
 
-                        <div class="activity-meta">
-                          ${esc(
-                            row.status ||
-                            'No status'
-                          )}
-                          ·
-                          ${formatDate(
-                            row.created_at
-                          )}
+                            ${esc(
+                              row.title ||
+                              'Untitled Episode'
+                            )}
+
+                          </div>
+
+                          <div class="activity-meta">
+
+                            ${esc(
+                              row.status ||
+                              'No status'
+                            )}
+
+                            ·
+
+                            ${formatDate(
+                              row.created_at
+                            )}
+
+                          </div>
+
                         </div>
 
                       </div>
 
-                    </div>
-
-                  `)
-                  .join('')}
+                    `)
+                    .join('')
+                }
 
               </div>
             `
             : `
               <div class="empty">
-                No episode records found.
+                No episodes found.
               </div>
             `
           }
@@ -2932,12 +4073,16 @@ async function refreshDashboard(){
 
   document
     .getElementById('dashboardContent')
-    .innerHTML=html;
+    .innerHTML=content;
 
 }
 
 
-function statCard(label,value,sub){
+function statCard(
+  label,
+  value,
+  sub
+){
 
   return `
 
@@ -2948,7 +4093,12 @@ function statCard(label,value,sub){
       </div>
 
       <div class="stat-value">
-        ${value === null ? '—' : esc(value)}
+        ${
+          value===null ||
+          value===undefined
+          ? '—'
+          : esc(value)
+        }
       </div>
 
       <div class="stat-sub">
@@ -2965,14 +4115,14 @@ function statCard(label,value,sub){
 function quickCard(
   icon,
   title,
-  desc,
+  description,
   action
 ){
 
   return `
 
     <button
-      class="quick"
+      class="quick-card"
       onclick="${action}">
 
       <div class="quick-icon">
@@ -2984,10 +4134,53 @@ function quickCard(
       </div>
 
       <div class="quick-desc">
-        ${esc(desc)}
+        ${esc(description)}
       </div>
 
     </button>
+
+  `;
+
+}
+
+
+function statusRow(
+  title,
+  detail,
+  type
+){
+
+  return `
+
+    <div class="activity-item">
+
+      <div
+        class="activity-dot"
+        style="
+          background:
+          ${
+            type==='green'
+            ? 'var(--green)'
+            : type==='red'
+              ? 'var(--red)'
+              : 'var(--yellow)'
+          };
+        ">
+      </div>
+
+      <div class="activity-main">
+
+        <div class="activity-title">
+          ${esc(title)}
+        </div>
+
+        <div class="activity-meta">
+          ${esc(detail)}
+        </div>
+
+      </div>
+
+    </div>
 
   `;
 
@@ -3003,35 +4196,53 @@ async function renderActivity(){
   const page =
     document.getElementById('page');
 
-  page.innerHTML =
 
-    pageHeader(
-      'Activity',
-      'Recent administrative activity and system events.',
-      `
-        <button
-          class="btn"
-          onclick="renderPage()">
-          ↻ Refresh
-        </button>
-      `
-    ) +
+  page.innerHTML = `
 
-    `
-      <div class="panel">
+    <div class="page-header">
 
-        <div id="activityContent"
-             class="panel-body">
+      <div>
 
-          <div class="loading">
-            <div class="spinner"></div>
-            Loading activity…
-          </div>
+        <h1>
+          Activity
+        </h1>
+
+        <p>
+          Administrative activity and audit events.
+        </p>
+
+      </div>
+
+      <button
+        class="btn"
+        onclick="renderActivity()">
+
+        ↻ Refresh
+
+      </button>
+
+    </div>
+
+
+    <div class="panel">
+
+      <div
+        id="activityContent"
+        class="panel-body">
+
+        <div class="loading">
+
+          <div class="spinner"></div>
+
+          Loading activity…
 
         </div>
 
       </div>
-    `;
+
+    </div>
+
+  `;
 
 
   let rows=[];
@@ -3050,22 +4261,26 @@ async function renderActivity(){
           'created_at',
           {ascending:false}
         )
-        .limit(80);
+        .limit(100);
+
 
     if(error){
       throw error;
     }
 
-    rows=data || [];
+
+    rows =
+      data || [];
 
   }catch(error){
 
     document
       .getElementById('activityContent')
       .innerHTML =
-        errorBox(error.message);
+        errorHtml(error.message);
 
     return;
+
   }
 
 
@@ -3075,59 +4290,68 @@ async function renderActivity(){
 
     rows.length
     ? `
+
       <div class="activity-list">
 
-        ${rows.map(row=>`
+        ${
+          rows
+            .map(row=>`
 
-          <div class="activity-item">
+              <div class="activity-item">
 
-            <div class="activity-dot"></div>
+                <div class="activity-dot"></div>
 
-            <div class="activity-main">
+                <div class="activity-main">
 
-              <div class="activity-title">
+                  <div class="activity-title">
 
-                ${esc(
-                  row.action ||
-                  row.event ||
-                  'Administrative action'
-                )}
+                    ${esc(
+                      row.action ||
+                      row.event ||
+                      'Administrative action'
+                    )}
+
+                  </div>
+
+                  <div class="activity-meta">
+
+                    ${esc(
+                      row.table_name ||
+                      row.table ||
+                      ''
+                    )}
+
+                    ${
+                      row.target_id
+                      ? ` · ${esc(row.target_id)}`
+                      : ''
+                    }
+
+                    ·
+
+                    ${formatDate(
+                      row.created_at
+                    )}
+
+                  </div>
+
+                </div>
 
               </div>
 
-              <div class="activity-meta">
-
-                ${esc(
-                  row.table_name ||
-                  row.table ||
-                  ''
-                )}
-
-                ${row.target_id
-                  ? ` · ${esc(row.target_id)}`
-                  : ''
-                }
-
-                ·
-
-                ${formatDate(
-                  row.created_at
-                )}
-
-              </div>
-
-            </div>
-
-          </div>
-
-        `).join('')}
+            `)
+            .join('')
+        }
 
       </div>
+
     `
     : `
+
       <div class="empty">
-        No activity has been recorded yet.
+        No administrative activity recorded.
       </div>
+
     `;
 
 }
@@ -3137,74 +4361,89 @@ async function renderActivity(){
    GLOBAL SEARCH
 ========================================================= */
 
-function renderSearch(){
+function renderGlobalSearch(){
 
   const page =
     document.getElementById('page');
 
-  page.innerHTML =
 
-    pageHeader(
-      'Global Search',
-      'Search across important CrowRules database tables.'
-    ) +
+  page.innerHTML = `
 
-    `
+    <div class="page-header">
 
-      <div class="panel">
+      <div>
 
-        <div class="toolbar">
+        <h1>
+          Global Search
+        </h1>
 
-          <div class="toolbar-left"
-               style="flex:1;">
+        <p>
+          Search across every discovered CrowRules resource.
+        </p>
 
-            <input
-              id="globalSearchInput"
-              class="search"
-              style="width:100%;"
-              placeholder="Search productions, episodes, news, projects, partners…">
+      </div>
 
-          </div>
+    </div>
 
-          <button
-            class="btn primary"
-            onclick="performGlobalSearch()">
-            Search
-          </button>
+
+    <div class="panel">
+
+      <div class="toolbar">
+
+        <div class="toolbar-group"
+             style="flex:1;">
+
+          <input
+            id="globalSearchInput"
+            class="search"
+            style="width:100%;"
+            placeholder="Search across CrowRules data…">
 
         </div>
 
-        <div id="globalSearchResults"
-             class="panel-body">
+        <button
+          class="btn primary"
+          onclick="performGlobalSearch()">
 
-          <div class="empty">
-            Enter a search term to begin.
-          </div>
+          Search
 
+        </button>
+
+      </div>
+
+
+      <div
+        id="globalSearchResults"
+        class="panel-body">
+
+        <div class="empty">
+          Search every available resource.
         </div>
 
       </div>
 
+    </div>
+
   `;
 
 
-  const input =
-    document.getElementById(
-      'globalSearchInput'
+  document
+    .getElementById('globalSearchInput')
+    .addEventListener(
+      'keydown',
+      event=>{
+
+        if(event.key==='Enter'){
+          performGlobalSearch();
+        }
+
+      }
     );
 
-  input.addEventListener(
-    'keydown',
-    event=>{
 
-      if(event.key === 'Enter'){
-        performGlobalSearch();
-      }
-
-    }
-  );
-
-  input.focus();
+  document
+    .getElementById('globalSearchInput')
+    .focus();
 
 }
 
@@ -3212,99 +4451,93 @@ function renderSearch(){
 async function performGlobalSearch(){
 
   const input =
-    document.getElementById(
-      'globalSearchInput'
-    );
+    document
+      .getElementById(
+        'globalSearchInput'
+      );
+
+
+  const box =
+    document
+      .getElementById(
+        'globalSearchResults'
+      );
+
 
   const term =
     input.value.trim();
 
-  const box =
-    document.getElementById(
-      'globalSearchResults'
-    );
 
+  if(term.length<2){
 
-  if(term.length < 2){
+    box.innerHTML = `
 
-    box.innerHTML =
-      `
-        <div class="empty">
-          Enter at least 2 characters.
-        </div>
-      `;
+      <div class="empty">
+        Enter at least two characters.
+      </div>
+
+    `;
 
     return;
+
   }
 
 
-  box.innerHTML =
-    `
-      <div class="loading">
-        <div class="spinner"></div>
-        Searching…
-      </div>
-    `;
+  box.innerHTML = `
 
+    <div class="loading">
 
-  const searchTables = [
+      <div class="spinner"></div>
 
-    'cr_original_productions',
-    'cr_episodes',
-    'cr_news',
-    'cr_updates',
-    'cr_projects',
-    'cr_events',
-    'cr_partners',
-    'cr_partnership_inquiries',
-    'cr_media',
-    'cr_roadmap',
-    'tacoma_nights_episodes'
+      Searching ${state.resources.length}
+      resources…
 
-  ];
+    </div>
+
+  `;
 
 
   const results=[];
 
 
-  for(const table of searchTables){
+  /*
+   * Search in batches to prevent a giant burst
+   * of simultaneous database requests.
+   */
 
-    try{
+  const batchSize=5;
 
-      const {
-        data,
-        error
-      } =
-        await sb
-          .from(table)
-          .select('*')
-          .limit(300);
 
-      if(error){
-        continue;
-      }
+  for(
+    let i=0;
+    i<state.resources.length;
+    i+=batchSize
+  ){
 
-      for(const row of data || []){
+    const batch =
+      state.resources.slice(
+        i,
+        i+batchSize
+      );
 
-        const json =
-          safeJson(row);
 
-        if(
-          json
-            .toLowerCase()
-            .includes(term.toLowerCase())
-        ){
+    const batchResults =
+      await Promise.all(
+        batch.map(
+          resource=>
+            searchResource(
+              resource.table,
+              term
+            )
+        )
+      );
 
-          results.push({
-            table,
-            row
-          });
 
-        }
-
-      }
-
-    }catch{}
+    batchResults
+      .flat()
+      .forEach(result=>{
+        results.push(result);
+      });
 
   }
 
@@ -3312,293 +4545,429 @@ async function performGlobalSearch(){
   box.innerHTML =
 
     results.length
-
     ? `
+
       <div class="search-results">
 
-        ${results
-          .slice(0,100)
-          .map(result=>`
+        ${
+          results
+            .slice(0,150)
+            .map(result=>`
 
-            <div class="search-result">
+              <div class="search-result">
 
-              <div class="search-result-head">
+                <div class="search-result-header">
 
-                <div class="search-table">
-                  ${esc(
-                    prettyTable(
-                      result.table
-                    )
-                  )}
+                  <div class="search-resource">
+
+                    ${esc(
+                      result.name
+                    )}
+
+                  </div>
+
+                  <button
+                    class="btn small"
+                    onclick="openSearchRecord(
+                      '${esc(result.table)}',
+                      '${esc(result.id || '')}'
+                    )">
+
+                    Open
+
+                  </button>
+
                 </div>
 
-                <button
-                  class="btn small"
-                  onclick="openRecordModal(
-                    '${result.table}',
-                    '${esc(result.row.id || '')}'
-                  )">
-                  Open
-                </button>
+                <div class="search-preview">
+
+                  ${esc(
+                    safeJson(result.row)
+                  )}
+
+                </div>
 
               </div>
 
-              <div class="search-preview">
-                ${esc(
-                  safeJson(result.row)
-                )}
-              </div>
-
-            </div>
-
-          `)
-          .join('')}
+            `)
+            .join('')
+        }
 
       </div>
 
       <div style="
-        margin-top:15px;
+        margin-top:12px;
         color:var(--muted);
-        font-size:10px;
+        font-size:9px;
       ">
-        Showing ${Math.min(results.length,100)}
-        of ${results.length} matches.
-      </div>
-    `
 
+        Showing
+        ${Math.min(results.length,150)}
+        of
+        ${results.length}
+        matches.
+
+      </div>
+
+    `
     : `
+
       <div class="empty">
         No matches found.
       </div>
+
     `;
+
+}
+
+
+async function searchResource(
+  table,
+  term
+){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await sb
+        .from(table)
+        .select('*')
+        .limit(300);
+
+
+    if(error){
+      return [];
+    }
+
+
+    return (data || [])
+      .filter(row=>
+        safeJson(row)
+          .toLowerCase()
+          .includes(
+            term.toLowerCase()
+          )
+      )
+      .map(row=>({
+
+        table,
+
+        name:
+          prettyName(table),
+
+        id:
+          row.id ||
+          row.user_id ||
+          '',
+
+        row
+
+      }));
+
+  }catch{
+
+    return [];
+
+  }
+
+}
+
+
+async function openSearchRecord(
+  table,
+  id
+){
+
+  if(!id){
+
+    state.table=table;
+
+    await renderTablePage(
+      prettyName(table),
+      'Search result resource.',
+      table
+    );
+
+    return;
+
+  }
+
+
+  await openRecordModal(
+    table,
+    id
+  );
 
 }
 
 
 /* =========================================================
-   HEALTH
+   DATABASE
 ========================================================= */
 
-async function renderHealth(){
+async function renderDatabase(){
 
   const page =
     document.getElementById('page');
 
-  page.innerHTML =
 
-    pageHeader(
-      'System Health',
-      'Database connectivity and operational diagnostics.',
-      `
+  page.innerHTML = `
+
+    <div class="page-header">
+
+      <div>
+
+        <h1>
+          Database
+        </h1>
+
+        <p>
+          Universal CrowRules Supabase database explorer.
+        </p>
+
+      </div>
+
+      <div class="page-actions">
+
         <button
-          class="btn primary"
-          onclick="runHealthCheck()">
-          Run Health Check
+          class="btn"
+          onclick="discoverResources().then(renderDatabase)">
+
+          ↻ Discover
+
         </button>
-      `
-    ) +
 
-    `
-      <div id="healthContent">
+      </div>
 
-        <div class="loading">
+    </div>
 
-          <div class="spinner"></div>
 
-          Testing database…
+    <div class="panel">
+
+      <div class="toolbar">
+
+        <div class="toolbar-group">
+
+          <input
+            id="resourceFilter"
+            class="search"
+            placeholder="Filter resources…">
+
+        </div>
+
+        <div class="toolbar-group">
+
+          <span class="badge purple">
+            ${state.resources.length}
+            resources
+          </span>
 
         </div>
 
       </div>
-    `;
 
 
-  await runHealthCheck();
+      <div
+        id="databaseResources"
+        class="panel-body">
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById('resourceFilter')
+    .addEventListener(
+      'input',
+      event=>{
+
+        state.resourceFilter =
+          event.target.value;
+
+        renderResourceGrid();
+
+      }
+    );
+
+
+  renderResourceGrid();
 
 }
 
 
-async function runHealthCheck(){
+function renderResourceGrid(){
 
   const box =
-    document.getElementById(
-      'healthContent'
-    );
+    document
+      .getElementById(
+        'databaseResources'
+      );
+
 
   if(!box){
     return;
   }
 
-  const tables =
-    Object.keys(TABLES);
 
-  const health=[];
-
-
-  for(const table of tables){
-
-    const start =
-      performance.now();
-
-    let status='ok';
-    let message='Connected';
+  const term =
+    String(
+      state.resourceFilter || ''
+    )
+    .toLowerCase()
+    .trim();
 
 
-    try{
+  const resources =
+    state.resources.filter(
+      resource=>
 
-      const {
-        error
-      } =
-        await sb
-          .from(table)
-          .select('*')
-          .limit(1);
+        !term ||
 
-      const ms =
-        Math.round(
-          performance.now() - start
-        );
+        resource.name
+          .toLowerCase()
+          .includes(term) ||
 
-      if(error){
+        resource.table
+          .toLowerCase()
+          .includes(term) ||
 
-        status='error';
-        message=
-          error.message;
+        resource.group
+          .toLowerCase()
+          .includes(term)
 
-        health.push({
-          table,
-          status,
-          message,
-          ms
-        });
+    );
 
-        continue;
-      }
 
-      health.push({
-        table,
-        status,
-        message,
-        ms
-      });
+  if(!resources.length){
 
-    }catch(error){
+    box.innerHTML = `
 
-      health.push({
-        table,
-        status:'error',
-        message:error.message,
-        ms:
-          Math.round(
-            performance.now() - start
-          )
-      });
+      <div class="empty">
+        No resources match the filter.
+      </div>
 
-    }
+    `;
 
-    box.innerHTML =
-      healthGrid(health);
+    return;
 
   }
 
 
-  state.health =
-    health;
+  const groups =
+    [...new Set(
+      resources.map(
+        x=>x.group
+      )
+    )];
+
 
   box.innerHTML =
-    healthGrid(health);
+    groups.map(group=>{
+
+      const groupResources =
+        resources.filter(
+          x=>x.group===group
+        );
+
+
+      return `
+
+        <div style="
+          margin-bottom:22px;
+        ">
+
+          <div
+            class="panel-title"
+            style="
+              margin:0 0 10px;
+            ">
+
+            ${esc(group)}
+
+          </div>
+
+          <div class="resource-grid">
+
+            ${
+              groupResources
+                .map(
+                  resource=>
+                    resourceCard(resource)
+                )
+                .join('')
+            }
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join('');
 
 }
 
 
-function healthGrid(health){
+function resourceCard(resource){
 
-  const ok =
-    health.filter(x=>x.status==='ok').length;
+  const count =
+    state.counts[
+      resource.table
+    ];
 
-  const errors =
-    health.filter(x=>x.status==='error').length;
 
   return `
 
-    <div class="stats">
+    <div
+      class="resource-card"
+      onclick="openResource(
+        '${esc(resource.table)}'
+      )">
 
-      ${statCard(
-        'Tables Tested',
-        health.length,
-        'Configured resources'
-      )}
+      <div class="resource-icon">
+        ${resource.icon}
+      </div>
 
-      ${statCard(
-        'Healthy',
-        ok,
-        'Successful connections'
-      )}
+      <div class="resource-name">
+        ${esc(resource.name)}
+      </div>
 
-      ${statCard(
-        'Errors',
-        errors,
-        'Tables requiring attention'
-      )}
+      <div class="resource-table">
+        ${esc(resource.table)}
+      </div>
 
-      ${statCard(
-        'Admin Auth',
-        state.isAdmin ? 'OK':'FAIL',
-        'Authorization state'
-      )}
+      <div class="resource-count">
 
-    </div>
+        ${
+          count===null ||
+          count===undefined
+          ? '—'
+          : esc(count)
+        }
 
+      </div>
 
-    <div class="health-grid">
+      <div class="resource-type">
 
-      ${health.map(item=>`
+        ${
+          resource.readonly
+          ? 'READ ONLY'
+          : 'DATABASE RESOURCE'
+        }
 
-        <div class="
-          health-card
-          ${item.status === 'ok'
-            ? 'ok'
-            : 'error'}
-        ">
+        ·
 
-          <div class="health-name">
+        ${
+          resource.responseMs
+        } ms probe
 
-            ${esc(
-              prettyTable(item.table)
-            )}
-
-          </div>
-
-          <div class="health-meta">
-
-            ${item.status === 'ok'
-              ? '✓ Connected'
-              : '✕ Error'}
-
-            ·
-
-            ${item.ms} ms
-
-          </div>
-
-          ${
-            item.status === 'error'
-            ? `
-              <div style="
-                margin-top:9px;
-                color:var(--red);
-                font-size:9px;
-                line-height:1.5;
-              ">
-                ${esc(item.message)}
-              </div>
-            `
-            : ''
-          }
-
-        </div>
-
-      `).join('')}
+      </div>
 
     </div>
 
@@ -3607,134 +4976,86 @@ function healthGrid(health){
 }
 
 
+function openResource(table){
+
+  state.table=table;
+  state.pageNum=1;
+  state.search='';
+  state.sort=null;
+
+  renderTablePage(
+    prettyName(table),
+    `Supabase resource: ${table}`,
+    table
+  );
+
+}
+
+
 /* =========================================================
-   DATABASE PAGE
+   ALL RESOURCES
 ========================================================= */
 
-async function renderDatabase(){
+function renderAllResources(){
 
   const page =
     document.getElementById('page');
 
-  page.innerHTML =
 
-    pageHeader(
-      'Database',
-      'Browse and manage connected Supabase tables.'
-    ) +
+  page.innerHTML = `
 
-    `
+    <div class="page-header">
 
-      <div class="panel">
+      <div>
 
-        <div class="toolbar">
+        <h1>
+          All Resources
+        </h1>
 
-          <div class="toolbar-left">
+        <p>
+          Every Supabase resource discovered by
+          the CrowRules Admin client.
+        </p>
 
-            <select
-              id="dbTableSelect"
-              style="min-width:250px;">
-              ${Object.keys(TABLES)
-                .map(table=>`
+      </div>
 
-                  <option
-                    value="${esc(table)}"
-                    ${state.table===table
-                      ? 'selected'
-                      : ''}>
-                    ${esc(
-                      prettyTable(table)
-                    )}
-                  </option>
+      <div class="page-actions">
 
-                `)
-                .join('')}
-            </select>
+        <button
+          class="btn primary"
+          onclick="discoverResources().then(renderAllResources)">
 
-            <input
-              id="dbSearch"
-              class="search"
-              placeholder="Filter records…">
+          ↻ Rediscover
 
-          </div>
+        </button>
+
+      </div>
+
+    </div>
 
 
-          <div class="toolbar-right">
+    <div class="panel">
 
-            <button
-              class="btn"
-              onclick="exportCSV()">
-              CSV Export
-            </button>
+      <div class="panel-body">
 
-            <button
-              id="dbAddButton"
-              class="btn primary">
-              + Add
-            </button>
+        <div class="resource-grid">
 
-          </div>
+          ${
+            state.resources
+              .map(
+                resource=>
+                  resourceCard(resource)
+              )
+              .join('')
+          }
 
-        </div>
-
-
-        <div id="dbContent">
-          <div class="loading">
-            <div class="spinner"></div>
-            Loading database…
-          </div>
         </div>
 
       </div>
 
-    `;
+    </div>
 
-
-  document
-    .getElementById('dbTableSelect')
-    .addEventListener(
-      'change',
-      async event=>{
-
-        state.table =
-          event.target.value;
-
-        state.pageNum=1;
-
-        await loadTable();
-
-      }
-    );
-
-
-  document
-    .getElementById('dbSearch')
-    .addEventListener(
-      'input',
-      event=>{
-
-        state.search =
-          event.target.value;
-
-        state.pageNum=1;
-
-        applyFilter();
-
-        renderDatabaseRows();
-
-      }
-    );
-
-
-  document
-    .getElementById('dbAddButton')
-    .addEventListener(
-      'click',
-      ()=>openAddModal(state.table)
-    );
-
-
-  await loadTable();
+  `;
 
 }
 
@@ -3749,86 +5070,150 @@ async function renderTablePage(
   table
 ){
 
+  state.table=table;
+
+
   const page =
     document.getElementById('page');
 
+
+  const resource =
+    state.resources.find(
+      x=>x.table===table
+    );
+
+
   const readonly =
-    TABLES[table]?.readonly === true;
+    resource?.readonly ||
+    false;
 
 
-  page.innerHTML =
+  page.innerHTML = `
 
-    pageHeader(
-      title,
-      subtitle,
-      `
+    <div class="page-header">
+
+      <div>
+
+        <h1>
+          ${esc(title)}
+        </h1>
+
+        <p>
+          ${esc(subtitle)}
+        </p>
+
+      </div>
+
+      <div class="page-actions">
+
         ${
-          !readonly
+          !readonly &&
+          !resource?.protected
           ? `
+
             <button
               class="btn primary"
-              onclick="openAddModal('${table}')">
+              onclick="openAddModal(
+                '${esc(table)}'
+              )">
+
               + Add Record
+
             </button>
+
           `
           : ''
         }
 
         <button
           class="btn"
-          onclick="renderPage()">
+          onclick="loadTable()">
+
           ↻ Refresh
+
         </button>
-      `
-    ) +
 
-    `
+        <button
+          class="btn"
+          onclick="exportCSV()">
 
-      <div class="panel">
+          CSV
 
-        <div class="toolbar">
+        </button>
 
-          <div class="toolbar-left">
+      </div>
 
-            <input
-              id="tableSearch"
-              class="search"
-              placeholder="Search records…">
+    </div>
 
-            <select
-              id="pageSize">
-              <option value="25">25 rows</option>
-              <option value="50">50 rows</option>
-              <option value="100">100 rows</option>
-            </select>
 
-          </div>
+    <div class="panel">
 
-          <div class="toolbar-right">
+      <div class="toolbar">
 
-            <button
-              class="btn"
-              onclick="exportCSV()">
-              CSV Export
-            </button>
+        <div class="toolbar-group">
 
-          </div>
+          <input
+            id="tableSearch"
+            class="search"
+            placeholder="Search records…">
+
+          <select
+            id="pageSize"
+            style="width:100px;">
+
+            <option value="25">
+              25
+            </option>
+
+            <option value="50">
+              50
+            </option>
+
+            <option value="100">
+              100
+            </option>
+
+          </select>
 
         </div>
 
 
-        <div id="tableContent">
+        <div class="toolbar-group">
 
-          <div class="loading">
-            <div class="spinner"></div>
-            Loading records…
-          </div>
+          <span class="badge cyan">
+            ${esc(table)}
+          </span>
+
+          ${
+            readonly
+            ? `
+              <span class="badge yellow">
+                READ ONLY
+              </span>
+            `
+            : ''
+          }
 
         </div>
 
       </div>
 
-    `;
+
+      <div id="tableContent">
+
+        <div class="loading">
+
+          <div class="spinner"></div>
+
+          Loading records…
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
 
 
   document
@@ -3877,12 +5262,15 @@ async function loadTable(){
   const table =
     state.table;
 
+
+  if(!table){
+    return;
+  }
+
+
   const target =
     document.getElementById(
       'tableContent'
-    ) ||
-    document.getElementById(
-      'dbContent'
     );
 
 
@@ -3891,18 +5279,19 @@ async function loadTable(){
   }
 
 
-  target.innerHTML =
-    `
-      <div class="loading">
+  target.innerHTML = `
 
-        <div class="spinner"></div>
+    <div class="loading">
 
-        Loading ${esc(
-          prettyTable(table)
-        )}…
+      <div class="spinner"></div>
 
-      </div>
-    `;
+      Loading ${esc(
+        prettyName(table)
+      )}…
+
+    </div>
+
+  `;
 
 
   try{
@@ -3914,45 +5303,35 @@ async function loadTable(){
       await sb
         .from(table)
         .select('*')
-        .limit(1000);
+        .limit(2000);
+
 
     if(error){
       throw error;
     }
 
+
     state.rows =
       data || [];
+
 
     state.schema =
       inferSchema(
         state.rows
       );
 
+
     state.filtered =
       [...state.rows];
 
-    state.search='';
-
-    const search =
-      document.getElementById(
-        'tableSearch'
-      ) ||
-      document.getElementById(
-        'dbSearch'
-      );
-
-    if(search){
-      search.value='';
-    }
 
     renderTableContent();
 
   }catch(error){
 
     target.innerHTML =
-      errorBox(
-        error.message,
-        table
+      errorHtml(
+        `${error.message}`
       );
 
   }
@@ -3966,43 +5345,65 @@ function inferSchema(rows){
     return [];
   }
 
+
   const keys =
-    [...new Set(
-      rows.flatMap(row=>
-        Object.keys(row)
+    [
+      ...new Set(
+        rows.flatMap(
+          row=>Object.keys(row)
+        )
       )
-    )];
+    ];
 
 
   return keys.map(key=>{
 
-    const sample =
+    const row =
       rows.find(
-        row=>row[key] !== null &&
-             row[key] !== undefined
-      )?.[key];
+        item=>
+          item[key]!==null &&
+          item[key]!==undefined
+      );
+
+
+    const value =
+      row?.[key];
+
 
     let type =
-      typeof sample;
+      typeof value;
 
-    if(sample === null || sample === undefined){
-      type='text';
-    }
-
-    if(typeof sample === 'object'){
-      type='jsonb';
-    }
 
     if(
-      typeof sample === 'number'
+      value===null ||
+      value===undefined
+    ){
+
+      type='unknown';
+
+    }
+
+
+    if(
+      typeof value==='object'
+    ){
+
+      type='jsonb';
+
+    }
+
+
+    if(
+      typeof value==='number'
     ){
 
       type =
-        Number.isInteger(sample)
+        Number.isInteger(value)
         ? 'integer'
         : 'numeric';
 
     }
+
 
     return {
       key,
@@ -4030,16 +5431,16 @@ function applyFilter(){
       [...state.rows];
 
     return;
+
   }
 
 
   state.filtered =
-    state.rows.filter(row=>
-
-      safeJson(row)
-        .toLowerCase()
-        .includes(term)
-
+    state.rows.filter(
+      row=>
+        safeJson(row)
+          .toLowerCase()
+          .includes(term)
     );
 
 }
@@ -4050,9 +5451,6 @@ function renderTableContent(){
   const target =
     document.getElementById(
       'tableContent'
-    ) ||
-    document.getElementById(
-      'dbContent'
     );
 
 
@@ -4064,7 +5462,7 @@ function renderTableContent(){
   applyFilter();
 
 
-  const rows =
+  let rows =
     [...state.filtered];
 
 
@@ -4079,14 +5477,17 @@ function renderTableContent(){
         const bv =
           b[state.sort];
 
-        if(av === bv){
+
+        if(av===bv){
           return 0;
         }
 
-        const result =
-          av > bv ? 1 : -1;
 
-        return state.sortDir === 'asc'
+        const result =
+          av>bv ? 1 : -1;
+
+
+        return state.sortDir==='asc'
           ? result
           : -result;
 
@@ -4099,15 +5500,19 @@ function renderTableContent(){
   const total =
     rows.length;
 
+
   const start =
     (state.pageNum-1) *
     state.pageSize;
 
+
   const end =
     Math.min(
-      start + state.pageSize,
+      start+
+      state.pageSize,
       total
     );
+
 
   const pageRows =
     rows.slice(
@@ -4118,7 +5523,9 @@ function renderTableContent(){
 
   const keys =
     state.schema.length
-    ? state.schema.map(x=>x.key)
+    ? state.schema.map(
+        x=>x.key
+      )
     : rows.length
       ? Object.keys(rows[0])
       : [];
@@ -4126,15 +5533,29 @@ function renderTableContent(){
 
   if(!rows.length){
 
-    target.innerHTML =
-      `
-        <div class="empty">
-          No records found.
-        </div>
-      `;
+    target.innerHTML = `
+
+      <div class="empty">
+        No records found.
+      </div>
+
+    `;
 
     return;
+
   }
+
+
+  const resource =
+    state.resources.find(
+      x=>x.table===state.table
+    );
+
+
+  const readonly =
+    resource?.readonly ||
+    resource?.protected ||
+    false;
 
 
   target.innerHTML = `
@@ -4147,27 +5568,37 @@ function renderTableContent(){
 
           <tr>
 
-            ${keys.map(key=>`
+            ${
+              keys
+                .map(
+                  key=>`
 
-              <th
-                style="cursor:pointer;"
-                onclick="sortBy('${esc(key)}')">
+                    <th
+                      class="sortable"
+                      onclick="sortBy(
+                        '${esc(key)}'
+                      )">
 
-                ${esc(
-                  prettyKey(key)
-                )}
+                      ${esc(
+                        prettyKey(key)
+                      )}
 
-                ${
-                  state.sort === key
-                  ? state.sortDir === 'asc'
-                    ? ' ↑'
-                    : ' ↓'
-                  : ''
-                }
+                      ${
+                        state.sort===key
+                        ? (
+                          state.sortDir==='asc'
+                          ? ' ↑'
+                          : ' ↓'
+                        )
+                        : ''
+                      }
 
-              </th>
+                    </th>
 
-            `).join('')}
+                  `
+                )
+                .join('')
+            }
 
             <th>
               Actions
@@ -4177,87 +5608,21 @@ function renderTableContent(){
 
         </thead>
 
+
         <tbody>
 
-          ${pageRows.map(row=>`
-
-            <tr>
-
-              ${keys.map(key=>`
-
-                <td>
-
-                  <div class="cell"
-                       title="${esc(
-                         displayValue(
-                           row[key],
-                           key
-                         )
-                       )}">
-
-                    ${valueBadge(
-                      key,
-                      displayValue(
-                        row[key],
-                        key
-                      )
-                    )}
-
-                  </div>
-
-                </td>
-
-              `).join('')}
-
-              <td>
-
-                <div class="actions">
-
-                  ${
-                    row.id ||
-                    row.user_id
-                    ? `
-                      <button
-                        class="btn small"
-                        onclick="openRecordModal(
-                          '${state.table}',
-                          '${esc(
-                            row.id ||
-                            row.user_id
-                          )}'
-                        )">
-                        Edit
-                      </button>
-                    `
-                    : ''
-                  }
-
-                  ${
-                    TABLES[state.table]?.readonly
-                    ? ''
-                    : `
-                      <button
-                        class="btn red small"
-                        onclick="deleteRecord(
-                          '${state.table}',
-                          '${esc(
-                            row.id ||
-                            row.user_id ||
-                            ''
-                          )}'
-                        )">
-                        Delete
-                      </button>
-                    `
-                  }
-
-                </div>
-
-              </td>
-
-            </tr>
-
-          `).join('')}
+          ${
+            pageRows
+              .map(
+                row=>
+                  tableRow(
+                    row,
+                    keys,
+                    readonly
+                  )
+              )
+              .join('')
+          }
 
         </tbody>
 
@@ -4270,36 +5635,49 @@ function renderTableContent(){
 
       <div class="pagination-info">
 
-        ${total
+        ${
+          total
           ? `${start+1}–${end} of ${total}`
-          : '0 records'}
+          : '0 records'
+        }
 
       </div>
+
 
       <div class="pagination-buttons">
 
         <button
           class="btn small"
           onclick="changePage(-1)"
-          ${state.pageNum <= 1
+          ${
+            state.pageNum<=1
             ? 'disabled'
-            : ''}>
+            : ''
+          }>
+
           ←
+
         </button>
 
-        <span
-          class="badge purple"
-          style="align-self:center;">
+
+        <span class="badge purple">
+
           Page ${state.pageNum}
+
         </span>
+
 
         <button
           class="btn small"
           onclick="changePage(1)"
-          ${end >= total
+          ${
+            end>=total
             ? 'disabled'
-            : ''}>
+            : ''
+          }>
+
           →
+
         </button>
 
       </div>
@@ -4312,49 +5690,68 @@ function renderTableContent(){
       border-top:1px solid var(--border);
     ">
 
-      <div class="panel-title"
-           style="margin-bottom:12px;">
-        TABLE SCHEMA
+      <div
+        class="panel-title"
+        style="
+          margin-bottom:10px;
+        ">
+
+        SCHEMA
+
       </div>
+
 
       <div class="schema-list">
 
-        ${keys.map(key=>{
+        ${
+          keys
+            .map(key=>{
 
-          const item =
-            state.schema.find(
-              x=>x.key===key
-            );
+              const info =
+                state.schema.find(
+                  x=>x.key===key
+                );
 
-          return `
 
-            <div class="schema-item">
+              return `
 
-              <strong>
-                ${esc(key)}
-              </strong>
+                <div class="schema-row">
 
-              <span>
-                ${esc(
-                  item?.type ||
-                  'unknown'
-                )}
-              </span>
+                  <strong>
+                    ${esc(key)}
+                  </strong>
 
-              <span>
-                ${
-                  key === 'id' ||
-                  key === 'user_id'
-                  ? 'identifier'
-                  : ''
-                }
-              </span>
+                  <span>
+                    ${esc(
+                      info?.type ||
+                      'unknown'
+                    )}
+                  </span>
 
-            </div>
+                  <span>
+                    ${
+                      key==='id' ||
+                      key==='user_id'
+                      ? 'identifier'
+                      : ''
+                    }
+                  </span>
 
-          `;
+                  <span>
+                    ${
+                      key.endsWith('_at')
+                      ? 'timestamp'
+                      : ''
+                    }
+                  </span>
 
-        }).join('')}
+                </div>
+
+              `;
+
+            })
+            .join('')
+        }
 
       </div>
 
@@ -4365,69 +5762,275 @@ function renderTableContent(){
 }
 
 
-function renderDatabaseRows(){
+function tableRow(
+  row,
+  keys,
+  readonly
+){
 
-  renderTableContent();
+  const id =
+    row.id ||
+    row.user_id ||
+    '';
+
+
+  return `
+
+    <tr>
+
+      ${
+        keys
+          .map(key=>`
+
+            <td>
+
+              <div
+                class="cell"
+                title="${esc(
+                  displayValue(
+                    row[key],
+                    key
+                  )
+                )}">
+
+                ${
+                  valueBadge(
+                    key,
+                    displayValue(
+                      row[key],
+                      key
+                    )
+                  )
+                }
+
+              </div>
+
+            </td>
+
+          `)
+          .join('')
+      }
+
+
+      <td>
+
+        <div class="actions">
+
+          ${
+            id
+            ? `
+
+              <button
+                class="btn small"
+                onclick="openRecordModal(
+                  '${esc(state.table)}',
+                  '${esc(id)}'
+                )">
+
+                Edit
+
+              </button>
+
+            `
+            : ''
+          }
+
+
+          ${
+            !readonly && id
+            ? `
+
+              <button
+                class="btn red small"
+                onclick="deleteRecord(
+                  '${esc(state.table)}',
+                  '${esc(id)}'
+                )">
+
+                Delete
+
+              </button>
+
+            `
+            : ''
+          }
+
+        </div>
+
+      </td>
+
+    </tr>
+
+  `;
 
 }
 
 
-function displayValue(value,key){
+function displayValue(
+  value,
+  key
+){
 
-  if(value === null || value === undefined){
+  if(
+    value===null ||
+    value===undefined
+  ){
     return '—';
   }
 
-  if(typeof value === 'object'){
+
+  if(
+    typeof value==='object'
+  ){
     return safeJson(value);
   }
 
+
+  const lower =
+    String(key).toLowerCase();
+
+
   if(
-    String(key)
-      .toLowerCase()
-      .includes('amount')
+    lower.includes('amount') ||
+    lower.includes('price') ||
+    lower.includes('total')
   ){
 
     return formatMoney(value);
 
   }
 
+
   if(
-    String(key)
-      .toLowerCase()
-      .includes('date') ||
-    String(key)
-      .toLowerCase()
-      .endsWith('_at')
+    lower.endsWith('_at') ||
+    lower.includes('date')
   ){
 
     return formatDate(value);
 
   }
 
+
   return String(value);
+
+}
+
+
+function valueBadge(
+  key,
+  value
+){
+
+  if(
+    value==='true' ||
+    value===true
+  ){
+
+    return '<span class="badge green">TRUE</span>';
+
+  }
+
+
+  if(
+    value==='false' ||
+    value===false
+  ){
+
+    return '<span class="badge red">FALSE</span>';
+
+  }
+
+
+  const lowerKey =
+    String(key).toLowerCase();
+
+
+  if(
+    lowerKey.includes('status') ||
+    lowerKey.includes('state')
+  ){
+
+    const lower =
+      String(value || '')
+        .toLowerCase();
+
+
+    let cls='';
+
+
+    if([
+      'published',
+      'active',
+      'live',
+      'approved',
+      'complete',
+      'completed'
+    ].includes(lower)){
+
+      cls='green';
+
+    }
+
+
+    if([
+      'draft',
+      'pending',
+      'scheduled',
+      'planned'
+    ].includes(lower)){
+
+      cls='yellow';
+
+    }
+
+
+    if([
+      'failed',
+      'rejected',
+      'cancelled',
+      'canceled',
+      'archived'
+    ].includes(lower)){
+
+      cls='red';
+
+    }
+
+
+    return `
+
+      <span class="badge ${cls}">
+        ${esc(value)}
+      </span>
+
+    `;
+
+  }
+
+
+  return esc(value);
 
 }
 
 
 function sortBy(key){
 
-  if(state.sort === key){
+  if(
+    state.sort===key
+  ){
 
     state.sortDir =
-      state.sortDir === 'asc'
+      state.sortDir==='asc'
       ? 'desc'
       : 'asc';
 
   }else{
 
-    state.sort =
-      key;
-
-    state.sortDir =
-      'asc';
+    state.sort=key;
+    state.sortDir='asc';
 
   }
+
 
   renderTableContent();
 
@@ -4445,14 +6048,16 @@ function changePage(delta){
       )
     );
 
+
   state.pageNum =
-    Math.min(
-      max,
-      Math.max(
-        1,
-        state.pageNum + delta
+    Math.max(
+      1,
+      Math.min(
+        max,
+        state.pageNum+delta
       )
     );
+
 
   renderTableContent();
 
@@ -4460,26 +6065,37 @@ function changePage(delta){
 
 
 /* =========================================================
-   MODAL
+   RECORD EDITOR
 ========================================================= */
 
 async function openAddModal(table){
 
-  if(TABLES[table]?.readonly){
+  const resource =
+    state.resources.find(
+      x=>x.table===table
+    );
+
+
+  if(
+    resource?.readonly ||
+    resource?.protected
+  ){
 
     toast(
-      'This resource is read-only.',
+      'This resource cannot be created through the generic editor.',
       'error'
     );
 
     return;
+
   }
 
-  state.table =
-    table;
 
+  state.table=table;
+  state.editing=false;
   state.editingId=null;
   state.editingRow={};
+
 
   await openEditor(
     table,
@@ -4497,9 +6113,6 @@ async function openRecordModal(
 
   try{
 
-    const primary =
-      id;
-
     let query =
       sb
         .from(table)
@@ -4507,24 +6120,13 @@ async function openRecordModal(
 
 
     if(
-      table === 'cr_admins' &&
-      isUUID(primary)
+      table==='cr_admins'
     ){
 
       query =
         query.eq(
           'user_id',
-          primary
-        );
-
-    }else if(
-      isUUID(primary)
-    ){
-
-      query =
-        query.eq(
-          'id',
-          primary
+          id
         );
 
     }else{
@@ -4532,7 +6134,7 @@ async function openRecordModal(
       query =
         query.eq(
           'id',
-          primary
+          id
         );
 
     }
@@ -4546,9 +6148,11 @@ async function openRecordModal(
         .limit(1)
         .maybeSingle();
 
+
     if(error){
       throw error;
     }
+
 
     if(!data){
 
@@ -4558,17 +6162,17 @@ async function openRecordModal(
       );
 
       return;
+
     }
 
-    state.table =
-      table;
 
-    state.editingId =
+    state.table=table;
+    state.editing=true;
+    state.editingId=
       data.id ||
       data.user_id;
+    state.editingRow=data;
 
-    state.editingRow =
-      data;
 
     await openEditor(
       table,
@@ -4596,27 +6200,41 @@ async function openEditor(
 
   const schema =
     inferSchema(
-      state.rows.length
-      ? state.rows
-      : [row]
+      Object.keys(row).length
+      ? [row]
+      : state.rows.length
+        ? state.rows
+        : [{}]
     );
 
 
-  const keys =
-    schema.length
-    ? schema.map(x=>x.key)
-    : Object.keys(row);
+  let keys =
+    schema.map(
+      x=>x.key
+    );
 
 
-  const generated =
-    new Set([
-      'created_at',
-      'updated_at'
-    ]);
+  /*
+   * If adding to a resource with no rows,
+   * the browser cannot know its columns.
+   * The user should use a secured schema/RPC
+   * or create the first record using a known schema.
+   */
+
+  if(!keys.length){
+
+    toast(
+      'No columns could be discovered for this empty resource.',
+      'error'
+    );
+
+    return;
+
+  }
 
 
   const primary =
-    table === 'cr_admins'
+    table==='cr_admins'
     ? 'user_id'
     : 'id';
 
@@ -4624,52 +6242,74 @@ async function openEditor(
   document
     .getElementById('modalTitle')
     .textContent =
-      `${editing ? 'Edit' : 'Add'} ${
-        prettyTable(table)
-      }`;
+      `${editing?'Edit':'Add'} ${prettyName(table)}`;
 
 
   document
     .getElementById('modalBody')
     .innerHTML = `
 
+      <div
+        style="
+          margin-bottom:14px;
+          color:var(--muted);
+          font-size:9px;
+        ">
+
+        Resource:
+        <strong>
+          ${esc(table)}
+        </strong>
+
+      </div>
+
+
       <div class="form-grid">
 
-        ${keys.map(key=>{
+        ${
+          keys
+            .map(key=>{
 
-          if(
-            generated.has(key)
-          ){
-            return '';
-          }
+              /*
+               * Database-managed timestamps.
+               */
 
-          const value =
-            row?.[key];
-
-          const inferred =
-            schema.find(
-              x=>x.key===key
-            )?.type ||
-            typeof value;
-
-
-          const isPrimary =
-            key === primary;
+              if(
+                !editing &&
+                (
+                  key==='created_at' ||
+                  key==='updated_at'
+                )
+              ){
+                return '';
+              }
 
 
-          const readonly =
-            editing &&
-            isPrimary;
+              const value =
+                row[key];
 
 
-          return editorField(
-            key,
-            value,
-            inferred,
-            readonly
-          );
+              const info =
+                schema.find(
+                  x=>x.key===key
+                );
 
-        }).join('')}
+
+              const readonly =
+                editing &&
+                key===primary;
+
+
+              return editorField(
+                key,
+                value,
+                info?.type || 'text',
+                readonly
+              );
+
+            })
+            .join('')
+        }
 
       </div>
 
@@ -4704,27 +6344,27 @@ function editorField(
 
 
   const full =
-    type === 'jsonb' ||
+    type==='jsonb' ||
     lower.includes('description') ||
     lower.includes('content') ||
-    lower.includes('metadata') ||
     lower.includes('body') ||
-    lower.includes('notes');
+    lower.includes('notes') ||
+    lower.includes('metadata');
 
 
   let input='';
 
 
   if(
-    type === 'boolean' ||
-    typeof value === 'boolean'
+    type==='boolean' ||
+    typeof value==='boolean'
   ){
 
     input = `
 
       <select
         data-field="${esc(key)}"
-        ${readonly ? 'disabled':''}>
+        ${readonly?'disabled':''}>
 
         <option value="">
           — Select —
@@ -4732,27 +6372,41 @@ function editorField(
 
         <option
           value="true"
-          ${value === true ? 'selected':''}>
+          ${
+            value===true
+            ? 'selected'
+            : ''
+          }>
+
           TRUE
+
         </option>
 
         <option
           value="false"
-          ${value === false ? 'selected':''}>
+          ${
+            value===false
+            ? 'selected'
+            : ''
+          }>
+
           FALSE
+
         </option>
 
       </select>
 
     `;
 
-  }else if(type === 'jsonb'){
+  }else if(
+    type==='jsonb'
+  ){
 
     input = `
 
       <textarea
         data-field="${esc(key)}"
-        ${readonly ? 'readonly':''}>${
+        ${readonly?'readonly':''}>${
           esc(
             value
             ? JSON.stringify(
@@ -4764,50 +6418,28 @@ function editorField(
           )
         }</textarea>
 
-      <small>
-        JSON / JSONB value
-      </small>
+      <div class="field-help">
+        JSON / JSONB
+      </div>
 
     `;
 
   }else if(
-    lower.includes('description') ||
-    lower.includes('content') ||
-    lower.includes('body') ||
-    lower.includes('notes') ||
-    lower.includes('metadata')
+    full
   ){
 
     input = `
 
       <textarea
         data-field="${esc(key)}"
-        ${readonly ? 'readonly':''}>${esc(
+        ${readonly?'readonly':''}>${esc(
           value ?? ''
         )}</textarea>
 
     `;
 
   }else if(
-    lower.includes('date') &&
-    !lower.includes('updated_at')
-  ){
-
-    input = `
-
-      <input
-        data-field="${esc(key)}"
-        type="date"
-        value="${esc(
-          normalizeDate(value)
-        )}"
-        ${readonly ? 'readonly':''}>
-
-    `;
-
-  }else if(
-    lower.endsWith('_at') ||
-    lower.includes('timestamp')
+    lower.endsWith('_at')
   ){
 
     input = `
@@ -4818,13 +6450,32 @@ function editorField(
         value="${esc(
           normalizeDateTime(value)
         )}"
-        ${readonly ? 'readonly':''}>
+        ${readonly?'readonly':''}>
 
     `;
 
   }else if(
-    lower.includes('time') &&
-    !lower.includes('timezone')
+    lower.endsWith('_date') ||
+    lower==='date' ||
+    lower.includes('birth_date')
+  ){
+
+    input = `
+
+      <input
+        data-field="${esc(key)}"
+        type="date"
+        value="${esc(
+          normalizeDate(value)
+        )}"
+        ${readonly?'readonly':''}>
+
+    `;
+
+  }else if(
+    lower.endsWith('_time') ||
+    lower==='start_time' ||
+    lower==='end_time'
   ){
 
     input = `
@@ -4835,14 +6486,14 @@ function editorField(
         value="${esc(
           value || ''
         )}"
-        ${readonly ? 'readonly':''}>
+        ${readonly?'readonly':''}>
 
     `;
 
   }else if(
-    type === 'integer' ||
-    type === 'numeric' ||
-    type === 'number'
+    type==='integer' ||
+    type==='numeric' ||
+    type==='number'
   ){
 
     input = `
@@ -4851,14 +6502,14 @@ function editorField(
         data-field="${esc(key)}"
         type="number"
         step="${
-          type === 'integer'
+          type==='integer'
           ? '1'
           : 'any'
         }"
         value="${esc(
           value ?? ''
         )}"
-        ${readonly ? 'readonly':''}>
+        ${readonly?'readonly':''}>
 
     `;
 
@@ -4872,7 +6523,7 @@ function editorField(
         value="${esc(
           value ?? ''
         )}"
-        ${readonly ? 'readonly':''}>
+        ${readonly?'readonly':''}>
 
     `;
 
@@ -4881,7 +6532,11 @@ function editorField(
 
   return `
 
-    <div class="form-field ${full ? 'full':''}">
+    <div
+      class="
+        form-field
+        ${full?'field-full':''}
+      ">
 
       <label>
         ${esc(
@@ -4916,15 +6571,25 @@ function normalizeDateTime(value){
     return '';
   }
 
+
   const d =
     new Date(value);
 
-  if(Number.isNaN(d.getTime())){
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
     return '';
   }
 
+
   const pad =
-    n=>String(n).padStart(2,'0');
+    n=>
+      String(n)
+        .padStart(2,'0');
+
 
   return `${
     d.getFullYear()
@@ -4939,48 +6604,6 @@ function normalizeDateTime(value){
   }`;
 
 }
-
-
-function closeModal(){
-
-  document
-    .getElementById('modalBackdrop')
-    .classList.remove('open');
-
-}
-
-
-document
-  .getElementById('modalClose')
-  .addEventListener(
-    'click',
-    closeModal
-  );
-
-
-document
-  .getElementById('modalCancel')
-  .addEventListener(
-    'click',
-    closeModal
-  );
-
-
-document
-  .getElementById('modalBackdrop')
-  .addEventListener(
-    'click',
-    event=>{
-
-      if(
-        event.target.id ===
-        'modalBackdrop'
-      ){
-        closeModal();
-      }
-
-    }
-  );
 
 
 async function saveModalRecord(
@@ -5003,89 +6626,100 @@ async function saveModalRecord(
   const payload={};
 
 
-  fields.forEach(field=>{
+  try{
 
-    if(field.disabled){
-      return;
-    }
+    fields.forEach(field=>{
 
-    const key =
-      field.dataset.field;
-
-    let value =
-      field.value;
+      if(field.disabled){
+        return;
+      }
 
 
-    const lower =
-      key.toLowerCase();
+      const key =
+        field.dataset.field;
 
 
-    if(value === ''){
-      value=null;
-    }
+      let value =
+        field.value;
 
 
-    if(
-      field.tagName === 'SELECT' &&
-      (
-        value === 'true' ||
-        value === 'false'
-      )
-    ){
-
-      value =
-        value === 'true';
-
-    }
+      if(value===''){
+        value=null;
+      }
 
 
-    if(
-      (
-        lower.includes('metadata') ||
-        lower.includes('json')
-      ) &&
-      typeof value === 'string' &&
-      value.trim()
-    ){
+      if(
+        field.tagName==='SELECT' &&
+        (
+          value==='true' ||
+          value==='false'
+        )
+      ){
 
-      try{
         value =
-          JSON.parse(value);
-      }catch{
-
-        toast(
-          `Invalid JSON in ${prettyKey(key)}.`,
-          'error'
-        );
-
-        throw new Error(
-          'Invalid JSON'
-        );
+          value==='true';
 
       }
 
-    }
+
+      const type =
+        state.schema.find(
+          x=>x.key===key
+        )?.type;
 
 
-    if(
-      field.type === 'number' &&
-      value !== null
-    ){
+      if(
+        type==='jsonb' &&
+        typeof value==='string' &&
+        value.trim()
+      ){
 
-      value =
-        Number(value);
+        try{
 
-    }
+          value =
+            JSON.parse(value);
+
+        }catch{
+
+          throw new Error(
+            `Invalid JSON in ${prettyKey(key)}.`
+          );
+
+        }
+
+      }
 
 
-    payload[key]=value;
+      if(
+        field.type==='number' &&
+        value!==null
+      ){
 
-  });
+        value =
+          Number(value);
+
+      }
+
+
+      payload[key]=value;
+
+    });
+
+
+  }catch(error){
+
+    toast(
+      error.message,
+      'error'
+    );
+
+    return;
+
+  }
 
 
   /*
-   * Automatically generate slug from title
-   * when adding a new record.
+   * Automatic slug generation.
    */
 
   if(
@@ -5105,13 +6739,12 @@ async function saveModalRecord(
 
 
   /*
-   * Automatically stamp published_at
-   * for newly published updates.
+   * Automatic publication timestamp.
    */
 
   if(
-    table === 'cr_updates' &&
-    payload.is_published === true &&
+    table==='cr_updates' &&
+    payload.is_published===true &&
     !payload.published_at
   ){
 
@@ -5121,13 +6754,14 @@ async function saveModalRecord(
   }
 
 
-  const saveButton =
+  const button =
     document.getElementById(
       'modalSave'
     );
 
-  saveButton.disabled=true;
-  saveButton.textContent='Saving…';
+
+  button.disabled=true;
+  button.textContent='Saving…';
 
 
   try{
@@ -5137,12 +6771,8 @@ async function saveModalRecord(
 
     if(editing){
 
-      const id =
-        state.editingId;
-
-
       if(
-        table === 'cr_admins'
+        table==='cr_admins'
       ){
 
         result =
@@ -5151,7 +6781,7 @@ async function saveModalRecord(
             .update(payload)
             .eq(
               'user_id',
-              id
+              state.editingId
             );
 
       }else{
@@ -5162,7 +6792,7 @@ async function saveModalRecord(
             .update(payload)
             .eq(
               'id',
-              id
+              state.editingId
             );
 
       }
@@ -5182,7 +6812,7 @@ async function saveModalRecord(
     }
 
 
-    await audit(
+    await writeAudit(
       editing
         ? 'UPDATE'
         : 'INSERT',
@@ -5191,23 +6821,24 @@ async function saveModalRecord(
         ? state.editingId
         : null,
       {
-        keys:Object.keys(payload)
+        fields:
+          Object.keys(payload)
       }
     );
 
 
     toast(
       editing
-        ? 'Record updated successfully.'
-        : 'Record created successfully.',
+      ? 'Record updated.'
+      : 'Record created.',
       'success'
     );
 
 
     closeModal();
 
-    await loadTable();
 
+    await loadTable();
 
   }catch(error){
 
@@ -5218,8 +6849,8 @@ async function saveModalRecord(
 
   }finally{
 
-    saveButton.disabled=false;
-    saveButton.textContent='Save';
+    button.disabled=false;
+    button.textContent='Save Record';
 
   }
 
@@ -5235,27 +6866,42 @@ async function deleteRecord(
   id
 ){
 
+  const resource =
+    state.resources.find(
+      x=>x.table===table
+    );
+
+
   if(
-    TABLES[table]?.readonly
+    resource?.readonly ||
+    resource?.protected
   ){
+
+    toast(
+      'This resource is protected.',
+      'error'
+    );
+
     return;
+
   }
 
 
   if(!id){
 
     toast(
-      'This record does not expose a deletable ID.',
+      'No record identifier found.',
       'error'
     );
 
     return;
+
   }
 
 
   const confirmed =
     confirm(
-      `Delete this ${prettyTable(table)} record?\n\nThis action cannot be undone.`
+      `Delete this ${prettyName(table)} record?\n\nThis action cannot be undone.`
     );
 
 
@@ -5273,7 +6919,7 @@ async function deleteRecord(
 
 
     if(
-      table === 'cr_admins'
+      table==='cr_admins'
     ){
 
       query =
@@ -5304,7 +6950,7 @@ async function deleteRecord(
     }
 
 
-    await audit(
+    await writeAudit(
       'DELETE',
       table,
       id
@@ -5335,7 +6981,7 @@ async function deleteRecord(
    AUDIT
 ========================================================= */
 
-async function audit(
+async function writeAudit(
   action,
   table,
   targetId=null,
@@ -5344,24 +6990,13 @@ async function audit(
 
   try{
 
-    /*
-     * cr_admin_audit_log.target_id is treated
-     * as UUID when supplied. Do not pass non-UUID
-     * identifiers into a UUID field.
-     */
-
-    const target =
-      isUUID(targetId)
-      ? targetId
-      : null;
-
-
     await sb
       .from('cr_admin_audit_log')
       .insert({
 
         admin_user_id:
-          state.user?.id || null,
+          state.user?.id ||
+          null,
 
         action,
 
@@ -5369,7 +7004,9 @@ async function audit(
           table,
 
         target_id:
-          target,
+          isUUID(targetId)
+          ? targetId
+          : null,
 
         metadata
 
@@ -5378,7 +7015,7 @@ async function audit(
   }catch(error){
 
     console.warn(
-      'Audit logging failed:',
+      'Audit write failed:',
       error
     );
 
@@ -5402,40 +7039,46 @@ function exportCSV(){
   if(!rows.length){
 
     toast(
-      'There are no records to export.',
+      'No records to export.',
       'error'
     );
 
     return;
+
   }
 
 
   const keys =
-    [...new Set(
-      rows.flatMap(
-        row=>Object.keys(row)
+    [
+      ...new Set(
+        rows.flatMap(
+          row=>Object.keys(row)
+        )
       )
-    )];
+    ];
 
 
-  const csv=[];
+  const output=[];
 
 
-  csv.push(
-    keys.map(csvEscape).join(',')
+  output.push(
+    keys
+      .map(csvEscape)
+      .join(',')
   );
 
 
   rows.forEach(row=>{
 
-    csv.push(
+    output.push(
       keys
-        .map(key=>
-          csvEscape(
-            typeof row[key] === 'object'
-            ? safeJson(row[key])
-            : row[key]
-          )
+        .map(
+          key=>
+            csvEscape(
+              typeof row[key]==='object'
+              ? safeJson(row[key])
+              : row[key]
+            )
         )
         .join(',')
     );
@@ -5445,9 +7088,10 @@ function exportCSV(){
 
   const blob =
     new Blob(
-      [csv.join('\n')],
+      [output.join('\n')],
       {
-        type:'text/csv;charset=utf-8;'
+        type:
+          'text/csv;charset=utf-8;'
       }
     );
 
@@ -5456,27 +7100,31 @@ function exportCSV(){
     URL.createObjectURL(blob);
 
 
-  const a =
+  const link =
     document.createElement('a');
 
-  a.href=url;
 
-  a.download =
+  link.href=url;
+
+
+  link.download =
     `${
-      state.table
+      state.table || 'crowrules-export'
     }-${
       new Date()
         .toISOString()
         .slice(0,10)
     }.csv`;
 
-  a.click();
+
+  link.click();
+
 
   URL.revokeObjectURL(url);
 
 
   toast(
-    'CSV exported.',
+    'CSV export created.',
     'success'
   );
 
@@ -5486,64 +7134,303 @@ function exportCSV(){
 function csvEscape(value){
 
   if(
-    value === null ||
-    value === undefined
+    value===null ||
+    value===undefined
   ){
     return '';
   }
 
-  const text =
-    String(value)
-      .replaceAll('"','""');
 
-  return `"${text}"`;
+  return `"${String(value)
+    .replaceAll('"','""')}"`;
 
 }
 
 
 /* =========================================================
-   ERROR
+   HEALTH
 ========================================================= */
 
-function errorBox(
-  message,
-  table=''
-){
+async function renderHealth(){
 
-  return `
+  const page =
+    document.getElementById('page');
 
-    <div style="
-      padding:25px;
-      color:var(--red);
-    ">
 
-      <strong>
-        Database request failed
-      </strong>
+  page.innerHTML = `
 
-      <div style="
-        margin-top:8px;
-        color:#b8b8c8;
-        font-size:11px;
-        line-height:1.6;
-      ">
+    <div class="page-header">
 
-        ${esc(message)}
+      <div>
+
+        <h1>
+          System Health
+        </h1>
+
+        <p>
+          Test every known and discovered Supabase resource.
+        </p>
 
       </div>
 
+      <button
+        class="btn primary"
+        onclick="runHealthCheck()">
+
+        Run Health Check
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="healthContent">
+
+      <div class="loading">
+
+        <div class="spinner"></div>
+
+        Testing resources…
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  await runHealthCheck();
+
+}
+
+
+async function runHealthCheck(){
+
+  const box =
+    document.getElementById(
+      'healthContent'
+    );
+
+
+  if(!box){
+    return;
+  }
+
+
+  const health=[];
+
+
+  for(
+    const resource
+    of state.resources
+  ){
+
+    const started =
+      performance.now();
+
+
+    try{
+
+      const {
+        error
+      } =
+        await sb
+          .from(resource.table)
+          .select('*')
+          .limit(1);
+
+
+      const ms =
+        Math.round(
+          performance.now() -
+          started
+        );
+
+
+      health.push({
+
+        table:
+          resource.table,
+
+        name:
+          resource.name,
+
+        status:
+          error
+          ? 'error'
+          : 'ok',
+
+        ms,
+
+        message:
+          error
+          ? error.message
+          : 'Connected'
+
+      });
+
+    }catch(error){
+
+      health.push({
+
+        table:
+          resource.table,
+
+        name:
+          resource.name,
+
+        status:'error',
+
+        ms:
+          Math.round(
+            performance.now() -
+            started
+          ),
+
+        message:
+          error.message
+
+      });
+
+    }
+
+
+    box.innerHTML =
+      healthGrid(health);
+
+  }
+
+
+  box.innerHTML =
+    healthGrid(health);
+
+}
+
+
+function healthGrid(health){
+
+  const healthy =
+    health.filter(
+      x=>x.status==='ok'
+    ).length;
+
+
+  const errors =
+    health.filter(
+      x=>x.status==='error'
+    ).length;
+
+
+  return `
+
+    <div class="stats">
+
+      ${statCard(
+        'Tested',
+        health.length,
+        'Resources'
+      )}
+
+      ${statCard(
+        'Healthy',
+        healthy,
+        'Connected'
+      )}
+
+      ${statCard(
+        'Errors',
+        errors,
+        'Requires attention'
+      )}
+
+      ${statCard(
+        'Admin',
+        state.isAdmin
+        ? 'OK'
+        : 'FAIL',
+        'Authorization'
+      )}
+
+      ${statCard(
+        'Realtime',
+        state.realtimeReady
+        ? 'OK'
+        : 'WAIT',
+        'Broadcast channel'
+      )}
+
+      ${statCard(
+        'User',
+        state.user
+        ? 'OK'
+        : 'FAIL',
+        'Authentication'
+      )}
+
+    </div>
+
+
+    <div class="health-grid">
+
       ${
-        table
-        ? `
-          <div style="
-            margin-top:12px;
-            color:#77778b;
-            font-size:10px;
-          ">
-            Table: ${esc(table)}
-          </div>
-        `
-        : ''
+        health
+          .map(item=>`
+
+            <div class="
+              health-card
+              ${
+                item.status==='ok'
+                ? 'ok'
+                : 'error'
+              }
+            ">
+
+              <div class="health-name">
+
+                ${esc(item.name)}
+
+              </div>
+
+              <div class="health-detail">
+
+                ${
+                  item.status==='ok'
+                  ? '✓ Connected'
+                  : '✕ Failed'
+                }
+
+                ·
+
+                ${item.ms} ms
+
+              </div>
+
+
+              ${
+                item.status==='error'
+                ? `
+
+                  <div
+                    class="health-detail"
+                    style="
+                      color:var(--red);
+                    ">
+
+                    ${esc(
+                      item.message
+                    )}
+
+                  </div>
+
+                `
+                : ''
+              }
+
+            </div>
+
+          `)
+          .join('')
       }
 
     </div>
@@ -5566,23 +7453,12 @@ async function setupRealtime(){
 
   try{
 
-    /*
-     * Private Broadcast channel.
-     *
-     * IMPORTANT:
-     * This establishes an authenticated admin
-     * refresh channel. Database changes will only
-     * automatically trigger refreshes if the
-     * database side is configured to broadcast
-     * appropriate events.
-     */
-
     await sb.realtime.setAuth();
 
 
     const channel =
       sb.channel(
-        'crowrules-admin-v5',
+        'crowrules-admin-v5-1',
         {
           config:{
             private:true
@@ -5599,9 +7475,10 @@ async function setupRealtime(){
       payload=>{
 
         console.log(
-          'Admin realtime refresh:',
+          'CrowRules Admin Broadcast:',
           payload
         );
+
 
         refreshCurrentPage();
 
@@ -5613,16 +7490,22 @@ async function setupRealtime(){
       status=>{
 
         const badge =
-          document.getElementById(
-            'realtimeBadge'
-          );
+          document
+            .getElementById(
+              'realtimeBadge'
+            );
+
 
         if(!badge){
           return;
         }
 
 
-        if(status === 'SUBSCRIBED'){
+        if(
+          status==='SUBSCRIBED'
+        ){
+
+          state.realtimeReady=true;
 
           badge.className =
             'badge green';
@@ -5631,15 +7514,17 @@ async function setupRealtime(){
             'REALTIME CONNECTED';
 
         }else if(
-          status === 'CHANNEL_ERROR' ||
-          status === 'TIMED_OUT'
+          status==='CHANNEL_ERROR' ||
+          status==='TIMED_OUT'
         ){
 
+          state.realtimeReady=false;
+
           badge.className =
-            'badge red';
+            'badge yellow';
 
           badge.textContent =
-            'REALTIME ERROR';
+            'REALTIME OPTIONAL';
 
         }
 
@@ -5650,18 +7535,20 @@ async function setupRealtime(){
     state.realtime =
       channel;
 
-
   }catch(error){
 
     console.warn(
-      'Realtime setup:',
+      'Realtime:',
       error
     );
 
+
     const badge =
-      document.getElementById(
-        'realtimeBadge'
-      );
+      document
+        .getElementById(
+          'realtimeBadge'
+        );
+
 
     if(badge){
 
@@ -5678,49 +7565,133 @@ async function setupRealtime(){
 }
 
 
+/* =========================================================
+   REFRESH
+========================================================= */
+
 async function refreshCurrentPage(){
 
   if(
-    state.page === 'dashboard'
+    state.page==='dashboard'
   ){
 
-    await refreshDashboard();
+    await populateDashboard();
 
     return;
+
   }
 
 
   if(
-    state.page === 'health'
-  ){
-
-    await runHealthCheck();
-
-    return;
-  }
-
-
-  if(
-    state.page === 'activity'
+    state.page==='activity'
   ){
 
     await renderActivity();
 
     return;
+
   }
 
 
   if(
-    state.page === 'search'
+    state.page==='health'
+  ){
+
+    await runHealthCheck();
+
+    return;
+
+  }
+
+
+  if(
+    state.page==='database'
+  ){
+
+    await discoverResources();
+
+    renderResourceGrid();
+
+    return;
+
+  }
+
+
+  if(
+    state.page==='all-resources'
+  ){
+
+    await discoverResources();
+
+    renderAllResources();
+
+    return;
+
+  }
+
+
+  if(
+    state.page==='global-search'
   ){
 
     return;
+
   }
 
 
   await loadTable();
 
 }
+
+
+/* =========================================================
+   MODAL EVENTS
+========================================================= */
+
+function closeModal(){
+
+  document
+    .getElementById(
+      'modalBackdrop'
+    )
+    .classList.remove('open');
+
+}
+
+
+document
+  .getElementById('modalClose')
+  .addEventListener(
+    'click',
+    closeModal
+  );
+
+
+document
+  .getElementById('modalCancel')
+  .addEventListener(
+    'click',
+    closeModal
+  );
+
+
+document
+  .getElementById('modalBackdrop')
+  .addEventListener(
+    'click',
+    event=>{
+
+      if(
+        event.target.id===
+        'modalBackdrop'
+      ){
+
+        closeModal();
+
+      }
+
+    }
+  );
 
 
 /* =========================================================
@@ -5734,17 +7705,17 @@ document
 
       /*
        * Ctrl/Cmd + K
-       * Global Search
        */
 
       if(
-        (event.ctrlKey || event.metaKey) &&
-        event.key.toLowerCase() === 'k'
+        (event.ctrlKey ||
+         event.metaKey) &&
+        event.key.toLowerCase()==='k'
       ){
 
         event.preventDefault();
 
-        state.page='search';
+        state.page='global-search';
 
         renderPage();
 
@@ -5752,11 +7723,11 @@ document
 
 
       /*
-       * Escape closes modal.
+       * Escape
        */
 
       if(
-        event.key === 'Escape'
+        event.key==='Escape'
       ){
 
         closeModal();
@@ -5768,7 +7739,7 @@ document
 
 
 /* =========================================================
-   START
+   START APPLICATION
 ========================================================= */
 
 initializeAuth();
