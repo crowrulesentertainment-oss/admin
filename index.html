@@ -1,54 +1,60 @@
-```html
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#05070b">
-<meta name="description" content="CrowRules Entertainment Admin v5.4 — Universal Supabase Command Center">
-<title>CrowRules Admin v5.4 — Universal Supabase Command Center</title>
+
+<title>CrowRules Admin v5.4 — Supabase Command Center</title>
+
+<meta name="description"
+      content="CrowRules Entertainment Admin v5.4 — Supabase database command center.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap"
+      rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
   --bg:#05070b;
-  --panel:#0b1018;
-  --panel2:#0f1621;
-  --panel3:#121c29;
-  --line:#1d2a3a;
-  --line2:#26384d;
-  --text:#edf4ff;
-  --muted:#8293a8;
-  --accent:#65d8ff;
-  --accent2:#8d7dff;
-  --green:#49e6a5;
-  --yellow:#ffd166;
-  --red:#ff5c75;
-  --orange:#ff9f43;
-  --shadow:0 18px 60px rgba(0,0,0,.42);
+  --bg2:#080c13;
+  --panel:#0b111a;
+  --panel2:#0f1722;
+  --panel3:#121d2a;
+  --border:#203044;
+  --border2:#2d435c;
+  --text:#edf5ff;
+  --muted:#8496aa;
+  --accent:#62d8ff;
+  --accent2:#a16cff;
+  --success:#48e59b;
+  --warning:#ffc857;
+  --danger:#ff5874;
+  --shadow:0 20px 70px rgba(0,0,0,.45);
   --radius:16px;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
-html,body{
-  margin:0;
-  min-height:100%;
-  background:
-    radial-gradient(circle at 20% 0%,rgba(101,216,255,.08),transparent 28%),
-    radial-gradient(circle at 100% 20%,rgba(141,125,255,.07),transparent 28%),
-    var(--bg);
-  color:var(--text);
-  font-family:Montserrat,Arial,sans-serif;
+html{
+  scroll-behavior:smooth;
 }
 
 body{
-  overflow-x:hidden;
+  margin:0;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(98,216,255,.08),transparent 30%),
+    radial-gradient(circle at 90% 10%,rgba(161,108,255,.08),transparent 28%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+  min-height:100vh;
 }
 
 button,
@@ -66,912 +72,1025 @@ button{
   display:none!important;
 }
 
-.mono{
-  font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+.screen{
+  min-height:100vh;
 }
 
 /* =========================================================
-   AUTH
-   ========================================================= */
+   BOOT
+========================================================= */
 
-#authScreen{
-  min-height:100vh;
-  display:grid;
-  place-items:center;
+#bootScreen{
+  display:flex;
+  align-items:center;
+  justify-content:center;
   padding:30px;
-  position:relative;
-  overflow:hidden;
 }
 
-#authScreen:before,
-#authScreen:after{
-  content:"";
-  position:absolute;
-  border-radius:50%;
-  filter:blur(80px);
-  pointer-events:none;
-}
-
-#authScreen:before{
-  width:420px;
-  height:420px;
-  background:rgba(101,216,255,.09);
-  top:-160px;
-  left:-100px;
-}
-
-#authScreen:after{
-  width:420px;
-  height:420px;
-  background:rgba(141,125,255,.09);
-  bottom:-180px;
-  right:-100px;
-}
-
-.authCard{
-  width:min(470px,100%);
-  background:rgba(11,16,24,.88);
-  border:1px solid var(--line2);
+.boot-box{
+  width:min(620px,100%);
+  text-align:center;
+  padding:55px 35px;
+  border:1px solid var(--border);
+  background:linear-gradient(145deg,#0b111a,#070b11);
   border-radius:24px;
   box-shadow:var(--shadow);
-  padding:34px;
-  backdrop-filter:blur(18px);
-  position:relative;
-  z-index:2;
 }
 
-.brandMark{
-  width:76px;
-  height:76px;
-  border-radius:22px;
-  display:grid;
-  place-items:center;
-  margin-bottom:22px;
-  background:
-    linear-gradient(145deg,rgba(101,216,255,.2),rgba(141,125,255,.14));
-  border:1px solid rgba(101,216,255,.35);
-  font-size:36px;
-  box-shadow:0 0 45px rgba(101,216,255,.12);
-}
-
-.brandTitle{
+.logo{
   font-family:Orbitron,sans-serif;
-  font-weight:800;
-  letter-spacing:2px;
-  font-size:25px;
+  font-weight:900;
+  letter-spacing:5px;
+  font-size:clamp(28px,5vw,54px);
+  margin-bottom:12px;
 }
 
-.brandSub{
+.logo span{
+  color:var(--accent);
+}
+
+.boot-status{
   color:var(--muted);
-  margin-top:8px;
+  margin-top:20px;
+}
+
+.loader{
+  width:100%;
+  height:4px;
+  background:#172333;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:30px;
+}
+
+.loader i{
+  display:block;
+  width:45%;
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  animation:load 1.3s infinite;
+}
+
+@keyframes load{
+  0%{transform:translateX(-120%)}
+  100%{transform:translateX(250%)}
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginScreen{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+}
+
+.login-card{
+  width:min(460px,100%);
+  padding:34px;
+  background:linear-gradient(145deg,#0c131d,#080c12);
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+}
+
+.login-card h1{
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+  margin:0 0 8px;
+}
+
+.login-card p{
+  color:var(--muted);
   line-height:1.6;
 }
 
-.versionBadge{
-  display:inline-flex;
-  margin-top:14px;
-  padding:6px 10px;
-  border-radius:999px;
-  background:rgba(101,216,255,.08);
-  border:1px solid rgba(101,216,255,.2);
-  color:var(--accent);
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:1px;
-}
-
 .field{
-  margin-top:17px;
+  margin:17px 0;
 }
 
 .field label{
   display:block;
   font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:1.4px;
   color:var(--muted);
   margin-bottom:7px;
-  font-weight:700;
 }
 
-input,
-select,
-textarea{
+.field input,
+.field select,
+.field textarea,
+.search-input{
   width:100%;
-  border:1px solid var(--line2);
+  border:1px solid var(--border);
   background:#070b11;
   color:var(--text);
-  border-radius:10px;
-  padding:11px 12px;
+  padding:13px 14px;
+  border-radius:11px;
   outline:none;
-  transition:.18s ease;
 }
 
-textarea{
-  min-height:110px;
-  resize:vertical;
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.search-input:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(98,216,255,.08);
 }
 
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:rgba(101,216,255,.65);
-  box-shadow:0 0 0 3px rgba(101,216,255,.08);
+.password-wrap{
+  position:relative;
+}
+
+.password-wrap input{
+  padding-right:80px;
+}
+
+.password-toggle{
+  position:absolute;
+  right:8px;
+  top:7px;
+  padding:7px 10px;
+  border:0;
+  background:#111c29;
+  color:var(--muted);
+  border-radius:7px;
 }
 
 .btn{
-  border:1px solid var(--line2);
+  border:1px solid var(--border);
+  background:#101a27;
   color:var(--text);
-  background:#0c131d;
-  padding:10px 13px;
+  padding:11px 15px;
   border-radius:10px;
-  font-weight:700;
   transition:.18s ease;
 }
 
 .btn:hover{
   transform:translateY(-1px);
-  border-color:#38516c;
-  background:#101a27;
+  border-color:var(--border2);
 }
 
-.btn.primary{
-  background:linear-gradient(135deg,#143345,#1b2450);
-  border-color:rgba(101,216,255,.42);
-  color:#dff8ff;
+.btn-primary{
+  background:linear-gradient(135deg,#164c63,#22245d);
+  border-color:#397d9a;
 }
 
-.btn.green{
-  border-color:rgba(73,230,165,.35);
-  color:#aaffd9;
+.btn-success{
+  background:rgba(72,229,155,.1);
+  border-color:rgba(72,229,155,.35);
+  color:var(--success);
 }
 
-.btn.red{
-  border-color:rgba(255,92,117,.35);
-  color:#ffb0bd;
+.btn-danger{
+  background:rgba(255,88,116,.08);
+  border-color:rgba(255,88,116,.3);
+  color:var(--danger);
 }
 
-.btn.yellow{
-  border-color:rgba(255,209,102,.35);
-  color:#ffe4a1;
+.btn-warning{
+  background:rgba(255,200,87,.08);
+  border-color:rgba(255,200,87,.3);
+  color:var(--warning);
 }
 
-.btn.block{
+.btn-small{
+  padding:8px 10px;
+  font-size:12px;
+}
+
+.full{
   width:100%;
-  margin-top:20px;
-  padding:13px;
 }
 
-.authError{
-  margin-top:14px;
-  color:#ff9bab;
-  background:rgba(255,92,117,.07);
-  border:1px solid rgba(255,92,117,.18);
-  padding:11px;
+.login-actions{
+  display:grid;
+  gap:10px;
+  margin-top:20px;
+}
+
+.error{
+  background:rgba(255,88,116,.08);
+  border:1px solid rgba(255,88,116,.3);
+  color:#ff9aac;
+  padding:12px;
   border-radius:10px;
   font-size:13px;
   line-height:1.5;
 }
 
-/* =========================================================
-   APP
-   ========================================================= */
-
-#app{
-  min-height:100vh;
+.success{
+  background:rgba(72,229,155,.08);
+  border:1px solid rgba(72,229,155,.3);
+  color:#8ff0bd;
+  padding:12px;
+  border-radius:10px;
+  font-size:13px;
 }
 
-.topbar{
-  height:70px;
+/* =========================================================
+   HEADER
+========================================================= */
+
+.app-header{
   position:sticky;
   top:0;
-  z-index:100;
+  z-index:50;
+  backdrop-filter:blur(18px);
+  background:rgba(5,7,11,.88);
+  border-bottom:1px solid var(--border);
+}
+
+.header-inner{
+  max-width:1600px;
+  margin:auto;
+  padding:15px 20px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
   gap:20px;
-  padding:0 22px;
-  background:rgba(5,7,11,.86);
-  border-bottom:1px solid var(--line);
-  backdrop-filter:blur(16px);
 }
 
-.topBrand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  min-width:250px;
-}
-
-.logoSmall{
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  border:1px solid rgba(101,216,255,.3);
-  background:rgba(101,216,255,.06);
-}
-
-.topBrand strong{
-  display:block;
+.brand{
   font-family:Orbitron,sans-serif;
-  letter-spacing:1px;
-  font-size:14px;
+  font-weight:900;
+  letter-spacing:2px;
+  white-space:nowrap;
 }
 
-.topBrand span{
+.brand small{
   display:block;
   color:var(--muted);
-  font-size:10px;
+  font:600 9px Montserrat,sans-serif;
+  letter-spacing:2px;
   margin-top:3px;
 }
 
-.topActions{
-  display:flex;
-  align-items:center;
-  gap:8px;
+.header-spacer{
+  flex:1;
 }
 
-.status{
+.auth-status{
   display:flex;
   align-items:center;
-  gap:8px;
-  font-size:11px;
+  gap:9px;
+  font-size:12px;
   color:var(--muted);
-  margin-right:8px;
 }
 
-.statusDot{
-  width:8px;
-  height:8px;
+.status-dot{
+  width:9px;
+  height:9px;
   border-radius:50%;
-  background:var(--red);
-  box-shadow:0 0 10px currentColor;
+  background:var(--success);
+  box-shadow:0 0 14px rgba(72,229,155,.7);
 }
 
-.statusDot.ok{
-  background:var(--green);
-  color:var(--green);
+.header-actions{
+  display:flex;
+  gap:7px;
 }
 
 /* =========================================================
    LAYOUT
-   ========================================================= */
+========================================================= */
 
-.layout{
+.app-layout{
+  max-width:1600px;
+  margin:auto;
   display:grid;
-  grid-template-columns:275px minmax(0,1fr);
+  grid-template-columns:240px 1fr;
   min-height:calc(100vh - 70px);
 }
 
 .sidebar{
-  border-right:1px solid var(--line);
-  background:rgba(8,12,18,.76);
-  padding:18px 14px;
-  position:sticky;
-  top:70px;
-  height:calc(100vh - 70px);
-  overflow:auto;
+  border-right:1px solid var(--border);
+  padding:20px 14px;
+  background:rgba(5,8,13,.6);
 }
 
-.sideLabel{
-  color:#60758c;
+.nav-title{
+  color:#506275;
   font-size:10px;
   font-weight:800;
-  letter-spacing:1.7px;
-  padding:13px 11px 7px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin:12px 10px 8px;
 }
 
-.sideBtn{
+.nav-btn{
   width:100%;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  border:1px solid transparent;
-  background:transparent;
-  color:#a8b8c9;
-  padding:10px 11px;
-  border-radius:10px;
   text-align:left;
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:3px;
+  background:transparent;
+  color:#a7b6c6;
+  border:1px solid transparent;
+  padding:11px 12px;
+  border-radius:9px;
+  margin-bottom:4px;
 }
 
-.sideBtn:hover,
-.sideBtn.active{
-  background:rgba(101,216,255,.06);
-  border-color:rgba(101,216,255,.12);
-  color:#e6f8ff;
-}
-
-.sideIcon{
-  width:22px;
-  text-align:center;
+.nav-btn:hover,
+.nav-btn.active{
+  color:var(--text);
+  background:#0d1722;
+  border-color:var(--border);
 }
 
 .main{
+  padding:25px;
   min-width:0;
-  padding:24px;
 }
 
-.pageHeader{
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+/* =========================================================
+   PAGE HEAD
+========================================================= */
+
+.page-head{
   display:flex;
-  justify-content:space-between;
   align-items:flex-start;
+  justify-content:space-between;
   gap:20px;
-  margin-bottom:20px;
+  margin-bottom:25px;
 }
 
-.pageTitle{
+.page-title{
+  margin:0;
   font-family:Orbitron,sans-serif;
   font-size:25px;
-  font-weight:800;
-  letter-spacing:1px;
 }
 
-.pageDescription{
+.page-subtitle{
+  margin:8px 0 0;
   color:var(--muted);
-  font-size:12px;
-  margin-top:7px;
+  line-height:1.6;
 }
 
-.headerActions{
+.head-actions{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
 }
 
 /* =========================================================
-   CARDS / STATS
-   ========================================================= */
+   STATS
+========================================================= */
 
-.statsGrid{
+.stats{
   display:grid;
-  grid-template-columns:repeat(6,minmax(130px,1fr));
-  gap:12px;
-  margin-bottom:20px;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:24px;
 }
 
-.statCard{
-  background:linear-gradient(145deg,rgba(15,22,33,.96),rgba(8,13,20,.96));
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:17px;
-  box-shadow:0 8px 30px rgba(0,0,0,.18);
+.stat{
+  padding:20px;
+  background:linear-gradient(145deg,#0d151f,#090e15);
+  border:1px solid var(--border);
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
 
-.statLabel{
+.stat-label{
   color:var(--muted);
   font-size:10px;
-  font-weight:800;
-  letter-spacing:1px;
   text-transform:uppercase;
+  letter-spacing:1.5px;
 }
 
-.statValue{
+.stat-value{
+  font-family:Orbitron,sans-serif;
+  font-size:28px;
   margin-top:9px;
-  font-family:Orbitron,sans-serif;
-  font-size:23px;
-  font-weight:700;
 }
 
-.statHint{
+.stat-extra{
   margin-top:6px;
-  color:#60758c;
-  font-size:10px;
+  color:#5e748a;
+  font-size:11px;
 }
 
-.card{
-  background:rgba(10,16,24,.9);
-  border:1px solid var(--line);
+/* =========================================================
+   PANELS
+========================================================= */
+
+.panel{
+  background:linear-gradient(145deg,#0b111a,#080d14);
+  border:1px solid var(--border);
   border-radius:var(--radius);
-  box-shadow:0 8px 35px rgba(0,0,0,.18);
-  overflow:hidden;
+  padding:20px;
+  margin-bottom:18px;
 }
 
-.cardHeader{
-  padding:15px 17px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
-
-.cardTitle{
+.panel-title{
   font-family:Orbitron,sans-serif;
-  font-size:13px;
-  font-weight:700;
+  font-size:14px;
+  margin-bottom:15px;
+}
+
+.toolbar{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-bottom:17px;
+}
+
+.toolbar .search-input{
+  flex:1;
+  min-width:220px;
+}
+
+/* =========================================================
+   DATABASE CARDS
+========================================================= */
+
+.database-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.database-card{
+  background:linear-gradient(145deg,#0d1620,#091019);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:18px;
+  transition:.18s ease;
+}
+
+.database-card:hover{
+  border-color:#35506b;
+  transform:translateY(-2px);
+}
+
+.db-top{
+  display:flex;
+  gap:13px;
+  align-items:flex-start;
+}
+
+.db-icon{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:#111f2e;
+  border:1px solid var(--border);
+  font-size:19px;
+}
+
+.db-name{
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+  word-break:break-word;
+}
+
+.db-schema{
+  color:var(--accent);
+  font-size:10px;
+  margin-top:5px;
+}
+
+.db-description{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  margin:14px 0;
+}
+
+.db-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  margin-bottom:15px;
+}
+
+.db-stat{
+  background:#080e15;
+  border:1px solid #172536;
+  padding:9px;
+  border-radius:8px;
+}
+
+.db-stat b{
+  display:block;
+  font-size:14px;
+}
+
+.db-stat span{
+  color:#64798e;
+  font-size:9px;
+  text-transform:uppercase;
   letter-spacing:.7px;
 }
 
-.cardBody{
+.db-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+/* =========================================================
+   RECORD CARDS
+========================================================= */
+
+.record-list{
+  display:grid;
+  gap:12px;
+}
+
+.record-card{
+  background:#0a1119;
+  border:1px solid var(--border);
+  border-radius:14px;
   padding:17px;
 }
 
-/* =========================================================
-   DATABASE EXPLORER
-   ========================================================= */
-
-.dbLayout{
-  display:grid;
-  grid-template-columns:290px minmax(0,1fr);
-  gap:15px;
-}
-
-.schemaList{
-  max-height:calc(100vh - 230px);
-  overflow:auto;
-}
-
-.schemaGroup{
+.record-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
   margin-bottom:12px;
 }
 
-.schemaName{
-  padding:9px 11px;
-  font-family:Orbitron,sans-serif;
-  font-size:10px;
-  letter-spacing:1px;
+.record-select{
+  width:17px;
+  height:17px;
+}
+
+.record-number{
   color:var(--accent);
-  text-transform:uppercase;
+  font:600 11px Orbitron,sans-serif;
 }
 
-.tableItem{
-  width:100%;
-  border:1px solid transparent;
-  background:transparent;
-  color:#a9b9c9;
-  padding:8px 10px;
-  text-align:left;
-  border-radius:8px;
+.record-actions{
+  margin-left:auto;
   display:flex;
-  align-items:center;
-  justify-content:space-between;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.record-fields{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:8px;
-  font-size:11px;
-  margin-bottom:2px;
 }
 
-.tableItem:hover,
-.tableItem.active{
-  background:rgba(101,216,255,.06);
-  border-color:rgba(101,216,255,.12);
-  color:#f0fbff;
+.record-field{
+  background:#080d13;
+  border:1px solid #152332;
+  border-radius:9px;
+  padding:10px;
+  min-width:0;
 }
 
-.tableType{
-  color:#536b81;
+.record-field.full-width{
+  grid-column:1/-1;
+}
+
+.record-key{
+  color:#60768c;
   font-size:9px;
   text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:5px;
 }
 
-.dbToolbar{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  align-items:center;
-}
-
-.dbToolbar .grow{
-  flex:1;
-  min-width:180px;
-}
-
-.tableMeta{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-bottom:12px;
-}
-
-.chip{
-  border:1px solid var(--line2);
-  border-radius:999px;
-  padding:6px 9px;
-  font-size:10px;
-  color:#a9bacb;
-  background:#080e15;
-}
-
-.chip.green{
-  border-color:rgba(73,230,165,.25);
-  color:#9ff5cc;
-}
-
-.chip.yellow{
-  border-color:rgba(255,209,102,.25);
-  color:#ffe09a;
-}
-
-.chip.red{
-  border-color:rgba(255,92,117,.25);
-  color:#ffabb9;
-}
-
-/* =========================================================
-   TABLE
-   ========================================================= */
-
-.gridWrap{
+.record-value{
+  font-size:12px;
+  word-break:break-word;
+  white-space:pre-wrap;
+  max-height:100px;
   overflow:auto;
-  max-width:100%;
 }
 
-.dataTable{
-  width:100%;
-  border-collapse:collapse;
-  min-width:800px;
-}
-
-.dataTable th,
-.dataTable td{
-  padding:10px 11px;
-  border-bottom:1px solid #15212e;
-  text-align:left;
-  vertical-align:top;
-  font-size:11px;
-}
-
-.dataTable th{
-  position:sticky;
-  top:0;
-  z-index:2;
-  background:#0c131d;
-  color:#8398ad;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-  white-space:nowrap;
-}
-
-.dataTable th.sortable{
-  cursor:pointer;
-}
-
-.dataTable th.sortable:hover{
-  color:var(--accent);
-}
-
-.dataTable tbody tr:hover{
-  background:rgba(101,216,255,.025);
-}
-
-.dataCell{
-  max-width:280px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.nullCell{
-  color:#485b70;
+.null-value{
+  color:#46586a;
   font-style:italic;
 }
 
-.booleanTrue{
-  color:var(--green);
+.boolean-true{
+  color:var(--success);
 }
 
-.booleanFalse{
-  color:var(--red);
+.boolean-false{
+  color:var(--danger);
 }
 
-.rowActions{
+/* =========================================================
+   TABLE DETAIL
+========================================================= */
+
+.detail-head{
   display:flex;
-  gap:5px;
-  white-space:nowrap;
+  align-items:center;
+  gap:14px;
+  margin-bottom:20px;
 }
 
-.smallBtn{
-  padding:5px 7px;
-  border-radius:7px;
-  border:1px solid var(--line2);
-  background:#0a1119;
-  color:#aebdcd;
-  font-size:10px;
+.detail-icon{
+  width:55px;
+  height:55px;
+  display:grid;
+  place-items:center;
+  background:#101d2b;
+  border:1px solid var(--border);
+  border-radius:14px;
+  font-size:24px;
 }
 
-.smallBtn:hover{
-  color:white;
-  border-color:#39516b;
+.detail-name{
+  font-family:Orbitron,sans-serif;
+  font-size:21px;
 }
+
+.detail-meta{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:5px;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
 
 .pagination{
   display:flex;
-  justify-content:space-between;
+  justify-content:center;
   align-items:center;
-  gap:10px;
-  padding-top:14px;
-  flex-wrap:wrap;
+  gap:9px;
+  margin-top:20px;
 }
 
-.pageButtons{
+.page-info{
+  color:var(--muted);
+  font-size:12px;
+  padding:0 8px;
+}
+
+/* =========================================================
+   SCHEMA
+========================================================= */
+
+.schema-list{
+  display:grid;
+  gap:8px;
+}
+
+.schema-column{
+  display:grid;
+  grid-template-columns:1.2fr 1fr .8fr .8fr;
+  gap:10px;
+  padding:12px;
+  border:1px solid #172536;
+  background:#080e15;
+  border-radius:9px;
+  font-size:11px;
+}
+
+.schema-column.head{
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-size:9px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 7px;
+  border-radius:6px;
+  font-size:9px;
+  font-weight:700;
+  background:#101d2a;
+  color:#8ea5ba;
+  border:1px solid #203346;
+}
+
+.badge.pk{
+  color:var(--warning);
+}
+
+.badge.fk{
+  color:var(--accent);
+}
+
+.badge.required{
+  color:#ff9aaa;
+}
+
+/* =========================================================
+   RELATION MAP
+========================================================= */
+
+.relation-list{
+  display:grid;
+  gap:9px;
+}
+
+.relation{
   display:flex;
-  gap:5px;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  border:1px solid var(--border);
+  background:#080e15;
+  border-radius:9px;
+  font-size:11px;
+}
+
+.relation .arrow{
+  color:var(--accent);
+  font-size:18px;
 }
 
 /* =========================================================
    MODAL
-   ========================================================= */
+========================================================= */
 
-.modal{
+.modal-backdrop{
   position:fixed;
   inset:0;
-  z-index:500;
-  display:none;
-  place-items:center;
-  padding:25px;
+  z-index:100;
   background:rgba(0,0,0,.72);
-  backdrop-filter:blur(7px);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-.modal.open{
-  display:grid;
+.modal-backdrop.show{
+  display:flex;
 }
 
-.modalCard{
-  width:min(760px,100%);
+.modal{
+  width:min(850px,100%);
   max-height:90vh;
   overflow:auto;
-  background:#0a1018;
-  border:1px solid var(--line2);
-  border-radius:20px;
+  background:#090f17;
+  border:1px solid var(--border2);
+  border-radius:18px;
   box-shadow:var(--shadow);
 }
 
-.modalHeader{
-  padding:16px 18px;
-  border-bottom:1px solid var(--line);
+.modal-head{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#0a1119;
+  border-bottom:1px solid var(--border);
+  padding:17px 20px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
 }
 
-.modalTitle{
+.modal-title{
   font-family:Orbitron,sans-serif;
-  font-size:14px;
+  font-size:15px;
 }
 
-.modalBody{
-  padding:18px;
+.modal-close{
+  margin-left:auto;
 }
 
-.formGrid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
+.modal-body{
+  padding:20px;
 }
 
-.formGrid .full{
-  grid-column:1/-1;
-}
-
-.modalFooter{
-  padding:15px 18px;
-  border-top:1px solid var(--line);
+.modal-foot{
+  border-top:1px solid var(--border);
+  padding:15px 20px;
   display:flex;
   justify-content:flex-end;
   gap:8px;
 }
 
-/* =========================================================
-   SCHEMA MAP
-   ========================================================= */
-
-.mapArea{
-  min-height:550px;
-  overflow:auto;
-  background:
-    linear-gradient(rgba(101,216,255,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(101,216,255,.025) 1px,transparent 1px),
-    #070c12;
-  background-size:32px 32px;
-  border-radius:12px;
-  padding:25px;
-}
-
-.mapGrid{
+.form-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-  gap:15px;
-}
-
-.mapNode{
-  border:1px solid var(--line2);
-  background:rgba(10,16,24,.94);
-  border-radius:13px;
-  padding:13px;
-}
-
-.mapNode h4{
-  font-family:Orbitron,sans-serif;
-  font-size:11px;
-  margin:0 0 7px;
-  color:var(--accent);
-}
-
-.mapNode .mapSchema{
-  color:#60758b;
-  font-size:9px;
-  margin-bottom:9px;
-}
-
-.mapColumn{
-  font-size:9px;
-  padding:4px 0;
-  color:#9eb0c2;
-  border-top:1px solid #15212d;
-}
-
-.mapPk{
-  color:var(--yellow);
-}
-
-/* =========================================================
-   DASHBOARD
-   ========================================================= */
-
-.moduleGrid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(160px,1fr));
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:12px;
 }
 
-.module{
-  border:1px solid var(--line);
-  background:linear-gradient(145deg,#0d151f,#091019);
-  padding:15px;
-  border-radius:14px;
-  cursor:pointer;
-  transition:.18s ease;
+.form-grid .field.full-width{
+  grid-column:1/-1;
 }
 
-.module:hover{
-  transform:translateY(-2px);
-  border-color:#324960;
+.dynamic-field textarea{
+  min-height:100px;
+  resize:vertical;
 }
 
-.moduleIcon{
-  font-size:22px;
-}
-
-.moduleName{
-  font-family:Orbitron,sans-serif;
-  font-size:11px;
-  margin-top:10px;
-}
-
-.moduleCount{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:6px;
+.field-meta{
+  color:#52677c;
+  font-size:9px;
+  margin-top:5px;
 }
 
 /* =========================================================
-   LOG / TOAST
-   ========================================================= */
+   TOAST
+========================================================= */
 
-.toast{
+#toastContainer{
   position:fixed;
   right:18px;
   bottom:18px;
-  z-index:1000;
-  max-width:420px;
-  background:#0b131d;
-  border:1px solid var(--line2);
-  border-radius:12px;
+  z-index:200;
+  width:min(400px,calc(100% - 36px));
+}
+
+.toast{
+  margin-top:8px;
   padding:13px 15px;
+  border-radius:11px;
+  border:1px solid var(--border);
+  background:#0d1722;
   box-shadow:var(--shadow);
-  display:none;
   font-size:12px;
+  line-height:1.5;
 }
 
-.toast.show{
-  display:block;
-}
-
-.toast.ok{
-  border-color:rgba(73,230,165,.35);
+.toast.success{
+  border-color:rgba(72,229,155,.35);
 }
 
 .toast.error{
-  border-color:rgba(255,92,117,.4);
+  border-color:rgba(255,88,116,.35);
 }
 
-.loading{
-  color:var(--muted);
-  padding:25px;
-  text-align:center;
+.toast.warning{
+  border-color:rgba(255,200,87,.35);
 }
+
+/* =========================================================
+   EMPTY
+========================================================= */
 
 .empty{
-  padding:35px;
+  padding:50px 20px;
   text-align:center;
   color:var(--muted);
+  border:1px dashed #22364a;
+  border-radius:13px;
 }
 
-pre.jsonPreview{
-  background:#05090e;
-  border:1px solid var(--line);
-  border-radius:10px;
+.empty strong{
+  display:block;
+  color:var(--text);
+  margin-bottom:7px;
+}
+
+/* =========================================================
+   DIAGNOSTICS
+========================================================= */
+
+.diag{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.diag-item{
   padding:12px;
-  overflow:auto;
-  max-height:350px;
-  color:#b8d2e8;
+  background:#080e15;
+  border:1px solid #172536;
+  border-radius:9px;
+}
+
+.diag-item span{
+  display:block;
+  color:#5c7287;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:5px;
+}
+
+.diag-item b{
   font-size:11px;
+  word-break:break-word;
 }
 
 /* =========================================================
    RESPONSIVE
-   ========================================================= */
+========================================================= */
 
-@media(max-width:1200px){
-  .statsGrid{
+@media(max-width:1100px){
+  .app-layout{
+    grid-template-columns:190px 1fr;
+  }
+
+  .stats{
     grid-template-columns:repeat(3,1fr);
   }
 
-  .moduleGrid{
-    grid-template-columns:repeat(2,1fr);
+  .database-list{
+    grid-template-columns:1fr;
   }
 }
 
-@media(max-width:900px){
-  .layout{
-    grid-template-columns:1fr;
+@media(max-width:800px){
+  .app-layout{
+    display:block;
   }
 
   .sidebar{
-    position:static;
-    height:auto;
+    position:sticky;
+    top:69px;
+    z-index:40;
     border-right:0;
-    border-bottom:1px solid var(--line);
+    border-bottom:1px solid var(--border);
+    overflow-x:auto;
+    display:flex;
+    gap:5px;
+    padding:8px;
   }
 
-  .dbLayout{
-    grid-template-columns:1fr;
+  .nav-title{
+    display:none;
   }
 
-  .schemaList{
-    max-height:300px;
-  }
-}
-
-@media(max-width:650px){
-  .topbar{
-    height:auto;
-    padding:12px;
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .topActions{
-    width:100%;
-    flex-wrap:wrap;
+  .nav-btn{
+    width:auto;
+    white-space:nowrap;
+    margin:0;
   }
 
   .main{
-    padding:14px;
+    padding:16px;
   }
 
-  .statsGrid{
+  .stats{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .formGrid{
+  .record-fields{
     grid-template-columns:1fr;
   }
 
-  .formGrid .full{
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid .field.full-width{
     grid-column:auto;
   }
 
-  .moduleGrid{
+  .schema-column{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .schema-column.head{
+    display:none;
+  }
+
+  .page-head{
+    display:block;
+  }
+
+  .head-actions{
+    margin-top:15px;
+  }
+
+  .header-inner{
+    padding:12px;
+  }
+
+  .auth-status{
+    display:none;
+  }
+}
+
+@media(max-width:500px){
+  .stats{
     grid-template-columns:1fr;
   }
 
-  .pageHeader{
-    flex-direction:column;
+  .db-stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .record-actions{
+    margin-left:0;
+  }
+
+  .record-head{
+    flex-wrap:wrap;
+  }
+
+  .detail-head{
+    align-items:flex-start;
   }
 }
 </style>
@@ -980,26 +1099,46 @@ pre.jsonPreview{
 <body>
 
 <!-- =======================================================
-     AUTH SCREEN
+     BOOT
 ======================================================= -->
 
-<section id="authScreen">
-
-  <div class="authCard">
-
-    <div class="brandMark">🐦‍⬛</div>
-
-    <div class="brandTitle">CROWRULES ADMIN</div>
-
-    <div class="brandSub">
-      Universal Supabase Command Center
-      <br>
-      Secure administration for the CrowRules Entertainment ecosystem.
+<section id="bootScreen" class="screen">
+  <div class="boot-box">
+    <div class="logo">CROW<span>RULES</span></div>
+    <div style="font-family:Orbitron;font-size:13px;letter-spacing:2px;">
+      ADMIN v5.4
     </div>
 
-    <div class="versionBadge">
-      ADMIN v5.4 • DATABASE CONTROL CENTER
+    <div class="boot-status" id="bootStatus">
+      Initializing secure administration...
     </div>
+
+    <div class="loader">
+      <i></i>
+    </div>
+  </div>
+</section>
+
+<!-- =======================================================
+     LOGIN
+======================================================= -->
+
+<section id="loginScreen" class="screen hidden">
+  <div class="login-card">
+
+    <div class="logo" style="font-size:28px;">
+      CROW<span>RULES</span>
+    </div>
+
+    <h1>Admin Command Center</h1>
+
+    <p>
+      Sign in with your Supabase Auth account.
+      Authorization is verified against the CrowRules
+      <code>cr_admins</code> system.
+    </p>
+
+    <div id="loginMessage"></div>
 
     <form id="loginForm">
 
@@ -1009,705 +1148,593 @@ pre.jsonPreview{
           id="loginEmail"
           type="email"
           autocomplete="username"
-          required
-          placeholder="admin@example.com">
+          placeholder="admin@example.com"
+          required>
       </div>
 
       <div class="field">
         <label>Password</label>
-        <input
-          id="loginPassword"
-          type="password"
-          autocomplete="current-password"
-          required
-          placeholder="••••••••">
+
+        <div class="password-wrap">
+          <input
+            id="loginPassword"
+            type="password"
+            autocomplete="current-password"
+            required>
+
+          <button
+            type="button"
+            class="password-toggle"
+            id="togglePassword">
+            Show
+          </button>
+        </div>
       </div>
 
-      <button class="btn primary block" type="submit">
-        SIGN IN TO COMMAND CENTER
-      </button>
+      <div class="login-actions">
+        <button class="btn btn-primary full" type="submit">
+          Sign In
+        </button>
+
+        <button
+          class="btn full"
+          type="button"
+          id="resetPassword">
+          Send Password Reset
+        </button>
+      </div>
 
     </form>
 
-    <button
-      id="resetPassword"
-      class="btn block"
-      type="button">
-      RESET PASSWORD
-    </button>
-
-    <div id="authError" class="authError hidden"></div>
-
   </div>
-
 </section>
 
-
 <!-- =======================================================
-     APPLICATION
+     ADMIN APP
 ======================================================= -->
 
-<section id="app" class="hidden">
+<section id="adminApp" class="screen hidden">
 
-  <header class="topbar">
+<header class="app-header">
 
-    <div class="topBrand">
-      <div class="logoSmall">🐦‍⬛</div>
+  <div class="header-inner">
 
-      <div>
-        <strong>CROWRULES ADMIN v5.4</strong>
-        <span>UNIVERSAL SUPABASE COMMAND CENTER</span>
-      </div>
+    <div class="brand">
+      CROWRULES ADMIN
+      <small>SUPABASE COMMAND CENTER v5.4</small>
     </div>
 
-    <div class="topActions">
+    <div class="header-spacer"></div>
 
-      <div class="status">
-        <span id="statusDot" class="statusDot"></span>
-        <span id="statusText">Connecting...</span>
-      </div>
+    <div class="auth-status">
+      <span class="status-dot"></span>
+      <span id="authUserLabel">Authenticated</span>
+    </div>
 
-      <button id="refreshAuth" class="btn">
-        ↻ Refresh Auth
+    <div class="header-actions">
+      <button class="btn btn-small" id="refreshAll">
+        Refresh
       </button>
 
-      <button id="refreshAll" class="btn">
-        ↻ Refresh
-      </button>
-
-      <button id="signOut" class="btn red">
+      <button class="btn btn-small btn-danger" id="signOut">
         Sign Out
       </button>
+    </div>
+
+  </div>
+
+</header>
+
+<div class="app-layout">
+
+<!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+<aside class="sidebar">
+
+  <div class="nav-title">Command</div>
+
+  <button class="nav-btn active" data-page="dashboard">
+    ◈ Dashboard
+  </button>
+
+  <button class="nav-btn" data-page="databases">
+    ▣ Databases
+  </button>
+
+  <button class="nav-btn" data-page="relationships">
+    ⛓ Relationships
+  </button>
+
+  <button class="nav-btn" data-page="audit">
+    ◉ Audit
+  </button>
+
+  <button class="nav-btn" data-page="diagnostics">
+    ⚙ Diagnostics
+  </button>
+
+</aside>
+
+<!-- =======================================================
+     MAIN
+======================================================= -->
+
+<main class="main">
+
+<!-- =======================================================
+     DASHBOARD
+======================================================= -->
+
+<section class="page active" id="page-dashboard">
+
+  <div class="page-head">
+
+    <div>
+      <h1 class="page-title">Supabase Command Center</h1>
+
+      <p class="page-subtitle">
+        Manage the application-facing CrowRules database from
+        one secure administration console.
+      </p>
+    </div>
+
+    <div class="head-actions">
+
+      <button
+        class="btn btn-primary"
+        id="dashboardAddRecord">
+        + Add Record
+      </button>
+
+      <button
+        class="btn"
+        id="dashboardRefresh">
+        Refresh Database
+      </button>
 
     </div>
 
-  </header>
-
-
-  <div class="layout">
-
-    <!-- SIDEBAR -->
-
-    <aside class="sidebar">
-
-      <div class="sideLabel">COMMAND</div>
-
-      <button class="sideBtn active" data-page="dashboard">
-        <span class="sideIcon">⌂</span>
-        Dashboard
-      </button>
-
-      <button class="sideBtn" data-page="database">
-        <span class="sideIcon">▦</span>
-        Database Explorer
-      </button>
-
-      <button class="sideBtn" data-page="members">
-        <span class="sideIcon">♟</span>
-        Members
-      </button>
-
-      <button class="sideBtn" data-page="schema">
-        <span class="sideIcon">⌘</span>
-        Schema Map
-      </button>
-
-      <div class="sideLabel">CROWRULES</div>
-
-      <button class="sideBtn" data-page="tv">
-        <span class="sideIcon">▣</span>
-        CrowRules TV
-      </button>
-
-      <button class="sideBtn" data-page="podcasting">
-        <span class="sideIcon">🎙</span>
-        Podcasting
-      </button>
-
-      <button class="sideBtn" data-page="sports">
-        <span class="sideIcon">🏆</span>
-        Sports
-      </button>
-
-      <button class="sideBtn" data-page="tacoma">
-        <span class="sideIcon">🌙</span>
-        Tacoma Nights
-      </button>
-
-      <button class="sideBtn" data-page="backdeck">
-        <span class="sideIcon">🎬</span>
-        Back Deck Live
-      </button>
-
-      <button class="sideBtn" data-page="business">
-        <span class="sideIcon">▤</span>
-        Business Hub
-      </button>
-
-      <div class="sideLabel">MANAGEMENT</div>
-
-      <button class="sideBtn" data-page="donations">
-        <span class="sideIcon">♥</span>
-        Donations
-      </button>
-
-      <button class="sideBtn" data-page="news">
-        <span class="sideIcon">📰</span>
-        News
-      </button>
-
-      <button class="sideBtn" data-page="analytics">
-        <span class="sideIcon">◔</span>
-        Analytics
-      </button>
-
-      <button class="sideBtn" data-page="admin">
-        <span class="sideIcon">⚙</span>
-        Admin
-      </button>
-
-    </aside>
-
-
-    <!-- MAIN -->
-
-    <main class="main">
-
-      <!-- DASHBOARD -->
-
-      <section id="page-dashboard" class="page">
-
-        <div class="pageHeader">
-
-          <div>
-            <div class="pageTitle">
-              Command Center
-            </div>
-
-            <div class="pageDescription">
-              Live overview of the CrowRules Entertainment Supabase environment.
-            </div>
-          </div>
-
-          <div class="headerActions">
-            <button class="btn primary" onclick="loadEverything()">
-              ↻ Update Statistics
-            </button>
-          </div>
-
-        </div>
-
-        <div id="statsGrid" class="statsGrid">
-          <div class="statCard">
-            <div class="statLabel">Schemas</div>
-            <div id="statSchemas" class="statValue">—</div>
-            <div class="statHint">Discovered</div>
-          </div>
-
-          <div class="statCard">
-            <div class="statLabel">Tables</div>
-            <div id="statTables" class="statValue">—</div>
-            <div class="statHint">All schemas</div>
-          </div>
-
-          <div class="statCard">
-            <div class="statLabel">Views</div>
-            <div id="statViews" class="statValue">—</div>
-            <div class="statHint">Read-only</div>
-          </div>
-
-          <div class="statCard">
-            <div class="statLabel">RLS</div>
-            <div id="statRls" class="statValue">—</div>
-            <div class="statHint">Protected tables</div>
-          </div>
-
-          <div class="statCard">
-            <div class="statLabel">Members</div>
-            <div id="statMembers" class="statValue">—</div>
-            <div class="statHint">cr_members</div>
-          </div>
-
-          <div class="statCard">
-            <div class="statLabel">Public Tables</div>
-            <div id="statPublicTables" class="statValue">—</div>
-            <div class="statHint">Application data</div>
-          </div>
-        </div>
-
-
-        <div class="card">
-
-          <div class="cardHeader">
-            <div class="cardTitle">
-              CROWRULES MODULES
-            </div>
-          </div>
-
-          <div class="cardBody">
-
-            <div class="moduleGrid">
-
-              <div class="module" onclick="openModule('cr_members')">
-                <div class="moduleIcon">♟</div>
-                <div class="moduleName">Members</div>
-                <div class="moduleCount">Member accounts & profiles</div>
-              </div>
-
-              <div class="module" onclick="openModule('cr_content')">
-                <div class="moduleIcon">📺</div>
-                <div class="moduleName">Content</div>
-                <div class="moduleCount">Programming catalog</div>
-              </div>
-
-              <div class="module" onclick="openModule('podcasts')">
-                <div class="moduleIcon">🎙</div>
-                <div class="moduleName">Podcasting</div>
-                <div class="moduleCount">Podcasts & creators</div>
-              </div>
-
-              <div class="module" onclick="openModule('sports_games')">
-                <div class="moduleIcon">🏆</div>
-                <div class="moduleName">Sports</div>
-                <div class="moduleCount">Games & sports data</div>
-              </div>
-
-              <div class="module" onclick="openModule('tacoma_nights_episodes')">
-                <div class="moduleIcon">🌙</div>
-                <div class="moduleName">Tacoma Nights</div>
-                <div class="moduleCount">Episodes</div>
-              </div>
-
-              <div class="module" onclick="openModule('back_deck_episodes')">
-                <div class="moduleIcon">🎬</div>
-                <div class="moduleName">Back Deck Live</div>
-                <div class="moduleCount">Episodes & programming</div>
-              </div>
-
-              <div class="module" onclick="openModule('donations')">
-                <div class="moduleIcon">♥</div>
-                <div class="moduleName">Donations</div>
-                <div class="moduleCount">Support & campaigns</div>
-              </div>
-
-              <div class="module" onclick="openModule('cr_projects')">
-                <div class="moduleIcon">🚀</div>
-                <div class="moduleName">Projects</div>
-                <div class="moduleCount">Business roadmap</div>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- DATABASE -->
-
-      <section id="page-database" class="page hidden">
-
-        <div class="pageHeader">
-
-          <div>
-            <div class="pageTitle">
-              Database Explorer
-            </div>
-
-            <div class="pageDescription">
-              Browse every discoverable Supabase schema, table, and view.
-            </div>
-          </div>
-
-        </div>
-
-        <div class="dbLayout">
-
-          <div class="card">
-
-            <div class="cardHeader">
-              <div class="cardTitle">
-                SCHEMAS
-              </div>
-            </div>
-
-            <div class="cardBody">
-
-              <input
-                id="tableSearch"
-                placeholder="Search tables...">
-
-              <div id="schemaList" class="schemaList">
-                <div class="loading">
-                  Loading database...
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="card">
-
-            <div class="cardHeader">
-
-              <div>
-                <div id="selectedTableTitle" class="cardTitle">
-                  Select a table
-                </div>
-
-                <div id="selectedTableSubtitle"
-                     style="color:var(--muted);font-size:10px;margin-top:4px">
-                  No table selected
-                </div>
-              </div>
-
-              <div class="dbToolbar">
-
-                <button
-                  id="addRecordBtn"
-                  class="btn green"
-                  disabled>
-                  ＋ Add
-                </button>
-
-                <button
-                  id="bulkDeleteBtn"
-                  class="btn red"
-                  disabled>
-                  🗑 Bulk Delete
-                </button>
-
-                <button
-                  id="exportBtn"
-                  class="btn">
-                  Export
-                </button>
-
-              </div>
-
-            </div>
-
-            <div class="cardBody">
-
-              <div id="tableMeta" class="tableMeta"></div>
-
-              <div class="dbToolbar" style="margin-bottom:13px">
-
-                <input
-                  id="rowSearch"
-                  class="grow"
-                  placeholder="Filter loaded records...">
-
-                <select id="pageSize">
-                  <option value="10">10 / page</option>
-                  <option value="25" selected>25 / page</option>
-                  <option value="50">50 / page</option>
-                  <option value="100">100 / page</option>
-                </select>
-
-                <button
-                  id="reloadTable"
-                  class="btn">
-                  ↻
-                </button>
-
-              </div>
-
-              <div id="dataGrid">
-                <div class="empty">
-                  Select a table from the database explorer.
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- MEMBERS -->
-
-      <section id="page-members" class="page hidden">
-
-        <div class="pageHeader">
-
-          <div>
-            <div class="pageTitle">Members</div>
-            <div class="pageDescription">
-              CrowRules member management.
-            </div>
-          </div>
-
-          <div class="headerActions">
-            <button
-              class="btn primary"
-              onclick="openModule('cr_members')">
-              Open Member Database
-            </button>
-          </div>
-
-        </div>
-
-        <div class="statsGrid">
-
-          <div class="statCard">
-            <div class="statLabel">Members</div>
-            <div id="memberTotal" class="statValue">—</div>
-          </div>
-
-          <div class="statCard">
-            <div class="statLabel">Active</div>
-            <div id="memberActive" class="statValue">—</div>
-          </div>
-
-          <div class="statCard">
-            <div class="statLabel">Premium</div>
-            <div id="memberPremium" class="statValue">—</div>
-          </div>
-
-          <div class="statCard">
-            <div class="statLabel">Free</div>
-            <div id="memberFree" class="statValue">—</div>
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="cardHeader">
-            <div class="cardTitle">
-              MEMBER SYSTEM
-            </div>
-          </div>
-
-          <div class="cardBody">
-
-            <p style="color:var(--muted);font-size:12px;line-height:1.7">
-              Manage member profiles, membership status, points,
-              watch activity, favorites, notifications and roles.
-              Passwords remain exclusively inside Supabase Auth.
-            </p>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- SCHEMA MAP -->
-
-      <section id="page-schema" class="page hidden">
-
-        <div class="pageHeader">
-
-          <div>
-            <div class="pageTitle">Schema Relationship Map</div>
-            <div class="pageDescription">
-              Visual representation of discovered Supabase tables and columns.
-            </div>
-          </div>
-
-          <button class="btn" onclick="renderSchemaMap()">
-            ↻ Refresh Map
-          </button>
-
-        </div>
-
-        <div class="card">
-
-          <div class="cardBody">
-
-            <div id="schemaMap" class="mapArea">
-              <div class="loading">
-                Loading schema map...
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- GENERIC MODULE PAGES -->
-
-      <section id="page-tv" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">CrowRules TV</div>
-            <div class="pageDescription">
-              Streaming, programming, episodes, media and catalog administration.
-            </div>
-          </div>
-        </div>
-        <div id="tvModule" class="card"></div>
-      </section>
-
-      <section id="page-podcasting" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">CrowRules Podcasting</div>
-            <div class="pageDescription">
-              Podcasts, episodes, podcasters and applications.
-            </div>
-          </div>
-        </div>
-        <div id="podcastModule" class="card"></div>
-      </section>
-
-      <section id="page-sports" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">CrowRules Sports</div>
-            <div class="pageDescription">
-              Sports games, teams, players, leagues, standings and programming.
-            </div>
-          </div>
-        </div>
-        <div id="sportsModule" class="card"></div>
-      </section>
-
-      <section id="page-tacoma" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">Tacoma Nights</div>
-            <div class="pageDescription">
-              Tacoma Nights production and episode administration.
-            </div>
-          </div>
-        </div>
-        <div id="tacomaModule" class="card"></div>
-      </section>
-
-      <section id="page-backdeck" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">Back Deck Live</div>
-            <div class="pageDescription">
-              Live-show and episode administration.
-            </div>
-          </div>
-        </div>
-        <div id="backdeckModule" class="card"></div>
-      </section>
-
-      <section id="page-business" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">Business Hub</div>
-            <div class="pageDescription">
-              Projects, partners, contacts, roadmap and business operations.
-            </div>
-          </div>
-        </div>
-        <div id="businessModule" class="card"></div>
-      </section>
-
-      <section id="page-donations" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">Donations</div>
-            <div class="pageDescription">
-              Campaigns, donation events and support statistics.
-            </div>
-          </div>
-        </div>
-        <div id="donationModule" class="card"></div>
-      </section>
-
-      <section id="page-news" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">News</div>
-            <div class="pageDescription">
-              News stories and source management.
-            </div>
-          </div>
-        </div>
-        <div id="newsModule" class="card"></div>
-      </section>
-
-      <section id="page-analytics" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">Analytics</div>
-            <div class="pageDescription">
-              CrowRules activity and analytics data.
-            </div>
-          </div>
-        </div>
-        <div id="analyticsModule" class="card"></div>
-      </section>
-
-      <section id="page-admin" class="page hidden">
-        <div class="pageHeader">
-          <div>
-            <div class="pageTitle">Administration</div>
-            <div class="pageDescription">
-              Admin identity, permissions, audit and system diagnostics.
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="cardBody">
-            <div id="adminIdentity"></div>
-          </div>
-        </div>
-      </section>
-
-    </main>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-label">Tables</div>
+      <div class="stat-value" id="statTables">—</div>
+      <div class="stat-extra">Base tables</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Views</div>
+      <div class="stat-value" id="statViews">—</div>
+      <div class="stat-extra">Read-only views</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Records</div>
+      <div class="stat-value" id="statRows">—</div>
+      <div class="stat-extra">Known table records</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Columns</div>
+      <div class="stat-value" id="statColumns">—</div>
+      <div class="stat-extra">Database fields</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Relations</div>
+      <div class="stat-value" id="statRelations">—</div>
+      <div class="stat-extra">Foreign keys</div>
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-title">
+      Database Search
+    </div>
+
+    <input
+      class="search-input"
+      id="databaseSearch"
+      placeholder="Search tables, views, schemas, columns...">
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-title">
+      Supabase Databases
+    </div>
+
+    <div id="dashboardDatabaseList" class="database-list">
+      <div class="empty">
+        <strong>Loading database metadata...</strong>
+        Discovering Supabase tables and views.
+      </div>
+    </div>
 
   </div>
 
 </section>
 
-
 <!-- =======================================================
-     RECORD MODAL
+     DATABASES
 ======================================================= -->
 
-<div id="recordModal" class="modal">
+<section class="page" id="page-databases">
 
-  <div class="modalCard">
+  <div class="page-head">
 
-    <div class="modalHeader">
+    <div>
+      <h1 class="page-title">Databases</h1>
 
-      <div id="recordModalTitle" class="modalTitle">
+      <p class="page-subtitle">
+        Every application-facing public table and view discovered
+        from your Supabase PostgreSQL database.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="toolbar">
+
+      <input
+        class="search-input"
+        id="tableSearch"
+        placeholder="Search databases...">
+
+      <button class="btn" id="reloadMetadata">
+        Reload Metadata
+      </button>
+
+    </div>
+
+    <div id="databaseList" class="database-list"></div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     TABLE DETAIL
+======================================================= -->
+
+<section class="page" id="page-table">
+
+  <div class="page-head">
+
+    <div class="detail-head">
+
+      <button class="btn" id="backDatabases">
+        ← Back
+      </button>
+
+      <div class="detail-icon">▣</div>
+
+      <div>
+        <div class="detail-name" id="detailTableName">
+          Table
+        </div>
+
+        <div class="detail-meta" id="detailTableMeta">
+          Loading...
+        </div>
+      </div>
+
+    </div>
+
+    <div class="head-actions">
+
+      <button class="btn btn-primary" id="addRecordButton">
+        + Add Record
+      </button>
+
+      <button class="btn" id="exportJsonButton">
+        JSON
+      </button>
+
+      <button class="btn" id="exportCsvButton">
+        CSV
+      </button>
+
+      <button class="btn" id="refreshRecordsButton">
+        Refresh
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-label">Records</div>
+      <div class="stat-value" id="detailRows">—</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Columns</div>
+      <div class="stat-value" id="detailColumns">—</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Primary Key</div>
+      <div class="stat-value" id="detailPk"
+           style="font-size:15px;">
+        —
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Relations</div>
+      <div class="stat-value" id="detailRelations">—</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">Type</div>
+      <div class="stat-value" id="detailType"
+           style="font-size:15px;">
+        —
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="toolbar">
+
+      <input
+        class="search-input"
+        id="recordSearch"
+        placeholder="Search records...">
+
+      <button
+        class="btn"
+        id="selectAllRecords">
+        Select Page
+      </button>
+
+      <button
+        class="btn btn-danger"
+        id="bulkDelete">
+        Delete Selected
+      </button>
+
+      <button
+        class="btn btn-success"
+        id="bulkPublish">
+        Publish Selected
+      </button>
+
+      <button
+        class="btn btn-warning"
+        id="bulkUnpublish">
+        Unpublish Selected
+      </button>
+
+    </div>
+
+    <div id="recordList" class="record-list"></div>
+
+    <div class="pagination">
+
+      <button class="btn btn-small" id="previousPage">
+        ← Previous
+      </button>
+
+      <span class="page-info" id="pageInfo">
+        Page 1
+      </span>
+
+      <button class="btn btn-small" id="nextPage">
+        Next →
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-title">
+      Table Schema
+    </div>
+
+    <div id="schemaList" class="schema-list"></div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     RELATIONSHIPS
+======================================================= -->
+
+<section class="page" id="page-relationships">
+
+  <div class="page-head">
+
+    <div>
+      <h1 class="page-title">Database Relationships</h1>
+
+      <p class="page-subtitle">
+        Foreign-key relationships discovered from PostgreSQL metadata.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div id="relationshipList" class="relation-list"></div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     AUDIT
+======================================================= -->
+
+<section class="page" id="page-audit">
+
+  <div class="page-head">
+
+    <div>
+      <h1 class="page-title">Admin Audit</h1>
+
+      <p class="page-subtitle">
+        Recent administrative operations performed through this console.
+      </p>
+    </div>
+
+    <button class="btn" id="refreshAudit">
+      Refresh Audit
+    </button>
+
+  </div>
+
+  <div class="panel">
+
+    <div id="auditList" class="record-list"></div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     DIAGNOSTICS
+======================================================= -->
+
+<section class="page" id="page-diagnostics">
+
+  <div class="page-head">
+
+    <div>
+      <h1 class="page-title">Diagnostics</h1>
+
+      <p class="page-subtitle">
+        Authentication, authorization, database and application status.
+      </p>
+    </div>
+
+    <button class="btn" id="runDiagnostics">
+      Run Diagnostics
+    </button>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="diag">
+
+      <div class="diag-item">
+        <span>Supabase Project</span>
+        <b id="diagProject">—</b>
+      </div>
+
+      <div class="diag-item">
+        <span>Authenticated User</span>
+        <b id="diagUser">—</b>
+      </div>
+
+      <div class="diag-item">
+        <span>Admin Role</span>
+        <b id="diagRole">—</b>
+      </div>
+
+      <div class="diag-item">
+        <span>Active</span>
+        <b id="diagActive">—</b>
+      </div>
+
+      <div class="diag-item">
+        <span>Authorization</span>
+        <b id="diagAuthorized">—</b>
+      </div>
+
+      <div class="diag-item">
+        <span>Tables</span>
+        <b id="diagTables">—</b>
+      </div>
+
+      <div class="diag-item">
+        <span>Views</span>
+        <b id="diagViews">—</b>
+      </div>
+
+      <div class="diag-item">
+        <span>Relationships</span>
+        <b id="diagRelations">—</b>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+</div>
+</section>
+
+<!-- =======================================================
+     MODAL
+======================================================= -->
+
+<div class="modal-backdrop" id="modalBackdrop">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title" id="modalTitle">
         Record
       </div>
 
       <button
-        class="btn"
-        onclick="closeModal()">
+        class="btn btn-small modal-close"
+        id="closeModal">
         ✕
       </button>
 
     </div>
 
-    <div id="recordForm" class="modalBody"></div>
+    <div class="modal-body">
 
-    <div class="modalFooter">
+      <div id="modalMessage"></div>
+
+      <form id="recordForm">
+
+        <div
+          class="form-grid"
+          id="dynamicForm">
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="modal-foot">
 
       <button
         class="btn"
-        onclick="closeModal()">
+        id="cancelModal">
         Cancel
       </button>
 
       <button
-        id="saveRecordBtn"
-        class="btn primary">
-        Save
+        class="btn btn-primary"
+        id="saveRecord">
+        Save Record
       </button>
 
     </div>
@@ -1716,62 +1743,67 @@ pre.jsonPreview{
 
 </div>
 
-
-<!-- =======================================================
-     TOAST
-======================================================= -->
-
-<div id="toast" class="toast"></div>
-
+<div id="toastContainer"></div>
 
 <script>
 /* =========================================================
    CROWRULES ADMIN v5.4
-   UNIVERSAL SUPABASE COMMAND CENTER
+   SUPABASE DATABASE COMMAND CENTER
    ========================================================= */
+
+/*
+  IMPORTANT:
+
+  Replace only this value with the browser-safe Supabase
+  publishable/anon key.
+
+  NEVER use service_role or a Supabase secret key here.
+*/
 
 const SUPABASE_URL =
   "https://zauxdqyssratvzmomozf.supabase.co";
 
-/*
- IMPORTANT:
- Paste ONLY your browser-safe Supabase publishable/anon key.
- NEVER paste a service_role or secret key here.
-*/
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_-Z6wecSOxwOk6IBut2zLnw_8DfRxnE9";
 
-
 /* =========================================================
-   STATE
+   GLOBAL STATE
 ========================================================= */
 
 let supabaseClient = null;
+
 let currentUser = null;
 let currentAdmin = null;
 
-let schemaRows = [];
-let selectedTable = null;
-let selectedRows = new Set();
+let resources = [];
+let relationships = [];
 
+let currentTable = null;
 let currentColumns = [];
 let currentRows = [];
 
-let currentPage = 0;
-let pageSize = 25;
+let currentPage = 1;
+let pageSize = 20;
 let totalRows = 0;
 
-let sortColumn = null;
-let sortDirection = "asc";
+let editingRow = null;
+let editingMode = "create";
 
-let editingRecord = null;
-
+let selectedIds = new Set();
 
 /* =========================================================
-   DOM HELPERS
+   ELEMENT HELPERS
 ========================================================= */
 
 const $ = id => document.getElementById(id);
+
+function show(el){
+  el.classList.remove("hidden");
+}
+
+function hide(el){
+  el.classList.add("hidden");
+}
 
 function escapeHtml(value){
 
@@ -1787,254 +1819,221 @@ function escapeHtml(value){
     .replaceAll("'","&#039;");
 }
 
+/* =========================================================
+   TOAST
+========================================================= */
 
-function showToast(message,type=""){
+function toast(message,type="success"){
 
-  const el = $("toast");
+  const box = document.createElement("div");
 
-  el.textContent = message;
+  box.className =
+    "toast " +
+    (type === "error" ? "error" :
+     type === "warning" ? "warning" :
+     "success");
 
-  el.className =
-    "toast show " +
-    (type || "");
+  box.textContent = message;
 
-  clearTimeout(window.toastTimer);
+  $("toastContainer").appendChild(box);
 
-  window.toastTimer =
-    setTimeout(() => {
-      el.className = "toast";
-    },4000);
+  setTimeout(()=>{
+    box.remove();
+  },4500);
 }
 
+/* =========================================================
+   BOOT STATUS
+========================================================= */
 
-function showAuthError(message){
-
-  const el = $("authError");
-
-  el.textContent = message;
-
-  el.classList.remove("hidden");
+function bootStatus(message){
+  $("bootStatus").textContent = message;
 }
-
-
-function clearAuthError(){
-
-  $("authError").classList.add("hidden");
-}
-
-
-function setStatus(ok,text){
-
-  $("statusDot").classList.toggle("ok",!!ok);
-
-  $("statusText").textContent = text;
-}
-
 
 /* =========================================================
    INITIALIZATION
 ========================================================= */
 
-async function init(){
+async function initialize(){
 
-  if(
-    !SUPABASE_URL ||
-    !SUPABASE_PUBLISHABLE_KEY ||
-    SUPABASE_PUBLISHABLE_KEY ===
-      "YOUR_SUPABASE_PUBLISHABLE_KEY"
-  ){
+  try{
 
-    showAuthError(
-      "Add your Supabase publishable/anon key to SUPABASE_PUBLISHABLE_KEY in this HTML file."
-    );
+    bootStatus("Initializing Supabase client...");
 
-    return;
-  }
+    if(
+      !SUPABASE_URL ||
+      SUPABASE_URL.includes("YOUR_") ||
+      !SUPABASE_PUBLISHABLE_KEY ||
+      SUPABASE_PUBLISHABLE_KEY.includes("YOUR_")
+    ){
+      throw new Error(
+        "Supabase configuration is incomplete. Add your browser-safe publishable key."
+      );
+    }
 
-  supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY,
-      {
-        auth:{
-          persistSession:true,
-          autoRefreshToken:true,
-          detectSessionInUrl:true,
-          flowType:"pkce"
+    supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+          auth:{
+            persistSession:true,
+            autoRefreshToken:true,
+            detectSessionInUrl:true,
+            flowType:"pkce"
+          }
+        }
+      );
+
+    bootStatus("Restoring authentication session...");
+
+    const {
+      data: sessionData,
+      error: sessionError
+    } = await supabaseClient.auth.getSession();
+
+    if(sessionError){
+      throw sessionError;
+    }
+
+    if(!sessionData?.session){
+
+      showLogin();
+
+      return;
+    }
+
+    bootStatus("Verifying authenticated identity...");
+
+    await authorizeCurrentUser();
+
+    supabaseClient.auth.onAuthStateChange(
+      async (event)=>{
+        if(event === "SIGNED_OUT"){
+          currentUser = null;
+          currentAdmin = null;
+          showLogin();
+        }
+
+        if(
+          event === "SIGNED_IN" ||
+          event === "TOKEN_REFRESHED"
+        ){
+          try{
+            await authorizeCurrentUser();
+          }catch(error){
+            console.error(error);
+          }
         }
       }
     );
 
+  }catch(error){
 
-  supabaseClient.auth.onAuthStateChange(
-    async (event,session) => {
+    console.error(error);
 
-      if(event === "SIGNED_OUT"){
+    showLogin();
 
-        currentUser = null;
-        currentAdmin = null;
-
-        showAuthScreen();
-
-        return;
-      }
-
-      if(
-        event === "SIGNED_IN" ||
-        event === "TOKEN_REFRESHED" ||
-        event === "USER_UPDATED"
-      ){
-
-        if(session){
-          await authorizeAdmin();
-        }
-      }
-
-    }
-  );
-
-
-  const {
-    data:{
-      session
-    }
-  } =
-    await supabaseClient.auth.getSession();
-
-
-  if(!session){
-
-    showAuthScreen();
-
-    return;
+    $("loginMessage").innerHTML =
+      `<div class="error">
+        ${escapeHtml(error.message)}
+      </div>`;
   }
-
-
-  await authorizeAdmin();
-
 }
-
 
 /* =========================================================
    AUTHORIZATION
 ========================================================= */
 
-async function authorizeAdmin(){
+async function authorizeCurrentUser(){
 
-  clearAuthError();
+  bootStatus("Checking Supabase Auth user...");
 
-  try{
+  const {
+    data,
+    error
+  } = await supabaseClient.auth.getUser();
 
-    setStatus(false,"Authenticating...");
-
-    const {
-      data:{
-        user
-      },
-      error:userError
-    } =
-      await supabaseClient.auth.getUser();
-
-
-    if(userError){
-      throw userError;
-    }
-
-    if(!user){
-
-      showAuthScreen();
-
-      throw new Error(
-        "Auth session missing. Please sign in again."
-      );
-    }
-
-
-    currentUser = user;
-
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.rpc(
-        "cr_admin_access_check"
-      );
-
-
-    if(error){
-      throw error;
-    }
-
-
-    const admin =
-      Array.isArray(data)
-        ? data[0]
-        : data;
-
-
-    if(
-      !admin ||
-      admin.authorized !== true ||
-      admin.is_active !== true
-    ){
-
-      throw new Error(
-        "This authenticated account is not authorized for CrowRules Admin."
-      );
-    }
-
-
-    currentAdmin = admin;
-
-    showApp();
-
-    setStatus(
-      true,
-      `${admin.role || "admin"} • ${user.email || ""}`
-    );
-
-    await loadEverything();
-
-  }
-  catch(error){
-
-    console.error(error);
-
-    setStatus(false,"Not authorized");
-
-    showAuthScreen();
-
-    showAuthError(
-      error.message ||
-      "Unable to authorize administrator."
+  if(error){
+    throw new Error(
+      "Supabase authentication failed: " +
+      error.message
     );
   }
 
+  const user = data?.user;
+
+  if(!user){
+    throw new Error(
+      "Auth session missing. Please sign in again."
+    );
+  }
+
+  currentUser = user;
+
+  bootStatus("Checking CrowRules administrator authorization...");
+
+  const {
+    data: adminData,
+    error: adminError
+  } = await supabaseClient.rpc(
+    "cr_admin_access_check"
+  );
+
+  if(adminError){
+    throw new Error(
+      "CrowRules administrator authorization failed: " +
+      adminError.message
+    );
+  }
+
+  const admin = Array.isArray(adminData)
+    ? adminData[0]
+    : adminData;
+
+  if(
+    !admin ||
+    admin.user_id !== user.id ||
+    admin.is_active !== true ||
+    !["admin","super_admin"].includes(
+      String(admin.role || "").toLowerCase()
+    ) ||
+    admin.authorized !== true
+  ){
+
+    throw new Error(
+      "This authenticated account is not authorized for CrowRules Admin."
+    );
+  }
+
+  currentAdmin = admin;
+
+  $("authUserLabel").textContent =
+    `${admin.display_name || user.email} · ${admin.role}`;
+
+  hide($("bootScreen"));
+  hide($("loginScreen"));
+  show($("adminApp"));
+
+  await loadEverything();
 }
 
-
 /* =========================================================
-   LOGIN
+   LOGIN SCREEN
 ========================================================= */
+
+function showLogin(){
+
+  hide($("bootScreen"));
+  hide($("adminApp"));
+  show($("loginScreen"));
+}
 
 $("loginForm").addEventListener(
   "submit",
-  async event => {
+  async event=>{
 
     event.preventDefault();
-
-    clearAuthError();
-
-    if(!supabaseClient){
-
-      showAuthError(
-        "Supabase is not configured."
-      );
-
-      return;
-    }
-
 
     const email =
       $("loginEmail").value.trim();
@@ -2042,40 +2041,64 @@ $("loginForm").addEventListener(
     const password =
       $("loginPassword").value;
 
+    $("loginMessage").innerHTML = "";
 
     try{
 
       const {
+        data,
         error
-      } =
-      await supabaseClient.auth.signInWithPassword({
+      } = await supabaseClient.auth.signInWithPassword({
         email,
         password
       });
-
 
       if(error){
         throw error;
       }
 
+      if(!data?.session){
+        throw new Error(
+          "Authentication succeeded but no session was returned."
+        );
+      }
 
-      await authorizeAdmin();
+      $("loginMessage").innerHTML =
+        `<div class="success">
+          Authentication successful. Verifying admin access...
+        </div>`;
 
+      await authorizeCurrentUser();
+
+    }catch(error){
+
+      $("loginMessage").innerHTML =
+        `<div class="error">
+          ${escapeHtml(error.message)}
+        </div>`;
     }
-    catch(error){
-
-      console.error(error);
-
-      showAuthError(
-        error.message ||
-        "Sign in failed."
-      );
-
-    }
-
   }
 );
 
+/* =========================================================
+   PASSWORD TOGGLE
+========================================================= */
+
+$("togglePassword").addEventListener(
+  "click",
+  ()=>{
+
+    const input = $("loginPassword");
+
+    if(input.type === "password"){
+      input.type = "text";
+      $("togglePassword").textContent = "Hide";
+    }else{
+      input.type = "password";
+      $("togglePassword").textContent = "Show";
+    }
+  }
+);
 
 /* =========================================================
    PASSWORD RESET
@@ -2083,88 +2106,50 @@ $("loginForm").addEventListener(
 
 $("resetPassword").addEventListener(
   "click",
-  async () => {
-
-    clearAuthError();
+  async ()=>{
 
     const email =
       $("loginEmail").value.trim();
 
-
     if(!email){
-
-      showAuthError(
-        "Enter your email address first."
-      );
+      $("loginMessage").innerHTML =
+        `<div class="error">
+          Enter your email address first.
+        </div>`;
 
       return;
     }
 
-
     try{
 
-      const {
-        error
-      } =
-      await supabaseClient.auth.resetPasswordForEmail(
-        email,
-        {
-          redirectTo:
-            window.location.origin +
-            window.location.pathname
-        }
-      );
-
+      const {error} =
+        await supabaseClient.auth.resetPasswordForEmail(
+          email,
+          {
+            redirectTo:
+              window.location.origin +
+              window.location.pathname
+          }
+        );
 
       if(error){
         throw error;
       }
 
+      $("loginMessage").innerHTML =
+        `<div class="success">
+          Password reset email requested.
+        </div>`;
 
-      showToast(
-        "Password reset email requested.",
-        "ok"
-      );
+    }catch(error){
 
+      $("loginMessage").innerHTML =
+        `<div class="error">
+          ${escapeHtml(error.message)}
+        </div>`;
     }
-    catch(error){
-
-      showAuthError(
-        error.message ||
-        "Password reset failed."
-      );
-
-    }
-
   }
 );
-
-
-/* =========================================================
-   AUTH SCREEN / APP
-========================================================= */
-
-function showAuthScreen(){
-
-  $("authScreen")
-    .classList.remove("hidden");
-
-  $("app")
-    .classList.add("hidden");
-
-}
-
-
-function showApp(){
-
-  $("authScreen")
-    .classList.add("hidden");
-
-  $("app")
-    .classList.remove("hidden");
-
-}
-
 
 /* =========================================================
    SIGN OUT
@@ -2172,43 +2157,63 @@ function showApp(){
 
 $("signOut").addEventListener(
   "click",
-  async () => {
+  async ()=>{
 
     await supabaseClient.auth.signOut();
 
-    showAuthScreen();
-
+    showLogin();
   }
 );
-
 
 /* =========================================================
-   REFRESH AUTH
+   NAVIGATION
 ========================================================= */
 
-$("refreshAuth").addEventListener(
-  "click",
-  async () => {
+document.querySelectorAll(".nav-btn")
+.forEach(button=>{
 
-    await authorizeAdmin();
+  button.addEventListener(
+    "click",
+    ()=>{
 
+      document.querySelectorAll(".nav-btn")
+      .forEach(btn=>{
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      openPage(button.dataset.page);
+    }
+  );
+});
+
+function openPage(page){
+
+  document.querySelectorAll(".page")
+  .forEach(section=>{
+    section.classList.remove("active");
+  });
+
+  const target =
+    $("page-" + page);
+
+  if(target){
+    target.classList.add("active");
   }
-);
 
-
-/* =========================================================
-   REFRESH EVERYTHING
-========================================================= */
-
-$("refreshAll").addEventListener(
-  "click",
-  async () => {
-
-    await loadEverything();
-
+  if(page === "relationships"){
+    renderRelationships();
   }
-);
 
+  if(page === "audit"){
+    loadAudit();
+  }
+
+  if(page === "diagnostics"){
+    runDiagnostics();
+  }
+}
 
 /* =========================================================
    LOAD EVERYTHING
@@ -2218,1485 +2223,724 @@ async function loadEverything(){
 
   try{
 
-    setStatus(true,"Loading database...");
+    bootStatus("Discovering Supabase database...");
 
-    await loadSchema();
+    await loadMetadata();
 
-    await loadDashboardStats();
+    await updateGlobalStats();
 
-    await loadMemberStats();
+    renderDatabaseLists();
 
-    await renderSchemaMap();
+    runDiagnostics();
 
-    await loadAdminIdentity();
-
-    setStatus(
-      true,
-      `${currentAdmin?.role || "admin"} • ${currentUser?.email || ""}`
-    );
-
-  }
-  catch(error){
+  }catch(error){
 
     console.error(error);
 
-    showToast(
-      error.message ||
-      "Database loading failed.",
+    toast(
+      "Database discovery failed: " +
+      error.message,
       "error"
     );
-
   }
-
 }
 
-
 /* =========================================================
-   SCHEMA DISCOVERY
+   METADATA
 ========================================================= */
 
-async function loadSchema(){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.rpc(
-    "cr_admin_v54_schema"
-  );
-
-
-  if(error){
-    throw error;
-  }
-
-
-  schemaRows =
-    Array.isArray(data)
-      ? data
-      : [];
-
-
-  renderSchemaList();
-
-}
-
-
-/* =========================================================
-   SCHEMA LIST
-========================================================= */
-
-function renderSchemaList(){
-
-  const search =
-    $("tableSearch").value
-      .trim()
-      .toLowerCase();
-
-
-  const filtered =
-    schemaRows.filter(row => {
-
-      return (
-        !search ||
-        row.schema_name
-          .toLowerCase()
-          .includes(search) ||
-        row.table_name
-          .toLowerCase()
-          .includes(search)
-      );
-
-    });
-
-
-  const groups = {};
-
-
-  for(const row of filtered){
-
-    if(!groups[row.schema_name]){
-      groups[row.schema_name] = [];
-    }
-
-    groups[row.schema_name].push(row);
-
-  }
-
-
-  const container =
-    $("schemaList");
-
-
-  if(!Object.keys(groups).length){
-
-    container.innerHTML =
-      `<div class="empty">No tables found.</div>`;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    Object.entries(groups)
-      .map(([schema,rows]) => {
-
-        return `
-          <div class="schemaGroup">
-
-            <div class="schemaName">
-              ${escapeHtml(schema)}
-            </div>
-
-            ${rows.map(row => {
-
-              const active =
-                selectedTable &&
-                selectedTable.schema_name ===
-                  row.schema_name &&
-                selectedTable.table_name ===
-                  row.table_name;
-
-              return `
-                <button
-                  class="tableItem ${active ? "active":""}"
-                  onclick='selectTable(${JSON.stringify(row.schema_name)},${JSON.stringify(row.table_name)})'>
-
-                  <span>
-                    ${escapeHtml(row.table_name)}
-                  </span>
-
-                  <span class="tableType">
-                    ${row.table_type === "VIEW" ? "VIEW" : "TABLE"}
-                  </span>
-
-                </button>
-              `;
-
-            }).join("")}
-
-          </div>
-        `;
-
-      })
-      .join("");
-
-}
-
-
-/* =========================================================
-   SELECT TABLE
-========================================================= */
-
-async function selectTable(schemaName,tableName){
-
-  const found =
-    schemaRows.find(
-      x =>
-        x.schema_name === schemaName &&
-        x.table_name === tableName
-    );
-
-
-  if(!found){
-    return;
-  }
-
-
-  selectedTable = found;
-
-  selectedRows.clear();
-
-  currentPage = 0;
-
-  sortColumn = null;
-
-  renderSchemaList();
-
-
-  $("selectedTableTitle").textContent =
-    tableName;
-
-  $("selectedTableSubtitle").textContent =
-    `${schemaName}.${tableName}`;
-
-
-  $("addRecordBtn").disabled =
-    found.table_type !== "BASE TABLE";
-
-
-  await loadTableColumns();
-
-  await loadTableCount();
-
-  await loadTableRows();
-
-}
-
-
-/* =========================================================
-   TABLE COLUMNS
-========================================================= */
-
-async function loadTableColumns(){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.rpc(
-    "cr_admin_v54_columns",
-    {
-      p_schema:
-        selectedTable.schema_name,
-
-      p_table:
-        selectedTable.table_name
-    }
-  );
-
-
-  if(error){
-    throw error;
-  }
-
-
-  currentColumns =
-    Array.isArray(data)
-      ? data
-      : [];
-
-
-  renderTableMeta();
-
-}
-
-
-/* =========================================================
-   TABLE META
-========================================================= */
-
-function renderTableMeta(){
-
-  const pk =
-    selectedTable.primary_key ||
-    "None detected";
-
-
-  $("tableMeta").innerHTML = `
-
-    <span class="chip">
-      Schema: ${escapeHtml(selectedTable.schema_name)}
-    </span>
-
-    <span class="chip">
-      Type: ${escapeHtml(selectedTable.table_type)}
-    </span>
-
-    <span class="chip">
-      Columns: ${currentColumns.length}
-    </span>
-
-    <span class="chip">
-      Rows: ${Number(totalRows).toLocaleString()}
-    </span>
-
-    <span class="chip">
-      PK: ${escapeHtml(pk)}
-    </span>
-
-    <span class="chip ${
-      selectedTable.rls_enabled
-        ? "green"
-        : "red"
-    }">
-      RLS: ${
-        selectedTable.rls_enabled
-          ? "Enabled"
-          : "Disabled"
-      }
-    </span>
-
-  `;
-
-}
-
-
-/* =========================================================
-   COUNT
-========================================================= */
-
-async function loadTableCount(){
+async function loadMetadata(){
+
+  /*
+    Primary method:
+    cr_admin_schema_metadata
+
+    Expected columns may include:
+      schema_name
+      table_name
+      table_type
+      column_count
+      row_count
+      primary_key
+      columns
+      foreign_keys
+
+    If the RPC/table isn't populated yet, the fallback list
+    keeps the admin functional for known application tables.
+  */
+
+  let metadata = null;
 
   try{
 
     const {
       data,
       error
-    } =
-    await supabaseClient.rpc(
-      "cr_admin_v54_count",
-      {
-        p_schema:
-          selectedTable.schema_name,
-
-        p_table:
-          selectedTable.table_name
-      }
+    } = await supabaseClient.rpc(
+      "cr_admin_schema_metadata"
     );
 
-
-    if(error){
-      throw error;
+    if(!error && data){
+      metadata = data;
     }
 
-
-    totalRows =
-      Number(data || 0);
-
-
-    renderTableMeta();
-
-  }
-  catch(error){
-
-    console.error(error);
-
-    totalRows = 0;
-
+  }catch(error){
+    console.warn(
+      "Schema metadata RPC unavailable:",
+      error
+    );
   }
 
+  if(Array.isArray(metadata) && metadata.length){
+
+    resources =
+      metadata.map(normalizeResource);
+
+  }else{
+
+    resources =
+      await discoverFallbackTables();
+  }
+
+  relationships =
+    extractRelationships(resources);
 }
 
-
 /* =========================================================
-   ROWS
+   FALLBACK DISCOVERY
 ========================================================= */
 
-async function loadTableRows(){
+async function discoverFallbackTables(){
 
-  const container =
-    $("dataGrid");
+  /*
+    Supabase browser clients cannot query PostgreSQL
+    information_schema directly unless exposed through an RPC.
 
+    This fallback checks the known CrowRules application
+    resources. The secure metadata RPC is recommended for
+    complete automatic discovery.
+  */
 
-  container.innerHTML =
-    `<div class="loading">Loading records...</div>`;
+  const names = [
 
+    "cr_admins",
+    "cr_admin_permissions",
+    "cr_admin_audit",
+    "cr_admin_v51_audit_log",
 
-  pageSize =
-    Number($("pageSize").value);
+    "cr_members",
+    "cr_member_activity",
+    "cr_member_watch_history",
+    "cr_member_favorites",
+    "cr_member_notifications",
+    "cr_member_roles",
 
+    "shows",
+    "episodes",
+    "channels",
+    "schedule_items",
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.rpc(
-    "cr_admin_v54_rows",
-    {
-      p_schema:
-        selectedTable.schema_name,
+    "live_events",
+    "movies",
+    "movie_catalog",
 
-      p_table:
-        selectedTable.table_name,
+    "crowrules_tv_catalog",
+    "crowrules_tv_movies",
 
-      p_limit:
-        pageSize,
+    "tacoma_nights",
+    "back_deck_live",
 
-      p_offset:
-        currentPage * pageSize,
+    "podcasts",
+    "podcast_episodes",
 
-      p_order:
-        sortColumn,
+    "sports",
+    "sports_events",
+    "sports_teams",
 
-      p_direction:
-        sortDirection
+    "notifications",
+    "donations",
+    "supporters",
+
+    "partners",
+    "inquiries",
+
+    "celebrity_deaths",
+    "celebrity_death_discovery_runs",
+
+    "analytics",
+    "watch_history",
+
+    "profiles",
+    "favorites",
+
+    "audit_log"
+  ];
+
+  const output = [];
+
+  for(const name of names){
+
+    try{
+
+      const {
+        count,
+        error
+      } =
+        await supabaseClient
+          .from(name)
+          .select("*",{
+            count:"exact",
+            head:true
+          });
+
+      if(!error){
+
+        output.push({
+          schema_name:"public",
+          table_name:name,
+          table_type:"BASE TABLE",
+          row_count:count || 0,
+          column_count:0,
+          primary_key:null,
+          columns:[],
+          foreign_keys:[]
+        });
+      }
+
+    }catch(error){
+      console.debug(
+        "Unavailable resource:",
+        name
+      );
     }
+  }
+
+  return output;
+}
+
+/* =========================================================
+   NORMALIZE RESOURCE
+========================================================= */
+
+function normalizeResource(resource){
+
+  return {
+    schema_name:
+      resource.schema_name ||
+      resource.schema ||
+      "public",
+
+    table_name:
+      resource.table_name ||
+      resource.name ||
+      resource.table ||
+      "",
+
+    table_type:
+      resource.table_type ||
+      resource.type ||
+      "BASE TABLE",
+
+    row_count:
+      Number(
+        resource.row_count ??
+        resource.count ??
+        0
+      ),
+
+    column_count:
+      Number(
+        resource.column_count ??
+        resource.columns?.length ??
+        0
+      ),
+
+    primary_key:
+      resource.primary_key ||
+      resource.primary_key_column ||
+      null,
+
+    columns:
+      normalizeColumns(
+        resource.columns
+      ),
+
+    foreign_keys:
+      resource.foreign_keys ||
+      resource.relationships ||
+      []
+  };
+}
+
+/* =========================================================
+   NORMALIZE COLUMNS
+========================================================= */
+
+function normalizeColumns(columns){
+
+  if(!columns){
+    return [];
+  }
+
+  if(Array.isArray(columns)){
+    return columns.map(column=>{
+
+      if(typeof column === "string"){
+
+        return {
+          name:column,
+          data_type:"text",
+          nullable:true,
+          is_primary:false,
+          is_foreign:false
+        };
+      }
+
+      return {
+        name:
+          column.name ||
+          column.column_name ||
+          "",
+
+        data_type:
+          column.data_type ||
+          column.type ||
+          "text",
+
+        nullable:
+          column.nullable ??
+          column.is_nullable ??
+          true,
+
+        is_primary:
+          Boolean(
+            column.is_primary ||
+            column.primary_key
+          ),
+
+        is_foreign:
+          Boolean(
+            column.is_foreign ||
+            column.foreign_key
+          ),
+
+        default:
+          column.default_value ??
+          column.column_default ??
+          null
+      };
+    });
+  }
+
+  return [];
+}
+
+/* =========================================================
+   RELATIONSHIPS
+========================================================= */
+
+function extractRelationships(resources){
+
+  const output = [];
+
+  resources.forEach(resource=>{
+
+    (resource.foreign_keys || [])
+    .forEach(fk=>{
+
+      output.push({
+        from_schema:
+          resource.schema_name,
+
+        from_table:
+          resource.table_name,
+
+        from_column:
+          fk.column ||
+          fk.from_column ||
+          fk.source_column ||
+          "",
+
+        to_schema:
+          fk.foreced_schema ||
+          fk.to_schema ||
+          "public",
+
+        to_table:
+          fk.foreced_table ||
+          fk.to_table ||
+          fk.target_table ||
+          "",
+
+        to_column:
+          fk.foreced_column ||
+          fk.to_column ||
+          fk.target_column ||
+          ""
+      });
+    });
+  });
+
+  return output;
+}
+
+/* =========================================================
+   GLOBAL STATS
+========================================================= */
+
+function updateGlobalStats(){
+
+  const tables =
+    resources.filter(
+      r =>
+        String(r.table_type)
+          .toUpperCase()
+          .includes("TABLE")
+    );
+
+  const views =
+    resources.filter(
+      r =>
+        String(r.table_type)
+          .toUpperCase()
+          .includes("VIEW")
+    );
+
+  const rows =
+    resources.reduce(
+      (sum,r)=>
+        sum + Number(r.row_count || 0),
+      0
+    );
+
+  const columns =
+    resources.reduce(
+      (sum,r)=>
+        sum + Number(r.column_count || 0),
+      0
+    );
+
+  $("statTables").textContent =
+    tables.length;
+
+  $("statViews").textContent =
+    views.length;
+
+  $("statRows").textContent =
+    formatNumber(rows);
+
+  $("statColumns").textContent =
+    formatNumber(columns);
+
+  $("statRelations").textContent =
+    relationships.length;
+
+  $("diagTables").textContent =
+    tables.length;
+
+  $("diagViews").textContent =
+    views.length;
+
+  $("diagRelations").textContent =
+    relationships.length;
+}
+
+function formatNumber(number){
+
+  return Number(number || 0)
+    .toLocaleString();
+}
+
+/* =========================================================
+   DATABASE LISTS
+========================================================= */
+
+function renderDatabaseLists(){
+
+  renderDatabaseContainer(
+    $("dashboardDatabaseList"),
+    $("databaseSearch").value
   );
 
-
-  if(error){
-    throw error;
-  }
-
-
-  currentRows =
-    Array.isArray(data)
-      ? data
-      : [];
-
-
-  renderDataGrid();
-
+  renderDatabaseContainer(
+    $("databaseList"),
+    $("tableSearch").value
+  );
 }
 
+function renderDatabaseContainer(container,search=""){
 
-/* =========================================================
-   RENDER DATA GRID
-========================================================= */
-
-function renderDataGrid(){
-
-  if(!currentRows.length){
-
-    $("dataGrid").innerHTML =
-      `<div class="empty">
-        No records found.
-      </div>`;
-
-    renderPagination();
-
+  if(!container){
     return;
-
   }
 
-
-  const search =
-    $("rowSearch").value
+  const term =
+    String(search || "")
       .trim()
       .toLowerCase();
 
+  const filtered =
+    resources.filter(resource=>{
 
-  let rows =
-    currentRows;
+      const haystack = [
 
+        resource.schema_name,
+        resource.table_name,
+        resource.table_type,
 
-  if(search){
+        ...(resource.columns || [])
+          .map(c=>c.name)
 
-    rows =
-      currentRows.filter(row =>
-        JSON.stringify(row)
-          .toLowerCase()
-          .includes(search)
-      );
+      ].join(" ").toLowerCase();
 
+      return !term ||
+        haystack.includes(term);
+    });
+
+  if(!filtered.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        <strong>No databases found</strong>
+        Try another search.
+      </div>`;
+
+    return;
   }
 
+  container.innerHTML =
+    filtered.map(
+      renderDatabaseCard
+    ).join("");
+}
 
-  const columns =
-    currentColumns.map(
-      x => x.column_name
-    );
+/* =========================================================
+   DATABASE CARD
+========================================================= */
 
+function renderDatabaseCard(resource){
 
-  let html = `
-    <div class="gridWrap">
+  const isView =
+    String(resource.table_type)
+      .toUpperCase()
+      .includes("VIEW");
 
-      <table class="dataTable">
+  const icon =
+    isView ? "◌" : "▣";
 
-        <thead>
-          <tr>
+  const primary =
+    resource.primary_key ||
+    findPrimaryKey(resource) ||
+    "—";
 
-            <th>
-              <input
-                type="checkbox"
-                onchange="toggleAllRows(this.checked)">
-            </th>
+  const relationCount =
+    relationships.filter(
+      r =>
+        r.from_table === resource.table_name ||
+        r.to_table === resource.table_name
+    ).length;
 
-            ${columns.map(col => `
-              <th
-                class="sortable"
-                onclick='sortBy(${JSON.stringify(col)})'>
-                ${escapeHtml(col)}
-                ${
-                  sortColumn === col
-                    ? (
-                      sortDirection === "asc"
-                        ? " ↑"
-                        : " ↓"
-                    )
-                    : ""
-                }
-              </th>
-            `).join("")}
+  return `
+    <div class="database-card">
 
-            <th>Actions</th>
+      <div class="db-top">
 
-          </tr>
-        </thead>
+        <div class="db-icon">
+          ${icon}
+        </div>
 
-        <tbody>
+        <div style="flex:1">
 
-  `;
-
-
-  for(const row of rows){
-
-    const key =
-      getPrimaryKey(row);
-
-
-    const keyString =
-      JSON.stringify(key);
-
-
-    const selected =
-      selectedRows.has(
-        JSON.stringify(key)
-      );
-
-
-    html += `
-      <tr>
-
-        <td>
-          <input
-            type="checkbox"
-            ${selected ? "checked":""}
-            onchange='toggleRow(${escapeHtml(JSON.stringify(keyString))},this.checked)'>
-        </td>
-
-        ${columns.map(col => {
-
-          const value =
-            row[col];
-
-          return `
-            <td>
-              <div class="dataCell">
-                ${formatCell(value)}
-              </div>
-            </td>
-          `;
-
-        }).join("")}
-
-        <td>
-
-          <div class="rowActions">
-
-            <button
-              class="smallBtn"
-              onclick='editRecord(${escapeHtml(JSON.stringify(keyString))})'>
-              Edit
-            </button>
-
-            <button
-              class="smallBtn"
-              onclick='duplicateRecord(${escapeHtml(JSON.stringify(keyString))})'>
-              Copy
-            </button>
-
-            ${
-              selectedTable.table_type ===
-              "BASE TABLE"
-                ? `
-                  <button
-                    class="smallBtn"
-                    onclick='deleteRecord(${escapeHtml(JSON.stringify(keyString))})'>
-                    Delete
-                  </button>
-                `
-                : ""
-            }
-
+          <div class="db-name">
+            ${escapeHtml(resource.table_name)}
           </div>
 
-        </td>
+          <div class="db-schema">
+            ${escapeHtml(resource.schema_name)}
+            ·
+            ${isView ? "VIEW" : "TABLE"}
+          </div>
 
-      </tr>
-    `;
+        </div>
 
-  }
-
-
-  html += `
-        </tbody>
-
-      </table>
-
-    </div>
-  `;
-
-
-  $("dataGrid").innerHTML =
-    html;
-
-
-  renderPagination();
-
-}
-
-
-/* =========================================================
-   FORMAT CELL
-========================================================= */
-
-function formatCell(value){
-
-  if(value === null || value === undefined){
-
-    return `<span class="nullCell">null</span>`;
-
-  }
-
-
-  if(typeof value === "boolean"){
-
-    return value
-      ? `<span class="booleanTrue">true</span>`
-      : `<span class="booleanFalse">false</span>`;
-
-  }
-
-
-  if(typeof value === "object"){
-
-    return escapeHtml(
-      JSON.stringify(value)
-    );
-
-  }
-
-
-  return escapeHtml(value);
-
-}
-
-
-/* =========================================================
-   PRIMARY KEY
-========================================================= */
-
-function getPrimaryKey(row){
-
-  const pkString =
-    selectedTable.primary_key;
-
-
-  if(!pkString){
-
-    const fallback =
-      currentColumns.find(
-        x =>
-          x.column_name === "id"
-      );
-
-    if(fallback){
-
-      return {
-        id:row.id
-      };
-
-    }
-
-
-    return {};
-
-  }
-
-
-  const keys =
-    pkString
-      .split(",")
-      .map(x => x.trim());
-
-
-  const result = {};
-
-
-  for(const key of keys){
-
-    result[key] =
-      row[key];
-
-  }
-
-
-  return result;
-
-}
-
-
-/* =========================================================
-   PAGINATION
-========================================================= */
-
-function renderPagination(){
-
-  const pages =
-    Math.max(
-      1,
-      Math.ceil(
-        totalRows / pageSize
-      )
-    );
-
-
-  const current =
-    currentPage + 1;
-
-
-  const html = `
-
-    <div class="pagination">
-
-      <div style="color:var(--muted);font-size:11px">
-        Page ${current} of ${pages}
-        • ${Number(totalRows).toLocaleString()} records
       </div>
 
-      <div class="pageButtons">
+      <div class="db-description">
+
+        ${isView
+          ? "Read-only database view."
+          : "Application database table available through the CrowRules Admin command center."}
+
+      </div>
+
+      <div class="db-stats">
+
+        <div class="db-stat">
+          <b>${formatNumber(resource.row_count)}</b>
+          <span>Rows</span>
+        </div>
+
+        <div class="db-stat">
+          <b>${formatNumber(resource.column_count)}</b>
+          <span>Columns</span>
+        </div>
+
+        <div class="db-stat">
+          <b>${escapeHtml(primary)}</b>
+          <span>Primary Key</span>
+        </div>
+
+        <div class="db-stat">
+          <b>${relationCount}</b>
+          <span>Relations</span>
+        </div>
+
+      </div>
+
+      <div class="db-actions">
 
         <button
-          class="smallBtn"
-          ${currentPage <= 0 ? "disabled":""}
-          onclick="goPage(${currentPage - 1})">
-          ◀
+          class="btn btn-primary btn-small"
+          onclick="openTable('${escapeJs(resource.table_name)}')">
+          OPEN
+        </button>
+
+        ${
+          !isView
+          ? `
+            <button
+              class="btn btn-success btn-small"
+              onclick="openCreateRecord('${escapeJs(resource.table_name)}')">
+              + ADD
+            </button>
+          `
+          : ""
+        }
+
+        <button
+          class="btn btn-small"
+          onclick="showTableSchema('${escapeJs(resource.table_name)}')">
+          SCHEMA
         </button>
 
         <button
-          class="smallBtn"
-          ${currentPage >= pages-1 ? "disabled":""}
-          onclick="goPage(${currentPage + 1})">
-          ▶
+          class="btn btn-small"
+          onclick="showTableStats('${escapeJs(resource.table_name)}')">
+          STATS
         </button>
 
       </div>
 
     </div>
-
   `;
-
-
-  const old =
-    $("dataGrid")
-      .querySelector(".pagination");
-
-
-  if(old){
-    old.remove();
-  }
-
-
-  $("dataGrid").insertAdjacentHTML(
-    "beforeend",
-    html
-  );
-
 }
 
+function escapeJs(value){
 
-async function goPage(page){
+  return String(value || "")
+    .replaceAll("\\","\\\\")
+    .replaceAll("'","\\'");
+}
 
-  const pages =
-    Math.max(
-      1,
-      Math.ceil(
-        totalRows / pageSize
-      )
+/* =========================================================
+   OPEN TABLE
+========================================================= */
+
+async function openTable(tableName){
+
+  const resource =
+    resources.find(
+      r =>
+        r.table_name === tableName
     );
 
+  if(!resource){
+    toast(
+      "Table metadata not found.",
+      "error"
+    );
 
-  if(page < 0 || page >= pages){
     return;
   }
 
+  currentTable = resource;
 
-  currentPage = page;
+  currentPage = 1;
 
-  await loadTableRows();
+  selectedIds.clear();
 
+  $("detailTableName").textContent =
+    tableName;
+
+  $("detailTableMeta").textContent =
+    `${resource.schema_name}.${tableName}`;
+
+  $("detailColumns").textContent =
+    resource.column_count || "—";
+
+  $("detailPk").textContent =
+    resource.primary_key ||
+    findPrimaryKey(resource) ||
+    "—";
+
+  $("detailRelations").textContent =
+    relationships.filter(
+      r =>
+        r.from_table === tableName ||
+        r.to_table === tableName
+    ).length;
+
+  $("detailType").textContent =
+    String(resource.table_type)
+      .toUpperCase()
+      .includes("VIEW")
+      ? "VIEW"
+      : "TABLE";
+
+  openPage("table");
+
+  await loadTableSchema();
+
+  await loadTableRecords();
 }
-
 
 /* =========================================================
-   SORT
+   FIND PRIMARY KEY
 ========================================================= */
 
-async function sortBy(column){
-
-  if(sortColumn === column){
-
-    sortDirection =
-      sortDirection === "asc"
-        ? "desc"
-        : "asc";
-
-  }
-  else{
-
-    sortColumn = column;
-    sortDirection = "asc";
-
-  }
-
-
-  currentPage = 0;
-
-  await loadTableRows();
-
-}
-
-
-/* =========================================================
-   ROW SELECTION
-========================================================= */
-
-function toggleRow(keyString,checked){
-
-  const key =
-    JSON.parse(keyString);
-
-
-  const normalized =
-    JSON.stringify(key);
-
-
-  if(checked){
-    selectedRows.add(normalized);
-  }
-  else{
-    selectedRows.delete(normalized);
-  }
-
-
-  updateBulkButton();
-
-}
-
-
-function toggleAllRows(checked){
-
-  for(const row of currentRows){
-
-    const key =
-      getPrimaryKey(row);
-
-    const normalized =
-      JSON.stringify(key);
-
-
-    if(checked){
-      selectedRows.add(normalized);
-    }
-    else{
-      selectedRows.delete(normalized);
-    }
-
-  }
-
-
-  renderDataGrid();
-
-}
-
-
-function updateBulkButton(){
-
-  $("bulkDeleteBtn").disabled =
-    !selectedTable ||
-    selectedTable.table_type !==
-      "BASE TABLE" ||
-    selectedRows.size === 0;
-
-}
-
-
-/* =========================================================
-   ADD RECORD
-========================================================= */
-
-$("addRecordBtn").addEventListener(
-  "click",
-  () => openRecordForm("insert",null)
-);
-
-
-/* =========================================================
-   RECORD FORM
-========================================================= */
-
-function openRecordForm(mode,record){
-
-  editingRecord =
-    mode === "update"
-      ? record
-      : null;
-
-
-  $("recordModalTitle").textContent =
-    mode === "update"
-      ? `Edit ${selectedTable.table_name}`
-      : `Add ${selectedTable.table_name}`;
-
-
-  const html =
-    currentColumns
-      .map(column => {
-
-        const name =
-          column.column_name;
-
-        const value =
-          record
-            ? record[name]
-            : "";
-
-
-        const readonly =
-          mode === "update" &&
-          selectedTable.primary_key
-            ?.split(",")
-            .map(x=>x.trim())
-            .includes(name);
-
-
-        let inputHtml;
-
-
-        if(
-          column.data_type ===
-          "boolean"
-        ){
-
-          inputHtml = `
-            <select
-              name="${escapeHtml(name)}">
-              <option value="">null</option>
-              <option value="true"
-                ${value === true ? "selected":""}>
-                true
-              </option>
-              <option value="false"
-                ${value === false ? "selected":""}>
-                false
-              </option>
-            </select>
-          `;
-
-        }
-        else if(
-          column.data_type.includes(
-            "json"
-          )
-        ){
-
-          inputHtml = `
-            <textarea
-              name="${escapeHtml(name)}"
-              ${readonly ? "readonly":""}>${escapeHtml(
-                value === null ||
-                value === undefined
-                  ? ""
-                  : JSON.stringify(value,null,2)
-              )}</textarea>
-          `;
-
-        }
-        else if(
-          column.data_type ===
-          "text"
-        ){
-
-          inputHtml = `
-            <textarea
-              name="${escapeHtml(name)}"
-              ${readonly ? "readonly":""}>${escapeHtml(
-                value ?? ""
-              )}</textarea>
-          `;
-
-        }
-        else{
-
-          inputHtml = `
-            <input
-              name="${escapeHtml(name)}"
-              value="${escapeHtml(
-                value ?? ""
-              )}"
-              ${readonly ? "readonly":""}>
-          `;
-
-        }
-
-
-        return `
-          <div class="field">
-            <label>
-              ${escapeHtml(name)}
-              <span style="color:#536a80">
-                ${escapeHtml(column.data_type)}
-              </span>
-            </label>
-            ${inputHtml}
-          </div>
-        `;
-
-      })
-      .join("");
-
-
-  $("recordForm").innerHTML =
-    `<div class="formGrid">${html}</div>`;
-
-
-  $("recordModal")
-    .classList.add("open");
-
-
-  $("saveRecordBtn").onclick =
-    () => saveRecord(mode);
-
-}
-
-
-function closeModal(){
-
-  $("recordModal")
-    .classList.remove("open");
-
-}
-
-
-/* =========================================================
-   COLLECT FORM DATA
-========================================================= */
-
-function collectFormData(){
-
-  const form =
-    $("recordForm");
-
-
-  const data = {};
-
-
-  for(const column of currentColumns){
-
-    const input =
-      form.querySelector(
-        `[name="${CSS.escape(column.column_name)}"]`
+function findPrimaryKey(resource){
+
+  const primary =
+    (resource.columns || [])
+      .find(
+        column =>
+          column.is_primary === true
       );
 
-
-    if(!input){
-      continue;
-    }
-
-
-    let value =
-      input.value;
-
-
-    if(value === ""){
-
-      data[column.column_name] =
-        null;
-
-      continue;
-
-    }
-
-
-    if(
-      column.data_type ===
-      "boolean"
-    ){
-
-      data[column.column_name] =
-        value === "true";
-
-      continue;
-
-    }
-
-
-    if(
-      column.data_type.includes(
-        "json"
-      )
-    ){
-
-      try{
-
-        data[column.column_name] =
-          JSON.parse(value);
-
-      }
-      catch{
-
-        throw new Error(
-          `${column.column_name} contains invalid JSON.`
-        );
-
-      }
-
-      continue;
-
-    }
-
-
-    data[column.column_name] =
-      value;
-
-  }
-
-
-  return data;
-
+  return primary?.name || null;
 }
 
-
 /* =========================================================
-   SAVE
+   TABLE SCHEMA
 ========================================================= */
 
-async function saveRecord(mode){
+async function loadTableSchema(){
 
-  try{
-
-    const data =
-      collectFormData();
-
-
-    let pk = null;
-
-
-    if(mode === "update"){
-
-      pk =
-        getPrimaryKey(
-          editingRecord
-        );
-
-    }
-
-
-    const {
-      data:result,
-      error
-    } =
-    await supabaseClient.rpc(
-      "cr_admin_v54_write",
-      {
-        p_schema:
-          selectedTable.schema_name,
-
-        p_table:
-          selectedTable.table_name,
-
-        p_data:
-          data,
-
-        p_pk:
-          pk,
-
-        p_mode:
-          mode
-      }
-    );
-
-
-    if(error){
-      throw error;
-    }
-
-
-    await audit(
-      mode,
-      result
-    );
-
-
-    closeModal();
-
-    showToast(
-      mode === "insert"
-        ? "Record created."
-        : "Record updated.",
-      "ok"
-    );
-
-
-    await loadTableCount();
-    await loadTableRows();
-
-  }
-  catch(error){
-
-    console.error(error);
-
-    showToast(
-      error.message ||
-      "Save failed.",
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   EDIT RECORD
-========================================================= */
-
-function editRecord(keyString){
-
-  const key =
-    JSON.parse(keyString);
-
-
-  const record =
-    currentRows.find(row =>
-      JSON.stringify(
-        getPrimaryKey(row)
-      ) === JSON.stringify(key)
-    );
-
-
-  if(!record){
-
-    showToast(
-      "Record not found in current page.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  openRecordForm(
-    "update",
-    record
-  );
-
-}
-
-
-/* =========================================================
-   DUPLICATE
-========================================================= */
-
-async function duplicateRecord(keyString){
-
-  const key =
-    JSON.parse(keyString);
-
-
-  const record =
-    currentRows.find(row =>
-      JSON.stringify(
-        getPrimaryKey(row)
-      ) === JSON.stringify(key)
-    );
-
-
-  if(!record){
-    return;
-  }
-
-
-  const copy = {
-    ...record
-  };
-
-
-  const pk =
-    selectedTable.primary_key;
-
-
-  if(pk){
-
-    for(
-      const keyName of pk
-        .split(",")
-        .map(x=>x.trim())
-    ){
-
-      delete copy[keyName];
-
-    }
-
-  }
-
-
-  /*
-   Remove common server-managed fields
-   when they have defaults.
-  */
-
-  for(
-    const field of [
-      "created_at",
-      "updated_at"
-    ]
-  ){
-
-    if(
-      currentColumns.some(
-        x =>
-          x.column_name ===
-          field &&
-          x.column_default
-      )
-    ){
-      delete copy[field];
-    }
-
-  }
-
-
-  try{
-
-    const {
-      error
-    } =
-    await supabaseClient.rpc(
-      "cr_admin_v54_write",
-      {
-        p_schema:
-          selectedTable.schema_name,
-
-        p_table:
-          selectedTable.table_name,
-
-        p_data:
-          copy,
-
-        p_pk:null,
-
-        p_mode:"insert"
-      }
-    );
-
-
-    if(error){
-      throw error;
-    }
-
-
-    showToast(
-      "Record duplicated.",
-      "ok"
-    );
-
-
-    await loadTableCount();
-    await loadTableRows();
-
-  }
-  catch(error){
-
-    showToast(
-      error.message ||
-      "Duplicate failed.",
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   DELETE RECORD
-========================================================= */
-
-async function deleteRecord(keyString){
+  const resource = currentTable;
 
   if(
-    !confirm(
-      "Delete this record?\n\nThis cannot be undone."
-    )
+    resource.columns &&
+    resource.columns.length
   ){
-    return;
-  }
 
+    currentColumns =
+      resource.columns;
 
-  const key =
-    JSON.parse(keyString);
+  }else{
 
-
-  try{
-
-    const {
-      error
-    } =
-    await supabaseClient.rpc(
-      "cr_admin_v54_delete",
-      {
-        p_schema:
-          selectedTable.schema_name,
-
-        p_table:
-          selectedTable.table_name,
-
-        p_pk:
-          key
-      }
-    );
-
-
-    if(error){
-      throw error;
-    }
-
-
-    await audit(
-      "delete",
-      key
-    );
-
-
-    selectedRows.delete(
-      JSON.stringify(key)
-    );
-
-
-    showToast(
-      "Record deleted.",
-      "ok"
-    );
-
-
-    await loadTableCount();
-    await loadTableRows();
-
-  }
-  catch(error){
-
-    showToast(
-      error.message ||
-      "Delete failed.",
-      "error"
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   BULK DELETE
-========================================================= */
-
-$("bulkDeleteBtn").addEventListener(
-  "click",
-  async () => {
-
-    if(!selectedRows.size){
-      return;
-    }
-
-
-    if(
-      !confirm(
-        `Delete ${selectedRows.size} selected records?\n\nThis cannot be undone.`
-      )
-    ){
-      return;
-    }
-
-
-    const keys =
-      [...selectedRows]
-        .map(x => JSON.parse(x));
-
+    /*
+      Fallback: infer columns from first record.
+    */
 
     try{
 
@@ -3704,806 +2948,1703 @@ $("bulkDeleteBtn").addEventListener(
         data,
         error
       } =
-      await supabaseClient.rpc(
-        "cr_admin_v54_bulk_delete",
-        {
-          p_schema:
-            selectedTable.schema_name,
+        await supabaseClient
+          .from(resource.table_name)
+          .select("*")
+          .limit(1);
 
-          p_table:
-            selectedTable.table_name,
+      if(!error && data?.length){
 
-          p_keys:
-            keys
-        }
-      );
-
-
-      if(error){
-        throw error;
+        currentColumns =
+          Object.keys(data[0])
+            .map(name=>({
+              name,
+              data_type:
+                typeof data[0][name],
+              nullable:true,
+              is_primary:false,
+              is_foreign:false
+            }));
       }
 
-
-      showToast(
-        `${data} record(s) deleted.`,
-        "ok"
-      );
-
-
-      selectedRows.clear();
-
-      updateBulkButton();
-
-      await loadTableCount();
-      await loadTableRows();
-
+    }catch(error){
+      console.warn(error);
     }
-    catch(error){
-
-      showToast(
-        error.message ||
-        "Bulk delete failed.",
-        "error"
-      );
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   EXPORT
-========================================================= */
-
-$("exportBtn").addEventListener(
-  "click",
-  () => {
-
-    if(!selectedTable){
-      return;
-    }
-
-
-    const rows =
-      currentRows;
-
-
-    const blob =
-      new Blob(
-        [
-          JSON.stringify(
-            rows,
-            null,
-            2
-          )
-        ],
-        {
-          type:"application/json"
-        }
-      );
-
-
-    const url =
-      URL.createObjectURL(blob);
-
-
-    const a =
-      document.createElement("a");
-
-
-    a.href = url;
-
-    a.download =
-      `${selectedTable.table_name}-export.json`;
-
-
-    a.click();
-
-
-    URL.revokeObjectURL(url);
-
-  }
-);
-
-
-/* =========================================================
-   TABLE SEARCH
-========================================================= */
-
-$("tableSearch").addEventListener(
-  "input",
-  renderSchemaList
-);
-
-
-/* =========================================================
-   ROW SEARCH
-========================================================= */
-
-$("rowSearch").addEventListener(
-  "input",
-  renderDataGrid
-);
-
-
-/* =========================================================
-   PAGE SIZE
-========================================================= */
-
-$("pageSize").addEventListener(
-  "change",
-  async () => {
-
-    currentPage = 0;
-
-    await loadTableRows();
-
-  }
-);
-
-
-/* =========================================================
-   RELOAD TABLE
-========================================================= */
-
-$("reloadTable").addEventListener(
-  "click",
-  async () => {
-
-    if(selectedTable){
-
-      await loadTableCount();
-      await loadTableRows();
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   DASHBOARD STATS
-========================================================= */
-
-async function loadDashboardStats(){
-
-  const tables =
-    schemaRows.filter(
-      x => x.table_type === "BASE TABLE"
-    );
-
-
-  const views =
-    schemaRows.filter(
-      x => x.table_type === "VIEW"
-    );
-
-
-  const schemas =
-    new Set(
-      schemaRows.map(
-        x => x.schema_name
-      )
-    );
-
-
-  const rls =
-    tables.filter(
-      x => x.rls_enabled
-    );
-
-
-  const publicTables =
-    tables.filter(
-      x => x.schema_name === "public"
-    );
-
-
-  $("statSchemas").textContent =
-    schemas.size;
-
-
-  $("statTables").textContent =
-    tables.length;
-
-
-  $("statViews").textContent =
-    views.length;
-
-
-  $("statRls").textContent =
-    rls.length;
-
-
-  $("statPublicTables").textContent =
-    publicTables.length;
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient.rpc(
-      "cr_admin_v54_count",
-      {
-        p_schema:"public",
-        p_table:"cr_members"
-      }
-    );
-
-
-    if(!error){
-
-      $("statMembers").textContent =
-        Number(data || 0)
-          .toLocaleString();
-
-    }
-
-  }
-  catch{
-
-    $("statMembers").textContent =
-      "—";
-
   }
 
+  renderSchema();
 }
 
-
 /* =========================================================
-   MEMBER STATS
+   RENDER SCHEMA
 ========================================================= */
 
-async function loadMemberStats(){
+function renderSchema(){
+
+  const container =
+    $("schemaList");
+
+  if(!currentColumns.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        <strong>Column metadata unavailable</strong>
+        The database metadata RPC should expose column definitions.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML = `
+
+    <div class="schema-column head">
+      <div>Column</div>
+      <div>Type</div>
+      <div>Nullable</div>
+      <div>Keys</div>
+    </div>
+
+    ${currentColumns.map(column=>`
+
+      <div class="schema-column">
+
+        <div>
+          ${escapeHtml(column.name)}
+        </div>
+
+        <div>
+          ${escapeHtml(column.data_type)}
+        </div>
+
+        <div>
+          ${column.nullable ? "YES" : "NO"}
+        </div>
+
+        <div>
+
+          ${
+            column.is_primary
+            ? `<span class="badge pk">PK</span>`
+            : ""
+          }
+
+          ${
+            column.is_foreign
+            ? `<span class="badge fk">FK</span>`
+            : ""
+          }
+
+          ${
+            !column.nullable
+            ? `<span class="badge required">REQ</span>`
+            : ""
+          }
+
+        </div>
+
+      </div>
+
+    `).join("")}
+
+  `;
+}
+
+/* =========================================================
+   LOAD RECORDS
+========================================================= */
+
+async function loadTableRecords(){
+
+  if(!currentTable){
+    return;
+  }
 
   try{
 
+    const search =
+      $("recordSearch").value
+        .trim();
+
+    const from =
+      (currentPage - 1) *
+      pageSize;
+
+    const to =
+      from + pageSize - 1;
+
+    let query =
+      supabaseClient
+        .from(currentTable.table_name)
+        .select("*",{
+          count:"exact"
+        });
+
+    const primaryKey =
+      findPrimaryKey(currentTable);
+
+    if(search){
+
+      const searchable =
+        currentColumns
+          .filter(
+            column =>
+              [
+                "text",
+                "character varying",
+                "varchar",
+                "char",
+                "uuid"
+              ].some(type=>
+                String(column.data_type)
+                  .toLowerCase()
+                  .includes(type)
+              )
+          )
+          .map(column=>
+            `${column.name}.ilike.%${search}%`
+          );
+
+      if(searchable.length){
+        query =
+          query.or(
+            searchable.join(",")
+          );
+      }
+    }
+
+    if(primaryKey){
+      query =
+        query.order(
+          primaryKey,
+          {
+            ascending:false,
+            nullsFirst:false
+          }
+        );
+    }
+
+    query =
+      query.range(from,to);
+
     const {
       data,
-      error
-    } =
-    await supabaseClient.rpc(
-      "cr_admin_v54_rows",
-      {
-        p_schema:"public",
-        p_table:"cr_members",
-        p_limit:100,
-        p_offset:0,
-        p_order:"created_at",
-        p_direction:"desc"
-      }
-    );
-
+      error,
+      count
+    } = await query;
 
     if(error){
       throw error;
     }
 
+    currentRows =
+      data || [];
 
-    const members =
-      Array.isArray(data)
-        ? data
-        : [];
+    totalRows =
+      Number(count || 0);
 
+    $("detailRows").textContent =
+      formatNumber(totalRows);
 
-    $("memberTotal").textContent =
-      totalFromKnownTable(
-        "cr_members"
-      );
+    renderRecords();
 
+    updatePagination();
 
-    const active =
-      members.filter(
-        x => x.is_active === true
-      ).length;
-
-
-    const premium =
-      members.filter(
-        x =>
-          String(
-            x.membership_tier || ""
-          ).toLowerCase() !== "free"
-      ).length;
-
-
-    const free =
-      members.filter(
-        x =>
-          String(
-            x.membership_tier || ""
-          ).toLowerCase() === "free"
-      ).length;
-
-
-    $("memberActive").textContent =
-      active;
-
-
-    $("memberPremium").textContent =
-      premium;
-
-
-    $("memberFree").textContent =
-      free;
-
-  }
-  catch(error){
+  }catch(error){
 
     console.error(error);
 
-  }
+    $("recordList").innerHTML =
+      `<div class="empty">
+        <strong>Unable to load records</strong>
+        ${escapeHtml(error.message)}
+      </div>`;
 
-}
-
-
-function totalFromKnownTable(tableName){
-
-  const table =
-    schemaRows.find(
-      x =>
-        x.schema_name === "public" &&
-        x.table_name === tableName
+    toast(
+      "Record loading failed.",
+      "error"
     );
-
-
-  if(
-    tableName === "cr_members" &&
-    $("statMembers").textContent !== "—"
-  ){
-
-    return $("statMembers").textContent;
-
   }
-
-
-  return "—";
-
 }
-
 
 /* =========================================================
-   SCHEMA MAP
+   RENDER RECORDS
 ========================================================= */
 
-async function renderSchemaMap(){
+function renderRecords(){
 
-  const map =
-    $("schemaMap");
+  const container =
+    $("recordList");
 
+  if(!currentRows.length){
 
-  if(!schemaRows.length){
-
-    map.innerHTML =
+    container.innerHTML =
       `<div class="empty">
-        Load the database first.
+        <strong>No records found</strong>
+        ${
+          $("recordSearch").value
+          ? "Try a different search."
+          : "This table currently has no records."
+        }
       </div>`;
 
     return;
-
   }
 
+  container.innerHTML =
+    currentRows.map(
+      (row,index)=>
+        renderRecordCard(
+          row,
+          index
+        )
+    ).join("");
+}
 
-  const publicTables =
-    schemaRows
-      .filter(
-        x =>
-          x.schema_name === "public" &&
-          x.table_type === "BASE TABLE"
-      );
+/* =========================================================
+   RECORD CARD
+========================================================= */
 
+function renderRecordCard(row,index){
 
-  let html =
-    `<div class="mapGrid">`;
+  const primaryKey =
+    findPrimaryKey(currentTable);
 
+  const rowId =
+    primaryKey
+      ? row[primaryKey]
+      : index;
 
-  for(const table of publicTables){
+  const fields =
+    Object.entries(row);
 
-    let columns = [];
+  return `
+    <div class="record-card">
 
-
-    try{
-
-      const {
-        data
-      } =
-      await supabaseClient.rpc(
-        "cr_admin_v54_columns",
-        {
-          p_schema:
-            table.schema_name,
-
-          p_table:
-            table.table_name
-        }
-      );
-
-
-      columns =
-        Array.isArray(data)
-          ? data
-          : [];
-
-    }
-    catch{
-
-      columns = [];
-
-    }
-
-
-    html += `
-
-      <div class="mapNode">
-
-        <h4>
-          ${escapeHtml(table.table_name)}
-        </h4>
-
-        <div class="mapSchema">
-          ${escapeHtml(table.schema_name)}
-        </div>
+      <div class="record-head">
 
         ${
-          columns
-            .slice(0,15)
-            .map(column => {
-
-              const isPk =
-                table.primary_key &&
-                table.primary_key
-                  .split(",")
-                  .map(x=>x.trim())
-                  .includes(
-                    column.column_name
-                  );
-
-
-              return `
-                <div class="mapColumn ${
-                  isPk ? "mapPk":""
-                }">
-
-                  ${
-                    isPk
-                      ? "🔑 "
-                      : ""
-                  }
-
-                  ${escapeHtml(
-                    column.column_name
-                  )}
-
-                  <span style="float:right">
-                    ${escapeHtml(
-                      column.data_type
-                    )}
-                  </span>
-
-                </div>
-              `;
-
-            })
-            .join("")
+          primaryKey
+          ? `
+            <input
+              class="record-select"
+              type="checkbox"
+              data-row-id="${escapeHtml(row[primaryKey])}"
+              ${selectedIds.has(String(row[primaryKey])) ? "checked" : ""}
+              onchange="toggleSelected(this)">
+          `
+          : ""
         }
+
+        <div class="record-number">
+          RECORD ${index + 1 + ((currentPage-1)*pageSize)}
+        </div>
+
+        <div class="record-actions">
+
+          <button
+            class="btn btn-small"
+            onclick="openEditRecord(${index})">
+            EDIT
+          </button>
+
+          <button
+            class="btn btn-small"
+            onclick="duplicateRecord(${index})">
+            DUPLICATE
+          </button>
+
+          ${
+            primaryKey
+            ? `
+              <button
+                class="btn btn-danger btn-small"
+                onclick="deleteRecord(${index})">
+                DELETE
+              </button>
+            `
+            : ""
+          }
+
+        </div>
 
       </div>
 
-    `;
+      <div class="record-fields">
 
-  }
+        ${fields.map(
+          ([key,value]) =>
+            renderRecordField(
+              key,
+              value
+            )
+        ).join("")}
 
+      </div>
 
-  html +=
-    `</div>`;
-
-
-  map.innerHTML =
-    html;
-
+    </div>
+  `;
 }
 
-
 /* =========================================================
-   MODULE SHORTCUT
+   RECORD FIELD
 ========================================================= */
 
-async function openModule(tableName){
+function renderRecordField(key,value){
 
-  const table =
-    schemaRows.find(
-      x =>
-        x.schema_name === "public" &&
-        x.table_name === tableName
+  const stringValue =
+    value === null ||
+    value === undefined
+      ? null
+      : typeof value === "object"
+        ? JSON.stringify(
+            value,
+            null,
+            2
+          )
+        : String(value);
+
+  let valueClass = "";
+
+  if(value === null){
+    valueClass = "null-value";
+  }
+
+  if(typeof value === "boolean"){
+    valueClass =
+      value
+      ? "boolean-true"
+      : "boolean-false";
+  }
+
+  return `
+    <div
+      class="record-field ${
+        stringValue &&
+        stringValue.length > 180
+          ? "full-width"
+          : ""
+      }">
+
+      <div class="record-key">
+        ${escapeHtml(key)}
+      </div>
+
+      <div
+        class="record-value ${valueClass}">
+        ${
+          value === null
+            ? "NULL"
+            : escapeHtml(stringValue)
+        }
+      </div>
+
+    </div>
+  `;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+function updatePagination(){
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        totalRows /
+        pageSize
+      )
     );
 
+  $("pageInfo").textContent =
+    `Page ${currentPage} / ${totalPages}`;
 
-  if(!table){
+  $("previousPage").disabled =
+    currentPage <= 1;
 
-    showToast(
-      `Table "${tableName}" was not found.`,
+  $("nextPage").disabled =
+    currentPage >= totalPages;
+}
+
+$("previousPage").addEventListener(
+  "click",
+  async ()=>{
+
+    if(currentPage <= 1){
+      return;
+    }
+
+    currentPage--;
+
+    await loadTableRecords();
+  }
+);
+
+$("nextPage").addEventListener(
+  "click",
+  async ()=>{
+
+    const totalPages =
+      Math.max(
+        1,
+        Math.ceil(
+          totalRows /
+          pageSize
+        )
+      );
+
+    if(currentPage >= totalPages){
+      return;
+    }
+
+    currentPage++;
+
+    await loadTableRecords();
+  }
+);
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+let recordSearchTimer;
+
+$("recordSearch").addEventListener(
+  "input",
+  ()=>{
+
+    clearTimeout(
+      recordSearchTimer
+    );
+
+    recordSearchTimer =
+      setTimeout(
+        async ()=>{
+          currentPage = 1;
+          await loadTableRecords();
+        },
+        400
+      );
+  }
+);
+
+$("databaseSearch").addEventListener(
+  "input",
+  renderDatabaseLists
+);
+
+$("tableSearch").addEventListener(
+  "input",
+  renderDatabaseLists
+);
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+function toggleSelected(checkbox){
+
+  const id =
+    String(
+      checkbox.dataset.rowId
+    );
+
+  if(checkbox.checked){
+    selectedIds.add(id);
+  }else{
+    selectedIds.delete(id);
+  }
+}
+
+$("selectAllRecords").addEventListener(
+  "click",
+  ()=>{
+
+    currentRows.forEach(row=>{
+
+      const key =
+        findPrimaryKey(currentTable);
+
+      if(key){
+
+        selectedIds.add(
+          String(row[key])
+        );
+      }
+    });
+
+    renderRecords();
+  }
+);
+
+/* =========================================================
+   ADD RECORD
+========================================================= */
+
+$("addRecordButton").addEventListener(
+  "click",
+  ()=>{
+    openCreateRecord(
+      currentTable.table_name
+    );
+  }
+);
+
+$("dashboardAddRecord").addEventListener(
+  "click",
+  ()=>{
+
+    if(!resources.length){
+      toast(
+        "No database tables are available.",
+        "warning"
+      );
+
+      return;
+    }
+
+    openCreateRecord(
+      resources.find(
+        resource =>
+          !String(resource.table_type)
+            .toUpperCase()
+            .includes("VIEW")
+      )?.table_name
+    );
+  }
+);
+
+function openCreateRecord(tableName){
+
+  const resource =
+    resources.find(
+      r =>
+        r.table_name === tableName
+    );
+
+  if(!resource){
+    toast(
+      "Select a database table first.",
+      "warning"
+    );
+
+    return;
+  }
+
+  currentTable =
+    resource;
+
+  editingMode =
+    "create";
+
+  editingRow =
+    null;
+
+  openRecordModal();
+}
+
+/* =========================================================
+   EDIT RECORD
+========================================================= */
+
+function openEditRecord(index){
+
+  editingMode =
+    "edit";
+
+  editingRow =
+    currentRows[index];
+
+  openRecordModal();
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openRecordModal(){
+
+  if(!currentTable){
+    return;
+  }
+
+  $("modalTitle").textContent =
+    editingMode === "edit"
+      ? `Edit ${currentTable.table_name}`
+      : `Add ${currentTable.table_name}`;
+
+  $("modalMessage").innerHTML = "";
+
+  const columns =
+    currentColumns.length
+      ? currentColumns
+      : Object.keys(
+          editingRow || {}
+        ).map(name=>({
+          name,
+          data_type:"text",
+          nullable:true
+        }));
+
+  $("dynamicForm").innerHTML =
+    columns.map(
+      column =>
+        renderDynamicField(
+          column
+        )
+    ).join("");
+
+  $("modalBackdrop")
+    .classList
+    .add("show");
+}
+
+/* =========================================================
+   DYNAMIC FORM FIELD
+========================================================= */
+
+function renderDynamicField(column){
+
+  const name =
+    column.name;
+
+  const type =
+    String(
+      column.data_type || "text"
+    ).toLowerCase();
+
+  const isPk =
+    column.is_primary ||
+    name === findPrimaryKey(
+      currentTable
+    );
+
+  const value =
+    editingMode === "edit" &&
+    editingRow
+      ? editingRow[name]
+      : null;
+
+  const readonly =
+    editingMode === "edit" &&
+    isPk;
+
+  let inputHtml;
+
+  if(
+    type.includes("bool")
+  ){
+
+    inputHtml = `
+      <select
+        name="${escapeHtml(name)}"
+        ${readonly ? "disabled" : ""}>
+
+        <option value="">NULL</option>
+        <option value="true"
+          ${value === true ? "selected" : ""}>
+          true
+        </option>
+        <option value="false"
+          ${value === false ? "selected" : ""}>
+          false
+        </option>
+
+      </select>
+    `;
+
+  }else if(
+    type.includes("json")
+  ){
+
+    inputHtml = `
+      <textarea
+        name="${escapeHtml(name)}"
+        placeholder='{"key":"value"}'
+        ${readonly ? "readonly" : ""}>${
+          value === null ||
+          value === undefined
+            ? ""
+            : escapeHtml(
+                typeof value === "string"
+                  ? value
+                  : JSON.stringify(
+                      value,
+                      null,
+                      2
+                    )
+              )
+        }</textarea>
+    `;
+
+  }else if(
+    type.includes("text") ||
+    type.includes("character") ||
+    type.includes("json")
+  ){
+
+    inputHtml = `
+      <textarea
+        name="${escapeHtml(name)}"
+        ${readonly ? "readonly" : ""}>${
+          value === null ||
+          value === undefined
+            ? ""
+            : escapeHtml(value)
+        }</textarea>
+    `;
+
+  }else{
+
+    let htmlType =
+      "text";
+
+    if(
+      type.includes("int") ||
+      type.includes("numeric") ||
+      type.includes("decimal") ||
+      type.includes("double") ||
+      type.includes("real")
+    ){
+      htmlType = "number";
+    }
+
+    if(
+      type.includes("timestamp") ||
+      type.includes("date")
+    ){
+      htmlType = "datetime-local";
+    }
+
+    inputHtml = `
+      <input
+        type="${htmlType}"
+        name="${escapeHtml(name)}"
+        value="${
+          value === null ||
+          value === undefined
+            ? ""
+            : escapeHtml(value)
+        }"
+        ${readonly ? "readonly" : ""}>
+    `;
+  }
+
+  return `
+    <div class="field dynamic-field">
+
+      <label>
+        ${escapeHtml(name)}
+      </label>
+
+      ${inputHtml}
+
+      <div class="field-meta">
+        ${escapeHtml(type)}
+        ${isPk ? " · PRIMARY KEY" : ""}
+        ${column.nullable === false ? " · REQUIRED" : ""}
+      </div>
+
+    </div>
+  `;
+}
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal(){
+
+  $("modalBackdrop")
+    .classList
+    .remove("show");
+
+  editingRow = null;
+}
+
+$("closeModal")
+.addEventListener(
+  "click",
+  closeModal
+);
+
+$("cancelModal")
+.addEventListener(
+  "click",
+  closeModal
+);
+
+$("modalBackdrop")
+.addEventListener(
+  "click",
+  event=>{
+
+    if(
+      event.target ===
+      $("modalBackdrop")
+    ){
+      closeModal();
+    }
+  }
+);
+
+/* =========================================================
+   SAVE RECORD
+========================================================= */
+
+$("saveRecord").addEventListener(
+  "click",
+  async ()=>{
+
+    if(!currentTable){
+      return;
+    }
+
+    const form =
+      $("recordForm");
+
+    const formData =
+      new FormData(form);
+
+    const payload = {};
+
+    currentColumns.forEach(
+      column=>{
+
+        const name =
+          column.name;
+
+        const field =
+          form.querySelector(
+            `[name="${CSS.escape(name)}"]`
+          );
+
+        if(!field){
+          return;
+        }
+
+        if(
+          editingMode === "edit" &&
+          (
+            column.is_primary ||
+            name === findPrimaryKey(currentTable)
+          )
+        ){
+          return;
+        }
+
+        let value =
+          formData.get(name);
+
+        if(value === ""){
+          value = null;
+        }
+
+        const type =
+          String(
+            column.data_type || ""
+          ).toLowerCase();
+
+        if(
+          type.includes("bool") &&
+          value !== null
+        ){
+          value =
+            value === "true";
+        }
+
+        if(
+          type.includes("json") &&
+          value !== null
+        ){
+
+          try{
+            value =
+              JSON.parse(value);
+          }catch(error){
+
+            $("modalMessage").innerHTML =
+              `<div class="error">
+                Invalid JSON in ${escapeHtml(name)}.
+              </div>`;
+
+            return;
+          }
+        }
+
+        payload[name] =
+          value;
+      }
+    );
+
+    try{
+
+      let result;
+
+      const primaryKey =
+        findPrimaryKey(
+          currentTable
+        );
+
+      if(editingMode === "edit"){
+
+        if(!primaryKey){
+          throw new Error(
+            "Cannot edit this table because no primary key was detected."
+          );
+        }
+
+        const pkValue =
+          editingRow[primaryKey];
+
+        result =
+          await supabaseClient
+            .from(currentTable.table_name)
+            .update(payload)
+            .eq(
+              primaryKey,
+              pkValue
+            );
+
+      }else{
+
+        result =
+          await supabaseClient
+            .from(currentTable.table_name)
+            .insert(payload);
+      }
+
+      if(result.error){
+        throw result.error;
+      }
+
+      await audit(
+        editingMode === "edit"
+          ? "update"
+          : "insert",
+        currentTable.table_name,
+        editingMode === "edit"
+          ? editingRow
+          : payload
+      );
+
+      closeModal();
+
+      toast(
+        editingMode === "edit"
+          ? "Record updated."
+          : "Record created."
+      );
+
+      await loadMetadata();
+      await updateGlobalStats();
+      await loadTableRecords();
+      renderDatabaseLists();
+
+    }catch(error){
+
+      console.error(error);
+
+      $("modalMessage").innerHTML =
+        `<div class="error">
+          ${escapeHtml(error.message)}
+        </div>`;
+    }
+  }
+);
+
+/* =========================================================
+   DELETE RECORD
+========================================================= */
+
+async function deleteRecord(index){
+
+  const row =
+    currentRows[index];
+
+  const primaryKey =
+    findPrimaryKey(currentTable);
+
+  if(!primaryKey){
+
+    toast(
+      "No primary key detected. Delete is disabled.",
+      "warning"
+    );
+
+    return;
+  }
+
+  const id =
+    row[primaryKey];
+
+  if(
+    !confirm(
+      `Delete this record from ${currentTable.table_name}?\n\n${primaryKey}: ${id}`
+    )
+  ){
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(currentTable.table_name)
+        .delete()
+        .eq(
+          primaryKey,
+          id
+        );
+
+    if(error){
+      throw error;
+    }
+
+    await audit(
+      "delete",
+      currentTable.table_name,
+      row
+    );
+
+    toast(
+      "Record deleted."
+    );
+
+    await loadMetadata();
+    await updateGlobalStats();
+    await loadTableRecords();
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Delete failed: " +
+      error.message,
+      "error"
+    );
+  }
+}
+
+/* =========================================================
+   DUPLICATE RECORD
+========================================================= */
+
+async function duplicateRecord(index){
+
+  const row =
+    currentRows[index];
+
+  const primaryKey =
+    findPrimaryKey(currentTable);
+
+  const copy =
+    JSON.parse(
+      JSON.stringify(row)
+    );
+
+  if(primaryKey){
+    delete copy[primaryKey];
+  }
+
+  /*
+    Remove common generated fields.
+  */
+
+  [
+    "created_at",
+    "updated_at"
+  ].forEach(field=>{
+    if(field in copy){
+      delete copy[field];
+    }
+  });
+
+  editingMode =
+    "create";
+
+  editingRow =
+    copy;
+
+  openRecordModal();
+}
+
+/* =========================================================
+   BULK DELETE
+========================================================= */
+
+$("bulkDelete").addEventListener(
+  "click",
+  async ()=>{
+
+    if(!selectedIds.size){
+      toast(
+        "No records selected.",
+        "warning"
+      );
+
+      return;
+    }
+
+    const primaryKey =
+      findPrimaryKey(
+        currentTable
+      );
+
+    if(!primaryKey){
+      toast(
+        "Bulk delete requires a primary key.",
+        "error"
+      );
+
+      return;
+    }
+
+    if(
+      !confirm(
+        `Delete ${selectedIds.size} selected record(s)?`
+      )
+    ){
+      return;
+    }
+
+    try{
+
+      const ids =
+        Array.from(
+          selectedIds
+        );
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(currentTable.table_name)
+          .delete()
+          .in(
+            primaryKey,
+            ids
+          );
+
+      if(error){
+        throw error;
+      }
+
+      await audit(
+        "bulk_delete",
+        currentTable.table_name,
+        {
+          ids
+        }
+      );
+
+      selectedIds.clear();
+
+      toast(
+        "Selected records deleted."
+      );
+
+      await loadMetadata();
+      await updateGlobalStats();
+      await loadTableRecords();
+
+    }catch(error){
+
+      toast(
+        "Bulk delete failed: " +
+        error.message,
+        "error"
+      );
+    }
+  }
+);
+
+/* =========================================================
+   PUBLISH / UNPUBLISH
+========================================================= */
+
+async function bulkSetPublished(value){
+
+  if(!selectedIds.size){
+    toast(
+      "No records selected.",
+      "warning"
+    );
+
+    return;
+  }
+
+  const publishColumn =
+    findPublishColumn();
+
+  if(!publishColumn){
+
+    toast(
+      "This table does not contain is_published, published, or is_public.",
+      "warning"
+    );
+
+    return;
+  }
+
+  const primaryKey =
+    findPrimaryKey(
+      currentTable
+    );
+
+  if(!primaryKey){
+
+    toast(
+      "Publishing requires a primary key.",
       "error"
     );
 
     return;
-
   }
 
+  try{
 
-  showPage("database");
+    const ids =
+      Array.from(
+        selectedIds
+      );
 
-  await selectTable(
-    "public",
-    tableName
-  );
+    const payload = {};
 
+    payload[publishColumn] =
+      value;
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(currentTable.table_name)
+        .update(payload)
+        .in(
+          primaryKey,
+          ids
+        );
+
+    if(error){
+      throw error;
+    }
+
+    await audit(
+      value
+        ? "bulk_publish"
+        : "bulk_unpublish",
+      currentTable.table_name,
+      {
+        ids,
+        column:publishColumn
+      }
+    );
+
+    selectedIds.clear();
+
+    toast(
+      value
+        ? "Selected records published."
+        : "Selected records unpublished."
+    );
+
+    await loadTableRecords();
+
+  }catch(error){
+
+    toast(
+      "Publish operation failed: " +
+      error.message,
+      "error"
+    );
+  }
 }
 
+$("bulkPublish")
+.addEventListener(
+  "click",
+  ()=>bulkSetPublished(true)
+);
 
-/* =========================================================
-   MODULE PAGES
-========================================================= */
+$("bulkUnpublish")
+.addEventListener(
+  "click",
+  ()=>bulkSetPublished(false)
+);
 
-const moduleTables = {
+function findPublishColumn(){
 
-  tv:[
-    "cr_content",
-    "cr_episodes",
-    "cr_media",
-    "cr_schedule",
-    "cr_original_productions"
-  ],
+  const candidates = [
+    "is_published",
+    "published",
+    "is_public"
+  ];
 
-  podcasting:[
-    "podcasts",
-    "podcast_episodes",
-    "podcast_podcasters",
-    "podcaster_profiles",
-    "podcaster_applications"
-  ],
-
-  sports:[
-    "sports_games",
-    "sports_events",
-    "sports_teams",
-    "sports_players",
-    "sports_leagues",
-    "sports_standings",
-    "sports_stats",
-    "sports_news"
-  ],
-
-  tacoma:[
-    "tacoma_nights_episodes"
-  ],
-
-  backdeck:[
-    "back_deck_episodes"
-  ],
-
-  business:[
-    "cr_projects",
-    "cr_partners",
-    "cr_contacts",
-    "cr_partnership_inquiries",
-    "cr_roadmap"
-  ],
-
-  donations:[
-    "cr_donation_campaigns",
-    "cr_donation_events",
-    "cr_donation_settings",
-    "cr_donation_stats",
-    "donations"
-  ],
-
-  news:[
-    "cr_news",
-    "cr_news_sources",
-    "cr_topics"
-  ],
-
-  analytics:[
-    "cr_analytics_events",
-    "cr_activity_feed"
-  ]
-
-};
-
-
-async function renderModule(
-  elementId,
-  category
-){
-
-  const container =
-    $(elementId);
-
-
-  const names =
-    moduleTables[category] || [];
-
-
-  const available =
-    names.filter(
-      name =>
-        schemaRows.some(
-          x =>
-            x.schema_name ===
-              "public" &&
-            x.table_name ===
-              name
+  const found =
+    currentColumns.find(
+      column =>
+        candidates.includes(
+          String(column.name)
+            .toLowerCase()
         )
     );
 
-
-  container.innerHTML = `
-
-    <div class="cardHeader">
-      <div class="cardTitle">
-        AVAILABLE DATABASES
-      </div>
-    </div>
-
-    <div class="cardBody">
-
-      <div class="moduleGrid">
-
-        ${
-          available.length
-            ? available.map(name => `
-
-              <div
-                class="module"
-                onclick='openModule(${JSON.stringify(name)})'>
-
-                <div class="moduleIcon">
-                  ▦
-                </div>
-
-                <div class="moduleName">
-                  ${escapeHtml(name)}
-                </div>
-
-                <div class="moduleCount">
-                  Open database
-                </div>
-
-              </div>
-
-            `).join("")
-            : `
-              <div class="empty">
-                No matching tables discovered.
-              </div>
-            `
-        }
-
-      </div>
-
-    </div>
-
-  `;
-
+  return found?.name || null;
 }
-
-
-async function loadModules(){
-
-  await renderModule(
-    "tvModule",
-    "tv"
-  );
-
-  await renderModule(
-    "podcastModule",
-    "podcasting"
-  );
-
-  await renderModule(
-    "sportsModule",
-    "sports"
-  );
-
-  await renderModule(
-    "tacomaModule",
-    "tacoma"
-  );
-
-  await renderModule(
-    "backdeckModule",
-    "backdeck"
-  );
-
-  await renderModule(
-    "businessModule",
-    "business"
-  );
-
-  await renderModule(
-    "donationModule",
-    "donations"
-  );
-
-  await renderModule(
-    "newsModule",
-    "news"
-  );
-
-  await renderModule(
-    "analyticsModule",
-    "analytics"
-  );
-
-}
-
 
 /* =========================================================
-   ADMIN IDENTITY
+   EXPORT JSON
 ========================================================= */
 
-async function loadAdminIdentity(){
+$("exportJsonButton")
+.addEventListener(
+  "click",
+  async ()=>{
 
-  const admin =
-    currentAdmin || {};
+    if(!currentTable){
+      return;
+    }
 
+    try{
 
-  $("adminIdentity").innerHTML = `
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from(currentTable.table_name)
+          .select("*");
 
-    <div class="tableMeta">
+      if(error){
+        throw error;
+      }
 
-      <span class="chip green">
-        AUTHORIZED
-      </span>
+      downloadFile(
+        `${currentTable.table_name}.json`,
+        JSON.stringify(
+          data || [],
+          null,
+          2
+        ),
+        "application/json"
+      );
 
-      <span class="chip">
-        Email:
-        ${escapeHtml(
-          currentUser?.email || ""
-        )}
-      </span>
-
-      <span class="chip">
-        Role:
-        ${escapeHtml(
-          admin.role || "admin"
-        )}
-      </span>
-
-      <span class="chip ${
-        admin.is_active
-          ? "green"
-          : "red"
-      }">
-        Active:
-        ${admin.is_active
-          ? "Yes"
-          : "No"}
-      </span>
-
-    </div>
-
-    <pre class="jsonPreview">${escapeHtml(
-      JSON.stringify(
+      await audit(
+        "export_json",
+        currentTable.table_name,
         {
-          authenticated_user:
-            currentUser,
-          admin:
-            currentAdmin
-        },
-        null,
-        2
-      )
-    )}</pre>
+          rows:data?.length || 0
+        }
+      );
 
-  `;
+    }catch(error){
 
+      toast(
+        "JSON export failed: " +
+        error.message,
+        "error"
+      );
+    }
+  }
+);
+
+/* =========================================================
+   EXPORT CSV
+========================================================= */
+
+$("exportCsvButton")
+.addEventListener(
+  "click",
+  async ()=>{
+
+    if(!currentTable){
+      return;
+    }
+
+    try{
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from(currentTable.table_name)
+          .select("*");
+
+      if(error){
+        throw error;
+      }
+
+      const rows =
+        data || [];
+
+      if(!rows.length){
+        toast(
+          "No records to export.",
+          "warning"
+        );
+
+        return;
+      }
+
+      const columns =
+        Object.keys(
+          rows[0]
+        );
+
+      const csv = [
+
+        columns
+          .map(csvEscape)
+          .join(","),
+
+        ...rows.map(
+          row =>
+            columns
+              .map(
+                column =>
+                  csvEscape(
+                    row[column]
+                  )
+              )
+              .join(",")
+        )
+
+      ].join("\n");
+
+      downloadFile(
+        `${currentTable.table_name}.csv`,
+        csv,
+        "text/csv;charset=utf-8"
+      );
+
+      await audit(
+        "export_csv",
+        currentTable.table_name,
+        {
+          rows:rows.length
+        }
+      );
+
+    }catch(error){
+
+      toast(
+        "CSV export failed: " +
+        error.message,
+        "error"
+      );
+    }
+  }
+);
+
+function csvEscape(value){
+
+  if(value === null ||
+     value === undefined){
+    return "";
+  }
+
+  let string =
+    typeof value === "object"
+      ? JSON.stringify(value)
+      : String(value);
+
+  return `"${string.replaceAll('"','""')}"`;
 }
 
+function downloadFile(
+  filename,
+  content,
+  mime
+){
+
+  const blob =
+    new Blob(
+      [content],
+      {
+        type:mime
+      }
+    );
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+  link.download = filename;
+
+  document.body.appendChild(
+    link
+  );
+
+  link.click();
+
+  link.remove();
+
+  URL.revokeObjectURL(
+    url
+  );
+}
+
+/* =========================================================
+   TABLE STATS
+========================================================= */
+
+async function showTableStats(tableName){
+
+  const resource =
+    resources.find(
+      r =>
+        r.table_name === tableName
+    );
+
+  if(!resource){
+    return;
+  }
+
+  let exactCount =
+    resource.row_count || 0;
+
+  try{
+
+    const {
+      count,
+      error
+    } =
+      await supabaseClient
+        .from(tableName)
+        .select("*",{
+          count:"exact",
+          head:true
+        });
+
+    if(!error){
+      exactCount =
+        count || 0;
+    }
+
+  }catch(error){
+    console.warn(error);
+  }
+
+  alert(
+`CrowRules Database Statistics
+
+Table: ${tableName}
+Schema: ${resource.schema_name}
+Type: ${resource.table_type}
+
+Records: ${exactCount.toLocaleString()}
+Columns: ${resource.column_count || "Unknown"}
+Primary Key: ${resource.primary_key || findPrimaryKey(resource) || "Unknown"}
+
+Relationships:
+${relationships.filter(
+  r =>
+    r.from_table === tableName ||
+    r.to_table === tableName
+).length}
+
+This table is ${String(resource.table_type).toUpperCase().includes("VIEW")
+  ? "READ ONLY."
+  : "AVAILABLE FOR CRUD OPERATIONS."}`
+  );
+}
+
+/* =========================================================
+   TABLE SCHEMA
+========================================================= */
+
+function showTableSchema(tableName){
+
+  const resource =
+    resources.find(
+      r =>
+        r.table_name === tableName
+    );
+
+  if(!resource){
+    return;
+  }
+
+  currentTable =
+    resource;
+
+  currentColumns =
+    resource.columns || [];
+
+  $("detailTableName").textContent =
+    tableName;
+
+  $("detailTableMeta").textContent =
+    `${resource.schema_name}.${tableName}`;
+
+  renderSchema();
+
+  openPage("table");
+}
+
+/* =========================================================
+   RELATIONSHIPS
+========================================================= */
+
+function renderRelationships(){
+
+  const container =
+    $("relationshipList");
+
+  if(!relationships.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        <strong>No relationships discovered</strong>
+        Make sure the metadata RPC exposes foreign keys.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML =
+    relationships.map(
+      relation => `
+
+        <div class="relation">
+
+          <span>
+            ${escapeHtml(relation.from_table)}
+          </span>
+
+          <span>
+            .
+            ${escapeHtml(relation.from_column)}
+          </span>
+
+          <span class="arrow">
+            →
+          </span>
+
+          <span>
+            ${escapeHtml(relation.to_table)}
+          </span>
+
+          <span>
+            .
+            ${escapeHtml(relation.to_column)}
+          </span>
+
+        </div>
+
+      `
+    ).join("");
+}
 
 /* =========================================================
    AUDIT
@@ -4511,212 +4652,302 @@ async function loadAdminIdentity(){
 
 async function audit(
   action,
-  record
+  tableName,
+  details
 ){
 
   try{
 
-    await supabaseClient.rpc(
-      "cr_admin_v54_audit",
-      {
-        p_action:
-          action,
+    /*
+      Try the v5.1 audit table first.
+    */
 
-        p_schema:
-          selectedTable?.schema_name ||
-          "public",
+    const payload = {
+      user_id:
+        currentUser?.id || null,
 
-        p_table:
-          selectedTable?.table_name ||
-          "",
+      action,
 
-        p_record:
-          record || null
-      }
-    );
+      table_name:
+        tableName || null,
 
-  }
-  catch(error){
+      details:
+        details || {},
 
-    console.warn(
-      "Audit logging failed:",
+      created_at:
+        new Date().toISOString()
+    };
+
+    const result =
+      await supabaseClient
+        .from("cr_admin_v51_audit_log")
+        .insert(payload);
+
+    if(result.error){
+
+      console.debug(
+        "Audit table insert unavailable:",
+        result.error.message
+      );
+    }
+
+  }catch(error){
+
+    console.debug(
+      "Audit logging unavailable:",
       error
     );
-
   }
-
 }
 
+async function loadAudit(){
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
+  const container =
+    $("auditList");
 
-function showPage(page){
+  try{
 
-  document
-    .querySelectorAll(".page")
-    .forEach(
-      el =>
-        el.classList.add("hidden")
-    );
+    let query =
+      supabaseClient
+        .from("cr_admin_v51_audit_log")
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(50);
 
+    const {
+      data,
+      error
+    } =
+      await query;
 
-  const target =
-    $(`page-${page}`);
+    if(error){
+      throw error;
+    }
 
+    if(!data?.length){
 
-  if(target){
-    target.classList.remove("hidden");
+      container.innerHTML =
+        `<div class="empty">
+          <strong>No audit records</strong>
+          Administrative activity will appear here.
+        </div>`;
+
+      return;
+    }
+
+    container.innerHTML =
+      data.map(
+        (row,index)=>`
+
+          <div class="record-card">
+
+            <div class="record-head">
+
+              <div class="record-number">
+                EVENT ${index+1}
+              </div>
+
+            </div>
+
+            <div class="record-fields">
+
+              ${Object.entries(row)
+                .map(
+                  ([key,value]) =>
+                    renderRecordField(
+                      key,
+                      value
+                    )
+                )
+                .join("")}
+
+            </div>
+
+          </div>
+
+        `
+      ).join("");
+
+  }catch(error){
+
+    container.innerHTML =
+      `<div class="empty">
+        <strong>Audit table unavailable</strong>
+        ${escapeHtml(error.message)}
+      </div>`;
   }
-
-
-  document
-    .querySelectorAll(".sideBtn")
-    .forEach(btn => {
-
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page === page
-      );
-
-    });
-
 }
 
-
-document
-  .querySelectorAll(".sideBtn")
-  .forEach(btn => {
-
-    btn.addEventListener(
-      "click",
-      async () => {
-
-        const page =
-          btn.dataset.page;
-
-        showPage(page);
-
-
-        if(page === "tv"){
-          await renderModule(
-            "tvModule",
-            "tv"
-          );
-        }
-
-        if(page === "podcasting"){
-          await renderModule(
-            "podcastModule",
-            "podcasting"
-          );
-        }
-
-        if(page === "sports"){
-          await renderModule(
-            "sportsModule",
-            "sports"
-          );
-        }
-
-        if(page === "tacoma"){
-          await renderModule(
-            "tacomaModule",
-            "tacoma"
-          );
-        }
-
-        if(page === "backdeck"){
-          await renderModule(
-            "backdeckModule",
-            "backdeck"
-          );
-        }
-
-        if(page === "business"){
-          await renderModule(
-            "businessModule",
-            "business"
-          );
-        }
-
-        if(page === "donations"){
-          await renderModule(
-            "donationModule",
-            "donations"
-          );
-        }
-
-        if(page === "news"){
-          await renderModule(
-            "newsModule",
-            "news"
-          );
-        }
-
-        if(page === "analytics"){
-          await renderModule(
-            "analyticsModule",
-            "analytics"
-          );
-        }
-
-        if(page === "admin"){
-          await loadAdminIdentity();
-        }
-
-      }
-    );
-
-  });
-
-
 /* =========================================================
-   CLOSE MODAL OUTSIDE
+   DIAGNOSTICS
 ========================================================= */
 
-$("recordModal").addEventListener(
+function runDiagnostics(){
+
+  $("diagProject").textContent =
+    SUPABASE_URL;
+
+  $("diagUser").textContent =
+    currentUser?.email ||
+    "Not authenticated";
+
+  $("diagRole").textContent =
+    currentAdmin?.role ||
+    "Unknown";
+
+  $("diagActive").textContent =
+    currentAdmin?.is_active
+      ? "YES"
+      : "NO";
+
+  $("diagAuthorized").textContent =
+    currentAdmin?.authorized
+      ? "AUTHORIZED"
+      : "NOT AUTHORIZED";
+
+  $("diagTables").textContent =
+    resources.filter(
+      r =>
+        String(r.table_type)
+          .toUpperCase()
+          .includes("TABLE")
+    ).length;
+
+  $("diagViews").textContent =
+    resources.filter(
+      r =>
+        String(r.table_type)
+          .toUpperCase()
+          .includes("VIEW")
+    ).length;
+
+  $("diagRelations").textContent =
+    relationships.length;
+}
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+async function refreshEverything(){
+
+  try{
+
+    toast(
+      "Refreshing Supabase database..."
+    );
+
+    await loadEverything();
+
+    if(currentTable){
+      await loadTableRecords();
+    }
+
+    toast(
+      "Database refreshed."
+    );
+
+  }catch(error){
+
+    toast(
+      "Refresh failed: " +
+      error.message,
+      "error"
+    );
+  }
+}
+
+$("refreshAll")
+.addEventListener(
   "click",
-  event => {
+  refreshEverything
+);
 
-    if(
-      event.target ===
-      $("recordModal")
-    ){
-      closeModal();
-    }
+$("dashboardRefresh")
+.addEventListener(
+  "click",
+  refreshEverything
+);
 
+$("reloadMetadata")
+.addEventListener(
+  "click",
+  refreshEverything
+);
+
+$("refreshRecordsButton")
+.addEventListener(
+  "click",
+  async ()=>{
+    await loadMetadata();
+    await loadTableRecords();
   }
 );
 
+$("refreshAudit")
+.addEventListener(
+  "click",
+  loadAudit
+);
+
+$("runDiagnostics")
+.addEventListener(
+  "click",
+  runDiagnostics
+);
 
 /* =========================================================
-   KEYBOARD
+   BACK
 ========================================================= */
 
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if(
-      event.key === "Escape"
-    ){
-      closeModal();
-    }
-
+$("backDatabases")
+.addEventListener(
+  "click",
+  ()=>{
+    openPage("databases");
   }
 );
 
+/* =========================================================
+   GLOBAL TABLE OPEN
+========================================================= */
+
+window.openTable =
+  openTable;
+
+window.openCreateRecord =
+  openCreateRecord;
+
+window.openEditRecord =
+  openEditRecord;
+
+window.deleteRecord =
+  deleteRecord;
+
+window.duplicateRecord =
+  duplicateRecord;
+
+window.toggleSelected =
+  toggleSelected;
+
+window.showTableSchema =
+  showTableSchema;
+
+window.showTableStats =
+  showTableStats;
 
 /* =========================================================
    START
 ========================================================= */
 
-init();
+initialize();
 
 </script>
 
 </body>
 </html>
-```
