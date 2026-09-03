@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#05070b">
-<meta name="description" content="CrowRules Entertainment Admin v5.4 — Universal Supabase Command Center">
-<title>CrowRules Admin v5.4</title>
+<meta name="theme-color" content="#03050a">
+<meta name="description" content="CrowRules Entertainment Admin v5.5 — Universal Supabase Data Engine">
+<title>CrowRules Admin v5.5</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,33 +13,36 @@
 
 <style>
 :root{
-  --bg:#05070b;
-  --bg2:#090d14;
-  --panel:#0d121b;
-  --panel2:#111824;
-  --panel3:#151d2a;
-  --line:#263246;
-  --line2:#34425a;
-  --text:#edf3ff;
-  --muted:#8996aa;
-  --cyan:#54e7ff;
-  --green:#50e3a4;
+  --bg:#03050a;
+  --bg2:#070b12;
+  --panel:#0b111a;
+  --panel2:#101824;
+  --panel3:#151f2d;
+  --line:#202c3e;
+  --line2:#34445d;
+  --text:#edf4ff;
+  --muted:#8190a7;
+  --cyan:#50e6ff;
+  --green:#4ce3a1;
+  --red:#ff5f76;
   --yellow:#ffd166;
-  --red:#ff5d73;
-  --purple:#a889ff;
-  --orange:#ff9d5c;
-  --shadow:0 20px 60px rgba(0,0,0,.35);
-  --radius:18px;
+  --purple:#aa8bff;
+  --orange:#ff9b5d;
+  --shadow:0 18px 55px rgba(0,0,0,.42);
+  --radius:17px;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
-html,body{
+html,
+body{
   margin:0;
   min-height:100%;
   background:
-    radial-gradient(circle at 20% 0%,rgba(84,231,255,.07),transparent 30%),
-    radial-gradient(circle at 100% 30%,rgba(168,137,255,.06),transparent 28%),
+    radial-gradient(circle at 15% 0%,rgba(80,230,255,.08),transparent 30%),
+    radial-gradient(circle at 100% 20%,rgba(170,139,255,.07),transparent 30%),
     var(--bg);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
@@ -49,7 +52,10 @@ body{
   overflow-x:hidden;
 }
 
-button,input,select,textarea{
+button,
+input,
+select,
+textarea{
   font:inherit;
 }
 
@@ -61,110 +67,106 @@ button{
   display:none!important;
 }
 
-.app{
-  min-height:100vh;
-}
-
 /* =========================================================
-   BOOT / AUTH
+   BOOT
 ========================================================= */
 
-.boot{
+#boot{
   position:fixed;
   inset:0;
-  z-index:9999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#030508;
+  z-index:99999;
+  display:grid;
+  place-items:center;
+  background:#020307;
 }
 
 .boot-box{
-  width:min(520px,92vw);
+  width:min(560px,92vw);
   text-align:center;
-  padding:42px;
 }
 
-.logo-mark{
-  width:90px;
-  height:90px;
-  margin:0 auto 24px;
-  border:1px solid rgba(84,231,255,.35);
-  border-radius:24px;
+.boot-logo{
+  width:100px;
+  height:100px;
+  margin:auto;
   display:grid;
   place-items:center;
-  background:
-    linear-gradient(135deg,rgba(84,231,255,.12),rgba(168,137,255,.08));
-  box-shadow:0 0 60px rgba(84,231,255,.12);
-  font-family:Orbitron;
-  font-size:34px;
-  font-weight:900;
+  border:1px solid rgba(80,230,255,.35);
+  border-radius:28px;
   color:var(--cyan);
+  font-family:Orbitron;
+  font-size:36px;
+  font-weight:900;
+  box-shadow:
+    0 0 80px rgba(80,230,255,.12),
+    inset 0 0 35px rgba(80,230,255,.05);
 }
 
-.boot h1{
+.boot-box h1{
+  margin:24px 0 8px;
   font-family:Orbitron;
   letter-spacing:2px;
-  margin:0 0 10px;
+  font-size:24px;
 }
 
-.boot p{
+.boot-box p{
   color:var(--muted);
 }
 
-.loader{
-  width:100%;
+.boot-bar{
   height:4px;
-  background:#141b26;
-  border-radius:99px;
   overflow:hidden;
-  margin-top:26px;
+  border-radius:99px;
+  background:#111927;
+  margin-top:24px;
 }
 
-.loader span{
+.boot-bar span{
   display:block;
+  width:30%;
   height:100%;
-  width:35%;
   background:var(--cyan);
-  animation:load 1.4s infinite ease-in-out;
+  animation:boot 1.5s infinite ease-in-out;
 }
 
-@keyframes load{
-  0%{transform:translateX(-130%)}
-  100%{transform:translateX(400%)}
+@keyframes boot{
+  0%{transform:translateX(-150%)}
+  100%{transform:translateX(450%)}
 }
 
-.auth-screen{
+/* =========================================================
+   AUTH
+========================================================= */
+
+.auth{
   min-height:100vh;
   display:grid;
   place-items:center;
-  padding:25px;
+  padding:20px;
   background:
-    linear-gradient(rgba(3,5,8,.88),rgba(3,5,8,.94)),
-    radial-gradient(circle at 50% 20%,rgba(84,231,255,.15),transparent 35%);
+    radial-gradient(circle at 50% 10%,rgba(80,230,255,.12),transparent 35%);
 }
 
 .auth-card{
   width:min(470px,100%);
-  background:rgba(13,18,27,.94);
+  padding:35px;
   border:1px solid var(--line);
-  border-radius:24px;
-  padding:34px;
+  border-radius:25px;
+  background:rgba(11,17,26,.96);
   box-shadow:var(--shadow);
-  backdrop-filter:blur(18px);
 }
 
-.auth-brand{
-  font-family:Orbitron;
+.auth-logo{
   color:var(--cyan);
+  font-family:Orbitron;
+  font-weight:900;
   letter-spacing:2px;
-  font-weight:800;
 }
 
 .auth-card h1{
-  font-family:Orbitron;
   margin:12px 0 8px;
-  font-size:26px;
+  font-family:Orbitron;
+  font-size:25px;
 }
 
 .auth-card p{
@@ -173,111 +175,111 @@ button{
 }
 
 .field{
-  margin:16px 0;
+  margin:15px 0;
 }
 
 .field label{
   display:block;
-  color:#aab6c9;
-  font-size:12px;
-  font-weight:700;
+  margin-bottom:7px;
+  color:#a9b5c8;
+  font-size:10px;
+  font-weight:800;
   text-transform:uppercase;
   letter-spacing:1px;
-  margin-bottom:8px;
 }
 
 input,
 select,
 textarea{
   width:100%;
-  color:var(--text);
-  background:#080c12;
+  padding:12px 13px;
   border:1px solid var(--line);
-  border-radius:12px;
+  border-radius:11px;
   outline:none;
-  padding:12px 14px;
-  transition:.2s;
+  background:#070b11;
+  color:var(--text);
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical;
 }
 
 input:focus,
 select:focus,
 textarea:focus{
   border-color:var(--cyan);
-  box-shadow:0 0 0 3px rgba(84,231,255,.08);
+  box-shadow:0 0 0 3px rgba(80,230,255,.08);
 }
 
-textarea{
-  min-height:120px;
-  resize:vertical;
+.auth-buttons{
+  display:flex;
+  gap:9px;
+  margin-top:20px;
 }
+
+.auth-buttons button{
+  flex:1;
+}
+
+.auth-message{
+  margin-top:16px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.auth-message.error{
+  color:var(--red);
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
 
 .btn{
+  padding:10px 14px;
   border:1px solid var(--line);
-  background:#101722;
+  border-radius:10px;
+  background:#0e1621;
   color:var(--text);
-  border-radius:11px;
-  padding:11px 15px;
-  font-weight:700;
-  transition:.18s;
+  font-size:12px;
+  font-weight:800;
+  transition:.18s ease;
 }
 
 .btn:hover{
   transform:translateY(-1px);
+  background:#152030;
   border-color:var(--line2);
-  background:#16202d;
 }
 
 .btn.primary{
-  background:rgba(84,231,255,.11);
   color:var(--cyan);
-  border-color:rgba(84,231,255,.35);
+  border-color:rgba(80,230,255,.32);
+  background:rgba(80,230,255,.08);
 }
 
 .btn.success{
-  background:rgba(80,227,164,.10);
   color:var(--green);
-  border-color:rgba(80,227,164,.3);
+  border-color:rgba(76,227,161,.3);
+  background:rgba(76,227,161,.07);
 }
 
 .btn.danger{
-  background:rgba(255,93,115,.08);
   color:var(--red);
-  border-color:rgba(255,93,115,.28);
+  border-color:rgba(255,95,118,.3);
+  background:rgba(255,95,118,.07);
 }
 
 .btn.warn{
-  background:rgba(255,209,102,.08);
   color:var(--yellow);
-  border-color:rgba(255,209,102,.28);
+  border-color:rgba(255,209,102,.3);
+  background:rgba(255,209,102,.07);
 }
 
 .btn.small{
-  padding:7px 10px;
-  font-size:12px;
-}
-
-.auth-actions{
-  display:flex;
-  gap:10px;
-  margin-top:22px;
-}
-
-.auth-actions .btn{
-  flex:1;
-}
-
-.auth-status{
-  margin-top:18px;
-  font-size:13px;
-  color:var(--muted);
-}
-
-.error{
-  color:var(--red)!important;
-}
-
-.success-text{
-  color:var(--green)!important;
+  padding:7px 9px;
+  font-size:10px;
 }
 
 /* =========================================================
@@ -287,49 +289,50 @@ textarea{
 .header{
   position:sticky;
   top:0;
-  z-index:100;
-  min-height:74px;
+  z-index:500;
+  min-height:72px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:18px;
-  padding:12px 20px;
+  gap:15px;
+  padding:10px 18px;
   border-bottom:1px solid var(--line);
-  background:rgba(5,7,11,.88);
-  backdrop-filter:blur(18px);
+  background:rgba(3,5,10,.91);
+  backdrop-filter:blur(20px);
 }
 
 .brand{
   display:flex;
   align-items:center;
-  gap:13px;
+  gap:12px;
 }
 
 .brand-icon{
   width:42px;
   height:42px;
-  border-radius:12px;
   display:grid;
   place-items:center;
-  border:1px solid rgba(84,231,255,.35);
+  border:1px solid rgba(80,230,255,.35);
+  border-radius:12px;
   color:var(--cyan);
   font-family:Orbitron;
   font-weight:900;
 }
 
-.brand-text strong{
-  display:block;
+.brand-title{
   font-family:Orbitron;
   font-size:14px;
+  font-weight:800;
   letter-spacing:1.5px;
 }
 
-.brand-text span{
+.brand-sub{
+  margin-top:3px;
   color:var(--muted);
-  font-size:11px;
+  font-size:10px;
 }
 
-.header-actions{
+.header-right{
   display:flex;
   align-items:center;
   gap:8px;
@@ -337,15 +340,15 @@ textarea{
 }
 
 .user-chip{
+  padding:8px 11px;
   border:1px solid var(--line);
-  background:#0c1119;
-  border-radius:12px;
-  padding:9px 12px;
-  color:#b9c4d6;
-  font-size:12px;
+  border-radius:10px;
+  background:#080d14;
+  color:#aab7ca;
+  font-size:10px;
 }
 
-.user-chip b{
+.user-chip strong{
   color:var(--cyan);
 }
 
@@ -355,32 +358,32 @@ textarea{
 
 .nav{
   position:sticky;
-  top:74px;
-  z-index:90;
+  top:72px;
+  z-index:490;
   display:flex;
-  gap:6px;
+  gap:5px;
   overflow:auto;
-  padding:10px 20px;
-  background:rgba(8,11,16,.95);
+  padding:9px 18px;
   border-bottom:1px solid var(--line);
+  background:rgba(6,9,14,.97);
 }
 
 .nav button{
   white-space:nowrap;
+  padding:8px 12px;
   border:1px solid transparent;
+  border-radius:9px;
   background:transparent;
   color:var(--muted);
-  border-radius:10px;
-  padding:9px 13px;
-  font-size:12px;
-  font-weight:700;
+  font-size:10px;
+  font-weight:800;
 }
 
 .nav button:hover,
 .nav button.active{
   color:var(--cyan);
-  border-color:rgba(84,231,255,.22);
-  background:rgba(84,231,255,.07);
+  border-color:rgba(80,230,255,.2);
+  background:rgba(80,230,255,.06);
 }
 
 /* =========================================================
@@ -390,7 +393,7 @@ textarea{
 .main{
   width:min(1800px,100%);
   margin:auto;
-  padding:24px;
+  padding:22px;
 }
 
 .page{
@@ -405,25 +408,26 @@ textarea{
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  gap:18px;
-  margin-bottom:22px;
+  gap:15px;
+  margin-bottom:18px;
 }
 
 .page-head h1{
-  font-family:Orbitron;
-  font-size:25px;
   margin:0 0 7px;
+  font-family:Orbitron;
+  font-size:24px;
 }
 
 .page-head p{
   margin:0;
   color:var(--muted);
-  line-height:1.5;
+  font-size:12px;
+  line-height:1.6;
 }
 
 .page-actions{
   display:flex;
-  gap:8px;
+  gap:7px;
   flex-wrap:wrap;
 }
 
@@ -434,127 +438,37 @@ textarea{
 .stats{
   display:grid;
   grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:12px;
-  margin-bottom:20px;
+  gap:10px;
+  margin-bottom:16px;
 }
 
 .stat{
-  min-height:118px;
-  padding:17px;
+  min-height:112px;
+  padding:15px;
   border:1px solid var(--line);
   border-radius:var(--radius);
-  background:
-    linear-gradient(145deg,rgba(255,255,255,.025),transparent),
-    var(--panel);
+  background:linear-gradient(145deg,rgba(255,255,255,.025),transparent),var(--panel);
   box-shadow:var(--shadow);
 }
 
 .stat-label{
   color:var(--muted);
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  font-weight:800;
-}
-
-.stat-value{
-  font-family:Orbitron;
-  font-size:25px;
-  margin-top:14px;
-}
-
-.stat-meta{
-  color:#718096;
-  font-size:11px;
-  margin-top:6px;
-}
-
-/* =========================================================
-   CARDS
-========================================================= */
-
-.card-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:14px;
-}
-
-.card{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:var(--radius);
-  padding:17px;
-  box-shadow:var(--shadow);
-}
-
-.card-title{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.card-title h3{
-  margin:0;
-  font-size:15px;
-}
-
-.card-sub{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:6px;
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  border:1px solid var(--line);
-  border-radius:99px;
-  padding:4px 8px;
   font-size:9px;
   text-transform:uppercase;
   font-weight:800;
-  letter-spacing:.7px;
+  letter-spacing:1px;
 }
 
-.badge.table{
-  color:var(--cyan);
-  border-color:rgba(84,231,255,.28);
-}
-
-.badge.view{
-  color:var(--purple);
-  border-color:rgba(168,137,255,.28);
-}
-
-.badge.success{
-  color:var(--green);
-}
-
-.badge.warn{
-  color:var(--yellow);
-}
-
-.card-stats{
-  display:flex;
-  gap:18px;
-  margin:16px 0;
-  color:var(--muted);
-  font-size:11px;
-}
-
-.card-stats strong{
-  color:var(--text);
+.stat-value{
+  margin-top:13px;
   font-family:Orbitron;
-  font-size:15px;
-  display:block;
-  margin-top:4px;
+  font-size:23px;
 }
 
-.card-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
+.stat-meta{
+  margin-top:5px;
+  color:#5e6d82;
+  font-size:9px;
 }
 
 /* =========================================================
@@ -563,14 +477,14 @@ textarea{
 
 .toolbar{
   display:flex;
-  gap:9px;
-  flex-wrap:wrap;
   align-items:center;
-  padding:13px;
+  gap:8px;
+  flex-wrap:wrap;
+  padding:11px;
+  margin-bottom:13px;
   border:1px solid var(--line);
+  border-radius:15px;
   background:var(--panel);
-  border-radius:var(--radius);
-  margin-bottom:15px;
 }
 
 .toolbar .search{
@@ -580,78 +494,190 @@ textarea{
 
 .toolbar select{
   width:auto;
-  min-width:150px;
+  min-width:135px;
 }
 
 /* =========================================================
-   RECORD LIST
+   CARDS
+========================================================= */
+
+.card-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(275px,1fr));
+  gap:12px;
+}
+
+.card{
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:var(--panel);
+  box-shadow:var(--shadow);
+}
+
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.card h3{
+  margin:0;
+  font-size:14px;
+}
+
+.card-sub{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 7px;
+  border:1px solid var(--line);
+  border-radius:99px;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.7px;
+}
+
+.badge.table{
+  color:var(--cyan);
+  border-color:rgba(80,230,255,.28);
+}
+
+.badge.view{
+  color:var(--purple);
+  border-color:rgba(170,139,255,.3);
+}
+
+.badge.good{
+  color:var(--green);
+  border-color:rgba(76,227,161,.3);
+}
+
+.card-stats{
+  display:flex;
+  gap:20px;
+  margin:15px 0;
+}
+
+.card-stat{
+  color:var(--muted);
+  font-size:9px;
+}
+
+.card-stat strong{
+  display:block;
+  margin-top:3px;
+  color:var(--text);
+  font-family:Orbitron;
+  font-size:13px;
+}
+
+.card-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+/* =========================================================
+   RECORDS
 ========================================================= */
 
 .records{
   display:flex;
   flex-direction:column;
-  gap:9px;
+  gap:8px;
 }
 
 .record{
+  padding:13px;
   border:1px solid var(--line);
-  background:#0b1018;
-  border-radius:14px;
-  padding:14px;
+  border-radius:13px;
+  background:#090e16;
 }
 
-.record-head{
+.record-top{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   gap:10px;
 }
 
 .record-title{
+  font-size:12px;
   font-weight:800;
-  font-size:13px;
 }
 
 .record-id{
-  color:#65738a;
+  color:#5d6c80;
   font-family:monospace;
-  font-size:10px;
+  font-size:9px;
 }
 
-.record-preview{
+.record-fields{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:8px;
-  margin:12px 0;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:7px;
+  margin:11px 0;
 }
 
 .kv{
-  padding:9px;
-  border:1px solid #1b2534;
-  background:#090e15;
-  border-radius:9px;
+  min-width:0;
+  padding:8px;
+  border:1px solid #182230;
+  border-radius:8px;
+  background:#070b11;
 }
 
 .kv span{
   display:block;
-  color:#68768b;
-  font-size:9px;
+  margin-bottom:3px;
+  color:#5f6e82;
+  font-size:8px;
   text-transform:uppercase;
-  margin-bottom:4px;
 }
 
-.kv b{
+.kv strong{
   display:block;
-  font-size:11px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+  font-size:10px;
 }
 
 .record-actions{
   display:flex;
+  gap:6px;
   flex-wrap:wrap;
-  gap:7px;
+}
+
+/* =========================================================
+   RELATIONSHIPS
+========================================================= */
+
+.relationships{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+  gap:11px;
+}
+
+.relationship{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+}
+
+.relationship .arrow{
+  margin:8px 0;
+  color:var(--cyan);
+  font-family:Orbitron;
+  font-size:10px;
 }
 
 /* =========================================================
@@ -661,184 +687,141 @@ textarea{
 .modal{
   position:fixed;
   inset:0;
-  z-index:1000;
+  z-index:2000;
   display:none;
   align-items:center;
   justify-content:center;
-  padding:20px;
-  background:rgba(0,0,0,.75);
-  backdrop-filter:blur(8px);
+  padding:18px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(9px);
 }
 
 .modal.open{
   display:flex;
 }
 
-.modal-card{
-  width:min(900px,100%);
-  max-height:92vh;
+.modal-box{
+  width:min(940px,100%);
+  max-height:93vh;
   overflow:auto;
-  background:#0b1018;
   border:1px solid var(--line2);
-  border-radius:22px;
-  box-shadow:0 30px 100px rgba(0,0,0,.65);
+  border-radius:21px;
+  background:#0a1018;
+  box-shadow:0 35px 120px rgba(0,0,0,.7);
 }
 
-.modal-head{
+.modal-header{
   position:sticky;
   top:0;
-  z-index:2;
+  z-index:5;
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  padding:17px 20px;
+  align-items:center;
+  gap:10px;
+  padding:15px 18px;
   border-bottom:1px solid var(--line);
-  background:#0b1018;
+  background:#0a1018;
 }
 
-.modal-head h2{
-  font-family:Orbitron;
-  font-size:17px;
+.modal-header h2{
   margin:0;
+  font-family:Orbitron;
+  font-size:16px;
 }
 
 .modal-body{
-  padding:20px;
+  padding:18px;
 }
 
-.modal-foot{
+.modal-footer{
   position:sticky;
   bottom:0;
   display:flex;
   justify-content:flex-end;
-  gap:8px;
-  padding:15px 20px;
+  gap:7px;
+  padding:13px 18px;
   border-top:1px solid var(--line);
-  background:#0b1018;
+  background:#0a1018;
 }
 
 .form-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
+  gap:12px;
 }
 
-.form-grid .full{
+.form-full{
   grid-column:1/-1;
 }
 
 /* =========================================================
-   TABLE DETAIL
+   CATEGORIES
 ========================================================= */
 
-.detail-layout{
-  display:grid;
-  grid-template-columns:300px 1fr;
-  gap:15px;
-}
-
-.detail-sidebar{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:var(--radius);
-  padding:14px;
-  height:max-content;
-  position:sticky;
-  top:145px;
-}
-
-.column-list{
+.category-bar{
   display:flex;
-  flex-direction:column;
-  gap:5px;
-  margin-top:12px;
+  gap:6px;
+  overflow:auto;
+  margin-bottom:13px;
 }
 
-.column-item{
-  padding:9px;
-  border:1px solid #1b2534;
-  border-radius:9px;
-  background:#090e15;
-  font-size:11px;
-}
-
-.column-item b{
-  display:block;
-  color:var(--cyan);
-}
-
-.column-item span{
-  color:#66758a;
-}
-
-.detail-main{
-  min-width:0;
-}
-
-.empty{
-  padding:40px;
-  text-align:center;
-  border:1px dashed var(--line2);
-  border-radius:var(--radius);
-  color:var(--muted);
-}
-
-/* =========================================================
-   RELATION MAP
-========================================================= */
-
-.relationships{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
-  gap:13px;
-}
-
-.relationship{
+.category{
+  white-space:nowrap;
+  padding:8px 11px;
   border:1px solid var(--line);
-  border-radius:15px;
-  padding:15px;
-  background:var(--panel);
-}
-
-.relationship .arrow{
-  color:var(--cyan);
-  font-family:Orbitron;
-  margin:8px 0;
-}
-
-.relationship small{
+  border-radius:99px;
+  background:#090e15;
   color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+}
+
+.category.active{
+  color:var(--cyan);
+  border-color:rgba(80,230,255,.28);
+  background:rgba(80,230,255,.06);
 }
 
 /* =========================================================
    LOGS
 ========================================================= */
 
-.log-list{
+.logs{
   display:flex;
   flex-direction:column;
   gap:7px;
 }
 
 .log{
-  padding:11px 13px;
-  background:#090e15;
-  border:1px solid #1a2432;
-  border-radius:10px;
-  font-family:monospace;
-  font-size:11px;
-}
-
-.log .time{
-  color:#58677c;
-}
-
-.log.ok{
+  padding:10px 12px;
+  border:1px solid #172130;
   border-left:3px solid var(--green);
+  border-radius:9px;
+  background:#080d14;
+  font-family:monospace;
+  font-size:10px;
 }
 
-.log.err{
-  border-left:3px solid var(--red);
+.log.error{
+  border-left-color:var(--red);
+}
+
+.log-time{
+  margin-right:8px;
+  color:#56657a;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty{
+  padding:38px 20px;
+  text-align:center;
+  border:1px dashed var(--line2);
+  border-radius:15px;
+  color:var(--muted);
+  font-size:12px;
 }
 
 /* =========================================================
@@ -847,36 +830,42 @@ textarea{
 
 .toast-wrap{
   position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:3000;
+  right:16px;
+  bottom:16px;
+  z-index:5000;
   display:flex;
   flex-direction:column;
-  gap:8px;
-  width:min(390px,calc(100vw - 36px));
+  gap:7px;
+  width:min(390px,calc(100vw - 32px));
 }
 
 .toast{
+  padding:12px 14px;
   border:1px solid var(--line2);
-  background:#0c121b;
-  border-radius:12px;
-  padding:13px 15px;
+  border-radius:11px;
+  background:#0b121b;
   box-shadow:var(--shadow);
-  font-size:12px;
+  font-size:11px;
   animation:toastIn .2s ease;
 }
 
 .toast.success{
-  border-color:rgba(80,227,164,.35);
+  border-color:rgba(76,227,161,.3);
 }
 
 .toast.error{
-  border-color:rgba(255,93,115,.35);
+  border-color:rgba(255,95,118,.3);
 }
 
 @keyframes toastIn{
-  from{transform:translateY(10px);opacity:0}
-  to{transform:none;opacity:1}
+  from{
+    opacity:0;
+    transform:translateY(8px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
 
 /* =========================================================
@@ -884,31 +873,30 @@ textarea{
 ========================================================= */
 
 @media(max-width:1200px){
+
   .stats{
     grid-template-columns:repeat(3,1fr);
   }
 
-  .detail-layout{
-    grid-template-columns:1fr;
-  }
-
-  .detail-sidebar{
-    position:static;
-  }
 }
 
-@media(max-width:720px){
+@media(max-width:750px){
+
   .main{
-    padding:15px;
+    padding:14px;
   }
 
   .header{
-    padding:10px 14px;
+    min-height:66px;
   }
 
   .nav{
-    padding:8px 14px;
     top:66px;
+  }
+
+  .brand-sub,
+  .brand-title{
+    display:none;
   }
 
   .stats{
@@ -923,403 +911,825 @@ textarea{
     grid-template-columns:1fr;
   }
 
-  .form-grid .full{
+  .form-full{
     grid-column:auto;
   }
+
 }
 
 @media(max-width:450px){
+
   .stats{
     grid-template-columns:1fr;
-  }
-
-  .brand-text{
-    display:none;
   }
 
   .auth-card{
     padding:24px;
   }
+
 }
 </style>
 </head>
 
 <body>
 
-<div id="boot" class="boot">
+<!-- =======================================================
+     BOOT
+======================================================= -->
+
+<div id="boot">
+
   <div class="boot-box">
-    <div class="logo-mark">CR</div>
-    <h1>CROWRULES ADMIN</h1>
-    <p>Initializing secure command center...</p>
-    <div class="loader"><span></span></div>
+
+    <div class="boot-logo">
+      CR
+    </div>
+
+    <h1>CROWRULES ADMIN v5.5</h1>
+
+    <p id="bootMessage">
+      Starting Universal Supabase Data Engine...
+    </p>
+
+    <div class="boot-bar">
+      <span></span>
+    </div>
+
   </div>
+
 </div>
 
-<div id="authScreen" class="auth-screen hidden">
+<!-- =======================================================
+     AUTH
+======================================================= -->
+
+<section id="authScreen" class="auth hidden">
+
   <div class="auth-card">
-    <div class="auth-brand">CROWRULES ENTERTAINMENT</div>
-    <h1>Admin v5.4</h1>
+
+    <div class="auth-logo">
+      CROWRULES ENTERTAINMENT
+    </div>
+
+    <h1>Admin v5.5</h1>
+
     <p>
-      Secure administrative access to your CrowRules Supabase application.
+      Secure administrator access to the CrowRules
+      Entertainment database command center.
     </p>
 
     <form id="loginForm">
+
       <div class="field">
         <label>Email</label>
-        <input id="loginEmail" type="email" autocomplete="email" required>
+        <input
+          id="email"
+          type="email"
+          autocomplete="email"
+          required
+        >
       </div>
 
       <div class="field">
         <label>Password</label>
-        <input id="loginPassword" type="password" autocomplete="current-password" required>
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
       </div>
 
-      <div class="auth-actions">
-        <button class="btn primary" type="submit">Sign In</button>
-        <button class="btn" type="button" id="resetPassword">Reset Password</button>
+      <div class="auth-buttons">
+
+        <button
+          class="btn primary"
+          type="submit"
+        >
+          Sign In
+        </button>
+
+        <button
+          class="btn"
+          type="button"
+          id="resetPassword"
+        >
+          Reset
+        </button>
+
       </div>
+
     </form>
 
-    <div id="authStatus" class="auth-status">
-      Waiting for authentication...
+    <div
+      id="authMessage"
+      class="auth-message"
+    >
+      Authentication required.
     </div>
+
   </div>
-</div>
 
-<div id="app" class="app hidden">
+</section>
 
-  <header class="header">
-    <div class="brand">
-      <div class="brand-icon">CR</div>
-      <div class="brand-text">
-        <strong>CROWRULES ADMIN v5.4</strong>
-        <span>Universal Supabase Command Center</span>
+<!-- =======================================================
+     APPLICATION
+======================================================= -->
+
+<div id="app" class="hidden">
+
+<header class="header">
+
+  <div class="brand">
+
+    <div class="brand-icon">
+      CR
+    </div>
+
+    <div>
+      <div class="brand-title">
+        CROWRULES ADMIN v5.5
+      </div>
+
+      <div class="brand-sub">
+        Universal Supabase Data Engine
       </div>
     </div>
 
-    <div class="header-actions">
-      <div class="user-chip">
-        <b id="adminName">Admin</b>
-        <span id="adminRole">—</span>
-      </div>
-      <button class="btn small" id="refreshAll">Refresh</button>
-      <button class="btn small danger" id="logout">Sign Out</button>
+  </div>
+
+  <div class="header-right">
+
+    <div class="user-chip">
+      <strong id="adminName">Admin</strong>
+      <span id="adminRole"></span>
     </div>
-  </header>
 
-  <nav class="nav">
-    <button class="active" data-page="dashboard">Dashboard</button>
-    <button data-page="database">Database</button>
-    <button data-page="relationships">Relationships</button>
-    <button data-page="activity">Activity</button>
-    <button data-page="diagnostics">Diagnostics</button>
-  </nav>
+    <button
+      class="btn small"
+      id="refresh"
+    >
+      Refresh
+    </button>
 
-  <main class="main">
+    <button
+      class="btn small danger"
+      id="logout"
+    >
+      Sign Out
+    </button>
 
-    <!-- =====================================================
-         DASHBOARD
-    ====================================================== -->
+  </div>
 
-    <section id="page-dashboard" class="page active">
+</header>
 
-      <div class="page-head">
-        <div>
-          <h1>Command Center</h1>
-          <p>Manage your CrowRules Entertainment Supabase application from one place.</p>
-        </div>
+<nav class="nav">
 
-        <div class="page-actions">
-          <button class="btn primary" id="dashboardRefresh">Refresh Statistics</button>
-        </div>
+  <button
+    class="active"
+    data-page="dashboard"
+  >
+    Command Center
+  </button>
+
+  <button data-page="database">
+    All Data
+  </button>
+
+  <button data-page="relationships">
+    Relationships
+  </button>
+
+  <button data-page="activity">
+    Activity
+  </button>
+
+  <button data-page="diagnostics">
+    Diagnostics
+  </button>
+
+</nav>
+
+<main class="main">
+
+<!-- =====================================================
+     DASHBOARD
+====================================================== -->
+
+<section
+  id="page-dashboard"
+  class="page active"
+>
+
+  <div class="page-head">
+
+    <div>
+      <h1>Command Center</h1>
+
+      <p>
+        Universal administration for CrowRules
+        application data.
+      </p>
+    </div>
+
+    <div class="page-actions">
+
+      <button
+        class="btn primary"
+        id="refreshDashboard"
+      >
+        Refresh Statistics
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-label">
+        Tables
       </div>
 
-      <div class="stats">
-        <div class="stat">
-          <div class="stat-label">Public Tables</div>
-          <div class="stat-value" id="statTables">0</div>
-          <div class="stat-meta">Editable application tables</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Views</div>
-          <div class="stat-value" id="statViews">0</div>
-          <div class="stat-meta">Read-only database views</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Columns</div>
-          <div class="stat-value" id="statColumns">0</div>
-          <div class="stat-meta">Discovered fields</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Relationships</div>
-          <div class="stat-value" id="statRelations">0</div>
-          <div class="stat-meta">Foreign-key links</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Rows</div>
-          <div class="stat-value" id="statRows">0</div>
-          <div class="stat-meta">Estimated table rows</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Admin Role</div>
-          <div class="stat-value" id="statRole">—</div>
-          <div class="stat-meta">Current authorization</div>
-        </div>
+      <div
+        class="stat-value"
+        id="statTables"
+      >
+        0
       </div>
 
-      <div class="toolbar">
-        <input
-          id="dashboardSearch"
-          class="search"
-          placeholder="Search all Supabase tables..."
-        >
-        <select id="dashboardType">
-          <option value="all">All resources</option>
-          <option value="BASE TABLE">Tables</option>
-          <option value="VIEW">Views</option>
-        </select>
+      <div class="stat-meta">
+        Editable application tables
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">
+        Views
       </div>
 
-      <div id="dashboardTables" class="card-grid"></div>
-
-    </section>
-
-    <!-- =====================================================
-         DATABASE
-    ====================================================== -->
-
-    <section id="page-database" class="page">
-
-      <div class="page-head">
-        <div>
-          <h1>Database Manager</h1>
-          <p>Add, edit, duplicate and delete records across your discovered Supabase tables.</p>
-        </div>
-
-        <div class="page-actions">
-          <button class="btn primary" id="databaseRefresh">Reload Database</button>
-        </div>
+      <div
+        class="stat-value"
+        id="statViews"
+      >
+        0
       </div>
 
-      <div class="toolbar">
-        <input
-          id="tableSearch"
-          class="search"
-          placeholder="Search tables..."
-        >
+      <div class="stat-meta">
+        Read-only resources
+      </div>
+    </div>
 
-        <select id="tableTypeFilter">
-          <option value="all">All</option>
-          <option value="BASE TABLE">Tables</option>
-          <option value="VIEW">Views</option>
-        </select>
-
-        <select id="tableSort">
-          <option value="name">Name</option>
-          <option value="rows">Rows</option>
-          <option value="columns">Columns</option>
-        </select>
+    <div class="stat">
+      <div class="stat-label">
+        Columns
       </div>
 
-      <div id="databaseCards" class="card-grid"></div>
-
-    </section>
-
-    <!-- =====================================================
-         RELATIONSHIPS
-    ====================================================== -->
-
-    <section id="page-relationships" class="page">
-
-      <div class="page-head">
-        <div>
-          <h1>Schema Relationships</h1>
-          <p>Foreign-key relationships discovered automatically from PostgreSQL metadata.</p>
-        </div>
+      <div
+        class="stat-value"
+        id="statColumns"
+      >
+        0
       </div>
 
-      <div id="relationshipCards" class="relationships"></div>
+      <div class="stat-meta">
+        Discovered fields
+      </div>
+    </div>
 
-    </section>
-
-    <!-- =====================================================
-         ACTIVITY
-    ====================================================== -->
-
-    <section id="page-activity" class="page">
-
-      <div class="page-head">
-        <div>
-          <h1>Admin Activity</h1>
-          <p>Local command-center activity and database operations.</p>
-        </div>
-
-        <div class="page-actions">
-          <button class="btn" id="clearLogs">Clear Local Log</button>
-        </div>
+    <div class="stat">
+      <div class="stat-label">
+        Relationships
       </div>
 
-      <div id="activityList" class="log-list"></div>
-
-    </section>
-
-    <!-- =====================================================
-         DIAGNOSTICS
-    ====================================================== -->
-
-    <section id="page-diagnostics" class="page">
-
-      <div class="page-head">
-        <div>
-          <h1>Diagnostics</h1>
-          <p>Authentication, authorization and Supabase connection diagnostics.</p>
-        </div>
-
-        <button class="btn primary" id="runDiagnostics">Run Diagnostics</button>
+      <div
+        class="stat-value"
+        id="statRelations"
+      >
+        0
       </div>
 
-      <div id="diagnosticCards" class="card-grid"></div>
+      <div class="stat-meta">
+        Foreign keys
+      </div>
+    </div>
 
-    </section>
+    <div class="stat">
+      <div class="stat-label">
+        Rows
+      </div>
 
-  </main>
+      <div
+        class="stat-value"
+        id="statRows"
+      >
+        0
+      </div>
+
+      <div class="stat-meta">
+        Estimated database rows
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-label">
+        Role
+      </div>
+
+      <div
+        class="stat-value"
+        id="statRole"
+      >
+        —
+      </div>
+
+      <div class="stat-meta">
+        Current administrator
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toolbar">
+
+    <input
+      id="dashboardSearch"
+      class="search"
+      placeholder="Search every Supabase table..."
+    >
+
+    <select id="dashboardType">
+
+      <option value="all">
+        All Resources
+      </option>
+
+      <option value="BASE TABLE">
+        Tables
+      </option>
+
+      <option value="VIEW">
+        Views
+      </option>
+
+    </select>
+
+  </div>
+
+  <div
+    id="dashboardCards"
+    class="card-grid"
+  ></div>
+
+</section>
+
+<!-- =====================================================
+     DATABASE
+====================================================== -->
+
+<section
+  id="page-database"
+  class="page"
+>
+
+  <div class="page-head">
+
+    <div>
+      <h1>All Supabase Data</h1>
+
+      <p>
+        Every discovered public application table
+        and view.
+      </p>
+    </div>
+
+    <div class="page-actions">
+
+      <button
+        class="btn primary"
+        id="reloadDatabase"
+      >
+        Reload
+      </button>
+
+    </div>
+
+  </div>
+
+  <div
+    id="categoryBar"
+    class="category-bar"
+  ></div>
+
+  <div class="toolbar">
+
+    <input
+      id="databaseSearch"
+      class="search"
+      placeholder="Search tables and categories..."
+    >
+
+    <select id="databaseType">
+
+      <option value="all">
+        All
+      </option>
+
+      <option value="BASE TABLE">
+        Tables
+      </option>
+
+      <option value="VIEW">
+        Views
+      </option>
+
+    </select>
+
+    <select id="databaseSort">
+
+      <option value="name">
+        Name
+      </option>
+
+      <option value="rows">
+        Row Count
+      </option>
+
+      <option value="columns">
+        Column Count
+      </option>
+
+    </select>
+
+  </div>
+
+  <div
+    id="databaseCards"
+    class="card-grid"
+  ></div>
+
+</section>
+
+<!-- =====================================================
+     RELATIONSHIPS
+====================================================== -->
+
+<section
+  id="page-relationships"
+  class="page"
+>
+
+  <div class="page-head">
+
+    <div>
+      <h1>Database Relationships</h1>
+
+      <p>
+        Foreign-key connections automatically
+        discovered from PostgreSQL.
+      </p>
+    </div>
+
+  </div>
+
+  <div
+    id="relationships"
+    class="relationships"
+  ></div>
+
+</section>
+
+<!-- =====================================================
+     ACTIVITY
+====================================================== -->
+
+<section
+  id="page-activity"
+  class="page"
+>
+
+  <div class="page-head">
+
+    <div>
+      <h1>Admin Activity</h1>
+
+      <p>
+        Local activity generated by this
+        administration session.
+      </p>
+    </div>
+
+    <button
+      class="btn"
+      id="clearActivity"
+    >
+      Clear
+    </button>
+
+  </div>
+
+  <div
+    id="activityLogs"
+    class="logs"
+  ></div>
+
+</section>
+
+<!-- =====================================================
+     DIAGNOSTICS
+====================================================== -->
+
+<section
+  id="page-diagnostics"
+  class="page"
+>
+
+  <div class="page-head">
+
+    <div>
+      <h1>Diagnostics</h1>
+
+      <p>
+        Verify authentication, authorization,
+        database discovery and CRUD connectivity.
+      </p>
+    </div>
+
+    <button
+      class="btn primary"
+      id="diagnosticsButton"
+    >
+      Run Diagnostics
+    </button>
+
+  </div>
+
+  <div
+    id="diagnostics"
+    class="card-grid"
+  ></div>
+
+</section>
+
+</main>
+
 </div>
 
-<!-- =========================================================
-     TABLE DETAIL MODAL
-========================================================= -->
+<!-- =======================================================
+     TABLE MODAL
+======================================================= -->
 
-<div id="tableModal" class="modal">
-  <div class="modal-card">
+<div
+  id="tableModal"
+  class="modal"
+>
 
-    <div class="modal-head">
+  <div class="modal-box">
+
+    <div class="modal-header">
+
       <div>
-        <h2 id="tableModalTitle">Table</h2>
-        <div id="tableModalSub" class="card-sub"></div>
+
+        <h2 id="tableTitle">
+          Table
+        </h2>
+
+        <div
+          id="tableSubtitle"
+          class="card-sub"
+        ></div>
+
       </div>
 
-      <button class="btn small" data-close-modal="tableModal">Close</button>
+      <button
+        class="btn small"
+        data-close="tableModal"
+      >
+        Close
+      </button>
+
     </div>
 
     <div class="modal-body">
 
       <div class="toolbar">
+
         <input
           id="recordSearch"
           class="search"
-          placeholder="Search loaded records..."
+          placeholder="Search records..."
         >
 
-        <button class="btn primary" id="addRecord">+ Add</button>
-        <button class="btn" id="exportJSON">Export JSON</button>
-        <button class="btn" id="exportCSV">Export CSV</button>
-        <button class="btn danger" id="bulkDelete">Delete Selected</button>
+        <select id="recordSort"></select>
+
+        <button
+          class="btn primary"
+          id="addButton"
+        >
+          + Add
+        </button>
+
+        <button
+          class="btn"
+          id="exportJSON"
+        >
+          JSON
+        </button>
+
+        <button
+          class="btn"
+          id="exportCSV"
+        >
+          CSV
+        </button>
+
+        <button
+          class="btn danger"
+          id="bulkDelete"
+        >
+          Delete Selected
+        </button>
+
       </div>
 
-      <div id="tableRecordStats" class="card-sub"></div>
+      <div
+        id="recordStatus"
+        class="card-sub"
+      ></div>
 
-      <div id="recordList" class="records"></div>
+      <div
+        id="recordList"
+        class="records"
+      ></div>
 
       <div class="toolbar">
-        <button class="btn" id="prevPage">Previous</button>
-        <span id="pageInfo" class="card-sub">Page 1</span>
-        <button class="btn" id="nextPage">Next</button>
+
+        <button
+          class="btn"
+          id="prevPage"
+        >
+          ← Previous
+        </button>
+
+        <span
+          id="pageInfo"
+          class="card-sub"
+        >
+          Page 1
+        </span>
+
+        <button
+          class="btn"
+          id="nextPage"
+        >
+          Next →
+        </button>
+
       </div>
 
     </div>
+
   </div>
+
 </div>
 
-<!-- =========================================================
+<!-- =======================================================
      RECORD MODAL
-========================================================= -->
+======================================================= -->
 
-<div id="recordModal" class="modal">
+<div
+  id="recordModal"
+  class="modal"
+>
 
-  <div class="modal-card">
+  <div class="modal-box">
 
-    <div class="modal-head">
-      <h2 id="recordModalTitle">Add Record</h2>
-      <button class="btn small" data-close-modal="recordModal">Close</button>
+    <div class="modal-header">
+
+      <h2 id="recordTitle">
+        Add Record
+      </h2>
+
+      <button
+        class="btn small"
+        data-close="recordModal"
+      >
+        Close
+      </button>
+
     </div>
 
     <div class="modal-body">
-      <div id="recordForm" class="form-grid"></div>
-      <div id="recordFormStatus" class="auth-status"></div>
+
+      <div
+        id="recordForm"
+        class="form-grid"
+      ></div>
+
+      <div
+        id="recordFormMessage"
+        class="auth-message"
+      ></div>
+
     </div>
 
-    <div class="modal-foot">
-      <button class="btn" data-close-modal="recordModal">Cancel</button>
-      <button class="btn primary" id="saveRecord">Save Record</button>
+    <div class="modal-footer">
+
+      <button
+        class="btn"
+        data-close="recordModal"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        id="saveRecord"
+      >
+        Save Record
+      </button>
+
     </div>
 
   </div>
 
 </div>
 
-<div id="toastWrap" class="toast-wrap"></div>
+<div
+  id="toastWrap"
+  class="toast-wrap"
+></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 /* =========================================================
-   CROWRULES ADMIN v5.4
-   UNIVERSAL SUPABASE COMMAND CENTER
+   CROWRULES ADMIN v5.5
 ========================================================= */
 
 const SUPABASE_URL =
   "https://zauxdqyssratvzmomozf.supabase.co";
 
-/*
-  IMPORTANT:
-  Use only your browser-safe Supabase publishable/anon key here.
-
-  NEVER use:
-  service_role
-  sb_secret_...
-  any private server key
-*/
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_-Z6wecSOxwOk6IBut2zLnw_8DfRxnE9";
 
 let supabaseClient = null;
+
 let currentUser = null;
 let currentAdmin = null;
-let resources = [];
-let currentTable = null;
-let currentRows = [];
-let currentPage = 1;
-let currentPageSize = 25;
-let editingRow = null;
-let selectedIds = new Set();
-let activityLogs = [];
 
-const $ = id => document.getElementById(id);
+let resources = [];
+let currentResource = null;
+let currentRows = [];
+
+let currentPage = 1;
+let pageSize = 25;
+
+let currentSortColumn = null;
+let currentSortDesc = false;
+
+let selectedIds = new Set();
+
+let editingRecord = null;
+
+let activity = [];
 
 /* =========================================================
-   INIT
+   DOM
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", boot);
+const $ = id =>
+  document.getElementById(id);
 
-async function boot(){
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  initialize
+);
+
+async function initialize(){
 
   try{
 
     if(
-      !SUPABASE_URL ||
       !SUPABASE_PUBLISHABLE_KEY ||
-      SUPABASE_PUBLISHABLE_KEY === "YOUR_SUPABASE_PUBLISHABLE_KEY"
+      SUPABASE_PUBLISHABLE_KEY ===
+      "YOUR_SUPABASE_PUBLISHABLE_KEY"
     ){
+
       throw new Error(
-        "Supabase publishable key has not been configured."
+        "Add your Supabase publishable/anon key to the HTML first."
       );
+
     }
+
+    setBoot(
+      "Initializing secure Supabase client..."
+    );
 
     supabaseClient =
       window.supabase.createClient(
@@ -1341,7 +1751,8 @@ async function boot(){
       data:{
         session
       }
-    } = await supabaseClient.auth.getSession();
+    } =
+      await supabaseClient.auth.getSession();
 
     if(session){
 
@@ -1350,20 +1761,24 @@ async function boot(){
     }else{
 
       showAuth(
-        "Sign in with your Supabase Auth account."
+        "No active authentication session."
       );
 
     }
 
     supabaseClient.auth.onAuthStateChange(
-      async(event, session)=>{
+      async(event,session)=>{
 
         if(event === "SIGNED_IN" && session){
 
           try{
+
             await authorize();
-          }catch(err){
-            showAuth(err.message);
+
+          }catch(error){
+
+            showAuth(error.message);
+
           }
 
         }
@@ -1372,58 +1787,50 @@ async function boot(){
 
           currentUser = null;
           currentAdmin = null;
-          resources = [];
 
-          showAuth("Signed out.");
-
-        }
-
-        if(event === "TOKEN_REFRESHED"){
-
-          addLog(
-            "Authentication token refreshed.",
-            "ok"
-          );
+          hide("app");
+          show("authScreen");
 
         }
 
       }
     );
 
-  }catch(err){
+  }catch(error){
 
-    console.error(err);
+    console.error(error);
 
     showAuth(
-      err.message ||
-      "Unable to initialize Supabase."
+      error.message
     );
 
   }
+
 }
 
 /* =========================================================
-   AUTHORIZATION
+   HARDENED AUTH
 ========================================================= */
 
 async function authorize(){
 
-  hide("authScreen");
   show("boot");
 
-  setBootMessage(
-    "Verifying Supabase identity..."
+  hide("authScreen");
+
+  setBoot(
+    "Verifying authenticated user..."
   );
 
   const {
     data:{
       user
     },
-    error:userError
+    error
   } =
     await supabaseClient.auth.getUser();
 
-  if(userError || !user){
+  if(error || !user){
 
     throw new Error(
       "Auth session missing. Please sign in again."
@@ -1433,23 +1840,23 @@ async function authorize(){
 
   currentUser = user;
 
-  setBootMessage(
+  setBoot(
     "Checking CrowRules administrator authorization..."
   );
 
   const {
     data,
-    error
+    error:adminError
   } =
     await supabaseClient.rpc(
       "cr_admin_access_check"
     );
 
-  if(error){
+  if(adminError){
 
     throw new Error(
-      "Admin authorization check failed: " +
-      error.message
+      "Admin authorization failed: " +
+      adminError.message
     );
 
   }
@@ -1473,23 +1880,26 @@ async function authorize(){
 
   currentAdmin = admin;
 
-  addLog(
-    "Authorized administrator: " +
-    (admin.email || user.email),
+  addActivity(
+    "Administrator authorized: " +
+    (
+      admin.email ||
+      user.email
+    ),
     "ok"
   );
 
-  setBootMessage(
-    "Loading CrowRules database..."
+  setBoot(
+    "Discovering Supabase application schema..."
   );
 
-  await loadResources();
+  await discoverResources();
 
   hide("boot");
   hide("authScreen");
   show("app");
 
-  updateAdminHeader();
+  updateHeader();
   renderDashboard();
   renderDatabase();
   renderRelationships();
@@ -1498,23 +1908,23 @@ async function authorize(){
 }
 
 /* =========================================================
-   RESOURCE DISCOVERY
+   DISCOVERY
 ========================================================= */
 
-async function loadResources(){
+async function discoverResources(){
 
   const {
     data,
     error
   } =
-    await supabaseClient.rpc(
-      "cr_admin_schema_metadata"
-    );
+  await supabaseClient.rpc(
+    "cr_admin_schema_metadata"
+  );
 
   if(error){
 
     throw new Error(
-      "Unable to load Supabase database metadata: " +
+      "Schema discovery failed: " +
       error.message
     );
 
@@ -1525,37 +1935,41 @@ async function loadResources(){
       ? data.map(normalizeResource)
       : [];
 
-  addLog(
-    "Loaded " +
-    resources.length +
-    " public Supabase resources.",
+  addActivity(
+    `Discovered ${resources.length} public Supabase resources.`,
     "ok"
   );
 
   updateStats();
 
+  buildCategories();
+
 }
 
-function normalizeResource(r){
+function normalizeResource(resource){
 
-  let columns = r.columns;
+  let columns =
+    resource.columns;
+
+  let foreignKeys =
+    resource.foreign_keys;
 
   if(typeof columns === "string"){
 
     try{
-      columns = JSON.parse(columns);
+      columns =
+        JSON.parse(columns);
     }catch{
       columns = [];
     }
 
   }
 
-  let foreignKeys = r.foreign_keys;
-
   if(typeof foreignKeys === "string"){
 
     try{
-      foreignKeys = JSON.parse(foreignKeys);
+      foreignKeys =
+        JSON.parse(foreignKeys);
     }catch{
       foreignKeys = [];
     }
@@ -1563,14 +1977,33 @@ function normalizeResource(r){
   }
 
   return {
-    schema_name:r.schema_name || "public",
-    table_name:r.table_name,
-    table_type:r.table_type,
-    row_count:Number(r.row_count || 0),
-    column_count:Number(r.column_count || 0),
-    primary_key:r.primary_key || "",
-    columns:Array.isArray(columns) ? columns : [],
-    foreign_keys:Array.isArray(foreignKeys) ? foreignKeys : []
+    schema_name:
+      resource.schema_name || "public",
+
+    table_name:
+      resource.table_name,
+
+    table_type:
+      resource.table_type,
+
+    row_count:
+      Number(resource.row_count || 0),
+
+    column_count:
+      Number(resource.column_count || 0),
+
+    primary_key:
+      resource.primary_key || "",
+
+    columns:
+      Array.isArray(columns)
+        ? columns
+        : [],
+
+    foreign_keys:
+      Array.isArray(foreignKeys)
+        ? foreignKeys
+        : []
   };
 
 }
@@ -1583,56 +2016,193 @@ function updateStats(){
 
   const tables =
     resources.filter(
-      r => r.table_type === "BASE TABLE"
+      r =>
+        r.table_type === "BASE TABLE"
     );
 
   const views =
     resources.filter(
-      r => r.table_type === "VIEW"
+      r =>
+        r.table_type === "VIEW"
     );
 
   const columns =
     resources.reduce(
-      (n,r)=>n + Number(r.column_count || 0),
+      (sum,r)=>
+        sum +
+        Number(r.column_count || 0),
       0
     );
 
   const relations =
     resources.reduce(
-      (n,r)=>n + r.foreign_keys.length,
+      (sum,r)=>
+        sum +
+        r.foreign_keys.length,
       0
     );
 
   const rows =
     tables.reduce(
-      (n,r)=>n + Number(r.row_count || 0),
+      (sum,r)=>
+        sum +
+        Number(r.row_count || 0),
       0
     );
 
   $("statTables").textContent =
-    formatNumber(tables.length);
+    number(tables.length);
 
   $("statViews").textContent =
-    formatNumber(views.length);
+    number(views.length);
 
   $("statColumns").textContent =
-    formatNumber(columns);
+    number(columns);
 
   $("statRelations").textContent =
-    formatNumber(relations);
+    number(relations);
 
   $("statRows").textContent =
-    formatNumber(rows);
+    number(rows);
 
   $("statRole").textContent =
-    currentAdmin?.role || "—";
+    currentAdmin?.role ||
+    "—";
 
 }
 
-function formatNumber(value){
+/* =========================================================
+   CATEGORIES
+========================================================= */
 
-  return Number(value || 0)
-    .toLocaleString();
+let activeCategory = "All";
+
+function getCategory(name){
+
+  const n =
+    name.toLowerCase();
+
+  if(
+    n.includes("admin") ||
+    n.startsWith("cr_admin")
+  )
+    return "Administration";
+
+  if(
+    n.includes("member") ||
+    n.includes("profile")
+  )
+    return "Members";
+
+  if(
+    n.includes("podcast")
+  )
+    return "Podcasting";
+
+  if(
+    n.includes("sport")
+  )
+    return "Sports";
+
+  if(
+    n.includes("tacoma")
+  )
+    return "Tacoma Nights";
+
+  if(
+    n.includes("deck")
+  )
+    return "Back Deck Live";
+
+  if(
+    n.includes("tv") ||
+    n.includes("channel") ||
+    n.includes("stream")
+  )
+    return "CrowRules TV";
+
+  if(
+    n.includes("episode") ||
+    n.includes("show") ||
+    n.includes("content") ||
+    n.includes("media")
+  )
+    return "Content";
+
+  if(
+    n.includes("schedule") ||
+    n.includes("program") ||
+    n.includes("live")
+  )
+    return "Programming";
+
+  if(
+    n.includes("donat") ||
+    n.includes("support") ||
+    n.includes("payment")
+  )
+    return "Support";
+
+  if(
+    n.includes("audit") ||
+    n.includes("log")
+  )
+    return "Audit";
+
+  return "Other";
+
+}
+
+function buildCategories(){
+
+  const categories =
+    [
+      "All",
+      ...new Set(
+        resources.map(
+          r =>
+            getCategory(
+              r.table_name
+            )
+        )
+      )
+    ];
+
+  $("categoryBar").innerHTML =
+    categories.map(
+      category =>
+        `
+          <button
+            class="category ${
+              category === activeCategory
+                ? "active"
+                : ""
+            }"
+            data-category="${escAttr(category)}"
+          >
+            ${esc(category)}
+          </button>
+        `
+    ).join("");
+
+  document
+    .querySelectorAll(".category")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        ()=>{
+
+          activeCategory =
+            button.dataset.category;
+
+          buildCategories();
+          renderDatabase();
+
+        }
+      );
+
+    });
 
 }
 
@@ -1643,23 +2213,29 @@ function formatNumber(value){
 function renderDashboard(){
 
   const search =
-    ($("dashboardSearch").value || "")
-      .toLowerCase();
+    (
+      $("dashboardSearch")
+        .value ||
+      ""
+    ).toLowerCase();
 
   const type =
-    $("dashboardType").value;
+    $("dashboardType")
+      .value;
 
-  const filtered =
+  const list =
     resources
-      .filter(r =>
-        type === "all" ||
-        r.table_type === type
+      .filter(
+        r =>
+          type === "all" ||
+          r.table_type === type
       )
-      .filter(r =>
-        !search ||
-        r.table_name
-          .toLowerCase()
-          .includes(search)
+      .filter(
+        r =>
+          !search ||
+          r.table_name
+            .toLowerCase()
+            .includes(search)
       )
       .sort(
         (a,b)=>
@@ -1668,135 +2244,77 @@ function renderDashboard(){
           )
       );
 
-  $("dashboardTables").innerHTML =
-    filtered.length
-      ? filtered.map(resourceCard).join("")
-      : emptyHTML(
-          "No Supabase resources match your search."
+  $("dashboardCards").innerHTML =
+    list.length
+      ? list.map(resourceCard).join("")
+      : empty(
+          "No Supabase resources found."
         );
 
 }
 
-function resourceCard(r){
-
-  const isTable =
-    r.table_type === "BASE TABLE";
-
-  return `
-    <article class="card">
-
-      <div class="card-title">
-
-        <div>
-          <h3>${escapeHTML(r.table_name)}</h3>
-          <div class="card-sub">
-            ${escapeHTML(r.schema_name)}
-          </div>
-        </div>
-
-        <span class="badge ${isTable ? "table" : "view"}">
-          ${isTable ? "TABLE" : "VIEW"}
-        </span>
-
-      </div>
-
-      <div class="card-stats">
-
-        <div>
-          Rows
-          <strong>${formatNumber(r.row_count)}</strong>
-        </div>
-
-        <div>
-          Columns
-          <strong>${formatNumber(r.column_count)}</strong>
-        </div>
-
-        <div>
-          PK
-          <strong>
-            ${escapeHTML(r.primary_key || "—")}
-          </strong>
-        </div>
-
-      </div>
-
-      <div class="card-actions">
-
-        <button
-          class="btn small primary"
-          onclick="openTable('${escapeAttr(r.table_name)}')"
-        >
-          Open
-        </button>
-
-        ${
-          isTable
-            ? `
-              <button
-                class="btn small success"
-                onclick="addRecordTo('${escapeAttr(r.table_name)}')"
-              >
-                + Add
-              </button>
-            `
-            : ""
-        }
-
-      </div>
-
-    </article>
-  `;
-
-}
-
 /* =========================================================
-   DATABASE PAGE
+   DATABASE
 ========================================================= */
 
 function renderDatabase(){
 
-  let list =
-    [...resources];
-
   const search =
-    ($("tableSearch").value || "")
-      .toLowerCase();
+    (
+      $("databaseSearch")
+        .value ||
+      ""
+    ).toLowerCase();
 
   const type =
-    $("tableTypeFilter").value;
+    $("databaseType")
+      .value;
 
   const sort =
-    $("tableSort").value;
+    $("databaseSort")
+      .value;
 
-  list =
-    list.filter(r =>
-      type === "all" ||
-      r.table_type === type
-    );
-
-  list =
-    list.filter(r =>
-      !search ||
-      r.table_name
-        .toLowerCase()
-        .includes(search)
-    );
+  let list =
+    resources
+      .filter(
+        r =>
+          type === "all" ||
+          r.table_type === type
+      )
+      .filter(
+        r =>
+          activeCategory === "All" ||
+          getCategory(
+            r.table_name
+          ) === activeCategory
+      )
+      .filter(
+        r =>
+          !search ||
+          r.table_name
+            .toLowerCase()
+            .includes(search) ||
+          getCategory(
+            r.table_name
+          )
+            .toLowerCase()
+            .includes(search)
+      );
 
   if(sort === "rows"){
 
     list.sort(
       (a,b)=>
-        Number(b.row_count) -
-        Number(a.row_count)
+        b.row_count -
+        a.row_count
     );
 
   }else if(sort === "columns"){
 
     list.sort(
       (a,b)=>
-        Number(b.column_count) -
-        Number(a.column_count)
+        b.column_count -
+        a.column_count
     );
 
   }else{
@@ -1813,56 +2331,216 @@ function renderDatabase(){
   $("databaseCards").innerHTML =
     list.length
       ? list.map(resourceCard).join("")
-      : emptyHTML(
-          "No database resources found."
+      : empty(
+          "No matching database resources."
         );
 
 }
 
 /* =========================================================
-   TABLE OPEN
+   RESOURCE CARD
+========================================================= */
+
+function resourceCard(resource){
+
+  const table =
+    resource.table_type ===
+    "BASE TABLE";
+
+  return `
+    <article class="card">
+
+      <div class="card-head">
+
+        <div>
+
+          <h3>
+            ${esc(resource.table_name)}
+          </h3>
+
+          <div class="card-sub">
+            ${esc(
+              getCategory(
+                resource.table_name
+              )
+            )}
+            •
+            ${esc(resource.schema_name)}
+          </div>
+
+        </div>
+
+        <span class="badge ${
+          table
+            ? "table"
+            : "view"
+        }">
+
+          ${
+            table
+              ? "TABLE"
+              : "VIEW"
+          }
+
+        </span>
+
+      </div>
+
+      <div class="card-stats">
+
+        <div class="card-stat">
+          Rows
+          <strong>
+            ${number(resource.row_count)}
+          </strong>
+        </div>
+
+        <div class="card-stat">
+          Columns
+          <strong>
+            ${number(resource.column_count)}
+          </strong>
+        </div>
+
+        <div class="card-stat">
+          Relations
+          <strong>
+            ${number(
+              resource.foreign_keys.length
+            )}
+          </strong>
+        </div>
+
+      </div>
+
+      <div class="card-actions">
+
+        <button
+          class="btn small primary"
+          onclick="openTable('${escAttr(resource.table_name)}')"
+        >
+          Open
+        </button>
+
+        ${
+          table
+            ? `
+              <button
+                class="btn small success"
+                onclick="openAdd('${escAttr(resource.table_name)}')"
+              >
+                + Add
+              </button>
+            `
+            : ""
+        }
+
+      </div>
+
+    </article>
+  `;
+
+}
+
+/* =========================================================
+   OPEN TABLE
 ========================================================= */
 
 async function openTable(tableName){
 
   const resource =
     resources.find(
-      r => r.table_name === tableName
+      r =>
+        r.table_name ===
+        tableName
     );
 
   if(!resource) return;
 
-  currentTable = resource;
+  currentResource =
+    resource;
+
   currentPage = 1;
+
+  currentSortColumn =
+    resource.columns?.[0]?.name ||
+    null;
+
+  currentSortDesc = false;
+
   selectedIds.clear();
 
-  $("tableModalTitle").textContent =
-    tableName;
+  $("tableTitle").textContent =
+    resource.table_name;
 
-  $("tableModalSub").textContent =
-    `${resource.table_type} • ${resource.column_count} columns • ${formatNumber(resource.row_count)} rows`;
+  $("tableSubtitle").textContent =
+    `${resource.table_type} • ${resource.column_count} columns • ${number(resource.row_count)} estimated rows`;
+
+  buildSortMenu();
 
   showModal("tableModal");
 
-  await loadTableRows();
+  await loadRows();
 
 }
 
-async function loadTableRows(){
+/* =========================================================
+   SORT MENU
+========================================================= */
 
-  if(!currentTable) return;
+function buildSortMenu(){
+
+  if(!currentResource)
+    return;
+
+  $("recordSort").innerHTML =
+    currentResource.columns
+      .map(
+        col =>
+          `
+            <option
+              value="${escAttr(col.name)}"
+              ${
+                col.name ===
+                currentSortColumn
+                  ? "selected"
+                  : ""
+              }
+            >
+              Sort: ${esc(col.name)}
+            </option>
+          `
+      )
+      .join("");
+
+}
+
+/* =========================================================
+   LOAD ROWS — SECURE RPC
+========================================================= */
+
+async function loadRows(){
+
+  if(!currentResource)
+    return;
 
   $("recordList").innerHTML =
-    emptyHTML("Loading records...");
+    empty(
+      "Loading records..."
+    );
 
-  const from =
-    (currentPage - 1) *
-    currentPageSize;
+  const offset =
+    (
+      currentPage - 1
+    ) *
+    pageSize;
 
-  const to =
-    from +
-    currentPageSize -
-    1;
+  const search =
+    (
+      $("recordSearch")
+        .value ||
+      ""
+    ).trim();
 
   try{
 
@@ -1870,40 +2548,81 @@ async function loadTableRows(){
       data,
       error
     } =
-      await supabaseClient
-        .from(currentTable.table_name)
-        .select("*")
-        .range(from,to);
+    await supabaseClient.rpc(
+      "cr_admin_table_rows",
+      {
+        p_table:
+          currentResource.table_name,
 
-    if(error){
+        p_limit:
+          pageSize,
 
+        p_offset:
+          offset,
+
+        p_order_column:
+          currentSortColumn,
+
+        p_desc:
+          currentSortDesc,
+
+        p_search:
+          search || null
+      }
+    );
+
+    if(error)
       throw error;
 
-    }
+    const result =
+      data || {};
 
     currentRows =
-      Array.isArray(data)
-        ? data
+      Array.isArray(result.rows)
+        ? result.rows
         : [];
 
-    renderRecords();
+    renderRows();
 
-    $("tableRecordStats").textContent =
-      `${currentRows.length} records loaded • Page ${currentPage}`;
+    const total =
+      Number(
+        result.total || 0
+      );
 
-  }catch(err){
+    const pages =
+      Math.max(
+        1,
+        Math.ceil(
+          total /
+          pageSize
+        )
+      );
+
+    $("recordStatus").textContent =
+      `${number(total)} total records • ${currentRows.length} loaded • Page ${currentPage} of ${pages}`;
+
+    $("pageInfo").textContent =
+      `Page ${currentPage} / ${pages}`;
+
+    $("prevPage").disabled =
+      currentPage <= 1;
+
+    $("nextPage").disabled =
+      currentPage >= pages;
+
+  }catch(error){
 
     currentRows = [];
 
     $("recordList").innerHTML =
-      `<div class="empty error">
-        Unable to read this table.<br><br>
-        ${escapeHTML(err.message)}
-      </div>`;
+      empty(
+        "Unable to load records: " +
+        error.message
+      );
 
-    addLog(
-      `Read failed: ${currentTable.table_name} — ${err.message}`,
-      "err"
+    addActivity(
+      `Read failed: ${currentResource.table_name} — ${error.message}`,
+      "error"
     );
 
   }
@@ -1911,31 +2630,16 @@ async function loadTableRows(){
 }
 
 /* =========================================================
-   RECORD RENDERING
+   RENDER ROWS
 ========================================================= */
 
-function renderRecords(){
+function renderRows(){
 
-  const search =
-    ($("recordSearch").value || "")
-      .toLowerCase();
-
-  let rows =
-    currentRows.filter(row => {
-
-      if(!search) return true;
-
-      return JSON.stringify(row)
-        .toLowerCase()
-        .includes(search);
-
-    });
-
-  if(!rows.length){
+  if(!currentRows.length){
 
     $("recordList").innerHTML =
-      emptyHTML(
-        "No records found on this page."
+      empty(
+        "No records found."
       );
 
     return;
@@ -1943,18 +2647,26 @@ function renderRecords(){
   }
 
   $("recordList").innerHTML =
-    rows.map(
-      (row,index)=>
-        recordHTML(row,index)
-    ).join("");
+    currentRows
+      .map(
+        (row,index)=>
+          recordHTML(
+            row,
+            index
+          )
+      )
+      .join("");
 
 }
 
 function recordHTML(row,index){
 
   const pk =
-    currentTable.primary_key
-      ? currentTable.primary_key.split(",")[0]
+    currentResource.primary_key
+      ? currentResource
+          .primary_key
+          .split(",")[0]
+          .trim()
       : null;
 
   const id =
@@ -1963,29 +2675,47 @@ function recordHTML(row,index){
       : index;
 
   const checked =
-    selectedIds.has(String(id))
+    selectedIds.has(
+      String(id)
+    )
       ? "checked"
       : "";
 
-  const keys =
-    Object.keys(row)
-      .slice(0,6);
+  const columns =
+    currentResource.columns
+      .map(
+        c => c.name
+      )
+      .filter(
+        name =>
+          row[name] !== undefined
+      )
+      .slice(0,8);
 
   return `
     <article class="record">
 
-      <div class="record-head">
+      <div class="record-top">
 
-        <label style="display:flex;gap:8px;align-items:center">
+        <label style="
+          display:flex;
+          gap:8px;
+          align-items:center
+        ">
 
           ${
             pk
               ? `
                 <input
                   type="checkbox"
-                  ${checked}
-                  onchange="toggleSelected('${escapeAttr(String(id))}',this.checked)"
                   style="width:auto"
+                  ${checked}
+                  onchange="
+                    toggleSelected(
+                      '${escAttr(String(id))}',
+                      this.checked
+                    )
+                  "
                 >
               `
               : ""
@@ -1998,26 +2728,48 @@ function recordHTML(row,index){
         </label>
 
         <span class="record-id">
-          ${pk ? escapeHTML(String(row[pk] ?? "—")) : "No PK"}
+          ${
+            pk
+              ? esc(
+                  String(
+                    row[pk] ??
+                    "NULL"
+                  )
+                )
+              : "NO PRIMARY KEY"
+          }
         </span>
 
       </div>
 
-      <div class="record-preview">
+      <div class="record-fields">
 
-        ${keys.map(k => `
+        ${columns.map(
+          key =>
+            `
+              <div class="kv">
 
-          <div class="kv">
+                <span>
+                  ${esc(key)}
+                </span>
 
-            <span>${escapeHTML(k)}</span>
+                <strong
+                  title="${escAttr(
+                    display(
+                      row[key]
+                    )
+                  )}"
+                >
+                  ${esc(
+                    display(
+                      row[key]
+                    )
+                  )}
+                </strong>
 
-            <b title="${escapeAttr(displayValue(row[k]))}">
-              ${escapeHTML(displayValue(row[k]))}
-            </b>
-
-          </div>
-
-        `).join("")}
+              </div>
+            `
+        ).join("")}
 
       </div>
 
@@ -2025,24 +2777,24 @@ function recordHTML(row,index){
 
         <button
           class="btn small"
-          onclick="editRecord(${index})"
+          onclick="editRow(${index})"
         >
           Edit
-        </button>
-
-        <button
-          class="btn small success"
-          onclick="duplicateRecord(${index})"
-        >
-          Duplicate
         </button>
 
         ${
           pk
             ? `
               <button
+                class="btn small success"
+                onclick="duplicateRow(${index})"
+              >
+                Duplicate
+              </button>
+
+              <button
                 class="btn small danger"
-                onclick="deleteRecord(${index})"
+                onclick="deleteRow(${index})"
               >
                 Delete
               </button>
@@ -2058,40 +2810,31 @@ function recordHTML(row,index){
 }
 
 /* =========================================================
-   ADD RECORD
+   ADD
 ========================================================= */
 
-function addRecordTo(tableName){
+function openAdd(tableName){
 
   const resource =
     resources.find(
-      r => r.table_name === tableName
+      r =>
+        r.table_name ===
+        tableName
     );
 
-  if(!resource) return;
+  if(!resource)
+    return;
 
-  currentTable = resource;
-  editingRow = null;
+  currentResource =
+    resource;
 
-  $("recordModalTitle").textContent =
-    `Add ${tableName}`;
+  editingRecord =
+    null;
 
-  buildRecordForm({});
+  $("recordTitle").textContent =
+    `Add ${resource.table_name}`;
 
-  showModal("recordModal");
-
-}
-
-function addRecord(){
-
-  if(!currentTable) return;
-
-  editingRow = null;
-
-  $("recordModalTitle").textContent =
-    `Add ${currentTable.table_name}`;
-
-  buildRecordForm({});
+  buildForm({});
 
   showModal("recordModal");
 
@@ -2101,312 +2844,443 @@ function addRecord(){
    EDIT
 ========================================================= */
 
-function editRecord(index){
+function editRow(index){
 
   const row =
     currentRows[index];
 
-  if(!row) return;
+  if(!row)
+    return;
 
-  editingRow = row;
+  editingRecord =
+    row;
 
-  $("recordModalTitle").textContent =
-    `Edit ${currentTable.table_name}`;
+  $("recordTitle").textContent =
+    `Edit ${currentResource.table_name}`;
 
-  buildRecordForm(row);
+  buildForm(row);
 
   showModal("recordModal");
 
 }
 
 /* =========================================================
-   FORM BUILDER
+   FORM
 ========================================================= */
 
-function buildRecordForm(row){
+function buildForm(row){
 
-  const fields =
-    currentTable.columns || [];
+  const pk =
+    currentResource.primary_key
+      .split(",")
+      .map(x=>x.trim());
 
   $("recordForm").innerHTML =
-    fields.map(col => {
+    currentResource.columns
+      .map(column=>{
 
-      const name = col.name;
+        const name =
+          column.name;
 
-      const value =
-        row[name] === null ||
-        row[name] === undefined
-          ? ""
-          : row[name];
+        const value =
+          row[name] === null ||
+          row[name] === undefined
+            ? ""
+            : row[name];
 
-      const isPK =
-        currentTable.primary_key
-          .split(",")
-          .map(x=>x.trim())
-          .includes(name);
+        const isPK =
+          pk.includes(name);
 
-      const type =
-        String(col.data_type || "")
-          .toLowerCase();
+        const generated =
+          isGenerated(
+            column
+          );
 
-      let control;
+        const type =
+          String(
+            column.data_type ||
+            ""
+          ).toLowerCase();
 
-      if(
-        type.includes("boolean")
-      ){
+        if(generated && !editingRecord){
 
-        const checked =
-          value === true
-            ? "checked"
-            : "";
+          return `
+            <div class="field">
+              <label>
+                ${esc(name)}
+              </label>
 
-        control = `
-          <label style="display:flex;gap:10px;align-items:center">
-            <input
-              type="checkbox"
-              data-field="${escapeAttr(name)}"
-              data-kind="boolean"
-              ${checked}
-              style="width:auto"
-            >
-            <span>Enabled / True</span>
-          </label>
-        `;
+              <input
+                disabled
+                placeholder="Generated automatically"
+              >
 
-      }else if(
-        type.includes("text") &&
-        (
-          name.includes("description") ||
-          name.includes("content") ||
-          name.includes("bio") ||
-          name.includes("body") ||
-          name.includes("notes")
-        )
-      ){
-
-        control = `
-          <textarea
-            data-field="${escapeAttr(name)}"
-            ${isPK && editingRow ? "disabled" : ""}
-          >${escapeHTML(value)}</textarea>
-        `;
-
-      }else{
-
-        let inputType = "text";
-
-        if(
-          type.includes("int") ||
-          type.includes("numeric") ||
-          type.includes("double") ||
-          type.includes("real")
-        ){
-
-          inputType = "number";
-
-        }else if(
-          type.includes("timestamp") ||
-          type.includes("date")
-        ){
-
-          inputType = "text";
+              <div class="card-sub">
+                ${esc(
+                  column.data_type ||
+                  ""
+                )}
+                • database default
+              </div>
+            </div>
+          `;
 
         }
 
-        control = `
-          <input
-            type="${inputType}"
-            data-field="${escapeAttr(name)}"
-            value="${escapeAttr(value)}"
-            ${isPK && editingRow ? "disabled" : ""}
-          >
+        let control = "";
+
+        if(type.includes("boolean")){
+
+          control = `
+            <label style="
+              display:flex;
+              align-items:center;
+              gap:9px;
+              padding:11px;
+              border:1px solid var(--line);
+              border-radius:10px;
+              background:#070b11
+            ">
+
+              <input
+                type="checkbox"
+                data-field="${escAttr(name)}"
+                data-type="boolean"
+                ${
+                  value === true
+                    ? "checked"
+                    : ""
+                }
+                ${
+                  isPK
+                    ? "disabled"
+                    : ""
+                }
+                style="width:auto"
+              >
+
+              <span>
+                True / Enabled
+              </span>
+
+            </label>
+          `;
+
+        }else if(
+          type.includes("json") ||
+          type.includes("jsonb")
+        ){
+
+          control = `
+            <textarea
+              data-field="${escAttr(name)}"
+              data-type="json"
+              ${
+                isPK
+                  ? "disabled"
+                  : ""
+              }
+              placeholder='{"key":"value"}'
+            >${
+              value
+                ? esc(
+                    JSON.stringify(
+                      value,
+                      null,
+                      2
+                    )
+                  )
+                : ""
+            }</textarea>
+          `;
+
+        }else if(
+          type.includes("text") &&
+          (
+            name.includes("description") ||
+            name.includes("content") ||
+            name.includes("body") ||
+            name.includes("bio") ||
+            name.includes("notes") ||
+            name.includes("message")
+          )
+        ){
+
+          control = `
+            <textarea
+              data-field="${escAttr(name)}"
+              ${
+                isPK
+                  ? "disabled"
+                  : ""
+              }
+            >${esc(value)}</textarea>
+          `;
+
+        }else{
+
+          let inputType =
+            "text";
+
+          if(
+            type.includes("int") ||
+            type.includes("numeric") ||
+            type.includes("decimal") ||
+            type.includes("double") ||
+            type.includes("real")
+          ){
+
+            inputType =
+              "number";
+
+          }
+
+          control = `
+            <input
+              type="${inputType}"
+              data-field="${escAttr(name)}"
+              value="${escAttr(
+                value
+              )}"
+              ${
+                isPK
+                  ? "disabled"
+                  : ""
+              }
+            >
+          `;
+
+        }
+
+        return `
+          <div class="field">
+
+            <label>
+              ${esc(name)}
+              ${
+                isPK
+                  ? " • PRIMARY KEY"
+                  : ""
+              }
+            </label>
+
+            ${control}
+
+            <div class="card-sub">
+
+              ${esc(
+                column.data_type ||
+                ""
+              )}
+
+              ${
+                column.nullable
+                  ? " • nullable"
+                  : " • required"
+              }
+
+            </div>
+
+          </div>
         `;
 
-      }
-
-      return `
-        <div class="field">
-          <label>
-            ${escapeHTML(name)}
-            ${isPK ? " • PRIMARY KEY" : ""}
-          </label>
-
-          ${control}
-
-          <div class="card-sub">
-            ${escapeHTML(col.data_type || "")}
-            ${col.nullable ? " • nullable" : " • required"}
-          </div>
-        </div>
-      `;
-
-    }).join("");
+      })
+      .join("");
 
 }
 
 /* =========================================================
-   SAVE RECORD
+   SAVE
 ========================================================= */
 
 async function saveRecord(){
 
-  if(!currentTable) return;
+  if(!currentResource)
+    return;
 
   const payload = {};
 
   document
-    .querySelectorAll("#recordForm [data-field]")
-    .forEach(el => {
+    .querySelectorAll(
+      "#recordForm [data-field]"
+    )
+    .forEach(element=>{
+
+      if(element.disabled)
+        return;
 
       const name =
-        el.dataset.field;
+        element.dataset.field;
 
-      if(el.dataset.kind === "boolean"){
+      const type =
+        element.dataset.type ||
+        "text";
+
+      if(type === "boolean"){
 
         payload[name] =
-          el.checked;
+          element.checked;
 
-      }else if(!el.disabled){
-
-        const value =
-          el.value;
-
-        if(value !== ""){
-
-          payload[name] =
-            convertInputValue(
-              value,
-              currentTable.columns
-                .find(c=>c.name===name)
-                ?.data_type
-            );
-
-        }
+        return;
 
       }
 
+      const value =
+        element.value;
+
+      if(value === "")
+        return;
+
+      if(type === "json"){
+
+        try{
+
+          payload[name] =
+            JSON.parse(value);
+
+        }catch{
+
+          throw new Error(
+            `${name} contains invalid JSON.`
+          );
+
+        }
+
+        return;
+
+      }
+
+      payload[name] =
+        convertValue(
+          value,
+          currentResource.columns
+            .find(
+              c =>
+                c.name ===
+                name
+            )
+            ?.data_type
+        );
+
     });
 
-  $("recordFormStatus").textContent =
+  $("recordFormMessage").textContent =
     "Saving...";
 
   try{
 
-    let result;
-
-    if(editingRow){
+    if(editingRecord){
 
       const pk =
-        currentTable.primary_key
+        currentResource.primary_key
           .split(",")[0]
           .trim();
 
       if(!pk){
 
         throw new Error(
-          "This table does not have a supported primary key."
+          "Editing requires a primary key."
         );
 
       }
 
       const pkValue =
-        editingRow[pk];
+        editingRecord[pk];
 
       const {
-        data,
-        error
-      } =
-        await supabaseClient.rpc(
-          "cr_admin_row_update",
-          {
-            p_table:
-              currentTable.table_name,
-
-            p_pk_column:
-              pk,
-
-            p_pk_value:
-              String(pkValue),
-
-            p_payload:
-              payload
-          }
-        );
-
-      if(error) throw error;
-
-      result = data;
-
-      addLog(
-        `Updated ${currentTable.table_name} record ${pkValue}.`,
-        "ok"
-      );
-
-    }else{
-
-      const {
-        data,
         error
       } =
       await supabaseClient.rpc(
-        "cr_admin_row_insert",
+        "cr_admin_row_update",
         {
           p_table:
-            currentTable.table_name,
+            currentResource.table_name,
+
+          p_pk_column:
+            pk,
+
+          p_pk_value:
+            String(pkValue),
 
           p_payload:
             payload
         }
       );
 
-      if(error) throw error;
+      if(error)
+        throw error;
 
-      result = data;
-
-      addLog(
-        `Inserted record into ${currentTable.table_name}.`,
+      addActivity(
+        `Updated ${currentResource.table_name} record ${pkValue}.`,
         "ok"
+      );
+
+      toast(
+        "Record updated.",
+        "success"
+      );
+
+    }else{
+
+      const {
+        error
+      } =
+      await supabaseClient.rpc(
+        "cr_admin_row_insert",
+        {
+          p_table:
+            currentResource.table_name,
+
+          p_payload:
+            payload
+        }
+      );
+
+      if(error)
+        throw error;
+
+      addActivity(
+        `Added record to ${currentResource.table_name}.`,
+        "ok"
+      );
+
+      toast(
+        "Record added.",
+        "success"
       );
 
     }
 
-    closeModal("recordModal");
+    closeModal(
+      "recordModal"
+    );
 
-    await refreshResourceStats();
-
-    await loadTableRows();
+    await discoverResources();
+    await loadRows();
 
     renderDashboard();
     renderDatabase();
 
-    toast(
-      editingRow
-        ? "Record updated."
-        : "Record added.",
-      "success"
-    );
+    editingRecord =
+      null;
 
-    editingRow = null;
+  }catch(error){
 
-    return result;
+    console.error(error);
 
-  }catch(err){
+    $("recordFormMessage").textContent =
+      error.message;
 
-    console.error(err);
-
-    $("recordFormStatus").textContent =
-      err.message;
-
-    $("recordFormStatus")
+    $("recordFormMessage")
       .classList.add("error");
 
-    addLog(
-      `Save failed: ${currentTable.table_name} — ${err.message}`,
-      "err"
+    addActivity(
+      `Save failed: ${error.message}`,
+      "error"
     );
 
     toast(
-      err.message,
+      error.message,
       "error"
     );
 
@@ -2415,25 +3289,23 @@ async function saveRecord(){
 }
 
 /* =========================================================
-   DELETE RECORD
+   DELETE
 ========================================================= */
 
-async function deleteRecord(index){
+async function deleteRow(index){
 
   const row =
     currentRows[index];
 
-  if(!row || !currentTable) return;
-
   const pk =
-    currentTable.primary_key
+    currentResource.primary_key
       .split(",")[0]
       .trim();
 
-  if(!pk){
+  if(!row || !pk){
 
     toast(
-      "Delete requires a primary key.",
+      "This resource does not have a supported primary key.",
       "error"
     );
 
@@ -2441,12 +3313,16 @@ async function deleteRecord(index){
 
   }
 
-  const pkValue =
+  const value =
     row[pk];
 
   if(!confirm(
-    `Delete this ${currentTable.table_name} record?\n\n${pk} = ${pkValue}`
-  )) return;
+    `Delete this record?\n\n${pk} = ${value}`
+  )){
+
+    return;
+
+  }
 
   try{
 
@@ -2457,20 +3333,21 @@ async function deleteRecord(index){
       "cr_admin_row_delete",
       {
         p_table:
-          currentTable.table_name,
+          currentResource.table_name,
 
         p_pk_column:
           pk,
 
         p_pk_value:
-          String(pkValue)
+          String(value)
       }
     );
 
-    if(error) throw error;
+    if(error)
+      throw error;
 
-    addLog(
-      `Deleted ${currentTable.table_name} record ${pkValue}.`,
+    addActivity(
+      `Deleted ${currentResource.table_name} record ${value}.`,
       "ok"
     );
 
@@ -2479,21 +3356,122 @@ async function deleteRecord(index){
       "success"
     );
 
-    await refreshResourceStats();
-    await loadTableRows();
+    selectedIds.delete(
+      String(value)
+    );
+
+    await discoverResources();
+    await loadRows();
 
     renderDashboard();
     renderDatabase();
 
-  }catch(err){
+  }catch(error){
 
-    addLog(
-      `Delete failed: ${err.message}`,
-      "err"
+    addActivity(
+      `Delete failed: ${error.message}`,
+      "error"
     );
 
     toast(
-      err.message,
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   DUPLICATE
+========================================================= */
+
+async function duplicateRow(index){
+
+  const row =
+    currentRows[index];
+
+  if(!row)
+    return;
+
+  const payload =
+    {...row};
+
+  const pk =
+    currentResource.primary_key
+      .split(",")[0]
+      .trim();
+
+  if(pk)
+    delete payload[pk];
+
+  /*
+    Let database defaults recreate
+    common generated timestamps.
+  */
+
+  for(
+    const field of [
+      "created_at",
+      "updated_at"
+    ]
+  ){
+
+    if(
+      currentResource.columns.some(
+        c =>
+          c.name === field &&
+          isGenerated(c)
+      )
+    ){
+
+      delete payload[field];
+
+    }
+
+  }
+
+  try{
+
+    const {
+      error
+    } =
+    await supabaseClient.rpc(
+      "cr_admin_row_insert",
+      {
+        p_table:
+          currentResource.table_name,
+
+        p_payload:
+          payload
+      }
+    );
+
+    if(error)
+      throw error;
+
+    addActivity(
+      `Duplicated a record in ${currentResource.table_name}.`,
+      "ok"
+    );
+
+    toast(
+      "Record duplicated.",
+      "success"
+    );
+
+    await discoverResources();
+    await loadRows();
+
+  }catch(error){
+
+    addActivity(
+      `Duplicate failed: ${error.message}`,
+      "error"
+    );
+
+    toast(
+      error.message,
       "error"
     );
 
@@ -2506,8 +3484,6 @@ async function deleteRecord(index){
 ========================================================= */
 
 async function bulkDelete(){
-
-  if(!currentTable) return;
 
   const ids =
     [...selectedIds];
@@ -2524,7 +3500,7 @@ async function bulkDelete(){
   }
 
   const pk =
-    currentTable.primary_key
+    currentResource.primary_key
       .split(",")[0]
       .trim();
 
@@ -2540,12 +3516,18 @@ async function bulkDelete(){
   }
 
   if(!confirm(
-    `Delete ${ids.length} selected record(s)?`
-  )) return;
+    `Delete ${ids.length} selected records?`
+  )){
 
-  let deleted = 0;
+    return;
 
-  for(const id of ids){
+  }
+
+  let count = 0;
+
+  for(
+    const id of ids
+  ){
 
     try{
 
@@ -2556,7 +3538,7 @@ async function bulkDelete(){
         "cr_admin_row_delete",
         {
           p_table:
-            currentTable.table_name,
+            currentResource.table_name,
 
           p_pk_column:
             pk,
@@ -2566,7 +3548,8 @@ async function bulkDelete(){
         }
       );
 
-      if(!error) deleted++;
+      if(!error)
+        count++;
 
     }catch{}
 
@@ -2574,133 +3557,36 @@ async function bulkDelete(){
 
   selectedIds.clear();
 
-  addLog(
-    `Bulk deleted ${deleted} record(s) from ${currentTable.table_name}.`,
+  addActivity(
+    `Bulk deleted ${count} records from ${currentResource.table_name}.`,
     "ok"
   );
 
   toast(
-    `${deleted} record(s) deleted.`,
+    `${count} records deleted.`,
     "success"
   );
 
-  await refreshResourceStats();
-  await loadTableRows();
-
-  renderDashboard();
-  renderDatabase();
+  await discoverResources();
+  await loadRows();
 
 }
 
 /* =========================================================
-   DUPLICATE
+   SELECTION
 ========================================================= */
 
-async function duplicateRecord(index){
-
-  const row =
-    currentRows[index];
-
-  if(!row || !currentTable) return;
-
-  const payload =
-    {...row};
-
-  const pk =
-    currentTable.primary_key
-      .split(",")[0]
-      .trim();
-
-  if(pk){
-
-    delete payload[pk];
-
-  }
-
-  /*
-    Remove common generated timestamp fields.
-    PostgreSQL defaults can recreate them.
-  */
-
-  for(
-    const key of Object.keys(payload)
-  ){
-
-    if(
-      key === "created_at" ||
-      key === "updated_at"
-    ){
-
-      delete payload[key];
-
-    }
-
-  }
-
-  try{
-
-    const {
-      error
-    } =
-    await supabaseClient.rpc(
-      "cr_admin_row_insert",
-      {
-        p_table:
-          currentTable.table_name,
-
-        p_payload:
-          payload
-      }
-    );
-
-    if(error) throw error;
-
-    addLog(
-      `Duplicated record in ${currentTable.table_name}.`,
-      "ok"
-    );
-
-    toast(
-      "Record duplicated.",
-      "success"
-    );
-
-    await refreshResourceStats();
-    await loadTableRows();
-
-  }catch(err){
-
-    addLog(
-      `Duplicate failed: ${err.message}`,
-      "err"
-    );
-
-    toast(
-      err.message,
-      "error"
-    );
-
-  }
-
-}
-
-/* =========================================================
-   SELECT
-========================================================= */
-
-function toggleSelected(id,checked){
+function toggleSelected(
+  id,
+  checked
+){
 
   id = String(id);
 
-  if(checked){
-
+  if(checked)
     selectedIds.add(id);
-
-  }else{
-
+  else
     selectedIds.delete(id);
-
-  }
 
 }
 
@@ -2708,37 +3594,48 @@ function toggleSelected(id,checked){
    PAGINATION
 ========================================================= */
 
-$("prevPage");
+async function previousPage(){
 
-function previousPage(){
-
-  if(currentPage <= 1) return;
+  if(currentPage <= 1)
+    return;
 
   currentPage--;
 
-  loadTableRows();
+  await loadRows();
 
 }
 
-function nextPage(){
+async function nextPage(){
 
   if(
-    !currentTable ||
-    currentRows.length < currentPageSize
-  ){
-
+    currentRows.length <
+    pageSize
+  )
     return;
-
-  }
 
   currentPage++;
 
-  loadTableRows();
+  await loadRows();
 
 }
 
 /* =========================================================
-   EXPORT JSON
+   SORT
+========================================================= */
+
+async function changeSort(){
+
+  currentSortColumn =
+    $("recordSort").value;
+
+  currentPage = 1;
+
+  await loadRows();
+
+}
+
+/* =========================================================
+   EXPORT
 ========================================================= */
 
 function exportJSON(){
@@ -2746,7 +3643,7 @@ function exportJSON(){
   if(!currentRows.length){
 
     toast(
-      "No records loaded.",
+      "No loaded records to export.",
       "error"
     );
 
@@ -2754,33 +3651,29 @@ function exportJSON(){
 
   }
 
-  downloadFile(
+  download(
     JSON.stringify(
       currentRows,
       null,
       2
     ),
-    `${currentTable.table_name}.json`,
+    `${currentResource.table_name}.json`,
     "application/json"
   );
 
-  addLog(
-    `Exported JSON from ${currentTable.table_name}.`,
+  addActivity(
+    `Exported JSON from ${currentResource.table_name}.`,
     "ok"
   );
 
 }
-
-/* =========================================================
-   EXPORT CSV
-========================================================= */
 
 function exportCSV(){
 
   if(!currentRows.length){
 
     toast(
-      "No records loaded.",
+      "No loaded records to export.",
       "error"
     );
 
@@ -2789,35 +3682,43 @@ function exportCSV(){
   }
 
   const columns =
-    currentTable.columns
-      .map(c=>c.name);
+    currentResource.columns
+      .map(
+        c =>
+          c.name
+      );
 
   const lines = [];
 
   lines.push(
-    columns.map(csvEscape).join(",")
+    columns
+      .map(csv)
+      .join(",")
   );
 
-  for(
-    const row of currentRows
-  ){
+  currentRows.forEach(row=>{
 
     lines.push(
       columns
-        .map(c=>csvEscape(row[c]))
+        .map(
+          c =>
+            csv(
+              row[c]
+            )
+        )
         .join(",")
     );
 
-  }
+  });
 
-  downloadFile(
+  download(
     lines.join("\n"),
-    `${currentTable.table_name}.csv`,
+    `${currentResource.table_name}.csv`,
     "text/csv"
   );
 
-  addLog(
-    `Exported CSV from ${currentTable.table_name}.`,
+  addActivity(
+    `Exported CSV from ${currentResource.table_name}.`,
     "ok"
   );
 
@@ -2831,82 +3732,76 @@ function renderRelationships(){
 
   const relations = [];
 
-  resources.forEach(source => {
+  resources.forEach(
+    resource=>{
 
-    source.foreign_keys.forEach(fk => {
+      resource.foreign_keys
+        .forEach(
+          fk=>{
 
-      relations.push({
-        fromTable:
-          source.table_name,
+            relations.push({
+              from:
+                resource.table_name,
 
-        fromColumn:
-          fk.column,
+              fromColumn:
+                fk.column,
 
-        toTable:
-          fk.to_table,
+              to:
+                fk.to_table,
 
-        toColumn:
-          fk.to_column
-      });
+              toColumn:
+                fk.to_column
+            });
 
-    });
-
-  });
-
-  $("relationshipCards").innerHTML =
-    relations.length
-      ? relations.map(r => `
-
-          <article class="relationship">
-
-            <b>
-              ${escapeHTML(r.fromTable)}
-            </b>
-
-            <div class="card-sub">
-              ${escapeHTML(r.fromColumn)}
-            </div>
-
-            <div class="arrow">
-              ↓ FOREIGN KEY
-            </div>
-
-            <b>
-              ${escapeHTML(r.toTable)}
-            </b>
-
-            <div class="card-sub">
-              ${escapeHTML(r.toColumn)}
-            </div>
-
-          </article>
-
-        `).join("")
-      : emptyHTML(
-          "No foreign-key relationships were discovered."
+          }
         );
 
-}
+    }
+  );
 
-/* =========================================================
-   REFRESH STATS
-========================================================= */
+  $("relationships").innerHTML =
+    relations.length
+      ? relations
+          .map(
+            relation =>
+              `
+                <article class="relationship">
 
-async function refreshResourceStats(){
+                  <strong>
+                    ${esc(
+                      relation.from
+                    )}
+                  </strong>
 
-  try{
+                  <div class="card-sub">
+                    ${esc(
+                      relation.fromColumn
+                    )}
+                  </div>
 
-    await loadResources();
+                  <div class="arrow">
+                    ↓ FOREIGN KEY
+                  </div>
 
-  }catch(err){
+                  <strong>
+                    ${esc(
+                      relation.to
+                    )}
+                  </strong>
 
-    addLog(
-      "Statistics refresh failed: " +
-      err.message,
-      "err"
-    );
+                  <div class="card-sub">
+                    ${esc(
+                      relation.toColumn
+                    )}
+                  </div>
 
-  }
+                </article>
+              `
+          )
+          .join("")
+      : empty(
+          "No foreign-key relationships discovered."
+        );
 
 }
 
@@ -2916,28 +3811,20 @@ async function refreshResourceStats(){
 
 async function runDiagnostics(){
 
-  const cards = [];
+  const checks = [];
 
-  cards.push(
-    diagnostic(
-      "Supabase URL",
-      SUPABASE_URL,
-      true
-    )
-  );
-
-  cards.push(
-    diagnostic(
-      "Client Initialized",
+  checks.push(
+    diagnosticCard(
+      "Supabase Client",
       supabaseClient
-        ? "Yes"
-        : "No",
+        ? "Initialized"
+        : "Missing",
       !!supabaseClient
     )
   );
 
-  cards.push(
-    diagnostic(
+  checks.push(
+    diagnosticCard(
       "Authenticated User",
       currentUser?.email ||
         "Not authenticated",
@@ -2945,9 +3832,9 @@ async function runDiagnostics(){
     )
   );
 
-  cards.push(
-    diagnostic(
-      "Admin Authorization",
+  checks.push(
+    diagnosticCard(
+      "CrowRules Authorization",
       currentAdmin?.authorized
         ? "AUTHORIZED"
         : "NOT AUTHORIZED",
@@ -2955,16 +3842,17 @@ async function runDiagnostics(){
     )
   );
 
-  cards.push(
-    diagnostic(
+  checks.push(
+    diagnosticCard(
       "Admin Role",
-      currentAdmin?.role || "—",
+      currentAdmin?.role ||
+        "—",
       !!currentAdmin
     )
   );
 
-  cards.push(
-    diagnostic(
+  checks.push(
+    diagnosticCard(
       "Account Active",
       currentAdmin?.is_active
         ? "YES"
@@ -2973,28 +3861,84 @@ async function runDiagnostics(){
     )
   );
 
-  cards.push(
-    diagnostic(
-      "Discovered Resources",
-      resources.length,
+  checks.push(
+    diagnosticCard(
+      "Schema Discovery",
+      `${resources.length} resources`,
       resources.length > 0
     )
   );
 
-  cards.push(
-    diagnostic(
-      "Generic CRUD RPC",
-      "cr_admin_row_insert / update / delete",
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.rpc(
+      "cr_admin_schema_metadata"
+    );
+
+    checks.push(
+      diagnosticCard(
+        "Metadata RPC",
+        error
+          ? error.message
+          : `${data?.length || 0} resources`,
+        !error
+      )
+    );
+
+  }catch(error){
+
+    checks.push(
+      diagnosticCard(
+        "Metadata RPC",
+        error.message,
+        false
+      )
+    );
+
+  }
+
+  checks.push(
+    diagnosticCard(
+      "Universal Row Reader",
+      "cr_admin_table_rows",
       true
     )
   );
 
-  $("diagnosticCards").innerHTML =
-    cards.join("");
+  checks.push(
+    diagnosticCard(
+      "Universal Insert",
+      "cr_admin_row_insert",
+      true
+    )
+  );
+
+  checks.push(
+    diagnosticCard(
+      "Universal Update",
+      "cr_admin_row_update",
+      true
+    )
+  );
+
+  checks.push(
+    diagnosticCard(
+      "Universal Delete",
+      "cr_admin_row_delete",
+      true
+    )
+  );
+
+  $("diagnostics").innerHTML =
+    checks.join("");
 
 }
 
-function diagnostic(
+function diagnosticCard(
   title,
   value,
   ok
@@ -3003,25 +3947,36 @@ function diagnostic(
   return `
     <article class="card">
 
-      <div class="card-title">
-        <h3>${escapeHTML(title)}</h3>
+      <div class="card-head">
+
+        <h3>
+          ${esc(title)}
+        </h3>
 
         <span class="badge ${
           ok
-            ? "success"
-            : "warn"
+            ? "good"
+            : "view"
         }">
-          ${ok ? "OK" : "CHECK"}
+
+          ${
+            ok
+              ? "OK"
+              : "CHECK"
+          }
+
         </span>
+
       </div>
 
       <div style="
-        margin-top:15px;
+        margin-top:13px;
+        color:var(--muted);
         font-family:monospace;
-        font-size:12px;
+        font-size:10px;
         word-break:break-word
       ">
-        ${escapeHTML(String(value))}
+        ${esc(String(value))}
       </div>
 
     </article>
@@ -3030,131 +3985,10 @@ function diagnostic(
 }
 
 /* =========================================================
-   AUTH UI
-========================================================= */
-
-function showAuth(message){
-
-  hide("boot");
-  hide("app");
-  show("authScreen");
-
-  $("authStatus").textContent =
-    message || "Please sign in.";
-
-}
-
-async function login(){
-
-  const email =
-    $("loginEmail").value.trim();
-
-  const password =
-    $("loginPassword").value;
-
-  $("authStatus").textContent =
-    "Signing in...";
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if(error) throw error;
-
-    if(!data.session){
-
-      throw new Error(
-        "Authentication completed without a session."
-      );
-
-    }
-
-    $("authStatus").textContent =
-      "Authentication successful. Verifying administrator access...";
-
-    await authorize();
-
-  }catch(err){
-
-    console.error(err);
-
-    $("authStatus").textContent =
-      err.message;
-
-    $("authStatus")
-      .classList.add("error");
-
-  }
-
-}
-
-async function resetPassword(){
-
-  const email =
-    $("loginEmail").value.trim();
-
-  if(!email){
-
-    $("authStatus").textContent =
-      "Enter your email address first.";
-
-    return;
-
-  }
-
-  try{
-
-    const {
-      error
-    } =
-    await supabaseClient.auth
-      .resetPasswordForEmail(
-        email,
-        {
-          redirectTo:
-            window.location.origin +
-            window.location.pathname
-        }
-      );
-
-    if(error) throw error;
-
-    $("authStatus").textContent =
-      "Password reset email requested.";
-
-    $("authStatus")
-      .classList.remove("error");
-
-  }catch(err){
-
-    $("authStatus").textContent =
-      err.message;
-
-    $("authStatus")
-      .classList.add("error");
-
-  }
-
-}
-
-async function logout(){
-
-  await supabaseClient.auth.signOut();
-
-}
-
-/* =========================================================
    HEADER
 ========================================================= */
 
-function updateAdminHeader(){
+function updateHeader(){
 
   $("adminName").textContent =
     currentAdmin?.display_name ||
@@ -3163,8 +3997,72 @@ function updateAdminHeader(){
 
   $("adminRole").textContent =
     currentAdmin?.role
-      ? " • " + currentAdmin.role
+      ? " • " +
+        currentAdmin.role
       : "";
+
+}
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+async function refreshEverything(){
+
+  toast(
+    "Refreshing CrowRules database...",
+    "success"
+  );
+
+  try{
+
+    await discoverResources();
+
+    renderDashboard();
+    renderDatabase();
+    renderRelationships();
+
+    if(currentResource){
+
+      const refreshed =
+        resources.find(
+          r =>
+            r.table_name ===
+            currentResource.table_name
+        );
+
+      if(refreshed){
+
+        currentResource =
+          refreshed;
+
+        await loadRows();
+
+      }
+
+    }
+
+    runDiagnostics();
+
+    addActivity(
+      "Universal database refresh completed.",
+      "ok"
+    );
+
+  }catch(error){
+
+    addActivity(
+      "Refresh failed: " +
+      error.message,
+      "error"
+    );
+
+    toast(
+      error.message,
+      "error"
+    );
+
+  }
 
 }
 
@@ -3177,9 +4075,12 @@ function bindEvents(){
   $("loginForm")
     .addEventListener(
       "submit",
-      e=>{
-        e.preventDefault();
+      event=>{
+
+        event.preventDefault();
+
         login();
+
       }
     );
 
@@ -3192,40 +4093,31 @@ function bindEvents(){
   $("logout")
     .addEventListener(
       "click",
-      logout
-    );
+      async()=>{
 
-  $("refreshAll")
-    .addEventListener(
-      "click",
-      refreshEverything
-    );
+        await supabaseClient
+          .auth
+          .signOut();
 
-  $("dashboardRefresh")
-    .addEventListener(
-      "click",
-      refreshEverything
-    );
-
-  $("databaseRefresh")
-    .addEventListener(
-      "click",
-      refreshEverything
-    );
-
-  $("runDiagnostics")
-    .addEventListener(
-      "click",
-      runDiagnostics
-    );
-
-  $("clearLogs")
-    .addEventListener(
-      "click",
-      ()=>{
-        activityLogs = [];
-        renderLogs();
       }
+    );
+
+  $("refresh")
+    .addEventListener(
+      "click",
+      refreshEverything
+    );
+
+  $("refreshDashboard")
+    .addEventListener(
+      "click",
+      refreshEverything
+    );
+
+  $("reloadDatabase")
+    .addEventListener(
+      "click",
+      refreshEverything
     );
 
   $("dashboardSearch")
@@ -3240,19 +4132,19 @@ function bindEvents(){
       renderDashboard
     );
 
-  $("tableSearch")
+  $("databaseSearch")
     .addEventListener(
       "input",
       renderDatabase
     );
 
-  $("tableTypeFilter")
+  $("databaseType")
     .addEventListener(
       "change",
       renderDatabase
     );
 
-  $("tableSort")
+  $("databaseSort")
     .addEventListener(
       "change",
       renderDatabase
@@ -3261,13 +4153,27 @@ function bindEvents(){
   $("recordSearch")
     .addEventListener(
       "input",
-      renderRecords
+      ()=>{
+        currentPage = 1;
+        loadRows();
+      }
     );
 
-  $("addRecord")
+  $("recordSort")
+    .addEventListener(
+      "change",
+      changeSort
+    );
+
+  $("addButton")
     .addEventListener(
       "click",
-      addRecord
+      ()=>{
+        if(currentResource)
+          openAdd(
+            currentResource.table_name
+          );
+      }
     );
 
   $("saveRecord")
@@ -3306,62 +4212,100 @@ function bindEvents(){
       nextPage
     );
 
+  $("diagnosticsButton")
+    .addEventListener(
+      "click",
+      runDiagnostics
+    );
+
+  $("clearActivity")
+    .addEventListener(
+      "click",
+      ()=>{
+        activity = [];
+        renderActivity();
+      }
+    );
+
   document
-    .querySelectorAll("[data-close-modal]")
-    .forEach(btn=>{
-      btn.addEventListener(
+    .querySelectorAll(
+      "[data-close]"
+    )
+    .forEach(button=>{
+
+      button.addEventListener(
         "click",
         ()=>{
           closeModal(
-            btn.dataset.closeModal
+            button.dataset.close
           );
         }
       );
+
     });
 
   document
-    .querySelectorAll(".nav button")
-    .forEach(btn=>{
+    .querySelectorAll(
+      ".nav button"
+    )
+    .forEach(button=>{
 
-      btn.addEventListener(
+      button.addEventListener(
         "click",
         ()=>{
 
           document
-            .querySelectorAll(".nav button")
-            .forEach(b=>
-              b.classList.remove("active")
+            .querySelectorAll(
+              ".nav button"
+            )
+            .forEach(
+              b =>
+                b.classList
+                  .remove("active")
             );
 
-          btn.classList.add("active");
+          button.classList
+            .add("active");
 
           document
-            .querySelectorAll(".page")
-            .forEach(p=>
-              p.classList.remove("active")
+            .querySelectorAll(
+              ".page"
+            )
+            .forEach(
+              p =>
+                p.classList
+                  .remove("active")
             );
 
           const page =
-            $("page-" + btn.dataset.page);
+            $(
+              "page-" +
+              button.dataset.page
+            );
 
           if(page)
-            page.classList.add("active");
+            page.classList
+              .add("active");
 
         }
       );
 
     });
 
-  window.addEventListener(
+  document.addEventListener(
     "keydown",
-    e=>{
+    event=>{
 
-      if(e.key === "Escape"){
+      if(event.key === "Escape"){
 
         document
-          .querySelectorAll(".modal.open")
-          .forEach(modal=>
-            modal.classList.remove("open")
+          .querySelectorAll(
+            ".modal.open"
+          )
+          .forEach(
+            modal =>
+              modal.classList
+                .remove("open")
           );
 
       }
@@ -3372,150 +4316,234 @@ function bindEvents(){
 }
 
 /* =========================================================
-   REFRESH
+   LOGIN
 ========================================================= */
 
-async function refreshEverything(){
+async function login(){
 
-  toast(
-    "Refreshing Supabase database...",
-    "success"
-  );
+  const email =
+    $("email")
+      .value
+      .trim();
+
+  const password =
+    $("password")
+      .value;
+
+  $("authMessage").textContent =
+    "Authenticating...";
+
+  $("authMessage")
+    .classList
+    .remove("error");
 
   try{
 
-    await loadResources();
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .auth
+      .signInWithPassword({
+        email,
+        password
+      });
 
-    renderDashboard();
-    renderDatabase();
-    renderRelationships();
-    runDiagnostics();
+    if(error)
+      throw error;
 
-    if(currentTable){
+    if(!data.session){
 
-      const refreshed =
-        resources.find(
-          r =>
-            r.table_name ===
-            currentTable.table_name
-        );
-
-      if(refreshed){
-
-        currentTable =
-          refreshed;
-
-        await loadTableRows();
-
-      }
+      throw new Error(
+        "Authentication completed without a session."
+      );
 
     }
 
-    addLog(
-      "Full command-center refresh completed.",
-      "ok"
-    );
+    $("authMessage").textContent =
+      "Authenticated. Checking administrator access...";
 
-  }catch(err){
+    await authorize();
 
-    addLog(
-      "Refresh failed: " +
-      err.message,
-      "err"
-    );
+  }catch(error){
 
-    toast(
-      err.message,
-      "error"
-    );
+    $("authMessage").textContent =
+      error.message;
+
+    $("authMessage")
+      .classList
+      .add("error");
 
   }
 
 }
 
 /* =========================================================
-   LOGGING
+   PASSWORD RESET
 ========================================================= */
 
-function addLog(message,type="ok"){
+async function resetPassword(){
 
-  activityLogs.unshift({
-    message,
-    type,
-    time:new Date().toLocaleTimeString()
-  });
+  const email =
+    $("email")
+      .value
+      .trim();
 
-  activityLogs =
-    activityLogs.slice(0,100);
+  if(!email){
 
-  renderLogs();
+    $("authMessage").textContent =
+      "Enter your email address first.";
+
+    return;
+
+  }
+
+  try{
+
+    const {
+      error
+    } =
+    await supabaseClient
+      .auth
+      .resetPasswordForEmail(
+        email,
+        {
+          redirectTo:
+            window.location.origin +
+            window.location.pathname
+        }
+      );
+
+    if(error)
+      throw error;
+
+    $("authMessage").textContent =
+      "Password reset request sent.";
+
+  }catch(error){
+
+    $("authMessage").textContent =
+      error.message;
+
+    $("authMessage")
+      .classList
+      .add("error");
+
+  }
 
 }
 
-function renderLogs(){
+/* =========================================================
+   ACTIVITY
+========================================================= */
 
-  $("activityList").innerHTML =
-    activityLogs.length
-      ? activityLogs.map(log=>`
+function addActivity(
+  message,
+  type="ok"
+){
 
-          <div class="log ${log.type}">
+  activity.unshift({
+    message,
+    type,
+    time:
+      new Date()
+        .toLocaleTimeString()
+  });
 
-            <span class="time">
-              [${escapeHTML(log.time)}]
-            </span>
+  activity =
+    activity.slice(
+      0,
+      150
+    );
 
-            ${escapeHTML(log.message)}
+  renderActivity();
 
-          </div>
+}
 
-        `).join("")
-      : emptyHTML(
-          "No local admin activity yet."
+function renderActivity(){
+
+  $("activityLogs").innerHTML =
+    activity.length
+      ? activity
+          .map(
+            item =>
+              `
+                <div class="log ${
+                  item.type === "error"
+                    ? "error"
+                    : ""
+                }">
+
+                  <span class="log-time">
+                    [
+                    ${esc(item.time)}
+                    ]
+                  </span>
+
+                  ${esc(item.message)}
+
+                </div>
+              `
+          )
+          .join("")
+      : empty(
+          "No activity recorded yet."
         );
 
 }
 
 /* =========================================================
-   MODALS
+   UI
 ========================================================= */
 
-function showModal(id){
+function show(id){
 
-  $(id).classList.add("open");
-
-}
-
-function closeModal(id){
-
-  $(id).classList.remove("open");
+  $(id)
+    .classList
+    .remove("hidden");
 
 }
 
 function hide(id){
 
-  $(id).classList.add("hidden");
+  $(id)
+    .classList
+    .add("hidden");
 
 }
 
-function show(id){
+function showAuth(message){
 
-  $(id).classList.remove("hidden");
+  hide("boot");
+  hide("app");
+  show("authScreen");
+
+  $("authMessage").textContent =
+    message;
 
 }
 
-/* =========================================================
-   BOOT MESSAGE
-========================================================= */
+function setBoot(message){
 
-function setBootMessage(message){
+  $("bootMessage").textContent =
+    message;
 
-  const p =
-    document.querySelector(
-      "#boot p"
-    );
+}
 
-  if(p)
-    p.textContent = message;
+function showModal(id){
+
+  $(id)
+    .classList
+    .add("open");
+
+}
+
+function closeModal(id){
+
+  $(id)
+    .classList
+    .remove("open");
 
 }
 
@@ -3523,23 +4551,32 @@ function setBootMessage(message){
    TOAST
 ========================================================= */
 
-function toast(message,type="success"){
+function toast(
+  message,
+  type="success"
+){
 
-  const el =
-    document.createElement("div");
+  const element =
+    document.createElement(
+      "div"
+    );
 
-  el.className =
+  element.className =
     `toast ${type}`;
 
-  el.textContent =
+  element.textContent =
     message;
 
   $("toastWrap")
-    .appendChild(el);
+    .appendChild(
+      element
+    );
 
   setTimeout(
-    ()=>el.remove(),
-    4200
+    ()=>{
+      element.remove();
+    },
+    4500
   );
 
 }
@@ -3548,7 +4585,7 @@ function toast(message,type="success"){
    DOWNLOAD
 ========================================================= */
 
-function downloadFile(
+function download(
   content,
   filename,
   type
@@ -3561,21 +4598,28 @@ function downloadFile(
     );
 
   const url =
-    URL.createObjectURL(blob);
+    URL.createObjectURL(
+      blob
+    );
 
-  const a =
-    document.createElement("a");
+  const link =
+    document.createElement(
+      "a"
+    );
 
-  a.href = url;
-  a.download = filename;
+  link.href = url;
+  link.download = filename;
 
-  document.body.appendChild(a);
+  document.body
+    .appendChild(link);
 
-  a.click();
+  link.click();
 
-  a.remove();
+  link.remove();
 
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(
+    url
+  );
 
 }
 
@@ -3583,7 +4627,15 @@ function downloadFile(
    HELPERS
 ========================================================= */
 
-function displayValue(value){
+function number(value){
+
+  return Number(
+    value || 0
+  ).toLocaleString();
+
+}
+
+function display(value){
 
   if(value === null)
     return "NULL";
@@ -3591,12 +4643,21 @@ function displayValue(value){
   if(value === undefined)
     return "—";
 
-  if(typeof value === "object"){
+  if(
+    typeof value ===
+    "object"
+  ){
 
     try{
-      return JSON.stringify(value);
+
+      return JSON.stringify(
+        value
+      );
+
     }catch{
+
       return String(value);
+
     }
 
   }
@@ -3605,20 +4666,22 @@ function displayValue(value){
 
 }
 
-function convertInputValue(
+function convertValue(
   value,
-  dataType
+  type
 ){
 
-  const type =
-    String(dataType || "")
-      .toLowerCase();
+  const t =
+    String(
+      type || ""
+    ).toLowerCase();
 
   if(
-    type.includes("int") ||
-    type.includes("numeric") ||
-    type.includes("double") ||
-    type.includes("real")
+    t.includes("int") ||
+    t.includes("numeric") ||
+    t.includes("decimal") ||
+    t.includes("double") ||
+    t.includes("real")
   ){
 
     const n =
@@ -3634,62 +4697,99 @@ function convertInputValue(
 
 }
 
-function csvEscape(value){
+function isGenerated(
+  column
+){
 
-  const text =
-    displayValue(value);
+  const d =
+    String(
+      column.column_default ||
+      column.default ||
+      ""
+    ).toLowerCase();
 
-  return `"${text
+  return Boolean(
+    d.includes("nextval(") ||
+    d.includes("gen_random_uuid") ||
+    d.includes("uuid_generate") ||
+    d.includes("identity")
+  );
+
+}
+
+function csv(value){
+
+  return `"${display(value)
     .replace(/"/g,'""')}"`;
 
 }
 
-function escapeHTML(value){
-
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-function escapeAttr(value){
-
-  return escapeHTML(value)
-    .replace(/`/g,"&#096;");
-
-}
-
-function emptyHTML(message){
+function empty(message){
 
   return `
     <div class="empty">
-      ${escapeHTML(message)}
+      ${esc(message)}
     </div>
   `;
 
 }
 
+function esc(value){
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+function escAttr(value){
+
+  return esc(value)
+    .replace(
+      /`/g,
+      "&#096;"
+    );
+
+}
+
 /* =========================================================
-   GLOBAL API
+   GLOBAL FUNCTIONS
 ========================================================= */
 
 window.openTable =
   openTable;
 
-window.addRecordTo =
-  addRecordTo;
+window.openAdd =
+  openAdd;
 
-window.editRecord =
-  editRecord;
+window.editRow =
+  editRow;
 
-window.deleteRecord =
-  deleteRecord;
+window.deleteRow =
+  deleteRow;
 
-window.duplicateRecord =
-  duplicateRecord;
+window.duplicateRow =
+  duplicateRow;
 
 window.toggleSelected =
   toggleSelected;
