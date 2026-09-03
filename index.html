@@ -1,46 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>CrowRules Entertainment — Business Hub Admin v4.0</title>
+<meta name="theme-color" content="#07070c">
+<meta name="description"
+      content="CrowRules Entertainment Admin v5.0 — Command Center">
 
-<meta
-  name="description"
-  content="CrowRules Entertainment Business Hub — complete Supabase administration console."
->
+<title>CrowRules Entertainment — Admin v5.0</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link
-  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap"
-  rel="stylesheet"
->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap"
+      rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
-  --bg:#050608;
-  --bg2:#080b10;
-  --panel:#0b0e13;
-  --panel2:#10141b;
-  --panel3:#151a22;
-  --line:#202936;
-  --line2:#2d3948;
-  --text:#edf2f7;
-  --muted:#8994a3;
-  --accent:#8b5cf6;
-  --accent2:#00e5ff;
-  --green:#22c55e;
-  --yellow:#facc15;
-  --red:#ef4444;
-  --orange:#fb923c;
-  --shadow:0 20px 60px rgba(0,0,0,.45);
+  --bg:#07070c;
+  --bg2:#0c0c14;
+  --panel:#10101a;
+  --panel2:#151521;
+  --panel3:#1b1b29;
+  --border:#29293a;
+  --text:#f4f4f8;
+  --muted:#9999ad;
+  --purple:#9b5cff;
+  --purple2:#7137d9;
+  --cyan:#29d9ff;
+  --green:#42e69b;
+  --yellow:#ffd166;
+  --red:#ff5d73;
+  --orange:#ff9f43;
+  --shadow:0 15px 50px rgba(0,0,0,.35);
   --radius:16px;
-  --sidebar:270px;
 }
 
 *{
@@ -50,11 +46,9 @@
 html,
 body{
   margin:0;
+  padding:0;
   min-height:100%;
-  background:
-    radial-gradient(circle at 15% 10%,rgba(139,92,246,.08),transparent 25%),
-    radial-gradient(circle at 85% 20%,rgba(0,229,255,.06),transparent 25%),
-    var(--bg);
+  background:var(--bg);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
 }
@@ -79,982 +73,993 @@ a{
   text-decoration:none;
 }
 
-.hidden{
-  display:none!important;
-}
-
-/* ============================================================
+/* =========================================================
    LOGIN
-============================================================ */
+========================================================= */
 
-.login-overlay{
-  position:fixed;
-  inset:0;
-  z-index:9999;
+.login-screen{
+  min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:24px;
+  padding:30px;
   background:
-    linear-gradient(rgba(5,6,8,.94),rgba(5,6,8,.98)),
-    radial-gradient(circle at center,rgba(139,92,246,.18),transparent 55%);
+    radial-gradient(circle at 20% 20%,rgba(155,92,255,.16),transparent 35%),
+    radial-gradient(circle at 80% 70%,rgba(41,217,255,.10),transparent 35%),
+    var(--bg);
 }
 
 .login-card{
   width:min(460px,100%);
-  padding:32px;
-  background:rgba(11,14,19,.96);
-  border:1px solid var(--line2);
-  border-radius:22px;
+  background:rgba(16,16,26,.95);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:36px;
   box-shadow:var(--shadow);
-  position:relative;
-  overflow:hidden;
 }
 
-.login-card:before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent 0,
-      transparent 3px,
-      rgba(255,255,255,.015) 4px
-    );
-}
-
-.login-logo{
+.logo{
   font-family:Orbitron,sans-serif;
-  font-size:22px;
   font-weight:900;
   letter-spacing:2px;
 }
 
-.login-logo span{
-  color:var(--accent2);
+.logo span{
+  color:var(--purple);
 }
 
-.login-sub{
-  margin:8px 0 28px;
+.login-card h1{
+  margin:0 0 8px;
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+}
+
+.login-card p{
   color:var(--muted);
   line-height:1.6;
 }
 
-.login-error{
-  display:none;
-  margin-top:14px;
-  padding:12px 14px;
-  border:1px solid rgba(239,68,68,.45);
+.login-form{
+  display:grid;
+  gap:14px;
+  margin-top:25px;
+}
+
+.field-label{
+  color:#cfcfe0;
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  color:var(--text);
+  background:#090910;
+  border:1px solid var(--border);
   border-radius:10px;
-  background:rgba(239,68,68,.08);
-  color:#fecaca;
+  padding:12px 13px;
+  outline:none;
+  transition:.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px rgba(155,92,255,.12);
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.login-status{
+  min-height:22px;
+  color:var(--red);
   font-size:13px;
-  line-height:1.5;
 }
 
-.login-error.show{
-  display:block;
-}
-
-/* ============================================================
+/* =========================================================
    APP
-============================================================ */
+========================================================= */
 
 .app{
+  display:none;
   min-height:100vh;
 }
+
+.app.active{
+  display:flex;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .sidebar{
   position:fixed;
   inset:0 auto 0 0;
-  width:var(--sidebar);
-  background:
-    linear-gradient(180deg,#090c11,#06080c);
-  border-right:1px solid var(--line);
-  z-index:100;
+  width:265px;
+  background:#090910;
+  border-right:1px solid var(--border);
   display:flex;
   flex-direction:column;
+  z-index:100;
+}
+
+.sidebar-header{
+  padding:22px 20px;
+  border-bottom:1px solid var(--border);
 }
 
 .brand{
-  padding:24px 20px 20px;
-  border-bottom:1px solid var(--line);
-}
-
-.brand-main{
   font-family:Orbitron,sans-serif;
   font-size:18px;
   font-weight:900;
-  letter-spacing:2px;
+  letter-spacing:1px;
 }
 
-.brand-main span{
-  color:var(--accent2);
+.brand span{
+  color:var(--purple);
 }
 
-.brand-sub{
+.admin-label{
   margin-top:6px;
-  font-size:10px;
   color:var(--muted);
-  letter-spacing:2px;
+  font-size:11px;
+  letter-spacing:1px;
   text-transform:uppercase;
 }
 
 .nav{
   flex:1;
   overflow-y:auto;
-  padding:14px 12px;
+  padding:12px;
 }
 
-.nav-group{
+.nav-section{
   margin:18px 8px 7px;
-  font-size:9px;
-  color:#667180;
-  font-weight:800;
-  letter-spacing:2px;
+  color:#66667b;
+  font-size:10px;
+  font-weight:900;
   text-transform:uppercase;
+  letter-spacing:1.5px;
 }
 
 .nav button{
   width:100%;
-  border:0;
-  background:transparent;
-  color:#9ca7b5;
-  padding:11px 12px;
-  border-radius:10px;
-  text-align:left;
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:11px;
+  padding:10px 11px;
   margin-bottom:3px;
-  transition:.18s ease;
+  color:#aaaabd;
+  background:transparent;
+  border:1px solid transparent;
+  border-radius:9px;
+  text-align:left;
+  font-size:12px;
+  font-weight:600;
 }
 
 .nav button:hover{
-  background:var(--panel2);
-  color:var(--text);
+  background:#11111b;
+  color:white;
 }
 
 .nav button.active{
-  background:
-    linear-gradient(
-      90deg,
-      rgba(139,92,246,.22),
-      rgba(0,229,255,.07)
-    );
-  color:#fff;
-  box-shadow:inset 3px 0 var(--accent);
+  color:white;
+  background:linear-gradient(
+    90deg,
+    rgba(155,92,255,.22),
+    rgba(155,92,255,.06)
+  );
+  border-color:rgba(155,92,255,.25);
 }
 
 .nav-icon{
   width:22px;
   text-align:center;
-  font-size:15px;
+}
+
+.sidebar-footer{
+  padding:12px;
+  border-top:1px solid var(--border);
 }
 
 .user-box{
-  border-top:1px solid var(--line);
-  padding:14px;
-}
-
-.user-name{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  font-size:12px;
+  padding:12px;
+  background:#10101a;
+  border:1px solid var(--border);
+  border-radius:10px;
   margin-bottom:10px;
 }
 
-.user-role{
-  color:var(--green);
-  font-size:9px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
+.user-email{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#d9d9e5;
+  font-size:11px;
 }
 
+/* =========================================================
+   MAIN
+========================================================= */
+
 .main{
-  margin-left:var(--sidebar);
+  width:calc(100% - 265px);
+  margin-left:265px;
   min-height:100vh;
 }
 
 .topbar{
   position:sticky;
   top:0;
-  z-index:80;
-  height:70px;
+  z-index:50;
   display:flex;
   align-items:center;
+  justify-content:space-between;
   gap:15px;
-  padding:0 24px;
-  background:rgba(5,6,8,.9);
+  padding:15px 25px;
+  background:rgba(7,7,12,.92);
   backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--line);
+  border-bottom:1px solid var(--border);
 }
 
-.menu-button{
-  display:none;
-}
-
-.page-title{
+.topbar-title{
   font-family:Orbitron,sans-serif;
-  font-weight:700;
-  letter-spacing:1px;
-  font-size:16px;
-  flex:1;
+  font-size:15px;
+  font-weight:800;
 }
 
-.top-actions{
+.topbar-right{
   display:flex;
   align-items:center;
   gap:8px;
-}
-
-.connection{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:7px 10px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  font-size:10px;
-  color:var(--muted);
-}
-
-.status-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--red);
-}
-
-.status-dot.online{
-  background:var(--green);
-  box-shadow:0 0 12px rgba(34,197,94,.65);
-}
-
-/* ============================================================
-   CONTENT
-============================================================ */
-
-.content{
-  padding:28px;
-  max-width:1800px;
-  margin:auto;
 }
 
 .page{
-  display:none;
+  padding:25px;
+  max-width:1700px;
+  margin:auto;
 }
 
-.page.active{
-  display:block;
-}
-
-.hero{
-  border:1px solid var(--line);
-  background:
-    radial-gradient(circle at 80% 0%,rgba(0,229,255,.08),transparent 30%),
-    radial-gradient(circle at 10% 0%,rgba(139,92,246,.13),transparent 35%),
-    var(--panel);
-  border-radius:22px;
-  padding:30px;
-  margin-bottom:22px;
-  position:relative;
-  overflow:hidden;
-}
-
-.hero:after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent 0,
-      transparent 5px,
-      rgba(255,255,255,.012) 6px
-    );
-}
-
-.hero h1{
-  position:relative;
-  z-index:1;
-  margin:0;
-  font-family:Orbitron,sans-serif;
-  font-size:clamp(24px,4vw,42px);
-  line-height:1.1;
-}
-
-.hero p{
-  position:relative;
-  z-index:1;
-  max-width:780px;
-  color:var(--muted);
-  line-height:1.7;
-}
-
-.hero-actions{
-  position:relative;
-  z-index:1;
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-
-/* ============================================================
+/* =========================================================
    BUTTONS
-============================================================ */
+========================================================= */
 
 .btn{
-  border:1px solid var(--line2);
-  background:var(--panel2);
-  color:var(--text);
+  border:1px solid var(--border);
   border-radius:9px;
+  background:#151521;
+  color:#e9e9f0;
   padding:9px 13px;
-  transition:.18s ease;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:7px;
+  font-size:12px;
+  font-weight:800;
+  transition:.2s;
 }
 
 .btn:hover{
+  border-color:#45455b;
   transform:translateY(-1px);
-  border-color:#4a596d;
-  background:var(--panel3);
 }
 
-.btn-primary{
-  border-color:rgba(139,92,246,.6);
-  background:rgba(139,92,246,.17);
+.btn.primary{
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  border-color:transparent;
+  color:white;
 }
 
-.btn-cyan{
-  border-color:rgba(0,229,255,.5);
-  background:rgba(0,229,255,.08);
+.btn.cyan{
+  background:rgba(41,217,255,.12);
+  color:var(--cyan);
+  border-color:rgba(41,217,255,.25);
 }
 
-.btn-danger{
-  border-color:rgba(239,68,68,.45);
-  background:rgba(239,68,68,.08);
-  color:#fecaca;
+.btn.green{
+  background:rgba(66,230,155,.11);
+  color:var(--green);
+  border-color:rgba(66,230,155,.25);
 }
 
-.btn-success{
-  border-color:rgba(34,197,94,.45);
-  background:rgba(34,197,94,.08);
-  color:#bbf7d0;
+.btn.red{
+  background:rgba(255,93,115,.1);
+  color:var(--red);
+  border-color:rgba(255,93,115,.25);
 }
 
-.btn-small{
+.btn.small{
   padding:6px 9px;
-  font-size:11px;
+  font-size:10px;
 }
 
-.btn-block{
-  width:100%;
-}
+/* =========================================================
+   PAGE HEADER
+========================================================= */
 
-/* ============================================================
-   STATS
-============================================================ */
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(7,minmax(0,1fr));
-  gap:12px;
+.page-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
   margin-bottom:22px;
 }
 
+.page-header h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:24px;
+}
+
+.page-header p{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.page-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:18px;
+}
+
 .stat{
-  min-width:0;
   background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:16px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:17px;
+  box-shadow:0 8px 30px rgba(0,0,0,.16);
 }
 
 .stat-label{
   color:var(--muted);
-  font-size:9px;
+  font-size:10px;
   text-transform:uppercase;
-  letter-spacing:1.5px;
-  margin-bottom:8px;
+  letter-spacing:1px;
+  font-weight:800;
 }
 
 .stat-value{
+  margin-top:8px;
   font-family:Orbitron,sans-serif;
   font-size:25px;
   font-weight:800;
 }
 
-/* ============================================================
-   CARDS
-============================================================ */
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:18px;
+.stat-sub{
+  margin-top:5px;
+  color:#77778b;
+  font-size:10px;
 }
 
-.card{
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:16px;
+}
+
+.panel{
   background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:16px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
   overflow:hidden;
 }
 
-.card-head{
-  padding:16px 18px;
-  border-bottom:1px solid var(--line);
+.panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:15px 17px;
+  border-bottom:1px solid var(--border);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:800;
+}
+
+.panel-body{
+  padding:16px;
+}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.quick{
+  padding:15px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#0c0c14;
+  text-align:left;
+}
+
+.quick:hover{
+  border-color:var(--purple);
+}
+
+.quick-icon{
+  font-size:20px;
+}
+
+.quick-title{
+  margin-top:8px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.quick-desc{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.4;
+}
+
+/* =========================================================
+   TABLE TOOLBAR
+========================================================= */
+
+.toolbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
-}
-
-.card-title{
-  font-family:Orbitron,sans-serif;
-  font-size:12px;
-  letter-spacing:1px;
-}
-
-.card-body{
-  padding:18px;
-}
-
-.empty{
-  padding:30px 18px;
-  text-align:center;
-  color:var(--muted);
-  line-height:1.7;
-}
-
-.empty strong{
-  display:block;
-  color:var(--text);
-  margin-bottom:5px;
-}
-
-/* ============================================================
-   TABLE TOOLBAR
-============================================================ */
-
-.toolbar{
-  display:flex;
   flex-wrap:wrap;
-  gap:8px;
+  padding:13px;
+  background:#0d0d16;
+  border-bottom:1px solid var(--border);
+}
+
+.toolbar-left,
+.toolbar-right{
+  display:flex;
   align-items:center;
-  margin-bottom:14px;
+  gap:7px;
+  flex-wrap:wrap;
 }
 
-.toolbar .search{
-  flex:1;
-  min-width:220px;
-}
-
-.search,
-.input,
-.select,
-.textarea{
-  width:100%;
-  border:1px solid var(--line2);
-  background:#080b10;
-  color:var(--text);
-  border-radius:9px;
-  outline:none;
-  padding:10px 11px;
-}
-
-.search:focus,
-.input:focus,
-.select:focus,
-.textarea:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 2px rgba(139,92,246,.1);
+.search{
+  min-width:230px;
 }
 
 .table-wrap{
-  width:100%;
   overflow:auto;
-  border:1px solid var(--line);
-  border-radius:13px;
+  max-height:65vh;
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:760px;
+  min-width:850px;
+}
+
+th,
+td{
+  padding:10px 12px;
+  border-bottom:1px solid #1f1f2c;
+  text-align:left;
+  vertical-align:top;
+  font-size:11px;
 }
 
 th{
-  background:#090c11;
-  color:#7f8a99;
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#10101a;
+  color:#9f9fb2;
   font-size:9px;
   text-transform:uppercase;
-  letter-spacing:1px;
-  text-align:left;
-  padding:12px;
-  border-bottom:1px solid var(--line);
-  white-space:nowrap;
+  letter-spacing:.8px;
 }
 
 td{
-  padding:12px;
-  border-bottom:1px solid rgba(32,41,54,.75);
-  font-size:12px;
-  vertical-align:top;
+  color:#d8d8e1;
 }
 
 tr:hover td{
-  background:rgba(255,255,255,.012);
+  background:#13131e;
 }
 
-.item-title{
-  font-weight:700;
-  color:#f5f7fa;
-}
-
-.item-sub{
-  margin-top:4px;
-  color:var(--muted);
-  font-size:10px;
-}
-
-.code{
-  font-family:monospace;
-  font-size:10px;
-  color:#aeb9c7;
-  word-break:break-all;
+.cell{
+  max-width:300px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .actions{
   display:flex;
-  flex-wrap:wrap;
   gap:5px;
+  white-space:nowrap;
 }
+
+/* =========================================================
+   BADGES
+========================================================= */
 
 .badge{
   display:inline-flex;
   align-items:center;
-  border:1px solid var(--line2);
-  background:rgba(255,255,255,.03);
-  border-radius:999px;
   padding:4px 7px;
+  border-radius:999px;
   font-size:9px;
+  font-weight:900;
   text-transform:uppercase;
-  letter-spacing:.7px;
-  white-space:nowrap;
+  letter-spacing:.4px;
+  background:#20202d;
+  color:#bcbccc;
 }
 
-.badge-success,
-.badge-active,
-.badge-published{
-  color:#bbf7d0;
-  border-color:rgba(34,197,94,.4);
-  background:rgba(34,197,94,.08);
+.badge.green{
+  color:var(--green);
+  background:rgba(66,230,155,.09);
 }
 
-.badge-danger,
-.badge-archived{
-  color:#fecaca;
-  border-color:rgba(239,68,68,.4);
-  background:rgba(239,68,68,.08);
+.badge.red{
+  color:var(--red);
+  background:rgba(255,93,115,.09);
 }
 
-.badge-warning,
-.badge-high,
-.badge-urgent{
-  color:#fde68a;
-  border-color:rgba(250,204,21,.4);
-  background:rgba(250,204,21,.07);
+.badge.yellow{
+  color:var(--yellow);
+  background:rgba(255,209,102,.09);
 }
 
-.badge-live{
-  color:#a5f3fc;
-  border-color:rgba(0,229,255,.4);
-  background:rgba(0,229,255,.08);
+.badge.purple{
+  color:#c69fff;
+  background:rgba(155,92,255,.10);
 }
 
-/* ============================================================
-   DATABASE EXPLORER
-============================================================ */
-
-.db-layout{
-  display:grid;
-  grid-template-columns:270px minmax(0,1fr);
-  gap:15px;
+.badge.cyan{
+  color:var(--cyan);
+  background:rgba(41,217,255,.09);
 }
 
-.table-list{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:16px;
-  overflow:hidden;
-  max-height:calc(100vh - 130px);
-  overflow-y:auto;
-}
-
-.table-list-head{
-  padding:14px;
-  border-bottom:1px solid var(--line);
-  position:sticky;
-  top:0;
-  background:var(--panel);
-  z-index:2;
-}
-
-.table-list button{
-  width:100%;
-  text-align:left;
-  border:0;
-  border-bottom:1px solid rgba(32,41,54,.6);
-  background:transparent;
-  color:#a7b0bd;
-  padding:11px 13px;
-  display:flex;
-  align-items:center;
-  gap:9px;
-}
-
-.table-list button:hover{
-  background:var(--panel2);
-  color:#fff;
-}
-
-.table-list button.active{
-  color:#fff;
-  background:rgba(139,92,246,.12);
-  box-shadow:inset 3px 0 var(--accent);
-}
-
-.table-count{
-  margin-left:auto;
-  color:#657080;
-  font-size:9px;
-}
-
-.db-main{
-  min-width:0;
-}
-
-.schema-note{
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.6;
-  margin-top:5px;
-}
-
-/* ============================================================
+/* =========================================================
    PAGINATION
-============================================================ */
+========================================================= */
 
 .pagination{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   gap:10px;
-  padding:12px 0;
+  padding:12px 14px;
+  border-top:1px solid var(--border);
+}
+
+.pagination-info{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.pagination-buttons{
+  display:flex;
+  gap:6px;
+}
+
+/* =========================================================
+   HEALTH
+========================================================= */
+
+.health-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.health-card{
+  padding:15px;
+  background:#0d0d16;
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+.health-card.ok{
+  border-color:rgba(66,230,155,.3);
+}
+
+.health-card.warn{
+  border-color:rgba(255,209,102,.3);
+}
+
+.health-card.error{
+  border-color:rgba(255,93,115,.35);
+}
+
+.health-name{
+  font-weight:800;
+  font-size:12px;
+}
+
+.health-meta{
+  margin-top:6px;
   color:var(--muted);
   font-size:10px;
 }
 
-.pagination-actions{
-  display:flex;
-  gap:5px;
-}
+/* =========================================================
+   SCHEMA
+========================================================= */
 
-/* ============================================================
-   FORMS
-============================================================ */
-
-.form-grid{
+.schema-list{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:13px;
+  gap:7px;
 }
 
-.field{
-  min-width:0;
-}
-
-.field.full{
-  grid-column:1/-1;
-}
-
-.field label{
-  display:block;
-  color:#a8b2c0;
+.schema-item{
+  display:grid;
+  grid-template-columns:1fr 100px 90px;
+  gap:10px;
+  padding:9px 10px;
+  background:#0c0c14;
+  border:1px solid #1d1d2a;
+  border-radius:8px;
   font-size:10px;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  margin-bottom:6px;
 }
 
-.checkbox{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  min-height:40px;
+.schema-item strong{
+  color:#e9e9f2;
 }
 
-.checkbox input{
-  width:16px;
-  height:16px;
+.schema-item span{
+  color:var(--muted);
 }
 
-.field-help{
-  color:#667180;
-  font-size:9px;
-  margin-top:5px;
-  line-height:1.5;
-}
-
-.json-editor{
-  min-height:130px;
-  font-family:monospace;
-  font-size:11px;
-}
-
-/* ============================================================
+/* =========================================================
    MODAL
-============================================================ */
+========================================================= */
 
 .modal-backdrop{
+  display:none;
   position:fixed;
   inset:0;
-  z-index:9000;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:rgba(0,0,0,.78);
+  z-index:500;
+  padding:30px;
+  background:rgba(0,0,0,.72);
   backdrop-filter:blur(8px);
+  overflow:auto;
 }
 
-.modal-backdrop.show{
+.modal-backdrop.open{
   display:flex;
+  align-items:flex-start;
+  justify-content:center;
 }
 
 .modal{
   width:min(900px,100%);
-  max-height:90vh;
-  display:flex;
-  flex-direction:column;
-  background:#090c11;
-  border:1px solid var(--line2);
-  border-radius:18px;
+  margin:auto;
+  background:#10101a;
+  border:1px solid var(--border);
+  border-radius:20px;
   box-shadow:var(--shadow);
 }
 
-.modal-head{
-  padding:17px 20px;
+.modal-header{
   display:flex;
+  justify-content:space-between;
+  gap:15px;
   align-items:center;
-  gap:10px;
-  border-bottom:1px solid var(--line);
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
 }
 
 .modal-title{
   font-family:Orbitron,sans-serif;
-  font-size:13px;
-  flex:1;
+  font-size:14px;
 }
 
 .modal-body{
   padding:20px;
-  overflow-y:auto;
 }
 
-.modal-foot{
-  padding:14px 20px;
-  border-top:1px solid var(--line);
+.modal-footer{
   display:flex;
   justify-content:flex-end;
   gap:8px;
+  padding:15px 20px;
+  border-top:1px solid var(--border);
 }
 
-/* ============================================================
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.form-field{
+  display:grid;
+  gap:6px;
+}
+
+.form-field.full{
+  grid-column:1/-1;
+}
+
+.form-field label{
+  color:#aaaabd;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  font-weight:800;
+}
+
+.form-field small{
+  color:#66667a;
+  font-size:9px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast-container{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:900;
+  display:grid;
+  gap:8px;
+  width:min(380px,calc(100% - 40px));
+}
+
+.toast{
+  padding:13px 15px;
+  background:#151521;
+  border:1px solid var(--border);
+  border-radius:11px;
+  box-shadow:var(--shadow);
+  font-size:11px;
+  animation:toastIn .2s ease;
+}
+
+.toast.success{
+  border-color:rgba(66,230,155,.35);
+}
+
+.toast.error{
+  border-color:rgba(255,93,115,.35);
+}
+
+.toast.info{
+  border-color:rgba(41,217,255,.35);
+}
+
+@keyframes toastIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+/* =========================================================
    LOADING
-============================================================ */
+========================================================= */
 
 .loading{
-  position:fixed;
-  inset:0;
-  z-index:9998;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(5,6,8,.62);
-  backdrop-filter:blur(3px);
-}
-
-.loading.show{
-  display:flex;
+  padding:35px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
 }
 
 .spinner{
-  width:42px;
-  height:42px;
-  border:3px solid #293241;
-  border-top-color:var(--accent2);
+  width:22px;
+  height:22px;
+  margin:0 auto 10px;
+  border:2px solid #29293a;
+  border-top-color:var(--purple);
   border-radius:50%;
-  animation:spin .8s linear infinite;
+  animation:spin .7s linear infinite;
 }
 
 @keyframes spin{
   to{transform:rotate(360deg)}
 }
 
-/* ============================================================
-   TOAST
-============================================================ */
+/* =========================================================
+   EMPTY
+========================================================= */
 
-.toast-container{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:10000;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  max-width:380px;
+.empty{
+  padding:40px 20px;
+  text-align:center;
+  color:var(--muted);
 }
 
-.toast{
-  background:#10151d;
-  border:1px solid var(--line2);
-  border-radius:10px;
-  box-shadow:var(--shadow);
-  padding:12px 14px;
-  font-size:12px;
-  animation:toastIn .2s ease;
-}
+/* =========================================================
+   SEARCH
+========================================================= */
 
-.toast.success{
-  border-color:rgba(34,197,94,.5);
-}
-
-.toast.error{
-  border-color:rgba(239,68,68,.5);
-}
-
-@keyframes toastIn{
-  from{
-    transform:translateY(8px);
-    opacity:0;
-  }
-  to{
-    transform:translateY(0);
-    opacity:1;
-  }
-}
-
-/* ============================================================
-   HEALTH
-============================================================ */
-
-.health-grid{
+.search-results{
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
+  gap:10px;
 }
 
-.health-card{
-  padding:16px;
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:var(--panel);
+.search-result{
+  padding:14px;
+  background:#0d0d16;
+  border:1px solid var(--border);
+  border-radius:11px;
 }
 
-.health-status{
+.search-result-head{
   display:flex;
   justify-content:space-between;
   gap:10px;
-  align-items:center;
 }
 
-/* ============================================================
-   RESPONSIVE
-============================================================ */
+.search-table{
+  color:var(--purple);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
 
-@media(max-width:1300px){
+.search-preview{
+  margin-top:8px;
+  color:#b8b8c7;
+  font-size:11px;
+  line-height:1.5;
+  white-space:pre-wrap;
+  overflow:hidden;
+  max-height:100px;
+}
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+.activity-list{
+  display:grid;
+  gap:8px;
+}
+
+.activity-item{
+  display:flex;
+  gap:12px;
+  padding:12px;
+  border:1px solid #1f1f2b;
+  border-radius:10px;
+  background:#0c0c14;
+}
+
+.activity-dot{
+  width:8px;
+  height:8px;
+  margin-top:5px;
+  border-radius:50%;
+  background:var(--purple);
+  flex:none;
+}
+
+.activity-main{
+  min-width:0;
+  flex:1;
+}
+
+.activity-title{
+  font-size:11px;
+  font-weight:800;
+}
+
+.activity-meta{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+.mobile-menu{
+  display:none;
+}
+
+@media(max-width:1200px){
   .stats{
-    grid-template-columns:repeat(4,minmax(0,1fr));
-  }
-}
-
-@media(max-width:1050px){
-  .sidebar{
-    transform:translateX(-100%);
-    transition:.22s ease;
+    grid-template-columns:repeat(3,1fr);
   }
 
-  .sidebar.open{
-    transform:translateX(0);
-  }
-
-  .main{
-    margin-left:0;
-  }
-
-  .menu-button{
-    display:inline-flex;
-  }
-
-  .grid{
+  .dashboard-grid{
     grid-template-columns:1fr;
-  }
-
-  .db-layout{
-    grid-template-columns:1fr;
-  }
-
-  .table-list{
-    max-height:300px;
   }
 
   .health-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-columns:repeat(2,1fr);
   }
 }
 
-@media(max-width:700px){
-  .content{
-    padding:16px;
+@media(max-width:800px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
   }
 
-  .topbar{
-    padding:0 14px;
+  .sidebar.open{
+    transform:none;
   }
 
-  .connection{
-    display:none;
+  .main{
+    width:100%;
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:inline-flex;
   }
 
   .stats{
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .health-grid{
+    grid-template-columns:1fr;
+  }
+
+  .quick-grid{
+    grid-template-columns:1fr 1fr;
   }
 
   .form-grid{
     grid-template-columns:1fr;
   }
 
-  .field.full{
-    grid-column:auto;
+  .page{
+    padding:17px;
   }
 
-  .health-grid{
+  .topbar{
+    padding:12px 15px;
+  }
+}
+
+@media(max-width:500px){
+  .stats{
     grid-template-columns:1fr;
   }
 
-  .hero{
-    padding:22px;
+  .quick-grid{
+    grid-template-columns:1fr;
+  }
+
+  .page-header{
+    flex-direction:column;
+  }
+
+  .search{
+    min-width:170px;
+  }
+
+  .login-card{
+    padding:25px;
   }
 }
 </style>
@@ -1062,150 +1067,155 @@ tr:hover td{
 
 <body>
 
-<!-- ============================================================
+<!-- =========================================================
      LOGIN
-============================================================ -->
+========================================================= -->
 
-<div id="loginOverlay" class="login-overlay">
+<section id="loginScreen" class="login-screen">
 
   <div class="login-card">
 
-    <div class="login-logo">
+    <div class="logo">
       CROW<span>RULES</span>
     </div>
 
-    <div class="brand-sub">
-      Entertainment Business Hub
+    <div style="margin-top:4px;color:#77778a;font-size:11px;">
+      ENTERTAINMENT
     </div>
 
-    <p class="login-sub">
-      Secure administrator access to the CrowRules Entertainment
-      Supabase control center.
+    <h1 style="margin-top:28px;">
+      Admin v5.0
+    </h1>
+
+    <p>
+      Command Center access for CrowRules Entertainment.
+      Authenticate with your Supabase admin account.
     </p>
 
-    <form id="loginForm">
+    <form id="loginForm" class="login-form">
 
-      <div class="field">
+      <div class="form-field">
         <label>Email</label>
         <input
           id="loginEmail"
-          class="input"
           type="email"
           autocomplete="username"
           required
-        >
+          placeholder="admin@example.com">
       </div>
 
-      <br>
-
-      <div class="field">
+      <div class="form-field">
         <label>Password</label>
         <input
           id="loginPassword"
-          class="input"
           type="password"
           autocomplete="current-password"
           required
-        >
+          placeholder="••••••••">
       </div>
 
-      <br>
+      <div id="loginStatus" class="login-status"></div>
 
-      <button
-        class="btn btn-primary btn-block"
-        type="submit">
+      <button class="btn primary" type="submit">
         Sign In
       </button>
-
-      <div id="loginError" class="login-error"></div>
 
     </form>
 
   </div>
 
-</div>
+</section>
 
 
-<!-- ============================================================
-     LOADING
-============================================================ -->
-
-<div id="loading" class="loading">
-  <div class="spinner"></div>
-</div>
-
-
-<!-- ============================================================
-     TOASTS
-============================================================ -->
-
-<div id="toastContainer" class="toast-container"></div>
-
-
-<!-- ============================================================
+<!-- =========================================================
      APPLICATION
-============================================================ -->
+========================================================= -->
 
-<div id="app" class="app hidden">
+<div id="app" class="app">
+
+  <!-- SIDEBAR -->
 
   <aside id="sidebar" class="sidebar">
 
-    <div class="brand">
+    <div class="sidebar-header">
 
-      <div class="brand-main">
+      <div class="brand">
         CROW<span>RULES</span>
       </div>
 
-      <div class="brand-sub">
-        Entertainment Hub
+      <div class="admin-label">
+        Entertainment Admin v5.0
       </div>
 
     </div>
 
+    <nav id="nav" class="nav">
 
-    <nav class="nav">
+      <div class="nav-section">Command Center</div>
 
-      <div class="nav-group">
-        Control Room
-      </div>
-
-      <button data-page="dashboard" class="active">
+      <button data-page="dashboard">
         <span class="nav-icon">⌂</span>
         Dashboard
       </button>
 
-      <button data-page="database">
-        <span class="nav-icon">▦</span>
-        All Tables
+      <button data-page="activity">
+        <span class="nav-icon">◉</span>
+        Activity
       </button>
 
+      <button data-page="search">
+        <span class="nav-icon">⌕</span>
+        Global Search
+      </button>
+
+      <button data-page="health">
+        <span class="nav-icon">♥</span>
+        System Health
+      </button>
+
+      <button data-page="database">
+        <span class="nav-icon">▦</span>
+        Database
+      </button>
+
+
+      <div class="nav-section">CrowRules Entertainment</div>
+
       <button data-page="divisions">
-        <span class="nav-icon">◈</span>
+        <span class="nav-icon">◆</span>
         Divisions
       </button>
 
-      <button data-page="shows">
-        <span class="nav-icon">▶</span>
+      <button data-page="productions">
+        <span class="nav-icon">🎬</span>
         Productions
       </button>
 
       <button data-page="episodes">
-        <span class="nav-icon">▣</span>
+        <span class="nav-icon">▶</span>
         Episodes
       </button>
 
+      <button data-page="projects">
+        <span class="nav-icon">◇</span>
+        Projects
+      </button>
 
-      <div class="nav-group">
-        Publishing
-      </div>
+      <button data-page="media">
+        <span class="nav-icon">▣</span>
+        Media
+      </button>
+
+
+      <div class="nav-section">Publishing</div>
 
       <button data-page="news">
-        <span class="nav-icon">N</span>
+        <span class="nav-icon">📰</span>
         News
       </button>
 
       <button data-page="updates">
-        <span class="nav-icon">↻</span>
+        <span class="nav-icon">↗</span>
         Updates
       </button>
 
@@ -1214,48 +1224,8 @@ tr:hover td{
         Announcements
       </button>
 
-
-      <div class="nav-group">
-        Business
-      </div>
-
-      <button data-page="projects">
-        <span class="nav-icon">◆</span>
-        Projects
-      </button>
-
-      <button data-page="partners">
-        <span class="nav-icon">◇</span>
-        Partners
-      </button>
-
-      <button data-page="inquiries">
-        <span class="nav-icon">✉</span>
-        Partnership Inbox
-      </button>
-
-      <button data-page="campaigns">
-        <span class="nav-icon">$</span>
-        Campaigns
-      </button>
-
-      <button data-page="donations">
-        <span class="nav-icon">♥</span>
-        Donations
-      </button>
-
-
-      <div class="nav-group">
-        System
-      </div>
-
-      <button data-page="subscribers">
-        <span class="nav-icon">◎</span>
-        Subscribers
-      </button>
-
       <button data-page="events">
-        <span class="nav-icon">◷</span>
+        <span class="nav-icon">★</span>
         Events
       </button>
 
@@ -1264,49 +1234,93 @@ tr:hover td{
         Schedule
       </button>
 
+
+      <div class="nav-section">Networks</div>
+
+      <button data-page="tv">
+        <span class="nav-icon">▣</span>
+        CrowRules TV
+      </button>
+
+      <button data-page="tacoma">
+        <span class="nav-icon">🌲</span>
+        Tacoma Nights
+      </button>
+
+      <button data-page="podcasting">
+        <span class="nav-icon">🎙</span>
+        Podcasting
+      </button>
+
+      <button data-page="sports">
+        <span class="nav-icon">🏆</span>
+        Sports
+      </button>
+
+
+      <div class="nav-section">Business</div>
+
+      <button data-page="partners">
+        <span class="nav-icon">🤝</span>
+        Partners
+      </button>
+
+      <button data-page="inquiries">
+        <span class="nav-icon">✉</span>
+        Partnership Inquiries
+      </button>
+
+      <button data-page="donation_campaigns">
+        <span class="nav-icon">♥</span>
+        Donation Campaigns
+      </button>
+
+      <button data-page="donations">
+        <span class="nav-icon">$</span>
+        Donations
+      </button>
+
+      <button data-page="subscribers">
+        <span class="nav-icon">♟</span>
+        Subscribers
+      </button>
+
+
+      <div class="nav-section">Planning</div>
+
       <button data-page="roadmap">
-        <span class="nav-icon">→</span>
+        <span class="nav-icon">➜</span>
         Roadmap
       </button>
 
-      <button data-page="media">
-        <span class="nav-icon">▧</span>
-        Media
-      </button>
+
+      <div class="nav-section">Administration</div>
 
       <button data-page="admins">
         <span class="nav-icon">♙</span>
-        Administrators
+        Admins
       </button>
 
       <button data-page="audit">
         <span class="nav-icon">⌁</span>
-        Audit
-      </button>
-
-      <button data-page="health">
-        <span class="nav-icon">♥</span>
-        Health
+        Audit Log
       </button>
 
     </nav>
 
+    <div class="sidebar-footer">
 
-    <div class="user-box">
+      <div class="user-box">
+        <div style="font-size:9px;color:#66667a;text-transform:uppercase;">
+          Signed in
+        </div>
 
-      <div id="currentUser" class="user-name">
-        —
+        <div id="userEmail" class="user-email">
+          —
+        </div>
       </div>
 
-      <div class="user-role">
-        AUTHENTICATED ADMIN
-      </div>
-
-      <br>
-
-      <button
-        id="logoutBtn"
-        class="btn btn-small btn-danger btn-block">
+      <button id="logoutBtn" class="btn red" style="width:100%;">
         Sign Out
       </button>
 
@@ -1315,30 +1329,37 @@ tr:hover td{
   </aside>
 
 
+  <!-- MAIN -->
+
   <main class="main">
 
     <header class="topbar">
 
-      <button
-        id="mobileMenu"
-        class="btn btn-small menu-button">
-        ☰
-      </button>
+      <div style="display:flex;align-items:center;gap:10px;">
 
-      <div id="pageTitle" class="page-title">
-        Dashboard
+        <button
+          id="mobileMenu"
+          class="btn mobile-menu small">
+          ☰
+        </button>
+
+        <div id="topbarTitle" class="topbar-title">
+          Command Center
+        </div>
+
       </div>
 
-      <div class="top-actions">
+      <div class="topbar-right">
 
-        <div class="connection">
-          <span id="statusDot" class="status-dot"></span>
-          <span id="connectionText">Connecting</span>
-        </div>
+        <span
+          id="realtimeBadge"
+          class="badge cyan">
+          REALTIME READY
+        </span>
 
         <button
           id="refreshBtn"
-          class="btn btn-small">
+          class="btn small">
           ↻ Refresh
         </button>
 
@@ -1347,555 +1368,8 @@ tr:hover td{
     </header>
 
 
-    <section class="content">
-
-
-<!-- ============================================================
-     DASHBOARD
-============================================================ -->
-
-<div id="page-dashboard" class="page active">
-
-  <div class="hero">
-
-    <h1>
-      Business Hub<br>
-      Control Room
-    </h1>
-
-    <p>
-      Complete administrative control over the CrowRules Entertainment
-      Supabase database — content, productions, episodes, business
-      operations, donations, partners, subscribers, schedules and more.
-    </p>
-
-    <div class="hero-actions">
-
-      <button
-        class="btn btn-primary"
-        onclick="openQuickAdd()">
-        + Add Record
-      </button>
-
-      <button
-        class="btn btn-cyan"
-        onclick="go('database')">
-        Open Database
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <div class="stats">
-
-    <div class="stat">
-      <div class="stat-label">Tables</div>
-      <div id="metricTables" class="stat-value">—</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Records</div>
-      <div id="metricRecords" class="stat-value">—</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Divisions</div>
-      <div id="metricDivisions" class="stat-value">—</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Productions</div>
-      <div id="metricShows" class="stat-value">—</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Episodes</div>
-      <div id="metricEpisodes" class="stat-value">—</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Published News</div>
-      <div id="metricNews" class="stat-value">—</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Live Shows</div>
-      <div id="metricLive" class="stat-value">—</div>
-    </div>
-
-  </div>
-
-
-  <div class="grid">
-
-    <div class="card">
-
-      <div class="card-head">
-
-        <div class="card-title">
-          DATABASE OVERVIEW
-        </div>
-
-        <button
-          class="btn btn-small"
-          onclick="go('database')">
-          Manage
-        </button>
-
-      </div>
-
-      <div id="dashboardTables" class="card-body">
-        Loading...
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="card-head">
-
-        <div class="card-title">
-          DONATION OVERVIEW
-        </div>
-
-        <button
-          class="btn btn-small"
-          onclick="go('donations')">
-          Open
-        </button>
-
-      </div>
-
-      <div class="card-body">
-
-        <div class="stats" style="grid-template-columns:repeat(2,1fr);margin:0">
-
-          <div class="stat">
-            <div class="stat-label">Donations</div>
-            <div id="dashboardDonationCount" class="stat-value">
-              —
-            </div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">Total</div>
-            <div id="dashboardDonationTotal" class="stat-value">
-              —
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="card-head">
-
-        <div class="card-title">
-          PRODUCTIONS
-        </div>
-
-        <button
-          class="btn btn-small"
-          onclick="go('shows')">
-          Manage
-        </button>
-
-      </div>
-
-      <div id="dashboardShows" class="card-body">
-        Loading...
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="card-head">
-
-        <div class="card-title">
-          RECENT EPISODES
-        </div>
-
-        <button
-          class="btn btn-small"
-          onclick="go('episodes')">
-          Manage
-        </button>
-
-      </div>
-
-      <div id="dashboardEpisodes" class="card-body">
-        Loading...
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ============================================================
-     DATABASE
-============================================================ -->
-
-<div id="page-database" class="page">
-
-  <div class="hero">
-
-    <h1>Supabase Database</h1>
-
-    <p>
-      Every exposed CrowRules public table is available from this
-      control center. Select a table to browse records, search,
-      sort, add, edit or delete data.
-    </p>
-
-  </div>
-
-
-  <div class="db-layout">
-
-    <div class="table-list">
-
-      <div class="table-list-head">
-
-        <input
-          id="tableSearch"
-          class="search"
-          placeholder="Search tables..."
-          oninput="renderTableList()"
-        >
-
-      </div>
-
-      <div id="tableList"></div>
-
-    </div>
-
-
-    <div class="db-main">
-
-      <div class="card">
-
-        <div class="card-head">
-
-          <div>
-
-            <div
-              id="dbTableTitle"
-              class="card-title">
-              Select a table
-            </div>
-
-            <div
-              id="dbTableDescription"
-              class="schema-note">
-              Choose a table from the database list.
-            </div>
-
-          </div>
-
-          <div class="actions">
-
-            <button
-              id="dbRefresh"
-              class="btn btn-small">
-              ↻
-            </button>
-
-            <button
-              id="dbAdd"
-              class="btn btn-small btn-primary"
-              disabled>
-              + Add
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div class="card-body">
-
-          <div class="toolbar">
-
-            <input
-              id="recordSearch"
-              class="search"
-              placeholder="Search records..."
-              oninput="filterDatabaseRows()"
-            >
-
-            <select
-              id="sortColumn"
-              class="select"
-              style="width:auto;min-width:170px"
-              onchange="renderDatabaseTable()">
-            </select>
-
-            <select
-              id="sortDirection"
-              class="select"
-              style="width:auto"
-              onchange="renderDatabaseTable()">
-
-              <option value="asc">Ascending</option>
-              <option value="desc" selected>Descending</option>
-
-            </select>
-
-          </div>
-
-
-          <div class="table-wrap">
-
-            <table>
-
-              <thead id="dbHead"></thead>
-
-              <tbody id="dbBody">
-
-                <tr>
-                  <td>
-                    <div class="empty">
-                      Select a table.
-                    </div>
-                  </td>
-                </tr>
-
-              </tbody>
-
-            </table>
-
-          </div>
-
-
-          <div class="pagination">
-
-            <div id="paginationInfo">
-              —
-            </div>
-
-            <div class="pagination-actions">
-
-              <button
-                id="prevPage"
-                class="btn btn-small">
-                ←
-              </button>
-
-              <button
-                id="nextPage"
-                class="btn btn-small">
-                →
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ============================================================
-     SPECIALIZED PAGES
-============================================================ -->
-
-<div id="page-divisions" class="page">
-  <div class="hero">
-    <h1>Divisions</h1>
-    <p>Manage CrowRules Entertainment business divisions.</p>
-  </div>
-  <div id="special-divisions"></div>
-</div>
-
-
-<div id="page-shows" class="page">
-  <div class="hero">
-    <h1>Original Productions</h1>
-    <p>Manage CrowRules original shows and live productions.</p>
-  </div>
-  <div id="special-shows"></div>
-</div>
-
-
-<div id="page-episodes" class="page">
-  <div class="hero">
-    <h1>Episodes</h1>
-    <p>Manage production episodes and video metadata.</p>
-  </div>
-  <div id="special-episodes"></div>
-</div>
-
-
-<div id="page-news" class="page">
-  <div class="hero">
-    <h1>News</h1>
-    <p>Manage CrowRules news publishing records.</p>
-  </div>
-  <div id="special-news"></div>
-</div>
-
-
-<div id="page-updates" class="page">
-  <div class="hero">
-    <h1>Updates</h1>
-    <p>Manage company and project updates.</p>
-  </div>
-  <div id="special-updates"></div>
-</div>
-
-
-<div id="page-announcements" class="page">
-  <div class="hero">
-    <h1>Announcements</h1>
-    <p>Manage public announcements and alerts.</p>
-  </div>
-  <div id="special-announcements"></div>
-</div>
-
-
-<div id="page-projects" class="page">
-  <div class="hero">
-    <h1>Projects</h1>
-    <p>Manage CrowRules projects.</p>
-  </div>
-  <div id="special-projects"></div>
-</div>
-
-
-<div id="page-partners" class="page">
-  <div class="hero">
-    <h1>Partners</h1>
-    <p>Manage partnership records and prospect tracking.</p>
-  </div>
-  <div id="special-partners"></div>
-</div>
-
-
-<div id="page-inquiries" class="page">
-  <div class="hero">
-    <h1>Partnership Inbox</h1>
-    <p>Manage incoming partnership and sponsorship inquiries.</p>
-  </div>
-  <div id="special-inquiries"></div>
-</div>
-
-
-<div id="page-campaigns" class="page">
-  <div class="hero">
-    <h1>Donation Campaigns</h1>
-    <p>Manage donation campaigns and PayPal configuration.</p>
-  </div>
-  <div id="special-campaigns"></div>
-</div>
-
-
-<div id="page-donations" class="page">
-  <div class="hero">
-    <h1>Donations</h1>
-    <p>
-      Donation records, transaction activity and aggregate statistics.
-    </p>
-  </div>
-  <div id="special-donations"></div>
-</div>
-
-
-<div id="page-subscribers" class="page">
-  <div class="hero">
-    <h1>Subscribers</h1>
-    <p>Manage newsletter subscriber records.</p>
-  </div>
-  <div id="special-subscribers"></div>
-</div>
-
-
-<div id="page-events" class="page">
-  <div class="hero">
-    <h1>Events</h1>
-    <p>Manage CrowRules events.</p>
-  </div>
-  <div id="special-events"></div>
-</div>
-
-
-<div id="page-schedule" class="page">
-  <div class="hero">
-    <h1>Schedule</h1>
-    <p>Manage CrowRules programming schedule records.</p>
-  </div>
-  <div id="special-schedule"></div>
-</div>
-
-
-<div id="page-roadmap" class="page">
-  <div class="hero">
-    <h1>Roadmap</h1>
-    <p>Manage CrowRules strategic roadmap entries.</p>
-  </div>
-  <div id="special-roadmap"></div>
-</div>
-
-
-<div id="page-media" class="page">
-  <div class="hero">
-    <h1>Media</h1>
-    <p>Manage media library metadata.</p>
-  </div>
-  <div id="special-media"></div>
-</div>
-
-
-<div id="page-admins" class="page">
-  <div class="hero">
-    <h1>Administrators</h1>
-    <p>
-      Manage records in <code>cr_admins</code>.
-      Supabase Auth users themselves are managed by Supabase Auth,
-      not by browser-side table CRUD.
-    </p>
-  </div>
-  <div id="special-admins"></div>
-</div>
-
-
-<div id="page-audit" class="page">
-  <div class="hero">
-    <h1>Audit</h1>
-    <p>Administrative audit history.</p>
-  </div>
-  <div id="special-audit"></div>
-</div>
-
-
-<div id="page-health" class="page">
-  <div class="hero">
-    <h1>System Health</h1>
-    <p>Live Supabase connectivity and table diagnostics.</p>
-  </div>
-  <div id="healthGrid" class="health-grid"></div>
-</div>
-
-
+    <section id="page" class="page">
+      <!-- PAGE CONTENT -->
     </section>
 
   </main>
@@ -1903,41 +1377,42 @@ tr:hover td{
 </div>
 
 
-<!-- ============================================================
+<!-- =========================================================
      MODAL
-============================================================ -->
+========================================================= -->
 
 <div id="modalBackdrop" class="modal-backdrop">
 
   <div class="modal">
 
-    <div class="modal-head">
+    <div class="modal-header">
 
       <div id="modalTitle" class="modal-title">
         Record
       </div>
 
       <button
-        class="btn btn-small"
-        onclick="closeModal()">
-        ×
+        id="modalClose"
+        class="btn small">
+        ✕
       </button>
 
     </div>
 
-    <div id="modalBody" class="modal-body"></div>
+    <div id="modalBody" class="modal-body">
+    </div>
 
-    <div class="modal-foot">
+    <div id="modalFooter" class="modal-footer">
 
       <button
-        class="btn"
-        onclick="closeModal()">
+        id="modalCancel"
+        class="btn">
         Cancel
       </button>
 
       <button
         id="modalSave"
-        class="btn btn-primary">
+        class="btn primary">
         Save
       </button>
 
@@ -1948,11 +1423,18 @@ tr:hover td{
 </div>
 
 
+<!-- =========================================================
+     TOASTS
+========================================================= -->
+
+<div id="toastContainer" class="toast-container"></div>
+
+
 <script>
-/* ============================================================
+/* =========================================================
    CROWRULES ENTERTAINMENT
-   BUSINESS HUB ADMIN v4.0
-============================================================ */
+   ADMIN v5.0
+========================================================= */
 
 const SUPABASE_URL =
   'https://zauxdqyssratvzmomozf.supabase.co';
@@ -1960,7 +1442,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   'sb_publishable_-Z6wecSOxwOk6IBut2zLnw_8DfRxnE9';
 
-const supabaseClient =
+const sb =
   window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY,
@@ -1974,914 +1456,476 @@ const supabaseClient =
   );
 
 
-/* ============================================================
+/* =========================================================
    TABLE DEFINITIONS
-============================================================ */
+========================================================= */
 
 const TABLES = {
 
   cr_activity_feed:{
     label:'Activity Feed',
-    pk:'id',
-    icon:'◉',
-    columns:[
-      ['id','uuid'],
-      ['event_type','text'],
-      ['title','text'],
-      ['description','text'],
-      ['division','text'],
-      ['project','text'],
-      ['metadata','jsonb'],
-      ['created_at','timestamptz']
-    ]
+    icon:'◉'
   },
 
   cr_admin_audit_log:{
     label:'Admin Audit Log',
-    pk:'id',
-    icon:'⌁',
-    columns:[
-      ['id','uuid'],
-      ['user_id','uuid'],
-      ['action','text'],
-      ['target_table','text'],
-      ['target_id','uuid'],
-      ['metadata','jsonb'],
-      ['created_at','timestamptz']
-    ]
+    icon:'⌁'
   },
 
   cr_admins:{
     label:'Administrators',
-    pk:'user_id',
-    icon:'♙',
-    columns:[
-      ['user_id','uuid'],
-      ['display_name','text'],
-      ['created_at','timestamptz']
-    ]
+    icon:'♙'
   },
 
   cr_analytics_events:{
     label:'Analytics Events',
-    pk:'id',
-    icon:'◌',
-    columns:[
-      ['id','bigint'],
-      ['event_name','text'],
-      ['page_path','text'],
-      ['element_id','text'],
-      ['session_id','text'],
-      ['referrer','text'],
-      ['metadata','jsonb'],
-      ['created_at','timestamptz']
-    ]
+    icon:'◌'
   },
 
   cr_announcements:{
     label:'Announcements',
-    pk:'id',
-    icon:'!',
-    columns:[
-      ['id','uuid'],
-      ['title','text'],
-      ['message','text'],
-      ['severity','text'],
-      ['active','boolean'],
-      ['starts_at','timestamptz'],
-      ['expires_at','timestamptz'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'!'
   },
 
   cr_audit_log:{
     label:'Audit Log',
-    pk:'id',
-    icon:'⌁',
-    columns:[
-      ['id','bigint'],
-      ['user_id','uuid'],
-      ['action','text'],
-      ['table_name','text'],
-      ['record_id','text'],
-      ['metadata','jsonb'],
-      ['created_at','timestamptz']
-    ]
+    icon:'⌁'
   },
 
   cr_business_hub_modules:{
     label:'Business Hub Modules',
-    pk:'id',
-    icon:'▦',
-    columns:[
-      ['id','uuid'],
-      ['name','text'],
-      ['slug','text'],
-      ['description','text'],
-      ['icon','text'],
-      ['route','text'],
-      ['module_group','text'],
-      ['status','text'],
-      ['sort_order','integer'],
-      ['is_published','boolean'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'◆'
   },
 
   cr_business_hub_tasks:{
     label:'Business Hub Tasks',
-    pk:'id',
-    icon:'☑',
-    columns:[
-      ['id','uuid'],
-      ['module_id','uuid'],
-      ['title','text'],
-      ['description','text'],
-      ['status','text'],
-      ['priority','text'],
-      ['due_date','date'],
-      ['assigned_to','uuid'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'✓'
   },
 
   cr_comments:{
     label:'Comments',
-    pk:'id',
-    icon:'C',
-    columns:[
-      ['id','uuid'],
-      ['content_id','uuid'],
-      ['production_id','uuid'],
-      ['author_id','uuid'],
-      ['author_name','text'],
-      ['author_email','text'],
-      ['body','text'],
-      ['status','text'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'☵'
   },
 
   cr_contacts:{
     label:'Contacts',
-    pk:'id',
-    icon:'✉',
-    columns:[
-      ['id','uuid'],
-      ['name','text'],
-      ['email','text'],
-      ['subject','text'],
-      ['message','text'],
-      ['source','text'],
-      ['status','text'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'✉'
   },
 
   cr_content:{
     label:'Content',
-    pk:'id',
-    icon:'C',
-    columns:[
-      ['id','uuid'],
-      ['title','text'],
-      ['slug','text'],
-      ['content_type','text'],
-      ['excerpt','text'],
-      ['body','text'],
-      ['featured_image_url','text'],
-      ['status','text'],
-      ['author_id','uuid'],
-      ['published_at','timestamptz'],
-      ['sort_order','integer'],
-      ['metadata','jsonb'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'▤'
   },
 
   cr_divisions:{
     label:'Divisions',
-    pk:'id',
-    icon:'◈',
-    columns:[
-      ['id','uuid'],
-      ['name','text'],
-      ['slug','text'],
-      ['short_code','text'],
-      ['description','text'],
-      ['status','text'],
-      ['target_year','integer'],
-      ['sort_order','integer'],
-      ['icon','text'],
-      ['website_url','text'],
-      ['is_published','boolean'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'◆'
   },
 
   cr_donation_campaigns:{
     label:'Donation Campaigns',
-    pk:'id',
-    icon:'$',
-    columns:[
-      ['id','uuid'],
-      ['name','text'],
-      ['slug','text'],
-      ['description','text'],
-      ['goal_amount','numeric'],
-      ['currency','text'],
-      ['active','boolean'],
-      ['featured','boolean'],
-      ['starts_at','timestamptz'],
-      ['ends_at','timestamptz'],
-      ['paypal_item_number','text'],
-      ['paypal_item_name','text'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'♥'
   },
 
   cr_donation_events:{
     label:'Donation Events',
-    pk:'id',
-    icon:'♥',
-    columns:[
-      ['id','uuid'],
-      ['paypal_transaction_id','text'],
-      ['paypal_status','text'],
-      ['amount','numeric'],
-      ['currency','text'],
-      ['campaign_id','uuid'],
-      ['campaign_slug','text'],
-      ['item_name','text'],
-      ['donor_display_name','text'],
-      ['donor_email','text'],
-      ['message','text'],
-      ['raw_payload','jsonb'],
-      ['occurred_at','timestamptz'],
-      ['created_at','timestamptz']
-    ]
+    icon:'$'
   },
 
   cr_donation_settings:{
     label:'Donation Settings',
-    pk:'id',
-    icon:'⚙',
-    columns:[
-      ['id','uuid'],
-      ['site_name','text'],
-      ['paypal_environment','text'],
-      ['paypal_hosted_button_id','text'],
-      ['paypal_business','text'],
-      ['default_currency','text'],
-      ['donations_enabled','boolean'],
-      ['recurring_enabled','boolean'],
-      ['suggested_amounts','jsonb'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'⚙'
   },
 
   cr_donation_stats:{
-    label:'Donation Statistics',
-    pk:'id',
-    icon:'$',
-    columns:[
-      ['id','uuid'],
-      ['campaign_id','uuid'],
-      ['currency','text'],
-      ['donation_count','bigint'],
-      ['total_amount','numeric'],
-      ['updated_at','timestamptz']
-    ]
+    label:'Donation Stats',
+    icon:'$'
   },
 
   cr_episodes:{
     label:'Episodes',
-    pk:'id',
-    icon:'▣',
-    columns:[
-      ['id','uuid'],
-      ['production_id','uuid'],
-      ['season_number','integer'],
-      ['episode_number','integer'],
-      ['title','text'],
-      ['slug','text'],
-      ['description','text'],
-      ['status','text'],
-      ['release_date','date'],
-      ['runtime_minutes','integer'],
-      ['video_url','text'],
-      ['thumbnail_url','text'],
-      ['is_published','boolean'],
-      ['metadata','jsonb'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'▶'
   },
 
   cr_events:{
     label:'Events',
-    pk:'id',
-    icon:'◷',
-    columns:[
-      ['id','uuid'],
-      ['name','text'],
-      ['slug','text'],
-      ['description','text'],
-      ['event_type','text'],
-      ['start_at','timestamptz'],
-      ['end_at','timestamptz'],
-      ['location_name','text'],
-      ['location_url','text'],
-      ['stream_url','text'],
-      ['status','text'],
-      ['is_published','boolean'],
-      ['metadata','jsonb'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'★'
   },
 
   cr_media:{
     label:'Media',
-    pk:'id',
-    icon:'▧',
-    columns:[
-      ['id','uuid'],
-      ['title','text'],
-      ['media_type','text'],
-      ['bucket_name','text'],
-      ['storage_path','text'],
-      ['public_url','text'],
-      ['alt_text','text'],
-      ['mime_type','text'],
-      ['file_size','bigint'],
-      ['project_id','uuid'],
-      ['production_id','uuid'],
-      ['status','text'],
-      ['metadata','jsonb'],
-      ['created_by','uuid'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'▣'
   },
 
   cr_nav_links:{
     label:'Navigation Links',
-    pk:'id',
-    icon:'↗',
-    columns:[
-      ['id','uuid'],
-      ['label','text'],
-      ['href','text'],
-      ['section','text'],
-      ['sort_order','integer'],
-      ['is_external','boolean'],
-      ['is_published','boolean'],
-      ['created_at','timestamptz']
-    ]
+    icon:'☰'
   },
 
   cr_news:{
     label:'News',
-    pk:'id',
-    icon:'N',
-    columns:[
-      ['id','uuid'],
-      ['title','text'],
-      ['slug','text'],
-      ['excerpt','text'],
-      ['content','text'],
-      ['category','text'],
-      ['division','text'],
-      ['project','text'],
-      ['image_url','text'],
-      ['source_url','text'],
-      ['source_name','text'],
-      ['author','text'],
-      ['status','text'],
-      ['featured','boolean'],
-      ['published_at','timestamptz'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'📰'
   },
 
   cr_news_sources:{
     label:'News Sources',
-    pk:'id',
-    icon:'S',
-    columns:[
-      ['id','uuid'],
-      ['name','text'],
-      ['url','text'],
-      ['source_type','text'],
-      ['active','boolean'],
-      ['created_at','timestamptz']
-    ]
+    icon:'◎'
   },
 
   cr_notifications:{
     label:'Notifications',
-    pk:'id',
-    icon:'!',
-    columns:[
-      ['id','uuid'],
-      ['user_id','uuid'],
-      ['title','text'],
-      ['message','text'],
-      ['notification_type','text'],
-      ['is_read','boolean'],
-      ['link_url','text'],
-      ['metadata','jsonb'],
-      ['created_at','timestamptz']
-    ]
+    icon:'🔔'
   },
 
   cr_original_productions:{
     label:'Original Productions',
-    pk:'id',
-    icon:'▶',
-    columns:[
-      ['id','uuid'],
-      ['project_id','uuid'],
-      ['title','text'],
-      ['slug','text'],
-      ['description','text'],
-      ['format','text'],
-      ['schedule_text','text'],
-      ['day_of_week','smallint'],
-      ['start_time','time'],
-      ['timezone','text'],
-      ['is_live','boolean'],
-      ['status','text'],
-      ['premiere_date','date'],
-      ['sort_order','integer'],
-      ['is_published','boolean'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'🎬'
   },
 
   cr_partners:{
     label:'Partners',
-    pk:'id',
-    icon:'◇',
-    columns:[
-      ['id','uuid'],
-      ['organization_name','text'],
-      ['partner_type','text'],
-      ['website_url','text'],
-      ['contact_name','text'],
-      ['contact_email','text'],
-      ['contact_phone','text'],
-      ['description','text'],
-      ['priority_score','integer'],
-      ['pitch_notes','text'],
-      ['tracking_status','text'],
-      ['next_action','text'],
-      ['next_action_date','date'],
-      ['is_active','boolean'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'🤝'
   },
 
   cr_partnership_inquiries:{
     label:'Partnership Inquiries',
-    pk:'id',
-    icon:'✉',
-    columns:[
-      ['id','uuid'],
-      ['organization_name','text'],
-      ['contact_name','text'],
-      ['email','text'],
-      ['phone','text'],
-      ['partnership_type','text'],
-      ['message','text'],
-      ['source','text'],
-      ['status','text'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz'],
-      ['website_url','text'],
-      ['budget_range','text'],
-      ['project_interest','text'],
-      ['preferred_contact','text'],
-      ['priority','text'],
-      ['admin_notes','text']
-    ]
+    icon:'✉'
   },
 
   cr_production_features:{
     label:'Production Features',
-    pk:'id',
-    icon:'★',
-    columns:[
-      ['id','uuid'],
-      ['production_id','uuid'],
-      ['feature_name','text'],
-      ['description','text'],
-      ['sort_order','integer'],
-      ['created_at','timestamptz']
-    ]
+    icon:'⚙'
   },
 
   cr_profiles:{
     label:'Profiles',
-    pk:'id',
-    icon:'♙',
-    columns:[
-      ['id','uuid'],
-      ['display_name','text'],
-      ['username','text'],
-      ['avatar_url','text'],
-      ['bio','text'],
-      ['role','text'],
-      ['is_active','boolean'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'♟'
   },
 
   cr_projects:{
     label:'Projects',
-    pk:'id',
-    icon:'◆',
-    columns:[
-      ['id','uuid'],
-      ['division_id','uuid'],
-      ['name','text'],
-      ['slug','text'],
-      ['description','text'],
-      ['status','text'],
-      ['target_year','integer'],
-      ['launch_date','date'],
-      ['project_type','text'],
-      ['sort_order','integer'],
-      ['is_featured','boolean'],
-      ['is_published','boolean'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz'],
-      ['page_url','text'],
-      ['schedule_text','text'],
-      ['metadata','jsonb']
-    ]
+    icon:'◇'
   },
 
   cr_public_donation_stats:{
     label:'Public Donation Stats',
-    pk:null,
     icon:'$',
-    view:true,
-    columns:[
-      ['campaign_id','uuid'],
-      ['currency','text'],
-      ['donation_count','bigint'],
-      ['total_amount','numeric']
-    ]
+    readonly:true
   },
 
   cr_roadmap:{
     label:'Roadmap',
-    pk:'id',
-    icon:'→',
-    columns:[
-      ['id','uuid'],
-      ['year','integer'],
-      ['title','text'],
-      ['description','text'],
-      ['status','text'],
-      ['sort_order','integer'],
-      ['is_published','boolean'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'➜'
   },
 
   cr_schedule:{
     label:'Schedule',
-    pk:'id',
-    icon:'▤',
-    columns:[
-      ['id','uuid'],
-      ['title','text'],
-      ['description','text'],
-      ['content_type','text'],
-      ['project_id','uuid'],
-      ['production_id','uuid'],
-      ['start_at','timestamptz'],
-      ['end_at','timestamptz'],
-      ['timezone','text'],
-      ['status','text'],
-      ['stream_url','text'],
-      ['thumbnail_url','text'],
-      ['is_live','boolean'],
-      ['is_published','boolean'],
-      ['metadata','jsonb'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'▤'
   },
 
   cr_site_settings:{
     label:'Site Settings',
-    pk:'id',
-    icon:'⚙',
-    columns:[
-      ['id','uuid'],
-      ['setting_key','text'],
-      ['setting_value','jsonb'],
-      ['is_public','boolean'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'⚙'
   },
 
   cr_social_links:{
     label:'Social Links',
-    pk:'id',
-    icon:'◎',
-    columns:[
-      ['id','uuid'],
-      ['platform','text'],
-      ['label','text'],
-      ['url','text'],
-      ['icon','text'],
-      ['sort_order','integer'],
-      ['is_published','boolean'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'●'
   },
 
   cr_subscribers:{
     label:'Subscribers',
-    pk:'id',
-    icon:'◎',
-    columns:[
-      ['id','uuid'],
-      ['email','text'],
-      ['name','text'],
-      ['status','text'],
-      ['source','text'],
-      ['preferences','jsonb'],
-      ['subscribed_at','timestamptz'],
-      ['unsubscribed_at','timestamptz'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'♟'
   },
 
   cr_updates:{
     label:'Updates',
-    pk:'id',
-    icon:'↻',
-    columns:[
-      ['id','uuid'],
-      ['title','text'],
-      ['description','text'],
-      ['update_type','text'],
-      ['division','text'],
-      ['project','text'],
-      ['status','text'],
-      ['priority','text'],
-      ['link_url','text'],
-      ['published','boolean'],
-      ['published_at','timestamptz'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'↗'
   },
 
   donations:{
     label:'Donations',
-    pk:'id',
-    icon:'♥',
-    columns:[
-      ['id','uuid'],
-      ['transaction_id','text'],
-      ['order_id','text'],
-      ['status','text'],
-      ['amount','numeric'],
-      ['currency','text'],
-      ['campaign_id','uuid'],
-      ['campaign_slug','text'],
-      ['item_name','text'],
-      ['donor_display_name','text'],
-      ['donor_email','text'],
-      ['message','text'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz']
-    ]
+    icon:'$'
   },
 
   tacoma_nights_episodes:{
     label:'Tacoma Nights Episodes',
-    pk:'id',
-    icon:'TN',
-    columns:[
-      ['id','uuid'],
-      ['episode_number','integer'],
-      ['title','text'],
-      ['description','text'],
-      ['season','text'],
-      ['season_theme','text'],
-      ['status','text'],
-      ['youtube_url','text'],
-      ['duration','text'],
-      ['thumbnail_url','text'],
-      ['published_at','timestamptz'],
-      ['is_featured','boolean'],
-      ['display_order','integer'],
-      ['created_at','timestamptz'],
-      ['updated_at','timestamptz'],
-      ['youtube_video_id','text'],
-      ['duration_seconds','integer'],
-      ['metadata','jsonb']
-    ]
+    icon:'🌲'
   }
 
 };
 
 
-/* ============================================================
+/* =========================================================
+   SPECIAL PAGE CONFIG
+========================================================= */
+
+const PAGES = {
+
+  dashboard:{
+    title:'Command Center',
+    subtitle:'CrowRules Entertainment operational overview.'
+  },
+
+  activity:{
+    title:'Activity',
+    subtitle:'Recent administrative activity and system events.'
+  },
+
+  search:{
+    title:'Global Search',
+    subtitle:'Search across the CrowRules administration database.'
+  },
+
+  health:{
+    title:'System Health',
+    subtitle:'Database connectivity and operational diagnostics.'
+  },
+
+  database:{
+    title:'Database',
+    subtitle:'Browse and manage connected Supabase tables.'
+  },
+
+  divisions:{
+    title:'Divisions',
+    subtitle:'CrowRules Entertainment business divisions.',
+    table:'cr_divisions'
+  },
+
+  productions:{
+    title:'Productions',
+    subtitle:'Original shows and productions.',
+    table:'cr_original_productions'
+  },
+
+  episodes:{
+    title:'Episodes',
+    subtitle:'Production episode management.',
+    table:'cr_episodes'
+  },
+
+  projects:{
+    title:'Projects',
+    subtitle:'Current and future CrowRules projects.',
+    table:'cr_projects'
+  },
+
+  media:{
+    title:'Media',
+    subtitle:'Images, video, audio and other media records.',
+    table:'cr_media'
+  },
+
+  news:{
+    title:'News',
+    subtitle:'CrowRules news publishing.',
+    table:'cr_news'
+  },
+
+  updates:{
+    title:'Updates',
+    subtitle:'CrowRules announcements and company updates.',
+    table:'cr_updates'
+  },
+
+  announcements:{
+    title:'Announcements',
+    subtitle:'Site and network announcements.',
+    table:'cr_announcements'
+  },
+
+  events:{
+    title:'Events',
+    subtitle:'Live events and special programming.',
+    table:'cr_events'
+  },
+
+  schedule:{
+    title:'Schedule',
+    subtitle:'Programming and broadcast schedule.',
+    table:'cr_schedule'
+  },
+
+  tv:{
+    title:'CrowRules TV',
+    subtitle:'Television network administration.',
+    table:'cr_original_productions'
+  },
+
+  tacoma:{
+    title:'Tacoma Nights',
+    subtitle:'Tacoma Nights episode administration.',
+    table:'tacoma_nights_episodes'
+  },
+
+  podcasting:{
+    title:'CrowRules Podcasting',
+    subtitle:'Podcasting-ready production administration.',
+    table:'cr_original_productions'
+  },
+
+  sports:{
+    title:'CrowRules Sports',
+    subtitle:'Sports-ready content and production administration.',
+    table:'cr_original_productions'
+  },
+
+  partners:{
+    title:'Partners',
+    subtitle:'Business partners and relationships.',
+    table:'cr_partners'
+  },
+
+  inquiries:{
+    title:'Partnership Inquiries',
+    subtitle:'Incoming business and partnership inquiries.',
+    table:'cr_partnership_inquiries'
+  },
+
+  donation_campaigns:{
+    title:'Donation Campaigns',
+    subtitle:'Support campaigns and fundraising configuration.',
+    table:'cr_donation_campaigns'
+  },
+
+  donations:{
+    title:'Donations',
+    subtitle:'Donation transaction records.',
+    table:'donations'
+  },
+
+  subscribers:{
+    title:'Subscribers',
+    subtitle:'CrowRules audience and subscriber records.',
+    table:'cr_subscribers'
+  },
+
+  roadmap:{
+    title:'Roadmap',
+    subtitle:'Product, network and company roadmap.',
+    table:'cr_roadmap'
+  },
+
+  admins:{
+    title:'Administrators',
+    subtitle:'Authorized CrowRules administration accounts.',
+    table:'cr_admins'
+  },
+
+  audit:{
+    title:'Audit Log',
+    subtitle:'Administrative change history.',
+    table:'cr_admin_audit_log'
+  }
+
+};
+
+
+/* =========================================================
    STATE
-============================================================ */
+========================================================= */
 
 const state = {
 
   user:null,
+
   isAdmin:false,
 
-  currentPage:'dashboard',
+  page:'dashboard',
 
-  selectedTable:null,
+  table:'cr_original_productions',
 
   rows:[],
-  filteredRows:[],
 
-  page:1,
+  filtered:[],
+
+  pageNum:1,
+
   pageSize:25,
 
-  sortColumn:null,
-  sortDirection:'desc',
+  sort:'',
+
+  sortDir:'desc',
+
+  search:'',
 
   editingId:null,
 
-  tableCounts:{},
+  editingRow:null,
 
-  channels:[],
+  schema:[],
 
-  loaded:false
+  counts:{},
+
+  health:[],
+
+  realtime:null
 
 };
 
 
-/* ============================================================
+/* =========================================================
    HELPERS
-============================================================ */
-
-const $ =
-  id => document.getElementById(id);
-
+========================================================= */
 
 function esc(value){
 
-  return String(value ?? '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
-
-}
-
-
-function prettyName(value){
-
-  return String(value || '')
-    .replace(/_/g,' ')
-    .replace(/\b\w/g,m=>m.toUpperCase());
-
-}
-
-
-function money(value){
-
-  const n = Number(value || 0);
-
-  return n.toLocaleString(
-    'en-US',
-    {
-      style:'currency',
-      currency:'USD'
-    }
-  );
-
-}
-
-
-function formatValue(value,type){
-
-  if(value === null || value === undefined)
-    return '—';
-
-  if(type === 'boolean')
-    return value ? 'Yes' : 'No';
-
-  if(type === 'jsonb' || type === 'json')
-    return JSON.stringify(value);
-
-  if(
-    type === 'timestamptz' ||
-    type === 'timestamp with time zone'
-  ){
-
-    const d = new Date(value);
-
-    if(!Number.isNaN(d.getTime()))
-      return d.toLocaleString(
-        'en-US',
-        {
-          dateStyle:'medium',
-          timeStyle:'short'
-        }
-      );
-
+  if(value === null || value === undefined){
+    return '';
   }
 
-  return String(value);
-
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#039;");
 }
 
 
-function badge(value){
+function toast(message,type='info'){
 
-  if(value === null || value === undefined)
-    return '<span class="badge">—</span>';
-
-  const v = String(value);
-
-  const cls =
-    v
-      .toLowerCase()
-      .replace(/[^a-z0-9_-]/g,'');
-
-  return `
-    <span class="badge badge-${cls}">
-      ${esc(v)}
-    </span>
-  `;
-
-}
-
-
-function toast(message,type=''){
-
-  const el =
+  const box =
     document.createElement('div');
 
-  el.className =
-    'toast ' + type;
+  box.className =
+    `toast ${type}`;
 
-  el.textContent =
+  box.textContent =
     message;
 
-  $('toastContainer')
-    .appendChild(el);
+  document
+    .getElementById('toastContainer')
+    .appendChild(box);
 
-  setTimeout(
-    ()=>el.remove(),
-    4500
-  );
-
+  setTimeout(()=>{
+    box.remove();
+  },4000);
 }
 
 
-function loading(show){
+function prettyTable(table){
 
-  $('loading')
-    .classList
-    .toggle('show',show);
-
+  return TABLES[table]?.label ||
+    table.replaceAll('_',' ');
 }
 
 
-function setConnection(ok,text){
+function prettyKey(key){
 
-  $('statusDot')
-    .classList
-    .toggle('online',ok);
+  return key
+    .replaceAll('_',' ')
+    .replace(/\b\w/g,
+      x=>x.toUpperCase());
+}
 
-  $('connectionText')
-    .textContent=text;
+
+function isUUID(value){
+
+  return typeof value === 'string' &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      .test(value);
 
 }
 
@@ -2890,3423 +1934,3844 @@ function slugify(value){
 
   return String(value || '')
     .toLowerCase()
+    .trim()
+    .replace(/['"]/g,'')
     .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'');
+    .replace(/^-+|-+$/g,'')
+    .slice(0,120);
 
 }
 
 
-function isGeneratedColumn(table,column){
+function formatDate(value){
 
-  if(
-    column === 'created_at' ||
-    column === 'updated_at'
-  )
-    return true;
-
-  const cfg =
-    TABLES[table];
-
-  const col =
-    cfg.columns.find(
-      c=>c[0]===column
-    );
-
-  if(!col)
-    return false;
-
-  if(
-    column === cfg.pk &&
-    (
-      col[1]==='uuid' ||
-      col[1]==='bigint'
-    )
-  ){
-
-    if(
-      table === 'cr_analytics_events' ||
-      table === 'cr_audit_log'
-    )
-      return false;
-
-    return true;
+  if(!value){
+    return '—';
   }
 
-  return false;
+  const d = new Date(value);
+
+  if(Number.isNaN(d.getTime())){
+    return value;
+  }
+
+  return d.toLocaleString();
+}
+
+
+function formatMoney(value){
+
+  if(value === null || value === undefined || value === ''){
+    return '—';
+  }
+
+  const n = Number(value);
+
+  if(Number.isNaN(n)){
+    return value;
+  }
+
+  return new Intl.NumberFormat(
+    'en-US',
+    {
+      style:'currency',
+      currency:'USD'
+    }
+  ).format(n);
 
 }
 
 
-/* ============================================================
-   DATABASE
-============================================================ */
+function valueBadge(key,value){
 
-async function selectRows(
-  table,
-  limit=1000
-){
+  const k =
+    String(key || '').toLowerCase();
 
-  let q =
-    supabaseClient
-      .from(table)
+  if(
+    value === true ||
+    value === false
+  ){
+
+    return value
+      ? '<span class="badge green">TRUE</span>'
+      : '<span class="badge red">FALSE</span>';
+
+  }
+
+  if(
+    k.includes('status') ||
+    k.includes('state')
+  ){
+
+    const v =
+      String(value || '').toLowerCase();
+
+    let cls='';
+
+    if(
+      ['published','active','live','approved','complete','completed']
+        .includes(v)
+    ){
+      cls='green';
+    }
+
+    if(
+      ['draft','pending','scheduled','planned']
+        .includes(v)
+    ){
+      cls='yellow';
+    }
+
+    if(
+      ['cancelled','canceled','failed','rejected','archived']
+        .includes(v)
+    ){
+      cls='red';
+    }
+
+    return `<span class="badge ${cls}">${esc(value)}</span>`;
+  }
+
+  return esc(value);
+}
+
+
+function safeJson(value){
+
+  try{
+    return JSON.stringify(value);
+  }catch{
+    return String(value);
+  }
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+async function checkAdmin(user){
+
+  if(!user){
+    return false;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } = await sb
+      .from('cr_admins')
       .select('*')
-      .limit(limit);
+      .eq('user_id',user.id)
+      .limit(1)
+      .maybeSingle();
 
-  const cfg =
-    TABLES[table];
+    if(error){
+      console.warn('Admin check:',error);
+      return false;
+    }
 
-  if(cfg?.columns?.some(
-    c=>c[0]==='created_at'
-  )){
-    q =
-      q.order(
-        'created_at',
-        {ascending:false}
-      );
-  }else if(cfg?.pk){
-    q =
-      q.order(
-        cfg.pk,
-        {ascending:false}
-      );
+    if(!data){
+      return false;
+    }
+
+    if(
+      data.is_active === false ||
+      data.active === false
+    ){
+      return false;
+    }
+
+    return true;
+
+  }catch(error){
+
+    console.error(error);
+
+    return false;
+  }
+
+}
+
+
+async function initializeAuth(){
+
+  const {
+    data:{
+      session
+    }
+  } =
+    await sb.auth.getSession();
+
+  if(!session){
+
+    showLogin();
+
+    return;
   }
 
   const {
-    data,
+    data:{
+      user
+    },
     error
-  } = await q;
+  } =
+    await sb.auth.getUser();
 
-  if(error)
-    throw error;
+  if(error || !user){
 
-  return data || [];
+    await sb.auth.signOut();
+
+    showLogin();
+
+    return;
+  }
+
+  const admin =
+    await checkAdmin(user);
+
+  if(!admin){
+
+    await sb.auth.signOut();
+
+    showLogin(
+      'Authenticated account is not authorized for Admin v5.0.'
+    );
+
+    return;
+  }
+
+  state.user =
+    user;
+
+  state.isAdmin =
+    true;
+
+  showApp();
 
 }
 
 
-async function countRows(table){
+function showLogin(message=''){
+
+  document
+    .getElementById('loginScreen')
+    .style.display='flex';
+
+  document
+    .getElementById('app')
+    .classList.remove('active');
+
+  document
+    .getElementById('loginStatus')
+    .textContent=message;
+
+}
+
+
+async function showApp(){
+
+  document
+    .getElementById('loginScreen')
+    .style.display='none';
+
+  document
+    .getElementById('app')
+    .classList.add('active');
+
+  document
+    .getElementById('userEmail')
+    .textContent=
+      state.user?.email || 'Admin';
+
+  await renderPage();
+
+  await setupRealtime();
+
+}
+
+
+document
+  .getElementById('loginForm')
+  .addEventListener('submit',async event=>{
+
+    event.preventDefault();
+
+    const email =
+      document
+        .getElementById('loginEmail')
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById('loginPassword')
+        .value;
+
+    const status =
+      document
+        .getElementById('loginStatus');
+
+    status.textContent =
+      'Authenticating…';
+
+    const {
+      error
+    } =
+      await sb.auth.signInWithPassword({
+        email,
+        password
+      });
+
+    if(error){
+
+      status.textContent =
+        error.message;
+
+      return;
+    }
+
+    status.textContent =
+      'Verifying administrator access…';
+
+    await initializeAuth();
+
+  });
+
+
+document
+  .getElementById('logoutBtn')
+  .addEventListener('click',async()=>{
+
+    await sb.auth.signOut();
+
+    state.user=null;
+    state.isAdmin=false;
+
+    showLogin();
+
+  });
+
+
+sb.auth.onAuthStateChange(
+  async(event,session)=>{
+
+    if(
+      event === 'SIGNED_OUT'
+    ){
+
+      state.user=null;
+      state.isAdmin=false;
+
+      showLogin();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+document
+  .querySelectorAll('#nav button')
+  .forEach(button=>{
+
+    button.addEventListener('click',()=>{
+
+      state.page =
+        button.dataset.page;
+
+      document
+        .getElementById('sidebar')
+        .classList.remove('open');
+
+      renderPage();
+
+    });
+
+  });
+
+
+document
+  .getElementById('mobileMenu')
+  .addEventListener('click',()=>{
+
+    document
+      .getElementById('sidebar')
+      .classList.toggle('open');
+
+  });
+
+
+document
+  .getElementById('refreshBtn')
+  .addEventListener('click',async()=>{
+
+    await renderPage();
+
+    toast(
+      'Page refreshed.',
+      'success'
+    );
+
+  });
+
+
+/* =========================================================
+   RENDER PAGE
+========================================================= */
+
+async function renderPage(){
+
+  document
+    .querySelectorAll('#nav button')
+    .forEach(button=>{
+
+      button.classList.toggle(
+        'active',
+        button.dataset.page === state.page
+      );
+
+    });
+
+  const config =
+    PAGES[state.page] ||
+    PAGES.dashboard;
+
+  document
+    .getElementById('topbarTitle')
+    .textContent =
+      config.title;
+
+  if(state.page === 'dashboard'){
+
+    await renderDashboard();
+
+    return;
+  }
+
+  if(state.page === 'activity'){
+
+    await renderActivity();
+
+    return;
+  }
+
+  if(state.page === 'search'){
+
+    renderSearch();
+
+    return;
+  }
+
+  if(state.page === 'health'){
+
+    await renderHealth();
+
+    return;
+  }
+
+  if(state.page === 'database'){
+
+    await renderDatabase();
+
+    return;
+  }
+
+  if(config.table){
+
+    state.table =
+      config.table;
+
+    await renderTablePage(
+      config.title,
+      config.subtitle,
+      config.table
+    );
+
+    return;
+  }
+
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+function pageHeader(
+  title,
+  subtitle,
+  actions=''
+){
+
+  return `
+
+    <div class="page-header">
+
+      <div>
+
+        <h1>${esc(title)}</h1>
+
+        <p>${esc(subtitle)}</p>
+
+      </div>
+
+      <div class="page-actions">
+
+        ${actions}
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+async function renderDashboard(){
+
+  const page =
+    document.getElementById('page');
+
+  page.innerHTML =
+
+    pageHeader(
+      'Command Center',
+      'CrowRules Entertainment operational overview.',
+      `
+        <button
+          class="btn primary"
+          onclick="openAddModal('cr_original_productions')">
+          + New Production
+        </button>
+
+        <button
+          class="btn cyan"
+          onclick="state.page='health';renderPage()">
+          System Health
+        </button>
+      `
+    ) +
+
+    `
+      <div id="dashboardContent">
+        <div class="loading">
+          <div class="spinner"></div>
+          Loading Command Center…
+        </div>
+      </div>
+    `;
+
+  await refreshDashboard();
+
+}
+
+
+async function countTable(table){
 
   const {
     count,
     error
   } =
-    await supabaseClient
+    await sb
       .from(table)
       .select('*',{
         count:'exact',
         head:true
       });
 
-  if(error)
-    throw error;
-
-  return count || 0;
-
-}
-
-
-async function insertRow(
-  table,
-  payload
-){
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from(table)
-      .insert(payload)
-      .select()
-      .single();
-
-  if(error)
-    throw error;
-
-  return data;
-
-}
-
-
-async function updateRow(
-  table,
-  pk,
-  id,
-  payload
-){
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from(table)
-      .update(payload)
-      .eq(pk,id)
-      .select()
-      .single();
-
-  if(error)
-    throw error;
-
-  return data;
-
-}
-
-
-async function deleteRow(
-  table,
-  pk,
-  id
-){
-
-  const {
-    error
-  } =
-    await supabaseClient
-      .from(table)
-      .delete()
-      .eq(pk,id);
-
-  if(error)
-    throw error;
-
-}
-
-
-async function audit(
-  action,
-  table,
-  recordId,
-  metadata={}
-){
-
-  try{
-
-    await supabaseClient
-      .from('cr_admin_audit_log')
-      .insert({
-        user_id:state.user?.id || null,
-        action,
-        target_table:table,
-        target_id:
-          recordId || null,
-        metadata
-      });
-
-  }catch(error){
+  if(error){
 
     console.warn(
-      'Audit logging failed',
-      error
+      `Count ${table}:`,
+      error.message
     );
 
+    return null;
   }
+
+  return count ?? 0;
 
 }
 
 
-/* ============================================================
-   AUTH
-============================================================ */
-
-async function checkAdmin(user){
-
-  if(!user)
-    return false;
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from('cr_admins')
-      .select('user_id,display_name')
-      .eq('user_id',user.id)
-      .maybeSingle();
-
-  if(error){
-
-    console.error(error);
-
-    return false;
-
-  }
-
-  return !!data;
-
-}
-
-
-async function authUI(){
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .auth
-      .getSession();
-
-  if(error){
-
-    setConnection(
-      false,
-      'Auth Error'
-    );
-
-    $('loginOverlay')
-      .classList
-      .remove('hidden');
-
-    return;
-
-  }
-
-  const session =
-    data.session;
-
-  if(!session){
-
-    state.user=null;
-    state.isAdmin=false;
-
-    $('loginOverlay')
-      .classList
-      .remove('hidden');
-
-    $('app')
-      .classList
-      .add('hidden');
-
-    setConnection(
-      false,
-      'Signed Out'
-    );
-
-    return;
-
-  }
-
-  state.user =
-    session.user;
-
-  const admin =
-    await checkAdmin(
-      session.user
-    );
-
-  if(!admin){
-
-    state.user=null;
-    state.isAdmin=false;
-
-    $('loginOverlay')
-      .classList
-      .remove('hidden');
-
-    $('app')
-      .classList
-      .add('hidden');
-
-    $('loginError')
-      .textContent =
-      'Authenticated successfully, but this account is not registered in cr_admins.';
-
-    $('loginError')
-      .classList
-      .add('show');
-
-    await supabaseClient
-      .auth
-      .signOut();
-
-    return;
-
-  }
-
-  state.isAdmin=true;
-
-  $('loginOverlay')
-    .classList
-    .add('hidden');
-
-  $('app')
-    .classList
-    .remove('hidden');
-
-  $('currentUser')
-    .textContent =
-    session.user.email ||
-    session.user.id;
-
-  setConnection(
-    true,
-    'Connected'
-  );
-
-  await refreshAll();
-
-}
-
-
-$('loginForm')
-  .addEventListener(
-    'submit',
-    async event=>{
-
-      event.preventDefault();
-
-      const email =
-        $('loginEmail')
-          .value
-          .trim();
-
-      const password =
-        $('loginPassword')
-          .value;
-
-      $('loginError')
-        .classList
-        .remove('show');
-
-      loading(true);
-
-      try{
-
-        const {
-          error
-        } =
-          await supabaseClient
-            .auth
-            .signInWithPassword({
-              email,
-              password
-            });
-
-        if(error)
-          throw error;
-
-        await authUI();
-
-      }catch(error){
-
-        console.error(error);
-
-        $('loginError')
-          .textContent =
-          error.message ||
-          'Login failed.';
-
-        $('loginError')
-          .classList
-          .add('show');
-
-      }finally{
-
-        loading(false);
-
-      }
-
-    }
-  );
-
-
-$('logoutBtn')
-  .addEventListener(
-    'click',
-    async()=>{
-
-      loading(true);
-
-      try{
-
-        await supabaseClient
-          .auth
-          .signOut();
-
-        location.reload();
-
-      }finally{
-
-        loading(false);
-
-      }
-
-    }
-  );
-
-
-supabaseClient.auth
-  .onAuthStateChange(
-    ()=>{
-      setTimeout(
-        authUI,
-        0
-      );
-    }
-  );
-
-
-/* ============================================================
-   NAVIGATION
-============================================================ */
-
-const PAGE_TITLES = {
-
-  dashboard:'Dashboard',
-
-  database:'All Supabase Tables',
-
-  divisions:'Divisions',
-
-  shows:'Original Productions',
-
-  episodes:'Episodes',
-
-  news:'News',
-
-  updates:'Updates',
-
-  announcements:'Announcements',
-
-  projects:'Projects',
-
-  partners:'Partners',
-
-  inquiries:'Partnership Inbox',
-
-  campaigns:'Donation Campaigns',
-
-  donations:'Donations',
-
-  subscribers:'Subscribers',
-
-  events:'Events',
-
-  schedule:'Schedule',
-
-  roadmap:'Roadmap',
-
-  media:'Media',
-
-  admins:'Administrators',
-
-  audit:'Audit Log',
-
-  health:'System Health'
-
-};
-
-
-function go(page){
-
-  if(!PAGE_TITLES[page])
-    return;
-
-  state.currentPage =
-    page;
-
-  document
-    .querySelectorAll('.page')
-    .forEach(el=>{
-
-      el.classList.toggle(
-        'active',
-        el.id ===
-        'page-' + page
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(
-      '.nav button[data-page]'
-    )
-    .forEach(btn=>{
-
-      btn.classList.toggle(
-        'active',
-        btn.dataset.page === page
-      );
-
-    });
-
-
-  $('pageTitle')
-    .textContent =
-    PAGE_TITLES[page];
-
-  $('sidebar')
-    .classList
-    .remove('open');
-
-
-  if(page === 'database')
-    renderTableList();
-
-  if(page === 'health')
-    renderHealth();
-
-  if([
-    'divisions',
-    'shows',
-    'episodes',
-    'news',
-    'updates',
-    'announcements',
-    'projects',
-    'partners',
-    'inquiries',
-    'campaigns',
+async function refreshDashboard(){
+
+  const names = [
+
+    'cr_original_productions',
+    'cr_episodes',
+    'cr_news',
+    'cr_updates',
+    'cr_events',
+    'cr_schedule',
     'donations',
-    'subscribers',
-    'events',
-    'schedule',
-    'roadmap',
-    'media',
-    'admins',
-    'audit'
-  ].includes(page)){
+    'cr_subscribers',
+    'cr_projects',
+    'cr_partners'
 
-    renderSpecialPage(
-      page
+  ];
+
+  const results =
+    await Promise.all(
+      names.map(async table=>[
+        table,
+        await countTable(table)
+      ])
     );
 
-  }
-
-}
-
-
-document
-  .querySelectorAll(
-    '.nav button[data-page]'
-  )
-  .forEach(btn=>{
-
-    btn.addEventListener(
-      'click',
-      ()=>{
-        go(btn.dataset.page);
-      }
-    );
-
-  });
-
-
-$('mobileMenu')
-  .addEventListener(
-    'click',
-    ()=>{
-      $('sidebar')
-        .classList
-        .toggle('open');
+  results.forEach(
+    ([table,count])=>{
+      state.counts[table]=count;
     }
   );
 
 
-/* ============================================================
-   REFRESH
-============================================================ */
+  const [
+    productions,
+    episodes,
+    news,
+    donations,
+    subscribers,
+    projects
+  ] = [
+    state.counts.cr_original_productions,
+    state.counts.cr_episodes,
+    state.counts.cr_news,
+    state.counts.donations,
+    state.counts.cr_subscribers,
+    state.counts.cr_projects
+  ];
 
-async function refreshAll(){
 
-  if(
-    !state.user ||
-    !state.isAdmin
-  )
-    return;
-
-  loading(true);
+  let donationTotal=0;
 
   try{
 
-    const entries =
-      Object.keys(TABLES);
+    const {
+      data
+    } =
+      await sb
+        .from('donations')
+        .select('amount')
+        .limit(500);
 
-    const counts =
-      await Promise.all(
-        entries.map(
-          async table=>{
+    if(data){
 
-            try{
+      donationTotal =
+        data.reduce(
+          (sum,row)=>
+            sum + Number(row.amount || 0),
+          0
+        );
 
-              return [
-                table,
-                await countRows(
-                  table
-                )
-              ];
+    }
 
-            }catch(error){
+  }catch{}
 
-              console.warn(
-                table,
-                error
-              );
 
-              return [
-                table,
-                null
-              ];
+  let latestProductions=[];
 
-            }
+  try{
 
+    const {
+      data
+    } =
+      await sb
+        .from('cr_original_productions')
+        .select('*')
+        .order('created_at',{
+          ascending:false
+        })
+        .limit(6);
+
+    latestProductions =
+      data || [];
+
+  }catch{}
+
+
+  let latestEpisodes=[];
+
+  try{
+
+    const {
+      data
+    } =
+      await sb
+        .from('cr_episodes')
+        .select('*')
+        .order('created_at',{
+          ascending:false
+        })
+        .limit(6);
+
+    latestEpisodes =
+      data || [];
+
+  }catch{}
+
+
+  const html = `
+
+    <div class="stats">
+
+      ${statCard(
+        'Productions',
+        productions,
+        'Original productions'
+      )}
+
+      ${statCard(
+        'Episodes',
+        episodes,
+        'Episode records'
+      )}
+
+      ${statCard(
+        'News',
+        news,
+        'Published/news records'
+      )}
+
+      ${statCard(
+        'Donations',
+        donations,
+        'Donation records'
+      )}
+
+      ${statCard(
+        'Subscribers',
+        subscribers,
+        'Audience records'
+      )}
+
+      ${statCard(
+        'Projects',
+        projects,
+        'Company projects'
+      )}
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <div class="panel-title">
+            QUICK OPERATIONS
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="quick-grid">
+
+            ${quickCard(
+              '🎬',
+              'New Production',
+              'Create a show or original production.',
+              "openAddModal('cr_original_productions')"
+            )}
+
+            ${quickCard(
+              '▶',
+              'New Episode',
+              'Add a production episode.',
+              "openAddModal('cr_episodes')"
+            )}
+
+            ${quickCard(
+              '▤',
+              'Schedule',
+              'Manage programming and broadcasts.',
+              "state.page='schedule';renderPage()"
+            )}
+
+            ${quickCard(
+              '📰',
+              'Publish News',
+              'Create a CrowRules news item.',
+              "openAddModal('cr_news')"
+            )}
+
+            ${quickCard(
+              '$',
+              'Donations',
+              'Review support and donation records.',
+              "state.page='donations';renderPage()"
+            )}
+
+            ${quickCard(
+              '♥',
+              'Health Check',
+              'Test connected database tables.',
+              "state.page='health';renderPage()"
+            )}
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <div class="panel-title">
+            DONATION PULSE
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div style="
+            font-family:Orbitron;
+            font-size:30px;
+            font-weight:800;
+          ">
+            ${formatMoney(donationTotal)}
+          </div>
+
+          <div style="
+            color:var(--muted);
+            font-size:11px;
+            margin-top:7px;
+          ">
+            Donation amount represented by currently
+            retrieved donation records.
+          </div>
+
+          <div style="
+            margin-top:18px;
+            display:flex;
+            gap:7px;
+            flex-wrap:wrap;
+          ">
+
+            <span class="badge purple">
+              SUPPORT CROWRULES
+            </span>
+
+            <span class="badge cyan">
+              PAYPAL READY
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <div class="panel-title">
+            LATEST PRODUCTIONS
+          </div>
+
+          <button
+            class="btn small"
+            onclick="state.page='productions';renderPage()">
+            View All
+          </button>
+
+        </div>
+
+        <div class="panel-body">
+
+          ${
+            latestProductions.length
+            ? `
+              <div class="activity-list">
+
+                ${latestProductions
+                  .map(row=>`
+
+                    <div class="activity-item">
+
+                      <div class="activity-dot"></div>
+
+                      <div class="activity-main">
+
+                        <div class="activity-title">
+                          ${esc(
+                            row.title ||
+                            row.name ||
+                            'Untitled Production'
+                          )}
+                        </div>
+
+                        <div class="activity-meta">
+                          ${esc(
+                            row.status ||
+                            'No status'
+                          )}
+                          ·
+                          ${formatDate(
+                            row.created_at
+                          )}
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  `)
+                  .join('')}
+
+              </div>
+            `
+            : `
+              <div class="empty">
+                No production records found.
+              </div>
+            `
           }
+
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <div class="panel-title">
+            LATEST EPISODES
+          </div>
+
+          <button
+            class="btn small"
+            onclick="state.page='episodes';renderPage()">
+            View All
+          </button>
+
+        </div>
+
+        <div class="panel-body">
+
+          ${
+            latestEpisodes.length
+            ? `
+              <div class="activity-list">
+
+                ${latestEpisodes
+                  .map(row=>`
+
+                    <div class="activity-item">
+
+                      <div class="activity-dot"></div>
+
+                      <div class="activity-main">
+
+                        <div class="activity-title">
+                          ${esc(
+                            row.title ||
+                            'Untitled Episode'
+                          )}
+                        </div>
+
+                        <div class="activity-meta">
+                          ${esc(
+                            row.status ||
+                            'No status'
+                          )}
+                          ·
+                          ${formatDate(
+                            row.created_at
+                          )}
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  `)
+                  .join('')}
+
+              </div>
+            `
+            : `
+              <div class="empty">
+                No episode records found.
+              </div>
+            `
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById('dashboardContent')
+    .innerHTML=html;
+
+}
+
+
+function statCard(label,value,sub){
+
+  return `
+
+    <div class="stat">
+
+      <div class="stat-label">
+        ${esc(label)}
+      </div>
+
+      <div class="stat-value">
+        ${value === null ? '—' : esc(value)}
+      </div>
+
+      <div class="stat-sub">
+        ${esc(sub)}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+function quickCard(
+  icon,
+  title,
+  desc,
+  action
+){
+
+  return `
+
+    <button
+      class="quick"
+      onclick="${action}">
+
+      <div class="quick-icon">
+        ${icon}
+      </div>
+
+      <div class="quick-title">
+        ${esc(title)}
+      </div>
+
+      <div class="quick-desc">
+        ${esc(desc)}
+      </div>
+
+    </button>
+
+  `;
+
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+async function renderActivity(){
+
+  const page =
+    document.getElementById('page');
+
+  page.innerHTML =
+
+    pageHeader(
+      'Activity',
+      'Recent administrative activity and system events.',
+      `
+        <button
+          class="btn"
+          onclick="renderPage()">
+          ↻ Refresh
+        </button>
+      `
+    ) +
+
+    `
+      <div class="panel">
+
+        <div id="activityContent"
+             class="panel-body">
+
+          <div class="loading">
+            <div class="spinner"></div>
+            Loading activity…
+          </div>
+
+        </div>
+
+      </div>
+    `;
+
+
+  let rows=[];
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await sb
+        .from('cr_admin_audit_log')
+        .select('*')
+        .order(
+          'created_at',
+          {ascending:false}
         )
-      );
+        .limit(80);
 
-    state.tableCounts =
-      Object.fromEntries(
-        counts
-      );
+    if(error){
+      throw error;
+    }
 
-    await updateDashboard();
-
-    if(state.selectedTable)
-      await loadSelectedTable();
-
-    renderTableList();
-
-    setConnection(
-      true,
-      'Connected'
-    );
+    rows=data || [];
 
   }catch(error){
 
-    console.error(error);
+    document
+      .getElementById('activityContent')
+      .innerHTML =
+        errorBox(error.message);
 
-    setConnection(
-      false,
-      'Database Error'
-    );
-
-    toast(
-      error.message ||
-      'Database refresh failed.',
-      'error'
-    );
-
-  }finally{
-
-    loading(false);
-
+    return;
   }
 
-}
 
+  document
+    .getElementById('activityContent')
+    .innerHTML =
 
-$('refreshBtn')
-  .addEventListener(
-    'click',
-    refreshAll
-  );
+    rows.length
+    ? `
+      <div class="activity-list">
 
+        ${rows.map(row=>`
 
-/* ============================================================
-   TABLE LIST
-============================================================ */
+          <div class="activity-item">
 
-function renderTableList(){
+            <div class="activity-dot"></div>
 
-  const query =
-    (
-      $('tableSearch')?.value ||
-      ''
-    )
-      .toLowerCase()
-      .trim();
+            <div class="activity-main">
 
-  const container =
-    $('tableList');
+              <div class="activity-title">
 
-  const entries =
-    Object.entries(
-      TABLES
-    )
-      .filter(
-        ([table,cfg])=>
-          !query ||
-          table.toLowerCase().includes(query) ||
-          cfg.label.toLowerCase().includes(query)
-      );
+                ${esc(
+                  row.action ||
+                  row.event ||
+                  'Administrative action'
+                )}
 
+              </div>
 
-  container.innerHTML =
-    entries.map(
-      ([table,cfg])=>`
+              <div class="activity-meta">
 
-        <button
-          class="${state.selectedTable===table?'active':''}"
-          onclick="selectTable('${table}')">
+                ${esc(
+                  row.table_name ||
+                  row.table ||
+                  ''
+                )}
 
-          <span>
-            ${esc(cfg.icon || '▦')}
-          </span>
+                ${row.target_id
+                  ? ` · ${esc(row.target_id)}`
+                  : ''
+                }
 
-          <span>
-            ${esc(cfg.label)}
-          </span>
+                ·
 
-          <span class="table-count">
-            ${
-              state.tableCounts[table] === null ||
-              state.tableCounts[table] === undefined
-                ? '—'
-                : state.tableCounts[table]
-            }
-          </span>
+                ${formatDate(
+                  row.created_at
+                )}
 
-        </button>
-
-      `
-    ).join('');
-
-
-}
-
-
-async function selectTable(table){
-
-  if(!TABLES[table])
-    return;
-
-  state.selectedTable =
-    table;
-
-  state.page=1;
-
-  state.sortColumn =
-    TABLES[table].columns[0][0];
-
-  state.sortDirection='desc';
-
-  renderTableList();
-
-  $('dbTableTitle')
-    .textContent =
-    TABLES[table].label;
-
-  $('dbTableDescription')
-    .textContent =
-    table +
-    (
-      TABLES[table].view
-        ? ' — read-only view'
-        : ' — editable table'
-    );
-
-  $('dbAdd')
-    .disabled =
-    !!TABLES[table].view;
-
-  populateSortColumns();
-
-  await loadSelectedTable();
-
-}
-
-
-async function loadSelectedTable(){
-
-  if(!state.selectedTable)
-    return;
-
-  try{
-
-    const table =
-      state.selectedTable;
-
-    state.rows =
-      await selectRows(
-        table
-      );
-
-    filterDatabaseRows();
-
-  }catch(error){
-
-    console.error(error);
-
-    $('dbBody').innerHTML =
-      `
-        <tr>
-          <td colspan="99">
-
-            <div class="empty">
-
-              <strong>
-                Could not load table
-              </strong>
-
-              ${esc(
-                error.message ||
-                'Unknown database error.'
-              )}
+              </div>
 
             </div>
 
-          </td>
-        </tr>
+          </div>
+
+        `).join('')}
+
+      </div>
+    `
+    : `
+      <div class="empty">
+        No activity has been recorded yet.
+      </div>
+    `;
+
+}
+
+
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+function renderSearch(){
+
+  const page =
+    document.getElementById('page');
+
+  page.innerHTML =
+
+    pageHeader(
+      'Global Search',
+      'Search across important CrowRules database tables.'
+    ) +
+
+    `
+
+      <div class="panel">
+
+        <div class="toolbar">
+
+          <div class="toolbar-left"
+               style="flex:1;">
+
+            <input
+              id="globalSearchInput"
+              class="search"
+              style="width:100%;"
+              placeholder="Search productions, episodes, news, projects, partners…">
+
+          </div>
+
+          <button
+            class="btn primary"
+            onclick="performGlobalSearch()">
+            Search
+          </button>
+
+        </div>
+
+        <div id="globalSearchResults"
+             class="panel-body">
+
+          <div class="empty">
+            Enter a search term to begin.
+          </div>
+
+        </div>
+
+      </div>
+
+  `;
+
+
+  const input =
+    document.getElementById(
+      'globalSearchInput'
+    );
+
+  input.addEventListener(
+    'keydown',
+    event=>{
+
+      if(event.key === 'Enter'){
+        performGlobalSearch();
+      }
+
+    }
+  );
+
+  input.focus();
+
+}
+
+
+async function performGlobalSearch(){
+
+  const input =
+    document.getElementById(
+      'globalSearchInput'
+    );
+
+  const term =
+    input.value.trim();
+
+  const box =
+    document.getElementById(
+      'globalSearchResults'
+    );
+
+
+  if(term.length < 2){
+
+    box.innerHTML =
+      `
+        <div class="empty">
+          Enter at least 2 characters.
+        </div>
       `;
+
+    return;
+  }
+
+
+  box.innerHTML =
+    `
+      <div class="loading">
+        <div class="spinner"></div>
+        Searching…
+      </div>
+    `;
+
+
+  const searchTables = [
+
+    'cr_original_productions',
+    'cr_episodes',
+    'cr_news',
+    'cr_updates',
+    'cr_projects',
+    'cr_events',
+    'cr_partners',
+    'cr_partnership_inquiries',
+    'cr_media',
+    'cr_roadmap',
+    'tacoma_nights_episodes'
+
+  ];
+
+
+  const results=[];
+
+
+  for(const table of searchTables){
+
+    try{
+
+      const {
+        data,
+        error
+      } =
+        await sb
+          .from(table)
+          .select('*')
+          .limit(300);
+
+      if(error){
+        continue;
+      }
+
+      for(const row of data || []){
+
+        const json =
+          safeJson(row);
+
+        if(
+          json
+            .toLowerCase()
+            .includes(term.toLowerCase())
+        ){
+
+          results.push({
+            table,
+            row
+          });
+
+        }
+
+      }
+
+    }catch{}
+
+  }
+
+
+  box.innerHTML =
+
+    results.length
+
+    ? `
+      <div class="search-results">
+
+        ${results
+          .slice(0,100)
+          .map(result=>`
+
+            <div class="search-result">
+
+              <div class="search-result-head">
+
+                <div class="search-table">
+                  ${esc(
+                    prettyTable(
+                      result.table
+                    )
+                  )}
+                </div>
+
+                <button
+                  class="btn small"
+                  onclick="openRecordModal(
+                    '${result.table}',
+                    '${esc(result.row.id || '')}'
+                  )">
+                  Open
+                </button>
+
+              </div>
+
+              <div class="search-preview">
+                ${esc(
+                  safeJson(result.row)
+                )}
+              </div>
+
+            </div>
+
+          `)
+          .join('')}
+
+      </div>
+
+      <div style="
+        margin-top:15px;
+        color:var(--muted);
+        font-size:10px;
+      ">
+        Showing ${Math.min(results.length,100)}
+        of ${results.length} matches.
+      </div>
+    `
+
+    : `
+      <div class="empty">
+        No matches found.
+      </div>
+    `;
+
+}
+
+
+/* =========================================================
+   HEALTH
+========================================================= */
+
+async function renderHealth(){
+
+  const page =
+    document.getElementById('page');
+
+  page.innerHTML =
+
+    pageHeader(
+      'System Health',
+      'Database connectivity and operational diagnostics.',
+      `
+        <button
+          class="btn primary"
+          onclick="runHealthCheck()">
+          Run Health Check
+        </button>
+      `
+    ) +
+
+    `
+      <div id="healthContent">
+
+        <div class="loading">
+
+          <div class="spinner"></div>
+
+          Testing database…
+
+        </div>
+
+      </div>
+    `;
+
+
+  await runHealthCheck();
+
+}
+
+
+async function runHealthCheck(){
+
+  const box =
+    document.getElementById(
+      'healthContent'
+    );
+
+  if(!box){
+    return;
+  }
+
+  const tables =
+    Object.keys(TABLES);
+
+  const health=[];
+
+
+  for(const table of tables){
+
+    const start =
+      performance.now();
+
+    let status='ok';
+    let message='Connected';
+
+
+    try{
+
+      const {
+        error
+      } =
+        await sb
+          .from(table)
+          .select('*')
+          .limit(1);
+
+      const ms =
+        Math.round(
+          performance.now() - start
+        );
+
+      if(error){
+
+        status='error';
+        message=
+          error.message;
+
+        health.push({
+          table,
+          status,
+          message,
+          ms
+        });
+
+        continue;
+      }
+
+      health.push({
+        table,
+        status,
+        message,
+        ms
+      });
+
+    }catch(error){
+
+      health.push({
+        table,
+        status:'error',
+        message:error.message,
+        ms:
+          Math.round(
+            performance.now() - start
+          )
+      });
+
+    }
+
+    box.innerHTML =
+      healthGrid(health);
+
+  }
+
+
+  state.health =
+    health;
+
+  box.innerHTML =
+    healthGrid(health);
+
+}
+
+
+function healthGrid(health){
+
+  const ok =
+    health.filter(x=>x.status==='ok').length;
+
+  const errors =
+    health.filter(x=>x.status==='error').length;
+
+  return `
+
+    <div class="stats">
+
+      ${statCard(
+        'Tables Tested',
+        health.length,
+        'Configured resources'
+      )}
+
+      ${statCard(
+        'Healthy',
+        ok,
+        'Successful connections'
+      )}
+
+      ${statCard(
+        'Errors',
+        errors,
+        'Tables requiring attention'
+      )}
+
+      ${statCard(
+        'Admin Auth',
+        state.isAdmin ? 'OK':'FAIL',
+        'Authorization state'
+      )}
+
+    </div>
+
+
+    <div class="health-grid">
+
+      ${health.map(item=>`
+
+        <div class="
+          health-card
+          ${item.status === 'ok'
+            ? 'ok'
+            : 'error'}
+        ">
+
+          <div class="health-name">
+
+            ${esc(
+              prettyTable(item.table)
+            )}
+
+          </div>
+
+          <div class="health-meta">
+
+            ${item.status === 'ok'
+              ? '✓ Connected'
+              : '✕ Error'}
+
+            ·
+
+            ${item.ms} ms
+
+          </div>
+
+          ${
+            item.status === 'error'
+            ? `
+              <div style="
+                margin-top:9px;
+                color:var(--red);
+                font-size:9px;
+                line-height:1.5;
+              ">
+                ${esc(item.message)}
+              </div>
+            `
+            : ''
+          }
+
+        </div>
+
+      `).join('')}
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   DATABASE PAGE
+========================================================= */
+
+async function renderDatabase(){
+
+  const page =
+    document.getElementById('page');
+
+  page.innerHTML =
+
+    pageHeader(
+      'Database',
+      'Browse and manage connected Supabase tables.'
+    ) +
+
+    `
+
+      <div class="panel">
+
+        <div class="toolbar">
+
+          <div class="toolbar-left">
+
+            <select
+              id="dbTableSelect"
+              style="min-width:250px;">
+              ${Object.keys(TABLES)
+                .map(table=>`
+
+                  <option
+                    value="${esc(table)}"
+                    ${state.table===table
+                      ? 'selected'
+                      : ''}>
+                    ${esc(
+                      prettyTable(table)
+                    )}
+                  </option>
+
+                `)
+                .join('')}
+            </select>
+
+            <input
+              id="dbSearch"
+              class="search"
+              placeholder="Filter records…">
+
+          </div>
+
+
+          <div class="toolbar-right">
+
+            <button
+              class="btn"
+              onclick="exportCSV()">
+              CSV Export
+            </button>
+
+            <button
+              id="dbAddButton"
+              class="btn primary">
+              + Add
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div id="dbContent">
+          <div class="loading">
+            <div class="spinner"></div>
+            Loading database…
+          </div>
+        </div>
+
+      </div>
+
+    `;
+
+
+  document
+    .getElementById('dbTableSelect')
+    .addEventListener(
+      'change',
+      async event=>{
+
+        state.table =
+          event.target.value;
+
+        state.pageNum=1;
+
+        await loadTable();
+
+      }
+    );
+
+
+  document
+    .getElementById('dbSearch')
+    .addEventListener(
+      'input',
+      event=>{
+
+        state.search =
+          event.target.value;
+
+        state.pageNum=1;
+
+        applyFilter();
+
+        renderDatabaseRows();
+
+      }
+    );
+
+
+  document
+    .getElementById('dbAddButton')
+    .addEventListener(
+      'click',
+      ()=>openAddModal(state.table)
+    );
+
+
+  await loadTable();
+
+}
+
+
+/* =========================================================
+   TABLE PAGE
+========================================================= */
+
+async function renderTablePage(
+  title,
+  subtitle,
+  table
+){
+
+  const page =
+    document.getElementById('page');
+
+  const readonly =
+    TABLES[table]?.readonly === true;
+
+
+  page.innerHTML =
+
+    pageHeader(
+      title,
+      subtitle,
+      `
+        ${
+          !readonly
+          ? `
+            <button
+              class="btn primary"
+              onclick="openAddModal('${table}')">
+              + Add Record
+            </button>
+          `
+          : ''
+        }
+
+        <button
+          class="btn"
+          onclick="renderPage()">
+          ↻ Refresh
+        </button>
+      `
+    ) +
+
+    `
+
+      <div class="panel">
+
+        <div class="toolbar">
+
+          <div class="toolbar-left">
+
+            <input
+              id="tableSearch"
+              class="search"
+              placeholder="Search records…">
+
+            <select
+              id="pageSize">
+              <option value="25">25 rows</option>
+              <option value="50">50 rows</option>
+              <option value="100">100 rows</option>
+            </select>
+
+          </div>
+
+          <div class="toolbar-right">
+
+            <button
+              class="btn"
+              onclick="exportCSV()">
+              CSV Export
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div id="tableContent">
+
+          <div class="loading">
+            <div class="spinner"></div>
+            Loading records…
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+  document
+    .getElementById('tableSearch')
+    .addEventListener(
+      'input',
+      event=>{
+
+        state.search =
+          event.target.value;
+
+        state.pageNum=1;
+
+        applyFilter();
+
+        renderTableContent();
+
+      }
+    );
+
+
+  document
+    .getElementById('pageSize')
+    .addEventListener(
+      'change',
+      event=>{
+
+        state.pageSize =
+          Number(event.target.value);
+
+        state.pageNum=1;
+
+        renderTableContent();
+
+      }
+    );
+
+
+  await loadTable();
+
+}
+
+
+async function loadTable(){
+
+  const table =
+    state.table;
+
+  const target =
+    document.getElementById(
+      'tableContent'
+    ) ||
+    document.getElementById(
+      'dbContent'
+    );
+
+
+  if(!target){
+    return;
+  }
+
+
+  target.innerHTML =
+    `
+      <div class="loading">
+
+        <div class="spinner"></div>
+
+        Loading ${esc(
+          prettyTable(table)
+        )}…
+
+      </div>
+    `;
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await sb
+        .from(table)
+        .select('*')
+        .limit(1000);
+
+    if(error){
+      throw error;
+    }
+
+    state.rows =
+      data || [];
+
+    state.schema =
+      inferSchema(
+        state.rows
+      );
+
+    state.filtered =
+      [...state.rows];
+
+    state.search='';
+
+    const search =
+      document.getElementById(
+        'tableSearch'
+      ) ||
+      document.getElementById(
+        'dbSearch'
+      );
+
+    if(search){
+      search.value='';
+    }
+
+    renderTableContent();
+
+  }catch(error){
+
+    target.innerHTML =
+      errorBox(
+        error.message,
+        table
+      );
 
   }
 
 }
 
 
-function populateSortColumns(){
+function inferSchema(rows){
 
-  const select =
-    $('sortColumn');
+  if(!rows.length){
+    return [];
+  }
 
-  if(!state.selectedTable)
-    return;
+  const keys =
+    [...new Set(
+      rows.flatMap(row=>
+        Object.keys(row)
+      )
+    )];
 
-  const cfg =
-    TABLES[
-      state.selectedTable
-    ];
 
-  select.innerHTML =
-    cfg.columns.map(
-      ([name])=>`
+  return keys.map(key=>{
 
-        <option
-          value="${esc(name)}"
-          ${
-            name === state.sortColumn
-              ? 'selected'
-              : ''
-          }>
+    const sample =
+      rows.find(
+        row=>row[key] !== null &&
+             row[key] !== undefined
+      )?.[key];
 
-          ${esc(
-            prettyName(name)
-          )}
+    let type =
+      typeof sample;
 
-        </option>
+    if(sample === null || sample === undefined){
+      type='text';
+    }
 
-      `
-    ).join('');
+    if(typeof sample === 'object'){
+      type='jsonb';
+    }
+
+    if(
+      typeof sample === 'number'
+    ){
+
+      type =
+        Number.isInteger(sample)
+        ? 'integer'
+        : 'numeric';
+
+    }
+
+    return {
+      key,
+      type
+    };
+
+  });
 
 }
 
 
-$('dbRefresh')
-  .addEventListener(
-    'click',
-    loadSelectedTable
-  );
+function applyFilter(){
 
-
-$('dbAdd')
-  .addEventListener(
-    'click',
-    ()=>{
-      if(state.selectedTable)
-        openRecordModal(
-          state.selectedTable
-        );
-    }
-  );
-
-
-function filterDatabaseRows(){
-
-  const query =
-    (
-      $('recordSearch')?.value ||
-      ''
+  const term =
+    String(
+      state.search || ''
     )
-      .toLowerCase()
-      .trim();
+    .toLowerCase()
+    .trim();
 
-  state.filteredRows =
-    state.rows.filter(
-      row=>{
 
-        if(!query)
-          return true;
+  if(!term){
 
-        return Object.values(row)
-          .some(
-            value=>
-              JSON.stringify(
-                value
-              )
-              .toLowerCase()
-              .includes(query)
-          );
+    state.filtered =
+      [...state.rows];
+
+    return;
+  }
+
+
+  state.filtered =
+    state.rows.filter(row=>
+
+      safeJson(row)
+        .toLowerCase()
+        .includes(term)
+
+    );
+
+}
+
+
+function renderTableContent(){
+
+  const target =
+    document.getElementById(
+      'tableContent'
+    ) ||
+    document.getElementById(
+      'dbContent'
+    );
+
+
+  if(!target){
+    return;
+  }
+
+
+  applyFilter();
+
+
+  const rows =
+    [...state.filtered];
+
+
+  if(state.sort){
+
+    rows.sort(
+      (a,b)=>{
+
+        const av =
+          a[state.sort];
+
+        const bv =
+          b[state.sort];
+
+        if(av === bv){
+          return 0;
+        }
+
+        const result =
+          av > bv ? 1 : -1;
+
+        return state.sortDir === 'asc'
+          ? result
+          : -result;
 
       }
     );
 
-  state.page=1;
-
-  renderDatabaseTable();
-
-}
-
-
-function renderDatabaseTable(){
-
-  if(!state.selectedTable)
-    return;
-
-  const cfg =
-    TABLES[
-      state.selectedTable
-    ];
-
-  const rows =
-    [...state.filteredRows];
-
-  const column =
-    $('sortColumn')?.value ||
-    state.sortColumn ||
-    cfg.columns[0][0];
-
-  const direction =
-    $('sortDirection')?.value ||
-    state.sortDirection;
-
-  state.sortColumn =
-    column;
-
-  state.sortDirection =
-    direction;
-
-
-  rows.sort(
-    (a,b)=>{
-
-      const av =
-        a[column];
-
-      const bv =
-        b[column];
-
-      if(av === bv)
-        return 0;
-
-      if(av === null || av === undefined)
-        return 1;
-
-      if(bv === null || bv === undefined)
-        return -1;
-
-      const aa =
-        typeof av === 'object'
-          ? JSON.stringify(av)
-          : String(av);
-
-      const bb =
-        typeof bv === 'object'
-          ? JSON.stringify(bv)
-          : String(bv);
-
-      const result =
-        aa.localeCompare(
-          bb,
-          undefined,
-          {
-            numeric:true,
-            sensitivity:'base'
-          }
-        );
-
-      return direction === 'asc'
-        ? result
-        : -result;
-
-    }
-  );
+  }
 
 
   const total =
     rows.length;
 
-  const pages =
-    Math.max(
-      1,
-      Math.ceil(
-        total / state.pageSize
-      )
-    );
-
-  if(state.page > pages)
-    state.page=pages;
-
   const start =
-    (state.page - 1) *
+    (state.pageNum-1) *
     state.pageSize;
 
-  const visible =
-    rows.slice(
-      start,
-      start + state.pageSize
-    );
-
-
-  $('dbHead').innerHTML =
-    `
-      <tr>
-
-        ${
-          cfg.columns
-            .map(
-              ([name])=>`
-                <th>
-                  ${esc(
-                    prettyName(name)
-                  )}
-                </th>
-              `
-            )
-            .join('')
-        }
-
-        <th>
-          Actions
-        </th>
-
-      </tr>
-    `;
-
-
-  if(!visible.length){
-
-    $('dbBody').innerHTML =
-      `
-        <tr>
-          <td
-            colspan="${cfg.columns.length + 1}">
-
-            <div class="empty">
-
-              <strong>
-                No records found
-              </strong>
-
-              ${
-                cfg.view
-                  ? 'This view currently contains no rows.'
-                  : 'Use + Add to create the first record.'
-              }
-
-            </div>
-
-          </td>
-        </tr>
-      `;
-
-  }else{
-
-    $('dbBody').innerHTML =
-      visible
-        .map(
-          row=>
-            renderDatabaseRow(
-              row,
-              cfg
-            )
-        )
-        .join('');
-
-  }
-
-
-  const from =
-    total
-      ? start + 1
-      : 0;
-
-  const to =
+  const end =
     Math.min(
       start + state.pageSize,
       total
     );
 
-  $('paginationInfo')
-    .textContent =
-    `${from}–${to} of ${total} · Page ${state.page}/${pages}`;
-
-  $('prevPage')
-    .disabled =
-    state.page <= 1;
-
-  $('nextPage')
-    .disabled =
-    state.page >= pages;
-
-}
+  const pageRows =
+    rows.slice(
+      start,
+      end
+    );
 
 
-function renderDatabaseRow(
-  row,
-  cfg
-){
+  const keys =
+    state.schema.length
+    ? state.schema.map(x=>x.key)
+    : rows.length
+      ? Object.keys(rows[0])
+      : [];
 
-  return `
-    <tr>
 
-      ${
-        cfg.columns
-          .map(
-            ([name,type])=>`
+  if(!rows.length){
+
+    target.innerHTML =
+      `
+        <div class="empty">
+          No records found.
+        </div>
+      `;
+
+    return;
+  }
+
+
+  target.innerHTML = `
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            ${keys.map(key=>`
+
+              <th
+                style="cursor:pointer;"
+                onclick="sortBy('${esc(key)}')">
+
+                ${esc(
+                  prettyKey(key)
+                )}
+
+                ${
+                  state.sort === key
+                  ? state.sortDir === 'asc'
+                    ? ' ↑'
+                    : ' ↓'
+                  : ''
+                }
+
+              </th>
+
+            `).join('')}
+
+            <th>
+              Actions
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${pageRows.map(row=>`
+
+            <tr>
+
+              ${keys.map(key=>`
+
+                <td>
+
+                  <div class="cell"
+                       title="${esc(
+                         displayValue(
+                           row[key],
+                           key
+                         )
+                       )}">
+
+                    ${valueBadge(
+                      key,
+                      displayValue(
+                        row[key],
+                        key
+                      )
+                    )}
+
+                  </div>
+
+                </td>
+
+              `).join('')}
 
               <td>
 
-                ${
-                  type === 'boolean'
-                    ? badge(
-                        row[name]
-                          ? 'Yes'
-                          : 'No'
-                      )
-                    : type === 'jsonb'
-                      ? `
-                        <span
-                          class="code"
-                          title="${esc(
-                            JSON.stringify(
-                              row[name]
-                            )
-                          )}">
-                          ${esc(
-                            JSON.stringify(
-                              row[name]
-                            )
-                          )}
-                        </span>
-                      `
-                      : `
-                        ${esc(
-                          formatValue(
-                            row[name],
-                            type
-                          )
-                        )}
-                      `
-                }
+                <div class="actions">
+
+                  ${
+                    row.id ||
+                    row.user_id
+                    ? `
+                      <button
+                        class="btn small"
+                        onclick="openRecordModal(
+                          '${state.table}',
+                          '${esc(
+                            row.id ||
+                            row.user_id
+                          )}'
+                        )">
+                        Edit
+                      </button>
+                    `
+                    : ''
+                  }
+
+                  ${
+                    TABLES[state.table]?.readonly
+                    ? ''
+                    : `
+                      <button
+                        class="btn red small"
+                        onclick="deleteRecord(
+                          '${state.table}',
+                          '${esc(
+                            row.id ||
+                            row.user_id ||
+                            ''
+                          )}'
+                        )">
+                        Delete
+                      </button>
+                    `
+                  }
+
+                </div>
 
               </td>
 
-            `
-          )
-          .join('')
-      }
+            </tr>
 
+          `).join('')}
 
-      <td>
+        </tbody>
 
-        ${
-          cfg.view
-            ? `
-              <button
-                class="btn btn-small"
-                onclick='viewRecord(${JSON.stringify(row).replace(/'/g,"&#039;")})'>
-                View
-              </button>
-            `
-            : `
-              <div class="actions">
-
-                <button
-                  class="btn btn-small"
-                  onclick='editRecord(${JSON.stringify(row).replace(/'/g,"&#039;")},"${cfg.pk}")'>
-                  Edit
-                </button>
-
-                <button
-                  class="btn btn-small btn-danger"
-                  onclick='deleteRecord("${state.selectedTable}",${JSON.stringify(row).replace(/'/g,"&#039;")})'>
-                  Delete
-                </button>
-
-              </div>
-            `
-        }
-
-      </td>
-
-    </tr>
-  `;
-
-}
-
-
-$('prevPage')
-  .addEventListener(
-    'click',
-    ()=>{
-      if(state.page > 1){
-
-        state.page--;
-
-        renderDatabaseTable();
-
-      }
-    }
-  );
-
-
-$('nextPage')
-  .addEventListener(
-    'click',
-    ()=>{
-
-      const pages =
-        Math.max(
-          1,
-          Math.ceil(
-            state.filteredRows.length /
-            state.pageSize
-          )
-        );
-
-      if(state.page < pages){
-
-        state.page++;
-
-        renderDatabaseTable();
-
-      }
-
-    }
-  );
-
-
-/* ============================================================
-   RECORD FORM
-============================================================ */
-
-function openRecordModal(
-  table,
-  row=null
-){
-
-  const cfg =
-    TABLES[table];
-
-  if(!cfg || cfg.view)
-    return;
-
-  state.selectedTable =
-    table;
-
-  state.editingId =
-    row
-      ? row[cfg.pk]
-      : null;
-
-
-  $('modalTitle')
-    .textContent =
-    row
-      ? `Edit ${cfg.label}`
-      : `Add ${cfg.label}`;
-
-
-  $('modalBody')
-    .innerHTML =
-    `
-      <div
-        class="schema-note"
-        style="margin-bottom:18px">
-
-        ${esc(table)}
-
-        ${
-          row
-            ? ' · editing existing record'
-            : ' · creating new record'
-        }
-
-      </div>
-
-      <div class="form-grid">
-
-        ${
-          cfg.columns
-            .map(
-              ([name,type])=>
-                renderField(
-                  table,
-                  name,
-                  type,
-                  row
-                )
-            )
-            .join('')
-        }
-
-      </div>
-    `;
-
-
-  $('modalSave')
-    .onclick =
-    ()=>saveRecord(table);
-
-
-  openModal();
-
-}
-
-
-function renderField(
-  table,
-  name,
-  type,
-  row
-){
-
-  const generated =
-    isGeneratedColumn(
-      table,
-      name
-    );
-
-  if(generated)
-    return `
-      <div class="field">
-
-        <label>
-          ${esc(
-            prettyName(name)
-          )}
-        </label>
-
-        <div class="field-help">
-          Automatically generated by the database.
-        </div>
-
-      </div>
-    `;
-
-
-  const value =
-    row?.[name];
-
-
-  if(type === 'boolean'){
-
-    return `
-      <div class="field">
-
-        <div class="checkbox">
-
-          <input
-            id="field_${esc(name)}"
-            type="checkbox"
-            ${value ? 'checked':''}
-          >
-
-          <label
-            for="field_${esc(name)}">
-            ${esc(
-              prettyName(name)
-            )}
-          </label>
-
-        </div>
-
-      </div>
-    `;
-
-  }
-
-
-  if(
-    type === 'jsonb' ||
-    type === 'json'
-  ){
-
-    let jsonValue =
-      value === undefined ||
-      value === null
-        ? '{}'
-        : JSON.stringify(
-            value,
-            null,
-            2
-          );
-
-    return `
-      <div class="field full">
-
-        <label>
-          ${esc(
-            prettyName(name)
-          )}
-        </label>
-
-        <textarea
-          id="field_${esc(name)}"
-          class="textarea json-editor"
-          spellcheck="false">${esc(
-            jsonValue
-          )}</textarea>
-
-        <div class="field-help">
-          Enter valid JSON.
-        </div>
-
-      </div>
-    `;
-
-  }
-
-
-  let inputType =
-    'text';
-
-  if(
-    type === 'integer' ||
-    type === 'bigint' ||
-    type === 'smallint' ||
-    type === 'numeric'
-  )
-    inputType='number';
-
-  if(type === 'date')
-    inputType='date';
-
-  if(type === 'time')
-    inputType='time';
-
-  if(type === 'timestamptz')
-    inputType='datetime-local';
-
-  const normalized =
-    String(name)
-      .toLowerCase();
-
-  if(
-    normalized.includes('url') ||
-    normalized.includes('href')
-  )
-    inputType='url';
-
-
-  const multiline =
-    [
-      'description',
-      'message',
-      'content',
-      'body',
-      'excerpt',
-      'bio',
-      'metadata',
-      'pitch_notes',
-      'admin_notes'
-    ].includes(name);
-
-
-  let displayValue =
-    value ?? '';
-
-
-  if(
-    type === 'timestamptz'
-  ){
-
-    displayValue =
-      toLocalInput(
-        value
-      );
-
-  }else if(
-    type === 'time' &&
-    value
-  ){
-
-    displayValue =
-      String(value)
-        .slice(0,5);
-
-  }
-
-
-  if(multiline){
-
-    return `
-      <div class="field full">
-
-        <label>
-          ${esc(
-            prettyName(name)
-          )}
-        </label>
-
-        <textarea
-          id="field_${esc(name)}"
-          class="textarea"
-          ${type === 'jsonb' ? 'spellcheck="false"' : ''}
-        >${esc(
-          displayValue
-        )}</textarea>
-
-      </div>
-    `;
-
-  }
-
-
-  return `
-    <div class="field">
-
-      <label>
-        ${esc(
-          prettyName(name)
-        )}
-      </label>
-
-      <input
-        id="field_${esc(name)}"
-        class="input"
-        type="${inputType}"
-        value="${esc(
-          displayValue
-        )}"
-        ${inputType==='number'
-          ? 'step="any"'
-          : ''}
-      >
+      </table>
 
     </div>
+
+
+    <div class="pagination">
+
+      <div class="pagination-info">
+
+        ${total
+          ? `${start+1}–${end} of ${total}`
+          : '0 records'}
+
+      </div>
+
+      <div class="pagination-buttons">
+
+        <button
+          class="btn small"
+          onclick="changePage(-1)"
+          ${state.pageNum <= 1
+            ? 'disabled'
+            : ''}>
+          ←
+        </button>
+
+        <span
+          class="badge purple"
+          style="align-self:center;">
+          Page ${state.pageNum}
+        </span>
+
+        <button
+          class="btn small"
+          onclick="changePage(1)"
+          ${end >= total
+            ? 'disabled'
+            : ''}>
+          →
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div style="
+      padding:15px;
+      border-top:1px solid var(--border);
+    ">
+
+      <div class="panel-title"
+           style="margin-bottom:12px;">
+        TABLE SCHEMA
+      </div>
+
+      <div class="schema-list">
+
+        ${keys.map(key=>{
+
+          const item =
+            state.schema.find(
+              x=>x.key===key
+            );
+
+          return `
+
+            <div class="schema-item">
+
+              <strong>
+                ${esc(key)}
+              </strong>
+
+              <span>
+                ${esc(
+                  item?.type ||
+                  'unknown'
+                )}
+              </span>
+
+              <span>
+                ${
+                  key === 'id' ||
+                  key === 'user_id'
+                  ? 'identifier'
+                  : ''
+                }
+              </span>
+
+            </div>
+
+          `;
+
+        }).join('')}
+
+      </div>
+
+    </div>
+
   `;
 
 }
 
 
-function toLocalInput(
-  value
-){
+function renderDatabaseRows(){
 
-  if(!value)
-    return '';
+  renderTableContent();
 
-  const d =
-    new Date(value);
+}
+
+
+function displayValue(value,key){
+
+  if(value === null || value === undefined){
+    return '—';
+  }
+
+  if(typeof value === 'object'){
+    return safeJson(value);
+  }
 
   if(
-    Number.isNaN(
-      d.getTime()
-    )
-  )
-    return '';
+    String(key)
+      .toLowerCase()
+      .includes('amount')
+  ){
 
-  const pad =
-    n =>
-      String(n)
-        .padStart(2,'0');
+    return formatMoney(value);
 
-  return `
-    ${d.getFullYear()}-
-    ${pad(d.getMonth()+1)}-
-    ${pad(d.getDate())}T
-    ${pad(d.getHours())}:
-    ${pad(d.getMinutes())}
-  `.replace(/\s/g,'');
+  }
 
-}
+  if(
+    String(key)
+      .toLowerCase()
+      .includes('date') ||
+    String(key)
+      .toLowerCase()
+      .endsWith('_at')
+  ){
 
+    return formatDate(value);
 
-function localToIso(
-  value
-){
+  }
 
-  if(!value)
-    return null;
-
-  const d =
-    new Date(value);
-
-  return Number.isNaN(
-    d.getTime()
-  )
-    ? null
-    : d.toISOString();
+  return String(value);
 
 }
 
 
-async function saveRecord(
-  table
+function sortBy(key){
+
+  if(state.sort === key){
+
+    state.sortDir =
+      state.sortDir === 'asc'
+      ? 'desc'
+      : 'asc';
+
+  }else{
+
+    state.sort =
+      key;
+
+    state.sortDir =
+      'asc';
+
+  }
+
+  renderTableContent();
+
+}
+
+
+function changePage(delta){
+
+  const max =
+    Math.max(
+      1,
+      Math.ceil(
+        state.filtered.length /
+        state.pageSize
+      )
+    );
+
+  state.pageNum =
+    Math.min(
+      max,
+      Math.max(
+        1,
+        state.pageNum + delta
+      )
+    );
+
+  renderTableContent();
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+async function openAddModal(table){
+
+  if(TABLES[table]?.readonly){
+
+    toast(
+      'This resource is read-only.',
+      'error'
+    );
+
+    return;
+  }
+
+  state.table =
+    table;
+
+  state.editingId=null;
+  state.editingRow={};
+
+  await openEditor(
+    table,
+    {},
+    false
+  );
+
+}
+
+
+async function openRecordModal(
+  table,
+  id
 ){
-
-  const cfg =
-    TABLES[table];
-
-  const payload = {};
-
 
   try{
 
-    for(
-      const [name,type]
-      of cfg.columns
+    const primary =
+      id;
+
+    let query =
+      sb
+        .from(table)
+        .select('*');
+
+
+    if(
+      table === 'cr_admins' &&
+      isUUID(primary)
     ){
 
-      if(
-        isGeneratedColumn(
-          table,
-          name
-        )
-      )
-        continue;
-
-
-      const el =
-        $(
-          'field_' +
-          name
+      query =
+        query.eq(
+          'user_id',
+          primary
         );
 
-      if(!el)
-        continue;
+    }else if(
+      isUUID(primary)
+    ){
 
-
-      if(type === 'boolean'){
-
-        payload[name] =
-          el.checked;
-
-        continue;
-
-      }
-
-
-      let value =
-        el.value;
-
-
-      if(
-        type === 'jsonb' ||
-        type === 'json'
-      ){
-
-        if(
-          value.trim() === ''
-        ){
-
-          payload[name] =
-            {};
-
-        }else{
-
-          payload[name] =
-            JSON.parse(
-              value
-            );
-
-        }
-
-        continue;
-
-      }
-
-
-      if(
-        type === 'integer' ||
-        type === 'bigint' ||
-        type === 'smallint'
-      ){
-
-        payload[name] =
-          value === ''
-            ? null
-            : Number(value);
-
-        continue;
-
-      }
-
-
-      if(type === 'numeric'){
-
-        payload[name] =
-          value === ''
-            ? null
-            : Number(value);
-
-        continue;
-
-      }
-
-
-      if(type === 'timestamptz'){
-
-        payload[name] =
-          localToIso(
-            value
-          );
-
-        continue;
-
-      }
-
-
-      payload[name] =
-        value.trim() === ''
-          ? null
-          : value.trim();
-
-    }
-
-
-    if(
-      table === 'cr_divisions' &&
-      payload.name &&
-      !payload.slug
-    )
-      payload.slug =
-        slugify(
-          payload.name
+      query =
+        query.eq(
+          'id',
+          primary
         );
-
-
-    if(
-      table === 'cr_news' &&
-      payload.title &&
-      !payload.slug
-    )
-      payload.slug =
-        slugify(
-          payload.title
-        );
-
-
-    if(
-      table === 'cr_original_productions' &&
-      payload.title &&
-      !payload.slug
-    )
-      payload.slug =
-        slugify(
-          payload.title
-        );
-
-
-    if(
-      table === 'cr_projects' &&
-      payload.name &&
-      !payload.slug
-    )
-      payload.slug =
-        slugify(
-          payload.name
-        );
-
-
-    if(
-      table === 'cr_donation_campaigns' &&
-      payload.name &&
-      !payload.slug
-    )
-      payload.slug =
-        slugify(
-          payload.name
-        );
-
-
-    if(
-      table === 'cr_updates' &&
-      payload.published === true &&
-      !payload.published_at
-    )
-      payload.published_at =
-        new Date().toISOString();
-
-
-    loading(true);
-
-
-    let result;
-
-
-    if(state.editingId !== null){
-
-      result =
-        await updateRow(
-          table,
-          cfg.pk,
-          state.editingId,
-          payload
-        );
-
-      await audit(
-        'update',
-        table,
-        state.editingId,
-        {
-          fields:Object.keys(
-            payload
-          )
-        }
-      );
-
-      toast(
-        `${cfg.label} updated.`,
-        'success'
-      );
 
     }else{
 
-      result =
-        await insertRow(
-          table,
-          payload
+      query =
+        query.eq(
+          'id',
+          primary
         );
-
-      await audit(
-        'insert',
-        table,
-        result?.[cfg.pk] || null,
-        {
-          fields:Object.keys(
-            payload
-          )
-        }
-      );
-
-      toast(
-        `${cfg.label} created.`,
-        'success'
-      );
 
     }
 
 
-    closeModal();
+    const {
+      data,
+      error
+    } =
+      await query
+        .limit(1)
+        .maybeSingle();
 
-    await loadSelectedTable();
+    if(error){
+      throw error;
+    }
 
-    await refreshCountsOnly();
+    if(!data){
 
+      toast(
+        'Record not found.',
+        'error'
+      );
+
+      return;
+    }
+
+    state.table =
+      table;
+
+    state.editingId =
+      data.id ||
+      data.user_id;
+
+    state.editingRow =
+      data;
+
+    await openEditor(
+      table,
+      data,
+      true
+    );
 
   }catch(error){
 
-    console.error(error);
-
     toast(
-      error.message ||
-      `Could not save ${cfg.label.toLowerCase()}.`,
+      error.message,
       'error'
     );
-
-  }finally{
-
-    loading(false);
 
   }
 
 }
 
 
-function editRecord(
+async function openEditor(
+  table,
   row,
-  pk
+  editing
 ){
 
-  if(!state.selectedTable)
-    return;
-
-  openRecordModal(
-    state.selectedTable,
-    row
-  );
-
-}
+  const schema =
+    inferSchema(
+      state.rows.length
+      ? state.rows
+      : [row]
+    );
 
 
-function viewRecord(
-  row
-){
+  const keys =
+    schema.length
+    ? schema.map(x=>x.key)
+    : Object.keys(row);
 
-  const table =
-    state.selectedTable;
 
-  const cfg =
-    TABLES[table];
+  const generated =
+    new Set([
+      'created_at',
+      'updated_at'
+    ]);
 
-  $('modalTitle')
+
+  const primary =
+    table === 'cr_admins'
+    ? 'user_id'
+    : 'id';
+
+
+  document
+    .getElementById('modalTitle')
     .textContent =
-    `View ${cfg.label}`;
+      `${editing ? 'Edit' : 'Add'} ${
+        prettyTable(table)
+      }`;
 
-  $('modalBody')
-    .innerHTML =
-    `
+
+  document
+    .getElementById('modalBody')
+    .innerHTML = `
+
       <div class="form-grid">
 
-        ${
-          cfg.columns
-            .map(
-              ([name,type])=>`
+        ${keys.map(key=>{
 
-                <div
-                  class="field
-                  ${type==='jsonb'?'full':''}">
+          if(
+            generated.has(key)
+          ){
+            return '';
+          }
 
-                  <label>
-                    ${esc(
-                      prettyName(name)
-                    )}
-                  </label>
+          const value =
+            row?.[key];
 
-                  <div
-                    class="code"
-                    style="
-                      background:#06080c;
-                      border:1px solid var(--line);
-                      border-radius:9px;
-                      padding:10px;
-                    ">
+          const inferred =
+            schema.find(
+              x=>x.key===key
+            )?.type ||
+            typeof value;
 
-                    ${esc(
-                      formatValue(
-                        row[name],
-                        type
-                      )
-                    )}
 
-                  </div>
+          const isPrimary =
+            key === primary;
 
-                </div>
 
-              `
-            )
-            .join('')
-        }
+          const readonly =
+            editing &&
+            isPrimary;
+
+
+          return editorField(
+            key,
+            value,
+            inferred,
+            readonly
+          );
+
+        }).join('')}
 
       </div>
+
     `;
 
-  $('modalSave')
-    .style
-    .display='none';
 
-  openModal();
+  document
+    .getElementById('modalSave')
+    .onclick =
+      ()=>saveModalRecord(
+        table,
+        editing
+      );
+
+
+  document
+    .getElementById('modalBackdrop')
+    .classList.add('open');
 
 }
 
 
-async function deleteRecord(
-  table,
-  row
+function editorField(
+  key,
+  value,
+  type,
+  readonly
 ){
 
-  const cfg =
-    TABLES[table];
+  const lower =
+    String(key).toLowerCase();
+
+
+  const full =
+    type === 'jsonb' ||
+    lower.includes('description') ||
+    lower.includes('content') ||
+    lower.includes('metadata') ||
+    lower.includes('body') ||
+    lower.includes('notes');
+
+
+  let input='';
+
 
   if(
-    !cfg ||
-    cfg.view ||
-    !cfg.pk
-  )
-    return;
-
-
-  const id =
-    row[cfg.pk];
-
-
-  if(
-    id === undefined ||
-    id === null
+    type === 'boolean' ||
+    typeof value === 'boolean'
   ){
 
-    toast(
-      'This record does not expose a usable primary key.',
-      'error'
-    );
+    input = `
 
-    return;
+      <select
+        data-field="${esc(key)}"
+        ${readonly ? 'disabled':''}>
 
-  }
+        <option value="">
+          — Select —
+        </option>
 
+        <option
+          value="true"
+          ${value === true ? 'selected':''}>
+          TRUE
+        </option>
 
-  const display =
-    row.title ||
-    row.name ||
-    row.organization_name ||
-    row.email ||
-    row.slug ||
-    id;
+        <option
+          value="false"
+          ${value === false ? 'selected':''}>
+          FALSE
+        </option>
 
+      </select>
 
-  const warning =
-    table === 'donations' ||
-    table === 'cr_donation_events'
-      ? '\n\nWARNING: This is a donation/transaction record. Deleting it may affect reporting or reconciliation.'
-      : '';
-
-
-  if(
-    !confirm(
-      `Delete "${display}"?${warning}\n\nThis cannot be undone.`
-    )
-  )
-    return;
-
-
-  loading(true);
-
-
-  try{
-
-    await deleteRow(
-      table,
-      cfg.pk,
-      id
-    );
-
-
-    await audit(
-      'delete',
-      table,
-      id,
-      {
-        display:String(
-          display
-        )
-      }
-    );
-
-
-    toast(
-      `${cfg.label} record deleted.`,
-      'success'
-    );
-
-
-    await loadSelectedTable();
-
-    await refreshCountsOnly();
-
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      error.message ||
-      `Could not delete ${cfg.label.toLowerCase()}.`,
-      'error'
-    );
-
-  }finally{
-
-    loading(false);
-
-  }
-
-}
-
-
-/* ============================================================
-   COUNTS
-============================================================ */
-
-async function refreshCountsOnly(){
-
-  const entries =
-    Object.keys(TABLES);
-
-  const results =
-    await Promise.all(
-      entries.map(
-        async table=>{
-
-          try{
-
-            return [
-              table,
-              await countRows(
-                table
-              )
-            ];
-
-          }catch(_){
-
-            return [
-              table,
-              null
-            ];
-
-          }
-
-        }
-      )
-    );
-
-  state.tableCounts =
-    Object.fromEntries(
-      results
-    );
-
-  renderTableList();
-
-  await updateDashboard();
-
-}
-
-
-/* ============================================================
-   DASHBOARD
-============================================================ */
-
-async function updateDashboard(){
-
-  const counts =
-    Object.values(
-      state.tableCounts
-    );
-
-  const validCounts =
-    counts.filter(
-      n=>typeof n === 'number'
-    );
-
-
-  const totalRecords =
-    validCounts.reduce(
-      (a,b)=>a+b,
-      0
-    );
-
-
-  $('metricTables')
-    .textContent =
-    Object.keys(
-      TABLES
-    ).length;
-
-
-  $('metricRecords')
-    .textContent =
-    totalRecords
-      .toLocaleString();
-
-
-  $('metricDivisions')
-    .textContent =
-    state.tableCounts
-      .cr_divisions ??
-      '—';
-
-
-  $('metricShows')
-    .textContent =
-    state.tableCounts
-      .cr_original_productions ??
-      '—';
-
-
-  $('metricEpisodes')
-    .textContent =
-    state.tableCounts
-      .cr_episodes ??
-      '—';
-
-
-  $('metricNews')
-    .textContent =
-    state.tableCounts
-      .cr_news ??
-      '—';
-
-
-  $('metricLive')
-    .textContent =
-    '—';
-
-
-  await renderDashboardTables();
-
-  await renderDashboardShows();
-
-  await renderDashboardEpisodes();
-
-  await renderDonationDashboard();
-
-}
-
-
-async function renderDashboardTables(){
-
-  const entries =
-    Object.entries(
-      state.tableCounts
-    )
-      .sort(
-        (a,b)=>
-          (b[1] || 0) -
-          (a[1] || 0)
-      )
-      .slice(0,10);
-
-
-  $('dashboardTables')
-    .innerHTML =
-    entries.map(
-      ([table,count])=>`
-
-        <div style="
-          display:flex;
-          justify-content:space-between;
-          gap:10px;
-          align-items:center;
-          padding:9px 0;
-          border-bottom:1px solid var(--line);
-        ">
-
-          <div>
-
-            <div class="item-title">
-              ${esc(
-                TABLES[table]?.label ||
-                table
-              )}
-            </div>
-
-            <div class="item-sub">
-              ${esc(table)}
-            </div>
-
-          </div>
-
-          <span class="badge">
-            ${
-              count === null ||
-              count === undefined
-                ? 'ERR'
-                : count
-            }
-          </span>
-
-        </div>
-
-      `
-    )
-    .join('');
-
-}
-
-
-async function renderDashboardShows(){
-
-  try{
-
-    const rows =
-      await selectRows(
-        'cr_original_productions',
-        6
-      );
-
-
-    const live =
-      rows.filter(
-        x=>x.is_live
-      ).length;
-
-
-    $('metricLive')
-      .textContent =
-      live;
-
-
-    $('dashboardShows')
-      .innerHTML =
-      rows.length
-        ? rows.map(
-            s=>`
-
-              <div style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                gap:10px;
-                padding:10px 0;
-                border-bottom:1px solid var(--line);
-              ">
-
-                <div>
-
-                  <div class="item-title">
-                    ${esc(
-                      s.title
-                    )}
-                  </div>
-
-                  <div class="item-sub">
-                    ${esc(
-                      s.schedule_text ||
-                      s.status ||
-                      ''
-                    )}
-                  </div>
-
-                </div>
-
-                ${
-                  s.is_live
-                    ? badge('LIVE')
-                    : badge(
-                        s.status
-                      )
-                }
-
-              </div>
-
-            `
-          ).join('')
-        : `
-          <div class="empty">
-            <strong>
-              No productions
-            </strong>
-          </div>
-        `;
-
-  }catch(error){
-
-    $('dashboardShows')
-      .innerHTML =
-      `
-        <div class="empty">
-          ${esc(
-            error.message
-          )}
-        </div>
-      `;
-
-  }
-
-}
-
-
-async function renderDashboardEpisodes(){
-
-  try{
-
-    const rows =
-      await selectRows(
-        'cr_episodes',
-        6
-      );
-
-
-    $('dashboardEpisodes')
-      .innerHTML =
-      rows.length
-        ? rows.map(
-            e=>`
-
-              <div style="
-                padding:10px 0;
-                border-bottom:1px solid var(--line);
-              ">
-
-                <div class="item-title">
-
-                  S${esc(
-                    e.season_number
-                  )}
-
-                  E${esc(
-                    e.episode_number
-                  )}
-
-                  — ${esc(
-                    e.title
-                  )}
-
-                </div>
-
-                <div class="item-sub">
-
-                  ${esc(
-                    e.status
-                  )}
-
-                  ${
-                    e.release_date
-                      ? ' · ' +
-                        esc(
-                          e.release_date
-                        )
-                      : ''
-                  }
-
-                </div>
-
-              </div>
-
-            `
-          ).join('')
-        : `
-          <div class="empty">
-            <strong>
-              No episodes
-            </strong>
-          </div>
-        `;
-
-  }catch(error){
-
-    $('dashboardEpisodes')
-      .innerHTML =
-      `
-        <div class="empty">
-          ${esc(
-            error.message
-          )}
-        </div>
-      `;
-
-  }
-
-}
-
-
-async function renderDonationDashboard(){
-
-  let count=0;
-  let total=0;
-
-
-  try{
-
-    const stats =
-      await selectRows(
-        'cr_donation_stats',
-        1000
-      );
-
-
-    stats.forEach(
-      row=>{
-
-        count +=
-          Number(
-            row.donation_count ||
-            0
-          );
-
-        total +=
-          Number(
-            row.total_amount ||
-            0
-          );
-
-      }
-    );
-
-
-  }catch(error){
-
-    console.warn(
-      error
-    );
-
-  }
-
-
-  $('dashboardDonationCount')
-    .textContent =
-    count.toLocaleString();
-
-
-  $('dashboardDonationTotal')
-    .textContent =
-    money(total);
-
-}
-
-
-/* ============================================================
-   SPECIALIZED TABLE PAGES
-============================================================ */
-
-const SPECIAL_TABLES = {
-
-  divisions:'cr_divisions',
-
-  shows:'cr_original_productions',
-
-  episodes:'cr_episodes',
-
-  news:'cr_news',
-
-  updates:'cr_updates',
-
-  announcements:'cr_announcements',
-
-  projects:'cr_projects',
-
-  partners:'cr_partners',
-
-  inquiries:'cr_partnership_inquiries',
-
-  campaigns:'cr_donation_campaigns',
-
-  donations:'donations',
-
-  subscribers:'cr_subscribers',
-
-  events:'cr_events',
-
-  schedule:'cr_schedule',
-
-  roadmap:'cr_roadmap',
-
-  media:'cr_media',
-
-  admins:'cr_admins',
-
-  audit:'cr_admin_audit_log'
-
-};
-
-
-async function renderSpecialPage(
-  page
-){
-
-  const table =
-    SPECIAL_TABLES[page];
-
-  if(!table)
-    return;
-
-  const container =
-    $('special-' + page);
-
-  if(!container)
-    return;
-
-
-  container.innerHTML =
-    `
-      <div class="card">
-
-        <div class="card-head">
-
-          <div>
-
-            <div class="card-title">
-              ${esc(
-                TABLES[table].label
-              )}
-            </div>
-
-            <div class="schema-note">
-              ${esc(table)}
-            </div>
-
-          </div>
-
-          <div class="actions">
-
-            <button
-              class="btn btn-small"
-              onclick="openDatabaseTable('${table}')">
-              Full Database View
-            </button>
-
-            ${
-              TABLES[table].view
-                ? ''
-                : `
-                  <button
-                    class="btn btn-small btn-primary"
-                    onclick="openRecordModal('${table}')">
-                    + Add
-                  </button>
-                `
-            }
-
-          </div>
-
-        </div>
-
-        <div class="card-body">
-
-          <div class="toolbar">
-
-            <input
-              id="specialSearch_${page}"
-              class="search"
-              placeholder="Search ${esc(
-                TABLES[table].label
-              )}..."
-              oninput="renderSpecialRows('${page}','${table}')"
-            >
-
-          </div>
-
-          <div class="table-wrap">
-
-            <table>
-
-              <thead>
-
-                <tr>
-
-                  ${
-                    TABLES[table].columns
-                      .slice(0,7)
-                      .map(
-                        ([name])=>
-                          `<th>
-                            ${esc(
-                              prettyName(
-                                name
-                              )
-                            )}
-                          </th>`
-                      )
-                      .join('')
-                  }
-
-                  <th>
-                    Actions
-                  </th>
-
-                </tr>
-
-              </thead>
-
-              <tbody
-                id="specialBody_${page}">
-
-                <tr>
-                  <td colspan="10">
-                    Loading...
-                  </td>
-                </tr>
-
-              </tbody>
-
-            </table>
-
-          </div>
-
-        </div>
-
-      </div>
     `;
 
+  }else if(type === 'jsonb'){
 
-  try{
+    input = `
 
-    const rows =
-      await selectRows(
-        table,
-        100
-      );
-
-    state.specialRows =
-      state.specialRows || {};
-
-    state.specialRows[table] =
-      rows;
-
-    renderSpecialRows(
-      page,
-      table
-    );
-
-  }catch(error){
-
-    $(
-      'specialBody_' +
-      page
-    ).innerHTML =
-    `
-      <tr>
-        <td colspan="10">
-
-          <div class="empty">
-
-            <strong>
-              Database error
-            </strong>
-
-            ${esc(
-              error.message
-            )}
-
-          </div>
-
-        </td>
-      </tr>
-    `;
-
-  }
-
-}
-
-
-function renderSpecialRows(
-  page,
-  table
-){
-
-  const rows =
-    state.specialRows?.[table] ||
-    [];
-
-  const search =
-    (
-      $('specialSearch_' + page)
-        ?.value ||
-      ''
-    )
-      .toLowerCase();
-
-
-  const cfg =
-    TABLES[table];
-
-
-  const filtered =
-    rows.filter(
-      row=>
-        !search ||
-        Object.values(row)
-          .some(
-            value=>
-              JSON.stringify(
-                value
+      <textarea
+        data-field="${esc(key)}"
+        ${readonly ? 'readonly':''}>${
+          esc(
+            value
+            ? JSON.stringify(
+                value,
+                null,
+                2
               )
-              .toLowerCase()
-              .includes(search)
+            : ''
           )
-    )
-    .slice(0,100);
+        }</textarea>
 
+      <small>
+        JSON / JSONB value
+      </small>
 
-  const columns =
-    cfg.columns
-      .slice(0,7);
+    `;
 
+  }else if(
+    lower.includes('description') ||
+    lower.includes('content') ||
+    lower.includes('body') ||
+    lower.includes('notes') ||
+    lower.includes('metadata')
+  ){
 
-  const body =
-    $('specialBody_' + page);
+    input = `
 
+      <textarea
+        data-field="${esc(key)}"
+        ${readonly ? 'readonly':''}>${esc(
+          value ?? ''
+        )}</textarea>
 
-  if(!filtered.length){
+    `;
 
-    body.innerHTML =
-      `
-        <tr>
-          <td colspan="${columns.length+1}">
+  }else if(
+    lower.includes('date') &&
+    !lower.includes('updated_at')
+  ){
 
-            <div class="empty">
+    input = `
 
-              <strong>
-                No records found
-              </strong>
+      <input
+        data-field="${esc(key)}"
+        type="date"
+        value="${esc(
+          normalizeDate(value)
+        )}"
+        ${readonly ? 'readonly':''}>
 
-            </div>
+    `;
 
-          </td>
-        </tr>
-      `;
+  }else if(
+    lower.endsWith('_at') ||
+    lower.includes('timestamp')
+  ){
 
-    return;
+    input = `
+
+      <input
+        data-field="${esc(key)}"
+        type="datetime-local"
+        value="${esc(
+          normalizeDateTime(value)
+        )}"
+        ${readonly ? 'readonly':''}>
+
+    `;
+
+  }else if(
+    lower.includes('time') &&
+    !lower.includes('timezone')
+  ){
+
+    input = `
+
+      <input
+        data-field="${esc(key)}"
+        type="time"
+        value="${esc(
+          value || ''
+        )}"
+        ${readonly ? 'readonly':''}>
+
+    `;
+
+  }else if(
+    type === 'integer' ||
+    type === 'numeric' ||
+    type === 'number'
+  ){
+
+    input = `
+
+      <input
+        data-field="${esc(key)}"
+        type="number"
+        step="${
+          type === 'integer'
+          ? '1'
+          : 'any'
+        }"
+        value="${esc(
+          value ?? ''
+        )}"
+        ${readonly ? 'readonly':''}>
+
+    `;
+
+  }else{
+
+    input = `
+
+      <input
+        data-field="${esc(key)}"
+        type="text"
+        value="${esc(
+          value ?? ''
+        )}"
+        ${readonly ? 'readonly':''}>
+
+    `;
 
   }
 
 
-  body.innerHTML =
-    filtered.map(
-      row=>`
+  return `
 
-        <tr>
+    <div class="form-field ${full ? 'full':''}">
 
-          ${
-            columns
-              .map(
-                ([name,type])=>`
+      <label>
+        ${esc(
+          prettyKey(key)
+        )}
+      </label>
 
-                  <td>
+      ${input}
 
-                    ${
-                      type === 'boolean'
-                        ? badge(
-                            row[name]
-                              ? 'Yes'
-                              : 'No'
-                          )
-                        : esc(
-                            formatValue(
-                              row[name],
-                              type
-                            )
-                          )
-                    }
+    </div>
 
-                  </td>
-
-                `
-              )
-              .join('')
-          }
-
-
-          <td>
-
-            ${
-              cfg.view
-                ? `
-                  <button
-                    class="btn btn-small"
-                    onclick='viewSpecialRecord(${JSON.stringify(row).replace(/'/g,"&#039;")},"${table}")'>
-                    View
-                  </button>
-                `
-                : `
-                  <div class="actions">
-
-                    <button
-                      class="btn btn-small"
-                      onclick='editSpecialRecord(${JSON.stringify(row).replace(/'/g,"&#039;")},"${table}")'>
-                      Edit
-                    </button>
-
-                    <button
-                      class="btn btn-small btn-danger"
-                      onclick='deleteSpecialRecord(${JSON.stringify(row).replace(/'/g,"&#039;")},"${table}")'>
-                      Delete
-                    </button>
-
-                  </div>
-                `
-            }
-
-          </td>
-
-        </tr>
-
-      `
-    ).join('');
+  `;
 
 }
 
 
-function editSpecialRecord(
-  row,
-  table
-){
+function normalizeDate(value){
 
-  openRecordModal(
-    table,
-    row
-  );
+  if(!value){
+    return '';
+  }
 
-}
-
-
-function viewSpecialRecord(
-  row,
-  table
-){
-
-  state.selectedTable =
-    table;
-
-  viewRecord(
-    row
-  );
+  return String(value)
+    .slice(0,10);
 
 }
 
 
-async function deleteSpecialRecord(
-  row,
-  table
-){
+function normalizeDateTime(value){
 
-  state.selectedTable =
-    table;
+  if(!value){
+    return '';
+  }
 
-  await deleteRecord(
-    table,
-    row
-  );
+  const d =
+    new Date(value);
 
-  await renderSpecialPage(
-    Object.keys(
-      SPECIAL_TABLES
-    ).find(
-      key=>
-        SPECIAL_TABLES[key]===table
-    )
-  );
+  if(Number.isNaN(d.getTime())){
+    return '';
+  }
 
-}
+  const pad =
+    n=>String(n).padStart(2,'0');
 
-
-function openDatabaseTable(
-  table
-){
-
-  state.selectedTable =
-    table;
-
-  go('database');
-
-  selectTable(
-    table
-  );
-
-}
-
-
-/* ============================================================
-   QUICK ADD
-============================================================ */
-
-function openQuickAdd(){
-
-  const options =
-    Object.entries(
-      TABLES
-    )
-      .filter(
-        ([,cfg])=>
-          !cfg.view
-      );
-
-
-  $('modalTitle')
-    .textContent =
-    'Add Database Record';
-
-
-  $('modalBody')
-    .innerHTML =
-    `
-      <div class="field">
-
-        <label>
-          Database Table
-        </label>
-
-        <select
-          id="quickTable"
-          class="select">
-
-          <option value="">
-            Select a table...
-          </option>
-
-          ${
-            options
-              .map(
-                ([table,cfg])=>
-                  `
-                    <option
-                      value="${esc(table)}">
-                      ${esc(
-                        cfg.label
-                      )}
-                      — ${esc(table)}
-                    </option>
-                  `
-              )
-              .join('')
-          }
-
-        </select>
-
-      </div>
-
-      <br>
-
-      <div class="schema-note">
-
-        Select the table first. The full schema-aware
-        record form will open next.
-
-      </div>
-    `;
-
-
-  $('modalSave')
-    .style
-    .display='inline-flex';
-
-
-  $('modalSave')
-    .onclick =
-    ()=>{
-
-      const table =
-        $('quickTable')
-          .value;
-
-      if(!table){
-
-        toast(
-          'Select a table first.',
-          'error'
-        );
-
-        return;
-
-      }
-
-      closeModal();
-
-      openRecordModal(
-        table
-      );
-
-    };
-
-
-  openModal();
-
-}
-
-
-/* ============================================================
-   MODAL
-============================================================ */
-
-function openModal(){
-
-  $('modalBackdrop')
-    .classList
-    .add('show');
+  return `${
+    d.getFullYear()
+  }-${
+    pad(d.getMonth()+1)
+  }-${
+    pad(d.getDate())
+  }T${
+    pad(d.getHours())
+  }:${
+    pad(d.getMinutes())
+  }`;
 
 }
 
 
 function closeModal(){
 
-  $('modalBackdrop')
-    .classList
-    .remove('show');
-
-  $('modalSave')
-    .style
-    .display='inline-flex';
-
-  state.editingId=null;
+  document
+    .getElementById('modalBackdrop')
+    .classList.remove('open');
 
 }
 
 
-$('modalBackdrop')
+document
+  .getElementById('modalClose')
+  .addEventListener(
+    'click',
+    closeModal
+  );
+
+
+document
+  .getElementById('modalCancel')
+  .addEventListener(
+    'click',
+    closeModal
+  );
+
+
+document
+  .getElementById('modalBackdrop')
   .addEventListener(
     'click',
     event=>{
 
       if(
-        event.target ===
-        $('modalBackdrop')
-      )
+        event.target.id ===
+        'modalBackdrop'
+      ){
         closeModal();
+      }
 
     }
   );
 
+
+async function saveModalRecord(
+  table,
+  editing
+){
+
+  const modal =
+    document.getElementById(
+      'modalBody'
+    );
+
+
+  const fields =
+    modal.querySelectorAll(
+      '[data-field]'
+    );
+
+
+  const payload={};
+
+
+  fields.forEach(field=>{
+
+    if(field.disabled){
+      return;
+    }
+
+    const key =
+      field.dataset.field;
+
+    let value =
+      field.value;
+
+
+    const lower =
+      key.toLowerCase();
+
+
+    if(value === ''){
+      value=null;
+    }
+
+
+    if(
+      field.tagName === 'SELECT' &&
+      (
+        value === 'true' ||
+        value === 'false'
+      )
+    ){
+
+      value =
+        value === 'true';
+
+    }
+
+
+    if(
+      (
+        lower.includes('metadata') ||
+        lower.includes('json')
+      ) &&
+      typeof value === 'string' &&
+      value.trim()
+    ){
+
+      try{
+        value =
+          JSON.parse(value);
+      }catch{
+
+        toast(
+          `Invalid JSON in ${prettyKey(key)}.`,
+          'error'
+        );
+
+        throw new Error(
+          'Invalid JSON'
+        );
+
+      }
+
+    }
+
+
+    if(
+      field.type === 'number' &&
+      value !== null
+    ){
+
+      value =
+        Number(value);
+
+    }
+
+
+    payload[key]=value;
+
+  });
+
+
+  /*
+   * Automatically generate slug from title
+   * when adding a new record.
+   */
+
+  if(
+    !editing &&
+    payload.title &&
+    Object.prototype.hasOwnProperty.call(
+      payload,
+      'slug'
+    ) &&
+    !payload.slug
+  ){
+
+    payload.slug =
+      slugify(payload.title);
+
+  }
+
+
+  /*
+   * Automatically stamp published_at
+   * for newly published updates.
+   */
+
+  if(
+    table === 'cr_updates' &&
+    payload.is_published === true &&
+    !payload.published_at
+  ){
+
+    payload.published_at =
+      new Date().toISOString();
+
+  }
+
+
+  const saveButton =
+    document.getElementById(
+      'modalSave'
+    );
+
+  saveButton.disabled=true;
+  saveButton.textContent='Saving…';
+
+
+  try{
+
+    let result;
+
+
+    if(editing){
+
+      const id =
+        state.editingId;
+
+
+      if(
+        table === 'cr_admins'
+      ){
+
+        result =
+          await sb
+            .from(table)
+            .update(payload)
+            .eq(
+              'user_id',
+              id
+            );
+
+      }else{
+
+        result =
+          await sb
+            .from(table)
+            .update(payload)
+            .eq(
+              'id',
+              id
+            );
+
+      }
+
+    }else{
+
+      result =
+        await sb
+          .from(table)
+          .insert(payload);
+
+    }
+
+
+    if(result.error){
+      throw result.error;
+    }
+
+
+    await audit(
+      editing
+        ? 'UPDATE'
+        : 'INSERT',
+      table,
+      editing
+        ? state.editingId
+        : null,
+      {
+        keys:Object.keys(payload)
+      }
+    );
+
+
+    toast(
+      editing
+        ? 'Record updated successfully.'
+        : 'Record created successfully.',
+      'success'
+    );
+
+
+    closeModal();
+
+    await loadTable();
+
+
+  }catch(error){
+
+    toast(
+      error.message,
+      'error'
+    );
+
+  }finally{
+
+    saveButton.disabled=false;
+    saveButton.textContent='Save';
+
+  }
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deleteRecord(
+  table,
+  id
+){
+
+  if(
+    TABLES[table]?.readonly
+  ){
+    return;
+  }
+
+
+  if(!id){
+
+    toast(
+      'This record does not expose a deletable ID.',
+      'error'
+    );
+
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      `Delete this ${prettyTable(table)} record?\n\nThis action cannot be undone.`
+    );
+
+
+  if(!confirmed){
+    return;
+  }
+
+
+  try{
+
+    let query =
+      sb
+        .from(table)
+        .delete();
+
+
+    if(
+      table === 'cr_admins'
+    ){
+
+      query =
+        query.eq(
+          'user_id',
+          id
+        );
+
+    }else{
+
+      query =
+        query.eq(
+          'id',
+          id
+        );
+
+    }
+
+
+    const {
+      error
+    } =
+      await query;
+
+
+    if(error){
+      throw error;
+    }
+
+
+    await audit(
+      'DELETE',
+      table,
+      id
+    );
+
+
+    toast(
+      'Record deleted.',
+      'success'
+    );
+
+
+    await loadTable();
+
+  }catch(error){
+
+    toast(
+      error.message,
+      'error'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   AUDIT
+========================================================= */
+
+async function audit(
+  action,
+  table,
+  targetId=null,
+  metadata={}
+){
+
+  try{
+
+    /*
+     * cr_admin_audit_log.target_id is treated
+     * as UUID when supplied. Do not pass non-UUID
+     * identifiers into a UUID field.
+     */
+
+    const target =
+      isUUID(targetId)
+      ? targetId
+      : null;
+
+
+    await sb
+      .from('cr_admin_audit_log')
+      .insert({
+
+        admin_user_id:
+          state.user?.id || null,
+
+        action,
+
+        table_name:
+          table,
+
+        target_id:
+          target,
+
+        metadata
+
+      });
+
+  }catch(error){
+
+    console.warn(
+      'Audit logging failed:',
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CSV EXPORT
+========================================================= */
+
+function exportCSV(){
+
+  const rows =
+    state.filtered.length
+    ? state.filtered
+    : state.rows;
+
+
+  if(!rows.length){
+
+    toast(
+      'There are no records to export.',
+      'error'
+    );
+
+    return;
+  }
+
+
+  const keys =
+    [...new Set(
+      rows.flatMap(
+        row=>Object.keys(row)
+      )
+    )];
+
+
+  const csv=[];
+
+
+  csv.push(
+    keys.map(csvEscape).join(',')
+  );
+
+
+  rows.forEach(row=>{
+
+    csv.push(
+      keys
+        .map(key=>
+          csvEscape(
+            typeof row[key] === 'object'
+            ? safeJson(row[key])
+            : row[key]
+          )
+        )
+        .join(',')
+    );
+
+  });
+
+
+  const blob =
+    new Blob(
+      [csv.join('\n')],
+      {
+        type:'text/csv;charset=utf-8;'
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement('a');
+
+  a.href=url;
+
+  a.download =
+    `${
+      state.table
+    }-${
+      new Date()
+        .toISOString()
+        .slice(0,10)
+    }.csv`;
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+
+  toast(
+    'CSV exported.',
+    'success'
+  );
+
+}
+
+
+function csvEscape(value){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+    return '';
+  }
+
+  const text =
+    String(value)
+      .replaceAll('"','""');
+
+  return `"${text}"`;
+
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+function errorBox(
+  message,
+  table=''
+){
+
+  return `
+
+    <div style="
+      padding:25px;
+      color:var(--red);
+    ">
+
+      <strong>
+        Database request failed
+      </strong>
+
+      <div style="
+        margin-top:8px;
+        color:#b8b8c8;
+        font-size:11px;
+        line-height:1.6;
+      ">
+
+        ${esc(message)}
+
+      </div>
+
+      ${
+        table
+        ? `
+          <div style="
+            margin-top:12px;
+            color:#77778b;
+            font-size:10px;
+          ">
+            Table: ${esc(table)}
+          </div>
+        `
+        : ''
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   REALTIME
+========================================================= */
+
+async function setupRealtime(){
+
+  if(state.realtime){
+    return;
+  }
+
+
+  try{
+
+    /*
+     * Private Broadcast channel.
+     *
+     * IMPORTANT:
+     * This establishes an authenticated admin
+     * refresh channel. Database changes will only
+     * automatically trigger refreshes if the
+     * database side is configured to broadcast
+     * appropriate events.
+     */
+
+    await sb.realtime.setAuth();
+
+
+    const channel =
+      sb.channel(
+        'crowrules-admin-v5',
+        {
+          config:{
+            private:true
+          }
+        }
+      );
+
+
+    channel.on(
+      'broadcast',
+      {
+        event:'admin_refresh'
+      },
+      payload=>{
+
+        console.log(
+          'Admin realtime refresh:',
+          payload
+        );
+
+        refreshCurrentPage();
+
+      }
+    );
+
+
+    channel.subscribe(
+      status=>{
+
+        const badge =
+          document.getElementById(
+            'realtimeBadge'
+          );
+
+        if(!badge){
+          return;
+        }
+
+
+        if(status === 'SUBSCRIBED'){
+
+          badge.className =
+            'badge green';
+
+          badge.textContent =
+            'REALTIME CONNECTED';
+
+        }else if(
+          status === 'CHANNEL_ERROR' ||
+          status === 'TIMED_OUT'
+        ){
+
+          badge.className =
+            'badge red';
+
+          badge.textContent =
+            'REALTIME ERROR';
+
+        }
+
+      }
+    );
+
+
+    state.realtime =
+      channel;
+
+
+  }catch(error){
+
+    console.warn(
+      'Realtime setup:',
+      error
+    );
+
+    const badge =
+      document.getElementById(
+        'realtimeBadge'
+      );
+
+    if(badge){
+
+      badge.className =
+        'badge yellow';
+
+      badge.textContent =
+        'REALTIME OPTIONAL';
+
+    }
+
+  }
+
+}
+
+
+async function refreshCurrentPage(){
+
+  if(
+    state.page === 'dashboard'
+  ){
+
+    await refreshDashboard();
+
+    return;
+  }
+
+
+  if(
+    state.page === 'health'
+  ){
+
+    await runHealthCheck();
+
+    return;
+  }
+
+
+  if(
+    state.page === 'activity'
+  ){
+
+    await renderActivity();
+
+    return;
+  }
+
+
+  if(
+    state.page === 'search'
+  ){
+
+    return;
+  }
+
+
+  await loadTable();
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+========================================================= */
 
 document
   .addEventListener(
     'keydown',
     event=>{
 
+      /*
+       * Ctrl/Cmd + K
+       * Global Search
+       */
+
+      if(
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === 'k'
+      ){
+
+        event.preventDefault();
+
+        state.page='search';
+
+        renderPage();
+
+      }
+
+
+      /*
+       * Escape closes modal.
+       */
+
       if(
         event.key === 'Escape'
-      )
+      ){
+
         closeModal();
 
-    }
-  );
-
-
-/* ============================================================
-   HEALTH
-============================================================ */
-
-async function renderHealth(){
-
-  const container =
-    $('healthGrid');
-
-  container.innerHTML =
-    `
-      <div class="health-card">
-        Running diagnostics...
-      </div>
-    `;
-
-
-  const entries =
-    Object.keys(
-      TABLES
-    );
-
-
-  const results =
-    await Promise.all(
-      entries.map(
-        async table=>{
-
-          const started =
-            performance.now();
-
-          try{
-
-            const {
-              error
-            } =
-              await supabaseClient
-                .from(table)
-                .select('*')
-                .limit(1);
-
-            if(error)
-              throw error;
-
-            return {
-              table,
-              ok:true,
-              ms:Math.round(
-                performance.now() -
-                started
-              )
-            };
-
-          }catch(error){
-
-            return {
-              table,
-              ok:false,
-              error:
-                error.message
-            };
-
-          }
-
-        }
-      )
-    );
-
-
-  container.innerHTML =
-    results.map(
-      result=>`
-
-        <div class="health-card">
-
-          <div class="health-status">
-
-            <div>
-
-              <div class="item-title">
-                ${esc(
-                  TABLES[
-                    result.table
-                  ].label
-                )}
-              </div>
-
-              <div class="item-sub">
-                ${esc(
-                  result.table
-                )}
-              </div>
-
-            </div>
-
-            ${
-              result.ok
-                ? badge('success')
-                : badge('danger')
-            }
-
-          </div>
-
-          <br>
-
-          <div class="item-sub">
-
-            ${
-              result.ok
-                ? `${result.ms} ms response`
-                : esc(
-                    result.error
-                  )
-            }
-
-          </div>
-
-        </div>
-
-      `
-    ).join('');
-
-}
-
-
-/* ============================================================
-   REALTIME
-============================================================ */
-
-function setupRealtime(){
-
-  state.channels.forEach(
-    channel=>{
-      try{
-        supabaseClient
-          .removeChannel(
-            channel
-          );
-      }catch(_){}
-    }
-  );
-
-
-  state.channels=[];
-
-
-  const realtimeTables =
-    Object.keys(
-      TABLES
-    )
-      .filter(
-        table=>
-          !TABLES[table].view
-      );
-
-
-  realtimeTables.forEach(
-    table=>{
-
-      const channel =
-        supabaseClient
-          .channel(
-            'admin-' +
-            table +
-            '-' +
-            Math.random()
-          )
-          .on(
-            'postgres_changes',
-            {
-              event:'*',
-              schema:'public',
-              table
-            },
-            async()=>{
-
-              try{
-
-                if(
-                  state.selectedTable ===
-                  table
-                )
-                  await loadSelectedTable();
-
-                await refreshCountsOnly();
-
-                if(
-                  SPECIAL_TABLES[
-                    state.currentPage
-                  ] === table
-                ){
-
-                  await renderSpecialPage(
-                    state.currentPage
-                  );
-
-                }
-
-              }catch(error){
-
-                console.warn(
-                  'Realtime update failed',
-                  error
-                );
-
-              }
-
-            }
-          )
-          .subscribe();
-
-
-      state.channels.push(
-        channel
-      );
+      }
 
     }
   );
 
-}
 
+/* =========================================================
+   START
+========================================================= */
 
-/* ============================================================
-   INIT
-============================================================ */
-
-async function init(){
-
-  setConnection(
-    false,
-    'Connecting'
-  );
-
-  await authUI();
-
-  setupRealtime();
-
-}
-
-
-init();
-
-
-/* ============================================================
-   GLOBAL ERRORS
-============================================================ */
-
-window.addEventListener(
-  'unhandledrejection',
-  event=>{
-
-    console.error(
-      'Unhandled rejection:',
-      event.reason
-    );
-
-  }
-);
-
-
-window.addEventListener(
-  'error',
-  event=>{
-
-    console.error(
-      'Application error:',
-      event.error ||
-      event.message
-    );
-
-  }
-);
+initializeAuth();
 
 </script>
 
