@@ -2,63 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,viewport-fit=cover">
-
-<meta
-  name="theme-color"
-  content="#050509">
-
-<meta
-  name="description"
-  content="CrowRules Entertainment Admin v5.1 — Universal Supabase Command Center">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#05070b">
+<meta name="description" content="CrowRules Entertainment Admin v5.1 — Secure Supabase Command Center">
 <title>CrowRules Entertainment — Admin v5.1</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link
-  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap"
-  rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-/* =========================================================
-   CROWRULES ENTERTAINMENT
-   ADMIN v5.1
-   UNIVERSAL SUPABASE COMMAND CENTER
-========================================================= */
-
 :root{
-  --bg:#050509;
-  --bg2:#090910;
-  --panel:#0d0d16;
-  --panel2:#11111b;
-  --panel3:#161621;
-  --border:#252536;
-
-  --text:#f4f4f7;
-  --muted:#8f8fa3;
-  --muted2:#66667a;
-
-  --purple:#9d5cff;
-  --purple2:#6d32d9;
-  --cyan:#28d9ff;
-  --green:#48e69d;
-  --yellow:#ffd166;
-  --orange:#ff9d42;
-  --red:#ff5d73;
-
-  --shadow:0 20px 70px rgba(0,0,0,.45);
-
-  --radius:15px;
-
-  --sidebar:275px;
+  --bg:#05070b;
+  --bg2:#090d14;
+  --panel:#0d131d;
+  --panel2:#111a26;
+  --line:#1c2a3a;
+  --text:#eef4ff;
+  --muted:#91a0b4;
+  --accent:#7c5cff;
+  --accent2:#20d9ff;
+  --good:#32d583;
+  --warn:#f5b83d;
+  --bad:#ff5d73;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --radius:18px;
+  --sidebar:270px;
 }
 
 *{
@@ -68,21 +35,19 @@
 html,
 body{
   margin:0;
-  padding:0;
   min-height:100%;
-  background:var(--bg);
+  background:
+    radial-gradient(circle at 15% 10%,rgba(124,92,255,.13),transparent 30%),
+    radial-gradient(circle at 90% 10%,rgba(32,217,255,.08),transparent 28%),
+    var(--bg);
   color:var(--text);
-  font-family:Montserrat,Arial,sans-serif;
-}
-
-body{
-  overflow-x:hidden;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 button,
 input,
-textarea,
-select{
+select,
+textarea{
   font:inherit;
 }
 
@@ -90,202 +55,212 @@ button{
   cursor:pointer;
 }
 
-button:disabled{
-  cursor:not-allowed;
-  opacity:.45;
-}
-
-input,
-textarea,
-select{
-  width:100%;
-  background:#07070d;
-  border:1px solid var(--border);
-  color:var(--text);
-  border-radius:9px;
-  padding:11px 12px;
-  outline:none;
-  transition:.2s;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:var(--purple);
-  box-shadow:0 0 0 3px rgba(157,92,255,.12);
-}
-
-textarea{
-  min-height:125px;
-  resize:vertical;
-}
-
 .hidden{
   display:none!important;
 }
 
+.app{
+  min-height:100vh;
+}
 
 /* =========================================================
    LOGIN
-========================================================= */
+   ========================================================= */
 
-.login-screen{
+#loginScreen{
   min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:25px;
-
-  background:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(157,92,255,.16),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at 85% 75%,
-      rgba(40,217,255,.10),
-      transparent 35%
-    ),
-    var(--bg);
+  display:grid;
+  place-items:center;
+  padding:24px;
 }
 
 .login-card{
-  width:min(480px,100%);
-  padding:38px;
-  background:rgba(13,13,22,.96);
-  border:1px solid var(--border);
-  border-radius:23px;
+  width:min(460px,100%);
+  background:rgba(13,19,29,.92);
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:34px;
   box-shadow:var(--shadow);
+  backdrop-filter:blur(18px);
 }
 
 .logo{
-  font-family:Orbitron,sans-serif;
-  font-size:22px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:24px;
+}
+
+.logo-mark{
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;
+  font-size:25px;
   font-weight:900;
-  letter-spacing:2px;
+  box-shadow:0 0 35px rgba(124,92,255,.3);
 }
 
-.logo span{
-  color:var(--purple);
+.logo-title{
+  font-weight:900;
+  font-size:19px;
 }
 
-.login-version{
-  margin-top:5px;
-  color:var(--muted2);
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1.4px;
+.logo-sub{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:3px;
 }
 
 .login-card h1{
-  margin:32px 0 8px;
-  font-family:Orbitron,sans-serif;
-  font-size:25px;
+  margin:0 0 8px;
+  font-size:28px;
 }
 
 .login-card p{
   color:var(--muted);
-  line-height:1.65;
-  font-size:12px;
+  line-height:1.6;
 }
 
-.login-form{
-  display:grid;
-  gap:13px;
-  margin-top:25px;
+.field{
+  margin:16px 0;
 }
 
-.form-field{
-  display:grid;
-  gap:6px;
+.field label{
+  display:block;
+  margin-bottom:7px;
+  color:#b7c4d7;
+  font-size:13px;
+  font-weight:700;
 }
 
-.form-field label{
-  color:#aaaabb;
-  font-size:9px;
-  font-weight:900;
-  text-transform:uppercase;
-  letter-spacing:.9px;
+.field input,
+.field select,
+.field textarea,
+.search-box{
+  width:100%;
+  background:#080d14;
+  border:1px solid var(--line);
+  color:var(--text);
+  border-radius:12px;
+  padding:12px 13px;
+  outline:none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.search-box:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(124,92,255,.12);
+}
+
+.primary{
+  border:0;
+  border-radius:12px;
+  padding:12px 16px;
+  background:linear-gradient(135deg,var(--accent),#5d83ff);
+  color:white;
+  font-weight:800;
+}
+
+.primary:hover{
+  filter:brightness(1.08);
+}
+
+.secondary{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:11px 15px;
+  background:#0b1119;
+  color:var(--text);
+}
+
+.danger{
+  border:1px solid rgba(255,93,115,.35);
+  background:rgba(255,93,115,.08);
+  color:#ff9aaa;
+}
+
+.success{
+  color:var(--good);
+}
+
+.error{
+  color:#ff8b9b;
+}
+
+.login-error{
+  margin-top:15px;
+  padding:12px;
+  border:1px solid rgba(255,93,115,.25);
+  background:rgba(255,93,115,.07);
+  border-radius:12px;
+  color:#ff9aaa;
+  line-height:1.5;
+  font-size:13px;
 }
 
 .login-status{
-  min-height:20px;
-  color:var(--red);
+  margin-top:14px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* =========================================================
+   MAIN APP
+   ========================================================= */
+
+#adminApp{
+  display:none;
+}
+
+.layout{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:var(--sidebar) 1fr;
+}
+
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:auto;
+  background:rgba(7,11,17,.95);
+  border-right:1px solid var(--line);
+  padding:20px 14px;
+}
+
+.side-brand{
+  padding:7px 9px 20px;
+}
+
+.side-brand strong{
+  display:block;
+  font-size:16px;
+}
+
+.side-brand span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
   font-size:11px;
 }
 
-
-/* =========================================================
-   APPLICATION
-========================================================= */
-
-.app{
-  display:none;
-  min-height:100vh;
+.nav-group{
+  margin:18px 0;
 }
 
-.app.active{
-  display:block;
-}
-
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.sidebar{
-  position:fixed;
-  z-index:200;
-  left:0;
-  top:0;
-  bottom:0;
-  width:var(--sidebar);
-
-  display:flex;
-  flex-direction:column;
-
-  background:#08080e;
-  border-right:1px solid var(--border);
-}
-
-.sidebar-header{
-  padding:20px;
-  border-bottom:1px solid var(--border);
-}
-
-.sidebar-brand{
-  font-family:Orbitron,sans-serif;
-  font-size:18px;
+.nav-label{
+  color:#64758c;
+  font-size:10px;
   font-weight:900;
-  letter-spacing:1px;
-}
-
-.sidebar-brand span{
-  color:var(--purple);
-}
-
-.sidebar-sub{
-  margin-top:5px;
-  color:var(--muted2);
-  font-size:9px;
+  letter-spacing:.13em;
   text-transform:uppercase;
-  letter-spacing:1.2px;
-}
-
-.nav{
-  flex:1;
-  overflow-y:auto;
-  padding:11px;
-}
-
-.nav-section{
-  margin:17px 8px 7px;
-  color:#555568;
-  font-size:9px;
-  font-weight:900;
-  text-transform:uppercase;
-  letter-spacing:1.5px;
+  padding:0 10px 8px;
 }
 
 .nav-btn{
@@ -293,1150 +268,570 @@ textarea{
   display:flex;
   align-items:center;
   gap:10px;
-
-  padding:9px 10px;
-  margin-bottom:3px;
-
-  background:transparent;
   border:1px solid transparent;
-  border-radius:8px;
-
-  color:#a2a2b5;
+  background:transparent;
+  color:#aebbd0;
   text-align:left;
-  font-size:11px;
-  font-weight:700;
+  padding:10px 11px;
+  border-radius:11px;
+  margin:3px 0;
 }
 
-.nav-btn:hover{
-  background:#11111a;
-  color:white;
-}
-
+.nav-btn:hover,
 .nav-btn.active{
-  background:
-    linear-gradient(
-      90deg,
-      rgba(157,92,255,.22),
-      rgba(157,92,255,.04)
-    );
-
-  border-color:rgba(157,92,255,.28);
+  background:#101925;
+  border-color:#1d2c40;
   color:white;
 }
 
 .nav-icon{
   width:22px;
   text-align:center;
-  font-size:13px;
 }
-
-.nav-count{
-  margin-left:auto;
-  color:#77778a;
-  font-size:9px;
-}
-
-.sidebar-footer{
-  padding:11px;
-  border-top:1px solid var(--border);
-}
-
-.user-card{
-  padding:11px;
-  background:#0e0e17;
-  border:1px solid var(--border);
-  border-radius:9px;
-  margin-bottom:9px;
-}
-
-.user-label{
-  color:#555568;
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.user-email{
-  margin-top:5px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  color:#d7d7e2;
-  font-size:10px;
-}
-
-
-/* =========================================================
-   MAIN
-========================================================= */
 
 .main{
-  margin-left:var(--sidebar);
-  min-height:100vh;
+  min-width:0;
 }
 
 .topbar{
   position:sticky;
   top:0;
-  z-index:100;
-
+  z-index:20;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  gap:15px;
-
-  min-height:62px;
-  padding:11px 22px;
-
-  background:rgba(5,5,9,.91);
+  justify-content:space-between;
+  gap:18px;
+  padding:14px 22px;
+  background:rgba(5,7,11,.82);
+  border-bottom:1px solid var(--line);
   backdrop-filter:blur(18px);
-
-  border-bottom:1px solid var(--border);
 }
 
-.topbar-left{
+.top-left{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:14px;
   min-width:0;
 }
 
-.topbar-title{
-  font-family:Orbitron,sans-serif;
-  font-size:14px;
-  font-weight:800;
+.menu-toggle{
+  display:none;
 }
 
-.topbar-subtitle{
+.page-title{
+  font-weight:900;
+}
+
+.page-subtitle{
   color:var(--muted);
-  font-size:9px;
+  font-size:11px;
+  margin-top:3px;
 }
 
-.topbar-right{
+.top-actions{
   display:flex;
   align-items:center;
-  gap:7px;
+  gap:8px;
 }
 
-.page{
-  max-width:1800px;
-  margin:auto;
+.user-pill{
+  border:1px solid var(--line);
+  background:#0b1119;
+  border-radius:999px;
+  padding:8px 12px;
+  color:#c7d2e2;
+  font-size:12px;
+}
+
+.content{
   padding:24px;
 }
 
-
 /* =========================================================
-   BUTTONS
-========================================================= */
+   VIEWS
+   ========================================================= */
 
-.btn{
-  border:1px solid var(--border);
-  border-radius:8px;
-
-  background:#14141e;
-  color:#e7e7ee;
-
-  padding:9px 12px;
-
-  font-size:10px;
-  font-weight:800;
-
-  transition:.2s;
+.view{
+  display:none;
 }
 
-.btn:hover{
-  border-color:#414156;
-  transform:translateY(-1px);
+.view.active{
+  display:block;
 }
 
-.btn.primary{
-  color:white;
-  border-color:transparent;
-
+.hero{
   background:
-    linear-gradient(
-      135deg,
-      var(--purple),
-      var(--purple2)
-    );
-}
-
-.btn.cyan{
-  color:var(--cyan);
-  background:rgba(40,217,255,.08);
-  border-color:rgba(40,217,255,.24);
-}
-
-.btn.green{
-  color:var(--green);
-  background:rgba(72,230,157,.08);
-  border-color:rgba(72,230,157,.24);
-}
-
-.btn.yellow{
-  color:var(--yellow);
-  background:rgba(255,209,102,.08);
-  border-color:rgba(255,209,102,.24);
-}
-
-.btn.red{
-  color:var(--red);
-  background:rgba(255,93,115,.08);
-  border-color:rgba(255,93,115,.24);
-}
-
-.btn.small{
-  padding:6px 8px;
-  font-size:9px;
-}
-
-
-/* =========================================================
-   PAGE HEADER
-========================================================= */
-
-.page-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:20px;
-
-  margin-bottom:19px;
-}
-
-.page-header h1{
-  margin:0;
-
-  font-family:Orbitron,sans-serif;
-  font-size:23px;
-}
-
-.page-header p{
-  margin:7px 0 0;
-
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.5;
-}
-
-.page-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-}
-
-
-/* =========================================================
-   PANELS
-========================================================= */
-
-.panel{
-  background:var(--panel);
-  border:1px solid var(--border);
+    linear-gradient(135deg,rgba(124,92,255,.12),rgba(32,217,255,.05)),
+    var(--panel);
+  border:1px solid var(--line);
   border-radius:var(--radius);
-  overflow:hidden;
+  padding:25px;
+  margin-bottom:20px;
+  box-shadow:var(--shadow);
 }
 
-.panel-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-
-  padding:14px 16px;
-  border-bottom:1px solid var(--border);
+.hero h1{
+  margin:0;
+  font-size:30px;
 }
 
-.panel-title{
-  font-family:Orbitron,sans-serif;
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.7px;
+.hero p{
+  max-width:850px;
+  color:var(--muted);
+  line-height:1.65;
+  margin:8px 0 0;
 }
 
-.panel-body{
-  padding:16px;
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-.stats{
+.grid{
   display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:10px;
-  margin-bottom:15px;
+  gap:15px;
+}
+
+.grid-4{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+.grid-3{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+.grid-2{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.card{
+  background:rgba(13,19,29,.9);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow);
 }
 
 .stat{
-  padding:15px;
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:13px;
+  min-height:130px;
 }
 
 .stat-label{
   color:var(--muted);
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  font-weight:900;
+  font-size:12px;
 }
 
 .stat-value{
-  margin-top:7px;
-
-  font-family:Orbitron,sans-serif;
-  font-size:22px;
-  font-weight:800;
-}
-
-.stat-sub{
-  margin-top:5px;
-  color:var(--muted2);
-  font-size:9px;
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:1.4fr 1fr;
-  gap:14px;
-}
-
-.quick-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:9px;
-}
-
-.quick-card{
-  display:block;
-  width:100%;
-
-  padding:14px;
-
-  background:#0a0a11;
-  border:1px solid var(--border);
-  border-radius:10px;
-
-  text-align:left;
-  color:var(--text);
-}
-
-.quick-card:hover{
-  border-color:var(--purple);
-}
-
-.quick-icon{
-  font-size:18px;
-}
-
-.quick-title{
-  margin-top:8px;
-  font-size:10px;
+  margin-top:13px;
+  font-size:30px;
   font-weight:900;
 }
 
-.quick-desc{
-  margin-top:4px;
-  color:var(--muted);
-  font-size:9px;
-  line-height:1.45;
+.stat-note{
+  margin-top:7px;
+  color:#66778d;
+  font-size:11px;
 }
 
-
-/* =========================================================
-   TABLE
-========================================================= */
-
-.toolbar{
+.section-title{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:9px;
-  flex-wrap:wrap;
-
-  padding:11px;
-
-  background:#0b0b12;
-  border-bottom:1px solid var(--border);
+  gap:10px;
+  margin:26px 0 12px;
 }
 
-.toolbar-group{
+.section-title h2{
+  margin:0;
+  font-size:18px;
+}
+
+.section-title span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.toolbar{
   display:flex;
   align-items:center;
-  gap:6px;
+  gap:9px;
   flex-wrap:wrap;
+  margin-bottom:14px;
 }
 
-.search{
-  min-width:230px;
+.toolbar .search-box{
+  max-width:360px;
 }
 
 .table-wrap{
-  width:100%;
-  max-height:62vh;
   overflow:auto;
+  border:1px solid var(--line);
+  border-radius:15px;
 }
 
 table{
   width:100%;
-  min-width:900px;
   border-collapse:collapse;
+  min-width:750px;
 }
 
 th,
 td{
-  padding:9px 11px;
-
-  border-bottom:1px solid #1c1c28;
-
+  padding:12px 13px;
+  border-bottom:1px solid #172333;
   text-align:left;
   vertical-align:top;
-
-  font-size:10px;
+  font-size:12px;
 }
 
 th{
-  position:sticky;
-  top:0;
-  z-index:5;
-
-  background:#10101a;
-
-  color:#9292a6;
-
-  font-size:8px;
+  color:#8494aa;
+  font-size:10px;
   text-transform:uppercase;
-  letter-spacing:.7px;
-}
-
-th.sortable{
-  cursor:pointer;
-}
-
-th.sortable:hover{
-  color:white;
-}
-
-td{
-  color:#d5d5df;
+  letter-spacing:.08em;
+  background:#0a1018;
 }
 
 tr:hover td{
-  background:#12121b;
+  background:rgba(255,255,255,.015);
 }
-
-.cell{
-  max-width:300px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.actions{
-  display:flex;
-  gap:4px;
-  white-space:nowrap;
-}
-
-
-/* =========================================================
-   BADGES
-========================================================= */
 
 .badge{
   display:inline-flex;
   align-items:center;
-
-  padding:3px 6px;
-
   border-radius:999px;
-
-  background:#20202d;
-  color:#aaaabd;
-
-  font-size:8px;
-  font-weight:900;
-  text-transform:uppercase;
-  letter-spacing:.35px;
+  padding:4px 8px;
+  font-size:10px;
+  font-weight:800;
+  border:1px solid var(--line);
+  background:#0b1119;
 }
 
-.badge.green{
-  color:var(--green);
-  background:rgba(72,230,157,.08);
+.badge.good{
+  color:var(--good);
+  border-color:rgba(50,213,131,.2);
 }
 
-.badge.red{
-  color:var(--red);
-  background:rgba(255,93,115,.08);
+.badge.warn{
+  color:var(--warn);
+  border-color:rgba(245,184,61,.2);
 }
 
-.badge.yellow{
-  color:var(--yellow);
-  background:rgba(255,209,102,.08);
+.badge.bad{
+  color:var(--bad);
+  border-color:rgba(255,93,115,.2);
 }
 
-.badge.cyan{
-  color:var(--cyan);
-  background:rgba(40,217,255,.08);
-}
-
-.badge.purple{
-  color:#c7a2ff;
-  background:rgba(157,92,255,.09);
-}
-
-.badge.orange{
-  color:var(--orange);
-  background:rgba(255,157,66,.08);
-}
-
-
-/* =========================================================
-   PAGINATION
-========================================================= */
-
-.pagination{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-
-  padding:11px 13px;
-
-  border-top:1px solid var(--border);
-}
-
-.pagination-info{
+.muted{
   color:var(--muted);
-  font-size:9px;
 }
 
-.pagination-buttons{
-  display:flex;
-  align-items:center;
-  gap:5px;
+.mono{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 
+pre{
+  white-space:pre-wrap;
+  word-break:break-word;
+  background:#070b11;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:15px;
+  color:#cbd6e7;
+  max-height:500px;
+  overflow:auto;
+}
+
+.empty{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+}
 
 /* =========================================================
-   DATABASE RESOURCE CARDS
-========================================================= */
+   RESOURCE EXPLORER
+   ========================================================= */
 
-.resource-grid{
+.resource-list{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:9px;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:10px;
 }
 
-.resource-card{
-  padding:13px;
-
-  background:#0a0a11;
-  border:1px solid var(--border);
-  border-radius:11px;
-
+.resource{
+  border:1px solid var(--line);
+  background:#0a1018;
+  border-radius:13px;
+  padding:14px;
   cursor:pointer;
 }
 
-.resource-card:hover{
-  border-color:var(--purple);
-}
-
-.resource-icon{
-  font-size:17px;
+.resource:hover{
+  border-color:#30445e;
+  transform:translateY(-1px);
 }
 
 .resource-name{
-  margin-top:8px;
-  font-size:10px;
-  font-weight:900;
-}
-
-.resource-table{
-  margin-top:3px;
-  color:var(--muted2);
-  font-family:monospace;
-  font-size:8px;
-}
-
-.resource-count{
-  margin-top:10px;
-
-  font-family:Orbitron,sans-serif;
-  font-size:17px;
-}
-
-.resource-type{
-  margin-top:4px;
-  color:var(--muted);
-  font-size:8px;
-}
-
-
-/* =========================================================
-   SCHEMA
-========================================================= */
-
-.schema-list{
-  display:grid;
-  gap:5px;
-}
-
-.schema-row{
-  display:grid;
-  grid-template-columns:1.2fr .8fr .7fr .7fr;
-  gap:8px;
-
-  padding:8px 9px;
-
-  background:#0a0a11;
-  border:1px solid #1b1b27;
-  border-radius:7px;
-
-  font-size:9px;
-}
-
-.schema-row strong{
-  color:#e4e4ed;
-}
-
-.schema-row span{
-  color:var(--muted);
-}
-
-
-/* =========================================================
-   HEALTH
-========================================================= */
-
-.health-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:10px;
-}
-
-.health-card{
-  padding:13px;
-
-  background:#0a0a11;
-  border:1px solid var(--border);
-  border-radius:10px;
-}
-
-.health-card.ok{
-  border-color:rgba(72,230,157,.27);
-}
-
-.health-card.error{
-  border-color:rgba(255,93,115,.3);
-}
-
-.health-card.warn{
-  border-color:rgba(255,209,102,.3);
-}
-
-.health-name{
-  font-size:10px;
-  font-weight:900;
-}
-
-.health-detail{
-  margin-top:5px;
-  color:var(--muted);
-  font-size:8px;
-  line-height:1.5;
-}
-
-
-/* =========================================================
-   ACTIVITY
-========================================================= */
-
-.activity-list{
-  display:grid;
-  gap:7px;
-}
-
-.activity-item{
-  display:flex;
-  gap:10px;
-
-  padding:11px;
-
-  background:#0a0a11;
-  border:1px solid #1c1c28;
-  border-radius:9px;
-}
-
-.activity-dot{
-  width:7px;
-  height:7px;
-  margin-top:4px;
-  flex:none;
-
-  background:var(--purple);
-  border-radius:50%;
-}
-
-.activity-main{
-  min-width:0;
-  flex:1;
-}
-
-.activity-title{
-  font-size:10px;
   font-weight:800;
+  font-size:13px;
 }
 
-.activity-meta{
-  margin-top:4px;
-  color:var(--muted);
-  font-size:8px;
+.resource-meta{
+  color:#718198;
+  font-size:10px;
+  margin-top:6px;
 }
-
 
 /* =========================================================
-   SEARCH
-========================================================= */
+   DIAGNOSTICS
+   ========================================================= */
 
-.search-results{
-  display:grid;
-  gap:8px;
-}
-
-.search-result{
-  padding:12px;
-
-  background:#0a0a11;
-  border:1px solid var(--border);
-  border-radius:10px;
-}
-
-.search-result-header{
+.check{
   display:flex;
-  justify-content:space-between;
-  gap:10px;
+  align-items:flex-start;
+  gap:12px;
+  padding:14px;
+  border-bottom:1px solid var(--line);
 }
 
-.search-resource{
-  color:var(--purple);
-  font-family:Orbitron,sans-serif;
-  font-size:9px;
+.check:last-child{
+  border-bottom:0;
 }
 
-.search-preview{
-  margin-top:8px;
+.check-icon{
+  width:30px;
+  height:30px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:#0a1119;
+}
 
-  color:#b6b6c5;
+.check-title{
+  font-weight:800;
+  font-size:13px;
+}
 
-  font-family:monospace;
-  font-size:9px;
+.check-detail{
+  color:var(--muted);
+  font-size:11px;
   line-height:1.5;
-
-  white-space:pre-wrap;
-  overflow:hidden;
-  max-height:120px;
+  margin-top:4px;
 }
-
 
 /* =========================================================
    MODAL
-========================================================= */
+   ========================================================= */
 
 .modal-backdrop{
-  display:none;
-
   position:fixed;
   inset:0;
-  z-index:800;
-
-  align-items:flex-start;
-  justify-content:center;
-
-  padding:25px;
-
-  overflow:auto;
-
-  background:rgba(0,0,0,.76);
+  z-index:100;
+  display:none;
+  place-items:center;
+  padding:20px;
+  background:rgba(0,0,0,.7);
   backdrop-filter:blur(8px);
 }
 
 .modal-backdrop.open{
-  display:flex;
+  display:grid;
 }
 
 .modal{
-  width:min(950px,100%);
-  margin:auto;
-
-  background:#10101a;
-
-  border:1px solid var(--border);
-  border-radius:19px;
-
-  box-shadow:var(--shadow);
-
-  overflow:hidden;
+  width:min(900px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0c121b;
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 30px 100px rgba(0,0,0,.55);
 }
 
-.modal-header{
+.modal-head{
   display:flex;
   justify-content:space-between;
+  gap:12px;
   align-items:center;
-  gap:10px;
-
-  padding:16px 18px;
-
-  border-bottom:1px solid var(--border);
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
 }
 
-.modal-title{
-  font-family:Orbitron,sans-serif;
-  font-size:12px;
-  font-weight:800;
+.modal-head h2{
+  margin:0;
+  font-size:17px;
 }
 
 .modal-body{
   padding:19px;
 }
 
-.modal-footer{
+.modal-foot{
   display:flex;
   justify-content:flex-end;
-  gap:7px;
-
-  padding:13px 18px;
-
-  border-top:1px solid var(--border);
+  gap:8px;
+  padding:15px 19px;
+  border-top:1px solid var(--line);
 }
-
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-
-.field-full{
-  grid-column:1/-1;
-}
-
-.field-help{
-  color:var(--muted2);
-  font-size:8px;
-}
-
 
 /* =========================================================
    TOAST
-========================================================= */
+   ========================================================= */
 
-.toast-container{
+#toastContainer{
   position:fixed;
   right:18px;
   bottom:18px;
-  z-index:1200;
-
-  display:grid;
-  gap:7px;
-
-  width:min(390px,calc(100% - 36px));
+  z-index:200;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
 }
 
 .toast{
-  padding:12px 14px;
-
-  background:#15151f;
-
-  border:1px solid var(--border);
-  border-radius:9px;
-
+  max-width:380px;
+  padding:13px 15px;
+  background:#0c141e;
+  border:1px solid var(--line);
+  border-radius:13px;
   box-shadow:var(--shadow);
-
-  font-size:10px;
-
-  animation:toastIn .2s ease;
+  color:#dce6f5;
+  font-size:12px;
 }
 
-.toast.success{
-  border-color:rgba(72,230,157,.35);
+.toast.good{
+  border-color:rgba(50,213,131,.3);
 }
 
-.toast.error{
-  border-color:rgba(255,93,115,.35);
+.toast.bad{
+  border-color:rgba(255,93,115,.3);
 }
-
-.toast.info{
-  border-color:rgba(40,217,255,.35);
-}
-
-@keyframes toastIn{
-  from{
-    opacity:0;
-    transform:translateY(8px);
-  }
-
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
 
 /* =========================================================
-   LOADING / EMPTY
-========================================================= */
+   RESPONSIVE
+   ========================================================= */
 
-.loading{
-  padding:40px;
-  text-align:center;
+@media(max-width:1000px){
+  .grid-4{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
 
-  color:var(--muted);
-
-  font-size:10px;
-}
-
-.spinner{
-  width:21px;
-  height:21px;
-
-  margin:0 auto 9px;
-
-  border:2px solid #29293a;
-  border-top-color:var(--purple);
-
-  border-radius:50%;
-
-  animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-  to{
-    transform:rotate(360deg);
+  .grid-3{
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
 
-.empty{
-  padding:38px 20px;
-  text-align:center;
-
-  color:var(--muted);
-  font-size:10px;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-.mobile-menu{
-  display:none;
-}
-
-@media(max-width:1250px){
-
-  .stats{
-    grid-template-columns:repeat(3,1fr);
+@media(max-width:760px){
+  :root{
+    --sidebar:270px;
   }
 
-  .resource-grid{
-    grid-template-columns:repeat(3,1fr);
-  }
-
-  .dashboard-grid{
+  .layout{
     grid-template-columns:1fr;
   }
 
-}
-
-@media(max-width:900px){
-
-  :root{
-    --sidebar:275px;
-  }
-
   .sidebar{
-    transform:translateX(-100%);
-    transition:.25s;
+    position:fixed;
+    left:-280px;
+    z-index:80;
+    transition:left .2s ease;
   }
 
-  .sidebar.open{
-    transform:none;
+  body.sidebar-open .sidebar{
+    left:0;
   }
 
-  .main{
-    margin-left:0;
-  }
-
-  .mobile-menu{
+  .menu-toggle{
     display:inline-flex;
   }
 
-  .resource-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .health-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-}
-
-@media(max-width:650px){
-
-  .page{
+  .content{
     padding:15px;
   }
 
   .topbar{
-    padding:10px 13px;
+    padding:12px 15px;
   }
 
-  .topbar-subtitle{
+  .grid-4,
+  .grid-3,
+  .grid-2{
+    grid-template-columns:1fr;
+  }
+
+  .user-pill{
     display:none;
   }
 
-  .stats{
-    grid-template-columns:repeat(2,1fr);
+  .hero h1{
+    font-size:24px;
   }
-
-  .resource-grid{
-    grid-template-columns:1fr;
-  }
-
-  .health-grid{
-    grid-template-columns:1fr;
-  }
-
-  .quick-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .field-full{
-    grid-column:auto;
-  }
-
-  .page-header{
-    flex-direction:column;
-  }
-
-  .search{
-    min-width:170px;
-  }
-
 }
-
-@media(max-width:430px){
-
-  .stats{
-    grid-template-columns:1fr;
-  }
-
-  .quick-grid{
-    grid-template-columns:1fr;
-  }
-
-  .login-card{
-    padding:25px;
-  }
-
-}
-
 </style>
 </head>
 
 <body>
 
-
 <!-- =========================================================
      LOGIN
-========================================================= -->
+     ========================================================= -->
 
-<section
-  id="loginScreen"
-  class="login-screen">
+<section id="loginScreen">
 
   <div class="login-card">
 
     <div class="logo">
-      CROW<span>RULES</span>
+      <div class="logo-mark">CR</div>
+      <div>
+        <div class="logo-title">CrowRules Entertainment</div>
+        <div class="logo-sub">Secure Administration System v5.1</div>
+      </div>
     </div>
 
-    <div class="login-version">
-      Entertainment Administration
-      ·
-      v5.1
-    </div>
-
-    <h1>
-      Universal Command Center
-    </h1>
+    <h1>Admin Command Center</h1>
 
     <p>
-      Secure administration interface for the
-      CrowRules Entertainment Supabase backend.
+      Sign in with your CrowRules administrator account.
+      Authorization is verified against the live Supabase
+      <span class="mono">cr_admins</span> table.
     </p>
 
-    <form
-      id="loginForm"
-      class="login-form">
+    <form id="loginForm">
 
-      <div class="form-field">
-
-        <label>
-          Administrator Email
-        </label>
-
+      <div class="field">
+        <label for="email">Email</label>
         <input
-          id="loginEmail"
+          id="email"
           type="email"
           autocomplete="username"
           required
-          placeholder="admin@example.com">
-
+          placeholder="admin@example.com"
+        >
       </div>
 
-      <div class="form-field">
-
-        <label>
-          Password
-        </label>
-
+      <div class="field">
+        <label for="password">Password</label>
         <input
-          id="loginPassword"
+          id="password"
           type="password"
           autocomplete="current-password"
           required
-          placeholder="••••••••">
-
-      </div>
-
-      <div
-        id="loginStatus"
-        class="login-status">
+          placeholder="••••••••"
+        >
       </div>
 
       <button
-        class="btn primary"
-        type="submit">
-
+        id="loginButton"
+        class="primary"
+        type="submit"
+        style="width:100%"
+      >
         Sign In
-
       </button>
 
     </form>
+
+    <div id="loginError" class="login-error hidden"></div>
+
+    <div id="loginStatus" class="login-status">
+      Connecting to CrowRules authentication…
+    </div>
 
   </div>
 
@@ -1444,536 +839,709 @@ tr:hover td{
 
 
 <!-- =========================================================
-     APPLICATION
-========================================================= -->
+     ADMIN APPLICATION
+     ========================================================= -->
 
-<div
-  id="app"
-  class="app">
+<div id="adminApp">
 
+  <div class="layout">
 
-  <!-- =======================================================
-       SIDEBAR
-  ======================================================== -->
+    <!-- SIDEBAR -->
 
-  <aside
-    id="sidebar"
-    class="sidebar">
+    <aside class="sidebar">
 
-    <div class="sidebar-header">
-
-      <div class="sidebar-brand">
-        CROW<span>RULES</span>
+      <div class="side-brand">
+        <strong>CR Admin v5.1</strong>
+        <span>Entertainment Command Center</span>
       </div>
 
-      <div class="sidebar-sub">
-        Admin v5.1 · Supabase Command Center
-      </div>
+      <div class="nav-group">
 
-    </div>
+        <div class="nav-label">Command</div>
 
-
-    <nav
-      id="nav"
-      class="nav">
-
-      <div class="nav-section">
-        Command Center
-      </div>
-
-      <button
-        class="nav-btn"
-        data-page="dashboard">
-
-        <span class="nav-icon">⌂</span>
-        Dashboard
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="activity">
-
-        <span class="nav-icon">◉</span>
-        Activity
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="global-search">
-
-        <span class="nav-icon">⌕</span>
-        Global Search
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="database">
-
-        <span class="nav-icon">▦</span>
-        Database
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="health">
-
-        <span class="nav-icon">♥</span>
-        System Health
-
-      </button>
-
-
-      <div class="nav-section">
-        Entertainment
-      </div>
-
-      <button
-        class="nav-btn"
-        data-page="divisions">
-
-        <span class="nav-icon">◆</span>
-        Divisions
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="projects">
-
-        <span class="nav-icon">◇</span>
-        Projects
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="productions">
-
-        <span class="nav-icon">🎬</span>
-        Productions
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="episodes">
-
-        <span class="nav-icon">▶</span>
-        Episodes
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="media">
-
-        <span class="nav-icon">▣</span>
-        Media
-
-      </button>
-
-
-      <div class="nav-section">
-        Publishing
-      </div>
-
-      <button
-        class="nav-btn"
-        data-page="news">
-
-        <span class="nav-icon">📰</span>
-        News
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="updates">
-
-        <span class="nav-icon">↗</span>
-        Updates
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="announcements">
-
-        <span class="nav-icon">!</span>
-        Announcements
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="comments">
-
-        <span class="nav-icon">☵</span>
-        Comments
-
-      </button>
-
-
-      <div class="nav-section">
-        Broadcast
-      </div>
-
-      <button
-        class="nav-btn"
-        data-page="schedule">
-
-        <span class="nav-icon">▤</span>
-        Schedule
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="events">
-
-        <span class="nav-icon">★</span>
-        Events
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="tv">
-
-        <span class="nav-icon">▣</span>
-        CrowRules TV
-
-      </button>
-
-
-      <div class="nav-section">
-        Networks
-      </div>
-
-      <button
-        class="nav-btn"
-        data-page="tacoma">
-
-        <span class="nav-icon">🌲</span>
-        Tacoma Nights
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="podcasting">
-
-        <span class="nav-icon">🎙</span>
-        Podcasting
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="sports">
-
-        <span class="nav-icon">🏆</span>
-        Sports
-
-      </button>
-
-
-      <div class="nav-section">
-        Business
-      </div>
-
-      <button
-        class="nav-btn"
-        data-page="contacts">
-
-        <span class="nav-icon">✉</span>
-        Contacts
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="partners">
-
-        <span class="nav-icon">🤝</span>
-        Partners
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="inquiries">
-
-        <span class="nav-icon">?</span>
-        Partnership Inquiries
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="donation-campaigns">
-
-        <span class="nav-icon">♥</span>
-        Donation Campaigns
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="donations">
-
-        <span class="nav-icon">$</span>
-        Donations
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="subscribers">
-
-        <span class="nav-icon">♟</span>
-        Subscribers
-
-      </button>
-
-
-      <div class="nav-section">
-        Planning
-      </div>
-
-      <button
-        class="nav-btn"
-        data-page="roadmap">
-
-        <span class="nav-icon">➜</span>
-        Roadmap
-
-      </button>
-
-
-      <div class="nav-section">
-        Administration
-      </div>
-
-      <button
-        class="nav-btn"
-        data-page="admins">
-
-        <span class="nav-icon">♙</span>
-        Admins
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="audit">
-
-        <span class="nav-icon">⌁</span>
-        Audit Log
-
-      </button>
-
-      <button
-        class="nav-btn"
-        data-page="settings">
-
-        <span class="nav-icon">⚙</span>
-        Site Settings
-
-      </button>
-
-      <div class="nav-section">
-        Supabase
-      </div>
-
-      <button
-        class="nav-btn"
-        data-page="all-resources">
-
-        <span class="nav-icon">✚</span>
-        All Resources
-        <span
-          id="resourceCount"
-          class="nav-count">
-          —
-        </span>
-
-      </button>
-
-    </nav>
-
-
-    <div class="sidebar-footer">
-
-      <div class="user-card">
-
-        <div class="user-label">
-          Authenticated Administrator
-        </div>
-
-        <div
-          id="userEmail"
-          class="user-email">
-          —
-        </div>
-
-      </div>
-
-      <button
-        id="logoutBtn"
-        class="btn red"
-        style="width:100%;">
-
-        Sign Out
-
-      </button>
-
-    </div>
-
-  </aside>
-
-
-  <!-- =======================================================
-       MAIN
-  ======================================================== -->
-
-  <main class="main">
-
-    <header class="topbar">
-
-      <div class="topbar-left">
-
-        <button
-          id="mobileMenu"
-          class="btn small mobile-menu">
-
-          ☰
-
+        <button class="nav-btn active" data-view="dashboard">
+          <span class="nav-icon">⌂</span>
+          Dashboard
         </button>
 
-        <div>
+        <button class="nav-btn" data-view="search">
+          <span class="nav-icon">⌕</span>
+          Search Everything
+        </button>
 
-          <div
-            id="topbarTitle"
-            class="topbar-title">
+        <button class="nav-btn" data-view="resources">
+          <span class="nav-icon">▦</span>
+          Resources
+        </button>
 
-            Command Center
+        <button class="nav-btn" data-view="schema">
+          <span class="nav-icon">◇</span>
+          Schema Explorer
+        </button>
+
+      </div>
+
+      <div class="nav-group">
+
+        <div class="nav-label">CrowRules</div>
+
+        <button class="nav-btn" data-view="tv">
+          <span class="nav-icon">▶</span>
+          CrowRules TV
+        </button>
+
+        <button class="nav-btn" data-view="sports">
+          <span class="nav-icon">🏆</span>
+          Sports
+        </button>
+
+        <button class="nav-btn" data-view="podcasting">
+          <span class="nav-icon">🎙</span>
+          Podcasting
+        </button>
+
+        <button class="nav-btn" data-view="tacoma">
+          <span class="nav-icon">🌃</span>
+          Tacoma Nights
+        </button>
+
+      </div>
+
+      <div class="nav-group">
+
+        <div class="nav-label">Business</div>
+
+        <button class="nav-btn" data-view="business">
+          <span class="nav-icon">▣</span>
+          Business Hub
+        </button>
+
+        <button class="nav-btn" data-view="donations">
+          <span class="nav-icon">♥</span>
+          Donations
+        </button>
+
+        <button class="nav-btn" data-view="partners">
+          <span class="nav-icon">♢</span>
+          Partners
+        </button>
+
+      </div>
+
+      <div class="nav-group">
+
+        <div class="nav-label">Security</div>
+
+        <button class="nav-btn" data-view="admins">
+          <span class="nav-icon">♙</span>
+          Administrators
+        </button>
+
+        <button class="nav-btn" data-view="audit">
+          <span class="nav-icon">☷</span>
+          Audit Log
+        </button>
+
+        <button class="nav-btn" data-view="diagnostics">
+          <span class="nav-icon">✓</span>
+          Diagnostics
+        </button>
+
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+      <header class="topbar">
+
+        <div class="top-left">
+
+          <button
+            id="menuToggle"
+            class="secondary menu-toggle"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div id="pageTitle" class="page-title">
+              Command Center
+            </div>
+
+            <div id="pageSubtitle" class="page-subtitle">
+              CrowRules Entertainment Administration
+            </div>
+          </div>
+
+        </div>
+
+        <div class="top-actions">
+
+          <button
+            id="refreshButton"
+            class="secondary"
+            title="Refresh"
+          >
+            ↻
+          </button>
+
+          <span id="userPill" class="user-pill">
+            Checking authorization…
+          </span>
+
+          <button
+            id="logoutButton"
+            class="secondary danger"
+          >
+            Sign Out
+          </button>
+
+        </div>
+
+      </header>
+
+
+      <section class="content">
+
+        <!-- =================================================
+             DASHBOARD
+             ================================================= -->
+
+        <div id="view-dashboard" class="view active">
+
+          <div class="hero">
+
+            <h1>
+              CrowRules Command Center
+            </h1>
+
+            <p>
+              Welcome to the CrowRules Entertainment administrative
+              control system. Your authorization is checked directly
+              against the authenticated Supabase user and the
+              CrowRules administrator registry.
+            </p>
 
           </div>
 
-          <div
-            id="topbarSubtitle"
-            class="topbar-subtitle">
+          <div class="grid grid-4">
 
-            Universal Supabase administration
+            <div class="card stat">
+              <div class="stat-label">Admin Status</div>
+              <div id="statAdminStatus" class="stat-value">—</div>
+              <div id="statAdminRole" class="stat-note">Checking…</div>
+            </div>
+
+            <div class="card stat">
+              <div class="stat-label">Database Resources</div>
+              <div id="statResources" class="stat-value">—</div>
+              <div class="stat-note">Discovered public tables/views</div>
+            </div>
+
+            <div class="card stat">
+              <div class="stat-label">Admin Permissions</div>
+              <div id="statPermissions" class="stat-value">—</div>
+              <div class="stat-note">Configured permissions</div>
+            </div>
+
+            <div class="card stat">
+              <div class="stat-label">System Health</div>
+              <div id="statHealth" class="stat-value">—</div>
+              <div class="stat-note">Live authorization/database checks</div>
+            </div>
+
+          </div>
+
+
+          <div class="section-title">
+            <h2>Administrator Identity</h2>
+            <span>Verified Supabase Auth identity</span>
+          </div>
+
+          <div class="card">
+
+            <div class="grid grid-2">
+
+              <div>
+                <div class="muted">Email</div>
+                <div id="identityEmail" class="mono" style="margin-top:6px">
+                  —
+                </div>
+              </div>
+
+              <div>
+                <div class="muted">User ID</div>
+                <div id="identityId" class="mono" style="margin-top:6px">
+                  —
+                </div>
+              </div>
+
+              <div>
+                <div class="muted">Admin Name</div>
+                <div id="identityName" style="margin-top:6px">
+                  —
+                </div>
+              </div>
+
+              <div>
+                <div class="muted">Role</div>
+                <div id="identityRole" style="margin-top:6px">
+                  —
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="section-title">
+            <h2>Quick Actions</h2>
+          </div>
+
+          <div class="toolbar">
+
+            <button
+              class="primary"
+              data-view="resources"
+            >
+              Explore Database
+            </button>
+
+            <button
+              class="secondary"
+              data-view="diagnostics"
+            >
+              Run Diagnostics
+            </button>
+
+            <button
+              class="secondary"
+              data-view="schema"
+            >
+              Inspect Schema
+            </button>
+
+            <button
+              class="secondary"
+              data-view="audit"
+            >
+              View Audit Log
+            </button>
 
           </div>
 
         </div>
 
-      </div>
+
+        <!-- =================================================
+             SEARCH
+             ================================================= -->
+
+        <div id="view-search" class="view">
+
+          <div class="hero">
+
+            <h1>Search Everything</h1>
+
+            <p>
+              Search discovered CrowRules resources without requiring
+              hard-coded table names.
+            </p>
+
+          </div>
+
+          <div class="card">
+
+            <div class="toolbar">
+
+              <input
+                id="globalSearch"
+                class="search-box"
+                placeholder="Search title, name, email, slug, description…"
+              >
+
+              <button
+                id="globalSearchButton"
+                class="primary"
+              >
+                Search
+              </button>
+
+            </div>
+
+            <div id="searchResults"></div>
+
+          </div>
+
+        </div>
 
 
-      <div class="topbar-right">
+        <!-- =================================================
+             RESOURCES
+             ================================================= -->
 
-        <span
-          id="authBadge"
-          class="badge green">
+        <div id="view-resources" class="view">
 
-          ADMIN VERIFIED
+          <div class="hero">
 
-        </span>
+            <h1>Database Resources</h1>
 
-        <span
-          id="realtimeBadge"
-          class="badge cyan">
+            <p>
+              Resources discovered from the CrowRules Supabase database.
+              Views are treated as read-only unless explicitly marked
+              writable by the database metadata layer.
+            </p>
 
-          REALTIME
+          </div>
 
-        </span>
+          <div class="card">
 
-        <button
-          id="refreshBtn"
-          class="btn small">
+            <div class="toolbar">
 
-          ↻
+              <input
+                id="resourceFilter"
+                class="search-box"
+                placeholder="Filter resources…"
+              >
 
-        </button>
+              <button
+                id="reloadResources"
+                class="secondary"
+              >
+                Reload
+              </button>
 
-      </div>
+            </div>
 
-    </header>
+            <div id="resourceList" class="resource-list">
+              <div class="empty">Loading resources…</div>
+            </div>
+
+          </div>
+
+        </div>
 
 
-    <section
-      id="page"
-      class="page">
+        <!-- =================================================
+             SCHEMA
+             ================================================= -->
 
-    </section>
+        <div id="view-schema" class="view">
 
-  </main>
+          <div class="hero">
+
+            <h1>Schema Explorer</h1>
+
+            <p>
+              Inspect columns, types, defaults, nullability and
+              primary-key information for discovered resources.
+            </p>
+
+          </div>
+
+          <div class="card">
+
+            <div class="toolbar">
+
+              <select
+                id="schemaResource"
+                style="max-width:420px"
+              >
+                <option value="">Select resource…</option>
+              </select>
+
+            </div>
+
+            <div id="schemaDetails">
+              <div class="empty">
+                Select a resource.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TV
+             ================================================= -->
+
+        <div id="view-tv" class="view">
+
+          <div class="hero">
+            <h1>CrowRules TV Center</h1>
+            <p>
+              Manage discovered TV channels, schedules, shows,
+              episodes, catalog records, live events, members,
+              watch history and related resources.
+            </p>
+          </div>
+
+          <div id="tvResources" class="resource-list"></div>
+
+        </div>
+
+
+        <!-- =================================================
+             SPORTS
+             ================================================= -->
+
+        <div id="view-sports" class="view">
+
+          <div class="hero">
+            <h1>CrowRules Sports Center</h1>
+            <p>
+              Sports-related database resources are automatically
+              discovered by table name and grouped here.
+            </p>
+          </div>
+
+          <div id="sportsResources" class="resource-list"></div>
+
+        </div>
+
+
+        <!-- =================================================
+             PODCASTING
+             ================================================= -->
+
+        <div id="view-podcasting" class="view">
+
+          <div class="hero">
+            <h1>CrowRules Podcasting Center</h1>
+            <p>
+              Manage podcast shows, episodes, hosts, creators,
+              audio media and publishing resources discovered
+              from Supabase.
+            </p>
+          </div>
+
+          <div id="podcastingResources" class="resource-list"></div>
+
+        </div>
+
+
+        <!-- =================================================
+             TACOMA
+             ================================================= -->
+
+        <div id="view-tacoma" class="view">
+
+          <div class="hero">
+            <h1>Tacoma Nights Center</h1>
+            <p>
+              Central administration for Tacoma Nights and related
+              episodes, content, news, media and production records.
+            </p>
+          </div>
+
+          <div id="tacomaResources" class="resource-list"></div>
+
+        </div>
+
+
+        <!-- =================================================
+             BUSINESS
+             ================================================= -->
+
+        <div id="view-business" class="view">
+
+          <div class="hero">
+            <h1>Business Hub</h1>
+            <p>
+              CrowRules Entertainment business modules, projects,
+              tasks, partners, contacts, announcements and roadmap
+              resources.
+            </p>
+          </div>
+
+          <div id="businessResources" class="resource-list"></div>
+
+        </div>
+
+
+        <!-- =================================================
+             DONATIONS
+             ================================================= -->
+
+        <div id="view-donations" class="view">
+
+          <div class="hero">
+            <h1>Donations Center</h1>
+            <p>
+              Monitor donation campaigns, donation events,
+              donation statistics and related settings.
+            </p>
+          </div>
+
+          <div id="donationResources" class="resource-list"></div>
+
+        </div>
+
+
+        <!-- =================================================
+             PARTNERS
+             ================================================= -->
+
+        <div id="view-partners" class="view">
+
+          <div class="hero">
+            <h1>Partners Center</h1>
+            <p>
+              Manage partnership inquiries, partner records,
+              contacts and business relationships.
+            </p>
+          </div>
+
+          <div id="partnerResources" class="resource-list"></div>
+
+        </div>
+
+
+        <!-- =================================================
+             ADMINS
+             ================================================= -->
+
+        <div id="view-admins" class="view">
+
+          <div class="hero">
+            <h1>Administrators</h1>
+            <p>
+              Review the CrowRules administrator registry.
+              Authorization is based on database records, not
+              editable user metadata.
+            </p>
+          </div>
+
+          <div class="card">
+
+            <div id="adminTable">
+              <div class="empty">
+                Loading administrators…
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             AUDIT
+             ================================================= -->
+
+        <div id="view-audit" class="view">
+
+          <div class="hero">
+            <h1>Audit Log</h1>
+            <p>
+              Administrative activity recorded by the CrowRules
+              administration system.
+            </p>
+          </div>
+
+          <div class="card">
+
+            <div class="toolbar">
+
+              <button
+                id="reloadAudit"
+                class="secondary"
+              >
+                Reload Audit
+              </button>
+
+            </div>
+
+            <div id="auditTable">
+              <div class="empty">
+                Loading audit records…
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DIAGNOSTICS
+             ================================================= -->
+
+        <div id="view-diagnostics" class="view">
+
+          <div class="hero">
+
+            <h1>System Diagnostics</h1>
+
+            <p>
+              This diagnostic screen is specifically designed to
+              identify the authorization problem that previously
+              produced “This authenticated account is not authorized
+              for CrowRules Admin.”
+            </p>
+
+          </div>
+
+          <div class="card">
+
+            <div id="diagnosticChecks">
+              <div class="empty">
+                Running diagnostics…
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
 
 </div>
 
 
 <!-- =========================================================
-     RECORD MODAL
-========================================================= -->
+     RESOURCE MODAL
+     ========================================================= -->
 
-<div
-  id="modalBackdrop"
-  class="modal-backdrop">
+<div id="modalBackdrop" class="modal-backdrop">
 
   <div class="modal">
 
-    <div class="modal-header">
+    <div class="modal-head">
 
-      <div
-        id="modalTitle"
-        class="modal-title">
-
-        Record Editor
-
-      </div>
+      <h2 id="modalTitle">
+        Resource
+      </h2>
 
       <button
         id="modalClose"
-        class="btn small">
-
+        class="secondary"
+      >
         ✕
-
       </button>
 
     </div>
 
-    <div
-      id="modalBody"
-      class="modal-body">
+    <div id="modalBody" class="modal-body"></div>
 
-    </div>
-
-    <div
-      id="modalFooter"
-      class="modal-footer">
+    <div class="modal-foot">
 
       <button
-        id="modalCancel"
-        class="btn">
-
-        Cancel
-
-      </button>
-
-      <button
-        id="modalSave"
-        class="btn primary">
-
-        Save Record
-
+        id="modalCloseBottom"
+        class="secondary"
+      >
+        Close
       </button>
 
     </div>
@@ -1984,31 +1552,43 @@ tr:hover td{
 
 
 <!-- =========================================================
-     TOAST
-========================================================= -->
+     TOASTS
+     ========================================================= -->
 
-<div
-  id="toastContainer"
-  class="toast-container">
-</div>
+<div id="toastContainer"></div>
 
 
 <script>
+/* =========================================================
+   CROWRULES ENTERTAINMENT
+   ADMIN v5.1 ULTIMATE
+   ========================================================= */
+
+/*
+  IMPORTANT SECURITY NOTES
+
+  1. Only the Supabase publishable key belongs in this file.
+  2. NEVER put sb_secret_... or service_role credentials here.
+  3. Authorization is checked against cr_admins.user_id.
+  4. User-editable user_metadata is NOT used for authorization.
+  5. auth.getUser() is used for verified identity.
+*/
+
 
 /* =========================================================
-   CONFIGURATION
-========================================================= */
+   SUPABASE CONFIG
+   ========================================================= */
 
 const SUPABASE_URL =
-  'https://zauxdqyssratvzmomozf.supabase.co';
+  "https://zauxdqyssratvzmomozf.supabase.co";
 
-const SUPABASE_KEY =
-  'sb_publishable_-Z6wecSOxwOk6IBut2zLnw_8DfRxnE9';
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_-Z6wecSOxwOk6IBut2zLnw_8DfRxnE9";
 
-const sb =
+const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_KEY,
+    SUPABASE_PUBLISHABLE_KEY,
     {
       auth:{
         persistSession:true,
@@ -2020,804 +1600,350 @@ const sb =
 
 
 /* =========================================================
-   KNOWN CROWRULES RESOURCES
-========================================================= */
-
-const KNOWN_RESOURCES = {
-
-  cr_activity_feed:{
-    label:'Activity Feed',
-    group:'Administration',
-    icon:'◉'
-  },
-
-  cr_admin_audit_log:{
-    label:'Admin Audit Log',
-    group:'Administration',
-    icon:'⌁'
-  },
-
-  cr_admins:{
-    label:'Administrators',
-    group:'Administration',
-    icon:'♙',
-    protected:true
-  },
-
-  cr_analytics_events:{
-    label:'Analytics Events',
-    group:'Analytics',
-    icon:'◌'
-  },
-
-  cr_announcements:{
-    label:'Announcements',
-    group:'Publishing',
-    icon:'!'
-  },
-
-  cr_audit_log:{
-    label:'Audit Log',
-    group:'Administration',
-    icon:'⌁'
-  },
-
-  cr_business_hub_modules:{
-    label:'Business Hub Modules',
-    group:'Business',
-    icon:'◆'
-  },
-
-  cr_business_hub_tasks:{
-    label:'Business Hub Tasks',
-    group:'Business',
-    icon:'✓'
-  },
-
-  cr_comments:{
-    label:'Comments',
-    group:'Publishing',
-    icon:'☵'
-  },
-
-  cr_contacts:{
-    label:'Contacts',
-    group:'Business',
-    icon:'✉'
-  },
-
-  cr_content:{
-    label:'Content',
-    group:'Publishing',
-    icon:'▤'
-  },
-
-  cr_divisions:{
-    label:'Divisions',
-    group:'Entertainment',
-    icon:'◆'
-  },
-
-  cr_donation_campaigns:{
-    label:'Donation Campaigns',
-    group:'Business',
-    icon:'♥'
-  },
-
-  cr_donation_events:{
-    label:'Donation Events',
-    group:'Business',
-    icon:'$'
-  },
-
-  cr_donation_settings:{
-    label:'Donation Settings',
-    group:'Business',
-    icon:'⚙'
-  },
-
-  cr_donation_stats:{
-    label:'Donation Stats',
-    group:'Business',
-    icon:'$'
-  },
-
-  cr_episodes:{
-    label:'Episodes',
-    group:'Entertainment',
-    icon:'▶'
-  },
-
-  cr_events:{
-    label:'Events',
-    group:'Broadcast',
-    icon:'★'
-  },
-
-  cr_media:{
-    label:'Media',
-    group:'Entertainment',
-    icon:'▣'
-  },
-
-  cr_nav_links:{
-    label:'Navigation Links',
-    group:'Publishing',
-    icon:'☰'
-  },
-
-  cr_news:{
-    label:'News',
-    group:'Publishing',
-    icon:'📰'
-  },
-
-  cr_news_sources:{
-    label:'News Sources',
-    group:'Publishing',
-    icon:'◎'
-  },
-
-  cr_notifications:{
-    label:'Notifications',
-    group:'Administration',
-    icon:'🔔'
-  },
-
-  cr_original_productions:{
-    label:'Original Productions',
-    group:'Entertainment',
-    icon:'🎬'
-  },
-
-  cr_partners:{
-    label:'Partners',
-    group:'Business',
-    icon:'🤝'
-  },
-
-  cr_partnership_inquiries:{
-    label:'Partnership Inquiries',
-    group:'Business',
-    icon:'?'
-  },
-
-  cr_production_features:{
-    label:'Production Features',
-    group:'Entertainment',
-    icon:'⚙'
-  },
-
-  cr_profiles:{
-    label:'Profiles',
-    group:'Members',
-    icon:'♟'
-  },
-
-  cr_projects:{
-    label:'Projects',
-    group:'Entertainment',
-    icon:'◇'
-  },
-
-  cr_public_donation_stats:{
-    label:'Public Donation Stats',
-    group:'Business',
-    icon:'$',
-    readonly:true
-  },
-
-  cr_roadmap:{
-    label:'Roadmap',
-    group:'Planning',
-    icon:'➜'
-  },
-
-  cr_schedule:{
-    label:'Schedule',
-    group:'Broadcast',
-    icon:'▤'
-  },
-
-  cr_site_settings:{
-    label:'Site Settings',
-    group:'Administration',
-    icon:'⚙'
-  },
-
-  cr_social_links:{
-    label:'Social Links',
-    group:'Publishing',
-    icon:'●'
-  },
-
-  cr_subscribers:{
-    label:'Subscribers',
-    group:'Members',
-    icon:'♟'
-  },
-
-  cr_updates:{
-    label:'Updates',
-    group:'Publishing',
-    icon:'↗'
-  },
-
-  donations:{
-    label:'Donations',
-    group:'Business',
-    icon:'$'
-  },
-
-  tacoma_nights_episodes:{
-    label:'Tacoma Nights Episodes',
-    group:'Tacoma Nights',
-    icon:'🌲'
-  }
-
-};
-
-
-/* =========================================================
-   POSSIBLE EXPANSION TABLES
-========================================================= */
-
-const RESOURCE_ALIASES = {
-
-  /*
-   * Existing / future CrowRules TV resources
-   */
-
-  tv_channels:'CrowRules TV Channels',
-  tv_channel_playlist:'TV Channel Playlist',
-  schedule_items:'TV Schedule Items',
-  shows:'Shows',
-  episodes:'Episodes',
-  movie_catalog:'Movie Catalog',
-  tv_movies:'TV Movies',
-  tv_episodes:'TV Episodes',
-  tv_live_events:'TV Live Events',
-  tv_members:'TV Members',
-  watch_history:'Watch History',
-  watch_time:'Watch Time',
-  favorites:'Favorites',
-  creator_channels:'Creator Channels',
-
-  /*
-   * Podcasting
-   */
-
-  podcasts:'Podcasts',
-  podcast_shows:'Podcast Shows',
-  podcast_episodes:'Podcast Episodes',
-  podcast_hosts:'Podcast Hosts',
-  podcast_guests:'Podcast Guests',
-  podcast_applications:'Podcast Applications',
-  podcast_submissions:'Podcast Submissions',
-
-  /*
-   * Sports
-   */
-
-  sports_leagues:'Sports Leagues',
-  sports_teams:'Sports Teams',
-  sports_games:'Sports Games',
-  sports_scores:'Sports Scores',
-  sports_standings:'Sports Standings',
-  sports_news:'Sports News',
-  sports_events:'Sports Events',
-
-  /*
-   * Studios
-   */
-
-  studio_projects:'Studio Projects',
-  studio_productions:'Studio Productions',
-  studio_episodes:'Studio Episodes',
-
-  /*
-   * Members
-   */
-
-  members:'Members',
-  member_profiles:'Member Profiles',
-  member_points:'Member Points',
-  member_favorites:'Member Favorites',
-  member_watch_history:'Member Watch History',
-
-  /*
-   * Memorials / special programming
-   */
-
-  celebrity_deaths:'Celebrity Deaths',
-  celebrity_memorials:'Celebrity Memorials',
-  memorials:'Memorials'
-
-};
-
-
-/* =========================================================
-   PAGE CONFIGURATION
-========================================================= */
-
-const PAGES = {
-
-  dashboard:{
-    title:'Command Center',
-    subtitle:'CrowRules Entertainment operational overview.'
-  },
-
-  activity:{
-    title:'Activity',
-    subtitle:'Administrative activity and system events.'
-  },
-
-  'global-search':{
-    title:'Global Search',
-    subtitle:'Search across discovered Supabase resources.'
-  },
-
-  database:{
-    title:'Database',
-    subtitle:'Universal database explorer.'
-  },
-
-  health:{
-    title:'System Health',
-    subtitle:'Connectivity and Supabase resource diagnostics.'
-  },
-
-  divisions:{
-    title:'Divisions',
-    subtitle:'CrowRules Entertainment divisions.',
-    table:'cr_divisions'
-  },
-
-  projects:{
-    title:'Projects',
-    subtitle:'Current and future CrowRules projects.',
-    table:'cr_projects'
-  },
-
-  productions:{
-    title:'Productions',
-    subtitle:'Original shows and productions.',
-    table:'cr_original_productions'
-  },
-
-  episodes:{
-    title:'Episodes',
-    subtitle:'Production episode management.',
-    table:'cr_episodes'
-  },
-
-  media:{
-    title:'Media',
-    subtitle:'Images, video, audio and media records.',
-    table:'cr_media'
-  },
-
-  news:{
-    title:'News',
-    subtitle:'CrowRules news publishing.',
-    table:'cr_news'
-  },
-
-  updates:{
-    title:'Updates',
-    subtitle:'Company and network updates.',
-    table:'cr_updates'
-  },
-
-  announcements:{
-    title:'Announcements',
-    subtitle:'Public-facing announcements.',
-    table:'cr_announcements'
-  },
-
-  comments:{
-    title:'Comments',
-    subtitle:'Audience and community comments.',
-    table:'cr_comments'
-  },
-
-  schedule:{
-    title:'Schedule',
-    subtitle:'Broadcast and programming schedule.',
-    table:'cr_schedule'
-  },
-
-  events:{
-    title:'Events',
-    subtitle:'Live events and special programming.',
-    table:'cr_events'
-  },
-
-  tv:{
-    title:'CrowRules TV',
-    subtitle:'Television network administration.',
-    table:'cr_original_productions'
-  },
-
-  tacoma:{
-    title:'Tacoma Nights',
-    subtitle:'Tacoma Nights episode administration.',
-    table:'tacoma_nights_episodes'
-  },
-
-  podcasting:{
-    title:'CrowRules Podcasting',
-    subtitle:'Podcasting administration.',
-    table:'cr_original_productions'
-  },
-
-  sports:{
-    title:'CrowRules Sports',
-    subtitle:'Sports administration.',
-    table:'cr_original_productions'
-  },
-
-  contacts:{
-    title:'Contacts',
-    subtitle:'Business and audience contacts.',
-    table:'cr_contacts'
-  },
-
-  partners:{
-    title:'Partners',
-    subtitle:'Business partners.',
-    table:'cr_partners'
-  },
-
-  inquiries:{
-    title:'Partnership Inquiries',
-    subtitle:'Incoming partnership requests.',
-    table:'cr_partnership_inquiries'
-  },
-
-  'donation-campaigns':{
-    title:'Donation Campaigns',
-    subtitle:'CrowRules support campaigns.',
-    table:'cr_donation_campaigns'
-  },
-
-  donations:{
-    title:'Donations',
-    subtitle:'Donation transactions.',
-    table:'donations'
-  },
-
-  subscribers:{
-    title:'Subscribers',
-    subtitle:'Audience subscribers.',
-    table:'cr_subscribers'
-  },
-
-  roadmap:{
-    title:'Roadmap',
-    subtitle:'CrowRules product and business roadmap.',
-    table:'cr_roadmap'
-  },
-
-  admins:{
-    title:'Administrators',
-    subtitle:'Authorized CrowRules administrators.',
-    table:'cr_admins'
-  },
-
-  audit:{
-    title:'Audit Log',
-    subtitle:'Administrative change history.',
-    table:'cr_admin_audit_log'
-  },
-
-  settings:{
-    title:'Site Settings',
-    subtitle:'CrowRules global configuration.',
-    table:'cr_site_settings'
-  },
-
-  'all-resources':{
-    title:'All Resources',
-    subtitle:'Every Supabase resource available to this client.'
-  }
-
-};
-
-
-/* =========================================================
    STATE
-========================================================= */
+   ========================================================= */
 
 const state = {
-
   user:null,
-
-  isAdmin:false,
-
-  page:'dashboard',
-
-  table:null,
-
-  rows:[],
-
-  filtered:[],
-
-  schema:[],
-
+  admin:null,
   resources:[],
-
-  counts:{},
-
-  pageNum:1,
-
-  pageSize:25,
-
-  sort:null,
-
-  sortDir:'desc',
-
-  search:'',
-
-  realtime:null,
-
-  realtimeReady:false,
-
-  editing:false,
-
-  editingId:null,
-
-  editingRow:null,
-
-  resourceFilter:'',
-
-  loading:false
-
+  permissions:[],
+  currentView:"dashboard",
+  selectedResource:null,
+  diagnostics:[]
 };
 
 
 /* =========================================================
-   UTILITY
-========================================================= */
+   KNOWN FALLBACK RESOURCES
+   ========================================================= */
 
-function esc(value){
+const KNOWN_RESOURCES = [
 
-  if(value===null ||
-     value===undefined){
-    return '';
+  "cr_activity_feed",
+  "cr_admin_audit_log",
+  "cr_admin_audit",
+  "cr_admin_permissions",
+  "cr_admins",
+  "cr_analytics_events",
+  "cr_announcements",
+  "cr_audit_log",
+  "cr_business_hub_modules",
+  "cr_business_hub_tasks",
+  "cr_comments",
+  "cr_contacts",
+  "cr_content",
+  "cr_divisions",
+  "cr_donation_campaigns",
+  "cr_donation_events",
+  "cr_donation_settings",
+  "cr_donation_stats",
+  "cr_episodes",
+  "cr_events",
+  "cr_media",
+  "cr_nav_links",
+  "cr_news",
+  "cr_news_sources",
+  "cr_notifications",
+  "cr_original_productions",
+  "cr_partners",
+  "cr_partnership_inquiries",
+  "cr_production_features",
+  "cr_profiles",
+  "cr_projects",
+  "cr_public_donation_stats",
+  "cr_roadmap",
+  "cr_schedule",
+  "cr_site_settings",
+  "cr_social_links",
+  "cr_subscribers",
+  "cr_updates",
+  "donations",
+  "tacoma_nights_episodes",
+
+  /* CrowRules TV candidates */
+  "tv_channels",
+  "tv_channel_playlist",
+  "schedule_items",
+  "shows",
+  "episodes",
+  "live_events",
+  "members",
+  "member_profiles",
+  "profiles",
+  "watch_history",
+  "watch_time",
+  "favorites",
+  "my_list",
+  "creator_channels",
+  "crowrules_tv_catalog",
+  "crowrules_tv_movies",
+  "crowrules_tv_free_cinema",
+  "crowrules_tv_movie_schedule",
+  "tv_analytics"
+
+];
+
+
+/* =========================================================
+   DOM HELPERS
+   ========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+const esc = value => {
+
+  if(value === null || value === undefined){
+    return "";
   }
 
   return String(value)
-    .replaceAll('&','&amp;')
-    .replaceAll('<','&lt;')
-    .replaceAll('>','&gt;')
-    .replaceAll('"','&quot;')
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
-
-}
-
-
-function prettyName(table){
-
-  if(KNOWN_RESOURCES[table]){
-    return KNOWN_RESOURCES[table].label;
-  }
-
-  if(RESOURCE_ALIASES[table]){
-    return RESOURCE_ALIASES[table];
-  }
-
-  return String(table || '')
-    .replace(/^cr_/,'')
-    .replaceAll('_',' ')
-    .replace(/\b\w/g,c=>c.toUpperCase());
-
-}
+};
 
 
-function prettyKey(key){
+function toast(message,type=""){
 
-  return String(key || '')
-    .replaceAll('_',' ')
-    .replace(/\b\w/g,c=>c.toUpperCase());
+  const box =
+    document.createElement("div");
 
-}
-
-
-function isUUID(value){
-
-  return typeof value==='string' &&
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
-      .test(value);
-
-}
-
-
-function slugify(value){
-
-  return String(value || '')
-    .toLowerCase()
-    .trim()
-    .replace(/['"]/g,'')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'')
-    .slice(0,120);
-
-}
-
-
-function safeJson(value){
-
-  try{
-    return JSON.stringify(value);
-  }catch{
-    return String(value);
-  }
-
-}
-
-
-function formatDate(value){
-
-  if(!value){
-    return '—';
-  }
-
-  const d=new Date(value);
-
-  if(Number.isNaN(d.getTime())){
-    return String(value);
-  }
-
-  return d.toLocaleString();
-
-}
-
-
-function formatMoney(value){
-
-  const number=Number(value);
-
-  if(!Number.isFinite(number)){
-    return String(value ?? '—');
-  }
-
-  return new Intl.NumberFormat(
-    'en-US',
-    {
-      style:'currency',
-      currency:'USD'
-    }
-  ).format(number);
-
-}
-
-
-function toast(message,type='info'){
-
-  const node =
-    document.createElement('div');
-
-  node.className =
+  box.className =
     `toast ${type}`;
 
-  node.textContent =
+  box.textContent =
     message;
 
-  document
-    .getElementById('toastContainer')
-    .appendChild(node);
+  $("toastContainer")
+    .appendChild(box);
 
-  setTimeout(()=>{
-    node.remove();
-  },4200);
-
+  setTimeout(() => {
+    box.remove();
+  },4500);
 }
 
 
-function errorHtml(message){
+/* =========================================================
+   LOGIN ERROR HANDLING
+   ========================================================= */
 
-  return `
+function showLoginError(message){
 
-    <div style="
-      padding:25px;
-      color:var(--red);
-    ">
+  $("loginError").textContent =
+    message;
 
-      <strong>
-        Supabase request failed
-      </strong>
+  $("loginError")
+    .classList
+    .remove("hidden");
+}
 
-      <div style="
-        margin-top:8px;
-        color:#aaaabb;
-        font-size:10px;
-        line-height:1.6;
-      ">
 
-        ${esc(message)}
+function clearLoginError(){
 
-      </div>
+  $("loginError")
+    .classList
+    .add("hidden");
 
-    </div>
-
-  `;
-
+  $("loginError")
+    .textContent = "";
 }
 
 
 /* =========================================================
    AUTHENTICATION
-========================================================= */
+   ========================================================= */
 
-async function initializeAuth(){
+/*
+  Critical fix:
+
+  We DO NOT trust:
+
+  session.user.user_metadata.is_admin
+
+  We DO NOT trust:
+
+  email === "admin@example.com"
+
+  We DO NOT rely on an ambiguous overloaded:
+
+  cr_is_admin()
+
+  Instead:
+
+  auth.getUser()
+       ↓
+  user.id
+       ↓
+  cr_admins.user_id
+       ↓
+  is_active
+       ↓
+  role
+*/
+
+
+async function getVerifiedUser(){
 
   const {
-    data:{
-      session
-    }
-  } =
-    await sb.auth.getSession();
-
-
-  if(!session){
-
-    showLogin();
-
-    return;
-
-  }
-
-
-  const {
-    data:{
-      user
-    },
+    data,
     error
   } =
-    await sb.auth.getUser();
+    await supabaseClient
+      .auth
+      .getUser();
 
-
-  if(error || !user){
-
-    await sb.auth.signOut();
-
-    showLogin(
-      'Unable to verify authenticated user.'
-    );
-
-    return;
-
+  if(error){
+    throw error;
   }
 
-
-  const admin =
-    await verifyAdmin(user);
-
-
-  if(!admin){
-
-    await sb.auth.signOut();
-
-    showLogin(
-      'This authenticated account is not authorized for CrowRules Admin.'
+  if(!data || !data.user){
+    throw new Error(
+      "No authenticated Supabase user was found."
     );
-
-    return;
-
   }
 
-
-  state.user=user;
-  state.isAdmin=true;
-
-
-  showApp();
-
+  return data.user;
 }
 
 
-async function verifyAdmin(user){
+async function getAdminRecord(userId){
+
+  if(!userId){
+    throw new Error(
+      "Cannot verify administrator without a user ID."
+    );
+  }
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("cr_admins")
+      .select(`
+        user_id,
+        display_name,
+        role,
+        is_active,
+        created_at,
+        updated_at
+      `)
+      .eq("user_id",userId)
+      .maybeSingle();
+
+  if(error){
+    throw error;
+  }
+
+  return data;
+}
+
+
+async function authorizeCurrentUser(){
+
+  const user =
+    await getVerifiedUser();
+
+  state.user =
+    user;
+
+  $("identityEmail").textContent =
+    user.email || "No email";
+
+  $("identityId").textContent =
+    user.id;
+
+  const admin =
+    await getAdminRecord(user.id);
+
+  if(!admin){
+
+    throw new Error(
+      "Authenticated successfully, but this Supabase user has no matching row in public.cr_admins."
+    );
+  }
+
+  if(admin.is_active !== true){
+
+    throw new Error(
+      "Your CrowRules Admin record exists, but is_active is false."
+    );
+  }
+
+  const allowedRoles = [
+    "admin",
+    "super_admin",
+    "owner"
+  ];
+
+  if(!allowedRoles.includes(admin.role)){
+
+    throw new Error(
+      `Your CrowRules Admin record has role "${admin.role}", which is not an authorized administrator role.`
+    );
+  }
+
+  state.admin =
+    admin;
+
+  $("identityName").textContent =
+    admin.display_name ||
+    "CrowRules Administrator";
+
+  $("identityRole").innerHTML =
+    `<span class="badge good">${esc(admin.role)}</span>`;
+
+  $("userPill").textContent =
+    `${admin.display_name || user.email} • ${admin.role}`;
+
+  $("statAdminStatus").textContent =
+    "AUTHORIZED";
+
+  $("statAdminStatus").classList.add(
+    "success"
+  );
+
+  $("statAdminRole").textContent =
+    admin.role;
+
+  return {
+    user,
+    admin
+  };
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+async function handleLogin(event){
+
+  event.preventDefault();
+
+  clearLoginError();
+
+  const email =
+    $("email")
+      .value
+      .trim();
+
+  const password =
+    $("password")
+      .value;
+
+  $("loginButton").disabled =
+    true;
+
+  $("loginButton").textContent =
+    "Signing In…";
+
+  $("loginStatus").textContent =
+    "Authenticating with Supabase…";
 
   try{
 
@@ -2825,296 +1951,317 @@ async function verifyAdmin(user){
       data,
       error
     } =
-      await sb
-        .from('cr_admins')
-        .select('*')
-        .eq('user_id',user.id)
-        .limit(1)
-        .maybeSingle();
-
+      await supabaseClient
+        .auth
+        .signInWithPassword({
+          email,
+          password
+        });
 
     if(error){
+      throw error;
+    }
 
-      console.warn(
-        'Admin verification:',
-        error
+    if(!data || !data.user){
+
+      throw new Error(
+        "Supabase returned no authenticated user."
       );
-
-      return false;
-
     }
 
+    $("loginStatus").textContent =
+      "Authentication successful. Verifying CrowRules Admin authorization…";
 
-    if(!data){
-      return false;
-    }
+    await authorizeCurrentUser();
+
+    await enterAdminApplication();
+
+  }catch(error){
+
+    console.error(
+      "CrowRules Admin login failure:",
+      error
+    );
+
+    showLoginError(
+      getFriendlyError(error)
+    );
+
+    $("loginStatus").textContent =
+      "Authorization failed.";
+
+  }finally{
+
+    $("loginButton").disabled =
+      false;
+
+    $("loginButton").textContent =
+      "Sign In";
+  }
+}
 
 
-    if(
-      data.is_active===false ||
-      data.active===false
-    ){
+/* =========================================================
+   FRIENDLY ERRORS
+   ========================================================= */
 
-      return false;
+function getFriendlyError(error){
 
-    }
+  const message =
+    error?.message ||
+    String(error);
+
+  if(
+    message.includes(
+      "Invalid login credentials"
+    )
+  ){
+
+    return "The email/password combination was rejected by Supabase Auth.";
+  }
+
+  if(
+    message.includes(
+      "cr_admins"
+    )
+  ){
+
+    return (
+      "Supabase Auth succeeded, but the CrowRules Admin registry could not be read. " +
+      "This usually indicates an RLS policy or Data API permission problem."
+    );
+  }
+
+  return message;
+}
 
 
-    return true;
+/* =========================================================
+   ENTER ADMIN
+   ========================================================= */
+
+async function enterAdminApplication(){
+
+  $("loginScreen")
+    .style.display = "none";
+
+  $("adminApp")
+    .style.display = "block";
+
+  $("loginStatus").textContent =
+    "Authorized.";
+
+  try{
+
+    await loadPermissions();
+    await loadResources();
+    await loadAdmins();
+    await loadAudit();
+    await runDiagnostics();
 
   }catch(error){
 
     console.error(error);
 
-    return false;
-
+    toast(
+      "Admin loaded, but some resources could not be loaded.",
+      "bad"
+    );
   }
-
-}
-
-
-function showLogin(message=''){
-
-  document
-    .getElementById('loginScreen')
-    .style.display='flex';
-
-  document
-    .getElementById('app')
-    .classList.remove('active');
-
-  document
-    .getElementById('loginStatus')
-    .textContent=message;
-
-}
-
-
-async function showApp(){
-
-  document
-    .getElementById('loginScreen')
-    .style.display='none';
-
-  document
-    .getElementById('app')
-    .classList.add('active');
-
-
-  document
-    .getElementById('userEmail')
-    .textContent =
-      state.user?.email || 'Administrator';
-
-
-  await discoverResources();
-
-  await renderPage();
-
-  await setupRealtime();
 
 }
 
 
 /* =========================================================
-   LOGIN EVENTS
-========================================================= */
+   SESSION RESTORE
+   ========================================================= */
 
-document
-  .getElementById('loginForm')
-  .addEventListener(
-    'submit',
-    async event=>{
+async function restoreSession(){
 
-      event.preventDefault();
+  $("loginStatus").textContent =
+    "Checking existing Supabase session…";
 
+  try{
 
-      const email =
-        document
-          .getElementById('loginEmail')
-          .value
-          .trim();
+    const {
+      data
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
 
+    if(
+      data &&
+      data.session
+    ){
 
-      const password =
-        document
-          .getElementById('loginPassword')
-          .value;
+      await authorizeCurrentUser();
 
+      await enterAdminApplication();
 
-      const status =
-        document
-          .getElementById('loginStatus');
-
-
-      status.textContent =
-        'Authenticating…';
-
-
-      const {
-        error
-      } =
-        await sb.auth.signInWithPassword({
-          email,
-          password
-        });
-
-
-      if(error){
-
-        status.textContent =
-          error.message;
-
-        return;
-
-      }
-
-
-      status.textContent =
-        'Verifying administrator access…';
-
-
-      await initializeAuth();
-
+      return;
     }
-  );
 
+    $("loginStatus").textContent =
+      "Please sign in.";
 
-document
-  .getElementById('logoutBtn')
-  .addEventListener(
-    'click',
-    async()=>{
+  }catch(error){
 
-      await sb.auth.signOut();
+    console.error(
+      "Session restore failed:",
+      error
+    );
 
-      state.user=null;
-      state.isAdmin=false;
-
-      showLogin();
-
-    }
-  );
-
-
-sb.auth.onAuthStateChange(
-  async(event)=>{
-
-    if(event==='SIGNED_OUT'){
-
-      state.user=null;
-      state.isAdmin=false;
-
-      showLogin();
-
-    }
+    $("loginStatus").textContent =
+      "Please sign in.";
 
   }
-);
+}
+
+
+/* =========================================================
+   AUTH STATE
+   ========================================================= */
+
+supabaseClient
+  .auth
+  .onAuthStateChange(
+    async (event,session) => {
+
+      if(
+        event === "SIGNED_OUT"
+      ){
+
+        state.user = null;
+        state.admin = null;
+
+        $("adminApp")
+          .style.display = "none";
+
+        $("loginScreen")
+          .style.display = "grid";
+
+        $("loginStatus").textContent =
+          "Signed out.";
+
+        return;
+      }
+
+      if(
+        event === "SIGNED_IN" &&
+        session
+      ){
+
+        try{
+
+          await authorizeCurrentUser();
+
+          await enterAdminApplication();
+
+        }catch(error){
+
+          console.error(error);
+
+          await supabaseClient
+            .auth
+            .signOut();
+
+          showLoginError(
+            getFriendlyError(error)
+          );
+        }
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+async function logout(){
+
+  try{
+
+    await supabaseClient
+      .auth
+      .signOut();
+
+  }catch(error){
+
+    toast(
+      error.message,
+      "bad"
+    );
+  }
+}
+
+
+/* =========================================================
+   PERMISSIONS
+   ========================================================= */
+
+async function loadPermissions(){
+
+  if(!state.user){
+    return;
+  }
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("cr_admin_permissions")
+      .select(`
+        id,
+        user_id,
+        permission,
+        granted,
+        created_at,
+        updated_at
+      `)
+      .eq("user_id",state.user.id)
+      .eq("granted",true)
+      .order("permission");
+
+  if(error){
+
+    console.warn(
+      "Permission load:",
+      error
+    );
+
+    state.permissions = [];
+
+    $("statPermissions")
+      .textContent = "—";
+
+    return;
+  }
+
+  state.permissions =
+    data || [];
+
+  $("statPermissions")
+    .textContent =
+    state.permissions.length;
+}
 
 
 /* =========================================================
    RESOURCE DISCOVERY
-========================================================= */
+   ========================================================= */
 
-async function discoverResources(){
+async function loadResources(){
 
-  /*
-   * The browser cannot safely enumerate PostgreSQL
-   * system catalogs with the publishable key.
-   *
-   * Therefore we start with the known CrowRules
-   * resource registry and probe the resources.
-   *
-   * An optional secured RPC can later replace this
-   * discovery method.
-   */
-
-
-  const known =
-    Object.keys(KNOWN_RESOURCES);
-
-
-  const possible =
-    Object.keys(RESOURCE_ALIASES);
-
-
-  const candidates =
-    [...new Set([
-      ...known,
-      ...possible
-    ])];
-
-
-  const found=[];
-
+  state.resources = [];
 
   /*
-   * Probe resources in batches rather than creating
-   * hundreds of simultaneous requests.
-   */
-
-  const batchSize=8;
-
-
-  for(
-    let i=0;
-    i<candidates.length;
-    i+=batchSize
-  ){
-
-    const batch =
-      candidates.slice(
-        i,
-        i+batchSize
-      );
-
-
-    const results =
-      await Promise.all(
-        batch.map(
-          table=>probeResource(table)
-        )
-      );
-
-
-    results
-      .filter(Boolean)
-      .forEach(resource=>{
-        found.push(resource);
-      });
-
-  }
-
-
-  state.resources =
-    found.sort(
-      (a,b)=>
-        a.group.localeCompare(b.group) ||
-        a.name.localeCompare(b.name)
-    );
-
-
-  document
-    .getElementById('resourceCount')
-    .textContent =
-      state.resources.length;
-
-
-  /*
-   * Populate sidebar count cache.
-   */
-
-  await refreshResourceCounts();
-
-}
-
-
-async function probeResource(table){
-
-  const started =
-    performance.now();
-
+    Preferred path:
+    secure admin RPC created for v5.1.
+  */
 
   try{
 
@@ -3122,2443 +2269,471 @@ async function probeResource(table){
       data,
       error
     } =
-      await sb
-        .from(table)
-        .select('*')
-        .limit(1);
-
-
-    if(error){
-
-      return null;
-
-    }
-
-
-    const row =
-      data?.[0] || {};
-
-
-    return {
-
-      table,
-
-      name:
-        prettyName(table),
-
-      group:
-        KNOWN_RESOURCES[table]?.group ||
-        inferResourceGroup(table),
-
-      icon:
-        KNOWN_RESOURCES[table]?.icon ||
-        '▦',
-
-      readonly:
-        KNOWN_RESOURCES[table]?.readonly ||
-        false,
-
-      protected:
-        KNOWN_RESOURCES[table]?.protected ||
-        false,
-
-      columns:
-        Object.keys(row),
-
-      responseMs:
-        Math.round(
-          performance.now()-started
-        )
-
-    };
-
-  }catch{
-
-    return null;
-
-  }
-
-}
-
-
-function inferResourceGroup(table){
-
-  const t =
-    String(table).toLowerCase();
-
-
-  if(
-    t.includes('podcast')
-  ){
-    return 'Podcasting';
-  }
-
-
-  if(
-    t.includes('sport') ||
-    t.includes('team') ||
-    t.includes('league') ||
-    t.includes('game')
-  ){
-    return 'Sports';
-  }
-
-
-  if(
-    t.includes('tv') ||
-    t.includes('movie') ||
-    t.includes('watch') ||
-    t.includes('channel')
-  ){
-    return 'CrowRules TV';
-  }
-
-
-  if(
-    t.includes('member') ||
-    t.includes('profile') ||
-    t.includes('subscriber')
-  ){
-    return 'Members';
-  }
-
-
-  if(
-    t.includes('donation') ||
-    t==='donations' ||
-    t.includes('partner') ||
-    t.includes('contact')
-  ){
-    return 'Business';
-  }
-
-
-  if(
-    t.includes('schedule') ||
-    t.includes('event')
-  ){
-    return 'Broadcast';
-  }
-
-
-  if(
-    t.includes('news') ||
-    t.includes('content') ||
-    t.includes('comment') ||
-    t.includes('update')
-  ){
-    return 'Publishing';
-  }
-
-
-  if(
-    t.includes('admin') ||
-    t.includes('audit') ||
-    t.includes('setting')
-  ){
-    return 'Administration';
-  }
-
-
-  return 'Other';
-
-}
-
-
-/* =========================================================
-   RESOURCE COUNTS
-========================================================= */
-
-async function refreshResourceCounts(){
-
-  const resources =
-    state.resources;
-
-
-  for(
-    let i=0;
-    i<resources.length;
-    i++
-  ){
-
-    const resource =
-      resources[i];
-
-
-    const count =
-      await countResource(
-        resource.table
-      );
-
-
-    state.counts[
-      resource.table
-    ] =
-      count;
-
-  }
-
-}
-
-
-async function countResource(table){
-
-  try{
-
-    const {
-      count,
-      error
-    } =
-      await sb
-        .from(table)
-        .select('*',{
-          count:'exact',
-          head:true
-        });
-
-
-    if(error){
-      return null;
-    }
-
-
-    return count ?? 0;
-
-  }catch{
-
-    return null;
-
-  }
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-document
-  .querySelectorAll('.nav-btn')
-  .forEach(button=>{
-
-    button.addEventListener(
-      'click',
-      ()=>{
-
-        state.page =
-          button.dataset.page;
-
-        document
-          .getElementById('sidebar')
-          .classList.remove('open');
-
-        renderPage();
-
-      }
-    );
-
-  });
-
-
-document
-  .getElementById('mobileMenu')
-  .addEventListener(
-    'click',
-    ()=>{
-
-      document
-        .getElementById('sidebar')
-        .classList.toggle('open');
-
-    }
-  );
-
-
-document
-  .getElementById('refreshBtn')
-  .addEventListener(
-    'click',
-    async()=>{
-
-      await refreshCurrentPage();
-
-      toast(
-        'Command Center refreshed.',
-        'success'
-      );
-
-    }
-  );
-
-
-/* =========================================================
-   PAGE RENDERING
-========================================================= */
-
-async function renderPage(){
-
-  document
-    .querySelectorAll('.nav-btn')
-    .forEach(button=>{
-
-      button.classList.toggle(
-        'active',
-        button.dataset.page === state.page
-      );
-
-    });
-
-
-  const config =
-    PAGES[state.page] ||
-    PAGES.dashboard;
-
-
-  document
-    .getElementById('topbarTitle')
-    .textContent =
-      config.title;
-
-
-  document
-    .getElementById('topbarSubtitle')
-    .textContent =
-      config.subtitle;
-
-
-  if(state.page==='dashboard'){
-
-    await renderDashboard();
-
-    return;
-
-  }
-
-
-  if(state.page==='activity'){
-
-    await renderActivity();
-
-    return;
-
-  }
-
-
-  if(state.page==='global-search'){
-
-    renderGlobalSearch();
-
-    return;
-
-  }
-
-
-  if(state.page==='database'){
-
-    await renderDatabase();
-
-    return;
-
-  }
-
-
-  if(state.page==='health'){
-
-    await renderHealth();
-
-    return;
-
-  }
-
-
-  if(state.page==='all-resources'){
-
-    renderAllResources();
-
-    return;
-
-  }
-
-
-  if(config.table){
-
-    state.table =
-      config.table;
-
-    await renderTablePage(
-      config.title,
-      config.subtitle,
-      config.table
-    );
-
-    return;
-
-  }
-
-
-  renderAllResources();
-
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-async function renderDashboard(){
-
-  const page =
-    document.getElementById('page');
-
-
-  page.innerHTML = `
-
-    <div class="page-header">
-
-      <div>
-
-        <h1>
-          Command Center
-        </h1>
-
-        <p>
-          Universal CrowRules Entertainment
-          Supabase administration.
-        </p>
-
-      </div>
-
-      <div class="page-actions">
-
-        <button
-          class="btn primary"
-          onclick="openAddModal('cr_original_productions')">
-
-          + Production
-
-        </button>
-
-        <button
-          class="btn cyan"
-          onclick="state.page='database';renderPage()">
-
-          Database
-
-        </button>
-
-        <button
-          class="btn"
-          onclick="state.page='health';renderPage()">
-
-          Health
-
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div id="dashboardContent">
-
-      <div class="loading">
-
-        <div class="spinner"></div>
-
-        Loading Command Center…
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  await populateDashboard();
-
-}
-
-
-async function populateDashboard(){
-
-  const relevant = [
-
-    'cr_divisions',
-    'cr_projects',
-    'cr_original_productions',
-    'cr_episodes',
-    'cr_news',
-    'cr_schedule',
-    'cr_events',
-    'donations',
-    'cr_subscribers',
-    'cr_partners'
-
-  ];
-
-
-  await Promise.all(
-    relevant.map(
-      async table=>{
-
-        if(
-          state.resources.some(
-            x=>x.table===table
-          )
-        ){
-
-          state.counts[table] =
-            await countResource(table);
-
-        }
-
-      }
-    )
-  );
-
-
-  let donationTotal=0;
-
-
-  try{
-
-    const {
-      data
-    } =
-      await sb
-        .from('donations')
-        .select('amount')
-        .limit(1000);
-
-
-    donationTotal =
-      (data || [])
-        .reduce(
-          (sum,row)=>
-            sum+
-            Number(row.amount || 0),
-          0
-        );
-
-  }catch{}
-
-
-  let liveCount=0;
-
-
-  try{
+      await supabaseClient
+        .rpc("cr_admin_schema_metadata");
 
     if(
-      state.resources.some(
-        x=>x.table==='cr_original_productions'
-      )
+      !error &&
+      Array.isArray(data) &&
+      data.length
     ){
 
-      const {
-        count
-      } =
-        await sb
-          .from('cr_original_productions')
-          .select('*',{
-            count:'exact',
-            head:true
-          })
-          .eq('is_live',true);
+      state.resources =
+        data.map(item => ({
+          schema_name:
+            item.schema_name || "public",
 
+          table_name:
+            item.table_name,
 
-      liveCount =
-        count || 0;
+          relation_type:
+            item.relation_type ||
+            "table",
 
+          columns:
+            Array.isArray(item.columns)
+              ? item.columns
+              : [],
+
+          writable:
+            item.writable === true
+        }));
+
+      renderResources();
+      renderResourceGroups();
+
+      $("statResources")
+        .textContent =
+        state.resources.length;
+
+      populateSchemaSelect();
+
+      return;
     }
-
-  }catch{}
-
-
-  let productions=[];
-
-
-  try{
-
-    const {
-      data
-    } =
-      await sb
-        .from('cr_original_productions')
-        .select('*')
-        .order(
-          'created_at',
-          {ascending:false}
-        )
-        .limit(6);
-
-
-    productions =
-      data || [];
-
-  }catch{}
-
-
-  let episodes=[];
-
-
-  try{
-
-    const {
-      data
-    } =
-      await sb
-        .from('cr_episodes')
-        .select('*')
-        .order(
-          'created_at',
-          {ascending:false}
-        )
-        .limit(6);
-
-
-    episodes =
-      data || [];
-
-  }catch{}
-
-
-  const content = `
-
-    <div class="stats">
-
-      ${statCard(
-        'Resources',
-        state.resources.length,
-        'Detected Supabase resources'
-      )}
-
-      ${statCard(
-        'Productions',
-        state.counts.cr_original_productions,
-        'Original productions'
-      )}
-
-      ${statCard(
-        'Episodes',
-        state.counts.cr_episodes,
-        'Episode records'
-      )}
-
-      ${statCard(
-        'Live',
-        liveCount,
-        'Currently marked live'
-      )}
-
-      ${statCard(
-        'Subscribers',
-        state.counts.cr_subscribers,
-        'Audience records'
-      )}
-
-      ${statCard(
-        'Donations',
-        formatMoney(donationTotal),
-        'Retrieved donation total'
-      )}
-
-    </div>
-
-
-    <div class="dashboard-grid">
-
-
-      <div class="panel">
-
-        <div class="panel-header">
-
-          <div class="panel-title">
-            QUICK OPERATIONS
-          </div>
-
-        </div>
-
-        <div class="panel-body">
-
-          <div class="quick-grid">
-
-            ${quickCard(
-              '🎬',
-              'New Production',
-              'Create an original show.',
-              "openAddModal('cr_original_productions')"
-            )}
-
-            ${quickCard(
-              '▶',
-              'New Episode',
-              'Create an episode.',
-              "openAddModal('cr_episodes')"
-            )}
-
-            ${quickCard(
-              '▤',
-              'Schedule',
-              'Manage programming.',
-              "state.page='schedule';renderPage()"
-            )}
-
-            ${quickCard(
-              '📰',
-              'News',
-              'Create publishing content.',
-              "state.page='news';renderPage()"
-            )}
-
-            ${quickCard(
-              '🎙',
-              'Podcasting',
-              'Open podcast administration.',
-              "state.page='podcasting';renderPage()"
-            )}
-
-            ${quickCard(
-              '🏆',
-              'Sports',
-              'Open sports administration.',
-              "state.page='sports';renderPage()"
-            )}
-
-            ${quickCard(
-              '$',
-              'Donations',
-              'Review support activity.',
-              "state.page='donations';renderPage()"
-            )}
-
-            ${quickCard(
-              '🌲',
-              'Tacoma Nights',
-              'Manage Tacoma Nights.',
-              "state.page='tacoma';renderPage()"
-            )}
-
-            ${quickCard(
-              '▦',
-              'All Resources',
-              'Browse every discovered resource.',
-              "state.page='all-resources';renderPage()"
-            )}
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="panel">
-
-        <div class="panel-header">
-
-          <div class="panel-title">
-            PLATFORM STATUS
-          </div>
-
-        </div>
-
-        <div class="panel-body">
-
-          <div class="activity-list">
-
-            ${statusRow(
-              'Supabase Authentication',
-              'Authenticated administrator',
-              'green'
-            )}
-
-            ${statusRow(
-              'Database',
-              `${state.resources.length} resources detected`,
-              'green'
-            )}
-
-            ${statusRow(
-              'Realtime',
-              state.realtimeReady
-                ? 'Connected'
-                : 'Initializing',
-              state.realtimeReady
-                ? 'green'
-                : 'yellow'
-            )}
-
-            ${statusRow(
-              'Admin Authorization',
-              state.isAdmin
-                ? 'Verified'
-                : 'Not verified',
-              state.isAdmin
-                ? 'green'
-                : 'red'
-            )}
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="panel">
-
-        <div class="panel-header">
-
-          <div class="panel-title">
-            LATEST PRODUCTIONS
-          </div>
-
-          <button
-            class="btn small"
-            onclick="state.page='productions';renderPage()">
-
-            View All
-
-          </button>
-
-        </div>
-
-        <div class="panel-body">
-
-          ${
-            productions.length
-            ? `
-              <div class="activity-list">
-
-                ${
-                  productions
-                    .map(row=>`
-
-                      <div class="activity-item">
-
-                        <div class="activity-dot"></div>
-
-                        <div class="activity-main">
-
-                          <div class="activity-title">
-
-                            ${esc(
-                              row.title ||
-                              'Untitled Production'
-                            )}
-
-                          </div>
-
-                          <div class="activity-meta">
-
-                            ${esc(
-                              row.status ||
-                              'No status'
-                            )}
-
-                            ·
-
-                            ${formatDate(
-                              row.created_at
-                            )}
-
-                          </div>
-
-                        </div>
-
-                      </div>
-
-                    `)
-                    .join('')
-                }
-
-              </div>
-            `
-            : `
-              <div class="empty">
-                No productions found.
-              </div>
-            `
-          }
-
-        </div>
-
-      </div>
-
-
-      <div class="panel">
-
-        <div class="panel-header">
-
-          <div class="panel-title">
-            LATEST EPISODES
-          </div>
-
-          <button
-            class="btn small"
-            onclick="state.page='episodes';renderPage()">
-
-            View All
-
-          </button>
-
-        </div>
-
-        <div class="panel-body">
-
-          ${
-            episodes.length
-            ? `
-              <div class="activity-list">
-
-                ${
-                  episodes
-                    .map(row=>`
-
-                      <div class="activity-item">
-
-                        <div class="activity-dot"></div>
-
-                        <div class="activity-main">
-
-                          <div class="activity-title">
-
-                            ${esc(
-                              row.title ||
-                              'Untitled Episode'
-                            )}
-
-                          </div>
-
-                          <div class="activity-meta">
-
-                            ${esc(
-                              row.status ||
-                              'No status'
-                            )}
-
-                            ·
-
-                            ${formatDate(
-                              row.created_at
-                            )}
-
-                          </div>
-
-                        </div>
-
-                      </div>
-
-                    `)
-                    .join('')
-                }
-
-              </div>
-            `
-            : `
-              <div class="empty">
-                No episodes found.
-              </div>
-            `
-          }
-
-        </div>
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  document
-    .getElementById('dashboardContent')
-    .innerHTML=content;
-
-}
-
-
-function statCard(
-  label,
-  value,
-  sub
-){
-
-  return `
-
-    <div class="stat">
-
-      <div class="stat-label">
-        ${esc(label)}
-      </div>
-
-      <div class="stat-value">
-        ${
-          value===null ||
-          value===undefined
-          ? '—'
-          : esc(value)
-        }
-      </div>
-
-      <div class="stat-sub">
-        ${esc(sub)}
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-function quickCard(
-  icon,
-  title,
-  description,
-  action
-){
-
-  return `
-
-    <button
-      class="quick-card"
-      onclick="${action}">
-
-      <div class="quick-icon">
-        ${icon}
-      </div>
-
-      <div class="quick-title">
-        ${esc(title)}
-      </div>
-
-      <div class="quick-desc">
-        ${esc(description)}
-      </div>
-
-    </button>
-
-  `;
-
-}
-
-
-function statusRow(
-  title,
-  detail,
-  type
-){
-
-  return `
-
-    <div class="activity-item">
-
-      <div
-        class="activity-dot"
-        style="
-          background:
-          ${
-            type==='green'
-            ? 'var(--green)'
-            : type==='red'
-              ? 'var(--red)'
-              : 'var(--yellow)'
-          };
-        ">
-      </div>
-
-      <div class="activity-main">
-
-        <div class="activity-title">
-          ${esc(title)}
-        </div>
-
-        <div class="activity-meta">
-          ${esc(detail)}
-        </div>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   ACTIVITY
-========================================================= */
-
-async function renderActivity(){
-
-  const page =
-    document.getElementById('page');
-
-
-  page.innerHTML = `
-
-    <div class="page-header">
-
-      <div>
-
-        <h1>
-          Activity
-        </h1>
-
-        <p>
-          Administrative activity and audit events.
-        </p>
-
-      </div>
-
-      <button
-        class="btn"
-        onclick="renderActivity()">
-
-        ↻ Refresh
-
-      </button>
-
-    </div>
-
-
-    <div class="panel">
-
-      <div
-        id="activityContent"
-        class="panel-body">
-
-        <div class="loading">
-
-          <div class="spinner"></div>
-
-          Loading activity…
-
-        </div>
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  let rows=[];
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from('cr_admin_audit_log')
-        .select('*')
-        .order(
-          'created_at',
-          {ascending:false}
-        )
-        .limit(100);
-
-
-    if(error){
-      throw error;
-    }
-
-
-    rows =
-      data || [];
 
   }catch(error){
 
-    document
-      .getElementById('activityContent')
-      .innerHTML =
-        errorHtml(error.message);
-
-    return;
-
-  }
-
-
-  document
-    .getElementById('activityContent')
-    .innerHTML =
-
-    rows.length
-    ? `
-
-      <div class="activity-list">
-
-        ${
-          rows
-            .map(row=>`
-
-              <div class="activity-item">
-
-                <div class="activity-dot"></div>
-
-                <div class="activity-main">
-
-                  <div class="activity-title">
-
-                    ${esc(
-                      row.action ||
-                      row.event ||
-                      'Administrative action'
-                    )}
-
-                  </div>
-
-                  <div class="activity-meta">
-
-                    ${esc(
-                      row.table_name ||
-                      row.table ||
-                      ''
-                    )}
-
-                    ${
-                      row.target_id
-                      ? ` · ${esc(row.target_id)}`
-                      : ''
-                    }
-
-                    ·
-
-                    ${formatDate(
-                      row.created_at
-                    )}
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            `)
-            .join('')
-        }
-
-      </div>
-
-    `
-    : `
-
-      <div class="empty">
-        No administrative activity recorded.
-      </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   GLOBAL SEARCH
-========================================================= */
-
-function renderGlobalSearch(){
-
-  const page =
-    document.getElementById('page');
-
-
-  page.innerHTML = `
-
-    <div class="page-header">
-
-      <div>
-
-        <h1>
-          Global Search
-        </h1>
-
-        <p>
-          Search across every discovered CrowRules resource.
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div class="panel">
-
-      <div class="toolbar">
-
-        <div class="toolbar-group"
-             style="flex:1;">
-
-          <input
-            id="globalSearchInput"
-            class="search"
-            style="width:100%;"
-            placeholder="Search across CrowRules data…">
-
-        </div>
-
-        <button
-          class="btn primary"
-          onclick="performGlobalSearch()">
-
-          Search
-
-        </button>
-
-      </div>
-
-
-      <div
-        id="globalSearchResults"
-        class="panel-body">
-
-        <div class="empty">
-          Search every available resource.
-        </div>
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  document
-    .getElementById('globalSearchInput')
-    .addEventListener(
-      'keydown',
-      event=>{
-
-        if(event.key==='Enter'){
-          performGlobalSearch();
-        }
-
-      }
+    console.warn(
+      "Schema metadata RPC unavailable:",
+      error
     );
 
-
-  document
-    .getElementById('globalSearchInput')
-    .focus();
-
-}
-
-
-async function performGlobalSearch(){
-
-  const input =
-    document
-      .getElementById(
-        'globalSearchInput'
-      );
-
-
-  const box =
-    document
-      .getElementById(
-        'globalSearchResults'
-      );
-
-
-  const term =
-    input.value.trim();
-
-
-  if(term.length<2){
-
-    box.innerHTML = `
-
-      <div class="empty">
-        Enter at least two characters.
-      </div>
-
-    `;
-
-    return;
-
   }
-
-
-  box.innerHTML = `
-
-    <div class="loading">
-
-      <div class="spinner"></div>
-
-      Searching ${state.resources.length}
-      resources…
-
-    </div>
-
-  `;
-
-
-  const results=[];
 
 
   /*
-   * Search in batches to prevent a giant burst
-   * of simultaneous database requests.
-   */
+    Fallback:
+    probe known resources individually.
 
-  const batchSize=5;
+    This keeps Admin v5.1 usable even if the metadata RPC
+    is temporarily unavailable.
+  */
 
+  const discovered = [];
 
   for(
-    let i=0;
-    i<state.resources.length;
-    i+=batchSize
+    const tableName of KNOWN_RESOURCES
   ){
 
-    const batch =
-      state.resources.slice(
-        i,
-        i+batchSize
-      );
+    try{
 
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(tableName)
+          .select("*",{count:"exact",head:true});
 
-    const batchResults =
-      await Promise.all(
-        batch.map(
-          resource=>
-            searchResource(
-              resource.table,
-              term
-            )
-        )
-      );
+      if(!error){
 
+        discovered.push({
+          schema_name:"public",
+          table_name:tableName,
+          relation_type:"table",
+          columns:[],
+          writable:true
+        });
 
-    batchResults
-      .flat()
-      .forEach(result=>{
-        results.push(result);
-      });
+      }
+
+    }catch(_){}
 
   }
 
+  state.resources =
+    discovered;
 
-  box.innerHTML =
+  renderResources();
+  renderResourceGroups();
 
-    results.length
-    ? `
+  $("statResources")
+    .textContent =
+    state.resources.length;
 
-      <div class="search-results">
-
-        ${
-          results
-            .slice(0,150)
-            .map(result=>`
-
-              <div class="search-result">
-
-                <div class="search-result-header">
-
-                  <div class="search-resource">
-
-                    ${esc(
-                      result.name
-                    )}
-
-                  </div>
-
-                  <button
-                    class="btn small"
-                    onclick="openSearchRecord(
-                      '${esc(result.table)}',
-                      '${esc(result.id || '')}'
-                    )">
-
-                    Open
-
-                  </button>
-
-                </div>
-
-                <div class="search-preview">
-
-                  ${esc(
-                    safeJson(result.row)
-                  )}
-
-                </div>
-
-              </div>
-
-            `)
-            .join('')
-        }
-
-      </div>
-
-      <div style="
-        margin-top:12px;
-        color:var(--muted);
-        font-size:9px;
-      ">
-
-        Showing
-        ${Math.min(results.length,150)}
-        of
-        ${results.length}
-        matches.
-
-      </div>
-
-    `
-    : `
-
-      <div class="empty">
-        No matches found.
-      </div>
-
-    `;
-
-}
-
-
-async function searchResource(
-  table,
-  term
-){
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from(table)
-        .select('*')
-        .limit(300);
-
-
-    if(error){
-      return [];
-    }
-
-
-    return (data || [])
-      .filter(row=>
-        safeJson(row)
-          .toLowerCase()
-          .includes(
-            term.toLowerCase()
-          )
-      )
-      .map(row=>({
-
-        table,
-
-        name:
-          prettyName(table),
-
-        id:
-          row.id ||
-          row.user_id ||
-          '',
-
-        row
-
-      }));
-
-  }catch{
-
-    return [];
-
-  }
-
-}
-
-
-async function openSearchRecord(
-  table,
-  id
-){
-
-  if(!id){
-
-    state.table=table;
-
-    await renderTablePage(
-      prettyName(table),
-      'Search result resource.',
-      table
-    );
-
-    return;
-
-  }
-
-
-  await openRecordModal(
-    table,
-    id
-  );
-
+  populateSchemaSelect();
 }
 
 
 /* =========================================================
-   DATABASE
-========================================================= */
+   RESOURCE RENDERING
+   ========================================================= */
 
-async function renderDatabase(){
+function renderResources(){
 
-  const page =
-    document.getElementById('page');
+  const container =
+    $("resourceList");
 
+  if(!state.resources.length){
 
-  page.innerHTML = `
+    container.innerHTML =
+      `<div class="empty">
+        No accessible resources were discovered.
+      </div>`;
 
-    <div class="page-header">
-
-      <div>
-
-        <h1>
-          Database
-        </h1>
-
-        <p>
-          Universal CrowRules Supabase database explorer.
-        </p>
-
-      </div>
-
-      <div class="page-actions">
-
-        <button
-          class="btn"
-          onclick="discoverResources().then(renderDatabase)">
-
-          ↻ Discover
-
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="panel">
-
-      <div class="toolbar">
-
-        <div class="toolbar-group">
-
-          <input
-            id="resourceFilter"
-            class="search"
-            placeholder="Filter resources…">
-
-        </div>
-
-        <div class="toolbar-group">
-
-          <span class="badge purple">
-            ${state.resources.length}
-            resources
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="databaseResources"
-        class="panel-body">
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  document
-    .getElementById('resourceFilter')
-    .addEventListener(
-      'input',
-      event=>{
-
-        state.resourceFilter =
-          event.target.value;
-
-        renderResourceGrid();
-
-      }
-    );
-
-
-  renderResourceGrid();
-
-}
-
-
-function renderResourceGrid(){
-
-  const box =
-    document
-      .getElementById(
-        'databaseResources'
-      );
-
-
-  if(!box){
     return;
   }
 
+  container.innerHTML =
+    state.resources
+      .map((resource,index) => {
 
-  const term =
-    String(
-      state.resourceFilter || ''
-    )
-    .toLowerCase()
-    .trim();
+        const type =
+          resource.relation_type === "view"
+            ? "VIEW"
+            : "TABLE";
 
-
-  const resources =
-    state.resources.filter(
-      resource=>
-
-        !term ||
-
-        resource.name
-          .toLowerCase()
-          .includes(term) ||
-
-        resource.table
-          .toLowerCase()
-          .includes(term) ||
-
-        resource.group
-          .toLowerCase()
-          .includes(term)
-
-    );
-
-
-  if(!resources.length){
-
-    box.innerHTML = `
-
-      <div class="empty">
-        No resources match the filter.
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const groups =
-    [...new Set(
-      resources.map(
-        x=>x.group
-      )
-    )];
-
-
-  box.innerHTML =
-    groups.map(group=>{
-
-      const groupResources =
-        resources.filter(
-          x=>x.group===group
-        );
-
-
-      return `
-
-        <div style="
-          margin-bottom:22px;
-        ">
-
+        return `
           <div
-            class="panel-title"
-            style="
-              margin:0 0 10px;
-            ">
+            class="resource"
+            data-resource-index="${index}"
+          >
+            <div class="resource-name">
+              ${esc(resource.table_name)}
+            </div>
 
-            ${esc(group)}
-
+            <div class="resource-meta">
+              ${esc(resource.schema_name)}
+              •
+              ${type}
+              •
+              ${resource.writable ? "writable" : "read-only"}
+            </div>
           </div>
+        `;
 
-          <div class="resource-grid">
-
-            ${
-              groupResources
-                .map(
-                  resource=>
-                    resourceCard(resource)
-                )
-                .join('')
-            }
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join('');
-
+      })
+      .join("");
 }
 
 
 function resourceCard(resource){
 
-  const count =
-    state.counts[
-      resource.table
-    ];
-
+  const index =
+    state.resources.indexOf(resource);
 
   return `
-
     <div
-      class="resource-card"
-      onclick="openResource(
-        '${esc(resource.table)}'
-      )">
-
-      <div class="resource-icon">
-        ${resource.icon}
-      </div>
+      class="resource"
+      data-resource-index="${index}"
+    >
 
       <div class="resource-name">
-        ${esc(resource.name)}
+        ${esc(resource.table_name)}
       </div>
 
-      <div class="resource-table">
-        ${esc(resource.table)}
-      </div>
-
-      <div class="resource-count">
-
-        ${
-          count===null ||
-          count===undefined
-          ? '—'
-          : esc(count)
-        }
-
-      </div>
-
-      <div class="resource-type">
-
-        ${
-          resource.readonly
-          ? 'READ ONLY'
-          : 'DATABASE RESOURCE'
-        }
-
-        ·
-
-        ${
-          resource.responseMs
-        } ms probe
-
+      <div class="resource-meta">
+        ${esc(resource.schema_name)}
+        •
+        ${esc(resource.relation_type)}
       </div>
 
     </div>
-
   `;
-
 }
 
 
-function openResource(table){
+/* =========================================================
+   RESOURCE GROUPS
+   ========================================================= */
 
-  state.table=table;
-  state.pageNum=1;
-  state.search='';
-  state.sort=null;
+function resourceMatches(resource,keywords){
 
-  renderTablePage(
-    prettyName(table),
-    `Supabase resource: ${table}`,
-    table
+  const name =
+    resource.table_name
+      .toLowerCase();
+
+  return keywords.some(
+    keyword =>
+      name.includes(keyword)
+  );
+}
+
+
+function renderGroup(containerId,keywords){
+
+  const container =
+    $(containerId);
+
+  if(!container){
+    return;
+  }
+
+  const matches =
+    state.resources
+      .filter(
+        resource =>
+          resourceMatches(
+            resource,
+            keywords
+          )
+      );
+
+  if(!matches.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        No matching resources discovered yet.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML =
+    matches
+      .map(resourceCard)
+      .join("");
+}
+
+
+function renderResourceGroups(){
+
+  renderGroup(
+    "tvResources",
+    [
+      "tv",
+      "show",
+      "episode",
+      "schedule",
+      "channel",
+      "movie",
+      "watch",
+      "member",
+      "creator",
+      "live"
+    ]
   );
 
-}
-
-
-/* =========================================================
-   ALL RESOURCES
-========================================================= */
-
-function renderAllResources(){
-
-  const page =
-    document.getElementById('page');
-
-
-  page.innerHTML = `
-
-    <div class="page-header">
-
-      <div>
-
-        <h1>
-          All Resources
-        </h1>
-
-        <p>
-          Every Supabase resource discovered by
-          the CrowRules Admin client.
-        </p>
-
-      </div>
-
-      <div class="page-actions">
-
-        <button
-          class="btn primary"
-          onclick="discoverResources().then(renderAllResources)">
-
-          ↻ Rediscover
-
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="panel">
-
-      <div class="panel-body">
-
-        <div class="resource-grid">
-
-          ${
-            state.resources
-              .map(
-                resource=>
-                  resourceCard(resource)
-              )
-              .join('')
-          }
-
-        </div>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   TABLE PAGE
-========================================================= */
-
-async function renderTablePage(
-  title,
-  subtitle,
-  table
-){
-
-  state.table=table;
-
-
-  const page =
-    document.getElementById('page');
-
-
-  const resource =
-    state.resources.find(
-      x=>x.table===table
-    );
-
-
-  const readonly =
-    resource?.readonly ||
-    false;
-
-
-  page.innerHTML = `
-
-    <div class="page-header">
-
-      <div>
-
-        <h1>
-          ${esc(title)}
-        </h1>
-
-        <p>
-          ${esc(subtitle)}
-        </p>
-
-      </div>
-
-      <div class="page-actions">
-
-        ${
-          !readonly &&
-          !resource?.protected
-          ? `
-
-            <button
-              class="btn primary"
-              onclick="openAddModal(
-                '${esc(table)}'
-              )">
-
-              + Add Record
-
-            </button>
-
-          `
-          : ''
-        }
-
-        <button
-          class="btn"
-          onclick="loadTable()">
-
-          ↻ Refresh
-
-        </button>
-
-        <button
-          class="btn"
-          onclick="exportCSV()">
-
-          CSV
-
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="panel">
-
-      <div class="toolbar">
-
-        <div class="toolbar-group">
-
-          <input
-            id="tableSearch"
-            class="search"
-            placeholder="Search records…">
-
-          <select
-            id="pageSize"
-            style="width:100px;">
-
-            <option value="25">
-              25
-            </option>
-
-            <option value="50">
-              50
-            </option>
-
-            <option value="100">
-              100
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="toolbar-group">
-
-          <span class="badge cyan">
-            ${esc(table)}
-          </span>
-
-          ${
-            readonly
-            ? `
-              <span class="badge yellow">
-                READ ONLY
-              </span>
-            `
-            : ''
-          }
-
-        </div>
-
-      </div>
-
-
-      <div id="tableContent">
-
-        <div class="loading">
-
-          <div class="spinner"></div>
-
-          Loading records…
-
-        </div>
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  document
-    .getElementById('tableSearch')
-    .addEventListener(
-      'input',
-      event=>{
-
-        state.search =
-          event.target.value;
-
-        state.pageNum=1;
-
-        applyFilter();
-
-        renderTableContent();
-
-      }
-    );
-
-
-  document
-    .getElementById('pageSize')
-    .addEventListener(
-      'change',
-      event=>{
-
-        state.pageSize =
-          Number(event.target.value);
-
-        state.pageNum=1;
-
-        renderTableContent();
-
-      }
-    );
-
-
-  await loadTable();
-
-}
-
-
-async function loadTable(){
-
-  const table =
-    state.table;
-
-
-  if(!table){
-    return;
-  }
-
-
-  const target =
-    document.getElementById(
-      'tableContent'
-    );
-
-
-  if(!target){
-    return;
-  }
-
-
-  target.innerHTML = `
-
-    <div class="loading">
-
-      <div class="spinner"></div>
-
-      Loading ${esc(
-        prettyName(table)
-      )}…
-
-    </div>
-
-  `;
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await sb
-        .from(table)
-        .select('*')
-        .limit(2000);
-
-
-    if(error){
-      throw error;
-    }
-
-
-    state.rows =
-      data || [];
-
-
-    state.schema =
-      inferSchema(
-        state.rows
-      );
-
-
-    state.filtered =
-      [...state.rows];
-
-
-    renderTableContent();
-
-  }catch(error){
-
-    target.innerHTML =
-      errorHtml(
-        `${error.message}`
-      );
-
-  }
-
-}
-
-
-function inferSchema(rows){
-
-  if(!rows.length){
-    return [];
-  }
-
-
-  const keys =
+  renderGroup(
+    "sportsResources",
     [
-      ...new Set(
-        rows.flatMap(
-          row=>Object.keys(row)
-        )
-      )
-    ];
+      "sport",
+      "sports",
+      "team",
+      "game",
+      "standings",
+      "league",
+      "player"
+    ]
+  );
 
+  renderGroup(
+    "podcastingResources",
+    [
+      "podcast",
+      "podcasting",
+      "audio",
+      "radio"
+    ]
+  );
 
-  return keys.map(key=>{
+  renderGroup(
+    "tacomaResources",
+    [
+      "tacoma",
+      "night"
+    ]
+  );
 
-    const row =
-      rows.find(
-        item=>
-          item[key]!==null &&
-          item[key]!==undefined
-      );
+  renderGroup(
+    "businessResources",
+    [
+      "business",
+      "project",
+      "task",
+      "contact",
+      "roadmap",
+      "content",
+      "news",
+      "announcement",
+      "social",
+      "division"
+    ]
+  );
 
+  renderGroup(
+    "donationResources",
+    [
+      "donation",
+      "donations"
+    ]
+  );
 
-    const value =
-      row?.[key];
-
-
-    let type =
-      typeof value;
-
-
-    if(
-      value===null ||
-      value===undefined
-    ){
-
-      type='unknown';
-
-    }
-
-
-    if(
-      typeof value==='object'
-    ){
-
-      type='jsonb';
-
-    }
-
-
-    if(
-      typeof value==='number'
-    ){
-
-      type =
-        Number.isInteger(value)
-        ? 'integer'
-        : 'numeric';
-
-    }
-
-
-    return {
-      key,
-      type
-    };
-
-  });
-
+  renderGroup(
+    "partnerResources",
+    [
+      "partner",
+      "partnership"
+    ]
+  );
 }
 
 
-function applyFilter(){
+/* =========================================================
+   RESOURCE FILTER
+   ========================================================= */
+
+function filterResources(){
 
   const term =
-    String(
-      state.search || ''
-    )
-    .toLowerCase()
-    .trim();
+    $("resourceFilter")
+      .value
+      .trim()
+      .toLowerCase();
 
-
-  if(!term){
-
-    state.filtered =
-      [...state.rows];
-
-    return;
-
-  }
-
-
-  state.filtered =
-    state.rows.filter(
-      row=>
-        safeJson(row)
-          .toLowerCase()
-          .includes(term)
+  const cards =
+    document.querySelectorAll(
+      "#resourceList .resource"
     );
 
+  cards.forEach(card => {
+
+    const name =
+      card
+        .querySelector(
+          ".resource-name"
+        )
+        ?.textContent
+        .toLowerCase() || "";
+
+    card.style.display =
+      !term ||
+      name.includes(term)
+        ? ""
+        : "none";
+
+  });
 }
 
 
-function renderTableContent(){
+/* =========================================================
+   SCHEMA SELECT
+   ========================================================= */
 
-  const target =
-    document.getElementById(
-      'tableContent'
-    );
+function populateSchemaSelect(){
 
+  const select =
+    $("schemaResource");
 
-  if(!target){
-    return;
-  }
+  select.innerHTML =
+    `<option value="">
+      Select resource…
+    </option>`;
 
+  state.resources
+    .forEach((resource,index) => {
 
-  applyFilter();
+      const option =
+        document.createElement(
+          "option"
+        );
 
+      option.value =
+        index;
 
-  let rows =
-    [...state.filtered];
+      option.textContent =
+        resource.table_name;
 
+      select.appendChild(option);
 
-  if(state.sort){
-
-    rows.sort(
-      (a,b)=>{
-
-        const av =
-          a[state.sort];
-
-        const bv =
-          b[state.sort];
-
-
-        if(av===bv){
-          return 0;
-        }
+    });
+}
 
 
-        const result =
-          av>bv ? 1 : -1;
+/* =========================================================
+   SCHEMA DETAILS
+   ========================================================= */
 
-
-        return state.sortDir==='asc'
-          ? result
-          : -result;
-
-      }
-    );
-
-  }
-
-
-  const total =
-    rows.length;
-
-
-  const start =
-    (state.pageNum-1) *
-    state.pageSize;
-
-
-  const end =
-    Math.min(
-      start+
-      state.pageSize,
-      total
-    );
-
-
-  const pageRows =
-    rows.slice(
-      start,
-      end
-    );
-
-
-  const keys =
-    state.schema.length
-    ? state.schema.map(
-        x=>x.key
-      )
-    : rows.length
-      ? Object.keys(rows[0])
-      : [];
-
-
-  if(!rows.length){
-
-    target.innerHTML = `
-
-      <div class="empty">
-        No records found.
-      </div>
-
-    `;
-
-    return;
-
-  }
-
+async function loadSchema(index){
 
   const resource =
-    state.resources.find(
-      x=>x.table===state.table
+    state.resources[index];
+
+  if(!resource){
+    return;
+  }
+
+  $("schemaDetails").innerHTML =
+    `<div class="empty">
+      Loading schema for
+      <strong>${esc(resource.table_name)}</strong>…
+    </div>`;
+
+  if(
+    resource.columns &&
+    resource.columns.length
+  ){
+
+    renderSchemaColumns(
+      resource
     );
 
+    return;
+  }
 
-  const readonly =
-    resource?.readonly ||
-    resource?.protected ||
-    false;
+  /*
+    Fallback schema inference.
+
+    We intentionally retrieve zero rows but request
+    metadata/count. Supabase/PostgREST doesn't expose full
+    catalog metadata through ordinary table selects, so the
+    secure v5.1 RPC is preferred.
+  */
+
+  $("schemaDetails").innerHTML =
+    `
+      <div class="card" style="box-shadow:none">
+
+        <div class="muted">
+          Schema metadata is not available for this resource
+          through the current discovery layer.
+        </div>
+
+        <p class="muted">
+          The resource is accessible, but column metadata requires
+          the CrowRules schema metadata RPC.
+        </p>
+
+      </div>
+    `;
+}
 
 
-  target.innerHTML = `
+function renderSchemaColumns(resource){
+
+  const columns =
+    resource.columns || [];
+
+  if(!columns.length){
+
+    $("schemaDetails").innerHTML =
+      `<div class="empty">
+        No column metadata returned.
+      </div>`;
+
+    return;
+  }
+
+  $("schemaDetails").innerHTML = `
 
     <div class="table-wrap">
 
@@ -5567,2126 +2742,1189 @@ function renderTableContent(){
         <thead>
 
           <tr>
-
-            ${
-              keys
-                .map(
-                  key=>`
-
-                    <th
-                      class="sortable"
-                      onclick="sortBy(
-                        '${esc(key)}'
-                      )">
-
-                      ${esc(
-                        prettyKey(key)
-                      )}
-
-                      ${
-                        state.sort===key
-                        ? (
-                          state.sortDir==='asc'
-                          ? ' ↑'
-                          : ' ↓'
-                        )
-                        : ''
-                      }
-
-                    </th>
-
-                  `
-                )
-                .join('')
-            }
-
-            <th>
-              Actions
-            </th>
-
+            <th>Column</th>
+            <th>Type</th>
+            <th>Nullable</th>
+            <th>Default</th>
+            <th>Primary Key</th>
           </tr>
 
         </thead>
 
-
         <tbody>
 
-          ${
-            pageRows
-              .map(
-                row=>
-                  tableRow(
-                    row,
-                    keys,
-                    readonly
-                  )
-              )
-              .join('')
-          }
+          ${columns.map(column => `
+
+            <tr>
+
+              <td class="mono">
+                ${esc(column.name)}
+              </td>
+
+              <td>
+                ${esc(column.data_type || column.type || "")}
+              </td>
+
+              <td>
+                ${column.nullable === false
+                  ? "NO"
+                  : "YES"}
+              </td>
+
+              <td class="mono">
+                ${esc(column.default_value || "")}
+              </td>
+
+              <td>
+                ${column.is_primary
+                  ? '<span class="badge good">PK</span>'
+                  : ""}
+              </td>
+
+            </tr>
+
+          `).join("")}
 
         </tbody>
 
       </table>
 
     </div>
-
-
-    <div class="pagination">
-
-      <div class="pagination-info">
-
-        ${
-          total
-          ? `${start+1}–${end} of ${total}`
-          : '0 records'
-        }
-
-      </div>
-
-
-      <div class="pagination-buttons">
-
-        <button
-          class="btn small"
-          onclick="changePage(-1)"
-          ${
-            state.pageNum<=1
-            ? 'disabled'
-            : ''
-          }>
-
-          ←
-
-        </button>
-
-
-        <span class="badge purple">
-
-          Page ${state.pageNum}
-
-        </span>
-
-
-        <button
-          class="btn small"
-          onclick="changePage(1)"
-          ${
-            end>=total
-            ? 'disabled'
-            : ''
-          }>
-
-          →
-
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div style="
-      padding:15px;
-      border-top:1px solid var(--border);
-    ">
-
-      <div
-        class="panel-title"
-        style="
-          margin-bottom:10px;
-        ">
-
-        SCHEMA
-
-      </div>
-
-
-      <div class="schema-list">
-
-        ${
-          keys
-            .map(key=>{
-
-              const info =
-                state.schema.find(
-                  x=>x.key===key
-                );
-
-
-              return `
-
-                <div class="schema-row">
-
-                  <strong>
-                    ${esc(key)}
-                  </strong>
-
-                  <span>
-                    ${esc(
-                      info?.type ||
-                      'unknown'
-                    )}
-                  </span>
-
-                  <span>
-                    ${
-                      key==='id' ||
-                      key==='user_id'
-                      ? 'identifier'
-                      : ''
-                    }
-                  </span>
-
-                  <span>
-                    ${
-                      key.endsWith('_at')
-                      ? 'timestamp'
-                      : ''
-                    }
-                  </span>
-
-                </div>
-
-              `;
-
-            })
-            .join('')
-        }
-
-      </div>
-
-    </div>
-
   `;
-
-}
-
-
-function tableRow(
-  row,
-  keys,
-  readonly
-){
-
-  const id =
-    row.id ||
-    row.user_id ||
-    '';
-
-
-  return `
-
-    <tr>
-
-      ${
-        keys
-          .map(key=>`
-
-            <td>
-
-              <div
-                class="cell"
-                title="${esc(
-                  displayValue(
-                    row[key],
-                    key
-                  )
-                )}">
-
-                ${
-                  valueBadge(
-                    key,
-                    displayValue(
-                      row[key],
-                      key
-                    )
-                  )
-                }
-
-              </div>
-
-            </td>
-
-          `)
-          .join('')
-      }
-
-
-      <td>
-
-        <div class="actions">
-
-          ${
-            id
-            ? `
-
-              <button
-                class="btn small"
-                onclick="openRecordModal(
-                  '${esc(state.table)}',
-                  '${esc(id)}'
-                )">
-
-                Edit
-
-              </button>
-
-            `
-            : ''
-          }
-
-
-          ${
-            !readonly && id
-            ? `
-
-              <button
-                class="btn red small"
-                onclick="deleteRecord(
-                  '${esc(state.table)}',
-                  '${esc(id)}'
-                )">
-
-                Delete
-
-              </button>
-
-            `
-            : ''
-          }
-
-        </div>
-
-      </td>
-
-    </tr>
-
-  `;
-
-}
-
-
-function displayValue(
-  value,
-  key
-){
-
-  if(
-    value===null ||
-    value===undefined
-  ){
-    return '—';
-  }
-
-
-  if(
-    typeof value==='object'
-  ){
-    return safeJson(value);
-  }
-
-
-  const lower =
-    String(key).toLowerCase();
-
-
-  if(
-    lower.includes('amount') ||
-    lower.includes('price') ||
-    lower.includes('total')
-  ){
-
-    return formatMoney(value);
-
-  }
-
-
-  if(
-    lower.endsWith('_at') ||
-    lower.includes('date')
-  ){
-
-    return formatDate(value);
-
-  }
-
-
-  return String(value);
-
-}
-
-
-function valueBadge(
-  key,
-  value
-){
-
-  if(
-    value==='true' ||
-    value===true
-  ){
-
-    return '<span class="badge green">TRUE</span>';
-
-  }
-
-
-  if(
-    value==='false' ||
-    value===false
-  ){
-
-    return '<span class="badge red">FALSE</span>';
-
-  }
-
-
-  const lowerKey =
-    String(key).toLowerCase();
-
-
-  if(
-    lowerKey.includes('status') ||
-    lowerKey.includes('state')
-  ){
-
-    const lower =
-      String(value || '')
-        .toLowerCase();
-
-
-    let cls='';
-
-
-    if([
-      'published',
-      'active',
-      'live',
-      'approved',
-      'complete',
-      'completed'
-    ].includes(lower)){
-
-      cls='green';
-
-    }
-
-
-    if([
-      'draft',
-      'pending',
-      'scheduled',
-      'planned'
-    ].includes(lower)){
-
-      cls='yellow';
-
-    }
-
-
-    if([
-      'failed',
-      'rejected',
-      'cancelled',
-      'canceled',
-      'archived'
-    ].includes(lower)){
-
-      cls='red';
-
-    }
-
-
-    return `
-
-      <span class="badge ${cls}">
-        ${esc(value)}
-      </span>
-
-    `;
-
-  }
-
-
-  return esc(value);
-
-}
-
-
-function sortBy(key){
-
-  if(
-    state.sort===key
-  ){
-
-    state.sortDir =
-      state.sortDir==='asc'
-      ? 'desc'
-      : 'asc';
-
-  }else{
-
-    state.sort=key;
-    state.sortDir='asc';
-
-  }
-
-
-  renderTableContent();
-
-}
-
-
-function changePage(delta){
-
-  const max =
-    Math.max(
-      1,
-      Math.ceil(
-        state.filtered.length /
-        state.pageSize
-      )
-    );
-
-
-  state.pageNum =
-    Math.max(
-      1,
-      Math.min(
-        max,
-        state.pageNum+delta
-      )
-    );
-
-
-  renderTableContent();
-
 }
 
 
 /* =========================================================
-   RECORD EDITOR
-========================================================= */
+   GLOBAL SEARCH
+   ========================================================= */
 
-async function openAddModal(table){
+async function globalSearch(){
 
-  const resource =
-    state.resources.find(
-      x=>x.table===table
-    );
+  const term =
+    $("globalSearch")
+      .value
+      .trim();
 
-
-  if(
-    resource?.readonly ||
-    resource?.protected
-  ){
+  if(term.length < 2){
 
     toast(
-      'This resource cannot be created through the generic editor.',
-      'error'
+      "Enter at least two characters.",
+      "bad"
     );
 
     return;
-
   }
 
+  const results =
+    [];
 
-  state.table=table;
-  state.editing=false;
-  state.editingId=null;
-  state.editingRow={};
-
-
-  await openEditor(
-    table,
-    {},
-    false
-  );
-
-}
-
-
-async function openRecordModal(
-  table,
-  id
-){
-
-  try{
-
-    let query =
-      sb
-        .from(table)
-        .select('*');
-
-
-    if(
-      table==='cr_admins'
-    ){
-
-      query =
-        query.eq(
-          'user_id',
-          id
-        );
-
-    }else{
-
-      query =
-        query.eq(
-          'id',
-          id
-        );
-
-    }
-
-
-    const {
-      data,
-      error
-    } =
-      await query
-        .limit(1)
-        .maybeSingle();
-
-
-    if(error){
-      throw error;
-    }
-
-
-    if(!data){
-
-      toast(
-        'Record not found.',
-        'error'
-      );
-
-      return;
-
-    }
-
-
-    state.table=table;
-    state.editing=true;
-    state.editingId=
-      data.id ||
-      data.user_id;
-    state.editingRow=data;
-
-
-    await openEditor(
-      table,
-      data,
-      true
-    );
-
-  }catch(error){
-
-    toast(
-      error.message,
-      'error'
-    );
-
-  }
-
-}
-
-
-async function openEditor(
-  table,
-  row,
-  editing
-){
-
-  const schema =
-    inferSchema(
-      Object.keys(row).length
-      ? [row]
-      : state.rows.length
-        ? state.rows
-        : [{}]
-    );
-
-
-  let keys =
-    schema.map(
-      x=>x.key
-    );
-
+  $("searchResults").innerHTML =
+    `<div class="empty">
+      Searching…
+    </div>`;
 
   /*
-   * If adding to a resource with no rows,
-   * the browser cannot know its columns.
-   * The user should use a secured schema/RPC
-   * or create the first record using a known schema.
-   */
-
-  if(!keys.length){
-
-    toast(
-      'No columns could be discovered for this empty resource.',
-      'error'
-    );
-
-    return;
-
-  }
-
-
-  const primary =
-    table==='cr_admins'
-    ? 'user_id'
-    : 'id';
-
-
-  document
-    .getElementById('modalTitle')
-    .textContent =
-      `${editing?'Edit':'Add'} ${prettyName(table)}`;
-
-
-  document
-    .getElementById('modalBody')
-    .innerHTML = `
-
-      <div
-        style="
-          margin-bottom:14px;
-          color:var(--muted);
-          font-size:9px;
-        ">
-
-        Resource:
-        <strong>
-          ${esc(table)}
-        </strong>
-
-      </div>
-
-
-      <div class="form-grid">
-
-        ${
-          keys
-            .map(key=>{
-
-              /*
-               * Database-managed timestamps.
-               */
-
-              if(
-                !editing &&
-                (
-                  key==='created_at' ||
-                  key==='updated_at'
-                )
-              ){
-                return '';
-              }
-
-
-              const value =
-                row[key];
-
-
-              const info =
-                schema.find(
-                  x=>x.key===key
-                );
-
-
-              const readonly =
-                editing &&
-                key===primary;
-
-
-              return editorField(
-                key,
-                value,
-                info?.type || 'text',
-                readonly
-              );
-
-            })
-            .join('')
-        }
-
-      </div>
-
-    `;
-
-
-  document
-    .getElementById('modalSave')
-    .onclick =
-      ()=>saveModalRecord(
-        table,
-        editing
-      );
-
-
-  document
-    .getElementById('modalBackdrop')
-    .classList.add('open');
-
-}
-
-
-function editorField(
-  key,
-  value,
-  type,
-  readonly
-){
-
-  const lower =
-    String(key).toLowerCase();
-
-
-  const full =
-    type==='jsonb' ||
-    lower.includes('description') ||
-    lower.includes('content') ||
-    lower.includes('body') ||
-    lower.includes('notes') ||
-    lower.includes('metadata');
-
-
-  let input='';
-
-
-  if(
-    type==='boolean' ||
-    typeof value==='boolean'
-  ){
-
-    input = `
-
-      <select
-        data-field="${esc(key)}"
-        ${readonly?'disabled':''}>
-
-        <option value="">
-          — Select —
-        </option>
-
-        <option
-          value="true"
-          ${
-            value===true
-            ? 'selected'
-            : ''
-          }>
-
-          TRUE
-
-        </option>
-
-        <option
-          value="false"
-          ${
-            value===false
-            ? 'selected'
-            : ''
-          }>
-
-          FALSE
-
-        </option>
-
-      </select>
-
-    `;
-
-  }else if(
-    type==='jsonb'
-  ){
-
-    input = `
-
-      <textarea
-        data-field="${esc(key)}"
-        ${readonly?'readonly':''}>${
-          esc(
-            value
-            ? JSON.stringify(
-                value,
-                null,
-                2
-              )
-            : ''
-          )
-        }</textarea>
-
-      <div class="field-help">
-        JSON / JSONB
-      </div>
-
-    `;
-
-  }else if(
-    full
-  ){
-
-    input = `
-
-      <textarea
-        data-field="${esc(key)}"
-        ${readonly?'readonly':''}>${esc(
-          value ?? ''
-        )}</textarea>
-
-    `;
-
-  }else if(
-    lower.endsWith('_at')
-  ){
-
-    input = `
-
-      <input
-        data-field="${esc(key)}"
-        type="datetime-local"
-        value="${esc(
-          normalizeDateTime(value)
-        )}"
-        ${readonly?'readonly':''}>
-
-    `;
-
-  }else if(
-    lower.endsWith('_date') ||
-    lower==='date' ||
-    lower.includes('birth_date')
-  ){
-
-    input = `
-
-      <input
-        data-field="${esc(key)}"
-        type="date"
-        value="${esc(
-          normalizeDate(value)
-        )}"
-        ${readonly?'readonly':''}>
-
-    `;
-
-  }else if(
-    lower.endsWith('_time') ||
-    lower==='start_time' ||
-    lower==='end_time'
-  ){
-
-    input = `
-
-      <input
-        data-field="${esc(key)}"
-        type="time"
-        value="${esc(
-          value || ''
-        )}"
-        ${readonly?'readonly':''}>
-
-    `;
-
-  }else if(
-    type==='integer' ||
-    type==='numeric' ||
-    type==='number'
-  ){
-
-    input = `
-
-      <input
-        data-field="${esc(key)}"
-        type="number"
-        step="${
-          type==='integer'
-          ? '1'
-          : 'any'
-        }"
-        value="${esc(
-          value ?? ''
-        )}"
-        ${readonly?'readonly':''}>
-
-    `;
-
-  }else{
-
-    input = `
-
-      <input
-        data-field="${esc(key)}"
-        type="text"
-        value="${esc(
-          value ?? ''
-        )}"
-        ${readonly?'readonly':''}>
-
-    `;
-
-  }
-
-
-  return `
-
-    <div
-      class="
-        form-field
-        ${full?'field-full':''}
-      ">
-
-      <label>
-        ${esc(
-          prettyKey(key)
-        )}
-      </label>
-
-      ${input}
-
-    </div>
-
-  `;
-
-}
-
-
-function normalizeDate(value){
-
-  if(!value){
-    return '';
-  }
-
-  return String(value)
-    .slice(0,10);
-
-}
-
-
-function normalizeDateTime(value){
-
-  if(!value){
-    return '';
-  }
-
-
-  const d =
-    new Date(value);
-
-
-  if(
-    Number.isNaN(
-      d.getTime()
-    )
-  ){
-    return '';
-  }
-
-
-  const pad =
-    n=>
-      String(n)
-        .padStart(2,'0');
-
-
-  return `${
-    d.getFullYear()
-  }-${
-    pad(d.getMonth()+1)
-  }-${
-    pad(d.getDate())
-  }T${
-    pad(d.getHours())
-  }:${
-    pad(d.getMinutes())
-  }`;
-
-}
-
-
-async function saveModalRecord(
-  table,
-  editing
-){
-
-  const modal =
-    document.getElementById(
-      'modalBody'
-    );
-
-
-  const fields =
-    modal.querySelectorAll(
-      '[data-field]'
-    );
-
-
-  const payload={};
-
-
-  try{
-
-    fields.forEach(field=>{
-
-      if(field.disabled){
-        return;
-      }
-
-
-      const key =
-        field.dataset.field;
-
-
-      let value =
-        field.value;
-
-
-      if(value===''){
-        value=null;
-      }
-
-
-      if(
-        field.tagName==='SELECT' &&
-        (
-          value==='true' ||
-          value==='false'
-        )
-      ){
-
-        value =
-          value==='true';
-
-      }
-
-
-      const type =
-        state.schema.find(
-          x=>x.key===key
-        )?.type;
-
-
-      if(
-        type==='jsonb' &&
-        typeof value==='string' &&
-        value.trim()
-      ){
-
-        try{
-
-          value =
-            JSON.parse(value);
-
-        }catch{
-
-          throw new Error(
-            `Invalid JSON in ${prettyKey(key)}.`
-          );
-
-        }
-
-      }
-
-
-      if(
-        field.type==='number' &&
-        value!==null
-      ){
-
-        value =
-          Number(value);
-
-      }
-
-
-      payload[key]=value;
-
-    });
-
-
-  }catch(error){
-
-    toast(
-      error.message,
-      'error'
-    );
-
-    return;
-
-  }
-
-
-  /*
-   * Automatic slug generation.
-   */
-
-  if(
-    !editing &&
-    payload.title &&
-    Object.prototype.hasOwnProperty.call(
-      payload,
-      'slug'
-    ) &&
-    !payload.slug
-  ){
-
-    payload.slug =
-      slugify(payload.title);
-
-  }
-
-
-  /*
-   * Automatic publication timestamp.
-   */
-
-  if(
-    table==='cr_updates' &&
-    payload.is_published===true &&
-    !payload.published_at
-  ){
-
-    payload.published_at =
-      new Date().toISOString();
-
-  }
-
-
-  const button =
-    document.getElementById(
-      'modalSave'
-    );
-
-
-  button.disabled=true;
-  button.textContent='Saving…';
-
-
-  try{
-
-    let result;
-
-
-    if(editing){
-
-      if(
-        table==='cr_admins'
-      ){
-
-        result =
-          await sb
-            .from(table)
-            .update(payload)
-            .eq(
-              'user_id',
-              state.editingId
-            );
-
-      }else{
-
-        result =
-          await sb
-            .from(table)
-            .update(payload)
-            .eq(
-              'id',
-              state.editingId
-            );
-
-      }
-
-    }else{
-
-      result =
-        await sb
-          .from(table)
-          .insert(payload);
-
-    }
-
-
-    if(result.error){
-      throw result.error;
-    }
-
-
-    await writeAudit(
-      editing
-        ? 'UPDATE'
-        : 'INSERT',
-      table,
-      editing
-        ? state.editingId
-        : null,
-      {
-        fields:
-          Object.keys(payload)
-      }
-    );
-
-
-    toast(
-      editing
-      ? 'Record updated.'
-      : 'Record created.',
-      'success'
-    );
-
-
-    closeModal();
-
-
-    await loadTable();
-
-  }catch(error){
-
-    toast(
-      error.message,
-      'error'
-    );
-
-  }finally{
-
-    button.disabled=false;
-    button.textContent='Save Record';
-
-  }
-
-}
-
-
-/* =========================================================
-   DELETE
-========================================================= */
-
-async function deleteRecord(
-  table,
-  id
-){
-
-  const resource =
-    state.resources.find(
-      x=>x.table===table
-    );
-
-
-  if(
-    resource?.readonly ||
-    resource?.protected
-  ){
-
-    toast(
-      'This resource is protected.',
-      'error'
-    );
-
-    return;
-
-  }
-
-
-  if(!id){
-
-    toast(
-      'No record identifier found.',
-      'error'
-    );
-
-    return;
-
-  }
-
-
-  const confirmed =
-    confirm(
-      `Delete this ${prettyName(table)} record?\n\nThis action cannot be undone.`
-    );
-
-
-  if(!confirmed){
-    return;
-  }
-
-
-  try{
-
-    let query =
-      sb
-        .from(table)
-        .delete();
-
-
-    if(
-      table==='cr_admins'
-    ){
-
-      query =
-        query.eq(
-          'user_id',
-          id
-        );
-
-    }else{
-
-      query =
-        query.eq(
-          'id',
-          id
-        );
-
-    }
-
-
-    const {
-      error
-    } =
-      await query;
-
-
-    if(error){
-      throw error;
-    }
-
-
-    await writeAudit(
-      'DELETE',
-      table,
-      id
-    );
-
-
-    toast(
-      'Record deleted.',
-      'success'
-    );
-
-
-    await loadTable();
-
-  }catch(error){
-
-    toast(
-      error.message,
-      'error'
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   AUDIT
-========================================================= */
-
-async function writeAudit(
-  action,
-  table,
-  targetId=null,
-  metadata={}
-){
-
-  try{
-
-    await sb
-      .from('cr_admin_audit_log')
-      .insert({
-
-        admin_user_id:
-          state.user?.id ||
-          null,
-
-        action,
-
-        table_name:
-          table,
-
-        target_id:
-          isUUID(targetId)
-          ? targetId
-          : null,
-
-        metadata
-
-      });
-
-  }catch(error){
-
-    console.warn(
-      'Audit write failed:',
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   CSV EXPORT
-========================================================= */
-
-function exportCSV(){
-
-  const rows =
-    state.filtered.length
-    ? state.filtered
-    : state.rows;
-
-
-  if(!rows.length){
-
-    toast(
-      'No records to export.',
-      'error'
-    );
-
-    return;
-
-  }
-
-
-  const keys =
-    [
-      ...new Set(
-        rows.flatMap(
-          row=>Object.keys(row)
-        )
-      )
-    ];
-
-
-  const output=[];
-
-
-  output.push(
-    keys
-      .map(csvEscape)
-      .join(',')
-  );
-
-
-  rows.forEach(row=>{
-
-    output.push(
-      keys
-        .map(
-          key=>
-            csvEscape(
-              typeof row[key]==='object'
-              ? safeJson(row[key])
-              : row[key]
-            )
-        )
-        .join(',')
-    );
-
-  });
-
-
-  const blob =
-    new Blob(
-      [output.join('\n')],
-      {
-        type:
-          'text/csv;charset=utf-8;'
-      }
-    );
-
-
-  const url =
-    URL.createObjectURL(blob);
-
-
-  const link =
-    document.createElement('a');
-
-
-  link.href=url;
-
-
-  link.download =
-    `${
-      state.table || 'crowrules-export'
-    }-${
-      new Date()
-        .toISOString()
-        .slice(0,10)
-    }.csv`;
-
-
-  link.click();
-
-
-  URL.revokeObjectURL(url);
-
-
-  toast(
-    'CSV export created.',
-    'success'
-  );
-
-}
-
-
-function csvEscape(value){
-
-  if(
-    value===null ||
-    value===undefined
-  ){
-    return '';
-  }
-
-
-  return `"${String(value)
-    .replaceAll('"','""')}"`;
-
-}
-
-
-/* =========================================================
-   HEALTH
-========================================================= */
-
-async function renderHealth(){
-
-  const page =
-    document.getElementById('page');
-
-
-  page.innerHTML = `
-
-    <div class="page-header">
-
-      <div>
-
-        <h1>
-          System Health
-        </h1>
-
-        <p>
-          Test every known and discovered Supabase resource.
-        </p>
-
-      </div>
-
-      <button
-        class="btn primary"
-        onclick="runHealthCheck()">
-
-        Run Health Check
-
-      </button>
-
-    </div>
-
-
-    <div
-      id="healthContent">
-
-      <div class="loading">
-
-        <div class="spinner"></div>
-
-        Testing resources…
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  await runHealthCheck();
-
-}
-
-
-async function runHealthCheck(){
-
-  const box =
-    document.getElementById(
-      'healthContent'
-    );
-
-
-  if(!box){
-    return;
-  }
-
-
-  const health=[];
-
+    Safe search strategy:
+    only query resources already verified as accessible.
+    We avoid dynamically constructing arbitrary SQL.
+  */
 
   for(
-    const resource
-    of state.resources
+    const resource of state.resources
   ){
-
-    const started =
-      performance.now();
-
 
     try{
 
       const {
+        data,
         error
       } =
-        await sb
-          .from(resource.table)
-          .select('*')
-          .limit(1);
+        await supabaseClient
+          .from(resource.table_name)
+          .select("*")
+          .limit(50);
 
+      if(error || !Array.isArray(data)){
+        continue;
+      }
 
-      const ms =
-        Math.round(
-          performance.now() -
-          started
-        );
+      for(
+        const row of data
+      ){
 
+        const haystack =
+          JSON.stringify(row)
+            .toLowerCase();
 
-      health.push({
+        if(
+          haystack.includes(
+            term.toLowerCase()
+          )
+        ){
 
-        table:
-          resource.table,
+          results.push({
+            resource:
+              resource.table_name,
+            row
+          });
 
-        name:
-          resource.name,
+        }
 
-        status:
-          error
-          ? 'error'
-          : 'ok',
+        if(results.length >= 100){
+          break;
+        }
 
-        ms,
+      }
 
-        message:
-          error
-          ? error.message
-          : 'Connected'
+      if(results.length >= 100){
+        break;
+      }
 
-      });
-
-    }catch(error){
-
-      health.push({
-
-        table:
-          resource.table,
-
-        name:
-          resource.name,
-
-        status:'error',
-
-        ms:
-          Math.round(
-            performance.now() -
-            started
-          ),
-
-        message:
-          error.message
-
-      });
-
-    }
-
-
-    box.innerHTML =
-      healthGrid(health);
+    }catch(_){}
 
   }
 
+  if(!results.length){
 
-  box.innerHTML =
-    healthGrid(health);
+    $("searchResults").innerHTML =
+      `<div class="empty">
+        No matching records found.
+      </div>`;
 
-}
+    return;
+  }
 
+  $("searchResults").innerHTML = `
 
-function healthGrid(health){
+    <div class="table-wrap">
 
-  const healthy =
-    health.filter(
-      x=>x.status==='ok'
-    ).length;
+      <table>
 
+        <thead>
+          <tr>
+            <th>Resource</th>
+            <th>Record</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-  const errors =
-    health.filter(
-      x=>x.status==='error'
-    ).length;
+        <tbody>
 
+          ${results.map((result,index) => `
 
-  return `
+            <tr>
 
-    <div class="stats">
+              <td class="mono">
+                ${esc(result.resource)}
+              </td>
 
-      ${statCard(
-        'Tested',
-        health.length,
-        'Resources'
-      )}
+              <td>
+                <pre style="max-height:160px">${esc(
+                  JSON.stringify(
+                    result.row,
+                    null,
+                    2
+                  )
+                )}</pre>
+              </td>
 
-      ${statCard(
-        'Healthy',
-        healthy,
-        'Connected'
-      )}
+              <td>
 
-      ${statCard(
-        'Errors',
-        errors,
-        'Requires attention'
-      )}
+                <button
+                  class="secondary"
+                  data-search-index="${index}"
+                >
+                  View
+                </button>
 
-      ${statCard(
-        'Admin',
-        state.isAdmin
-        ? 'OK'
-        : 'FAIL',
-        'Authorization'
-      )}
+              </td>
 
-      ${statCard(
-        'Realtime',
-        state.realtimeReady
-        ? 'OK'
-        : 'WAIT',
-        'Broadcast channel'
-      )}
+            </tr>
 
-      ${statCard(
-        'User',
-        state.user
-        ? 'OK'
-        : 'FAIL',
-        'Authentication'
-      )}
+          `).join("")}
+
+        </tbody>
+
+      </table>
 
     </div>
-
-
-    <div class="health-grid">
-
-      ${
-        health
-          .map(item=>`
-
-            <div class="
-              health-card
-              ${
-                item.status==='ok'
-                ? 'ok'
-                : 'error'
-              }
-            ">
-
-              <div class="health-name">
-
-                ${esc(item.name)}
-
-              </div>
-
-              <div class="health-detail">
-
-                ${
-                  item.status==='ok'
-                  ? '✓ Connected'
-                  : '✕ Failed'
-                }
-
-                ·
-
-                ${item.ms} ms
-
-              </div>
-
-
-              ${
-                item.status==='error'
-                ? `
-
-                  <div
-                    class="health-detail"
-                    style="
-                      color:var(--red);
-                    ">
-
-                    ${esc(
-                      item.message
-                    )}
-
-                  </div>
-
-                `
-                : ''
-              }
-
-            </div>
-
-          `)
-          .join('')
-      }
-
-    </div>
-
   `;
 
+  state.searchResults =
+    results;
 }
 
 
 /* =========================================================
-   REALTIME
-========================================================= */
+   ADMIN TABLE
+   ========================================================= */
 
-async function setupRealtime(){
+async function loadAdmins(){
 
-  if(state.realtime){
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("cr_admins")
+      .select(`
+        user_id,
+        display_name,
+        role,
+        is_active,
+        created_at,
+        updated_at
+      `)
+      .order("created_at");
+
+  if(error){
+
+    $("adminTable").innerHTML =
+      `
+        <div class="empty error">
+          Unable to load administrators:
+          ${esc(error.message)}
+        </div>
+      `;
+
     return;
   }
 
+  if(!data || !data.length){
+
+    $("adminTable").innerHTML =
+      `<div class="empty">
+        No administrator records found.
+      </div>`;
+
+    return;
+  }
+
+  $("adminTable").innerHTML = `
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Display Name</th>
+            <th>User ID</th>
+            <th>Role</th>
+            <th>Active</th>
+            <th>Created</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${data.map(admin => `
+
+            <tr>
+
+              <td>
+                ${esc(
+                  admin.display_name ||
+                  "Unnamed Admin"
+                )}
+              </td>
+
+              <td class="mono">
+                ${esc(admin.user_id)}
+              </td>
+
+              <td>
+                <span class="badge good">
+                  ${esc(admin.role)}
+                </span>
+              </td>
+
+              <td>
+                ${
+                  admin.is_active
+                    ? '<span class="badge good">ACTIVE</span>'
+                    : '<span class="badge bad">DISABLED</span>'
+                }
+              </td>
+
+              <td>
+                ${formatDate(admin.created_at)}
+              </td>
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   AUDIT LOG
+   ========================================================= */
+
+async function loadAudit(){
+
+  const tableNames = [
+    "cr_admin_audit",
+    "cr_admin_audit_log"
+  ];
+
+  let data = null;
+  let error = null;
+  let usedTable = null;
+
+  for(
+    const tableName of tableNames
+  ){
+
+    try{
+
+      const response =
+        await supabaseClient
+          .from(tableName)
+          .select("*")
+          .order("created_at",{ascending:false})
+          .limit(100);
+
+      if(!response.error){
+
+        data =
+          response.data;
+
+        usedTable =
+          tableName;
+
+        break;
+
+      }
+
+      error =
+        response.error;
+
+    }catch(err){
+
+      error =
+        err;
+
+    }
+
+  }
+
+  if(!data){
+
+    $("auditTable").innerHTML =
+      `
+        <div class="empty muted">
+          Audit log is not currently readable.
+          ${error ? esc(error.message) : ""}
+        </div>
+      `;
+
+    return;
+  }
+
+  if(!data.length){
+
+    $("auditTable").innerHTML =
+      `<div class="empty">
+        No audit records found.
+      </div>`;
+
+    return;
+  }
+
+  $("auditTable").innerHTML = `
+
+    <div class="muted" style="margin-bottom:10px">
+      Source: ${esc(usedTable)}
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Action</th>
+            <th>Resource</th>
+            <th>User</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          ${data.map(row => `
+
+            <tr>
+
+              <td>
+                ${formatDate(
+                  row.created_at ||
+                  row.timestamp
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  row.action ||
+                  row.event_type ||
+                  "—"
+                )}
+              </td>
+
+              <td class="mono">
+                ${esc(
+                  row.resource ||
+                  row.table_name ||
+                  "—"
+                )}
+              </td>
+
+              <td class="mono">
+                ${esc(
+                  row.user_id ||
+                  row.actor_id ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  typeof row.details === "object"
+                    ? JSON.stringify(row.details)
+                    : row.details ||
+                      row.message ||
+                      ""
+                )}
+              </td>
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   AUDIT WRITE
+   ========================================================= */
+
+async function writeAudit(
+  action,
+  resource = null,
+  details = {}
+){
+
+  if(!state.user){
+    return;
+  }
+
+  /*
+    Try the v5.1 audit table first.
+  */
 
   try{
 
-    await sb.realtime.setAuth();
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("cr_admin_audit")
+        .insert({
+          user_id:
+            state.user.id,
+
+          action,
+
+          resource,
+
+          details
+        });
+
+    if(!error){
+      return;
+    }
+
+  }catch(_){}
+
+  /*
+    Fall back to cr_admin_audit_log if present.
+  */
+
+  try{
+
+    await supabaseClient
+      .from("cr_admin_audit_log")
+      .insert({
+        user_id:
+          state.user.id,
+
+        action,
+
+        resource,
+
+        details
+      });
+
+  }catch(_){}
+
+}
 
 
-    const channel =
-      sb.channel(
-        'crowrules-admin-v5-1',
-        {
-          config:{
-            private:true
-          }
-        }
-      );
+/* =========================================================
+   DIAGNOSTICS
+   ========================================================= */
+
+async function runDiagnostics(){
+
+  const checks = [];
+
+  /*
+    1. Supabase client
+  */
+
+  checks.push({
+    title:"Supabase client",
+    good:true,
+    detail:
+      "Client initialized with the project URL and publishable key."
+  });
 
 
-    channel.on(
-      'broadcast',
-      {
-        event:'admin_refresh'
-      },
-      payload=>{
+  /*
+    2. Authenticated user
+  */
 
-        console.log(
-          'CrowRules Admin Broadcast:',
-          payload
-        );
+  try{
 
+    const user =
+      await getVerifiedUser();
 
-        refreshCurrentPage();
-
-      }
-    );
-
-
-    channel.subscribe(
-      status=>{
-
-        const badge =
-          document
-            .getElementById(
-              'realtimeBadge'
-            );
-
-
-        if(!badge){
-          return;
-        }
-
-
-        if(
-          status==='SUBSCRIBED'
-        ){
-
-          state.realtimeReady=true;
-
-          badge.className =
-            'badge green';
-
-          badge.textContent =
-            'REALTIME CONNECTED';
-
-        }else if(
-          status==='CHANNEL_ERROR' ||
-          status==='TIMED_OUT'
-        ){
-
-          state.realtimeReady=false;
-
-          badge.className =
-            'badge yellow';
-
-          badge.textContent =
-            'REALTIME OPTIONAL';
-
-        }
-
-      }
-    );
-
-
-    state.realtime =
-      channel;
+    checks.push({
+      title:"Authenticated user",
+      good:true,
+      detail:
+        `${user.email || "No email"} • ${user.id}`
+    });
 
   }catch(error){
 
-    console.warn(
-      'Realtime:',
-      error
-    );
+    checks.push({
+      title:"Authenticated user",
+      good:false,
+      detail:
+        error.message
+    });
+
+  }
 
 
-    const badge =
-      document
-        .getElementById(
-          'realtimeBadge'
-        );
+  /*
+    3. Admin registry
+  */
 
+  try{
 
-    if(badge){
+    if(!state.user){
 
-      badge.className =
-        'badge yellow';
-
-      badge.textContent =
-        'REALTIME OPTIONAL';
+      throw new Error(
+        "No authenticated user."
+      );
 
     }
 
+    const admin =
+      await getAdminRecord(
+        state.user.id
+      );
+
+    if(!admin){
+
+      throw new Error(
+        "No cr_admins row matches the authenticated user's UUID."
+      );
+
+    }
+
+    checks.push({
+      title:"CrowRules Admin registry",
+      good:
+        admin.is_active === true,
+      detail:
+        `${admin.display_name || "Unnamed"} • role=${admin.role} • active=${admin.is_active}`
+    });
+
+  }catch(error){
+
+    checks.push({
+      title:"CrowRules Admin registry",
+      good:false,
+      detail:
+        error.message
+    });
+
   }
+
+
+  /*
+    4. Admin permissions
+  */
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("cr_admin_permissions")
+        .select("permission")
+        .eq(
+          "user_id",
+          state.user?.id
+        )
+        .limit(1);
+
+    checks.push({
+      title:"Admin permissions table",
+      good:!error,
+      detail:
+        error
+          ? error.message
+          : "Permission table is readable."
+    });
+
+  }catch(error){
+
+    checks.push({
+      title:"Admin permissions table",
+      good:false,
+      detail:error.message
+    });
+
+  }
+
+
+  /*
+    5. Resource discovery
+  */
+
+  checks.push({
+    title:"Resource discovery",
+    good:
+      state.resources.length > 0,
+    detail:
+      `${state.resources.length} accessible resources discovered.`
+  });
+
+
+  /*
+    6. Explicit authorization summary
+  */
+
+  const authorized =
+    Boolean(
+      state.user &&
+      state.admin &&
+      state.admin.is_active === true &&
+      [
+        "admin",
+        "super_admin",
+        "owner"
+      ].includes(
+        state.admin.role
+      )
+    );
+
+  checks.push({
+    title:"Final CrowRules authorization",
+    good:authorized,
+    detail:
+      authorized
+        ? "AUTHORIZATION PASSED"
+        : "AUTHORIZATION FAILED"
+  });
+
+
+  state.diagnostics =
+    checks;
+
+  renderDiagnostics();
+
+  const failed =
+    checks.filter(
+      check => !check.good
+    ).length;
+
+  $("statHealth").textContent =
+    failed === 0
+      ? "HEALTHY"
+      : `${failed} ISSUE${failed === 1 ? "" : "S"}`;
+
+  $("statHealth").className =
+    `stat-value ${
+      failed === 0
+        ? "success"
+        : "error"
+    }`;
+}
+
+
+function renderDiagnostics(){
+
+  const container =
+    $("diagnosticChecks");
+
+  container.innerHTML =
+    state.diagnostics
+      .map(check => `
+
+        <div class="check">
+
+          <div class="check-icon">
+
+            ${
+              check.good
+                ? '<span class="success">✓</span>'
+                : '<span class="error">!</span>'
+            }
+
+          </div>
+
+          <div>
+
+            <div class="check-title">
+              ${esc(check.title)}
+            </div>
+
+            <div class="check-detail">
+              ${esc(check.detail)}
+            </div>
+
+          </div>
+
+        </div>
+
+      `)
+      .join("");
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+const VIEW_TITLES = {
+
+  dashboard:[
+    "Command Center",
+    "CrowRules Entertainment Administration"
+  ],
+
+  search:[
+    "Search Everything",
+    "Global CrowRules database search"
+  ],
+
+  resources:[
+    "Database Resources",
+    "Supabase resource explorer"
+  ],
+
+  schema:[
+    "Schema Explorer",
+    "Database structure and metadata"
+  ],
+
+  tv:[
+    "CrowRules TV",
+    "Streaming network administration"
+  ],
+
+  sports:[
+    "CrowRules Sports",
+    "Sports administration"
+  ],
+
+  podcasting:[
+    "CrowRules Podcasting",
+    "Podcast administration"
+  ],
+
+  tacoma:[
+    "Tacoma Nights",
+    "Tacoma original programming"
+  ],
+
+  business:[
+    "Business Hub",
+    "CrowRules Entertainment business operations"
+  ],
+
+  donations:[
+    "Donations",
+    "Support and fundraising administration"
+  ],
+
+  partners:[
+    "Partners",
+    "Partnership administration"
+  ],
+
+  admins:[
+    "Administrators",
+    "CrowRules administrator registry"
+  ],
+
+  audit:[
+    "Audit Log",
+    "Administrative activity"
+  ],
+
+  diagnostics:[
+    "Diagnostics",
+    "Authentication and database health"
+  ]
+
+};
+
+
+function showView(view){
+
+  if(!VIEW_TITLES[view]){
+    return;
+  }
+
+  state.currentView =
+    view;
+
+  document
+    .querySelectorAll(".view")
+    .forEach(element => {
+
+      element.classList.toggle(
+        "active",
+        element.id ===
+          `view-${view}`
+      );
+
+    });
+
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.view === view
+      );
+
+    });
+
+  $("pageTitle").textContent =
+    VIEW_TITLES[view][0];
+
+  $("pageSubtitle").textContent =
+    VIEW_TITLES[view][1];
+
+  document.body
+    .classList
+    .remove("sidebar-open");
 
 }
 
 
 /* =========================================================
-   REFRESH
-========================================================= */
+   MODAL
+   ========================================================= */
 
-async function refreshCurrentPage(){
+function openModal(
+  title,
+  html
+){
 
-  if(
-    state.page==='dashboard'
-  ){
+  $("modalTitle").textContent =
+    title;
 
-    await populateDashboard();
+  $("modalBody").innerHTML =
+    html;
 
-    return;
-
-  }
-
-
-  if(
-    state.page==='activity'
-  ){
-
-    await renderActivity();
-
-    return;
-
-  }
-
-
-  if(
-    state.page==='health'
-  ){
-
-    await runHealthCheck();
-
-    return;
-
-  }
-
-
-  if(
-    state.page==='database'
-  ){
-
-    await discoverResources();
-
-    renderResourceGrid();
-
-    return;
-
-  }
-
-
-  if(
-    state.page==='all-resources'
-  ){
-
-    await discoverResources();
-
-    renderAllResources();
-
-    return;
-
-  }
-
-
-  if(
-    state.page==='global-search'
-  ){
-
-    return;
-
-  }
-
-
-  await loadTable();
-
+  $("modalBackdrop")
+    .classList
+    .add("open");
 }
 
-
-/* =========================================================
-   MODAL EVENTS
-========================================================= */
 
 function closeModal(){
 
-  document
-    .getElementById(
-      'modalBackdrop'
-    )
-    .classList.remove('open');
-
+  $("modalBackdrop")
+    .classList
+    .remove("open");
 }
 
 
-document
-  .getElementById('modalClose')
-  .addEventListener(
-    'click',
-    closeModal
+/* =========================================================
+   RESOURCE MODAL
+   ========================================================= */
+
+async function openResource(index){
+
+  const resource =
+    state.resources[index];
+
+  if(!resource){
+    return;
+  }
+
+  openModal(
+    resource.table_name,
+    `
+      <div class="muted">
+        Loading resource…
+      </div>
+    `
   );
 
+  try{
 
-document
-  .getElementById('modalCancel')
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(resource.table_name)
+        .select("*")
+        .limit(20);
+
+    if(error){
+      throw error;
+    }
+
+    openModal(
+      resource.table_name,
+      `
+
+        <div class="grid grid-2">
+
+          <div class="card" style="box-shadow:none">
+            <div class="muted">Schema</div>
+            <strong>
+              ${esc(resource.schema_name)}
+            </strong>
+          </div>
+
+          <div class="card" style="box-shadow:none">
+            <div class="muted">Relation</div>
+            <strong>
+              ${esc(resource.relation_type)}
+            </strong>
+          </div>
+
+        </div>
+
+        <div class="section-title">
+          <h2>Records</h2>
+          <span>${data?.length || 0} loaded</span>
+        </div>
+
+        <pre>${esc(
+          JSON.stringify(
+            data || [],
+            null,
+            2
+          )
+        )}</pre>
+
+      `
+    );
+
+    await writeAudit(
+      "view_resource",
+      resource.table_name,
+      {
+        rows_loaded:
+          data?.length || 0
+      }
+    );
+
+  }catch(error){
+
+    openModal(
+      resource.table_name,
+      `
+        <div class="error">
+          Unable to read this resource.
+        </div>
+
+        <pre>${esc(
+          error.message
+        )}</pre>
+      `
+    );
+
+  }
+}
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
+  }
+
+  try{
+
+    return new Date(value)
+      .toLocaleString();
+
+  }catch(_){
+
+    return String(value);
+
+  }
+}
+
+
+/* =========================================================
+   EVENT DELEGATION
+   ========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const nav =
+      event.target.closest(
+        "[data-view]"
+      );
+
+    if(nav){
+
+      showView(
+        nav.dataset.view
+      );
+
+      return;
+    }
+
+    const resource =
+      event.target.closest(
+        "[data-resource-index]"
+      );
+
+    if(resource){
+
+      openResource(
+        Number(
+          resource.dataset.resourceIndex
+        )
+      );
+
+      return;
+    }
+
+    const searchResult =
+      event.target.closest(
+        "[data-search-index]"
+      );
+
+    if(searchResult){
+
+      const result =
+        state.searchResults?.[
+          Number(
+            searchResult.dataset.searchIndex
+          )
+        ];
+
+      if(result){
+
+        openModal(
+          result.resource,
+          `
+            <pre>${esc(
+              JSON.stringify(
+                result.row,
+                null,
+                2
+              )
+            )}</pre>
+          `
+        );
+
+      }
+
+      return;
+    }
+
+  }
+);
+
+
+/* =========================================================
+   EVENT LISTENERS
+   ========================================================= */
+
+$("loginForm")
   .addEventListener(
-    'click',
-    closeModal
+    "submit",
+    handleLogin
   );
 
-
-document
-  .getElementById('modalBackdrop')
+$("logoutButton")
   .addEventListener(
-    'click',
-    event=>{
+    "click",
+    logout
+  );
 
-      if(
-        event.target.id===
-        'modalBackdrop'
-      ){
+$("refreshButton")
+  .addEventListener(
+    "click",
+    async () => {
 
-        closeModal();
+      toast(
+        "Refreshing CrowRules Admin…"
+      );
+
+      try{
+
+        await authorizeCurrentUser();
+        await loadPermissions();
+        await loadResources();
+        await loadAdmins();
+        await loadAudit();
+        await runDiagnostics();
+
+        toast(
+          "Admin data refreshed.",
+          "good"
+        );
+
+      }catch(error){
+
+        toast(
+          error.message,
+          "bad"
+        );
 
       }
 
@@ -7694,40 +3932,125 @@ document
   );
 
 
-/* =========================================================
-   KEYBOARD SHORTCUTS
-========================================================= */
-
-document
+$("menuToggle")
   .addEventListener(
-    'keydown',
-    event=>{
+    "click",
+    () => {
 
-      /*
-       * Ctrl/Cmd + K
-       */
+      document.body
+        .classList
+        .toggle(
+          "sidebar-open"
+        );
+
+    }
+  );
+
+
+$("resourceFilter")
+  .addEventListener(
+    "input",
+    filterResources
+  );
+
+
+$("reloadResources")
+  .addEventListener(
+    "click",
+    async () => {
+
+      await loadResources();
+
+      toast(
+        "Resources reloaded.",
+        "good"
+      );
+
+    }
+  );
+
+
+$("schemaResource")
+  .addEventListener(
+    "change",
+    event => {
+
+      const index =
+        Number(event.target.value);
 
       if(
-        (event.ctrlKey ||
-         event.metaKey) &&
-        event.key.toLowerCase()==='k'
+        Number.isInteger(index)
       ){
+
+        loadSchema(index);
+
+      }
+
+    }
+  );
+
+
+$("globalSearchButton")
+  .addEventListener(
+    "click",
+    globalSearch
+  );
+
+
+$("globalSearch")
+  .addEventListener(
+    "keydown",
+    event => {
+
+      if(event.key === "Enter"){
 
         event.preventDefault();
 
-        state.page='global-search';
-
-        renderPage();
+        globalSearch();
 
       }
 
+    }
+  );
 
-      /*
-       * Escape
-       */
+
+$("reloadAudit")
+  .addEventListener(
+    "click",
+    async () => {
+
+      await loadAudit();
+
+      toast(
+        "Audit log refreshed.",
+        "good"
+      );
+
+    }
+  );
+
+
+$("modalClose")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+$("modalCloseBottom")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+
+$("modalBackdrop")
+  .addEventListener(
+    "click",
+    event => {
 
       if(
-        event.key==='Escape'
+        event.target ===
+        $("modalBackdrop")
       ){
 
         closeModal();
@@ -7739,11 +4062,27 @@ document
 
 
 /* =========================================================
-   START APPLICATION
-========================================================= */
+   INITIALIZATION
+   ========================================================= */
 
-initializeAuth();
+(async function init(){
 
+  /*
+    Small delay allows the Supabase client to initialize
+    its persisted session before we inspect it.
+  */
+
+  await new Promise(
+    resolve =>
+      setTimeout(
+        resolve,
+        150
+      )
+  );
+
+  await restoreSession();
+
+})();
 </script>
 
 </body>
