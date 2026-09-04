@@ -1,322 +1,3585 @@
-from pathlib import Path
-
-html = r'''<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#05060a">
-<meta name="description" content="CrowRules Entertainment Admin Dashboard powered by Supabase">
+
+<meta
+  name="description"
+  content="CrowRules Entertainment Admin Dashboard powered by Supabase"
+>
+
 <title>CrowRules Entertainment — Admin Dashboard</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
+  rel="stylesheet"
+>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root{
-  --bg:#05060a;--panel:#0c0f17;--panel2:#111522;--line:#242a3a;
-  --text:#f4f7fb;--muted:#8e98aa;--accent:#8b5cf6;--accent2:#22d3ee;
-  --good:#34d399;--warn:#fbbf24;--bad:#fb7185;--shadow:0 18px 50px rgba(0,0,0,.35);
+  --bg:#05060a;
+  --panel:#0c0f17;
+  --panel2:#111522;
+  --panel3:#161b28;
+  --line:#242a3a;
+
+  --text:#f4f7fb;
+  --muted:#8e98aa;
+
+  --accent:#8b5cf6;
+  --accent2:#22d3ee;
+
+  --good:#34d399;
+  --warn:#fbbf24;
+  --bad:#fb7185;
+
+  --shadow:0 18px 50px rgba(0,0,0,.35);
 }
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Montserrat,system-ui,sans-serif}
-button,input,select{font:inherit}button{cursor:pointer}
-a{color:inherit;text-decoration:none}
-.app{min-height:100vh;display:flex}
-.sidebar{width:260px;background:#080a10;border-right:1px solid var(--line);padding:20px 14px;position:fixed;inset:0 auto 0 0;z-index:20}
-.brand{font-family:Orbitron,sans-serif;font-weight:800;letter-spacing:.08em;font-size:17px;padding:8px 10px 22px}
-.brand span{display:block;color:var(--accent2);font-size:11px;margin-top:5px;letter-spacing:.18em}
-.nav{display:grid;gap:6px}.nav button{background:transparent;border:1px solid transparent;color:#aab3c3;text-align:left;padding:12px 13px;border-radius:10px}
-.nav button:hover,.nav button.active{background:#121725;border-color:#2b3244;color:#fff}
-.nav button.active{box-shadow:inset 3px 0 0 var(--accent2)}
-.main{margin-left:260px;width:calc(100% - 260px);min-height:100vh}
-.topbar{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(5,6,10,.88);backdrop-filter:blur(12px);position:sticky;top:0;z-index:10}
-.status{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px}.dot{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 12px var(--good)}
-.userbar{display:flex;align-items:center;gap:12px}.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:800}
-.content{padding:28px;max-width:1600px;margin:auto}
-.view{display:none}.view.active{display:block}
-h1{font-family:Orbitron,sans-serif;font-size:28px;margin:0 0 8px}.sub{color:var(--muted);margin:0 0 25px}
-.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr))}
-.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:15px;padding:18px;box-shadow:var(--shadow)}
-.stat-label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em}.stat-value{font-family:Orbitron,sans-serif;font-size:28px;margin-top:9px}.stat-meta{font-size:12px;color:var(--muted);margin-top:8px}
-.cards2{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.section-head h2{font-size:16px;margin:0}
-.btn{border:1px solid #31394d;background:#151a28;color:#fff;padding:9px 13px;border-radius:9px}.btn:hover{border-color:#505a72}.btn.primary{background:linear-gradient(135deg,#7c3aed,#0891b2);border:0}.btn.danger{border-color:#5b2631;color:#fecdd3}
-.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.table{width:100%;border-collapse:collapse;min-width:620px}.table th,.table td{padding:12px 13px;border-bottom:1px solid #202636;text-align:left;font-size:13px}.table th{font-size:11px;color:#8e98aa;text-transform:uppercase;letter-spacing:.1em;background:#0a0d14}.table tr:last-child td{border-bottom:0}.pill{display:inline-flex;padding:4px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.pill.good{background:#0d2b24;color:#7af0c1}.pill.warn{background:#30260c;color:#f9d36b}.pill.bad{background:#32151c;color:#ff9caf}
-.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 0,#15112a 0,#05060a 45%)}
-.login-card{width:min(440px,100%);background:#0d1018;border:1px solid var(--line);border-radius:18px;padding:28px;box-shadow:var(--shadow)}
-.logo{font-family:Orbitron,sans-serif;font-size:20px;font-weight:800}.logo span{color:var(--accent2)}
-.field{display:grid;gap:7px;margin:14px 0}.field label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}.field input,.field select{width:100%;background:#080b12;color:#fff;border:1px solid #2a3142;border-radius:9px;padding:11px 12px;outline:none}.field input:focus,.field select:focus{border-color:var(--accent)}
-.login-note{font-size:12px;color:var(--muted);line-height:1.6}.error{color:#ff9caf;font-size:12px;margin-top:10px}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.toolbar input{background:#0b0e15;color:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 12px;min-width:230px}
-.empty{padding:30px;text-align:center;color:var(--muted)}
-.activity{display:grid;gap:10px}.activity-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #202636}.activity-item:last-child{border-bottom:0}.activity-icon{width:30px;height:30px;border-radius:8px;background:#171c2a;display:grid;place-items:center}.activity-text{font-size:13px}.activity-time{font-size:11px;color:var(--muted);margin-top:3px}
-.toast{position:fixed;right:20px;bottom:20px;background:#121725;border:1px solid #333b50;padding:12px 15px;border-radius:10px;box-shadow:var(--shadow);display:none;z-index:100}.toast.show{display:block}
-@media(max-width:1000px){.sidebar{width:78px}.brand{font-size:0}.brand span{display:none}.nav button{font-size:0;text-align:center}.nav button::first-letter{font-size:18px}.main{margin-left:78px;width:calc(100% - 78px)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cards2{grid-template-columns:1fr}}
-@media(max-width:650px){.topbar{padding:0 14px}.content{padding:18px}.stats{grid-template-columns:1fr}.userbar .email{display:none}.toolbar input{min-width:0;width:100%}}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* LOGIN */
+
+.login-screen{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:25px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(139,92,246,.20),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 20% 100%,
+      rgba(34,211,238,.08),
+      transparent 30%
+    ),
+    #05060a;
+}
+
+.login-card{
+  width:min(450px,100%);
+  padding:32px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(22,27,40,.98),
+      rgba(10,12,19,.98)
+    );
+
+  border:1px solid var(--line);
+  border-radius:20px;
+
+  box-shadow:var(--shadow);
+}
+
+.login-logo{
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+
+.login-logo span{
+  color:var(--accent2);
+}
+
+.login-subtitle{
+  color:var(--muted);
+  font-size:13px;
+  margin:8px 0 25px;
+}
+
+.field{
+  display:grid;
+  gap:7px;
+  margin:15px 0;
+}
+
+.field label{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:12px 13px;
+
+  color:white;
+  background:#080b12;
+
+  border:1px solid #2a3142;
+  border-radius:9px;
+
+  outline:none;
+}
+
+.field textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:var(--accent);
+}
+
+.login-error{
+  min-height:18px;
+  margin-top:10px;
+
+  color:#ff9caf;
+  font-size:12px;
+}
+
+.security-note{
+  margin-top:20px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+}
+
+/* APP */
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+
+  width:260px;
+
+  padding:20px 14px;
+
+  background:#080a10;
+  border-right:1px solid var(--line);
+
+  z-index:50;
+}
+
+.brand{
+  padding:8px 10px 24px;
+
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+
+.brand span{
+  display:block;
+
+  margin-top:6px;
+
+  color:var(--accent2);
+
+  font-family:Montserrat,sans-serif;
+  font-size:10px;
+  letter-spacing:.18em;
+}
+
+.nav{
+  display:grid;
+  gap:6px;
+}
+
+.nav-button{
+  width:100%;
+
+  padding:12px 13px;
+
+  background:transparent;
+
+  color:#aab3c3;
+
+  border:1px solid transparent;
+  border-radius:10px;
+
+  text-align:left;
+}
+
+.nav-button:hover{
+  background:#121725;
+  border-color:#2b3244;
+  color:white;
+}
+
+.nav-button.active{
+  background:#121725;
+  border-color:#2b3244;
+
+  color:white;
+
+  box-shadow:
+    inset 3px 0 0 var(--accent2);
+}
+
+/* MAIN */
+
+.main{
+  width:calc(100% - 260px);
+  min-height:100vh;
+
+  margin-left:260px;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+
+  height:72px;
+
+  padding:0 28px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  background:rgba(5,6,10,.90);
+  backdrop-filter:blur(14px);
+
+  border-bottom:1px solid var(--line);
+
+  z-index:40;
+}
+
+.connection{
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  color:var(--muted);
+  font-size:12px;
+}
+
+.connection-dot{
+  width:8px;
+  height:8px;
+
+  border-radius:50%;
+
+  background:var(--good);
+
+  box-shadow:0 0 12px var(--good);
+}
+
+.connection-dot.offline{
+  background:var(--bad);
+  box-shadow:0 0 12px var(--bad);
+}
+
+.user-area{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.user-email{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.avatar{
+  width:35px;
+  height:35px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent),
+      var(--accent2)
+    );
+
+  font-weight:800;
+}
+
+/* CONTENT */
+
+.content{
+  width:100%;
+  max-width:1600px;
+
+  margin:auto;
+  padding:28px;
+}
+
+.view{
+  display:none;
+}
+
+.view.active{
+  display:block;
+}
+
+h1{
+  margin:0 0 7px;
+
+  font-family:Orbitron,sans-serif;
+  font-size:28px;
+}
+
+.page-subtitle{
+  margin:0 0 25px;
+
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* BUTTONS */
+
+.btn{
+  padding:9px 13px;
+
+  background:#151a28;
+
+  color:white;
+
+  border:1px solid #31394d;
+  border-radius:9px;
+}
+
+.btn:hover{
+  border-color:#505a72;
+}
+
+.btn.primary{
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #0891b2
+    );
+
+  border:0;
+}
+
+.btn.danger{
+  color:#fecdd3;
+  border-color:#5b2631;
+}
+
+/* CARDS */
+
+.grid{
+  display:grid;
+  gap:16px;
+}
+
+.stats{
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0,1fr)
+    );
+}
+
+.card{
+  padding:18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--panel2),
+      var(--panel)
+    );
+
+  border:1px solid var(--line);
+  border-radius:15px;
+
+  box-shadow:var(--shadow);
+}
+
+.stat-label{
+  color:var(--muted);
+
+  font-size:10px;
+  font-weight:700;
+
+  text-transform:uppercase;
+  letter-spacing:.13em;
+}
+
+.stat-value{
+  margin-top:9px;
+
+  font-family:Orbitron,sans-serif;
+  font-size:28px;
+}
+
+.stat-meta{
+  margin-top:8px;
+
+  color:var(--muted);
+  font-size:11px;
+}
+
+.two-column{
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
+
+  margin-top:18px;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:12px;
+
+  margin-bottom:14px;
+}
+
+.section-head h2{
+  margin:0;
+
+  font-size:16px;
+}
+
+/* TABLES */
+
+.table-wrap{
+  overflow:auto;
+
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+
+.table{
+  width:100%;
+
+  min-width:700px;
+
+  border-collapse:collapse;
+}
+
+.table th,
+.table td{
+  padding:12px 13px;
+
+  border-bottom:1px solid #202636;
+
+  text-align:left;
+
+  font-size:12px;
+}
+
+.table th{
+  background:#0a0d14;
+
+  color:#8e98aa;
+
+  font-size:10px;
+  font-weight:700;
+
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.table tr:last-child td{
+  border-bottom:0;
+}
+
+.table tbody tr:hover{
+  background:rgba(255,255,255,.025);
+}
+
+/* PILLS */
+
+.pill{
+  display:inline-flex;
+
+  padding:4px 8px;
+
+  border-radius:99px;
+
+  font-size:9px;
+  font-weight:800;
+
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.pill.good{
+  color:#7af0c1;
+  background:#0d2b24;
+}
+
+.pill.warn{
+  color:#f9d36b;
+  background:#30260c;
+}
+
+.pill.bad{
+  color:#ff9caf;
+  background:#32151c;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+
+  gap:10px;
+
+  margin-bottom:16px;
+}
+
+.toolbar input{
+  min-width:250px;
+
+  padding:10px 12px;
+
+  background:#0b0e15;
+
+  color:white;
+
+  border:1px solid var(--line);
+  border-radius:9px;
+
+  outline:none;
+}
+
+/* ACTIVITY */
+
+.activity{
+  display:grid;
+  gap:5px;
+}
+
+.activity-item{
+  display:flex;
+  align-items:flex-start;
+
+  gap:12px;
+
+  padding:11px 0;
+
+  border-bottom:1px solid #202636;
+}
+
+.activity-item:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:31px;
+  height:31px;
+
+  flex:0 0 auto;
+
+  display:grid;
+  place-items:center;
+
+  background:#171c2a;
+
+  border-radius:8px;
+}
+
+.activity-text{
+  font-size:12px;
+}
+
+.activity-time{
+  margin-top:4px;
+
+  color:var(--muted);
+  font-size:10px;
+}
+
+.empty{
+  padding:30px;
+
+  color:var(--muted);
+
+  text-align:center;
+
+  font-size:12px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+
+  max-width:400px;
+
+  padding:12px 15px;
+
+  background:#121725;
+
+  border:1px solid #333b50;
+  border-radius:10px;
+
+  box-shadow:var(--shadow);
+
+  font-size:12px;
+
+  display:none;
+
+  z-index:100;
+}
+
+.toast.show{
+  display:block;
+}
+
+/* MOBILE */
+
+@media(max-width:1050px){
+
+  .sidebar{
+    width:78px;
+  }
+
+  .brand{
+    font-size:0;
+    text-align:center;
+  }
+
+  .brand span{
+    display:none;
+  }
+
+  .nav-button{
+    font-size:0;
+    text-align:center;
+  }
+
+  .nav-button:first-letter{
+    font-size:18px;
+  }
+
+  .main{
+    width:calc(100% - 78px);
+    margin-left:78px;
+  }
+
+  .stats{
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0,1fr)
+      );
+  }
+
+  .two-column{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:650px){
+
+  .topbar{
+    padding:0 14px;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .user-email{
+    display:none;
+  }
+
+  .toolbar input{
+    width:100%;
+    min-width:0;
+  }
+
+  h1{
+    font-size:23px;
+  }
+}
 </style>
 </head>
+
 <body>
 
-<div id="loginScreen" class="login">
+<!-- =========================================================
+     LOGIN
+========================================================= -->
+
+<div id="loginScreen" class="login-screen">
+
   <div class="login-card">
-    <div class="logo">CROW<span>RULES</span> ADMIN</div>
-    <p class="sub" style="margin-top:10px">Secure administration portal</p>
-    <div class="field"><label>Supabase Publishable Key</label><input id="keyInput" type="password" placeholder="Paste your publishable/anon key"></div>
-    <div class="field"><label>Email</label><input id="emailInput" type="email" autocomplete="email"></div>
-    <div class="field"><label>Password</label><input id="passwordInput" type="password" autocomplete="current-password"></div>
-    <button class="btn primary" style="width:100%;margin-top:8px" id="loginBtn">Sign In</button>
-    <div id="loginError" class="error"></div>
-    <p class="login-note">The browser uses only the Supabase publishable/anon key. Never put a service-role or secret key in this file.</p>
+
+    <div class="login-logo">
+      CROW<span>RULES</span> ADMIN
+    </div>
+
+    <div class="login-subtitle">
+      CrowRules Entertainment Command Center
+    </div>
+
+    <div class="field">
+      <label>Supabase Publishable / Anon Key</label>
+
+      <input
+        id="keyInput"
+        type="password"
+        placeholder="Paste your Supabase client key"
+      >
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+
+      <input
+        id="emailInput"
+        type="email"
+        autocomplete="email"
+        placeholder="admin@example.com"
+      >
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+
+      <input
+        id="passwordInput"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Password"
+      >
+    </div>
+
+    <button
+      id="loginBtn"
+      class="btn primary"
+      style="width:100%;margin-top:8px"
+    >
+      Sign In
+    </button>
+
+    <div
+      id="loginError"
+      class="login-error"
+    ></div>
+
+    <div class="security-note">
+      This dashboard uses the Supabase client key only.
+      Never place a Supabase service-role or secret key in
+      browser-side HTML.
+    </div>
+
   </div>
+
 </div>
 
-<div id="app" class="app" style="display:none">
+
+<!-- =========================================================
+     ADMIN APP
+========================================================= -->
+
+<div
+  id="app"
+  class="app"
+  style="display:none"
+>
+
+  <!-- SIDEBAR -->
+
   <aside class="sidebar">
-    <div class="brand">CROWRULES<span>ENTERTAINMENT ADMIN</span></div>
+
+    <div class="brand">
+      CROWRULES
+      <span>ENTERTAINMENT ADMIN</span>
+    </div>
+
     <nav class="nav">
-      <button class="active" data-view="dashboard">▣ Dashboard</button>
-      <button data-view="content">▤ Content</button>
-      <button data-view="members">♙ Members</button>
-      <button data-view="schedule">◷ Schedule</button>
-      <button data-view="analytics">◒ Analytics</button>
-      <button data-view="donations">＄ Donations</button>
-      <button data-view="admins">⚿ Admins</button>
-      <button data-view="audit">⌁ Audit Log</button>
-      <button data-view="settings">⚙ Settings</button>
+
+      <button
+        class="nav-button active"
+        data-view="dashboard"
+      >
+        ▣ Dashboard
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="content"
+      >
+        ▤ Content
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="members"
+      >
+        ♙ Members
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="schedule"
+      >
+        ◷ Schedule
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="analytics"
+      >
+        ◒ Analytics
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="donations"
+      >
+        $ Donations
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="admins"
+      >
+        ⚿ Admins
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="audit"
+      >
+        ⌁ Audit Log
+      </button>
+
+      <button
+        class="nav-button"
+        data-view="settings"
+      >
+        ⚙ Settings
+      </button>
+
     </nav>
+
   </aside>
 
+
+  <!-- MAIN -->
+
   <main class="main">
+
     <header class="topbar">
-      <div class="status"><span class="dot"></span><span id="connectionText">Supabase connected</span></div>
-      <div class="userbar"><span class="email" id="userEmail"></span><div class="avatar" id="userAvatar">CR</div><button class="btn" id="logoutBtn">Sign out</button></div>
+
+      <div class="connection">
+
+        <span
+          id="connectionDot"
+          class="connection-dot"
+        ></span>
+
+        <span id="connectionText">
+          Supabase connected
+        </span>
+
+      </div>
+
+      <div class="user-area">
+
+        <span
+          id="userEmail"
+          class="user-email"
+        ></span>
+
+        <div
+          id="userAvatar"
+          class="avatar"
+        >
+          CR
+        </div>
+
+        <button
+          id="logoutBtn"
+          class="btn"
+        >
+          Sign Out
+        </button>
+
+      </div>
+
     </header>
+
 
     <div class="content">
 
-      <section id="view-dashboard" class="view active">
-        <h1>Command Center</h1><p class="sub">CrowRules Entertainment at a glance.</p>
+
+      <!-- =====================================================
+           DASHBOARD
+      ====================================================== -->
+
+      <section
+        id="view-dashboard"
+        class="view active"
+      >
+
+        <h1>Command Center</h1>
+
+        <p class="page-subtitle">
+          CrowRules Entertainment administration at a glance.
+        </p>
+
+
         <div class="grid stats">
-          <div class="card"><div class="stat-label">Members</div><div class="stat-value" id="statMembers">—</div><div class="stat-meta" id="statMembersMeta">Loading…</div></div>
-          <div class="card"><div class="stat-label">Published Content</div><div class="stat-value" id="statContent">—</div><div class="stat-meta">cr_content</div></div>
-          <div class="card"><div class="stat-label">Watch Hours</div><div class="stat-value" id="statWatch">—</div><div class="stat-meta">Lifetime member watch time</div></div>
-          <div class="card"><div class="stat-label">CrowPoints</div><div class="stat-value" id="statPoints">—</div><div class="stat-meta">Lifetime points</div></div>
+
+          <div class="card">
+
+            <div class="stat-label">
+              Active Members
+            </div>
+
+            <div
+              id="statMembers"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div
+              id="statMembersMeta"
+              class="stat-meta"
+            >
+              Loading…
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="stat-label">
+              Published Content
+            </div>
+
+            <div
+              id="statContent"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div class="stat-meta">
+              cr_content
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="stat-label">
+              Watch Hours
+            </div>
+
+            <div
+              id="statWatch"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div class="stat-meta">
+              Lifetime member watch time
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="stat-label">
+              CrowPoints
+            </div>
+
+            <div
+              id="statPoints"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div class="stat-meta">
+              Lifetime points
+            </div>
+
+          </div>
+
         </div>
-        <div class="grid cards2">
-          <div class="card"><div class="section-head"><h2>Recent Members</h2><button class="btn" onclick="showView('members')">View all</button></div><div id="recentMembers"></div></div>
-          <div class="card"><div class="section-head"><h2>Recent Admin Activity</h2><button class="btn" onclick="showView('audit')">Audit log</button></div><div id="recentAudit"></div></div>
+
+
+        <div class="grid two-column">
+
+
+          <div class="card">
+
+            <div class="section-head">
+
+              <h2>
+                Recent Members
+              </h2>
+
+              <button
+                class="btn"
+                onclick="showView('members')"
+              >
+                View All
+              </button>
+
+            </div>
+
+            <div
+              id="recentMembers"
+              class="activity"
+            ></div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="section-head">
+
+              <h2>
+                Recent Admin Activity
+              </h2>
+
+              <button
+                class="btn"
+                onclick="showView('audit')"
+              >
+                Audit Log
+              </button>
+
+            </div>
+
+            <div
+              id="recentAudit"
+              class="activity"
+            ></div>
+
+          </div>
+
         </div>
+
       </section>
 
-      <section id="view-content" class="view">
-        <h1>Content Manager</h1><p class="sub">Manage the existing CrowRules content catalog.</p>
-        <div class="toolbar"><input id="contentSearch" placeholder="Search titles…" oninput="filterContent()"><button class="btn" onclick="loadContent()">Refresh</button></div>
-        <div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Title</th><th>Type</th><th>Status</th><th>Published</th><th>Updated</th></tr></thead><tbody id="contentTable"></tbody></table></div></div>
-      </section>
 
-      <section id="view-members" class="view">
-        <h1>Member Management</h1><p class="sub">Membership, points and watch-time overview.</p>
-        <div class="toolbar"><input id="memberSearch" placeholder="Search username, name or email…" oninput="filterMembers()"><button class="btn" onclick="loadMembers()">Refresh</button></div>
-        <div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Member</th><th>Tier</th><th>Status</th><th>Points</th><th>Watch</th><th>Last Seen</th></tr></thead><tbody id="membersTable"></tbody></table></div></div>
-      </section>
+      <!-- =====================================================
+           CONTENT
+      ====================================================== -->
 
-      <section id="view-schedule" class="view">
-        <h1>Programming Schedule</h1><p class="sub">CrowRules TV programming from <b>cr_schedule</b>.</p>
-        <div class="toolbar"><button class="btn" onclick="loadSchedule()">Refresh</button></div>
-        <div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Title</th><th>Type</th><th>Start</th><th>End</th><th>Live</th><th>Published</th></tr></thead><tbody id="scheduleTable"></tbody></table></div></div>
-      </section>
+      <section
+        id="view-content"
+        class="view"
+      >
 
-      <section id="view-analytics" class="view">
-        <h1>Analytics</h1><p class="sub">Recent events captured by CrowRules analytics.</p>
-        <div class="grid stats">
-          <div class="card"><div class="stat-label">Events</div><div class="stat-value" id="analyticsTotal">—</div><div class="stat-meta">Recent event rows</div></div>
-          <div class="card"><div class="stat-label">Watch Events</div><div class="stat-value" id="analyticsWatch">—</div><div class="stat-meta">Event name contains watch</div></div>
-          <div class="card"><div class="stat-label">Page Views</div><div class="stat-value" id="analyticsPage">—</div><div class="stat-meta">Event name contains page</div></div>
-          <div class="card"><div class="stat-label">Unique Sessions</div><div class="stat-value" id="analyticsSessions">—</div><div class="stat-meta">Recent session IDs</div></div>
+        <h1>Content Manager</h1>
+
+        <p class="page-subtitle">
+          Manage CrowRules content from the existing cr_content table.
+        </p>
+
+        <div class="toolbar">
+
+          <input
+            id="contentSearch"
+            placeholder="Search titles…"
+          >
+
+          <button
+            class="btn"
+            onclick="loadContent()"
+          >
+            Refresh
+          </button>
+
         </div>
-        <div class="card" style="margin-top:18px"><div class="section-head"><h2>Recent Events</h2><button class="btn" onclick="loadAnalytics()">Refresh</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Event</th><th>Page</th><th>Session</th><th>Created</th></tr></thead><tbody id="analyticsTable"></tbody></table></div></div>
-      </section>
 
-      <section id="view-donations" class="view">
-        <h1>Donations</h1><p class="sub">Donation activity from the existing CrowRules donation tables.</p>
-        <div class="grid stats">
-          <div class="card"><div class="stat-label">Donation Records</div><div class="stat-value" id="donationCount">—</div><div class="stat-meta">donations</div></div>
-          <div class="card"><div class="stat-label">Campaigns</div><div class="stat-value" id="campaignCount">—</div><div class="stat-meta">cr_donation_campaigns</div></div>
-        </div>
-        <div class="card" style="margin-top:18px"><div class="section-head"><h2>Recent Donations</h2><button class="btn" onclick="loadDonations()">Refresh</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Date</th><th>Amount</th><th>Status</th><th>Campaign</th></tr></thead><tbody id="donationTable"></tbody></table></div></div>
-      </section>
 
-      <section id="view-admins" class="view">
-        <h1>Administrators</h1><p class="sub">Authorized users from <b>cr_admins</b>.</p>
-        <div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Display Name</th><th>Role</th><th>Active</th><th>Created</th><th>Updated</th></tr></thead><tbody id="adminsTable"></tbody></table></div></div>
-      </section>
-
-      <section id="view-audit" class="view">
-        <h1>Audit Log</h1><p class="sub">Administrative actions recorded in Supabase.</p>
-        <div class="card"><div class="section-head"><h2>Latest activity</h2><button class="btn" onclick="loadAudit()">Refresh</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Action</th><th>Table</th><th>Target</th><th>Date</th></tr></thead><tbody id="auditTable"></tbody></table></div></div>
-      </section>
-
-      <section id="view-settings" class="view">
-        <h1>Admin Settings</h1><p class="sub">Connection and dashboard preferences.</p>
         <div class="card">
-          <div class="field"><label>Supabase Project URL</label><input value="https://zauxdqyssratvzmomozf.supabase.co" readonly></div>
-          <div class="field"><label>Client Key</label><input id="settingsKey" type="password" placeholder="Publishable/anon key"></div>
-          <button class="btn primary" onclick="saveKey()">Save client key locally</button>
-          <p class="login-note">Only the publishable/anon key belongs in browser code. Supabase RLS must remain the authorization boundary.</p>
+
+          <div class="table-wrap">
+
+            <table class="table">
+
+              <thead>
+
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Published</th>
+                  <th>Updated</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="contentTable"></tbody>
+
+            </table>
+
+          </div>
+
         </div>
+
       </section>
+
+
+      <!-- =====================================================
+           MEMBERS
+      ====================================================== -->
+
+      <section
+        id="view-members"
+        class="view"
+      >
+
+        <h1>Member Management</h1>
+
+        <p class="page-subtitle">
+          Membership, CrowPoints and watch-time overview.
+        </p>
+
+        <div class="toolbar">
+
+          <input
+            id="memberSearch"
+            placeholder="Search username, name or email…"
+          >
+
+          <button
+            class="btn"
+            onclick="loadMembers()"
+          >
+            Refresh
+          </button>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="table-wrap">
+
+            <table class="table">
+
+              <thead>
+
+                <tr>
+                  <th>Member</th>
+                  <th>Tier</th>
+                  <th>Status</th>
+                  <th>Points</th>
+                  <th>Watch</th>
+                  <th>Last Seen</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="membersTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           SCHEDULE
+      ====================================================== -->
+
+      <section
+        id="view-schedule"
+        class="view"
+      >
+
+        <h1>Programming Schedule</h1>
+
+        <p class="page-subtitle">
+          CrowRules TV programming from cr_schedule.
+        </p>
+
+        <div class="toolbar">
+
+          <button
+            class="btn"
+            onclick="loadSchedule()"
+          >
+            Refresh Schedule
+          </button>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="table-wrap">
+
+            <table class="table">
+
+              <thead>
+
+                <tr>
+                  <th>Title</th>
+                  <th>Type</th>
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Live</th>
+                  <th>Published</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="scheduleTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           ANALYTICS
+      ====================================================== -->
+
+      <section
+        id="view-analytics"
+        class="view"
+      >
+
+        <h1>Analytics</h1>
+
+        <p class="page-subtitle">
+          Recent events captured by CrowRules analytics.
+        </p>
+
+
+        <div class="grid stats">
+
+          <div class="card">
+
+            <div class="stat-label">
+              Events
+            </div>
+
+            <div
+              id="analyticsTotal"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div class="stat-meta">
+              Recent event rows
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="stat-label">
+              Watch Events
+            </div>
+
+            <div
+              id="analyticsWatch"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div class="stat-meta">
+              Events containing watch
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="stat-label">
+              Page Events
+            </div>
+
+            <div
+              id="analyticsPage"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div class="stat-meta">
+              Events containing page
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="stat-label">
+              Sessions
+            </div>
+
+            <div
+              id="analyticsSessions"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div class="stat-meta">
+              Unique recent sessions
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="card"
+          style="margin-top:18px"
+        >
+
+          <div class="section-head">
+
+            <h2>
+              Recent Events
+            </h2>
+
+            <button
+              class="btn"
+              onclick="loadAnalytics()"
+            >
+              Refresh
+            </button>
+
+          </div>
+
+
+          <div class="table-wrap">
+
+            <table class="table">
+
+              <thead>
+
+                <tr>
+                  <th>Event</th>
+                  <th>Page</th>
+                  <th>Session</th>
+                  <th>Created</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="analyticsTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           DONATIONS
+      ====================================================== -->
+
+      <section
+        id="view-donations"
+        class="view"
+      >
+
+        <h1>Donations</h1>
+
+        <p class="page-subtitle">
+          CrowRules donation activity.
+        </p>
+
+
+        <div class="grid stats">
+
+          <div class="card">
+
+            <div class="stat-label">
+              Donation Records
+            </div>
+
+            <div
+              id="donationCount"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div class="stat-meta">
+              donations
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div class="stat-label">
+              Campaigns
+            </div>
+
+            <div
+              id="campaignCount"
+              class="stat-value"
+            >
+              —
+            </div>
+
+            <div class="stat-meta">
+              cr_donation_campaigns
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="card"
+          style="margin-top:18px"
+        >
+
+          <div class="section-head">
+
+            <h2>
+              Recent Donations
+            </h2>
+
+            <button
+              class="btn"
+              onclick="loadDonations()"
+            >
+              Refresh
+            </button>
+
+          </div>
+
+
+          <div class="table-wrap">
+
+            <table class="table">
+
+              <thead>
+
+                <tr>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Campaign</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="donationTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           ADMINS
+      ====================================================== -->
+
+      <section
+        id="view-admins"
+        class="view"
+      >
+
+        <h1>Administrators</h1>
+
+        <p class="page-subtitle">
+          Authorized CrowRules administrators.
+        </p>
+
+
+        <div class="card">
+
+          <div class="table-wrap">
+
+            <table class="table">
+
+              <thead>
+
+                <tr>
+                  <th>Display Name</th>
+                  <th>Role</th>
+                  <th>Active</th>
+                  <th>Created</th>
+                  <th>Updated</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="adminsTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           AUDIT
+      ====================================================== -->
+
+      <section
+        id="view-audit"
+        class="view"
+      >
+
+        <h1>Audit Log</h1>
+
+        <p class="page-subtitle">
+          Administrative actions recorded in Supabase.
+        </p>
+
+
+        <div class="card">
+
+          <div class="section-head">
+
+            <h2>
+              Latest Activity
+            </h2>
+
+            <button
+              class="btn"
+              onclick="loadAudit()"
+            >
+              Refresh
+            </button>
+
+          </div>
+
+
+          <div class="table-wrap">
+
+            <table class="table">
+
+              <thead>
+
+                <tr>
+                  <th>Action</th>
+                  <th>Table</th>
+                  <th>Target</th>
+                  <th>Date</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="auditTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           SETTINGS
+      ====================================================== -->
+
+      <section
+        id="view-settings"
+        class="view"
+      >
+
+        <h1>Settings</h1>
+
+        <p class="page-subtitle">
+          CrowRules Admin Dashboard configuration.
+        </p>
+
+
+        <div class="card">
+
+          <div class="field">
+
+            <label>
+              Supabase Project URL
+            </label>
+
+            <input
+              id="projectUrl"
+              value="https://zauxdqyssratvzmomozf.supabase.co"
+              readonly
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Supabase Client Key
+            </label>
+
+            <input
+              id="settingsKey"
+              type="password"
+              placeholder="Publishable / anon key"
+            >
+
+          </div>
+
+
+          <button
+            class="btn primary"
+            onclick="saveKey()"
+          >
+            Save Client Key
+          </button>
+
+          <div class="security-note">
+
+            Use only the Supabase publishable/anon key here.
+            Authorization is enforced through Supabase Auth and
+            Row Level Security.
+
+          </div>
+
+        </div>
+
+      </section>
+
 
     </div>
+
   </main>
+
 </div>
-<div id="toast" class="toast"></div>
+
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
 
 <script>
-const SUPABASE_URL = 'https://zauxdqyssratvzmomozf.supabase.co';
-let SUPABASE_KEY = localStorage.getItem('cr_supabase_publishable_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphdXhkcXlzc3JhdHZ6bW9tb3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MjE3MjYsImV4cCI6MjEwMjk5NzcyNn0.nPTPMgD8gHzL7qRmMuUNJxpjXaCJRVXmgxck15AKDDA';
-let supabase = null;
+
+/* =========================================================
+   SUPABASE CONFIG
+========================================================= */
+
+const SUPABASE_URL =
+  'https://zauxdqyssratvzmomozf.supabase.co';
+
+let SUPABASE_KEY =
+  localStorage.getItem(
+    'cr_supabase_publishable_key'
+  ) || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphdXhkcXlzc3JhdHZ6bW9tb3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MjE3MjYsImV4cCI6MjEwMjk5NzcyNn0.nPTPMgD8gHzL7qRmMuUNJxpjXaCJRVXmgxck15AKDDA';
+
+let supabaseClient = null;
+
 let currentUser = null;
-let contentRows = [], memberRows = [];
 
-const $ = id => document.getElementById(id);
-const esc = v => String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const fmtDate = v => v ? new Date(v).toLocaleString() : '—';
-const fmtNum = v => Number(v || 0).toLocaleString();
-const fmtHours = sec => (Number(sec || 0) / 3600).toFixed(1);
+let contentRows = [];
 
-function toast(msg){ $('toast').textContent=msg; $('toast').classList.add('show'); setTimeout(()=>$('toast').classList.remove('show'),2600); }
-function setError(msg){ $('loginError').textContent=msg || ''; }
+let memberRows = [];
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+
+function esc(value){
+
+  return String(
+    value ?? ''
+  ).replace(
+    /[&<>"']/g,
+    char => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    }[char])
+  );
+
+}
+
+
+function fmtNum(value){
+
+  return Number(
+    value || 0
+  ).toLocaleString();
+
+}
+
+
+function fmtDate(value){
+
+  if(!value){
+    return '—';
+  }
+
+  return new Date(
+    value
+  ).toLocaleString();
+
+}
+
+
+function fmtHours(seconds){
+
+  return (
+    Number(seconds || 0) /
+    3600
+  ).toFixed(1);
+
+}
+
+
+function toast(message){
+
+  const element =
+    $('toast');
+
+  element.textContent =
+    message;
+
+  element.classList.add(
+    'show'
+  );
+
+  setTimeout(
+    () =>
+      element.classList.remove(
+        'show'
+      ),
+    2800
+  );
+
+}
+
+
+function setLoginError(message){
+
+  $('loginError').textContent =
+    message || '';
+
+}
+
+
+/* =========================================================
+   SUPABASE INITIALIZATION
+========================================================= */
+
+function createSupabase(){
+
+  if(!SUPABASE_KEY){
+
+    return false;
+
+  }
+
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY,
+      {
+        auth:{
+          autoRefreshToken:true,
+          persistSession:true,
+          detectSessionInUrl:true
+        }
+      }
+    );
+
+  return true;
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
 
 async function init(){
-  if(!SUPABASE_KEY) return;
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}
-  });
-  const {data:{session}} = await supabase.auth.getSession();
-  if(session) await authorize(session.user);
+
+  if(!createSupabase()){
+
+    return;
+
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
+
+    if(error){
+
+      console.error(error);
+
+      return;
+
+    }
+
+    if(
+      data &&
+      data.session
+    ){
+
+      await authorize(
+        data.session.user
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
 }
+
+
+/* =========================================================
+   AUTHORIZATION
+========================================================= */
+
 async function authorize(user){
-  currentUser=user;
-  const {data:admin,error}=await supabase.from('cr_admins').select('display_name,role,is_active').eq('user_id',user.id).maybeSingle();
-  if(error){ setError(error.message); return; }
-  if(!admin || !admin.is_active){ await supabase.auth.signOut(); setError('This account is not an active CrowRules administrator.'); return; }
-  $('loginScreen').style.display='none'; $('app').style.display='flex';
-  $('userEmail').textContent=user.email || admin.display_name || '';
-  $('userAvatar').textContent=(admin.display_name||user.email||'CR').slice(0,2).toUpperCase();
-  $('settingsKey').value=SUPABASE_KEY;
-  await loadDashboard();
-}
-$('loginBtn').onclick=async()=>{
-  setError('');
-  SUPABASE_KEY=$('keyInput').value.trim() || SUPABASE_KEY;
-  if(!SUPABASE_KEY){setError('Enter your Supabase publishable/anon key.');return}
-  localStorage.setItem('cr_supabase_publishable_key',SUPABASE_KEY);
-  supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
-  const {data,error}=await supabase.auth.signInWithPassword({email:$('emailInput').value.trim(),password:$('passwordInput').value});
-  if(error){setError(error.message);return}
-  await authorize(data.user);
-};
-$('logoutBtn').onclick=async()=>{await supabase.auth.signOut();location.reload()};
 
-supabase && supabase.auth.onAuthStateChange((_event,session)=>{if(session) authorize(session.user);});
-window.showView = async view => {
-  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
-  $('view-'+view).classList.add('active');
-  document.querySelector(`[data-view="${view}"]`)?.classList.add('active');
-  if(view==='dashboard') await loadDashboard();
-  if(view==='content') await loadContent();
-  if(view==='members') await loadMembers();
-  if(view==='schedule') await loadSchedule();
-  if(view==='analytics') await loadAnalytics();
-  if(view==='donations') await loadDonations();
-  if(view==='admins') await loadAdmins();
-  if(view==='audit') await loadAudit();
-};
-document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+  currentUser =
+    user;
 
-async function safeQuery(fn, fallback=[]){
-  try{const r=await fn(); if(r.error) throw r.error; return r.data ?? fallback}
-  catch(e){ console.warn(e); toast(e.message || 'Supabase query failed'); return fallback; }
+  try{
+
+    const {
+      data:admin,
+      error
+    } =
+      await supabaseClient
+        .from('cr_admins')
+        .select(
+          'display_name,role,is_active'
+        )
+        .eq(
+          'user_id',
+          user.id
+        )
+        .maybeSingle();
+
+    if(error){
+
+      setLoginError(
+        error.message
+      );
+
+      return;
+
+    }
+
+    if(
+      !admin ||
+      !admin.is_active
+    ){
+
+      await supabaseClient
+        .auth
+        .signOut();
+
+      setLoginError(
+        'This account is not an active CrowRules administrator.'
+      );
+
+      return;
+
+    }
+
+    $('loginScreen')
+      .style
+      .display='none';
+
+    $('app')
+      .style
+      .display='flex';
+
+    $('userEmail')
+      .textContent =
+      user.email ||
+      admin.display_name ||
+      '';
+
+    $('userAvatar')
+      .textContent =
+      (
+        admin.display_name ||
+        user.email ||
+        'CR'
+      )
+      .slice(0,2)
+      .toUpperCase();
+
+    $('settingsKey')
+      .value =
+      SUPABASE_KEY;
+
+    setConnection(true);
+
+    await loadDashboard();
+
+  }catch(error){
+
+    console.error(error);
+
+    setLoginError(
+      error.message ||
+      'Authorization failed.'
+    );
+
+  }
+
 }
-async function count(table, filter){
-  try{let q=supabase.from(table).select('*',{count:'exact',head:true}); if(filter) q=filter(q); const r=await q; if(r.error) throw r.error; return r.count||0}catch(e){return 0}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+$('loginBtn').onclick =
+  async function(){
+
+    setLoginError('');
+
+    const key =
+      $('keyInput')
+        .value
+        .trim();
+
+    if(key){
+
+      SUPABASE_KEY =
+        key;
+
+      localStorage.setItem(
+        'cr_supabase_publishable_key',
+        key
+      );
+
+    }
+
+    if(!SUPABASE_KEY){
+
+      setLoginError(
+        'Enter your Supabase publishable/anon key.'
+      );
+
+      return;
+
+    }
+
+    const email =
+      $('emailInput')
+        .value
+        .trim();
+
+    const password =
+      $('passwordInput')
+        .value;
+
+    if(!email || !password){
+
+      setLoginError(
+        'Enter your email and password.'
+      );
+
+      return;
+
+    }
+
+    if(!supabaseClient){
+
+      createSupabase();
+
+    }
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .auth
+        .signInWithPassword({
+          email,
+          password
+        });
+
+    if(error){
+
+      setLoginError(
+        error.message
+      );
+
+      return;
+
+    }
+
+    await authorize(
+      data.user
+    );
+
+  };
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+$('logoutBtn').onclick =
+  async function(){
+
+    if(
+      supabaseClient
+    ){
+
+      await supabaseClient
+        .auth
+        .signOut();
+
+    }
+
+    location.reload();
+
+  };
+
+
+/* =========================================================
+   CONNECTION
+========================================================= */
+
+function setConnection(
+  connected
+){
+
+  const dot =
+    $('connectionDot');
+
+  const text =
+    $('connectionText');
+
+  if(connected){
+
+    dot.classList.remove(
+      'offline'
+    );
+
+    text.textContent =
+      'Supabase connected';
+
+  }else{
+
+    dot.classList.add(
+      'offline'
+    );
+
+    text.textContent =
+      'Supabase disconnected';
+
+  }
+
 }
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+async function showView(
+  view
+){
+
+  document
+    .querySelectorAll(
+      '.view'
+    )
+    .forEach(
+      element =>
+        element.classList.remove(
+          'active'
+        )
+    );
+
+  document
+    .querySelectorAll(
+      '.nav-button'
+    )
+    .forEach(
+      element =>
+        element.classList.remove(
+          'active'
+        )
+    );
+
+  const section =
+    $('view-' + view);
+
+  if(section){
+
+    section.classList.add(
+      'active'
+    );
+
+  }
+
+  const button =
+    document.querySelector(
+      `[data-view="${view}"]`
+    );
+
+  if(button){
+
+    button.classList.add(
+      'active'
+    );
+
+  }
+
+
+  if(view === 'dashboard')
+    await loadDashboard();
+
+  if(view === 'content')
+    await loadContent();
+
+  if(view === 'members')
+    await loadMembers();
+
+  if(view === 'schedule')
+    await loadSchedule();
+
+  if(view === 'analytics')
+    await loadAnalytics();
+
+  if(view === 'donations')
+    await loadDonations();
+
+  if(view === 'admins')
+    await loadAdmins();
+
+  if(view === 'audit')
+    await loadAudit();
+
+}
+
+
+document
+  .querySelectorAll(
+    '.nav-button'
+  )
+  .forEach(
+    button => {
+
+      button.onclick =
+        () =>
+          showView(
+            button.dataset.view
+          );
+
+    }
+  );
+
+
+/* =========================================================
+   SAFE QUERY
+========================================================= */
+
+async function safeQuery(
+  queryFunction,
+  fallback=[]
+){
+
+  try{
+
+    const result =
+      await queryFunction();
+
+    if(result.error){
+
+      throw result.error;
+
+    }
+
+    return result.data ||
+      fallback;
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message ||
+      'Supabase query failed.'
+    );
+
+    return fallback;
+
+  }
+
+}
+
+
+/* =========================================================
+   COUNT
+========================================================= */
+
+async function tableCount(
+  table,
+  filter
+){
+
+  try{
+
+    let query =
+      supabaseClient
+        .from(table)
+        .select(
+          '*',
+          {
+            count:'exact',
+            head:true
+          }
+        );
+
+    if(filter){
+
+      query =
+        filter(query);
+
+    }
+
+    const {
+      count,
+      error
+    } =
+      await query;
+
+    if(error){
+
+      throw error;
+
+    }
+
+    return count || 0;
+
+  }catch(error){
+
+    console.error(error);
+
+    return 0;
+
+  }
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
 async function loadDashboard(){
-  const [members,content,memberRowsDash,audit] = await Promise.all([
-    count('cr_members',q=>q.eq('is_active',true)),
-    count('cr_content',q=>q.eq('status','published')),
-    safeQuery(()=>supabase.from('cr_members').select('display_name,username,email,points,joined_at').order('joined_at',{ascending:false}).limit(6)),
-    safeQuery(()=>supabase.from('cr_admin_audit_log').select('action,target_table,created_at').order('created_at',{ascending:false}).limit(6))
-  ]);
-  $('statMembers').textContent=fmtNum(members);
-  $('statMembersMeta').textContent='Active members';
-  $('statContent').textContent=fmtNum(content);
-  const totals=await safeQuery(()=>supabase.from('cr_members').select('watch_seconds,lifetime_points').limit(10000));
-  const watch=totals.reduce((a,x)=>a+Number(x.watch_seconds||0),0);
-  const pts=totals.reduce((a,x)=>a+Number(x.lifetime_points||0),0);
-  $('statWatch').textContent=fmtHours(watch);
-  $('statPoints').textContent=fmtNum(pts);
-  $('recentMembers').innerHTML=memberRowsDash.length?memberRowsDash.map(x=>`<div class="activity-item"><div class="activity-icon">♙</div><div><div class="activity-text">${esc(x.display_name||x.username||x.email||'Member')}</div><div class="activity-time">${fmtDate(x.joined_at)} · ${fmtNum(x.points)} pts</div></div></div>`).join(''):'<div class="empty">No members found.</div>';
-  $('recentAudit').innerHTML=audit.length?audit.map(x=>`<div class="activity-item"><div class="activity-icon">⌁</div><div><div class="activity-text">${esc(x.action)}</div><div class="activity-time">${esc(x.target_table||'—')} · ${fmtDate(x.created_at)}</div></div></div>`).join(''):'<div class="empty">No audit activity found.</div>';
+
+  if(!supabaseClient)
+    return;
+
+
+  const [
+    activeMembers,
+    publishedContent,
+    recentMembers,
+    recentAudit
+  ] =
+    await Promise.all([
+
+      tableCount(
+        'cr_members',
+        query =>
+          query.eq(
+            'is_active',
+            true
+          )
+      ),
+
+      tableCount(
+        'cr_content',
+        query =>
+          query.eq(
+            'status',
+            'published'
+          )
+      ),
+
+      safeQuery(
+        () =>
+          supabaseClient
+            .from('cr_members')
+            .select(
+              'display_name,username,email,points,joined_at'
+            )
+            .order(
+              'joined_at',
+              {
+                ascending:false
+              }
+            )
+            .limit(6)
+      ),
+
+      safeQuery(
+        () =>
+          supabaseClient
+            .from('cr_admin_audit_log')
+            .select(
+              'action,target_table,created_at'
+            )
+            .order(
+              'created_at',
+              {
+                ascending:false
+              }
+            )
+            .limit(6)
+      )
+
+    ]);
+
+
+  $('statMembers')
+    .textContent =
+    fmtNum(
+      activeMembers
+    );
+
+  $('statMembersMeta')
+    .textContent =
+    'Active members';
+
+
+  $('statContent')
+    .textContent =
+    fmtNum(
+      publishedContent
+    );
+
+
+  const totals =
+    await safeQuery(
+      () =>
+        supabaseClient
+          .from('cr_members')
+          .select(
+            'watch_seconds,lifetime_points'
+          )
+          .limit(10000)
+    );
+
+
+  const watchSeconds =
+    totals.reduce(
+      (total,row) =>
+        total +
+        Number(
+          row.watch_seconds || 0
+        ),
+      0
+    );
+
+
+  const lifetimePoints =
+    totals.reduce(
+      (total,row) =>
+        total +
+        Number(
+          row.lifetime_points || 0
+        ),
+      0
+    );
+
+
+  $('statWatch')
+    .textContent =
+    fmtHours(
+      watchSeconds
+    );
+
+
+  $('statPoints')
+    .textContent =
+    fmtNum(
+      lifetimePoints
+    );
+
+
+  if(
+    recentMembers.length
+  ){
+
+    $('recentMembers')
+      .innerHTML =
+      recentMembers
+        .map(
+          member => `
+            <div class="activity-item">
+
+              <div class="activity-icon">
+                ♙
+              </div>
+
+              <div>
+
+                <div class="activity-text">
+                  ${esc(
+                    member.display_name ||
+                    member.username ||
+                    member.email ||
+                    'Member'
+                  )}
+                </div>
+
+                <div class="activity-time">
+                  ${fmtDate(member.joined_at)}
+                  ·
+                  ${fmtNum(member.points)}
+                  pts
+                </div>
+
+              </div>
+
+            </div>
+          `
+        )
+        .join('');
+
+  }else{
+
+    $('recentMembers')
+      .innerHTML =
+      `
+        <div class="empty">
+          No members found.
+        </div>
+      `;
+
+  }
+
+
+  if(
+    recentAudit.length
+  ){
+
+    $('recentAudit')
+      .innerHTML =
+      recentAudit
+        .map(
+          row => `
+            <div class="activity-item">
+
+              <div class="activity-icon">
+                ⌁
+              </div>
+
+              <div>
+
+                <div class="activity-text">
+                  ${esc(
+                    row.action
+                  )}
+                </div>
+
+                <div class="activity-time">
+                  ${esc(
+                    row.target_table ||
+                    '—'
+                  )}
+                  ·
+                  ${fmtDate(
+                    row.created_at
+                  )}
+                </div>
+
+              </div>
+
+            </div>
+          `
+        )
+        .join('');
+
+  }else{
+
+    $('recentAudit')
+      .innerHTML =
+      `
+        <div class="empty">
+          No audit activity found.
+        </div>
+      `;
+
+  }
+
 }
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
 
 async function loadContent(){
-  contentRows=await safeQuery(()=>supabase.from('cr_content').select('id,title,content_type,status,published_at,updated_at').order('updated_at',{ascending:false}).limit(500));
-  renderContent(contentRows);
+
+  contentRows =
+    await safeQuery(
+      () =>
+        supabaseClient
+          .from('cr_content')
+          .select(
+            'id,title,content_type,status,published_at,updated_at'
+          )
+          .order(
+            'updated_at',
+            {
+              ascending:false
+            }
+          )
+          .limit(500)
+    );
+
+  renderContent(
+    contentRows
+  );
+
 }
-function renderContent(rows){$('contentTable').innerHTML=rows.length?rows.map(x=>`<tr><td><b>${esc(x.title)}</b></td><td>${esc(x.content_type)}</td><td><span class="pill ${x.status==='published'?'good':x.status==='draft'?'warn':'bad'}">${esc(x.status)}</span></td><td>${fmtDate(x.published_at)}</td><td>${fmtDate(x.updated_at)}</td></tr>`).join(''):'<tr><td colspan="5"><div class="empty">No content visible to this admin client. Check RLS/Data API exposure.</div></td></tr>'}
-function filterContent(){const s=$('contentSearch').value.toLowerCase();renderContent(contentRows.filter(x=>(x.title||'').toLowerCase().includes(s)||(x.content_type||'').toLowerCase().includes(s)))}
+
+
+function renderContent(
+  rows
+){
+
+  if(!rows.length){
+
+    $('contentTable')
+      .innerHTML =
+      `
+        <tr>
+          <td colspan="5">
+            <div class="empty">
+              No content visible.
+              Check Supabase RLS/Data API access.
+            </div>
+          </td>
+        </tr>
+      `;
+
+    return;
+
+  }
+
+
+  $('contentTable')
+    .innerHTML =
+    rows
+      .map(
+        row => {
+
+          let statusClass =
+            row.status === 'published'
+              ? 'good'
+              : row.status === 'draft'
+                ? 'warn'
+                : 'bad';
+
+          return `
+            <tr>
+
+              <td>
+                <b>
+                  ${esc(row.title)}
+                </b>
+              </td>
+
+              <td>
+                ${esc(
+                  row.content_type
+                )}
+              </td>
+
+              <td>
+                <span
+                  class="pill ${statusClass}"
+                >
+                  ${esc(
+                    row.status
+                  )}
+                </span>
+              </td>
+
+              <td>
+                ${fmtDate(
+                  row.published_at
+                )}
+              </td>
+
+              <td>
+                ${fmtDate(
+                  row.updated_at
+                )}
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join('');
+
+}
+
+
+$('contentSearch')
+  .addEventListener(
+    'input',
+    function(){
+
+      const search =
+        this.value
+          .toLowerCase();
+
+      renderContent(
+        contentRows.filter(
+          row =>
+            (
+              row.title || ''
+            )
+              .toLowerCase()
+              .includes(search)
+            ||
+            (
+              row.content_type || ''
+            )
+              .toLowerCase()
+              .includes(search)
+        )
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   MEMBERS
+========================================================= */
 
 async function loadMembers(){
-  memberRows=await safeQuery(()=>supabase.from('cr_members').select('display_name,username,email,membership_tier,membership_status,points,lifetime_points,watch_seconds,last_seen_at').order('last_seen_at',{ascending:false}).limit(1000));
-  renderMembers(memberRows);
+
+  memberRows =
+    await safeQuery(
+      () =>
+        supabaseClient
+          .from('cr_members')
+          .select(
+            `
+              display_name,
+              username,
+              email,
+              membership_tier,
+              membership_status,
+              points,
+              lifetime_points,
+              watch_seconds,
+              last_seen_at
+            `
+          )
+          .order(
+            'last_seen_at',
+            {
+              ascending:false
+            }
+          )
+          .limit(1000)
+    );
+
+  renderMembers(
+    memberRows
+  );
+
 }
-function renderMembers(rows){$('membersTable').innerHTML=rows.length?rows.map(x=>`<tr><td><b>${esc(x.display_name||x.username||'Member')}</b><br><small style="color:#778195">${esc(x.email||'')}</small></td><td>${esc(x.membership_tier)}</td><td><span class="pill ${x.membership_status==='active'?'good':'warn'}">${esc(x.membership_status)}</span></td><td>${fmtNum(x.lifetime_points??x.points)}</td><td>${fmtHours(x.watch_seconds)} h</td><td>${fmtDate(x.last_seen_at)}</td></tr>`).join(''):'<tr><td colspan="6"><div class="empty">No members found.</div></td></tr>'}
-function filterMembers(){const s=$('memberSearch').value.toLowerCase();renderMembers(memberRows.filter(x=>[x.display_name,x.username,x.email].some(v=>(v||'').toLowerCase().includes(s))))}
+
+
+function renderMembers(
+  rows
+){
+
+  if(!rows.length){
+
+    $('membersTable')
+      .innerHTML =
+      `
+        <tr>
+          <td colspan="6">
+            <div class="empty">
+              No members found.
+            </div>
+          </td>
+        </tr>
+      `;
+
+    return;
+
+  }
+
+
+  $('membersTable')
+    .innerHTML =
+    rows
+      .map(
+        member => {
+
+          const statusClass =
+            member.membership_status ===
+            'active'
+              ? 'good'
+              : 'warn';
+
+          return `
+            <tr>
+
+              <td>
+
+                <b>
+                  ${esc(
+                    member.display_name ||
+                    member.username ||
+                    'Member'
+                  )}
+                </b>
+
+                <br>
+
+                <small
+                  style="color:#778195"
+                >
+                  ${esc(
+                    member.email ||
+                    ''
+                  )}
+                </small>
+
+              </td>
+
+              <td>
+                ${esc(
+                  member.membership_tier
+                )}
+              </td>
+
+              <td>
+
+                <span
+                  class="pill ${statusClass}"
+                >
+                  ${esc(
+                    member.membership_status
+                  )}
+                </span>
+
+              </td>
+
+              <td>
+                ${fmtNum(
+                  member.lifetime_points ??
+                  member.points
+                )}
+              </td>
+
+              <td>
+                ${fmtHours(
+                  member.watch_seconds
+                )}
+                h
+              </td>
+
+              <td>
+                ${fmtDate(
+                  member.last_seen_at
+                )}
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join('');
+
+}
+
+
+$('memberSearch')
+  .addEventListener(
+    'input',
+    function(){
+
+      const search =
+        this.value
+          .toLowerCase();
+
+      renderMembers(
+        memberRows.filter(
+          member =>
+            [
+              member.display_name,
+              member.username,
+              member.email
+            ].some(
+              value =>
+                (
+                  value || ''
+                )
+                  .toLowerCase()
+                  .includes(
+                    search
+                  )
+            )
+        )
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   SCHEDULE
+========================================================= */
 
 async function loadSchedule(){
-  const rows=await safeQuery(()=>supabase.from('cr_schedule').select('title,content_type,start_at,end_at,is_live,is_published').order('start_at',{ascending:true}).limit(300));
-  $('scheduleTable').innerHTML=rows.length?rows.map(x=>`<tr><td><b>${esc(x.title)}</b></td><td>${esc(x.content_type)}</td><td>${fmtDate(x.start_at)}</td><td>${fmtDate(x.end_at)}</td><td>${x.is_live?'<span class="pill good">LIVE</span>':'—'}</td><td>${x.is_published?'<span class="pill good">YES</span>':'<span class="pill warn">NO</span>'}</td></tr>`).join(''):'<tr><td colspan="6"><div class="empty">No schedule rows visible.</div></td></tr>';
+
+  const rows =
+    await safeQuery(
+      () =>
+        supabaseClient
+          .from('cr_schedule')
+          .select(
+            `
+              title,
+              content_type,
+              start_at,
+              end_at,
+              is_live,
+              is_published
+            `
+          )
+          .order(
+            'start_at',
+            {
+              ascending:true
+            }
+          )
+          .limit(300)
+    );
+
+
+  $('scheduleTable')
+    .innerHTML =
+    rows.length
+      ? rows.map(
+          row => `
+            <tr>
+
+              <td>
+                <b>
+                  ${esc(row.title)}
+                </b>
+              </td>
+
+              <td>
+                ${esc(
+                  row.content_type
+                )}
+              </td>
+
+              <td>
+                ${fmtDate(
+                  row.start_at
+                )}
+              </td>
+
+              <td>
+                ${fmtDate(
+                  row.end_at
+                )}
+              </td>
+
+              <td>
+
+                ${
+                  row.is_live
+                    ? `
+                      <span class="pill good">
+                        LIVE
+                      </span>
+                    `
+                    : '—'
+                }
+
+              </td>
+
+              <td>
+
+                ${
+                  row.is_published
+                    ? `
+                      <span class="pill good">
+                        YES
+                      </span>
+                    `
+                    : `
+                      <span class="pill warn">
+                        NO
+                      </span>
+                    `
+                }
+
+              </td>
+
+            </tr>
+          `
+        ).join('')
+      : `
+        <tr>
+          <td colspan="6">
+            <div class="empty">
+              No schedule rows visible.
+            </div>
+          </td>
+        </tr>
+      `;
+
 }
+
+
+/* =========================================================
+   ANALYTICS
+========================================================= */
 
 async function loadAnalytics(){
-  const rows=await safeQuery(()=>supabase.from('cr_analytics_events').select('event_name,page_path,session_id,created_at').order('created_at',{ascending:false}).limit(500));
-  $('analyticsTotal').textContent=fmtNum(rows.length);
-  $('analyticsWatch').textContent=fmtNum(rows.filter(x=>(x.event_name||'').toLowerCase().includes('watch')).length);
-  $('analyticsPage').textContent=fmtNum(rows.filter(x=>(x.event_name||'').toLowerCase().includes('page')).length);
-  $('analyticsSessions').textContent=fmtNum(new Set(rows.map(x=>x.session_id).filter(Boolean)).size);
-  $('analyticsTable').innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.event_name)}</td><td>${esc(x.page_path||'—')}</td><td>${esc(x.session_id||'—')}</td><td>${fmtDate(x.created_at)}</td></tr>`).join(''):'<tr><td colspan="4"><div class="empty">No analytics events visible.</div></td></tr>';
+
+  const rows =
+    await safeQuery(
+      () =>
+        supabaseClient
+          .from('cr_analytics_events')
+          .select(
+            `
+              event_name,
+              page_path,
+              session_id,
+              created_at
+            `
+          )
+          .order(
+            'created_at',
+            {
+              ascending:false
+            }
+          )
+          .limit(500)
+    );
+
+
+  $('analyticsTotal')
+    .textContent =
+    fmtNum(
+      rows.length
+    );
+
+
+  $('analyticsWatch')
+    .textContent =
+    fmtNum(
+      rows.filter(
+        row =>
+          (
+            row.event_name ||
+            ''
+          )
+            .toLowerCase()
+            .includes('watch')
+      ).length
+    );
+
+
+  $('analyticsPage')
+    .textContent =
+    fmtNum(
+      rows.filter(
+        row =>
+          (
+            row.event_name ||
+            ''
+          )
+            .toLowerCase()
+            .includes('page')
+      ).length
+    );
+
+
+  $('analyticsSessions')
+    .textContent =
+    fmtNum(
+      new Set(
+        rows
+          .map(
+            row =>
+              row.session_id
+          )
+          .filter(Boolean)
+      ).size
+    );
+
+
+  $('analyticsTable')
+    .innerHTML =
+    rows.length
+      ? rows.map(
+          row => `
+            <tr>
+
+              <td>
+                ${esc(
+                  row.event_name
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  row.page_path ||
+                  '—'
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  row.session_id ||
+                  '—'
+                )}
+              </td>
+
+              <td>
+                ${fmtDate(
+                  row.created_at
+                )}
+              </td>
+
+            </tr>
+          `
+        ).join('')
+      : `
+        <tr>
+          <td colspan="4">
+            <div class="empty">
+              No analytics events visible.
+            </div>
+          </td>
+        </tr>
+      `;
+
 }
+
+
+/* =========================================================
+   DONATIONS
+========================================================= */
 
 async function loadDonations(){
-  const [rows,camps]=await Promise.all([
-    safeQuery(()=>supabase.from('donations').select('*').order('created_at',{ascending:false}).limit(100)),
-    count('cr_donation_campaigns')
-  ]);
-  $('donationCount').textContent=fmtNum(rows.length);
-  $('campaignCount').textContent=fmtNum(camps);
-  $('donationTable').innerHTML=rows.length?rows.map(x=>{
-    const amount=x.amount??x.total??x.donation_amount??0;
-    return `<tr><td>${fmtDate(x.created_at)}</td><td>$${Number(amount||0).toFixed(2)}</td><td>${esc(x.status||'—')}</td><td>${esc(x.campaign_id||x.campaign||'—')}</td></tr>`
-  }).join(''):'<tr><td colspan="4"><div class="empty">No donation rows visible or the table uses different columns.</div></td></tr>';
+
+  const [
+    rows,
+    campaigns
+  ] =
+    await Promise.all([
+
+      safeQuery(
+        () =>
+          supabaseClient
+            .from('donations')
+            .select('*')
+            .order(
+              'created_at',
+              {
+                ascending:false
+              }
+            )
+            .limit(100)
+      ),
+
+      tableCount(
+        'cr_donation_campaigns'
+      )
+
+    ]);
+
+
+  $('donationCount')
+    .textContent =
+    fmtNum(
+      rows.length
+    );
+
+
+  $('campaignCount')
+    .textContent =
+    fmtNum(
+      campaigns
+    );
+
+
+  if(!rows.length){
+
+    $('donationTable')
+      .innerHTML =
+      `
+        <tr>
+          <td colspan="4">
+            <div class="empty">
+              No donation rows visible.
+            </div>
+          </td>
+        </tr>
+      `;
+
+    return;
+
+  }
+
+
+  $('donationTable')
+    .innerHTML =
+    rows
+      .map(
+        row => {
+
+          const amount =
+            row.amount ??
+            row.total ??
+            row.donation_amount ??
+            0;
+
+          return `
+            <tr>
+
+              <td>
+                ${fmtDate(
+                  row.created_at
+                )}
+              </td>
+
+              <td>
+                $${Number(
+                  amount || 0
+                ).toFixed(2)}
+              </td>
+
+              <td>
+                ${esc(
+                  row.status ||
+                  '—'
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  row.campaign_id ||
+                  row.campaign ||
+                  '—'
+                )}
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join('');
+
 }
 
+
+/* =========================================================
+   ADMINS
+========================================================= */
+
 async function loadAdmins(){
-  const rows=await safeQuery(()=>supabase.from('cr_admins').select('display_name,role,is_active,created_at,updated_at').order('created_at',{ascending:true}));
-  $('adminsTable').innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.display_name||'—')}</td><td>${esc(x.role)}</td><td>${x.is_active?'<span class="pill good">ACTIVE</span>':'<span class="pill bad">INACTIVE</span>'}</td><td>${fmtDate(x.created_at)}</td><td>${fmtDate(x.updated_at)}</td></tr>`).join(''):'<tr><td colspan="5"><div class="empty">No admin rows visible.</div></td></tr>';
+
+  const rows =
+    await safeQuery(
+      () =>
+        supabaseClient
+          .from('cr_admins')
+          .select(
+            `
+              display_name,
+              role,
+              is_active,
+              created_at,
+              updated_at
+            `
+          )
+          .order(
+            'created_at',
+            {
+              ascending:true
+            }
+          )
+    );
+
+
+  $('adminsTable')
+    .innerHTML =
+    rows.length
+      ? rows.map(
+          row => `
+            <tr>
+
+              <td>
+                ${esc(
+                  row.display_name ||
+                  '—'
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  row.role
+                )}
+              </td>
+
+              <td>
+
+                ${
+                  row.is_active
+                    ? `
+                      <span class="pill good">
+                        ACTIVE
+                      </span>
+                    `
+                    : `
+                      <span class="pill bad">
+                        INACTIVE
+                      </span>
+                    `
+                }
+
+              </td>
+
+              <td>
+                ${fmtDate(
+                  row.created_at
+                )}
+              </td>
+
+              <td>
+                ${fmtDate(
+                  row.updated_at
+                )}
+              </td>
+
+            </tr>
+          `
+        ).join('')
+      : `
+        <tr>
+          <td colspan="5">
+            <div class="empty">
+              No administrator rows visible.
+            </div>
+          </td>
+        </tr>
+      `;
+
 }
+
+
+/* =========================================================
+   AUDIT LOG
+========================================================= */
+
 async function loadAudit(){
-  const rows=await safeQuery(()=>supabase.from('cr_admin_audit_log').select('action,target_table,target_id,created_at').order('created_at',{ascending:false}).limit(250));
-  $('auditTable').innerHTML=rows.length?rows.map(x=>`<tr><td><b>${esc(x.action)}</b></td><td>${esc(x.target_table||'—')}</td><td>${esc(x.target_id||'—')}</td><td>${fmtDate(x.created_at)}</td></tr>`).join(''):'<tr><td colspan="4"><div class="empty">No audit rows visible.</div></td></tr>';
+
+  const rows =
+    await safeQuery(
+      () =>
+        supabaseClient
+          .from('cr_admin_audit_log')
+          .select(
+            `
+              action,
+              target_table,
+              target_id,
+              created_at
+            `
+          )
+          .order(
+            'created_at',
+            {
+              ascending:false
+            }
+          )
+          .limit(250)
+    );
+
+
+  $('auditTable')
+    .innerHTML =
+    rows.length
+      ? rows.map(
+          row => `
+            <tr>
+
+              <td>
+                <b>
+                  ${esc(
+                    row.action
+                  )}
+                </b>
+              </td>
+
+              <td>
+                ${esc(
+                  row.target_table ||
+                  '—'
+                )}
+              </td>
+
+              <td>
+                ${esc(
+                  row.target_id ||
+                  '—'
+                )}
+              </td>
+
+              <td>
+                ${fmtDate(
+                  row.created_at
+                )}
+              </td>
+
+            </tr>
+          `
+        ).join('')
+      : `
+        <tr>
+          <td colspan="4">
+            <div class="empty">
+              No audit rows visible.
+            </div>
+          </td>
+        </tr>
+      `;
+
 }
-function saveKey(){const k=$('settingsKey').value.trim();if(!k)return toast('Enter a client key first');localStorage.setItem('cr_supabase_publishable_key',k);SUPABASE_KEY=k;toast('Client key saved locally. Reload to use it.')}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function saveKey(){
+
+  const key =
+    $('settingsKey')
+      .value
+      .trim();
+
+  if(!key){
+
+    toast(
+      'Enter a client key first.'
+    );
+
+    return;
+
+  }
+
+  localStorage.setItem(
+    'cr_supabase_publishable_key',
+    key
+  );
+
+  SUPABASE_KEY =
+    key;
+
+  toast(
+    'Supabase client key saved locally.'
+  );
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+if(
+  SUPABASE_KEY
+){
+
+  createSupabase();
+
+  supabaseClient
+    .auth
+    .onAuthStateChange(
+      async (
+        event,
+        session
+      ) => {
+
+        if(
+          event ===
+          'SIGNED_OUT'
+        ){
+
+          location.reload();
+
+        }
+
+        if(
+          session &&
+          !currentUser
+        ){
+
+          await authorize(
+            session.user
+          );
+
+        }
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
 init();
+
 </script>
+
 </body>
 </html>
-'''
-path = Path("/mnt/data/crowrules-entertainment-admin.html")
-path.write_text(html, encoding="utf-8")
-print(path)
