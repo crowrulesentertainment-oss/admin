@@ -4,369 +4,6213 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#05060a">
-<meta name="description" content="CrowRules Entertainment Admin Dashboard v2.0">
-<title>CrowRules Admin Dashboard v2.0</title>
+<meta name="description" content="CrowRules Entertainment Admin Control Center">
+<title>CrowRules Entertainment — Admin Control Center</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{--bg:#05060a;--panel:#0b0e15;--panel2:#101522;--line:#252b3a;--text:#f6f8ff;--muted:#94a0b8;--cyan:#00e5ff;--purple:#9b5cff;--pink:#ff3cac;--green:#42e596;--red:#ff5d73;--yellow:#ffd166}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 10% 0,#201338 0,transparent 30%),radial-gradient(circle at 90% 20%,#06242c 0,transparent 28%),var(--bg);color:var(--text);font-family:Montserrat,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
-.top{height:64px;position:sticky;top:0;z-index:50;background:#060810eF;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.topin{height:100%;max-width:1800px;margin:auto;padding:0 18px;display:flex;align-items:center;gap:13px}.brand{font:800 18px Orbitron;letter-spacing:1px}.brand b{color:var(--cyan)}.tag{font-size:9px;font-weight:800;letter-spacing:1px;color:#ff9ad3;border:1px solid #ff3cac44;background:#ff3cac0e;border-radius:99px;padding:5px 8px}.who{margin-left:auto;color:var(--muted);font-size:11px}.signout{margin-left:8px}
-.layout{max-width:1800px;margin:auto;display:grid;grid-template-columns:255px 1fr;min-height:calc(100vh - 64px)}aside{position:sticky;top:64px;height:calc(100vh - 64px);overflow:auto;padding:15px;border-right:1px solid var(--line);background:#07091088}.navtitle{margin:16px 9px 7px;font:700 9px Orbitron;color:#5f6b83;letter-spacing:1.5px}.nav{width:100%;border:1px solid transparent;background:transparent;color:var(--muted);padding:10px 11px;border-radius:10px;text-align:left;margin:2px 0;font-weight:600;font-size:12px}.nav:hover,.nav.active{background:#ffffff08;color:#fff;border-color:#ffffff08}.nav.active{box-shadow:inset 2px 0 var(--cyan)}
-main{padding:22px}.page{display:none}.page.active{display:block}.head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.head h1,.head h2,.head h3{font-family:Orbitron;margin:0}.head h1{font-size:25px}.head h2{font-size:16px}.sub{color:var(--muted);font-size:11px;margin-top:5px}.grid{display:grid;gap:12px}.stats{grid-template-columns:repeat(6,minmax(130px,1fr))}.card{background:linear-gradient(180deg,#10141e,#0a0d13);border:1px solid var(--line);border-radius:15px;padding:15px;box-shadow:0 15px 45px #0003}.label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}.metric{font:700 25px Orbitron;margin-top:7px}.metric.small{font-size:18px}.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.btn{border:1px solid #ffffff16;background:#ffffff07;color:#fff;padding:9px 12px;border-radius:9px;font-weight:700;font-size:11px}.btn:hover{background:#ffffff10}.primary{border-color:#00e5ff55;background:#00e5ff12}.danger{border-color:#ff5d7355;background:#ff5d7310}.success{border-color:#42e59655;background:#42e59610}.warn{border-color:#ffd16655;background:#ffd16610}.field{width:100%;background:#070910;border:1px solid var(--line);border-radius:9px;color:#fff;padding:9px 10px;outline:none}.field:focus{border-color:#00e5ff66}.search{max-width:360px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:9px 10px;border-bottom:1px solid #ffffff0a;text-align:left;font-size:11px;vertical-align:middle}.table th{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;background:#0b0e15}.table tr:hover td{background:#ffffff03}.truncate{max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.actions{display:flex;gap:5px;flex-wrap:wrap}.badge{display:inline-block;border:1px solid #ffffff16;border-radius:999px;padding:4px 7px;font-size:9px;font-weight:800}.role-member{color:#c7cfdf}.role-supporter{color:#72e5ff}.role-creator{color:#c69cff}.role-moderator{color:#ff91cf}.role-producer{color:#ffd166}.role-staff{color:#66e8b1}.role-admin{color:#ff6f83}.role-owner{color:#fff;background:#9b5cff18;border-color:#9b5cff55}.rank{font:800 15px Orbitron}.rank1{color:#ffd166}.rank2{color:#c8d0dc}.rank3{color:#cd9a69}
-.progress{height:6px;background:#ffffff08;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink))}
-.membergrid{grid-template-columns:330px 1fr}.membercard{position:sticky;top:85px;height:max-content}.avatar{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#00e5ff33,#9b5cff44);border:1px solid #ffffff18;font:700 17px Orbitron}.memberhead{display:flex;gap:12px;align-items:center}.kvs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.kv{padding:9px;border:1px solid #ffffff0b;border-radius:9px;background:#ffffff03}.kv b{display:block;font-size:15px;margin-top:4px}.rolebox{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
-.modal{position:fixed;inset:0;z-index:100;background:#000c;display:none;place-items:center;padding:18px}.modal.open{display:grid}.modalbox{width:min(1000px,100%);max-height:94vh;overflow:auto;background:#0c1018;border:1px solid var(--line);border-radius:17px;padding:18px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.full{grid-column:1/-1}.help{color:var(--muted);font-size:10px;line-height:1.5}.json{min-height:170px;font-family:monospace;font-size:11px}.locked{max-width:700px;margin:80px auto;padding:35px;text-align:center;border:1px solid var(--line);border-radius:16px;background:#0b0e15}.toast{position:fixed;right:16px;bottom:16px;z-index:150;display:grid;gap:7px}.toast div{background:#10141d;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:11px;box-shadow:0 14px 45px #0009}.error{color:#ff9aaa}.good{color:#76f0ba}.empty{padding:25px;text-align:center;color:var(--muted);font-size:11px}
-@media(max-width:1250px){.stats{grid-template-columns:repeat(3,1fr)}.two,.three{grid-template-columns:1fr}.membergrid{grid-template-columns:1fr}.membercard{position:static}}
-@media(max-width:850px){.layout{grid-template-columns:1fr}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);display:flex;gap:5px;overflow:auto}.navtitle{display:none}.nav{min-width:max-content}.stats{grid-template-columns:repeat(2,1fr)}main{padding:13px}}
-@media(max-width:560px){.stats{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.head{align-items:flex-start;flex-direction:column}.who{display:none}}
+:root{
+  --bg:#05060a;
+  --bg2:#090b12;
+  --panel:#0c0f18;
+  --panel2:#111522;
+  --panel3:#151a29;
+  --border:rgba(255,255,255,.09);
+  --border2:rgba(255,255,255,.15);
+  --text:#f4f7ff;
+  --muted:#8e99ad;
+  --cyan:#00e5ff;
+  --purple:#8b5cf6;
+  --pink:#ff2bd6;
+  --green:#39ff88;
+  --yellow:#ffd84d;
+  --red:#ff496d;
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+  --radius:18px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(139,92,246,.12),transparent 30%),
+    radial-gradient(circle at 90% 10%,rgba(0,229,255,.08),transparent 28%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+}
+
+.login-card{
+  width:min(480px,100%);
+  background:rgba(12,15,24,.94);
+  border:1px solid var(--border2);
+  border-radius:24px;
+  padding:34px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(20px);
+}
+
+.logo{
+  font-family:Orbitron,sans-serif;
+  font-weight:900;
+  letter-spacing:2px;
+  font-size:24px;
+}
+
+.logo span{
+  color:var(--cyan);
+}
+
+.login-title{
+  margin:28px 0 8px;
+  font-family:Orbitron,sans-serif;
+  font-size:28px;
+}
+
+.login-sub{
+  color:var(--muted);
+  line-height:1.7;
+  margin-bottom:25px;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+#app{
+  display:none;
+  min-height:100vh;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:270px minmax(0,1fr);
+  min-height:100vh;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:auto;
+  padding:20px 15px;
+  background:rgba(7,9,15,.94);
+  border-right:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  z-index:20;
+}
+
+.brand{
+  padding:10px 12px 22px;
+}
+
+.brand-title{
+  font-family:Orbitron,sans-serif;
+  font-size:19px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.brand-title span{
+  color:var(--cyan);
+}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:5px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.nav-section{
+  margin:18px 8px 7px;
+  color:#68738a;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.nav-btn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:1px solid transparent;
+  background:transparent;
+  color:#aeb7c9;
+  padding:11px 12px;
+  border-radius:12px;
+  margin:3px 0;
+  text-align:left;
+  transition:.2s;
+}
+
+.nav-btn:hover{
+  background:rgba(255,255,255,.045);
+  color:white;
+}
+
+.nav-btn.active{
+  color:white;
+  border-color:rgba(0,229,255,.18);
+  background:linear-gradient(90deg,rgba(0,229,255,.10),rgba(139,92,246,.09));
+  box-shadow:inset 3px 0 var(--cyan);
+}
+
+.nav-icon{
+  width:25px;
+  text-align:center;
+}
+
+.sidebar-bottom{
+  margin-top:25px;
+  border-top:1px solid var(--border);
+  padding-top:15px;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+  min-width:0;
+  padding:22px;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:22px;
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.mobile-menu{
+  display:none;
+}
+
+.page-title{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+  font-weight:800;
+}
+
+.page-subtitle{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+.admin-pill{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:rgba(255,255,255,.035);
+  font-size:12px;
+}
+
+.status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section{
+  display:none;
+}
+
+.section.active{
+  display:block;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.card{
+  background:linear-gradient(145deg,rgba(17,21,34,.96),rgba(9,11,18,.96));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.card-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
+}
+
+.card-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  font-weight:800;
+}
+
+.card-sub{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.stat{
+  padding:19px;
+  min-height:130px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.3px;
+  font-weight:800;
+}
+
+.stat-value{
+  margin-top:12px;
+  font-family:Orbitron,sans-serif;
+  font-size:28px;
+  font-weight:800;
+}
+
+.stat-meta{
+  color:#69758a;
+  font-size:10px;
+  margin-top:7px;
+}
+
+.stat.cyan .stat-value{
+  color:var(--cyan);
+}
+
+.stat.purple .stat-value{
+  color:var(--purple);
+}
+
+.stat.green .stat-value{
+  color:var(--green);
+}
+
+.stat.pink .stat-value{
+  color:var(--pink);
+}
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.two-col{
+  display:grid;
+  grid-template-columns:1.35fr .65fr;
+  gap:18px;
+}
+
+.three-col{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+  border:1px solid var(--border2);
+  background:#121625;
+  color:white;
+  border-radius:10px;
+  padding:9px 13px;
+  font-size:11px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  border-color:var(--cyan);
+}
+
+.btn.primary{
+  background:linear-gradient(135deg,#174b56,#30206a);
+  border-color:rgba(0,229,255,.35);
+}
+
+.btn.danger{
+  color:#fff;
+  border-color:rgba(255,73,109,.3);
+  background:rgba(255,73,109,.09);
+}
+
+.btn.success{
+  border-color:rgba(57,255,136,.3);
+  background:rgba(57,255,136,.08);
+}
+
+.btn.small{
+  padding:6px 9px;
+  font-size:10px;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  padding:15px;
+  border-bottom:1px solid var(--border);
+}
+
+.search{
+  flex:1;
+  min-width:220px;
+}
+
+.input,
+.select,
+.textarea{
+  width:100%;
+  background:#090c14;
+  color:white;
+  border:1px solid var(--border2);
+  border-radius:10px;
+  outline:none;
+  padding:10px 11px;
+  font-size:11px;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 3px rgba(0,229,255,.08);
+}
+
+.textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrap{
+  width:100%;
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:760px;
+}
+
+th{
+  color:#77849a;
+  font-size:9px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  text-align:left;
+  padding:11px 14px;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+
+td{
+  padding:12px 14px;
+  border-bottom:1px solid rgba(255,255,255,.045);
+  font-size:11px;
+  vertical-align:middle;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.018);
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.mono{
+  font-family:monospace;
+  font-size:10px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  background:rgba(255,255,255,.06);
+}
+
+.badge.owner{
+  color:#ffd84d;
+  border:1px solid rgba(255,216,77,.25);
+}
+
+.badge.admin{
+  color:#ff6fdc;
+  border:1px solid rgba(255,43,214,.25);
+}
+
+.badge.staff{
+  color:#00e5ff;
+  border:1px solid rgba(0,229,255,.25);
+}
+
+.badge.member{
+  color:#aeb7c9;
+}
+
+.badge.success{
+  color:var(--green);
+}
+
+.badge.warning{
+  color:var(--yellow);
+}
+
+.badge.danger{
+  color:var(--red);
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty{
+  padding:45px 20px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.empty strong{
+  display:block;
+  color:white;
+  margin-bottom:7px;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+  z-index:100;
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(900px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:#0b0e17;
+  border:1px solid var(--border2);
+  border-radius:20px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:17px 20px;
+  background:#0d1019;
+  border-bottom:1px solid var(--border);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.modal-foot{
+  position:sticky;
+  bottom:0;
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  padding:15px 20px;
+  background:#0d1019;
+  border-top:1px solid var(--border);
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  color:#8d99ad;
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+#toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:200;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.toast{
+  min-width:260px;
+  max-width:400px;
+  padding:13px 15px;
+  background:#111522;
+  border:1px solid var(--border2);
+  border-radius:12px;
+  box-shadow:var(--shadow);
+  font-size:11px;
+}
+
+.toast.success{
+  border-color:rgba(57,255,136,.35);
+}
+
+.toast.error{
+  border-color:rgba(255,73,109,.4);
+}
+
+.toast-title{
+  font-weight:800;
+  margin-bottom:3px;
+}
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+.activity-list{
+  padding:5px 20px 15px;
+}
+
+.activity{
+  display:flex;
+  gap:12px;
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,.045);
+}
+
+.activity-dot{
+  flex:0 0 8px;
+  width:8px;
+  height:8px;
+  margin-top:5px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:0 0 12px var(--cyan);
+}
+
+.activity-main{
+  min-width:0;
+}
+
+.activity-title{
+  font-size:11px;
+  font-weight:700;
+}
+
+.activity-meta{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:4px;
+}
+
+/* =========================================================
+   ROLE PANEL
+========================================================= */
+
+.role-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  padding:18px;
+}
+
+.role-card{
+  padding:15px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:rgba(255,255,255,.02);
+}
+
+.role-name{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  font-weight:800;
+}
+
+.role-count{
+  margin-top:9px;
+  font-size:22px;
+  font-family:Orbitron,sans-serif;
+}
+
+/* =========================================================
+   SYSTEM STATUS
+========================================================= */
+
+.system-list{
+  padding:10px 20px 20px;
+}
+
+.system-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.045);
+  font-size:11px;
+}
+
+.online{
+  color:var(--green);
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 15px;
+  border-top:1px solid var(--border);
+}
+
+.page-info{
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+  .stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .two-col,
+  .three-col{
+    grid-template-columns:1fr;
+  }
+
+  .role-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:800px){
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    position:fixed;
+    left:-290px;
+    width:270px;
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .main{
+    padding:15px;
+  }
+}
+
+@media(max-width:560px){
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .role-grid{
+    grid-template-columns:1fr;
+  }
+
+  .topbar{
+    align-items:flex-start;
+  }
+
+  .admin-pill{
+    display:none;
+  }
+}
 </style>
 </head>
+
 <body>
-<header class="top"><div class="topin">
-<div class="brand">CROW<b>RULES</b></div><span class="tag">ADMIN DASHBOARD v2.0</span><span id="who" class="who">Checking authentication…</span><button id="signout" class="btn signout" style="display:none" onclick="signOut()">Sign Out</button>
-</div></header>
+
+<!-- =======================================================
+     LOGIN
+======================================================= -->
+
+<div id="loginScreen">
+
+  <div class="login-card">
+
+    <div class="logo">
+      CROW<span>RULES</span>
+    </div>
+
+    <div class="login-title">
+      Admin Control Center
+    </div>
+
+    <div class="login-sub">
+      Secure administration for CrowRules Entertainment,
+      CrowRules TV, CrowSpace, creator applications,
+      content, members and engagement.
+    </div>
+
+    <button class="btn primary" id="loginBtn" style="width:100%">
+      Sign In With CrowRules Account
+    </button>
+
+    <div id="loginMessage"
+         class="muted"
+         style="margin-top:15px;font-size:11px">
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     APP
+======================================================= -->
+
+<div id="app">
 
 <div class="layout">
-<aside id="sidebar" style="display:none">
-<div class="navtitle">COMMAND</div>
-<button class="nav active" data-page="dashboard">▣ Dashboard</button>
-<button class="nav" data-page="members">♟ Members</button>
-<button class="nav" data-page="leaderboard">★ Leaderboard</button>
-<button class="nav" data-page="tables">▤ All Tables</button>
-<button class="nav" data-page="applications">✦ Applications</button>
-<button class="nav" data-page="audit">◈ Audit Log</button>
-<div class="navtitle">QUICK ACCESS</div>
-<div id="quick"></div>
+
+<!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+
+    <div class="brand-title">
+      CROW<span>RULES</span>
+    </div>
+
+    <div class="brand-sub">
+      Admin Control Center
+    </div>
+
+  </div>
+
+  <div class="nav-section">Command</div>
+
+  <button class="nav-btn active" data-section="dashboard">
+    <span class="nav-icon">◈</span>
+    Dashboard
+  </button>
+
+  <button class="nav-btn" data-section="members">
+    <span class="nav-icon">♟</span>
+    Members
+  </button>
+
+  <button class="nav-btn" data-section="leaderboard">
+    <span class="nav-icon">🏆</span>
+    Leaderboard
+  </button>
+
+  <div class="nav-section">Content</div>
+
+  <button class="nav-btn" data-section="content">
+    <span class="nav-icon">▣</span>
+    CrowRules Content
+  </button>
+
+  <button class="nav-btn" data-section="tacoma">
+    <span class="nav-icon">🎙</span>
+    Tacoma Nights
+  </button>
+
+  <button class="nav-btn" data-section="backdeck">
+    <span class="nav-icon">📺</span>
+    Back Deck Live
+  </button>
+
+  <button class="nav-btn" data-section="episodes">
+    <span class="nav-icon">▶</span>
+    Episodes
+  </button>
+
+  <div class="nav-section">Community</div>
+
+  <button class="nav-btn" data-section="suggestions">
+    <span class="nav-icon">💡</span>
+    Suggestions
+  </button>
+
+  <button class="nav-btn" data-section="chat">
+    <span class="nav-icon">💬</span>
+    Chat
+  </button>
+
+  <button class="nav-btn" data-section="crowspace">
+    <span class="nav-icon">🕊</span>
+    CrowSpace
+  </button>
+
+  <div class="nav-section">Creators</div>
+
+  <button class="nav-btn" data-section="applications">
+    <span class="nav-icon">🎤</span>
+    Applications
+  </button>
+
+  <div class="nav-section">Engagement</div>
+
+  <button class="nav-btn" data-section="watch">
+    <span class="nav-icon">⏱</span>
+    Watch History
+  </button>
+
+  <button class="nav-btn" data-section="events">
+    <span class="nav-icon">⚡</span>
+    Engagement Events
+  </button>
+
+  <button class="nav-btn" data-section="sessions">
+    <span class="nav-icon">◉</span>
+    Media Sessions
+  </button>
+
+  <div class="nav-section">Administration</div>
+
+  <button class="nav-btn" data-section="tables">
+    <span class="nav-icon">▤</span>
+    All Tables
+  </button>
+
+  <button class="nav-btn" data-section="audit">
+    <span class="nav-icon">⌁</span>
+    Audit Log
+  </button>
+
+  <button class="nav-btn" data-section="roles">
+    <span class="nav-icon">♛</span>
+    Roles
+  </button>
+
+  <div class="sidebar-bottom">
+
+    <button class="nav-btn" id="refreshBtn">
+      <span class="nav-icon">↻</span>
+      Refresh
+    </button>
+
+    <button class="nav-btn" id="logoutBtn">
+      <span class="nav-icon">⇥</span>
+      Sign Out
+    </button>
+
+  </div>
+
 </aside>
 
-<main>
-<div id="locked" class="locked">Checking administrator access…</div>
+<!-- =======================================================
+     MAIN
+======================================================= -->
 
-<section id="dashboard" class="page">
-<div class="head"><div><h1>Command Center</h1><div class="sub">CrowRules Entertainment — live Supabase administration.</div></div><div class="toolbar"><button class="btn primary" onclick="refreshDashboard()">↻ Refresh</button></div></div>
-<div class="grid stats">
-<div class="card"><div class="label">Members</div><div id="s_members" class="metric">—</div></div>
-<div class="card"><div class="label">Active Members</div><div id="s_active_members" class="metric">—</div></div>
-<div class="card"><div class="label">Content</div><div id="s_content" class="metric">—</div></div>
-<div class="card"><div class="label">Published / Live</div><div id="s_published_content" class="metric">—</div></div>
-<div class="card"><div class="label">CrowPoints</div><div id="s_watch_points" class="metric">—</div></div>
-<div class="card"><div class="label">Watch History</div><div id="s_watch_history" class="metric">—</div></div>
-<div class="card"><div class="label">Media Sessions</div><div id="s_media_sessions" class="metric">—</div></div>
-<div class="card"><div class="label">Engagement Events</div><div id="s_engagement_events" class="metric">—</div></div>
-<div class="card"><div class="label">Chat Messages</div><div id="s_chat_messages" class="metric">—</div></div>
-<div class="card"><div class="label">CrowSpace Posts</div><div id="s_posts" class="metric">—</div></div>
-<div class="card"><div class="label">Groups</div><div id="s_groups" class="metric">—</div></div>
-<div class="card"><div class="label">Suggestions</div><div id="s_suggestions" class="metric">—</div></div>
-<div class="card"><div class="label">Podcaster Apps</div><div id="s_podcaster_applications" class="metric">—</div></div>
-<div class="card"><div class="label">Sports Apps</div><div id="s_sports_applications" class="metric">—</div></div>
-<div class="card"><div class="label">Friendships</div><div id="s_friends" class="metric">—</div></div>
-<div class="card"><div class="label">Notifications</div><div id="s_notifications" class="metric">—</div></div>
-</div>
-<div class="grid two" style="margin-top:14px">
-<div class="card"><div class="head"><h2>Role Distribution</h2></div><div id="roleDist"></div></div>
-<div class="card"><div class="head"><h2>System Status</h2></div><div id="systemStatus" class="help">Loading…</div></div>
-</div>
+<main class="main">
+
+  <div class="topbar">
+
+    <div class="topbar-left">
+
+      <button class="btn mobile-menu" id="mobileMenu">
+        ☰
+      </button>
+
+      <div>
+
+        <h1 class="page-title" id="pageTitle">
+          Dashboard
+        </h1>
+
+        <div class="page-subtitle" id="pageSubtitle">
+          CrowRules Entertainment command center
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="admin-pill">
+      <span class="status-dot"></span>
+      <span id="adminName">Authenticated</span>
+      <span id="adminRole">ADMIN</span>
+    </div>
+
+  </div>
+
+<!-- =======================================================
+     DASHBOARD
+======================================================= -->
+
+<section class="section active" id="section-dashboard">
+
+  <div class="stats-grid">
+
+    <div class="card stat cyan">
+      <div class="stat-label">Members</div>
+      <div class="stat-value" id="statMembers">—</div>
+      <div class="stat-meta" id="statActiveMembers">— active</div>
+    </div>
+
+    <div class="card stat purple">
+      <div class="stat-label">Lifetime CrowPoints</div>
+      <div class="stat-value" id="statPoints">—</div>
+      <div class="stat-meta">Verified member totals</div>
+    </div>
+
+    <div class="card stat green">
+      <div class="stat-label">Watch Time</div>
+      <div class="stat-value" id="statWatch">—</div>
+      <div class="stat-meta">Verified playback hours</div>
+    </div>
+
+    <div class="card stat pink">
+      <div class="stat-label">Content</div>
+      <div class="stat-value" id="statContent">—</div>
+      <div class="stat-meta" id="statPublished">— published</div>
+    </div>
+
+  </div>
+
+  <div class="two-col">
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <div>
+          <div class="card-title">
+            Platform Activity
+          </div>
+          <div class="card-sub">
+            Current database activity
+          </div>
+        </div>
+
+        <button class="btn small" onclick="loadDashboard()">
+          Refresh
+        </button>
+
+      </div>
+
+      <div class="system-list">
+
+        <div class="system-row">
+          <span>Watch History Records</span>
+          <strong id="dashHistory">—</strong>
+        </div>
+
+        <div class="system-row">
+          <span>Engagement Events</span>
+          <strong id="dashEvents">—</strong>
+        </div>
+
+        <div class="system-row">
+          <span>Media Sessions</span>
+          <strong id="dashSessions">—</strong>
+        </div>
+
+        <div class="system-row">
+          <span>Suggestions</span>
+          <strong id="dashSuggestions">—</strong>
+        </div>
+
+        <div class="system-row">
+          <span>Creator Applications</span>
+          <strong id="dashApplications">—</strong>
+        </div>
+
+        <div class="system-row">
+          <span>CrowSpace Groups</span>
+          <strong id="dashGroups">—</strong>
+        </div>
+
+        <div class="system-row">
+          <span>CrowSpace Posts</span>
+          <strong id="dashPosts">—</strong>
+        </div>
+
+        <div class="system-row">
+          <span>Chat Messages</span>
+          <strong id="dashChat">—</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <div>
+          <div class="card-title">
+            System Status
+          </div>
+          <div class="card-sub">
+            Live connection status
+          </div>
+        </div>
+
+      </div>
+
+      <div class="system-list">
+
+        <div class="system-row">
+          <span>Supabase</span>
+          <strong class="online">CONNECTED</strong>
+        </div>
+
+        <div class="system-row">
+          <span>Authentication</span>
+          <strong class="online">ACTIVE</strong>
+        </div>
+
+        <div class="system-row">
+          <span>Admin RPC</span>
+          <strong class="online">READY</strong>
+        </div>
+
+        <div class="system-row">
+          <span>Engagement Sync</span>
+          <strong class="online">ACTIVE</strong>
+        </div>
+
+        <div class="system-row">
+          <span>Realtime</span>
+          <strong class="online">AVAILABLE</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top:18px">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Recent Administration Activity
+        </div>
+        <div class="card-sub">
+          Latest audit events
+        </div>
+      </div>
+
+      <button class="btn small"
+              onclick="showSection('audit')">
+        Open Audit Log
+      </button>
+
+    </div>
+
+    <div class="activity-list" id="dashboardActivity">
+      <div class="empty">Loading activity…</div>
+    </div>
+
+  </div>
+
 </section>
 
-<section id="members" class="page">
-<div class="head"><div><h1>Member Management</h1><div class="sub">Search members and manage profiles and roles.</div></div><input id="memberSearch" class="field search" placeholder="Search username, display name, email…" oninput="renderMembers()"></div>
-<div class="grid membergrid">
-<div id="memberInspector" class="card membercard"><div class="empty">Select a member to manage.</div></div>
-<div class="card"><div class="tablewrap"><table class="table"><thead><tr><th>Member</th><th>Role</th><th>Points</th><th>Watch</th><th>Status</th><th>Joined</th><th>Action</th></tr></thead><tbody id="membersBody"></tbody></table></div></div>
-</div>
+<!-- =======================================================
+     MEMBERS
+======================================================= -->
+
+<section class="section" id="section-members">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Member Management
+        </div>
+        <div class="card-sub">
+          Profiles, roles, CrowPoints and verified watch time
+        </div>
+      </div>
+
+      <button class="btn primary" onclick="newMember()">
+        + Add Member
+      </button>
+
+    </div>
+
+    <div class="toolbar">
+
+      <input
+        id="memberSearch"
+        class="input search"
+        placeholder="Search username, display name or email…"
+        oninput="debouncedLoadMembers()">
+
+      <button class="btn" onclick="loadMembers()">
+        Search
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Member</th>
+            <th>Role</th>
+            <th>Membership</th>
+            <th>CrowPoints</th>
+            <th>Watch Time</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="membersBody">
+          <tr>
+            <td colspan="7">
+              <div class="empty">Loading members…</div>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
 </section>
 
-<section id="leaderboard" class="page">
-<div class="head"><div><h1>Member Leaderboard</h1><div class="sub">Lifetime and monthly CrowPoints plus total watch time.</div></div><div class="toolbar"><select id="leaderLimit" class="field" style="width:auto" onchange="loadLeaderboard()"><option>25</option><option selected>50</option><option>100</option><option>250</option><option>500</option></select><button class="btn" onclick="loadLeaderboard()">↻ Refresh</button></div></div>
-<div class="card"><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Member</th><th>Role</th><th>Lifetime Points</th><th>Monthly Points</th><th>Watch Hours</th><th>Status</th><th></th></tr></thead><tbody id="leaderBody"></tbody></table></div></div>
+<!-- =======================================================
+     LEADERBOARD
+======================================================= -->
+
+<section class="section" id="section-leaderboard">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          CrowPoints Leaderboard
+        </div>
+        <div class="card-sub">
+          Calculated from verified engagement totals
+        </div>
+      </div>
+
+      <button class="btn" onclick="loadLeaderboard()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Rank</th>
+            <th>Member</th>
+            <th>Role</th>
+            <th>Lifetime Points</th>
+            <th>Monthly Points</th>
+            <th>Watch Time</th>
+            <th>Status</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="leaderboardBody">
+          <tr>
+            <td colspan="7">
+              <div class="empty">Loading leaderboard…</div>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
 </section>
 
-<section id="tables" class="page">
-<div class="head"><div><h1>Supabase Table Manager</h1><div class="sub">Generic add, edit and delete interface for public base tables.</div></div><div class="toolbar"><input id="tableSearch" class="field search" placeholder="Filter tables…" oninput="renderTableList()"><button class="btn" onclick="loadSchema()">Reload</button></div></div>
-<div class="grid" style="grid-template-columns:250px 1fr">
-<div class="card" style="max-height:76vh;overflow:auto"><div id="tableList"></div></div>
-<div class="card"><div class="head"><div><h2 id="tableTitle">Select a table</h2><div id="tableInfo" class="sub"></div></div><div class="toolbar"><button id="addRecord" class="btn primary" style="display:none" onclick="openEditor()">＋ Add</button><button id="reloadRows" class="btn" style="display:none" onclick="loadRows()">↻</button></div></div><div class="tablewrap"><table class="table"><thead id="genericHead"></thead><tbody id="genericBody"></tbody></table></div></div>
-</div>
+<!-- =======================================================
+     CONTENT
+======================================================= -->
+
+<section class="section" id="section-content">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          CrowRules Content
+        </div>
+        <div class="card-sub">
+          Canonical content catalog
+        </div>
+      </div>
+
+      <button class="btn primary"
+              onclick="openTableEditor('cr_content',null)">
+        + Add Content
+      </button>
+
+    </div>
+
+    <div class="toolbar">
+
+      <input
+        class="input search"
+        id="contentSearch"
+        placeholder="Search content…"
+        oninput="loadContent()">
+
+      <button class="btn" onclick="loadContent()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Canonical Key</th>
+            <th>Published</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="contentBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
 </section>
 
-<section id="applications" class="page">
-<div class="head"><div><h1>Creator Applications</h1><div class="sub">Review applications using the same secure admin layer.</div></div><button class="btn" onclick="loadApplications()">↻ Refresh</button></div>
-<div class="grid two"><div class="card"><div class="head"><h2>Podcasters</h2></div><div id="podApps"></div></div><div class="card"><div class="head"><h2>Sports Creators</h2></div><div id="sportApps"></div></div></div>
+<!-- =======================================================
+     TACOMA NIGHTS
+======================================================= -->
+
+<section class="section" id="section-tacoma">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Tacoma Nights
+        </div>
+        <div class="card-sub">
+          Full episode management
+        </div>
+      </div>
+
+      <button class="btn primary"
+              onclick="openTableEditor('tacoma_nights_episodes',null)">
+        + Add Episode
+      </button>
+
+    </div>
+
+    <div class="toolbar">
+
+      <input
+        class="input search"
+        id="tacomaSearch"
+        placeholder="Search Tacoma Nights episodes…"
+        oninput="loadTacoma()">
+
+      <button class="btn" onclick="loadTacoma()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Episode</th>
+            <th>Title</th>
+            <th>Season</th>
+            <th>Status</th>
+            <th>Duration</th>
+            <th>Published</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="tacomaBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
 </section>
 
-<section id="audit" class="page">
-<div class="head"><div><h1>Audit Log</h1><div class="sub">Administrative actions and database activity.</div></div><button class="btn" onclick="loadAudit()">↻ Refresh</button></div>
-<div class="card"><div class="tablewrap"><table class="table"><thead><tr><th>Time</th><th>Action</th><th>Resource</th><th>Target</th><th>Details</th></tr></thead><tbody id="auditBody"></tbody></table></div></div>
+<!-- =======================================================
+     BACK DECK
+======================================================= -->
+
+<section class="section" id="section-backdeck">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Back Deck Live
+        </div>
+        <div class="card-sub">
+          Live show episode management
+        </div>
+      </div>
+
+      <button class="btn primary"
+              onclick="openTableEditor('back_deck_episodes',null)">
+        + Add Episode
+      </button>
+
+    </div>
+
+    <div class="toolbar">
+
+      <input
+        class="input search"
+        id="backdeckSearch"
+        placeholder="Search Back Deck Live…"
+        oninput="loadBackDeck()">
+
+      <button class="btn" onclick="loadBackDeck()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Episode</th>
+            <th>Title</th>
+            <th>Season</th>
+            <th>Status</th>
+            <th>Runtime</th>
+            <th>Published</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="backdeckBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
 </section>
+
+<!-- =======================================================
+     EPISODES
+======================================================= -->
+
+<section class="section" id="section-episodes">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Unified Episodes
+        </div>
+        <div class="card-sub">
+          Canonical episode records
+        </div>
+      </div>
+
+      <button class="btn primary"
+              onclick="openTableEditor('cr_episodes',null)">
+        + Add Episode
+      </button>
+
+    </div>
+
+    <div class="toolbar">
+
+      <input
+        class="input search"
+        id="episodeSearch"
+        placeholder="Search episodes…"
+        oninput="loadEpisodes()">
+
+      <button class="btn" onclick="loadEpisodes()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Episode</th>
+            <th>Title</th>
+            <th>Season</th>
+            <th>Status</th>
+            <th>Runtime</th>
+            <th>Published</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="episodesBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     SUGGESTIONS
+======================================================= -->
+
+<section class="section" id="section-suggestions">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Member Suggestions
+        </div>
+        <div class="card-sub">
+          Manage ideas submitted by members
+        </div>
+      </div>
+
+      <button class="btn" onclick="loadSuggestions()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Submitted</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="suggestionsBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     CHAT
+======================================================= -->
+
+<section class="section" id="section-chat">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          CrowSpace Chat
+        </div>
+        <div class="card-sub">
+          Persistent member chat messages
+        </div>
+      </div>
+
+      <button class="btn" onclick="loadChat()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Message</th>
+            <th>User</th>
+            <th>Room</th>
+            <th>Created</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="chatBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     CROSPACE
+======================================================= -->
+
+<section class="section" id="section-crowspace">
+
+  <div class="three-col">
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <div>
+          <div class="card-title">Groups</div>
+          <div class="card-sub">CrowSpace groups</div>
+        </div>
+
+        <button class="btn small"
+                onclick="openTableEditor('crowspace_groups',null)">
+          + Add
+        </button>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="groupsBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <div>
+          <div class="card-title">Posts</div>
+          <div class="card-sub">CrowSpace posts</div>
+        </div>
+
+        <button class="btn small"
+                onclick="openTableEditor('crowspace_posts',null)">
+          + Add
+        </button>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Post</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="postsBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <div>
+          <div class="card-title">Friendships</div>
+          <div class="card-sub">Member connections</div>
+        </div>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="friendsBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     APPLICATIONS
+======================================================= -->
+
+<section class="section" id="section-applications">
+
+  <div class="two-col">
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <div>
+          <div class="card-title">
+            Podcaster Applications
+          </div>
+          <div class="card-sub">
+            Creator submissions
+          </div>
+        </div>
+
+        <button class="btn" onclick="loadApplications()">
+          Refresh
+        </button>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Show</th>
+              <th>Host</th>
+              <th>Genre</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="podcasterBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <div>
+          <div class="card-title">
+            Sports Creator Applications
+          </div>
+          <div class="card-sub">
+            CrowRules Sports submissions
+          </div>
+        </div>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Show</th>
+              <th>Creator</th>
+              <th>Sport</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="sportsBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     WATCH HISTORY
+======================================================= -->
+
+<section class="section" id="section-watch">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Watch History
+        </div>
+        <div class="card-sub">
+          Member playback records
+        </div>
+      </div>
+
+      <button class="btn" onclick="loadWatchHistory()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Member</th>
+            <th>Content</th>
+            <th>Watched</th>
+            <th>Position</th>
+            <th>Completed</th>
+            <th>Last Watched</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="watchBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     ENGAGEMENT EVENTS
+======================================================= -->
+
+<section class="section" id="section-events">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Engagement Events
+        </div>
+        <div class="card-sub">
+          Verified playback events
+        </div>
+      </div>
+
+      <button class="btn" onclick="loadEvents()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>User</th>
+            <th>Content</th>
+            <th>Seconds</th>
+            <th>Points</th>
+            <th>Type</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="eventsBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     MEDIA SESSIONS
+======================================================= -->
+
+<section class="section" id="section-sessions">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Media Sessions
+        </div>
+        <div class="card-sub">
+          Playback session state
+        </div>
+      </div>
+
+      <button class="btn" onclick="loadSessions()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>User</th>
+            <th>Content</th>
+            <th>Media</th>
+            <th>Session Time</th>
+            <th>Position</th>
+            <th>Completed</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="sessionsBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     ALL TABLES
+======================================================= -->
+
+<section class="section" id="section-tables">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Supabase Table Manager
+        </div>
+        <div class="card-sub">
+          Add, edit and delete records across public tables
+        </div>
+      </div>
+
+      <button class="btn" onclick="loadSchema()">
+        Refresh Schema
+      </button>
+
+    </div>
+
+    <div class="toolbar">
+
+      <input
+        id="tableSearch"
+        class="input search"
+        placeholder="Search tables…"
+        oninput="renderSchema()">
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Schema</th>
+            <th>Table</th>
+            <th>Columns</th>
+            <th>Primary Key</th>
+            <th>RLS</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="schemaBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     AUDIT
+======================================================= -->
+
+<section class="section" id="section-audit">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Administration Audit Log
+        </div>
+        <div class="card-sub">
+          Administrative actions and changes
+        </div>
+      </div>
+
+      <button class="btn" onclick="loadAudit()">
+        Refresh
+      </button>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Action</th>
+            <th>Target Table</th>
+            <th>Target</th>
+            <th>Metadata</th>
+            <th>Created</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="auditBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     ROLES
+======================================================= -->
+
+<section class="section" id="section-roles">
+
+  <div class="card">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          CrowRules Role Management
+        </div>
+        <div class="card-sub">
+          Owner-controlled member roles
+        </div>
+      </div>
+
+    </div>
+
+    <div class="role-grid" id="roleGrid"></div>
+
+  </div>
+
+  <div class="card" style="margin-top:18px">
+
+    <div class="card-header">
+
+      <div>
+        <div class="card-title">
+          Change Member Role
+        </div>
+        <div class="card-sub">
+          Uses secure cr_admin_set_member_role RPC
+        </div>
+      </div>
+
+    </div>
+
+    <div style="padding:20px">
+
+      <div class="form-grid">
+
+        <div class="field">
+
+          <label>Member User ID</label>
+
+          <input
+            class="input"
+            id="roleUserId"
+            placeholder="UUID">
+
+        </div>
+
+        <div class="field">
+
+          <label>New Role</label>
+
+          <select class="select" id="roleSelect">
+
+            <option value="member">Member</option>
+            <option value="supporter">Supporter</option>
+            <option value="creator">Creator</option>
+            <option value="moderator">Moderator</option>
+            <option value="producer">Producer</option>
+            <option value="staff">Staff</option>
+            <option value="admin">Admin</option>
+            <option value="owner">Owner</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div style="margin-top:15px">
+
+        <button class="btn primary"
+                onclick="changeRole()">
+          Save Role
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
 </main>
 </div>
+</div>
 
-<div id="modal" class="modal"><div class="modalbox"><div class="head"><div><h2 id="modalTitle">Edit Record</h2><div id="modalHelp" class="sub"></div></div><button class="btn" onclick="closeModal()">Close</button></div><div id="modalBody"></div></div></div>
-<div id="toast" class="toast"></div>
+<!-- =======================================================
+     EDITOR MODAL
+======================================================= -->
+
+<div class="modal" id="editorModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <div class="modal-title" id="editorTitle">
+        Edit Record
+      </div>
+
+      <button class="btn small"
+              onclick="closeModal()">
+        ✕
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div id="editorFields"
+           class="form-grid">
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button class="btn"
+              onclick="closeModal()">
+        Cancel
+      </button>
+
+      <button class="btn primary"
+              id="saveRecordBtn"
+              onclick="saveRecord()">
+        Save Changes
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     TOAST
+======================================================= -->
+
+<div id="toast"></div>
 
 <script>
-'use strict';
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-const SUPABASE_URL='https://zauxdqyssratvzmomozf.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='sb_publishable_-m6NuVfbrcs84OH7aGPrDw_AuLfXo8J';
+const SUPABASE_URL =
+  'https://zauxdqyssratvzmomozf.supabase.co';
 
-const db=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
-  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
-});
+const SUPABASE_KEY =
+  'sb_publishable_-m6NuVfbrcs84OH7aGPrDw_AuLfXo8J';
 
-const ROLE_RANK={member:10,supporter:20,creator:30,moderator:40,producer:50,staff:60,admin:70,owner:100,super_admin:100};
-const ROLES=['member','supporter','creator','moderator','producer','staff','admin','owner'];
-const state={user:null,role:'member',stats:{},members:[],leaderboard:[],schema:[],table:null,rows:[],editing:null};
+const { createClient } =
+  supabase;
 
-const $=id=>document.getElementById(id);
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=n=>Number(n||0).toLocaleString();
-const hours=n=>(Number(n||0)/3600).toFixed(2);
-function toast(msg,bad=false){const d=document.createElement('div');d.textContent=msg;if(bad)d.classList.add('error');$('toast').appendChild(d);setTimeout(()=>d.remove(),3500)}
-function setText(id,v){if($(id))$(id).textContent=v}
-function roleClass(r){return 'role-'+String(r||'member').toLowerCase().replace('_','-')}
-function roleBadge(r){return `<span class="badge ${roleClass(r)}">${esc(String(r||'member').toUpperCase())}</span>`}
-function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id)?.classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
-function isAdmin(){return (ROLE_RANK[state.role]||0)>=70}
-function isOwner(){return (ROLE_RANK[state.role]||0)>=100}
+const db = createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
+  }
+);
 
-async function rpc(name,args={}){
-  const {data,error}=await db.rpc(name,args);
-  if(error)throw error;
-  return data;
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+let currentRole = 'member';
+
+let schema = [];
+let currentTable = null;
+let currentRecord = null;
+let currentColumns = [];
+
+let refreshTimer = null;
+
+const PAGE_SIZE = 100;
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHtml(value){
+
+  if(value === null ||
+     value === undefined){
+    return '';
+  }
+
+  return String(value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
 }
+
+function formatNumber(value){
+  return Number(value || 0).toLocaleString();
+}
+
+function formatSeconds(seconds){
+
+  seconds = Number(seconds || 0);
+
+  const h =
+    Math.floor(seconds / 3600);
+
+  const m =
+    Math.floor((seconds % 3600) / 60);
+
+  const s =
+    Math.floor(seconds % 60);
+
+  if(h){
+    return `${h}h ${m}m`;
+  }
+
+  if(m){
+    return `${m}m ${s}s`;
+  }
+
+  return `${s}s`;
+}
+
+function formatHours(seconds){
+
+  return (
+    Number(seconds || 0) / 3600
+  ).toFixed(2) + 'h';
+}
+
+function formatDate(value){
+
+  if(!value){
+    return '—';
+  }
+
+  try{
+
+    return new Date(value)
+      .toLocaleString();
+
+  }catch{
+
+    return value;
+
+  }
+}
+
+function roleBadge(role){
+
+  role =
+    String(role || 'member')
+      .toLowerCase();
+
+  let cls = 'member';
+
+  if(role === 'owner'){
+    cls = 'owner';
+  }else if(role === 'admin'){
+    cls = 'admin';
+  }else if(
+    ['staff','producer','moderator']
+      .includes(role)
+  ){
+    cls = 'staff';
+  }
+
+  return `
+    <span class="badge ${cls}">
+      ${escapeHtml(role)}
+    </span>
+  `;
+}
+
+function statusBadge(status){
+
+  status =
+    String(status || '')
+      .toLowerCase();
+
+  let cls = '';
+
+  if(
+    ['published','active','approved','completed','live']
+      .includes(status)
+  ){
+    cls = 'success';
+  }
+
+  if(
+    ['pending','draft','planned','coming_soon']
+      .includes(status)
+  ){
+    cls = 'warning';
+  }
+
+  if(
+    ['rejected','deleted','banned','failed']
+      .includes(status)
+  ){
+    cls = 'danger';
+  }
+
+  return `
+    <span class="badge ${cls}">
+      ${escapeHtml(status || 'unknown')}
+    </span>
+  `;
+}
+
+function toast(
+  message,
+  type='success',
+  title=''
+){
+
+  const el =
+    document.createElement('div');
+
+  el.className =
+    `toast ${type}`;
+
+  el.innerHTML = `
+    ${
+      title
+      ? `<div class="toast-title">
+           ${escapeHtml(title)}
+         </div>`
+      : ''
+    }
+    <div>${escapeHtml(message)}</div>
+  `;
+
+  document
+    .getElementById('toast')
+    .appendChild(el);
+
+  setTimeout(
+    () => el.remove(),
+    4200
+  );
+}
+
+/* =========================================================
+   AUTH
+========================================================= */
 
 async function init(){
-  const {data,error}=await db.auth.getUser();
-  if(error||!data.user){$('locked').innerHTML='<h2>Administrator sign-in required</h2><p>Sign in with your CrowRules administrator account.</p>';return}
-  state.user=data.user;
-  let role='member';
-  try{role=await rpc('cr_my_role')}catch{}
-  state.role=String(role||'member').toLowerCase();
-  $('who').textContent=(state.user.email||'Authenticated')+' • '+state.role.toUpperCase();
-  $('signout').style.display='block';
-  if(!isAdmin()){$('locked').innerHTML='<h2>Access denied</h2><p>Your current CrowRules role is '+esc(state.role)+'. Administrator access is required.</p>';return}
-  $('locked').style.display='none';$('sidebar').style.display='block';
-  document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
-  buildQuick();
-  showPage('dashboard');
-  await refreshDashboard();
+
+  const {
+    data:{
+      session
+    }
+  } = await db.auth.getSession();
+
+  if(session){
+
+    await authenticate(session);
+
+  }
+
+  db.auth.onAuthStateChange(
+    async(event,session)=>{
+
+      if(session){
+
+        setTimeout(
+          () => authenticate(session),
+          0
+        );
+
+      }else{
+
+        showLogin();
+
+      }
+
+    }
+  );
+
 }
 
-function buildQuick(){
-  const names=['cr_content','cr_members','cr_member_roles','cr_role_catalog','cr_member_watch_history','cr_member_watch_points','cr_media_sessions','cr_media_engagement_events','cr_schedule','cr_channels','cr_shows','cr_episodes','tacoma_nights_episodes','back_deck_episodes','crowspace_groups','crowspace_posts','crowspace_comments','cr_member_chat','cr_member_suggestions','cr_podcaster_applications','cr_sports_show_creator_applications','cr_announcements','cr_partners','cr_donation_campaigns'];
-  $('quick').innerHTML=names.map(n=>`<button class="nav" onclick="showPage('tables');openTable('${n}')">${n}</button>`).join('');
-}
+async function authenticate(session){
 
-async function refreshDashboard(){
+  currentUser =
+    session.user;
+
   try{
-    const s=await rpc('cr_admin_dashboard_stats');
-    state.stats=s||{};
-    Object.entries(state.stats).forEach(([k,v])=>setText('s_'+k,fmt(v)));
-    renderRoleDistribution();
-    setText('systemStatus','Database RPC layer: online. Current administrator: '+(state.user?.email||'unknown')+'. Effective role: '+state.role+'. Generic CRUD is routed through PostgreSQL security-definer functions rather than a browser service-role key.');
-    await Promise.all([loadMembers(),loadLeaderboard(),loadSchema(),loadApplications(),loadAudit()]);
-  }catch(e){toast(e.message,true);setText('systemStatus','Unable to load dashboard: '+e.message)}
+
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        'cr_my_role'
+      );
+
+    if(error){
+      throw error;
+    }
+
+    currentRole =
+      String(data || 'member')
+        .toLowerCase();
+
+  }catch(error){
+
+    console.error(error);
+
+    currentRole =
+      'member';
+
+  }
+
+  if(
+    ![
+      'admin',
+      'owner',
+      'super_admin'
+    ].includes(currentRole)
+  ){
+
+    document
+      .getElementById('loginMessage')
+      .textContent =
+      'Administrator access is required.';
+
+    await db.auth.signOut();
+
+    return;
+
+  }
+
+  showApp();
+
+  document
+    .getElementById('adminName')
+    .textContent =
+    currentUser.email ||
+    currentUser.id.slice(0,8);
+
+  document
+    .getElementById('adminRole')
+    .textContent =
+    currentRole.toUpperCase();
+
+  await loadDashboard();
+
 }
 
-function renderRoleDistribution(){
-  const counts={};state.members.forEach(m=>{const r=String(m.role||'member').toLowerCase();counts[r]=(counts[r]||0)+1});
-  const total=state.members.length||1;
-  $('roleDist').innerHTML=ROLES.map(r=>{const n=counts[r]||0,p=Math.round(n/total*100);return `<div style="margin:9px 0"><div style="display:flex;justify-content:space-between;font-size:10px"><span>${roleBadge(r)}</span><span>${n} (${p}%)</span></div><div class="progress" style="margin-top:5px"><i style="width:${p}%"></i></div></div>`}).join('');
+function showLogin(){
+
+  document
+    .getElementById('loginScreen')
+    .style.display='flex';
+
+  document
+    .getElementById('app')
+    .style.display='none';
+
 }
+
+function showApp(){
+
+  document
+    .getElementById('loginScreen')
+    .style.display='none';
+
+  document
+    .getElementById('app')
+    .style.display='block';
+
+}
+
+async function login(){
+
+  const {
+    error
+  } =
+    await db.auth.signInWithOAuth({
+      provider:'google',
+      options:{
+        redirectTo:
+          window.location.href
+      }
+    });
+
+  if(error){
+
+    toast(
+      error.message,
+      'error',
+      'Login Failed'
+    );
+
+  }
+
+}
+
+async function logout(){
+
+  await db.auth.signOut();
+
+  showLogin();
+
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const sectionTitles = {
+
+  dashboard:[
+    'Dashboard',
+    'CrowRules Entertainment command center'
+  ],
+
+  members:[
+    'Members',
+    'Profiles, membership and engagement'
+  ],
+
+  leaderboard:[
+    'Leaderboard',
+    'CrowPoints and verified watch time'
+  ],
+
+  content:[
+    'CrowRules Content',
+    'Canonical content catalog'
+  ],
+
+  tacoma:[
+    'Tacoma Nights',
+    'Episode management'
+  ],
+
+  backdeck:[
+    'Back Deck Live',
+    'Episode management'
+  ],
+
+  episodes:[
+    'Episodes',
+    'Unified episode catalog'
+  ],
+
+  suggestions:[
+    'Suggestions',
+    'Member ideas and feedback'
+  ],
+
+  chat:[
+    'CrowSpace Chat',
+    'Persistent chat management'
+  ],
+
+  crowspace:[
+    'CrowSpace',
+    'Groups, posts and connections'
+  ],
+
+  applications:[
+    'Applications',
+    'Creator submissions'
+  ],
+
+  watch:[
+    'Watch History',
+    'Member playback records'
+  ],
+
+  events:[
+    'Engagement Events',
+    'Verified playback events'
+  ],
+
+  sessions:[
+    'Media Sessions',
+    'Playback session state'
+  ],
+
+  tables:[
+    'All Tables',
+    'Supabase database management'
+  ],
+
+  audit:[
+    'Audit Log',
+    'Administrative activity'
+  ],
+
+  roles:[
+    'Roles',
+    'CrowRules permission hierarchy'
+  ]
+
+};
+
+function showSection(name){
+
+  document
+    .querySelectorAll('.section')
+    .forEach(el=>{
+      el.classList.remove('active');
+    });
+
+  const section =
+    document.getElementById(
+      `section-${name}`
+    );
+
+  if(section){
+    section.classList.add('active');
+  }
+
+  document
+    .querySelectorAll('.nav-btn[data-section]')
+    .forEach(btn=>{
+      btn.classList.toggle(
+        'active',
+        btn.dataset.section === name
+      );
+    });
+
+  const meta =
+    sectionTitles[name] ||
+    ['Admin','CrowRules'];
+
+  document
+    .getElementById('pageTitle')
+    .textContent =
+    meta[0];
+
+  document
+    .getElementById('pageSubtitle')
+    .textContent =
+    meta[1];
+
+  document
+    .getElementById('sidebar')
+    .classList.remove('open');
+
+  loadSectionData(name);
+
+}
+
+async function loadSectionData(name){
+
+  switch(name){
+
+    case 'dashboard':
+      return loadDashboard();
+
+    case 'members':
+      return loadMembers();
+
+    case 'leaderboard':
+      return loadLeaderboard();
+
+    case 'content':
+      return loadContent();
+
+    case 'tacoma':
+      return loadTacoma();
+
+    case 'backdeck':
+      return loadBackDeck();
+
+    case 'episodes':
+      return loadEpisodes();
+
+    case 'suggestions':
+      return loadSuggestions();
+
+    case 'chat':
+      return loadChat();
+
+    case 'crowspace':
+      return loadCrowSpace();
+
+    case 'applications':
+      return loadApplications();
+
+    case 'watch':
+      return loadWatchHistory();
+
+    case 'events':
+      return loadEvents();
+
+    case 'sessions':
+      return loadSessions();
+
+    case 'tables':
+      return loadSchema();
+
+    case 'audit':
+      return loadAudit();
+
+    case 'roles':
+      return loadRoles();
+
+  }
+
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+async function loadDashboard(){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        'cr_admin_dashboard_stats'
+      );
+
+    if(error){
+      throw error;
+    }
+
+    const stats =
+      data || {};
+
+    setText(
+      'statMembers',
+      formatNumber(stats.members)
+    );
+
+    setText(
+      'statActiveMembers',
+      `${formatNumber(stats.active_members)} active`
+    );
+
+    setText(
+      'statPoints',
+      formatNumber(stats.watch_points)
+    );
+
+    setText(
+      'statWatch',
+      formatHours(
+        stats.watch_seconds ||
+        0
+      )
+    );
+
+    setText(
+      'statContent',
+      formatNumber(stats.content)
+    );
+
+    setText(
+      'statPublished',
+      `${formatNumber(stats.published_content)} published`
+    );
+
+    setText(
+      'dashHistory',
+      formatNumber(stats.watch_history)
+    );
+
+    setText(
+      'dashEvents',
+      formatNumber(stats.engagement_events)
+    );
+
+    setText(
+      'dashSessions',
+      formatNumber(stats.media_sessions)
+    );
+
+    setText(
+      'dashSuggestions',
+      formatNumber(stats.suggestions)
+    );
+
+    setText(
+      'dashApplications',
+      formatNumber(
+        Number(stats.podcaster_applications || 0) +
+        Number(stats.sports_applications || 0)
+      )
+    );
+
+    setText(
+      'dashGroups',
+      formatNumber(stats.groups)
+    );
+
+    setText(
+      'dashPosts',
+      formatNumber(stats.posts)
+    );
+
+    setText(
+      'dashChat',
+      formatNumber(stats.chat_messages)
+    );
+
+    await loadDashboardActivity();
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message,
+      'error',
+      'Dashboard Error'
+    );
+
+  }
+
+}
+
+async function loadDashboardActivity(){
+
+  try{
+
+    const rows =
+      await adminRows(
+        'cr_admin_audit_log',
+        10,
+        0,
+        'created_at',
+        'desc'
+      );
+
+    const el =
+      document.getElementById(
+        'dashboardActivity'
+      );
+
+    if(!rows.length){
+
+      el.innerHTML =
+        `<div class="empty">
+          No administration activity yet.
+        </div>`;
+
+      return;
+
+    }
+
+    el.innerHTML =
+      rows.map(row=>`
+
+        <div class="activity">
+
+          <div class="activity-dot"></div>
+
+          <div class="activity-main">
+
+            <div class="activity-title">
+              ${escapeHtml(
+                row.action || 'admin_action'
+              )}
+            </div>
+
+            <div class="activity-meta">
+              ${escapeHtml(
+                row.target_table || ''
+              )}
+              ${row.target_id
+                ? ' · ' + escapeHtml(
+                    String(row.target_id)
+                  )
+                : ''
+              }
+              ·
+              ${escapeHtml(
+                formatDate(row.created_at)
+              )}
+            </div>
+
+          </div>
+
+        </div>
+
+      `).join('');
+
+  }catch(error){
+
+    console.warn(
+      'Activity load failed',
+      error
+    );
+
+  }
+
+}
+
+/* =========================================================
+   ADMIN ROWS
+========================================================= */
+
+async function adminRows(
+  table,
+  limit=100,
+  offset=0,
+  order=null,
+  direction='desc'
+){
+
+  const {
+    data,
+    error
+  } =
+    await db.rpc(
+      'cr_admin_v54_rows',
+      {
+        p_schema:'public',
+        p_table:table,
+        p_limit:limit,
+        p_offset:offset,
+        p_order:order,
+        p_direction:direction
+      }
+    );
+
+  if(error){
+    throw error;
+  }
+
+  return Array.isArray(data)
+    ? data
+    : [];
+
+}
+
+/* =========================================================
+   MEMBERS
+========================================================= */
 
 async function loadMembers(){
+
+  const body =
+    document.getElementById(
+      'membersBody'
+    );
+
+  body.innerHTML =
+    `<tr><td colspan="7">
+      <div class="empty">Loading members…</div>
+    </td></tr>`;
+
   try{
-    state.members=await rpc('cr_admin_crud',{p_action:'list',p_table:'cr_members',p_id:null,p_data:{}}) || [];
-    renderMembers();
-  }catch(e){toast('Members: '+e.message,true)}
+
+    const search =
+      (
+        document
+          .getElementById('memberSearch')
+          ?.value ||
+        ''
+      )
+      .trim()
+      .toLowerCase();
+
+    let rows =
+      await adminRows(
+        'cr_members',
+        500,
+        0,
+        'created_at',
+        'desc'
+      );
+
+    if(search){
+
+      rows =
+        rows.filter(row=>{
+
+          return [
+            row.username,
+            row.display_name,
+            row.email,
+            row.membership_tier,
+            row.role
+          ]
+          .filter(Boolean)
+          .some(
+            value =>
+              String(value)
+                .toLowerCase()
+                .includes(search)
+          );
+
+        });
+
+    }
+
+    body.innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td>
+
+            <strong>
+              ${escapeHtml(
+                row.display_name ||
+                row.username ||
+                'Unnamed'
+              )}
+            </strong>
+
+            <div class="muted">
+              ${escapeHtml(
+                row.username || ''
+              )}
+            </div>
+
+            <div class="mono muted">
+              ${escapeHtml(
+                row.user_id || ''
+              )}
+            </div>
+
+          </td>
+
+          <td>
+            ${roleBadge(row.role)}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.membership_tier || 'free'
+            )}
+            <div class="muted">
+              ${escapeHtml(
+                row.membership_status || ''
+              )}
+            </div>
+          </td>
+
+          <td>
+            <strong>
+              ${formatNumber(
+                row.lifetime_points ??
+                row.points ??
+                0
+              )}
+            </strong>
+
+            <div class="muted">
+              ${formatNumber(
+                row.monthly_points || 0
+              )} this month
+            </div>
+
+          </td>
+
+          <td>
+
+            <strong>
+              ${formatHours(
+                row.watch_seconds || 0
+              )}
+            </strong>
+
+            <div class="muted">
+              ${formatSeconds(
+                row.watch_seconds || 0
+              )}
+            </div>
+
+          </td>
+
+          <td>
+            ${
+              row.is_active
+              ? '<span class="badge success">Active</span>'
+              : '<span class="badge danger">Inactive</span>'
+            }
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("cr_members",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small"
+              onclick='editMemberRole(${JSON.stringify(row)})'>
+              Role
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("cr_members",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+    if(!rows.length){
+
+      body.innerHTML =
+        `<tr><td colspan="7">
+          <div class="empty">
+            No members found.
+          </div>
+        </td></tr>`;
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    body.innerHTML =
+      `<tr><td colspan="7">
+        <div class="empty">
+          <strong>Unable to load members</strong>
+          ${escapeHtml(error.message)}
+        </div>
+      </td></tr>`;
+
+  }
+
 }
 
-function renderMembers(){
-  const q=($('memberSearch')?.value||'').toLowerCase();
-  const rows=state.members.filter(m=>[m.username,m.display_name,m.email,m.role].some(v=>String(v||'').toLowerCase().includes(q)));
-  $('membersBody').innerHTML=rows.map(m=>{
-    const points=Number(m.lifetime_points??m.points??0);
-    const watch=m.watch_seconds??m.total_watch_seconds??0;
-    return `<tr>
-      <td><strong>${esc(m.display_name||m.username||'Unnamed')}</strong><div class="sub">@${esc(m.username||'')}</div></td>
-      <td>${roleBadge(m.role||'member')}</td><td>${fmt(points)}</td><td>${hours(watch)}h</td>
-      <td>${m.is_active===false?'<span class="badge role-admin">INACTIVE</span>':'<span class="badge role-staff">ACTIVE</span>'}</td>
-      <td>${esc(m.created_at?new Date(m.created_at).toLocaleDateString():'—')}</td>
-      <td><button class="btn" onclick="inspectMember('${esc(m.user_id||'')}')">Manage</button></td>
-    </tr>`
-  }).join('')||'<tr><td colspan="7" class="empty">No matching members.</td></tr>';
+let memberSearchTimer;
+
+function debouncedLoadMembers(){
+
+  clearTimeout(
+    memberSearchTimer
+  );
+
+  memberSearchTimer =
+    setTimeout(
+      loadMembers,
+      250
+    );
+
 }
 
-async function inspectMember(uid){
-  const m=state.members.find(x=>String(x.user_id)===String(uid));
-  if(!m){toast('Member not found',true);return}
-  const current=String(m.role||'member').toLowerCase();
-  const roleOptions=ROLES.map(r=>`<option value="${r}" ${r===current?'selected':''} ${!isOwner()&&['admin','owner'].includes(r)?'disabled':''}>${r.toUpperCase()}</option>`).join('');
-  $('memberInspector').innerHTML=`
-    <div class="memberhead"><div class="avatar">${esc((m.display_name||m.username||'?').slice(0,1).toUpperCase())}</div><div><strong>${esc(m.display_name||m.username||'Member')}</strong><div class="sub">@${esc(m.username||'')}<br>${esc(m.email||'')}</div></div></div>
-    <div class="kvs">
-      <div class="kv"><span class="label">Lifetime Points</span><b>${fmt(m.lifetime_points??m.points??0)}</b></div>
-      <div class="kv"><span class="label">Watch Hours</span><b>${hours(m.watch_seconds??m.total_watch_seconds??0)}</b></div>
-      <div class="kv"><span class="label">Status</span><b>${m.is_active===false?'Inactive':'Active'}</b></div>
-      <div class="kv"><span class="label">Member ID</span><b style="font-size:10px">${esc(m.id||'—')}</b></div>
-    </div>
-    <div class="rolebox"><div class="label">CrowRules Role</div><select id="memberRoleSelect" class="field" style="margin-top:6px">${roleOptions}</select>
-    <div class="help" style="margin-top:7px">Member → Supporter → Creator → Moderator → Producer → Staff → Admin → Owner. Admin/Owner escalation is restricted by PostgreSQL.</div>
-    <button class="btn primary" style="margin-top:10px" onclick="changeMemberRole('${esc(m.user_id)}')">Save Role</button></div>
-    <div class="toolbar" style="margin-top:14px"><button class="btn" onclick="openTable('cr_members')">Edit Full Profile</button><button class="btn danger" onclick="deleteMember('${esc(m.user_id)}')">Delete Member</button></div>`;
-}
-
-async function changeMemberRole(uid){
-  const role=$('memberRoleSelect').value;
-  if(!confirm('Change this member to '+role.toUpperCase()+'?'))return;
-  try{const result=await rpc('cr_admin_set_member_role',{p_user_id:uid,p_role:role});toast('Role changed to '+role.toUpperCase());await refreshDashboard();inspectMember(uid)}catch(e){toast(e.message,true)}
-}
-
-async function deleteMember(uid){
-  if(!confirm('Delete this member profile? This is destructive and database foreign-key rules may apply.'))return;
-  try{await rpc('cr_admin_crud',{p_action:'delete',p_table:'cr_members',p_id:uid,p_data:{}});toast('Member deleted.');$('memberInspector').innerHTML='<div class="empty">Member deleted.</div>';await refreshDashboard()}catch(e){toast(e.message,true)}
-}
+/* =========================================================
+   LEADERBOARD
+========================================================= */
 
 async function loadLeaderboard(){
+
+  const body =
+    document.getElementById(
+      'leaderboardBody'
+    );
+
+  body.innerHTML =
+    `<tr><td colspan="7">
+      <div class="empty">
+        Loading leaderboard…
+      </div>
+    </td></tr>`;
+
   try{
-    const limit=Number($('leaderLimit')?.value||50);
-    state.leaderboard=await rpc('cr_admin_member_leaderboard',{p_limit:limit})||[];
-    $('leaderBody').innerHTML=state.leaderboard.map(r=>{
-      const cls=r.rank<=3?'rank rank'+r.rank:'rank';
-      return `<tr><td class="${cls}">#${r.rank}</td><td><strong>${esc(r.display_name||r.username||'Member')}</strong><div class="sub">@${esc(r.username||'')}</div></td><td>${roleBadge(r.role)}</td><td><strong>${fmt(r.lifetime_points)}</strong></td><td>${fmt(r.monthly_points)}</td><td>${Number(r.watch_hours||0).toFixed(2)}h</td><td>${r.is_active?'<span class="badge role-staff">ACTIVE</span>':'<span class="badge role-admin">INACTIVE</span>'}</td><td><button class="btn" onclick="showPage('members');inspectMember('${esc(r.user_id)}')">Manage</button></td></tr>`
-    }).join('')||'<tr><td colspan="8" class="empty">No leaderboard members.</td></tr>';
-  }catch(e){$('leaderBody').innerHTML=`<tr><td colspan="8" class="error">${esc(e.message)}</td></tr>`}
-}
 
-async function loadSchema(){
-  try{state.schema=await rpc('cr_admin_schema')||[];renderTableList()}catch(e){toast('Schema: '+e.message,true)}
-}
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        'cr_admin_member_leaderboard',
+        {
+          p_limit:500
+        }
+      );
 
-function renderTableList(){
-  const q=($('tableSearch')?.value||'').toLowerCase();
-  const rows=state.schema.filter(t=>String(t.table_name).toLowerCase().includes(q));
-  $('tableList').innerHTML=rows.map(t=>`<button class="nav ${state.table?.table_name===t.table_name?'active':''}" onclick="openTable('${esc(t.table_name)}')">${esc(t.table_name)} <span style="float:right;font-size:8px">${t.has_id?'CRUD':'VIEW'}</span></button>`).join('')||'<div class="empty">No tables found.</div>';
-}
-
-async function openTable(name){
-  const t=state.schema.find(x=>x.table_name===name);
-  if(!t){toast('Table not in schema cache',true);return}
-  state.table=t;renderTableList();
-  setText('tableTitle',name);
-  setText('tableInfo',`${(t.columns||[]).length} columns • primary key: ${t.primary_key||'none'} • ${t.has_id?'add/edit/delete enabled':'inspection only'}`);
-  $('addRecord').style.display=t.has_id?'block':'none';$('reloadRows').style.display='block';
-  await loadRows();
-}
-
-async function loadRows(){
-  if(!state.table)return;
-  try{
-    state.rows=await rpc('cr_admin_crud',{p_action:'list',p_table:state.table.table_name,p_id:null,p_data:{}})||[];
-    renderRows();
-  }catch(e){$('genericBody').innerHTML=`<tr><td class="error">${esc(e.message)}</td></tr>`}
-}
-
-function displayCell(v){
-  if(v===null||v===undefined)return '—';
-  if(typeof v==='object')return JSON.stringify(v);
-  return String(v);
-}
-
-function renderRows(){
-  const cols=state.table.columns||[];
-  $('genericHead').innerHTML='<tr>'+cols.map(c=>`<th>${esc(c.name)}</th>`).join('')+'<th>Actions</th></tr>';
-  $('genericBody').innerHTML=state.rows.map(r=>{
-    const id=state.table.primary_key==='id'?r.id:null;
-    return '<tr>'+cols.map(c=>`<td class="truncate" title="${esc(displayCell(r[c.name]))}">${esc(displayCell(r[c.name]))}</td>`).join('')+
-    `<td>${id?`<div class="actions"><button class="btn" onclick="openEditor('${esc(id)}')">Edit</button><button class="btn danger" onclick="deleteRow('${esc(id)}')">Delete</button></div>`:'<span class="badge">NO SIMPLE PK</span>'}</td></tr>`
-  }).join('')||`<tr><td colspan="${cols.length+1}" class="empty">No records.</td></tr>`;
-}
-
-function inputFor(c,value){
-  let v=value??'';
-  if(typeof v==='object')v=JSON.stringify(v,null,2);
-  if(c.name==='id')return `<input class="field" data-col="${esc(c.name)}" value="${esc(v)}" readonly>`;
-  if(c.name==='created_at'||c.name==='updated_at')return `<input class="field" data-col="${esc(c.name)}" value="${esc(v)}" readonly>`;
-  if(c.type==='boolean')return `<select class="field" data-col="${esc(c.name)}"><option value="true" ${String(v)==='true'?'selected':''}>true</option><option value="false" ${String(v)==='false'?'selected':''}>false</option></select>`;
-  if(c.type==='json'||c.type==='jsonb'||c.type==='ARRAY')return `<textarea class="field json" data-col="${esc(c.name)}">${esc(v)}</textarea>`;
-  if(c.type.includes('timestamp'))return `<input class="field" data-col="${esc(c.name)}" type="datetime-local" value="${v?new Date(v).toISOString().slice(0,16):''}">`;
-  if(c.type==='date')return `<input class="field" data-col="${esc(c.name)}" type="date" value="${esc(v)}">`;
-  if(c.type.includes('integer')||c.type==='bigint'||c.type==='numeric')return `<input class="field" data-col="${esc(c.name)}" type="number" value="${esc(v)}">`;
-  return `<textarea class="field" data-col="${esc(c.name)}" rows="${/description|body|message|bio|notes|details|social_links|additional_info|goals/i.test(c.name)?5:2}">${esc(v)}</textarea>`;
-}
-
-async function openEditor(id=null){
-  if(!state.table)return;
-  state.editing=id;
-  let row={};
-  if(id){try{row=await rpc('cr_admin_crud',{p_action:'get',p_table:state.table.table_name,p_id:id,p_data:{}})||{}}catch(e){toast(e.message,true);return}}
-  $('modalTitle').textContent=(id?'Edit ':'Add ')+state.table.table_name;
-  $('modalHelp').textContent=`${state.table.columns.length} fields`;
-  $('modalBody').innerHTML=`<div class="formgrid">${state.table.columns.map(c=>{
-    const full=/body|description|metadata|message|bio|notes|details|social_links|additional_info|goals/i.test(c.name)?'full':'';
-    return `<div class="${full}"><label class="help">${esc(c.name)} • ${esc(c.type)}${c.nullable?'':' • required'}</label>${inputFor(c,row[c.name])}</div>`;
-  }).join('')}</div><div class="toolbar" style="margin-top:14px"><button class="btn primary" onclick="saveEditor()">Save Record</button><button class="btn" onclick="closeModal()">Cancel</button></div>`;
-  $('modal').classList.add('open');
-}
-
-function parseInput(c,v){
-  if(v==='')return null;
-  if(c.type==='boolean')return v==='true';
-  if(c.type==='json'||c.type==='jsonb'||c.type==='ARRAY'){try{return JSON.parse(v)}catch{throw new Error(c.name+' contains invalid JSON')}}
-  if(c.type.includes('timestamp'))return new Date(v).toISOString();
-  if(c.type.includes('integer')||c.type==='bigint'||c.type==='numeric')return Number(v);
-  return v;
-}
-
-async function saveEditor(){
-  const payload={};
-  try{
-    for(const c of state.table.columns){
-      if(['id','created_at','updated_at'].includes(c.name))continue;
-      const el=document.querySelector(`[data-col="${CSS.escape(c.name)}"]`);
-      if(!el)continue;
-      if(el.value!==''||c.nullable)payload[c.name]=parseInput(c,el.value);
+    if(error){
+      throw error;
     }
-    await rpc('cr_admin_crud',{p_action:state.editing?'update':'insert',p_table:state.table.table_name,p_id:state.editing,p_data:payload});
-    toast('Record saved.');closeModal();await loadRows();
-  }catch(e){toast(e.message,true)}
+
+    const rows =
+      data || [];
+
+    body.innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td>
+            <strong>
+              #${formatNumber(row.rank)}
+            </strong>
+          </td>
+
+          <td>
+
+            <strong>
+              ${escapeHtml(
+                row.display_name ||
+                row.username ||
+                'Unnamed'
+              )}
+            </strong>
+
+            <div class="muted">
+              @${escapeHtml(
+                row.username || ''
+              )}
+            </div>
+
+          </td>
+
+          <td>
+            ${roleBadge(row.role)}
+          </td>
+
+          <td>
+            <strong>
+              ${formatNumber(
+                row.lifetime_points
+              )}
+            </strong>
+          </td>
+
+          <td>
+            ${formatNumber(
+              row.monthly_points
+            )}
+          </td>
+
+          <td>
+            ${formatHours(
+              row.watch_seconds
+            )}
+          </td>
+
+          <td>
+            ${
+              row.is_active
+              ? '<span class="badge success">Active</span>'
+              : '<span class="badge danger">Inactive</span>'
+            }
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    body.innerHTML =
+      `<tr><td colspan="7">
+        <div class="empty">
+          <strong>Leaderboard error</strong>
+          ${escapeHtml(error.message)}
+        </div>
+      </td></tr>`;
+
+  }
+
 }
 
-async function deleteRow(id){
-  if(!confirm('Delete this record from '+state.table.table_name+'?'))return;
-  try{await rpc('cr_admin_crud',{p_action:'delete',p_table:state.table.table_name,p_id:id,p_data:{}});toast('Record deleted.');await loadRows()}catch(e){toast(e.message,true)}
+/* =========================================================
+   CONTENT
+========================================================= */
+
+async function loadContent(){
+
+  await renderSimpleTable(
+    'cr_content',
+    'contentBody',
+    [
+      'title',
+      'content_type',
+      'status',
+      'canonical_key',
+      'published_at'
+    ],
+    'contentSearch',
+    'cr_content'
+  );
+
 }
+
+/* =========================================================
+   TACOMA
+========================================================= */
+
+async function loadTacoma(){
+
+  const body =
+    document.getElementById(
+      'tacomaBody'
+    );
+
+  try{
+
+    let rows =
+      await adminRows(
+        'tacoma_nights_episodes',
+        500,
+        0,
+        'episode_number',
+        'desc'
+      );
+
+    const search =
+      (
+        document
+          .getElementById('tacomaSearch')
+          ?.value || ''
+      )
+      .toLowerCase();
+
+    if(search){
+
+      rows =
+        rows.filter(row=>
+          [
+            row.title,
+            row.description,
+            row.season,
+            row.status
+          ]
+          .filter(Boolean)
+          .some(v=>
+            String(v)
+              .toLowerCase()
+              .includes(search)
+          )
+        );
+
+    }
+
+    body.innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td>
+            #${escapeHtml(
+              row.episode_number
+            )}
+          </td>
+
+          <td>
+            <strong>
+              ${escapeHtml(row.title)}
+            </strong>
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.season || ''
+            )}
+          </td>
+
+          <td>
+            ${statusBadge(row.status)}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.duration ||
+              formatSeconds(
+                row.duration_seconds
+              ) ||
+              '—'
+            )}
+          </td>
+
+          <td>
+            ${row.published_at
+              ? formatDate(row.published_at)
+              : '—'
+            }
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("tacoma_nights_episodes",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("tacoma_nights_episodes",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    body.innerHTML =
+      `<tr><td colspan="7">
+        <div class="empty">
+          ${escapeHtml(error.message)}
+        </div>
+      </td></tr>`;
+
+  }
+
+}
+
+/* =========================================================
+   BACK DECK
+========================================================= */
+
+async function loadBackDeck(){
+
+  const body =
+    document.getElementById(
+      'backdeckBody'
+    );
+
+  try{
+
+    let rows =
+      await adminRows(
+        'back_deck_episodes',
+        500,
+        0,
+        'episode_number',
+        'desc'
+      );
+
+    const search =
+      (
+        document
+          .getElementById('backdeckSearch')
+          ?.value || ''
+      )
+      .toLowerCase();
+
+    if(search){
+
+      rows =
+        rows.filter(row=>
+          [
+            row.title,
+            row.description,
+            row.status
+          ]
+          .filter(Boolean)
+          .some(v=>
+            String(v)
+              .toLowerCase()
+              .includes(search)
+          )
+        );
+
+    }
+
+    body.innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td>
+            #${escapeHtml(
+              row.episode_number
+            )}
+          </td>
+
+          <td>
+            <strong>
+              ${escapeHtml(row.title)}
+            </strong>
+          </td>
+
+          <td>
+            S${escapeHtml(
+              row.season_number
+            )}
+          </td>
+
+          <td>
+            ${statusBadge(row.status)}
+          </td>
+
+          <td>
+            ${row.runtime_minutes
+              ? row.runtime_minutes + ' min'
+              : '—'
+            }
+          </td>
+
+          <td>
+            ${row.release_date || '—'}
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("back_deck_episodes",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("back_deck_episodes",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    body.innerHTML =
+      `<tr><td colspan="7">
+        <div class="empty">
+          ${escapeHtml(error.message)}
+        </div>
+      </td></tr>`;
+
+  }
+
+}
+
+/* =========================================================
+   EPISODES
+========================================================= */
+
+async function loadEpisodes(){
+
+  const body =
+    document.getElementById(
+      'episodesBody'
+    );
+
+  try{
+
+    let rows =
+      await adminRows(
+        'cr_episodes',
+        500,
+        0,
+        'episode_number',
+        'desc'
+      );
+
+    const search =
+      (
+        document
+          .getElementById('episodeSearch')
+          ?.value || ''
+      ).toLowerCase();
+
+    if(search){
+
+      rows =
+        rows.filter(row=>
+          [
+            row.title,
+            row.description,
+            row.status,
+            row.slug
+          ]
+          .filter(Boolean)
+          .some(v=>
+            String(v)
+              .toLowerCase()
+              .includes(search)
+          )
+        );
+
+    }
+
+    body.innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td>
+            S${row.season_number}
+            E${row.episode_number}
+          </td>
+
+          <td>
+            <strong>
+              ${escapeHtml(row.title)}
+            </strong>
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.season_number
+            )}
+          </td>
+
+          <td>
+            ${statusBadge(row.status)}
+          </td>
+
+          <td>
+            ${row.runtime_minutes
+              ? row.runtime_minutes + ' min'
+              : '—'
+            }
+          </td>
+
+          <td>
+            ${row.release_date || '—'}
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("cr_episodes",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("cr_episodes",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    body.innerHTML =
+      `<tr><td colspan="7">
+        <div class="empty">
+          ${escapeHtml(error.message)}
+        </div>
+      </td></tr>`;
+
+  }
+
+}
+
+/* =========================================================
+   SIMPLE TABLE
+========================================================= */
+
+async function renderSimpleTable(
+  table,
+  bodyId,
+  columns,
+  searchId,
+  editTable=table
+){
+
+  const body =
+    document.getElementById(
+      bodyId
+    );
+
+  body.innerHTML =
+    `<tr><td colspan="${columns.length+1}">
+      <div class="empty">
+        Loading…
+      </div>
+    </td></tr>`;
+
+  try{
+
+    let rows =
+      await adminRows(
+        table,
+        500,
+        0,
+        'created_at',
+        'desc'
+      );
+
+    const search =
+      (
+        document
+          .getElementById(searchId)
+          ?.value || ''
+      ).toLowerCase();
+
+    if(search){
+
+      rows =
+        rows.filter(row=>
+          Object.values(row)
+            .filter(v=>
+              typeof v === 'string'
+            )
+            .some(v=>
+              v.toLowerCase()
+                .includes(search)
+            )
+        );
+
+    }
+
+    body.innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          ${columns.map(col=>{
+
+            let value =
+              row[col];
+
+            if(
+              col === 'status'
+            ){
+
+              return `
+                <td>
+                  ${statusBadge(value)}
+                </td>
+              `;
+
+            }
+
+            if(
+              col === 'published_at'
+            ){
+
+              return `
+                <td>
+                  ${value
+                    ? formatDate(value)
+                    : '—'
+                  }
+                </td>
+              `;
+
+            }
+
+            return `
+              <td>
+                ${escapeHtml(
+                  value === null ||
+                  value === undefined
+                    ? '—'
+                    : String(value)
+                )}
+              </td>
+            `;
+
+          }).join('')}
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("${table}",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("${table}",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+    if(!rows.length){
+
+      body.innerHTML =
+        `<tr><td colspan="${columns.length+1}">
+          <div class="empty">
+            No records found.
+          </div>
+        </td></tr>`;
+
+    }
+
+  }catch(error){
+
+    body.innerHTML =
+      `<tr><td colspan="${columns.length+1}">
+        <div class="empty">
+          <strong>Unable to load records</strong>
+          ${escapeHtml(error.message)}
+        </div>
+      </td></tr>`;
+
+  }
+
+}
+
+/* =========================================================
+   SUGGESTIONS
+========================================================= */
+
+async function loadSuggestions(){
+
+  await renderSimpleTable(
+    'cr_member_suggestions',
+    'suggestionsBody',
+    [
+      'title',
+      'category',
+      'status',
+      'created_at'
+    ],
+    null
+  );
+
+}
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+async function loadChat(){
+
+  const body =
+    document.getElementById(
+      'chatBody'
+    );
+
+  try{
+
+    const rows =
+      await adminRows(
+        'cr_member_chat',
+        300,
+        0,
+        'created_at',
+        'desc'
+      );
+
+    body.innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td style="max-width:350px">
+            ${escapeHtml(
+              row.message || ''
+            )}
+          </td>
+
+          <td class="mono">
+            ${escapeHtml(
+              row.user_id || ''
+            )}
+          </td>
+
+          <td class="mono">
+            ${escapeHtml(
+              row.room_id || ''
+            )}
+          </td>
+
+          <td>
+            ${formatDate(
+              row.created_at
+            )}
+          </td>
+
+          <td>
+            ${
+              row.deleted_at
+              ? '<span class="badge danger">Deleted</span>'
+              : '<span class="badge success">Active</span>'
+            }
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("cr_member_chat",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("cr_member_chat",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    body.innerHTML =
+      `<tr><td colspan="6">
+        <div class="empty">
+          ${escapeHtml(error.message)}
+        </div>
+      </td></tr>`;
+
+  }
+
+}
+
+/* =========================================================
+   CROSPACE
+========================================================= */
+
+async function loadCrowSpace(){
+
+  try{
+
+    const [
+      groups,
+      posts,
+      friends
+    ] =
+      await Promise.all([
+        adminRows(
+          'crowspace_groups',
+          50,
+          0,
+          'created_at',
+          'desc'
+        ),
+        adminRows(
+          'crowspace_posts',
+          50,
+          0,
+          'created_at',
+          'desc'
+        ),
+        adminRows(
+          'crowspace_friendships',
+          50,
+          0,
+          'created_at',
+          'desc'
+        )
+      ]);
+
+    document
+      .getElementById('groupsBody')
+      .innerHTML =
+      groups.map(row=>`
+
+        <tr>
+
+          <td>
+            ${escapeHtml(
+              row.name ||
+              row.title ||
+              row.slug ||
+              row.id
+            )}
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("crowspace_groups",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("crowspace_groups",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+    document
+      .getElementById('postsBody')
+      .innerHTML =
+      posts.map(row=>`
+
+        <tr>
+
+          <td>
+            ${escapeHtml(
+              row.content ||
+              row.body ||
+              row.title ||
+              row.id
+            )}
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("crowspace_posts",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("crowspace_posts",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+    document
+      .getElementById('friendsBody')
+      .innerHTML =
+      friends.map(row=>`
+
+        <tr>
+
+          <td>
+            ${statusBadge(
+              row.status ||
+              'connected'
+            )}
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("crowspace_friendships",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("crowspace_friendships",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+/* =========================================================
+   APPLICATIONS
+========================================================= */
 
 async function loadApplications(){
-  const [p,s]=await Promise.allSettled([
-    rpc('cr_admin_crud',{p_action:'list',p_table:'cr_podcaster_applications',p_id:null,p_data:{}}),
-    rpc('cr_admin_crud',{p_action:'list',p_table:'cr_sports_show_creator_applications',p_id:null,p_data:{}})
-  ]);
-  function render(result,sports=false){
-    if(result.status==='rejected')return `<div class="help error">${esc(result.reason?.message||'Unable to load')}</div>`;
-    const rows=result.value||[];
-    return rows.map(r=>`<div class="card" style="margin:7px 0;padding:12px"><div class="head"><strong>${esc(r.show_name||'Untitled')}</strong>${roleBadge(r.status||'pending')}</div><div class="sub">${esc(r.email||'')} • ${esc(r.created_at?new Date(r.created_at).toLocaleString():'')}</div><p class="help">${esc(r.show_description||'')}</p><button class="btn" onclick="showPage('tables');openTable('${sports?'cr_sports_show_creator_applications':'cr_podcaster_applications'}')">Manage</button></div>`).join('')||'<div class="empty">No applications.</div>';
+
+  try{
+
+    const [
+      podcasters,
+      sports
+    ] =
+      await Promise.all([
+        adminRows(
+          'cr_podcaster_applications',
+          200,
+          0,
+          'created_at',
+          'desc'
+        ),
+        adminRows(
+          'cr_sports_show_creator_applications',
+          200,
+          0,
+          'created_at',
+          'desc'
+        )
+      ]);
+
+    document
+      .getElementById('podcasterBody')
+      .innerHTML =
+      podcasters.map(row=>`
+
+        <tr>
+
+          <td>
+            ${escapeHtml(
+              row.show_name
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.host_name
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.genre
+            )}
+          </td>
+
+          <td>
+            ${statusBadge(row.status)}
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("cr_podcaster_applications",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("cr_podcaster_applications",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+    document
+      .getElementById('sportsBody')
+      .innerHTML =
+      sports.map(row=>`
+
+        <tr>
+
+          <td>
+            ${escapeHtml(
+              row.show_name
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.creator_name
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.sport
+            )}
+          </td>
+
+          <td>
+            ${statusBadge(row.status)}
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("cr_sports_show_creator_applications",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("cr_sports_show_creator_applications",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    toast(
+      error.message,
+      'error',
+      'Applications'
+    );
+
   }
-  $('podApps').innerHTML=render(p,false);$('sportApps').innerHTML=render(s,true);
+
 }
+
+/* =========================================================
+   WATCH HISTORY
+========================================================= */
+
+async function loadWatchHistory(){
+
+  try{
+
+    const rows =
+      await adminRows(
+        'cr_member_watch_history',
+        500,
+        0,
+        'watched_at',
+        'desc'
+      );
+
+    document
+      .getElementById('watchBody')
+      .innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td class="mono">
+            ${escapeHtml(
+              row.user_id
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.title || row.content_id
+            )}
+          </td>
+
+          <td>
+            ${formatSeconds(
+              row.watched_seconds
+            )}
+          </td>
+
+          <td>
+            ${formatSeconds(
+              row.last_position_seconds
+            )}
+          </td>
+
+          <td>
+            ${
+              row.completed
+              ? '<span class="badge success">Yes</span>'
+              : '<span class="badge">No</span>'
+            }
+          </td>
+
+          <td>
+            ${formatDate(
+              row.watched_at
+            )}
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("cr_member_watch_history",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("cr_member_watch_history",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    showTableError(
+      'watchBody',
+      7,
+      error
+    );
+
+  }
+
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+async function loadEvents(){
+
+  try{
+
+    const rows =
+      await adminRows(
+        'cr_media_engagement_events',
+        500,
+        0,
+        'created_at',
+        'desc'
+      );
+
+    document
+      .getElementById('eventsBody')
+      .innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td class="mono">
+            ${escapeHtml(
+              row.user_id
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.content_title ||
+              row.content_key ||
+              row.content_id
+            )}
+          </td>
+
+          <td>
+            ${formatSeconds(
+              row.seconds
+            )}
+          </td>
+
+          <td>
+            <strong>
+              ${formatNumber(
+                row.points
+              )}
+            </strong>
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.event_type
+            )}
+          </td>
+
+          <td>
+            ${formatDate(
+              row.created_at
+            )}
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("cr_media_engagement_events",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("cr_media_engagement_events",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    showTableError(
+      'eventsBody',
+      7,
+      error
+    );
+
+  }
+
+}
+
+/* =========================================================
+   SESSIONS
+========================================================= */
+
+async function loadSessions(){
+
+  try{
+
+    const rows =
+      await adminRows(
+        'cr_media_sessions',
+        500,
+        0,
+        'updated_at',
+        'desc'
+      );
+
+    document
+      .getElementById('sessionsBody')
+      .innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td class="mono">
+            ${escapeHtml(
+              row.user_id
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.content_title ||
+              row.content_key ||
+              row.content_id
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.media_type
+            )}
+          </td>
+
+          <td>
+            ${formatSeconds(
+              row.total_seconds
+            )}
+          </td>
+
+          <td>
+            ${formatSeconds(
+              row.last_position_seconds
+            )}
+          </td>
+
+          <td>
+            ${
+              row.completed
+              ? '<span class="badge success">Complete</span>'
+              : '<span class="badge">Active</span>'
+            }
+          </td>
+
+          <td>
+
+            <button
+              class="btn small"
+              onclick='editRecord("cr_media_sessions",${JSON.stringify(row)})'>
+              Edit
+            </button>
+
+            <button
+              class="btn small danger"
+              onclick='deleteRecord("cr_media_sessions",${JSON.stringify(row)})'>
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    showTableError(
+      'sessionsBody',
+      7,
+      error
+    );
+
+  }
+
+}
+
+/* =========================================================
+   SCHEMA
+========================================================= */
+
+async function loadSchema(){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        'cr_admin_v54_schema'
+      );
+
+    if(error){
+      throw error;
+    }
+
+    schema =
+      data || [];
+
+    renderSchema();
+
+  }catch(error){
+
+    toast(
+      error.message,
+      'error',
+      'Schema'
+    );
+
+  }
+
+}
+
+function renderSchema(){
+
+  const body =
+    document.getElementById(
+      'schemaBody'
+    );
+
+  const search =
+    (
+      document
+        .getElementById('tableSearch')
+        ?.value || ''
+    ).toLowerCase();
+
+  const rows =
+    schema.filter(row=>
+      !search ||
+      String(row.table_name)
+        .toLowerCase()
+        .includes(search)
+    );
+
+  body.innerHTML =
+    rows.map(row=>`
+
+      <tr>
+
+        <td>
+          ${escapeHtml(
+            row.schema_name
+          )}
+        </td>
+
+        <td>
+          <strong>
+            ${escapeHtml(
+              row.table_name
+            )}
+          </strong>
+        </td>
+
+        <td>
+          ${formatNumber(
+            row.column_count
+          )}
+        </td>
+
+        <td class="mono">
+          ${escapeHtml(
+            row.primary_key || '—'
+          )}
+        </td>
+
+        <td>
+          ${
+            row.rls_enabled
+            ? '<span class="badge success">RLS</span>'
+            : '<span class="badge warning">Open</span>'
+          }
+        </td>
+
+        <td>
+
+          <button
+            class="btn small"
+            onclick='browseTable("${escapeHtml(row.table_name)}")'>
+            Browse
+          </button>
+
+          <button
+            class="btn small primary"
+            onclick='openTableEditor("${escapeHtml(row.table_name)}",null)'>
+            + Add
+          </button>
+
+        </td>
+
+      </tr>
+
+    `).join('');
+
+}
+
+/* =========================================================
+   BROWSE TABLE
+========================================================= */
+
+async function browseTable(table){
+
+  currentTable =
+    table;
+
+  const rows =
+    await adminRows(
+      table,
+      100,
+      0,
+      null,
+      'asc'
+    );
+
+  if(!rows.length){
+
+    toast(
+      'This table currently has no records.',
+      'success',
+      table
+    );
+
+    return;
+
+  }
+
+  openTableViewer(
+    table,
+    rows
+  );
+
+}
+
+function openTableViewer(
+  table,
+  rows
+){
+
+  const columns =
+    Object.keys(rows[0] || {});
+
+  const html =
+    `
+    <div class="modal open"
+         id="viewerModal">
+
+      <div class="modal-box">
+
+        <div class="modal-head">
+
+          <div class="modal-title">
+            ${escapeHtml(table)}
+          </div>
+
+          <button
+            class="btn small"
+            onclick="document.getElementById('viewerModal').remove()">
+            ✕
+          </button>
+
+        </div>
+
+        <div class="modal-body">
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  ${columns.map(c=>
+                    `<th>${escapeHtml(c)}</th>`
+                  ).join('')}
+
+                  <th>Actions</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                ${rows.map(row=>`
+
+                  <tr>
+
+                    ${columns.map(c=>`
+
+                      <td>
+                        ${escapeHtml(
+                          formatCell(
+                            row[c]
+                          )
+                        )}
+                      </td>
+
+                    `).join('')}
+
+                    <td>
+
+                      <button
+                        class="btn small"
+                        onclick='editRecord("${escapeHtml(table)}",${JSON.stringify(row)})'>
+                        Edit
+                      </button>
+
+                      <button
+                        class="btn small danger"
+                        onclick='deleteRecord("${escapeHtml(table)}",${JSON.stringify(row)})'>
+                        Delete
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                `).join('')}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    `;
+
+  document.body.insertAdjacentHTML(
+    'beforeend',
+    html
+  );
+
+}
+
+/* =========================================================
+   EDITOR
+========================================================= */
+
+async function openTableEditor(
+  table,
+  record
+){
+
+  currentTable =
+    table;
+
+  currentRecord =
+    record;
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        'cr_admin_v54_columns',
+        {
+          p_schema:'public',
+          p_table:table
+        }
+      );
+
+    if(error){
+      throw error;
+    }
+
+    currentColumns =
+      data || [];
+
+    renderEditor();
+
+  }catch(error){
+
+    toast(
+      error.message,
+      'error',
+      'Editor'
+    );
+
+  }
+
+}
+
+function editRecord(
+  table,
+  record
+){
+
+  openTableEditor(
+    table,
+    record
+  );
+
+}
+
+function renderEditor(){
+
+  const isEdit =
+    !!currentRecord;
+
+  document
+    .getElementById('editorTitle')
+    .textContent =
+    `${isEdit ? 'Edit' : 'Add'} — ${currentTable}`;
+
+  const container =
+    document.getElementById(
+      'editorFields'
+    );
+
+  container.innerHTML =
+    currentColumns.map(col=>{
+
+      const name =
+        col.column_name;
+
+      const value =
+        currentRecord?.[name];
+
+      const readonly =
+        isEdit &&
+        isPrimaryKey(name);
+
+      const defaultValue =
+        value === null ||
+        value === undefined
+          ? ''
+          : value;
+
+      let type =
+        'text';
+
+      if(
+        col.data_type.includes('integer') ||
+        col.data_type.includes('numeric') ||
+        col.data_type.includes('double')
+      ){
+        type='number';
+      }
+
+      if(
+        col.data_type === 'boolean'
+      ){
+        return `
+          <div class="field">
+
+            <label>
+              ${escapeHtml(name)}
+            </label>
+
+            <select
+              class="select editor-field"
+              data-column="${escapeHtml(name)}"
+              data-type="boolean"
+              ${readonly?'disabled':''}>
+
+              <option value="">Default</option>
+              <option
+                value="true"
+                ${value === true ? 'selected':''}>
+                true
+              </option>
+
+              <option
+                value="false"
+                ${value === false ? 'selected':''}>
+                false
+              </option>
+
+            </select>
+
+          </div>
+        `;
+      }
+
+      if(
+        col.data_type === 'jsonb'
+      ){
+
+        return `
+          <div class="field full">
+
+            <label>
+              ${escapeHtml(name)} · JSON
+            </label>
+
+            <textarea
+              class="textarea editor-field"
+              data-column="${escapeHtml(name)}"
+              data-type="jsonb"
+              ${readonly?'readonly':''}>${escapeHtml(
+                typeof defaultValue === 'object'
+                  ? JSON.stringify(
+                      defaultValue,
+                      null,
+                      2
+                    )
+                  : defaultValue
+              )}</textarea>
+
+          </div>
+        `;
+
+      }
+
+      if(
+        col.data_type.includes('timestamp') ||
+        col.data_type === 'date'
+      ){
+
+        return `
+          <div class="field">
+
+            <label>
+              ${escapeHtml(name)}
+            </label>
+
+            <input
+              class="input editor-field"
+              type="text"
+              data-column="${escapeHtml(name)}"
+              data-type="${escapeHtml(col.data_type)}"
+              value="${escapeHtml(
+                defaultValue
+              )}"
+              ${readonly?'readonly':''}>
+
+          </div>
+        `;
+
+      }
+
+      const large =
+        name === 'body' ||
+        name === 'description' ||
+        name === 'show_description' ||
+        name === 'additional_info' ||
+        name === 'admin_notes';
+
+      if(large){
+
+        return `
+          <div class="field full">
+
+            <label>
+              ${escapeHtml(name)}
+            </label>
+
+            <textarea
+              class="textarea editor-field"
+              data-column="${escapeHtml(name)}"
+              data-type="${escapeHtml(col.data_type)}"
+              ${readonly?'readonly':''}>${escapeHtml(
+                defaultValue
+              )}</textarea>
+
+          </div>
+        `;
+
+      }
+
+      return `
+        <div class="field">
+
+          <label>
+            ${escapeHtml(name)}
+          </label>
+
+          <input
+            class="input editor-field"
+            type="${type}"
+            data-column="${escapeHtml(name)}"
+            data-type="${escapeHtml(col.data_type)}"
+            value="${escapeHtml(
+              defaultValue
+            )}"
+            ${readonly?'readonly':''}>
+
+        </div>
+      `;
+
+    }).join('');
+
+  document
+    .getElementById(
+      'editorModal'
+    )
+    .classList.add('open');
+
+}
+
+function isPrimaryKey(
+  column
+){
+
+  const primary =
+    schema.find(
+      x =>
+        x.table_name === currentTable
+    )?.primary_key || '';
+
+  return primary
+    .split(',')
+    .map(x=>x.trim())
+    .includes(column);
+
+}
+
+function closeModal(){
+
+  document
+    .getElementById(
+      'editorModal'
+    )
+    .classList.remove('open');
+
+}
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+async function saveRecord(){
+
+  if(!currentTable){
+    return;
+  }
+
+  const data = {};
+
+  document
+    .querySelectorAll(
+      '#editorFields .editor-field'
+    )
+    .forEach(field=>{
+
+      const column =
+        field.dataset.column;
+
+      if(
+        currentRecord &&
+        isPrimaryKey(column)
+      ){
+        return;
+      }
+
+      let value =
+        field.value;
+
+      const type =
+        field.dataset.type;
+
+      if(
+        value === ''
+      ){
+
+        return;
+
+      }
+
+      if(type === 'boolean'){
+
+        if(
+          value === 'true'
+        ){
+          data[column]=true;
+        }else if(
+          value === 'false'
+        ){
+          data[column]=false;
+        }
+
+        return;
+
+      }
+
+      if(type === 'jsonb'){
+
+        try{
+
+          data[column] =
+            JSON.parse(value);
+
+        }catch{
+
+          toast(
+            `Invalid JSON in ${column}`,
+            'error',
+            'Save Failed'
+          );
+
+          throw new Error(
+            'Invalid JSON'
+          );
+
+        }
+
+        return;
+
+      }
+
+      if(
+        type.includes('integer') ||
+        type.includes('numeric') ||
+        type.includes('double')
+      ){
+
+        data[column] =
+          Number(value);
+
+        return;
+
+      }
+
+      data[column]=value;
+
+    });
+
+  try{
+
+    let result;
+
+    if(currentRecord){
+
+      const pk =
+        getPrimaryKeyObject(
+          currentTable,
+          currentRecord
+        );
+
+      result =
+        await db.rpc(
+          'cr_admin_v54_write',
+          {
+            p_schema:'public',
+            p_table:currentTable,
+            p_data:data,
+            p_pk:pk,
+            p_mode:'update'
+          }
+        );
+
+    }else{
+
+      result =
+        await db.rpc(
+          'cr_admin_v54_write',
+          {
+            p_schema:'public',
+            p_table:currentTable,
+            p_data:data,
+            p_pk:null,
+            p_mode:'insert'
+          }
+        );
+
+    }
+
+    if(result.error){
+      throw result.error;
+    }
+
+    toast(
+      'Record saved successfully.',
+      'success',
+      currentRecord
+        ? 'Updated'
+        : 'Created'
+    );
+
+    closeModal();
+
+    await loadSectionData(
+      activeSection()
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message,
+      'error',
+      'Save Failed'
+    );
+
+  }
+
+}
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deleteRecord(
+  table,
+  record
+){
+
+  if(!confirm(
+    `Delete this record from ${table}?\n\nThis action cannot be undone.`
+  )){
+    return;
+  }
+
+  try{
+
+    const pk =
+      getPrimaryKeyObject(
+        table,
+        record
+      );
+
+    const {
+      error
+    } =
+      await db.rpc(
+        'cr_admin_v54_delete',
+        {
+          p_schema:'public',
+          p_table:table,
+          p_pk:pk
+        }
+      );
+
+    if(error){
+      throw error;
+    }
+
+    toast(
+      'Record deleted.',
+      'success',
+      'Deleted'
+    );
+
+    await loadSectionData(
+      activeSection()
+    );
+
+  }catch(error){
+
+    toast(
+      error.message,
+      'error',
+      'Delete Failed'
+    );
+
+  }
+
+}
+
+/* =========================================================
+   PRIMARY KEY
+========================================================= */
+
+function getPrimaryKeyObject(
+  table,
+  record
+){
+
+  const meta =
+    schema.find(
+      x =>
+        x.table_name === table
+    );
+
+  if(
+    !meta ||
+    !meta.primary_key
+  ){
+
+    if(record.id){
+      return {
+        id:record.id
+      };
+    }
+
+    throw new Error(
+      `Unable to determine primary key for ${table}`
+    );
+
+  }
+
+  const keys =
+    meta.primary_key
+      .split(',')
+      .map(
+        x=>x.trim()
+      );
+
+  const pk = {};
+
+  keys.forEach(key=>{
+
+    pk[key] =
+      record[key];
+
+  });
+
+  return pk;
+
+}
+
+/* =========================================================
+   ROLE MANAGEMENT
+========================================================= */
+
+async function loadRoles(){
+
+  const roles = [
+    'member',
+    'supporter',
+    'creator',
+    'moderator',
+    'producer',
+    'staff',
+    'admin',
+    'owner'
+  ];
+
+  let rows=[];
+
+  try{
+
+    rows =
+      await adminRows(
+        'cr_members',
+        500,
+        0,
+        'created_at',
+        'asc'
+      );
+
+  }catch(error){
+
+    console.warn(error);
+
+  }
+
+  const counts = {};
+
+  roles.forEach(
+    role=>{
+      counts[role]=0;
+    }
+  );
+
+  rows.forEach(row=>{
+
+    const role =
+      String(
+        row.role ||
+        'member'
+      ).toLowerCase();
+
+    if(
+      counts[role] !== undefined
+    ){
+      counts[role]++;
+    }
+
+  });
+
+  document
+    .getElementById('roleGrid')
+    .innerHTML =
+    roles.map(role=>`
+
+      <div class="role-card">
+
+        <div class="role-name">
+          ${escapeHtml(
+            role.toUpperCase()
+          )}
+        </div>
+
+        <div class="role-count">
+          ${formatNumber(
+            counts[role] || 0
+          )}
+        </div>
+
+      </div>
+
+    `).join('');
+
+}
+
+async function changeRole(){
+
+  const userId =
+    document
+      .getElementById(
+        'roleUserId'
+      )
+      .value
+      .trim();
+
+  const role =
+    document
+      .getElementById(
+        'roleSelect'
+      )
+      .value;
+
+  if(!userId){
+
+    toast(
+      'Enter a member user ID.',
+      'error',
+      'Role'
+    );
+
+    return;
+
+  }
+
+  if(!confirm(
+    `Change this member's role to ${role}?`
+  )){
+    return;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await db.rpc(
+        'cr_admin_set_member_role',
+        {
+          p_user_id:userId,
+          p_role:role
+        }
+      );
+
+    if(error){
+      throw error;
+    }
+
+    toast(
+      `Role changed to ${role}.`,
+      'success',
+      'Role Updated'
+    );
+
+    await loadMembers();
+    await loadLeaderboard();
+    await loadRoles();
+
+  }catch(error){
+
+    toast(
+      error.message,
+      'error',
+      'Role Change Failed'
+    );
+
+  }
+
+}
+
+function editMemberRole(
+  row
+){
+
+  showSection('roles');
+
+  document
+    .getElementById('roleUserId')
+    .value =
+    row.user_id || '';
+
+  document
+    .getElementById('roleSelect')
+    .value =
+    row.role || 'member';
+
+}
+
+/* =========================================================
+   AUDIT
+========================================================= */
 
 async function loadAudit(){
+
   try{
-    const rows=await rpc('cr_admin_crud',{p_action:'list',p_table:'cr_admin_audit_log',p_id:null,p_data:{}})||[];
-    $('auditBody').innerHTML=rows.slice(0,100).map(r=>`<tr><td>${esc(r.created_at?new Date(r.created_at).toLocaleString():'—')}</td><td>${esc(r.action||'—')}</td><td>${esc(r.resource||r.target_table||'—')}</td><td>${esc(r.target_id||r.target_user_id||'—')}</td><td class="truncate">${esc(displayCell(r.details))}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">No audit entries.</td></tr>';
-  }catch(e){$('auditBody').innerHTML=`<tr><td colspan="5" class="error">${esc(e.message)}</td></tr>`}
+
+    const rows =
+      await adminRows(
+        'cr_admin_audit_log',
+        500,
+        0,
+        'created_at',
+        'desc'
+      );
+
+    document
+      .getElementById('auditBody')
+      .innerHTML =
+      rows.map(row=>`
+
+        <tr>
+
+          <td>
+            <strong>
+              ${escapeHtml(
+                row.action
+              )}
+            </strong>
+          </td>
+
+          <td>
+            ${escapeHtml(
+              row.target_table ||
+              '—'
+            )}
+          </td>
+
+          <td class="mono">
+            ${escapeHtml(
+              row.target_id ||
+              '—'
+            )}
+          </td>
+
+          <td style="max-width:300px">
+
+            <pre style="
+              margin:0;
+              white-space:pre-wrap;
+              font-size:9px;
+              color:#9ca8bb;
+            ">${escapeHtml(
+              JSON.stringify(
+                row.metadata || {},
+                null,
+                2
+              )
+            )}</pre>
+
+          </td>
+
+          <td>
+            ${formatDate(
+              row.created_at
+            )}
+          </td>
+
+        </tr>
+
+      `).join('');
+
+  }catch(error){
+
+    showTableError(
+      'auditBody',
+      5,
+      error
+    );
+
+  }
+
 }
 
-async function signOut(){await db.auth.signOut();location.reload()}
-function closeModal(){state.editing=null;$('modal').classList.remove('open')}
-$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
-db.auth.onAuthStateChange(()=>{});
+/* =========================================================
+   UTILITIES
+========================================================= */
 
-init();
+function setText(
+  id,
+  value
+){
+
+  const el =
+    document.getElementById(id);
+
+  if(el){
+    el.textContent =
+      value;
+  }
+
+}
+
+function formatCell(value){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+    return '—';
+  }
+
+  if(
+    typeof value === 'object'
+  ){
+
+    return JSON.stringify(
+      value
+    );
+
+  }
+
+  return String(value);
+
+}
+
+function showTableError(
+  bodyId,
+  colspan,
+  error
+){
+
+  const body =
+    document.getElementById(
+      bodyId
+    );
+
+  if(body){
+
+    body.innerHTML =
+      `<tr><td colspan="${colspan}">
+        <div class="empty">
+          <strong>Database Error</strong>
+          ${escapeHtml(
+            error?.message ||
+            String(error)
+          )}
+        </div>
+      </td></tr>`;
+
+  }
+
+}
+
+function activeSection(){
+
+  const section =
+    document.querySelector(
+      '.section.active'
+    );
+
+  if(!section){
+    return 'dashboard';
+  }
+
+  return section.id
+    .replace(
+      'section-',
+      ''
+    );
+
+}
+
+/* =========================================================
+   NEW MEMBER
+========================================================= */
+
+function newMember(){
+
+  openTableEditor(
+    'cr_members',
+    null
+  );
+
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+  .querySelectorAll(
+    '.nav-btn[data-section]'
+  )
+  .forEach(btn=>{
+
+    btn.addEventListener(
+      'click',
+      ()=>{
+        showSection(
+          btn.dataset.section
+        );
+      }
+    );
+
+  });
+
+document
+  .getElementById(
+    'loginBtn'
+  )
+  .addEventListener(
+    'click',
+    login
+  );
+
+document
+  .getElementById(
+    'logoutBtn'
+  )
+  .addEventListener(
+    'click',
+    logout
+  );
+
+document
+  .getElementById(
+    'refreshBtn'
+  )
+  .addEventListener(
+    'click',
+    ()=>{
+      loadSectionData(
+        activeSection()
+      );
+    }
+  );
+
+document
+  .getElementById(
+    'mobileMenu'
+  )
+  .addEventListener(
+    'click',
+    ()=>{
+      document
+        .getElementById(
+          'sidebar'
+        )
+        .classList.toggle(
+          'open'
+        );
+    }
+  );
+
+document
+  .getElementById(
+    'editorModal'
+  )
+  .addEventListener(
+    'click',
+    event=>{
+
+      if(
+        event.target.id ===
+        'editorModal'
+      ){
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+/* =========================================================
+   REALTIME
+========================================================= */
+
+function startRealtime(){
+
+  const channel =
+    db.channel(
+      'crowrules-admin-live'
+    );
+
+  channel
+    .on(
+      'postgres_changes',
+      {
+        event:'*',
+        schema:'public',
+        table:'cr_members'
+      },
+      ()=>{
+        if(
+          activeSection()==='members'
+        ){
+          loadMembers();
+        }
+
+        if(
+          activeSection()==='dashboard'
+        ){
+          loadDashboard();
+        }
+
+        if(
+          activeSection()==='leaderboard'
+        ){
+          loadLeaderboard();
+        }
+      }
+    )
+    .on(
+      'postgres_changes',
+      {
+        event:'*',
+        schema:'public',
+        table:'cr_member_watch_history'
+      },
+      ()=>{
+        if(
+          activeSection()==='watch'
+        ){
+          loadWatchHistory();
+        }
+      }
+    )
+    .on(
+      'postgres_changes',
+      {
+        event:'*',
+        schema:'public',
+        table:'cr_media_engagement_events'
+      },
+      ()=>{
+        if(
+          activeSection()==='events'
+        ){
+          loadEvents();
+        }
+
+        if(
+          activeSection()==='dashboard'
+        ){
+          loadDashboard();
+        }
+      }
+    )
+    .on(
+      'postgres_changes',
+      {
+        event:'*',
+        schema:'public',
+        table:'cr_media_sessions'
+      },
+      ()=>{
+        if(
+          activeSection()==='sessions'
+        ){
+          loadSessions();
+        }
+      }
+    )
+    .subscribe();
+
+}
+
+/* =========================================================
+   PERIODIC REFRESH
+========================================================= */
+
+function startRefresh(){
+
+  clearInterval(
+    refreshTimer
+  );
+
+  refreshTimer =
+    setInterval(
+      ()=>{
+        if(
+          document.visibilityState ===
+          'visible'
+        ){
+
+          const section =
+            activeSection();
+
+          if(
+            [
+              'dashboard',
+              'members',
+              'leaderboard'
+            ].includes(section)
+          ){
+
+            loadSectionData(
+              section
+            );
+
+          }
+
+        }
+      },
+      60000
+    );
+
+}
+
+/* =========================================================
+   START
+========================================================= */
+
+(async function(){
+
+  await init();
+
+  startRealtime();
+
+  startRefresh();
+
+})();
+
 </script>
+
 </body>
 </html>
