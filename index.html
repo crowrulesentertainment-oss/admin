@@ -4,165 +4,368 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#05060a">
-<title>CrowRules Admin Dashboard</title>
+<meta name="description" content="CrowRules Entertainment Admin Dashboard v2.0">
+<title>CrowRules Admin Dashboard v2.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#05060a;--panel:#0b0e16;--panel2:#101521;--line:#252b3a;--text:#f6f8ff;--muted:#98a3ba;--cyan:#00e5ff;--purple:#9b5cff;--pink:#ff3cac;--green:#42e596;--red:#ff5d73;--yellow:#ffd166}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 10% 0,#1b1230 0,transparent 35%),#05060a;color:var(--text);font-family:Montserrat,Arial,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}
-.top{position:sticky;top:0;z-index:30;background:#070910eF;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.topin{max-width:1700px;margin:auto;padding:13px 18px;display:flex;align-items:center;gap:15px}.logo{font:800 18px Orbitron;letter-spacing:1px}.logo span{color:var(--cyan)}.pill{font-size:10px;font-weight:800;border:1px solid #ff3cac55;color:#ff9ad3;background:#ff3cac10;border-radius:999px;padding:5px 8px}.who{margin-left:auto;color:var(--muted);font-size:12px}
-.layout{max-width:1700px;margin:auto;display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 61px)}aside{border-right:1px solid var(--line);padding:18px;position:sticky;top:61px;height:calc(100vh - 61px);overflow:auto}.navbtn{width:100%;text-align:left;border:0;background:transparent;color:var(--muted);padding:11px 12px;border-radius:10px;margin:3px 0}.navbtn:hover,.navbtn.active{background:#ffffff09;color:#fff}.navtitle{font:700 10px Orbitron;color:#5d6881;letter-spacing:1.5px;margin:18px 10px 7px}
-main{padding:22px}.page{display:none}.page.active{display:block}.head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:16px}.head h1,.head h2{font-family:Orbitron;margin:0}.head h1{font-size:26px}.head h2{font-size:17px}.muted{color:var(--muted);font-size:12px}.grid{display:grid;gap:14px}.cards{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:linear-gradient(180deg,#10141e,#0a0d13);border:1px solid var(--line);border-radius:16px;padding:16px}.metric{font:700 27px Orbitron;margin-top:7px}.label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}
-.btn{border:1px solid #ffffff18;background:#ffffff07;color:#fff;padding:9px 12px;border-radius:9px;font-weight:700}.btn:hover{background:#ffffff12}.primary{border-color:#00e5ff55;background:#00e5ff12}.danger{border-color:#ff5d7355;background:#ff5d7312}.success{border-color:#42e59655;background:#42e59612}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.field{width:100%;background:#070910;border:1px solid var(--line);border-radius:9px;color:#fff;padding:10px;outline:0}.field:focus{border-color:#00e5ff66}.search{max-width:380px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:14px}.table{width:100%;border-collapse:collapse;min-width:800px}.table th,.table td{padding:10px;border-bottom:1px solid #ffffff0a;text-align:left;font-size:12px;vertical-align:top}.table th{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;background:#0b0e15;position:sticky;top:0}.table tr:hover td{background:#ffffff03}.cell{max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.actions{display:flex;gap:5px;white-space:nowrap}.badge{display:inline-block;padding:4px 7px;border-radius:999px;border:1px solid #ffffff14;font-size:9px;font-weight:800}.ok{color:var(--green)}.err{color:#ffb5c0}.warn{color:var(--yellow)}
-.modal{position:fixed;inset:0;background:#000c;z-index:80;display:none;place-items:center;padding:18px}.modal.open{display:grid}.modalbox{width:min(950px,100%);max-height:92vh;overflow:auto;background:#0c1018;border:1px solid var(--line);border-radius:18px;padding:18px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.full{grid-column:1/-1}.help{font-size:11px;color:var(--muted);line-height:1.5}.json{font-family:monospace;min-height:180px}
-.toast{position:fixed;right:16px;bottom:16px;z-index:100;display:grid;gap:7px}.toast div{background:#10141d;border:1px solid var(--line);padding:11px 13px;border-radius:10px;box-shadow:0 12px 40px #0009;font-size:12px}.locked{padding:35px;text-align:center;border:1px solid var(--line);border-radius:16px;color:var(--muted)}.dangerzone{border-color:#ff5d7333}
-@media(max-width:1000px){.layout{grid-template-columns:1fr}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow:auto}.navtitle{display:none}.navbtn{min-width:max-content}.cards{grid-template-columns:repeat(2,1fr)}.two,.three{grid-template-columns:1fr}}
-@media(max-width:600px){main{padding:13px}.cards{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.head{align-items:flex-start;flex-direction:column}}
+:root{--bg:#05060a;--panel:#0b0e15;--panel2:#101522;--line:#252b3a;--text:#f6f8ff;--muted:#94a0b8;--cyan:#00e5ff;--purple:#9b5cff;--pink:#ff3cac;--green:#42e596;--red:#ff5d73;--yellow:#ffd166}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 10% 0,#201338 0,transparent 30%),radial-gradient(circle at 90% 20%,#06242c 0,transparent 28%),var(--bg);color:var(--text);font-family:Montserrat,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.top{height:64px;position:sticky;top:0;z-index:50;background:#060810eF;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.topin{height:100%;max-width:1800px;margin:auto;padding:0 18px;display:flex;align-items:center;gap:13px}.brand{font:800 18px Orbitron;letter-spacing:1px}.brand b{color:var(--cyan)}.tag{font-size:9px;font-weight:800;letter-spacing:1px;color:#ff9ad3;border:1px solid #ff3cac44;background:#ff3cac0e;border-radius:99px;padding:5px 8px}.who{margin-left:auto;color:var(--muted);font-size:11px}.signout{margin-left:8px}
+.layout{max-width:1800px;margin:auto;display:grid;grid-template-columns:255px 1fr;min-height:calc(100vh - 64px)}aside{position:sticky;top:64px;height:calc(100vh - 64px);overflow:auto;padding:15px;border-right:1px solid var(--line);background:#07091088}.navtitle{margin:16px 9px 7px;font:700 9px Orbitron;color:#5f6b83;letter-spacing:1.5px}.nav{width:100%;border:1px solid transparent;background:transparent;color:var(--muted);padding:10px 11px;border-radius:10px;text-align:left;margin:2px 0;font-weight:600;font-size:12px}.nav:hover,.nav.active{background:#ffffff08;color:#fff;border-color:#ffffff08}.nav.active{box-shadow:inset 2px 0 var(--cyan)}
+main{padding:22px}.page{display:none}.page.active{display:block}.head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.head h1,.head h2,.head h3{font-family:Orbitron;margin:0}.head h1{font-size:25px}.head h2{font-size:16px}.sub{color:var(--muted);font-size:11px;margin-top:5px}.grid{display:grid;gap:12px}.stats{grid-template-columns:repeat(6,minmax(130px,1fr))}.card{background:linear-gradient(180deg,#10141e,#0a0d13);border:1px solid var(--line);border-radius:15px;padding:15px;box-shadow:0 15px 45px #0003}.label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}.metric{font:700 25px Orbitron;margin-top:7px}.metric.small{font-size:18px}.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}.toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.btn{border:1px solid #ffffff16;background:#ffffff07;color:#fff;padding:9px 12px;border-radius:9px;font-weight:700;font-size:11px}.btn:hover{background:#ffffff10}.primary{border-color:#00e5ff55;background:#00e5ff12}.danger{border-color:#ff5d7355;background:#ff5d7310}.success{border-color:#42e59655;background:#42e59610}.warn{border-color:#ffd16655;background:#ffd16610}.field{width:100%;background:#070910;border:1px solid var(--line);border-radius:9px;color:#fff;padding:9px 10px;outline:none}.field:focus{border-color:#00e5ff66}.search{max-width:360px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:9px 10px;border-bottom:1px solid #ffffff0a;text-align:left;font-size:11px;vertical-align:middle}.table th{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;background:#0b0e15}.table tr:hover td{background:#ffffff03}.truncate{max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.actions{display:flex;gap:5px;flex-wrap:wrap}.badge{display:inline-block;border:1px solid #ffffff16;border-radius:999px;padding:4px 7px;font-size:9px;font-weight:800}.role-member{color:#c7cfdf}.role-supporter{color:#72e5ff}.role-creator{color:#c69cff}.role-moderator{color:#ff91cf}.role-producer{color:#ffd166}.role-staff{color:#66e8b1}.role-admin{color:#ff6f83}.role-owner{color:#fff;background:#9b5cff18;border-color:#9b5cff55}.rank{font:800 15px Orbitron}.rank1{color:#ffd166}.rank2{color:#c8d0dc}.rank3{color:#cd9a69}
+.progress{height:6px;background:#ffffff08;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink))}
+.membergrid{grid-template-columns:330px 1fr}.membercard{position:sticky;top:85px;height:max-content}.avatar{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#00e5ff33,#9b5cff44);border:1px solid #ffffff18;font:700 17px Orbitron}.memberhead{display:flex;gap:12px;align-items:center}.kvs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.kv{padding:9px;border:1px solid #ffffff0b;border-radius:9px;background:#ffffff03}.kv b{display:block;font-size:15px;margin-top:4px}.rolebox{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.modal{position:fixed;inset:0;z-index:100;background:#000c;display:none;place-items:center;padding:18px}.modal.open{display:grid}.modalbox{width:min(1000px,100%);max-height:94vh;overflow:auto;background:#0c1018;border:1px solid var(--line);border-radius:17px;padding:18px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.full{grid-column:1/-1}.help{color:var(--muted);font-size:10px;line-height:1.5}.json{min-height:170px;font-family:monospace;font-size:11px}.locked{max-width:700px;margin:80px auto;padding:35px;text-align:center;border:1px solid var(--line);border-radius:16px;background:#0b0e15}.toast{position:fixed;right:16px;bottom:16px;z-index:150;display:grid;gap:7px}.toast div{background:#10141d;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:11px;box-shadow:0 14px 45px #0009}.error{color:#ff9aaa}.good{color:#76f0ba}.empty{padding:25px;text-align:center;color:var(--muted);font-size:11px}
+@media(max-width:1250px){.stats{grid-template-columns:repeat(3,1fr)}.two,.three{grid-template-columns:1fr}.membergrid{grid-template-columns:1fr}.membercard{position:static}}
+@media(max-width:850px){.layout{grid-template-columns:1fr}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);display:flex;gap:5px;overflow:auto}.navtitle{display:none}.nav{min-width:max-content}.stats{grid-template-columns:repeat(2,1fr)}main{padding:13px}}
+@media(max-width:560px){.stats{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.head{align-items:flex-start;flex-direction:column}.who{display:none}}
 </style>
 </head>
 <body>
 <header class="top"><div class="topin">
-<div class="logo">CROW<span>RULES</span></div><span class="pill">ADMIN CONTROL CENTER</span><span id="who" class="who">Checking session…</span>
+<div class="brand">CROW<b>RULES</b></div><span class="tag">ADMIN DASHBOARD v2.0</span><span id="who" class="who">Checking authentication…</span><button id="signout" class="btn signout" style="display:none" onclick="signOut()">Sign Out</button>
 </div></header>
+
 <div class="layout">
-<aside id="sidebar"></aside>
+<aside id="sidebar" style="display:none">
+<div class="navtitle">COMMAND</div>
+<button class="nav active" data-page="dashboard">▣ Dashboard</button>
+<button class="nav" data-page="members">♟ Members</button>
+<button class="nav" data-page="leaderboard">★ Leaderboard</button>
+<button class="nav" data-page="tables">▤ All Tables</button>
+<button class="nav" data-page="applications">✦ Applications</button>
+<button class="nav" data-page="audit">◈ Audit Log</button>
+<div class="navtitle">QUICK ACCESS</div>
+<div id="quick"></div>
+</aside>
+
 <main>
-<section id="locked" class="locked">Checking administrator access…</section>
+<div id="locked" class="locked">Checking administrator access…</div>
 
 <section id="dashboard" class="page">
-<div class="head"><div><h1>Command Center</h1><div class="muted">Supabase-backed CrowRules Entertainment administration.</div></div><button class="btn" onclick="refreshAll()">↻ Refresh</button></div>
-<div class="grid cards">
-<div class="card"><div class="label">Public Tables</div><div class="metric" id="mTables">—</div></div>
-<div class="card"><div class="label">Members</div><div class="metric" id="mMembers">—</div></div>
-<div class="card"><div class="label">Content Records</div><div class="metric" id="mContent">—</div></div>
-<div class="card"><div class="label">Role</div><div class="metric" id="mRole">—</div></div>
+<div class="head"><div><h1>Command Center</h1><div class="sub">CrowRules Entertainment — live Supabase administration.</div></div><div class="toolbar"><button class="btn primary" onclick="refreshDashboard()">↻ Refresh</button></div></div>
+<div class="grid stats">
+<div class="card"><div class="label">Members</div><div id="s_members" class="metric">—</div></div>
+<div class="card"><div class="label">Active Members</div><div id="s_active_members" class="metric">—</div></div>
+<div class="card"><div class="label">Content</div><div id="s_content" class="metric">—</div></div>
+<div class="card"><div class="label">Published / Live</div><div id="s_published_content" class="metric">—</div></div>
+<div class="card"><div class="label">CrowPoints</div><div id="s_watch_points" class="metric">—</div></div>
+<div class="card"><div class="label">Watch History</div><div id="s_watch_history" class="metric">—</div></div>
+<div class="card"><div class="label">Media Sessions</div><div id="s_media_sessions" class="metric">—</div></div>
+<div class="card"><div class="label">Engagement Events</div><div id="s_engagement_events" class="metric">—</div></div>
+<div class="card"><div class="label">Chat Messages</div><div id="s_chat_messages" class="metric">—</div></div>
+<div class="card"><div class="label">CrowSpace Posts</div><div id="s_posts" class="metric">—</div></div>
+<div class="card"><div class="label">Groups</div><div id="s_groups" class="metric">—</div></div>
+<div class="card"><div class="label">Suggestions</div><div id="s_suggestions" class="metric">—</div></div>
+<div class="card"><div class="label">Podcaster Apps</div><div id="s_podcaster_applications" class="metric">—</div></div>
+<div class="card"><div class="label">Sports Apps</div><div id="s_sports_applications" class="metric">—</div></div>
+<div class="card"><div class="label">Friendships</div><div id="s_friends" class="metric">—</div></div>
+<div class="card"><div class="label">Notifications</div><div id="s_notifications" class="metric">—</div></div>
 </div>
 <div class="grid two" style="margin-top:14px">
-<div class="card"><div class="head"><h2>Database</h2></div><div id="dbSummary" class="help"></div></div>
-<div class="card"><div class="head"><h2>Security</h2></div><div class="help">The dashboard uses the Supabase publishable key and a server-side protected RPC. No service-role or secret key is embedded in this HTML. Admin/Owner authorization is enforced in PostgreSQL before CRUD operations are executed.</div></div>
+<div class="card"><div class="head"><h2>Role Distribution</h2></div><div id="roleDist"></div></div>
+<div class="card"><div class="head"><h2>System Status</h2></div><div id="systemStatus" class="help">Loading…</div></div>
 </div>
+</section>
+
+<section id="members" class="page">
+<div class="head"><div><h1>Member Management</h1><div class="sub">Search members and manage profiles and roles.</div></div><input id="memberSearch" class="field search" placeholder="Search username, display name, email…" oninput="renderMembers()"></div>
+<div class="grid membergrid">
+<div id="memberInspector" class="card membercard"><div class="empty">Select a member to manage.</div></div>
+<div class="card"><div class="tablewrap"><table class="table"><thead><tr><th>Member</th><th>Role</th><th>Points</th><th>Watch</th><th>Status</th><th>Joined</th><th>Action</th></tr></thead><tbody id="membersBody"></tbody></table></div></div>
+</div>
+</section>
+
+<section id="leaderboard" class="page">
+<div class="head"><div><h1>Member Leaderboard</h1><div class="sub">Lifetime and monthly CrowPoints plus total watch time.</div></div><div class="toolbar"><select id="leaderLimit" class="field" style="width:auto" onchange="loadLeaderboard()"><option>25</option><option selected>50</option><option>100</option><option>250</option><option>500</option></select><button class="btn" onclick="loadLeaderboard()">↻ Refresh</button></div></div>
+<div class="card"><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Member</th><th>Role</th><th>Lifetime Points</th><th>Monthly Points</th><th>Watch Hours</th><th>Status</th><th></th></tr></thead><tbody id="leaderBody"></tbody></table></div></div>
 </section>
 
 <section id="tables" class="page">
-<div class="head"><div><h1>Table Manager</h1><div class="muted">Browse public tables and create, edit or delete records.</div></div><div class="toolbar"><input id="tableSearch" class="field search" placeholder="Filter tables…"><button class="btn" onclick="loadSchema()">Reload Schema</button></div></div>
-<div class="grid" style="grid-template-columns:260px 1fr">
-<div class="card" style="max-height:72vh;overflow:auto"><div id="tableList"></div></div>
-<div class="card"><div class="head"><h2 id="tableTitle">Select a table</h2><button id="addBtn" class="btn primary" style="display:none" onclick="openEditor()">＋ Add</button></div><div id="tableInfo" class="help"></div><div class="tablewrap" style="margin-top:12px"><table class="table"><thead id="thead"></thead><tbody id="tbody"></tbody></table></div></div>
+<div class="head"><div><h1>Supabase Table Manager</h1><div class="sub">Generic add, edit and delete interface for public base tables.</div></div><div class="toolbar"><input id="tableSearch" class="field search" placeholder="Filter tables…" oninput="renderTableList()"><button class="btn" onclick="loadSchema()">Reload</button></div></div>
+<div class="grid" style="grid-template-columns:250px 1fr">
+<div class="card" style="max-height:76vh;overflow:auto"><div id="tableList"></div></div>
+<div class="card"><div class="head"><div><h2 id="tableTitle">Select a table</h2><div id="tableInfo" class="sub"></div></div><div class="toolbar"><button id="addRecord" class="btn primary" style="display:none" onclick="openEditor()">＋ Add</button><button id="reloadRows" class="btn" style="display:none" onclick="loadRows()">↻</button></div></div><div class="tablewrap"><table class="table"><thead id="genericHead"></thead><tbody id="genericBody"></tbody></table></div></div>
 </div>
 </section>
 
-<section id="members" class="page"><div class="head"><div><h1>Members</h1><div class="muted">Manage member profiles, status, points and watch totals.</div></div><button class="btn" onclick="openTable('cr_members')">Open Full Member Table</button></div><div class="card"><div id="memberTable"></div></div></section>
+<section id="applications" class="page">
+<div class="head"><div><h1>Creator Applications</h1><div class="sub">Review applications using the same secure admin layer.</div></div><button class="btn" onclick="loadApplications()">↻ Refresh</button></div>
+<div class="grid two"><div class="card"><div class="head"><h2>Podcasters</h2></div><div id="podApps"></div></div><div class="card"><div class="head"><h2>Sports Creators</h2></div><div id="sportApps"></div></div></div>
+</section>
 
-<section id="applications" class="page"><div class="head"><div><h1>Creator Applications</h1><div class="muted">Podcaster and CrowRules Sports creator applications.</div></div><button class="btn" onclick="loadApplications()">Refresh</button></div><div class="grid two"><div class="card"><div class="head"><h2>Podcasters</h2></div><div id="podApps"></div></div><div class="card"><div class="head"><h2>Sports Creators</h2></div><div id="sportApps"></div></div></div></section>
-
-<section id="audit" class="page"><div class="head"><div><h1>Audit & Activity</h1><div class="muted">Operational history from the audit tables.</div></div><button class="btn" onclick="loadAudit()">Refresh</button></div><div class="grid two"><div class="card"><h2 style="font-family:Orbitron;font-size:15px">Admin Audit</h2><div id="auditA"></div></div><div class="card"><h2 style="font-family:Orbitron;font-size:15px">Admin Activity</h2><div id="auditB"></div></div></div></section>
+<section id="audit" class="page">
+<div class="head"><div><h1>Audit Log</h1><div class="sub">Administrative actions and database activity.</div></div><button class="btn" onclick="loadAudit()">↻ Refresh</button></div>
+<div class="card"><div class="tablewrap"><table class="table"><thead><tr><th>Time</th><th>Action</th><th>Resource</th><th>Target</th><th>Details</th></tr></thead><tbody id="auditBody"></tbody></table></div></div>
+</section>
 </main>
 </div>
 
-<div id="modal" class="modal"><div class="modalbox"><div class="head"><div><h2 id="modalTitle">Edit Record</h2><div id="modalHelp" class="muted"></div></div><button class="btn" onclick="closeModal()">Close</button></div><div id="editor"></div></div></div>
-<div class="toast" id="toast"></div>
+<div id="modal" class="modal"><div class="modalbox"><div class="head"><div><h2 id="modalTitle">Edit Record</h2><div id="modalHelp" class="sub"></div></div><button class="btn" onclick="closeModal()">Close</button></div><div id="modalBody"></div></div></div>
+<div id="toast" class="toast"></div>
 
 <script>
 'use strict';
-const SUPABASE_URL='https://zauxdqyssratvzmomozf.supabase.co';
-const SUPABASE_KEY='sb_publishable_-m6NuVfbrcs84OH7aGPrDw_AuLfXo8J';
-const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const state={session:null,user:null,role:'member',schema:[],table:null,rows:[],editing:null};
 
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const toast=(m,err=false)=>{const x=document.createElement('div');x.textContent=m;if(err)x.style.borderColor='#ff5d7366';$('toast').appendChild(x);setTimeout(()=>x.remove(),3500)};
+const SUPABASE_URL='https://zauxdqyssratvzmomozf.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_-m6NuVfbrcs84OH7aGPrDw_AuLfXo8J';
+
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
+});
+
+const ROLE_RANK={member:10,supporter:20,creator:30,moderator:40,producer:50,staff:60,admin:70,owner:100,super_admin:100};
+const ROLES=['member','supporter','creator','moderator','producer','staff','admin','owner'];
+const state={user:null,role:'member',stats:{},members:[],leaderboard:[],schema:[],table:null,rows:[],editing:null};
+
 const $=id=>document.getElementById(id);
-const roleRank={member:10,supporter:20,creator:30,moderator:40,producer:50,staff:60,admin:70,owner:100,super_admin:100};
-const roleName=r=>String(r||'member').replace('_',' ').toUpperCase();
-function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id)?.classList.add('active');document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.page===id));}
-function nav(){ $('sidebar').innerHTML=`<div class="navtitle">CONTROL</div><button class="navbtn active" data-page="dashboard">▣ Dashboard</button><button class="navbtn" data-page="tables">▤ All Tables</button><button class="navbtn" data-page="members">♟ Members</button><button class="navbtn" data-page="applications">★ Creator Applications</button><button class="navbtn" data-page="audit">◈ Audit & Activity</button><div class="navtitle">QUICK TABLES</div>`;document.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>showPage(b.dataset.page));}
-function quickTables(){const host=$('sidebar');['cr_content','cr_schedule','cr_news','cr_projects','cr_original_productions','sports_shows','sports_episodes','podcasts','podcast_episodes','crowspace_posts','crowspace_groups','cr_announcements','cr_donation_campaigns','cr_partners'].forEach(t=>{const b=document.createElement('button');b.className='navbtn';b.textContent=t;b.onclick=()=>{showPage('tables');openTable(t)};host.appendChild(b)})}
-async function init(){
- const {data}=await db.auth.getSession();state.session=data.session;state.user=data.session?.user||null;
- if(!state.user){$('locked').innerHTML='<h2>Administrator sign-in required</h2><p>Sign in with a CrowRules administrator account to continue.</p>';return}
- const rr=await db.rpc('cr_my_role');state.role=String(rr.data||'member').toLowerCase();
- $('who').textContent=(state.user.email||'Authenticated')+' • '+roleName(state.role);
- if((roleRank[state.role]||10)<70){$('locked').innerHTML='<h2>Access denied</h2><p>Your current role does not have administrator access.</p>';return}
- $('locked').style.display='none';nav();quickTables();showPage('dashboard');await refreshAll();
-}
-async function rpc(action,table,id=null,data={}){
- const {data:r,error}=await db.rpc('cr_admin_crud',{p_action:action,p_table:table,p_id:id,p_data:data});
- if(error)throw error;return r;
-}
-async function loadSchema(){
- const {data,error}=await db.rpc('cr_admin_schema');if(error){toast(error.message,true);return}
- state.schema=data||[];renderTableList();setText('mTables',state.schema.length);setText('dbSummary',`${state.schema.length} public base tables are visible to the admin schema service. Tables with a primary-key id can use the generic CRUD editor; tables without an id are available for inspection but may require a dedicated editor.`);
-}
-function renderTableList(){
- const q=($('tableSearch')?.value||'').toLowerCase();$('tableList').innerHTML=state.schema.filter(t=>t.table_name.toLowerCase().includes(q)).map(t=>`<button class="navbtn ${state.table?.table_name===t.table_name?'active':''}" onclick="openTable('${esc(t.table_name)}')">${esc(t.table_name)}<span style="float:right;font-size:9px">${t.has_id?'CRUD':'VIEW'}</span></button>`).join('')||'<div class="help">No tables.</div>';
-}
-$('tableSearch').addEventListener('input',renderTableList);
-async function openTable(name){
- const t=state.schema.find(x=>x.table_name===name);if(!t){toast('Table schema not loaded yet.','true');await loadSchema();return openTable(name)}
- state.table=t;renderTableList();setText('tableTitle',name);setText('tableInfo',`${(t.columns||[]).length} columns • primary key: ${t.primary_key||'none'} • ${t.has_id?'full generic CRUD enabled':'inspection only in generic editor'}`);$('addBtn').style.display='block';await loadRows();
-}
-async function loadRows(){
- if(!state.table)return;try{state.rows=await rpc('list',state.table.table_name);renderRows()}catch(e){$('tbody').innerHTML=`<tr><td class="err">${esc(e.message)}</td></tr>`}
-}
-function renderRows(){
- const rows=state.rows||[],cols=(state.table.columns||[]);$('thead').innerHTML='<tr>'+cols.map(c=>`<th>${esc(c.name)}</th>`).join('')+'<th>Actions</th></tr>';
- $('tbody').innerHTML=rows.map(r=>{const key=state.table.has_id?r.id:null;return '<tr>'+cols.map(c=>`<td class="cell" title="${esc(typeof r[c.name]==='object'?JSON.stringify(r[c.name]):r[c.name])}">${esc(typeof r[c.name]==='object'?JSON.stringify(r[c.name]):r[c.name])}</td>`).join('')+`<td><div class="actions">${key?`<button class="btn" onclick="openEditor('${esc(key)}')">Edit</button><button class="btn danger" onclick="deleteRow('${esc(key)}')">Delete</button>`:'<span class="badge">NO id</span>'}</div></td></tr>`}).join('')||'<tr><td>No records found.</td></tr>';
-}
-function fieldInput(c,value){
- const v=value===undefined||value===null?'':(typeof value==='object'?JSON.stringify(value,null,2):String(value));
- if(c.name==='id'||c.name==='created_at'||c.name==='updated_at')return `<input class="field" data-col="${esc(c.name)}" value="${esc(v)}" ${c.name==='id'?'readonly':''}>`;
- if(c.type==='boolean')return `<select class="field" data-col="${esc(c.name)}"><option value="true" ${v==='true'?'selected':''}>true</option><option value="false" ${v==='false'?'selected':''}>false</option></select>`;
- if(c.type==='json' || c.type==='jsonb' || c.type==='ARRAY')return `<textarea class="field json" data-col="${esc(c.name)}">${esc(v)}</textarea>`;
- if(c.type.includes('timestamp'))return `<input class="field" data-col="${esc(c.name)}" type="datetime-local" value="${v?new Date(v).toISOString().slice(0,16):''}">`;
- if(c.type==='date')return `<input class="field" data-col="${esc(c.name)}" type="date" value="${esc(v)}">`;
- if(c.type.includes('integer')||c.type==='bigint'||c.type==='numeric')return `<input class="field" data-col="${esc(c.name)}" type="number" value="${esc(v)}">`;
- return `<textarea class="field" data-col="${esc(c.name)}" rows="${c.name.includes('description')||c.name.includes('body')||c.name.includes('message')||c.name.includes('bio')?'4':'2'}">${esc(v)}</textarea>`;
-}
-async function openEditor(id=null){
- if(!state.table)return;
- state.editing=id;
- let row={};
- if(id){try{row=await rpc('get',state.table.table_name,id)}catch(e){toast(e.message,true);return}}
- $('modalTitle').textContent=id?`Edit ${state.table.table_name}`:`Add ${state.table.table_name}`;
- $('modalHelp').textContent=`${state.table.columns.length} columns • ${state.table.primary_key||'no primary key'}`;
- $('editor').innerHTML=`<div class="formgrid">${state.table.columns.map(c=>`<div class="${c.name==='body'||c.name==='description'||c.name==='metadata'||c.name==='content'||c.name==='message'||c.name==='bio'||c.name==='social_links'?'full':''}"><label class="help">${esc(c.name)} • ${esc(c.type)}${c.nullable?'':' • required'}</label>${fieldInput(c,row[c.name])}</div>`).join('')}</div><div class="toolbar" style="margin-top:14px"><button class="btn primary" onclick="saveEditor()">Save Record</button><button class="btn" onclick="closeModal()">Cancel</button></div><div class="help" style="margin-top:10px">Only fields present in the payload are updated. Database constraints and RLS/security checks still apply.</div>`;
- $('modal').classList.add('open');
-}
-function closeModal(){$('modal').classList.remove('open');state.editing=null}
-function parseVal(c,v){
- if(v==='')return null;
- if(c.type==='boolean')return v==='true';
- if(c.type==='json'||c.type==='jsonb'||c.type==='ARRAY'){try{return JSON.parse(v)}catch{throw new Error(`${c.name} must contain valid JSON`)}} 
- if(c.type.includes('timestamp'))return new Date(v).toISOString();
- if(c.type.includes('integer')||c.type==='bigint')return Number(v);
- if(c.type==='numeric')return Number(v);
- return v;
-}
-async function saveEditor(){
- const data={};try{for(const c of state.table.columns){const el=document.querySelector(`[data-col="${CSS.escape(c.name)}"]`);if(!el||c.name==='id')continue;if(el.value!==''||c.nullable)data[c.name]=parseVal(c,el.value)} }catch(e){toast(e.message,true);return}
- try{await rpc(state.editing?'update':'insert',state.table.table_name,state.editing?state.editing:null,data);toast('Record saved.');closeModal();await loadRows()}catch(e){toast(e.message,true)}
-}
-async function deleteRow(id){
- if(!confirm(`Delete this record from ${state.table.table_name}? This cannot be undone.`))return;
- try{await rpc('delete',state.table.table_name,id);toast('Record deleted.');await loadRows()}catch(e){toast(e.message,true)}
-}
-async function loadMembers(){
- try{const rows=await rpc('list','cr_members');setText('mMembers',rows.length);$('memberTable').innerHTML=`<div class="tablewrap"><table class="table"><thead><tr><th>Username</th><th>Display</th><th>Email</th><th>Role</th><th>Points</th><th>Watch</th><th>Status</th><th>Actions</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.username)}</td><td>${esc(r.display_name)}</td><td>${esc(r.email)}</td><td>${esc(r.role)}</td><td>${Number(r.lifetime_points??r.points??0).toLocaleString()}</td><td>${(Number(r.watch_seconds||0)/3600).toFixed(1)}h</td><td>${esc(r.membership_status)} / ${r.is_active?'active':'inactive'}</td><td><button class="btn" onclick="openTable('cr_members')">Manage</button></td></tr>`).join('')}</tbody></table></div>`}catch(e){$('memberTable').innerHTML=`<div class="help err">${esc(e.message)}</div>`}
-}
-async function loadApplications(){
- const [p,s]=await Promise.allSettled([rpc('list','cr_podcaster_applications'),rpc('list','cr_sports_show_creator_applications')]);
- const render=x=>x.status==='fulfilled'?(x.value||[]).map(r=>`<div class="card" style="margin-bottom:8px"><div class="head"><strong>${esc(r.show_name)}</strong><span class="badge">${esc(r.status)}</span></div><div class="muted">${esc(r.email||'')} • ${esc(r.created_at||'')}</div><p class="help">${esc(r.show_description||'')}</p><div class="actions"><button class="btn" onclick="openTable('${r._sports?'cr_sports_show_creator_applications':'cr_podcaster_applications'}')">Manage</button></div></div>`).join('')||'<div class="help">No applications.</div>':`<div class="help err">${esc(x.reason?.message||'Unable to load applications')}</div>`;
- $('podApps').innerHTML=render(p);$('sportApps').innerHTML=render(s);
-}
-async function loadAudit(){
- const a=await Promise.allSettled([rpc('list','cr_admin_audit_log'),rpc('list','cr_admin_v52_activity')]);
- const render=x=>x.status==='fulfilled'?(x.value||[]).slice(0,30).map(r=>`<div class="card" style="margin:5px 0"><strong>${esc(r.action||'event')}</strong><div class="muted">${esc(r.target_table||r.table_name||r.resource||'')} • ${esc(r.created_at||'')}</div></div>`).join('')||'<div class="help">No entries.</div>':`<div class="help err">${esc(x.reason?.message||'Unavailable')}</div>`;
- $('auditA').innerHTML=render(a[0]);$('auditB').innerHTML=render(a[1]);
-}
-async function refreshAll(){await loadSchema();await loadMembers();await loadApplications();await loadAudit();setText('mContent',(await rpc('list','cr_content')).length);setText('mRole',roleName(state.role));}
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Number(n||0).toLocaleString();
+const hours=n=>(Number(n||0)/3600).toFixed(2);
+function toast(msg,bad=false){const d=document.createElement('div');d.textContent=msg;if(bad)d.classList.add('error');$('toast').appendChild(d);setTimeout(()=>d.remove(),3500)}
 function setText(id,v){if($(id))$(id).textContent=v}
+function roleClass(r){return 'role-'+String(r||'member').toLowerCase().replace('_','-')}
+function roleBadge(r){return `<span class="badge ${roleClass(r)}">${esc(String(r||'member').toUpperCase())}</span>`}
+function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id)?.classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
+function isAdmin(){return (ROLE_RANK[state.role]||0)>=70}
+function isOwner(){return (ROLE_RANK[state.role]||0)>=100}
+
+async function rpc(name,args={}){
+  const {data,error}=await db.rpc(name,args);
+  if(error)throw error;
+  return data;
+}
+
+async function init(){
+  const {data,error}=await db.auth.getUser();
+  if(error||!data.user){$('locked').innerHTML='<h2>Administrator sign-in required</h2><p>Sign in with your CrowRules administrator account.</p>';return}
+  state.user=data.user;
+  let role='member';
+  try{role=await rpc('cr_my_role')}catch{}
+  state.role=String(role||'member').toLowerCase();
+  $('who').textContent=(state.user.email||'Authenticated')+' • '+state.role.toUpperCase();
+  $('signout').style.display='block';
+  if(!isAdmin()){$('locked').innerHTML='<h2>Access denied</h2><p>Your current CrowRules role is '+esc(state.role)+'. Administrator access is required.</p>';return}
+  $('locked').style.display='none';$('sidebar').style.display='block';
+  document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+  buildQuick();
+  showPage('dashboard');
+  await refreshDashboard();
+}
+
+function buildQuick(){
+  const names=['cr_content','cr_members','cr_member_roles','cr_role_catalog','cr_member_watch_history','cr_member_watch_points','cr_media_sessions','cr_media_engagement_events','cr_schedule','cr_channels','cr_shows','cr_episodes','tacoma_nights_episodes','back_deck_episodes','crowspace_groups','crowspace_posts','crowspace_comments','cr_member_chat','cr_member_suggestions','cr_podcaster_applications','cr_sports_show_creator_applications','cr_announcements','cr_partners','cr_donation_campaigns'];
+  $('quick').innerHTML=names.map(n=>`<button class="nav" onclick="showPage('tables');openTable('${n}')">${n}</button>`).join('');
+}
+
+async function refreshDashboard(){
+  try{
+    const s=await rpc('cr_admin_dashboard_stats');
+    state.stats=s||{};
+    Object.entries(state.stats).forEach(([k,v])=>setText('s_'+k,fmt(v)));
+    renderRoleDistribution();
+    setText('systemStatus','Database RPC layer: online. Current administrator: '+(state.user?.email||'unknown')+'. Effective role: '+state.role+'. Generic CRUD is routed through PostgreSQL security-definer functions rather than a browser service-role key.');
+    await Promise.all([loadMembers(),loadLeaderboard(),loadSchema(),loadApplications(),loadAudit()]);
+  }catch(e){toast(e.message,true);setText('systemStatus','Unable to load dashboard: '+e.message)}
+}
+
+function renderRoleDistribution(){
+  const counts={};state.members.forEach(m=>{const r=String(m.role||'member').toLowerCase();counts[r]=(counts[r]||0)+1});
+  const total=state.members.length||1;
+  $('roleDist').innerHTML=ROLES.map(r=>{const n=counts[r]||0,p=Math.round(n/total*100);return `<div style="margin:9px 0"><div style="display:flex;justify-content:space-between;font-size:10px"><span>${roleBadge(r)}</span><span>${n} (${p}%)</span></div><div class="progress" style="margin-top:5px"><i style="width:${p}%"></i></div></div>`}).join('');
+}
+
+async function loadMembers(){
+  try{
+    state.members=await rpc('cr_admin_crud',{p_action:'list',p_table:'cr_members',p_id:null,p_data:{}}) || [];
+    renderMembers();
+  }catch(e){toast('Members: '+e.message,true)}
+}
+
+function renderMembers(){
+  const q=($('memberSearch')?.value||'').toLowerCase();
+  const rows=state.members.filter(m=>[m.username,m.display_name,m.email,m.role].some(v=>String(v||'').toLowerCase().includes(q)));
+  $('membersBody').innerHTML=rows.map(m=>{
+    const points=Number(m.lifetime_points??m.points??0);
+    const watch=m.watch_seconds??m.total_watch_seconds??0;
+    return `<tr>
+      <td><strong>${esc(m.display_name||m.username||'Unnamed')}</strong><div class="sub">@${esc(m.username||'')}</div></td>
+      <td>${roleBadge(m.role||'member')}</td><td>${fmt(points)}</td><td>${hours(watch)}h</td>
+      <td>${m.is_active===false?'<span class="badge role-admin">INACTIVE</span>':'<span class="badge role-staff">ACTIVE</span>'}</td>
+      <td>${esc(m.created_at?new Date(m.created_at).toLocaleDateString():'—')}</td>
+      <td><button class="btn" onclick="inspectMember('${esc(m.user_id||'')}')">Manage</button></td>
+    </tr>`
+  }).join('')||'<tr><td colspan="7" class="empty">No matching members.</td></tr>';
+}
+
+async function inspectMember(uid){
+  const m=state.members.find(x=>String(x.user_id)===String(uid));
+  if(!m){toast('Member not found',true);return}
+  const current=String(m.role||'member').toLowerCase();
+  const roleOptions=ROLES.map(r=>`<option value="${r}" ${r===current?'selected':''} ${!isOwner()&&['admin','owner'].includes(r)?'disabled':''}>${r.toUpperCase()}</option>`).join('');
+  $('memberInspector').innerHTML=`
+    <div class="memberhead"><div class="avatar">${esc((m.display_name||m.username||'?').slice(0,1).toUpperCase())}</div><div><strong>${esc(m.display_name||m.username||'Member')}</strong><div class="sub">@${esc(m.username||'')}<br>${esc(m.email||'')}</div></div></div>
+    <div class="kvs">
+      <div class="kv"><span class="label">Lifetime Points</span><b>${fmt(m.lifetime_points??m.points??0)}</b></div>
+      <div class="kv"><span class="label">Watch Hours</span><b>${hours(m.watch_seconds??m.total_watch_seconds??0)}</b></div>
+      <div class="kv"><span class="label">Status</span><b>${m.is_active===false?'Inactive':'Active'}</b></div>
+      <div class="kv"><span class="label">Member ID</span><b style="font-size:10px">${esc(m.id||'—')}</b></div>
+    </div>
+    <div class="rolebox"><div class="label">CrowRules Role</div><select id="memberRoleSelect" class="field" style="margin-top:6px">${roleOptions}</select>
+    <div class="help" style="margin-top:7px">Member → Supporter → Creator → Moderator → Producer → Staff → Admin → Owner. Admin/Owner escalation is restricted by PostgreSQL.</div>
+    <button class="btn primary" style="margin-top:10px" onclick="changeMemberRole('${esc(m.user_id)}')">Save Role</button></div>
+    <div class="toolbar" style="margin-top:14px"><button class="btn" onclick="openTable('cr_members')">Edit Full Profile</button><button class="btn danger" onclick="deleteMember('${esc(m.user_id)}')">Delete Member</button></div>`;
+}
+
+async function changeMemberRole(uid){
+  const role=$('memberRoleSelect').value;
+  if(!confirm('Change this member to '+role.toUpperCase()+'?'))return;
+  try{const result=await rpc('cr_admin_set_member_role',{p_user_id:uid,p_role:role});toast('Role changed to '+role.toUpperCase());await refreshDashboard();inspectMember(uid)}catch(e){toast(e.message,true)}
+}
+
+async function deleteMember(uid){
+  if(!confirm('Delete this member profile? This is destructive and database foreign-key rules may apply.'))return;
+  try{await rpc('cr_admin_crud',{p_action:'delete',p_table:'cr_members',p_id:uid,p_data:{}});toast('Member deleted.');$('memberInspector').innerHTML='<div class="empty">Member deleted.</div>';await refreshDashboard()}catch(e){toast(e.message,true)}
+}
+
+async function loadLeaderboard(){
+  try{
+    const limit=Number($('leaderLimit')?.value||50);
+    state.leaderboard=await rpc('cr_admin_member_leaderboard',{p_limit:limit})||[];
+    $('leaderBody').innerHTML=state.leaderboard.map(r=>{
+      const cls=r.rank<=3?'rank rank'+r.rank:'rank';
+      return `<tr><td class="${cls}">#${r.rank}</td><td><strong>${esc(r.display_name||r.username||'Member')}</strong><div class="sub">@${esc(r.username||'')}</div></td><td>${roleBadge(r.role)}</td><td><strong>${fmt(r.lifetime_points)}</strong></td><td>${fmt(r.monthly_points)}</td><td>${Number(r.watch_hours||0).toFixed(2)}h</td><td>${r.is_active?'<span class="badge role-staff">ACTIVE</span>':'<span class="badge role-admin">INACTIVE</span>'}</td><td><button class="btn" onclick="showPage('members');inspectMember('${esc(r.user_id)}')">Manage</button></td></tr>`
+    }).join('')||'<tr><td colspan="8" class="empty">No leaderboard members.</td></tr>';
+  }catch(e){$('leaderBody').innerHTML=`<tr><td colspan="8" class="error">${esc(e.message)}</td></tr>`}
+}
+
+async function loadSchema(){
+  try{state.schema=await rpc('cr_admin_schema')||[];renderTableList()}catch(e){toast('Schema: '+e.message,true)}
+}
+
+function renderTableList(){
+  const q=($('tableSearch')?.value||'').toLowerCase();
+  const rows=state.schema.filter(t=>String(t.table_name).toLowerCase().includes(q));
+  $('tableList').innerHTML=rows.map(t=>`<button class="nav ${state.table?.table_name===t.table_name?'active':''}" onclick="openTable('${esc(t.table_name)}')">${esc(t.table_name)} <span style="float:right;font-size:8px">${t.has_id?'CRUD':'VIEW'}</span></button>`).join('')||'<div class="empty">No tables found.</div>';
+}
+
+async function openTable(name){
+  const t=state.schema.find(x=>x.table_name===name);
+  if(!t){toast('Table not in schema cache',true);return}
+  state.table=t;renderTableList();
+  setText('tableTitle',name);
+  setText('tableInfo',`${(t.columns||[]).length} columns • primary key: ${t.primary_key||'none'} • ${t.has_id?'add/edit/delete enabled':'inspection only'}`);
+  $('addRecord').style.display=t.has_id?'block':'none';$('reloadRows').style.display='block';
+  await loadRows();
+}
+
+async function loadRows(){
+  if(!state.table)return;
+  try{
+    state.rows=await rpc('cr_admin_crud',{p_action:'list',p_table:state.table.table_name,p_id:null,p_data:{}})||[];
+    renderRows();
+  }catch(e){$('genericBody').innerHTML=`<tr><td class="error">${esc(e.message)}</td></tr>`}
+}
+
+function displayCell(v){
+  if(v===null||v===undefined)return '—';
+  if(typeof v==='object')return JSON.stringify(v);
+  return String(v);
+}
+
+function renderRows(){
+  const cols=state.table.columns||[];
+  $('genericHead').innerHTML='<tr>'+cols.map(c=>`<th>${esc(c.name)}</th>`).join('')+'<th>Actions</th></tr>';
+  $('genericBody').innerHTML=state.rows.map(r=>{
+    const id=state.table.primary_key==='id'?r.id:null;
+    return '<tr>'+cols.map(c=>`<td class="truncate" title="${esc(displayCell(r[c.name]))}">${esc(displayCell(r[c.name]))}</td>`).join('')+
+    `<td>${id?`<div class="actions"><button class="btn" onclick="openEditor('${esc(id)}')">Edit</button><button class="btn danger" onclick="deleteRow('${esc(id)}')">Delete</button></div>`:'<span class="badge">NO SIMPLE PK</span>'}</td></tr>`
+  }).join('')||`<tr><td colspan="${cols.length+1}" class="empty">No records.</td></tr>`;
+}
+
+function inputFor(c,value){
+  let v=value??'';
+  if(typeof v==='object')v=JSON.stringify(v,null,2);
+  if(c.name==='id')return `<input class="field" data-col="${esc(c.name)}" value="${esc(v)}" readonly>`;
+  if(c.name==='created_at'||c.name==='updated_at')return `<input class="field" data-col="${esc(c.name)}" value="${esc(v)}" readonly>`;
+  if(c.type==='boolean')return `<select class="field" data-col="${esc(c.name)}"><option value="true" ${String(v)==='true'?'selected':''}>true</option><option value="false" ${String(v)==='false'?'selected':''}>false</option></select>`;
+  if(c.type==='json'||c.type==='jsonb'||c.type==='ARRAY')return `<textarea class="field json" data-col="${esc(c.name)}">${esc(v)}</textarea>`;
+  if(c.type.includes('timestamp'))return `<input class="field" data-col="${esc(c.name)}" type="datetime-local" value="${v?new Date(v).toISOString().slice(0,16):''}">`;
+  if(c.type==='date')return `<input class="field" data-col="${esc(c.name)}" type="date" value="${esc(v)}">`;
+  if(c.type.includes('integer')||c.type==='bigint'||c.type==='numeric')return `<input class="field" data-col="${esc(c.name)}" type="number" value="${esc(v)}">`;
+  return `<textarea class="field" data-col="${esc(c.name)}" rows="${/description|body|message|bio|notes|details|social_links|additional_info|goals/i.test(c.name)?5:2}">${esc(v)}</textarea>`;
+}
+
+async function openEditor(id=null){
+  if(!state.table)return;
+  state.editing=id;
+  let row={};
+  if(id){try{row=await rpc('cr_admin_crud',{p_action:'get',p_table:state.table.table_name,p_id:id,p_data:{}})||{}}catch(e){toast(e.message,true);return}}
+  $('modalTitle').textContent=(id?'Edit ':'Add ')+state.table.table_name;
+  $('modalHelp').textContent=`${state.table.columns.length} fields`;
+  $('modalBody').innerHTML=`<div class="formgrid">${state.table.columns.map(c=>{
+    const full=/body|description|metadata|message|bio|notes|details|social_links|additional_info|goals/i.test(c.name)?'full':'';
+    return `<div class="${full}"><label class="help">${esc(c.name)} • ${esc(c.type)}${c.nullable?'':' • required'}</label>${inputFor(c,row[c.name])}</div>`;
+  }).join('')}</div><div class="toolbar" style="margin-top:14px"><button class="btn primary" onclick="saveEditor()">Save Record</button><button class="btn" onclick="closeModal()">Cancel</button></div>`;
+  $('modal').classList.add('open');
+}
+
+function parseInput(c,v){
+  if(v==='')return null;
+  if(c.type==='boolean')return v==='true';
+  if(c.type==='json'||c.type==='jsonb'||c.type==='ARRAY'){try{return JSON.parse(v)}catch{throw new Error(c.name+' contains invalid JSON')}}
+  if(c.type.includes('timestamp'))return new Date(v).toISOString();
+  if(c.type.includes('integer')||c.type==='bigint'||c.type==='numeric')return Number(v);
+  return v;
+}
+
+async function saveEditor(){
+  const payload={};
+  try{
+    for(const c of state.table.columns){
+      if(['id','created_at','updated_at'].includes(c.name))continue;
+      const el=document.querySelector(`[data-col="${CSS.escape(c.name)}"]`);
+      if(!el)continue;
+      if(el.value!==''||c.nullable)payload[c.name]=parseInput(c,el.value);
+    }
+    await rpc('cr_admin_crud',{p_action:state.editing?'update':'insert',p_table:state.table.table_name,p_id:state.editing,p_data:payload});
+    toast('Record saved.');closeModal();await loadRows();
+  }catch(e){toast(e.message,true)}
+}
+
+async function deleteRow(id){
+  if(!confirm('Delete this record from '+state.table.table_name+'?'))return;
+  try{await rpc('cr_admin_crud',{p_action:'delete',p_table:state.table.table_name,p_id:id,p_data:{}});toast('Record deleted.');await loadRows()}catch(e){toast(e.message,true)}
+}
+
+async function loadApplications(){
+  const [p,s]=await Promise.allSettled([
+    rpc('cr_admin_crud',{p_action:'list',p_table:'cr_podcaster_applications',p_id:null,p_data:{}}),
+    rpc('cr_admin_crud',{p_action:'list',p_table:'cr_sports_show_creator_applications',p_id:null,p_data:{}})
+  ]);
+  function render(result,sports=false){
+    if(result.status==='rejected')return `<div class="help error">${esc(result.reason?.message||'Unable to load')}</div>`;
+    const rows=result.value||[];
+    return rows.map(r=>`<div class="card" style="margin:7px 0;padding:12px"><div class="head"><strong>${esc(r.show_name||'Untitled')}</strong>${roleBadge(r.status||'pending')}</div><div class="sub">${esc(r.email||'')} • ${esc(r.created_at?new Date(r.created_at).toLocaleString():'')}</div><p class="help">${esc(r.show_description||'')}</p><button class="btn" onclick="showPage('tables');openTable('${sports?'cr_sports_show_creator_applications':'cr_podcaster_applications'}')">Manage</button></div>`).join('')||'<div class="empty">No applications.</div>';
+  }
+  $('podApps').innerHTML=render(p,false);$('sportApps').innerHTML=render(s,true);
+}
+
+async function loadAudit(){
+  try{
+    const rows=await rpc('cr_admin_crud',{p_action:'list',p_table:'cr_admin_audit_log',p_id:null,p_data:{}})||[];
+    $('auditBody').innerHTML=rows.slice(0,100).map(r=>`<tr><td>${esc(r.created_at?new Date(r.created_at).toLocaleString():'—')}</td><td>${esc(r.action||'—')}</td><td>${esc(r.resource||r.target_table||'—')}</td><td>${esc(r.target_id||r.target_user_id||'—')}</td><td class="truncate">${esc(displayCell(r.details))}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">No audit entries.</td></tr>';
+  }catch(e){$('auditBody').innerHTML=`<tr><td colspan="5" class="error">${esc(e.message)}</td></tr>`}
+}
+
+async function signOut(){await db.auth.signOut();location.reload()}
+function closeModal(){state.editing=null;$('modal').classList.remove('open')}
+$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+db.auth.onAuthStateChange(()=>{});
+
 init();
 </script>
 </body>
