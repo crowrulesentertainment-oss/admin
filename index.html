@@ -3,313 +3,3958 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <meta name="theme-color" content="#05060a">
-<title>CrowRules Admin Pro</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="description"
+      content="CrowRules Entertainment Admin Pro — Supabase-powered administration platform.">
+
+<title>CrowRules Entertainment — Admin Pro</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{--bg:#05060a;--panel:#0d111b;--panel2:#121827;--text:#f4f7ff;--muted:#8992aa;--accent:#00eaff;--accent2:#9d5cff;--danger:#ff4168;--ok:#42ff9d;--line:rgba(255,255,255,.08)}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 10% 0,rgba(0,234,255,.09),transparent 32%),radial-gradient(circle at 90% 10%,rgba(157,92,255,.09),transparent 32%),var(--bg);color:var(--text);font-family:Montserrat,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
-.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--line);background:rgba(7,9,15,.92);backdrop-filter:blur(18px);padding:20px}
-.brand{font-family:Orbitron,sans-serif;font-weight:900;letter-spacing:.08em;margin-bottom:25px}.brand small{display:block;font:600 9px Montserrat;color:var(--muted);letter-spacing:.2em;margin-top:6px}
-.nav{display:grid;gap:6px}.nav button{border:1px solid transparent;background:transparent;color:var(--muted);text-align:left;padding:12px;border-radius:11px}.nav button:hover,.nav button.active{background:rgba(0,234,255,.07);border-color:rgba(0,234,255,.2);color:var(--text)}
-.main{padding:25px;max-width:1700px;width:100%}.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.topbar h1{font:800 24px Orbitron;margin:0}.topbar p{margin:6px 0 0;color:var(--muted);font-size:11px}.actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn{border:1px solid rgba(0,234,255,.25);background:rgba(0,234,255,.06);color:var(--text);padding:10px 13px;border-radius:10px}.btn:hover{border-color:var(--accent)}.btn.danger{border-color:rgba(255,65,104,.3);background:rgba(255,65,104,.06)}
-.view{display:none}.view.active{display:block}.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,minmax(0,1fr))}.card{background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.018));border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 18px 50px rgba(0,0,0,.2)}.stat .label{font-size:10px;color:var(--muted);letter-spacing:.12em}.stat .value{font:800 28px Orbitron;margin-top:8px;color:var(--accent)}.sectionTitle{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:26px 0 12px}.sectionTitle h2{font:700 16px Orbitron;margin:0}.sectionTitle p{font-size:10px;color:var(--muted);margin:4px 0 0}
-.categoryGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.category{transition:.25s}.category:hover{transform:translateY(-3px);border-color:rgba(0,234,255,.25)}.category .icon{font-size:24px}.category h3{font:700 13px Orbitron;margin:10px 0 6px}.category p{font-size:10px;color:var(--muted);line-height:1.6}.category .tables{font-size:9px;color:#6f7890;line-height:1.5;margin-top:9px}
-.tableWrap{overflow:auto}.dataTable{width:100%;border-collapse:collapse;font-size:11px}.dataTable th,.dataTable td{padding:11px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.dataTable th{font-size:9px;color:var(--muted);letter-spacing:.1em}.pill{display:inline-block;padding:5px 8px;border-radius:999px;background:rgba(0,234,255,.07);color:var(--accent);font-size:9px;font-weight:800}.pill.off{color:var(--muted);background:rgba(255,255,255,.05)}
-.formGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;background:#080b12;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px}.field textarea{min-height:90px;resize:vertical}.full{grid-column:1/-1}
-.themePreview{min-height:260px;border-radius:16px;border:1px solid var(--line);padding:25px;background:radial-gradient(circle at 20% 10%,color-mix(in srgb,var(--preview,#00eaff) 16%,transparent),transparent 35%),#080a11}.themePreview h3{font:800 25px Orbitron;margin:10px 0}.themePreview .accent{color:var(--preview,#00eaff)}
-.status{padding:10px 12px;border-radius:10px;background:rgba(66,255,157,.06);border:1px solid rgba(66,255,157,.15);color:var(--ok);font-size:10px}.error{background:rgba(255,65,104,.06);border-color:rgba(255,65,104,.2);color:#ff91a6}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.modal.open{display:flex}.modalBox{width:min(800px,100%);max-height:90vh;overflow:auto;background:#0b0e17;border:1px solid var(--line);border-radius:20px;padding:20px}.modalHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.modalHead h2{font:700 17px Orbitron;margin:0}.muted{color:var(--muted)}.small{font-size:10px}
-@media(max-width:1100px){.app{grid-template-columns:220px 1fr}.stats{grid-template-columns:repeat(2,1fr)}.categoryGrid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:700px){.app{display:block}.sidebar{position:static;height:auto}.nav{grid-template-columns:repeat(2,1fr)}.main{padding:15px}.stats,.categoryGrid,.formGrid{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap');
+
+:root {
+  --bg:#05060a;
+  --bg2:#090c13;
+  --panel:#0d111a;
+  --panel2:#111722;
+  --panel3:#151c29;
+  --border:#202a3a;
+  --text:#eef5ff;
+  --muted:#7f8da5;
+  --accent:#00eaff;
+  --accent2:#9d5cff;
+  --success:#48ff91;
+  --warning:#ffd166;
+  --danger:#ff4f70;
+  --shadow:0 20px 70px rgba(0,0,0,.45);
+  --radius:16px;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+html,
+body {
+  margin:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(0,234,255,.08), transparent 28%),
+    radial-gradient(circle at 90% 20%, rgba(157,92,255,.09), transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body {
+  overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font:inherit;
+}
+
+button {
+  cursor:pointer;
+}
+
+.app {
+  display:grid;
+  grid-template-columns:280px minmax(0,1fr);
+  min-height:100vh;
+}
+
+.sidebar {
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:auto;
+  background:
+    linear-gradient(180deg,rgba(13,17,26,.98),rgba(5,6,10,.98));
+  border-right:1px solid var(--border);
+  padding:18px 14px;
+  z-index:30;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 8px 18px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:12px;
+}
+
+.logo {
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--accent);
+  border-radius:12px;
+  color:var(--accent);
+  background:rgba(0,234,255,.06);
+  box-shadow:0 0 25px rgba(0,234,255,.12);
+  font-size:23px;
+}
+
+.brand-title {
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:1px;
+}
+
+.brand-sub {
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+  letter-spacing:1px;
+}
+
+.nav-section {
+  margin:18px 7px 7px;
+  color:#53617a;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-weight:800;
+}
+
+.nav {
+  display:grid;
+  gap:4px;
+}
+
+.nav button {
+  border:1px solid transparent;
+  background:transparent;
+  color:#aebbd0;
+  text-align:left;
+  padding:10px 11px;
+  border-radius:10px;
+  transition:.18s ease;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+}
+
+.nav button:hover {
+  background:rgba(255,255,255,.035);
+  border-color:var(--border);
+  color:white;
+}
+
+.nav button.active {
+  color:white;
+  background:
+    linear-gradient(90deg,rgba(0,234,255,.09),rgba(157,92,255,.08));
+  border-color:rgba(0,234,255,.25);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon {
+  width:20px;
+  text-align:center;
+}
+
+.main {
+  min-width:0;
+  padding:18px;
+}
+
+.topbar {
+  position:sticky;
+  top:12px;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:12px 14px;
+  margin-bottom:18px;
+  border:1px solid var(--border);
+  background:rgba(10,13,20,.82);
+  backdrop-filter:blur(20px);
+  border-radius:14px;
+}
+
+.top-left,
+.top-right {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.page-title {
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.connection {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.dot {
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--danger);
+  box-shadow:0 0 10px currentColor;
+}
+
+.dot.online {
+  background:var(--success);
+}
+
+.admin-pill {
+  padding:7px 10px;
+  border:1px solid rgba(72,255,145,.25);
+  background:rgba(72,255,145,.06);
+  color:var(--success);
+  border-radius:999px;
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.btn {
+  border:1px solid var(--border);
+  background:#111722;
+  color:#dce8f7;
+  border-radius:10px;
+  padding:9px 12px;
+  transition:.18s ease;
+}
+
+.btn:hover {
+  border-color:#34445c;
+  transform:translateY(-1px);
+}
+
+.btn.primary {
+  background:linear-gradient(135deg,rgba(0,234,255,.16),rgba(157,92,255,.15));
+  border-color:rgba(0,234,255,.35);
+  color:white;
+}
+
+.btn.danger {
+  border-color:rgba(255,79,112,.35);
+  color:#ff91a6;
+}
+
+.btn.success {
+  border-color:rgba(72,255,145,.3);
+  color:var(--success);
+}
+
+.mobile-menu {
+  display:none;
+}
+
+.view {
+  display:none;
+}
+
+.view.active {
+  display:block;
+}
+
+.hero {
+  padding:24px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:
+    linear-gradient(135deg,rgba(0,234,255,.08),transparent 38%),
+    linear-gradient(315deg,rgba(157,92,255,.08),transparent 38%),
+    var(--panel);
+  box-shadow:var(--shadow);
+  margin-bottom:18px;
+}
+
+.hero h1 {
+  font-family:Orbitron,sans-serif;
+  margin:0 0 8px;
+  font-size:26px;
+}
+
+.hero p {
+  color:var(--muted);
+  margin:0;
+  max-width:850px;
+  line-height:1.65;
+}
+
+.grid {
+  display:grid;
+  gap:14px;
+}
+
+.stats {
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+.card {
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.025),transparent),
+    var(--panel);
+  box-shadow:var(--shadow);
+}
+
+.stat {
+  padding:18px;
+}
+
+.stat-label {
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  font-weight:800;
+}
+
+.stat-value {
+  margin-top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:26px;
+}
+
+.stat-detail {
+  margin-top:7px;
+  color:#63718a;
+  font-size:11px;
+}
+
+.section {
+  margin-top:18px;
+}
+
+.section-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.section-head h2 {
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+  margin:0;
+}
+
+.section-head span {
+  color:var(--muted);
+  font-size:11px;
+}
+
+.category-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+
+.category-card {
+  padding:16px;
+  cursor:pointer;
+  transition:.18s ease;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--panel);
+}
+
+.category-card:hover {
+  transform:translateY(-2px);
+  border-color:rgba(0,234,255,.35);
+  box-shadow:0 15px 45px rgba(0,0,0,.35);
+}
+
+.category-card h3 {
+  margin:0 0 5px;
+  font-size:13px;
+}
+
+.category-card p {
+  margin:0;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.category-count {
+  margin-top:13px;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.category-tables {
+  margin-top:10px;
+  color:#65738b;
+  font-size:9px;
+  line-height:1.6;
+}
+
+.toolbar {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--panel);
+  margin-bottom:12px;
+}
+
+.search {
+  flex:1;
+  min-width:220px;
+}
+
+input,
+select,
+textarea {
+  width:100%;
+  border:1px solid var(--border);
+  background:#080b11;
+  color:#edf4ff;
+  border-radius:9px;
+  padding:10px 11px;
+  outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color:rgba(0,234,255,.5);
+  box-shadow:0 0 0 3px rgba(0,234,255,.05);
+}
+
+.table-wrap {
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--panel);
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  min-width:780px;
+}
+
+th,
+td {
+  padding:10px 11px;
+  border-bottom:1px solid #182131;
+  text-align:left;
+  font-size:10px;
+  vertical-align:top;
+}
+
+th {
+  color:#7f8da5;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  background:#0a0e15;
+  position:sticky;
+  top:0;
+  z-index:2;
+}
+
+td {
+  color:#d6dfed;
+}
+
+tr:hover td {
+  background:rgba(255,255,255,.018);
+}
+
+.actions {
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+.mini-btn {
+  border:1px solid var(--border);
+  background:#0d131d;
+  color:#b7c5d8;
+  border-radius:7px;
+  padding:6px 8px;
+  font-size:9px;
+}
+
+.mini-btn:hover {
+  border-color:#3b4d67;
+  color:white;
+}
+
+.json {
+  white-space:pre-wrap;
+  word-break:break-word;
+  max-width:400px;
+  max-height:130px;
+  overflow:auto;
+  font-family:monospace;
+  color:#91a4c0;
+}
+
+.status {
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#090d14;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.status.success {
+  border-color:rgba(72,255,145,.25);
+  color:var(--success);
+}
+
+.status.error {
+  border-color:rgba(255,79,112,.3);
+  color:#ff91a6;
+}
+
+.status.warning {
+  border-color:rgba(255,209,102,.3);
+  color:var(--warning);
+}
+
+.empty {
+  padding:40px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.modal-backdrop {
+  position:fixed;
+  inset:0;
+  display:none;
+  place-items:center;
+  padding:20px;
+  background:rgba(0,0,0,.76);
+  backdrop-filter:blur(10px);
+  z-index:100;
+}
+
+.modal-backdrop.open {
+  display:grid;
+}
+
+.modal {
+  width:min(920px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:#0a0e15;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head {
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 17px;
+  border-bottom:1px solid var(--border);
+  background:#0a0e15;
+}
+
+.modal-title {
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.modal-body {
+  padding:17px;
+}
+
+.modal-foot {
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:14px 17px;
+  border-top:1px solid var(--border);
+}
+
+.form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.field label {
+  display:block;
+  margin-bottom:5px;
+  color:#7d8ca4;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+.field.full {
+  grid-column:1/-1;
+}
+
+.theme-preview {
+  min-height:220px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:22px;
+  overflow:hidden;
+  position:relative;
+  background:
+    radial-gradient(circle at 20% 20%,var(--preview-accent),transparent 35%),
+    radial-gradient(circle at 80% 80%,var(--preview-accent2),transparent 35%),
+    #05060a;
+}
+
+.theme-preview h3 {
+  font-family:Orbitron,sans-serif;
+  font-size:24px;
+  margin:0 0 8px;
+  position:relative;
+}
+
+.theme-preview p {
+  color:#b9c7da;
+  position:relative;
+}
+
+.theme-glow {
+  position:absolute;
+  inset:-100px;
+  background:
+    linear-gradient(90deg,transparent 0 40%,rgba(255,255,255,.04) 50%,transparent 60%);
+  transform:rotate(-20deg);
+  pointer-events:none;
+}
+
+.theme-table td {
+  vertical-align:middle;
+}
+
+.badge {
+  display:inline-flex;
+  align-items:center;
+  padding:4px 7px;
+  border-radius:999px;
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  border:1px solid var(--border);
+}
+
+.badge.live {
+  color:#ff718d;
+  border-color:rgba(255,79,112,.25);
+  background:rgba(255,79,112,.06);
+}
+
+.badge.enabled {
+  color:var(--success);
+  border-color:rgba(72,255,145,.25);
+  background:rgba(72,255,145,.06);
+}
+
+.badge.disabled {
+  color:#718098;
+}
+
+.login-screen {
+  position:fixed;
+  inset:0;
+  z-index:999;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 30% 20%,rgba(0,234,255,.08),transparent 35%),
+    radial-gradient(circle at 80% 70%,rgba(157,92,255,.1),transparent 35%),
+    #030407;
+}
+
+.login-card {
+  width:min(460px,100%);
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:#090d14;
+  padding:25px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.login-logo {
+  width:62px;
+  height:62px;
+  display:grid;
+  place-items:center;
+  border-radius:17px;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  font-size:30px;
+  margin-bottom:18px;
+  box-shadow:0 0 35px rgba(0,234,255,.12);
+}
+
+.login-card h1 {
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+  margin:0 0 6px;
+}
+
+.login-card p {
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+  margin:0 0 20px;
+}
+
+.login-form {
+  display:grid;
+  gap:11px;
+}
+
+.login-error {
+  color:#ff91a6;
+  font-size:10px;
+  min-height:16px;
+}
+
+.loading {
+  display:inline-block;
+  width:12px;
+  height:12px;
+  border:2px solid #56647a;
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform:rotate(360deg); }
+}
+
+.hidden {
+  display:none!important;
+}
+
+@media(max-width:1100px) {
+  .stats {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .category-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:800px) {
+  .app {
+    display:block;
+  }
+
+  .sidebar {
+    position:fixed;
+    left:-290px;
+    transition:.22s ease;
+    width:280px;
+    z-index:80;
+  }
+
+  .sidebar.open {
+    left:0;
+  }
+
+  .mobile-menu {
+    display:block;
+  }
+
+  .main {
+    padding:10px;
+  }
+
+  .topbar {
+    top:5px;
+  }
+
+  .form-grid {
+    grid-template-columns:1fr;
+  }
+
+  .category-grid,
+  .stats {
+    grid-template-columns:1fr;
+  }
+
+  .page-title {
+    display:none;
+  }
+}
 </style>
 </head>
+
 <body>
-<div class="app">
-<aside class="sidebar">
-  <div class="brand">CROWRULES<br>ADMIN PRO<small>SUPABASE CONTROL CENTER</small></div>
-  <div class="nav">
-    <button class="active" data-view="dashboard">⌂ Dashboard</button>
-    <button data-view="tv">▸ CrowRules TV</button>
-    <button data-view="shows">★ Shows & Productions</button>
-    <button data-view="live">● Live & Events</button>
-    <button data-view="members">♟ Members</button>
-    <button data-view="watch">◷ Watch Time & CrowPoints</button>
-    <button data-view="community">☍ Community</button>
-    <button data-view="crowspace">✦ CrowSpace</button>
-    <button data-view="creators">✚ Creators</button>
-    <button data-view="podcasts">◉ Podcasts</button>
-    <button data-view="sports">⚽ Sports Center</button>
-    <button data-view="business">◆ Business Hub</button>
-    <button data-view="donations">♥ Donations</button>
-    <button data-view="partnerships">↔ Partnerships</button>
-    <button data-view="news">◆ News</button>
-    <button data-view="analytics">▥ Analytics</button>
-    <button data-view="celebrity">✝ Celebrity Memorial</button>
-    <button data-view="themes">☼ Themes & Special Events</button>
-    <button data-view="navigation">☰ Navigation & Site</button>
-    <button data-view="projects">◇ Projects & Roadmap</button>
-    <button data-view="contacts">✉ Contacts & Applications</button>
-    <button data-view="admin">⚙ Administration</button>
-  </div>
-</aside>
 
-<main class="main">
-<div class="topbar">
-  <div><h1 id="pageTitle">Admin Dashboard</h1><p id="pageSubtitle">CrowRules Entertainment Supabase control center</p></div>
-  <div class="actions"><button class="btn" id="refreshBtn">↻ Refresh</button><button class="btn danger" id="signOutBtn">Sign Out</button></div>
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+
+    <div class="login-logo">🐦‍⬛</div>
+
+    <h1>CROWRULES ADMIN PRO</h1>
+
+    <p>
+      Secure administration console for CrowRules Entertainment,
+      CrowRules TV, Members, Shows, Sports, Business, Community,
+      Themes and the complete Supabase ecosystem.
+    </p>
+
+    <form id="loginForm" class="login-form">
+
+      <div class="field">
+        <label>Email</label>
+        <input
+          id="loginEmail"
+          type="email"
+          autocomplete="username"
+          required>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          required>
+      </div>
+
+      <button class="btn primary" type="submit">
+        SIGN IN TO ADMIN PRO
+      </button>
+
+      <div id="loginError" class="login-error"></div>
+
+    </form>
+
+  </div>
 </div>
 
-<section class="view active" id="view-dashboard">
-  <div class="grid stats">
-    <div class="card stat"><div class="label">CATEGORIES</div><div class="value" id="statCategories">—</div></div>
-    <div class="card stat"><div class="label">THEMES</div><div class="value" id="statThemes">—</div></div>
-    <div class="card stat"><div class="label">ACTIVE THEMES</div><div class="value" id="statActiveThemes">—</div></div>
-    <div class="card stat"><div class="label">ADMIN STATUS</div><div class="value" id="statAdmin">—</div></div>
-  </div>
-  <div class="sectionTitle"><div><h2>SUPABASE CATEGORIES</h2><p>All major categories currently registered for Admin Pro.</p></div></div>
-  <div class="grid categoryGrid" id="categoryGrid"></div>
-</section>
+<div id="app" class="app hidden">
 
-<section class="view" id="view-themes">
-  <div class="card">
-    <div class="sectionTitle"><div><h2>THEME MANAGER</h2><p>Schedule show themes, holidays and special-event overrides.</p></div><button class="btn" id="newThemeBtn">+ New Theme</button></div>
-    <div class="status" id="themeStatus">Loading theme catalog...</div>
-    <div class="tableWrap" style="margin-top:12px"><table class="dataTable"><thead><tr><th>NAME</th><th>TYPE</th><th>START</th><th>END</th><th>ENABLED</th><th>PRIORITY</th><th>ACTIONS</th></tr></thead><tbody id="themeRows"></tbody></table></div>
-  </div>
-  <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:15px">
-    <div class="card">
-      <div class="sectionTitle"><div><h2>LIVE THEME PREVIEW</h2><p>Preview a theme without changing stored dates.</p></div></div>
-      <select id="previewSelect" style="width:100%;background:#080b12;color:white;border:1px solid var(--line);padding:10px;border-radius:10px"></select>
-      <div class="themePreview" id="themePreview" style="margin-top:12px"><div class="small muted">Select a theme.</div><h3>Theme Preview</h3><div class="accent">CrowRules TV</div></div>
-    </div>
-    <div class="card">
-      <div class="sectionTitle"><div><h2>THEME PRIORITY</h2><p>Higher priority wins when multiple events overlap.</p></div></div>
-      <p class="small muted" style="line-height:1.8">Recommended hierarchy: special event override &gt; holiday &gt; normal network theme. Use the priority field to control overlaps.</p>
-      <div class="status">Example: New Year's can override Christmas during the overlap window.</div>
-    </div>
-  </div>
-</section>
+  <aside id="sidebar" class="sidebar">
 
-<section class="view" id="view-generic">
-  <div class="card">
-    <div class="sectionTitle"><div><h2 id="genericTitle">Category</h2><p id="genericSubtitle"></p></div></div>
-    <div id="genericContent"></div>
-  </div>
-</section>
-</main>
+    <div class="brand">
+      <div class="logo">🐦‍⬛</div>
+
+      <div>
+        <div class="brand-title">CROWRULES</div>
+        <div class="brand-sub">ADMIN PRO</div>
+      </div>
+    </div>
+
+    <div class="nav-section">Core</div>
+
+    <nav id="nav" class="nav"></nav>
+
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div class="top-left">
+
+        <button
+          id="mobileMenu"
+          class="btn mobile-menu">
+          ☰
+        </button>
+
+        <div id="pageTitle" class="page-title">
+          ADMIN PRO
+        </div>
+
+        <div class="connection">
+          <span id="connectionDot" class="dot"></span>
+          <span id="connectionText">CONNECTING</span>
+        </div>
+
+      </div>
+
+      <div class="top-right">
+
+        <span id="adminPill" class="admin-pill">
+          CHECKING ADMIN
+        </span>
+
+        <button
+          id="refreshBtn"
+          class="btn">
+          ↻ Refresh
+        </button>
+
+        <button
+          id="signOutBtn"
+          class="btn danger">
+          Sign Out
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- DASHBOARD -->
+    <section
+      id="view-dashboard"
+      class="view active">
+
+      <div class="hero">
+
+        <h1>CrowRules Admin Pro</h1>
+
+        <p>
+          Central control center for the CrowRules Entertainment
+          Supabase ecosystem. Manage content, television,
+          shows, members, watch time, CrowPoints, community,
+          creators, sports, business, donations, themes and more.
+        </p>
+
+      </div>
+
+      <div class="grid stats">
+
+        <div class="card stat">
+          <div class="stat-label">Categories</div>
+          <div id="statCategories" class="stat-value">—</div>
+          <div class="stat-detail">Registered Admin Pro modules</div>
+        </div>
+
+        <div class="card stat">
+          <div class="stat-label">Supabase Tables</div>
+          <div id="statTables" class="stat-value">—</div>
+          <div class="stat-detail">Connected tables</div>
+        </div>
+
+        <div class="card stat">
+          <div class="stat-label">Themes</div>
+          <div id="statThemes" class="stat-value">—</div>
+          <div class="stat-detail">Holiday and special events</div>
+        </div>
+
+        <div class="card stat">
+          <div class="stat-label">Active Themes</div>
+          <div id="statActiveThemes" class="stat-value">—</div>
+          <div class="stat-detail">Currently active</div>
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <div class="section-head">
+          <h2>Admin Categories</h2>
+          <span>LIVE SUPABASE REGISTRY</span>
+        </div>
+
+        <div id="dashboardCategories"
+             class="category-grid"></div>
+
+      </div>
+
+    </section>
+
+    <!-- CATEGORY -->
+    <section
+      id="view-category"
+      class="view">
+
+      <div class="hero">
+
+        <h1 id="categoryTitle">Category</h1>
+
+        <p id="categoryDescription">
+          Supabase data management.
+        </p>
+
+      </div>
+
+      <div id="categoryToolbar"
+           class="toolbar">
+
+        <input
+          id="tableSearch"
+          class="search"
+          placeholder="Search records...">
+
+        <select id="tableSelect"></select>
+
+        <button
+          id="loadTableBtn"
+          class="btn primary">
+          Load Table
+        </button>
+
+        <button
+          id="newRowBtn"
+          class="btn success">
+          + New Row
+        </button>
+
+      </div>
+
+      <div id="categoryStatus"
+           class="status">
+        Select a table.
+      </div>
+
+      <div class="section">
+
+        <div id="tableContainer"
+             class="table-wrap">
+
+          <div class="empty">
+            Select a Supabase table to begin.
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <div class="section-head">
+
+          <h2>Tables in this category</h2>
+
+          <span id="categoryTableCount">
+            0 tables
+          </span>
+
+        </div>
+
+        <div id="categoryTables"
+             class="category-grid"></div>
+
+      </div>
+
+    </section>
+
+    <!-- THEMES -->
+    <section
+      id="view-themes"
+      class="view">
+
+      <div class="hero">
+
+        <h1>Themes & Special Events</h1>
+
+        <p>
+          Control show-specific themes, holiday layouts,
+          special-event appearances, seasonal effects,
+          hero messages and priority overrides.
+        </p>
+
+      </div>
+
+      <div class="toolbar">
+
+        <button
+          id="newThemeBtn"
+          class="btn primary">
+          + New Theme
+        </button>
+
+        <button
+          id="reloadThemesBtn"
+          class="btn">
+          ↻ Reload Themes
+        </button>
+
+        <button
+          id="activeThemeBtn"
+          class="btn success">
+          View Active
+        </button>
+
+      </div>
+
+      <div id="themeStatus"
+           class="status">
+        Loading themes...
+      </div>
+
+      <div class="section">
+
+        <div class="table-wrap">
+
+          <table class="theme-table">
+
+            <thead>
+
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Window</th>
+                <th>Priority</th>
+                <th>Shows</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="themeTableBody"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CONNECTION -->
+    <section
+      id="view-connection"
+      class="view">
+
+      <div class="hero">
+
+        <h1>Supabase Connection</h1>
+
+        <p>
+          Live diagnostics for the CrowRules Admin Pro
+          database connection.
+        </p>
+
+      </div>
+
+      <div id="connectionDiagnostics"></div>
+
+    </section>
+
+  </main>
+
 </div>
 
-<div class="modal" id="themeModal">
-<div class="modalBox">
-  <div class="modalHead"><h2 id="modalTitle">New Theme</h2><button class="btn" id="closeModal">Close</button></div>
-  <form id="themeForm">
-    <input type="hidden" id="themeId">
-    <div class="formGrid">
-      <div class="field"><label>Name</label><input id="themeName" required></div>
-      <div class="field"><label>Slug</label><input id="themeSlug" required></div>
-      <div class="field"><label>Type</label><select id="themeType"><option value="holiday">Holiday</option><option value="special_event">Special Event</option><option value="network">Network</option><option value="show_override">Show Override</option></select></div>
-      <div class="field"><label>Priority</label><input id="themePriority" type="number" value="100"></div>
-      <div class="field"><label>Start</label><input id="themeStart" type="datetime-local"></div>
-      <div class="field"><label>End</label><input id="themeEnd" type="datetime-local"></div>
-      <div class="field"><label>Accent</label><input id="themeAccent" value="#00eaff"></div>
-      <div class="field"><label>Accent 2</label><input id="themeAccent2" value="#9d5cff"></div>
-      <div class="field full"><label>Hero Description</label><textarea id="themeDescription"></textarea></div>
-      <div class="field full"><label>Effects JSON</label><textarea id="themeEffects">{}</textarea></div>
-      <div class="field"><label>Enabled</label><select id="themeEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select></div>
-      <div class="field"><label>Show IDs</label><input id="themeShows" placeholder="tacoma,backdeck,bird,dj"></div>
+<!-- ROW MODAL -->
+<div
+  id="rowModal"
+  class="modal-backdrop">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div id="rowModalTitle"
+           class="modal-title">
+        Edit Row
+      </div>
+
+      <button
+        class="btn"
+        data-close="rowModal">
+        ✕
+      </button>
+
     </div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:15px"><button class="btn" type="submit">Save Theme</button></div>
-    <div class="status" id="formStatus" style="margin-top:12px;display:none"></div>
-  </form>
+
+    <div class="modal-body">
+
+      <div class="field">
+
+        <label>JSON Row</label>
+
+        <textarea
+          id="rowJson"
+          rows="20"
+          spellcheck="false"></textarea>
+
+      </div>
+
+      <div id="rowModalStatus"
+           class="status hidden"></div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        data-close="rowModal">
+        Cancel
+      </button>
+
+      <button
+        id="saveRowBtn"
+        class="btn primary">
+        Save Row
+      </button>
+
+    </div>
+
+  </div>
+
 </div>
+
+<!-- THEME MODAL -->
+<div
+  id="themeModal"
+  class="modal-backdrop">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div id="themeModalTitle"
+           class="modal-title">
+        New Theme
+      </div>
+
+      <button
+        class="btn"
+        data-close="themeModal">
+        ✕
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Name</label>
+          <input id="themeName">
+        </div>
+
+        <div class="field">
+          <label>Slug</label>
+          <input id="themeSlug">
+        </div>
+
+        <div class="field">
+          <label>Theme Type</label>
+
+          <select id="themeType">
+
+            <option value="holiday">Holiday</option>
+            <option value="special_event">Special Event</option>
+            <option value="network">Network</option>
+            <option value="show_override">Show Override</option>
+
+          </select>
+
+        </div>
+
+        <div class="field">
+          <label>Priority</label>
+          <input
+            id="themePriority"
+            type="number"
+            value="100">
+        </div>
+
+        <div class="field">
+          <label>Start</label>
+          <input
+            id="themeStart"
+            type="datetime-local">
+        </div>
+
+        <div class="field">
+          <label>End</label>
+          <input
+            id="themeEnd"
+            type="datetime-local">
+        </div>
+
+        <div class="field">
+          <label>Accent</label>
+          <input
+            id="themeAccent"
+            value="#00eaff">
+        </div>
+
+        <div class="field">
+          <label>Accent 2</label>
+          <input
+            id="themeAccent2"
+            value="#9d5cff">
+        </div>
+
+        <div class="field full">
+
+          <label>Show IDs</label>
+
+          <input
+            id="themeShows"
+            placeholder="tacoma,backdeck,bird,dj">
+
+        </div>
+
+        <div class="field full">
+
+          <label>Banner Text</label>
+
+          <input id="themeBanner">
+
+        </div>
+
+        <div class="field full">
+
+          <label>Hero Title</label>
+
+          <input id="themeHeroTitle">
+
+        </div>
+
+        <div class="field full">
+
+          <label>Hero Description</label>
+
+          <textarea
+            id="themeHeroDescription"
+            rows="3"></textarea>
+
+        </div>
+
+        <div class="field full">
+
+          <label>Effects JSON</label>
+
+          <textarea
+            id="themeEffects"
+            rows="7">{
+  "glow": true,
+  "particles": false,
+  "fog": false,
+  "ghosts": false,
+  "bats": false,
+  "snow": false,
+  "hearts": false,
+  "confetti": false,
+  "rainbow": false,
+  "glitch": false
+}</textarea>
+
+        </div>
+
+        <div class="field full">
+
+          <label>Metadata JSON</label>
+
+          <textarea
+            id="themeMetadata"
+            rows="5">{}</textarea>
+
+        </div>
+
+        <div class="field full">
+
+          <div
+            id="themePreview"
+            class="theme-preview">
+
+            <div class="theme-glow"></div>
+
+            <h3 id="previewTitle">
+              CrowRules Theme
+            </h3>
+
+            <p id="previewDescription">
+              Theme preview
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="themeModalStatus"
+           class="status hidden"></div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        data-close="themeModal">
+        Cancel
+      </button>
+
+      <button
+        id="saveThemeBtn"
+        class="btn primary">
+        Save Theme
+      </button>
+
+    </div>
+
+  </div>
+
 </div>
 
 <script>
-const SUPABASE_URL="https://zauxdqyssratvzmomozf.supabase.co";
-const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphdXhkcXlzc3JhdHZ6bW9tb3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MjE3MjYsImV4cCI6MjEwMjk5NzcyNn0.nPTPMgD8gHzL7qRmMuUNJxpjXaCJRVXmgxck15AKDDA";
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+/* =========================================================
+   CROWRULES ADMIN PRO
+   SUPABASE CONFIG
+========================================================= */
 
-let categories=[],themes=[],editingTheme=null;
-const categoryFallback=[
-["dashboard","Dashboard","Admin overview, system health and activity","⌂"],
-["content","Content","Pages, posts, media and general content","▣"],
-["tv","CrowRules TV","Channels, shows, seasons, episodes, playlists and schedules","▸"],
-["shows","Shows & Productions","Original productions and show episode management","★"],
-["live","Live & Events","Live broadcasts and event scheduling","●"],
-["members","Members","Profiles, roles, favorites, notifications and member activity","♟"],
-["watch","Watch Time & CrowPoints","Watch history, sessions, engagement and CrowPoints","◷"],
-["community","Community","Comments, chat, suggestions, friendships and social activity","☍"],
-["crowspace","CrowSpace","Profiles, posts, groups, reactions and notifications","✦"],
-["creators","Creators","Creator profiles, content, applications, live events and earnings","✚"],
-["podcasts","Podcasts","Podcasts, episodes, podcasters and applications","◉"],
-["sports","Sports Center","Leagues, teams, players, games, standings, stats, news and polls","⚽"],
-["business","Business Hub","Operations, projects, finance, partners, sponsors and staff","◆"],
-["donations","Donations","Donation campaigns, events, settings, stats and donations","♥"],
-["partnerships","Partnerships","Partners, partnership inquiries and sponsorships","↔"],
-["news","News","News, sources, announcements and updates","◆"],
-["analytics","Analytics","Analytics events and creator metrics","▥"],
-["celebrity","Celebrity Memorial","Celebrity death and memorial data","✝"],
-["themes","Themes & Special Events","Show themes, holiday themes and special-event overrides","☼"],
-["navigation","Navigation & Site","Settings, navigation, social links, divisions and topics","☰"],
-["projects","Projects & Roadmap","Projects and roadmap planning","◇"],
-["admin","Administration","Admins, permissions, roles and audit logs","⚙"],
-["contacts","Contacts & Applications","Contacts, subscribers and inbound applications","✉"]
-];
+const SUPABASE_URL =
+  "https://zauxdqyssratvzmomozf.supabase.co";
 
-function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
-function fmt(v){if(!v)return "—";return new Intl.DateTimeFormat("en-US",{dateStyle:"medium",timeStyle:"short"}).format(new Date(v));}
-function toast(msg,error=false){const el=document.getElementById("themeStatus");el.textContent=msg;el.className="status"+(error?" error":"");}
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphdXhkcXlzc3JhdHZ6bW9tb3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MjE3MjYsImV4cCI6MjEwMjk5NzcyNn0.nPTPMgD8gHzL7qRmMuUNJxpjXaCJRVXmgxck15AKDDA";
 
-async function ensureAuth(){
- const {data:{session}}=await supabaseClient.auth.getSession();
- if(!session){document.getElementById("statAdmin").textContent="LOGIN";return null;}
- const {data,error}=await supabaseClient.from("cr_admins").select("role,is_active").eq("user_id",session.user.id).maybeSingle();
- if(error||!data||data.is_active===false){document.getElementById("statAdmin").textContent="DENIED";return null;}
- document.getElementById("statAdmin").textContent="OK";
- return session;
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+let currentCategory = null;
+let currentTable = null;
+let currentRows = [];
+let currentColumns = [];
+let currentPage = 0;
+let pageSize = 50;
+let editingRow = null;
+let editingRowMode = "edit";
+
+let categories = [];
+let themes = [];
+
+/* =========================================================
+   CATEGORY ICONS
+========================================================= */
+
+const ICONS = {
+  dashboard:"⌂",
+  content:"▣",
+  tv:"▣",
+  shows:"▶",
+  live:"●",
+  members:"♟",
+  watch:"◉",
+  community:"☁",
+  crowspace:"✦",
+  creators:"★",
+  podcasts:"◉",
+  sports:"◆",
+  business:"▤",
+  donations:"♥",
+  partnerships:"∞",
+  news:"▤",
+  analytics:"⌁",
+  celebrity:"✝",
+  themes:"✺",
+  navigation:"☰",
+  projects:"▦",
+  admin:"⚙",
+  contacts:"✉"
+};
+
+/* =========================================================
+   CATEGORY DESCRIPTIONS
+========================================================= */
+
+const CATEGORY_DESCRIPTIONS = {
+
+  dashboard:
+    "CrowRules Entertainment administrative overview.",
+
+  content:
+    "Central content, media and content-alias management.",
+
+  tv:
+    "CrowRules TV channels, programming, shows, episodes and schedules.",
+
+  shows:
+    "Original productions and show-specific episode databases.",
+
+  live:
+    "Live programming, live events and special events.",
+
+  members:
+    "Member profiles, roles, favorites, notifications and rewards.",
+
+  watch:
+    "Watch history, viewing sessions, engagement and CrowPoints.",
+
+  community:
+    "Comments, chat, suggestions, votes and member relationships.",
+
+  crowspace:
+    "CrowSpace profiles, posts, groups, reactions and notifications.",
+
+  creators:
+    "Creator profiles, content, applications, earnings and analytics.",
+
+  podcasts:
+    "Podcast shows, episodes, podcasters and applications.",
+
+  sports:
+    "Sports leagues, teams, games, schedules, standings and statistics.",
+
+  business:
+    "CrowRules Entertainment Business Hub operations and management.",
+
+  donations:
+    "Donation campaigns, events, settings and statistics.",
+
+  partnerships:
+    "Partners, partnership inquiries and relationship management.",
+
+  news:
+    "News, sources, announcements and network updates.",
+
+  analytics:
+    "Platform and creator analytics data.",
+
+  celebrity:
+    "Celebrity memorial and death tracking.",
+
+  themes:
+    "Holiday, seasonal, show-specific and special-event themes.",
+
+  navigation:
+    "Site settings, navigation, social links, divisions and topics.",
+
+  projects:
+    "Projects and long-term CrowRules roadmap.",
+
+  admin:
+    "Administrators, permissions, roles and audit logs.",
+
+  contacts:
+    "Contacts, subscribers and creator/application submissions."
+
+};
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function $(id){
+  return document.getElementById(id);
 }
+
+function escapeHtml(value){
+
+  if(value === null || value === undefined)
+    return "";
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function pretty(value){
+
+  if(value === null || value === undefined)
+    return "—";
+
+  if(typeof value === "object"){
+
+    try{
+      return JSON.stringify(value,null,2);
+    }catch{
+      return String(value);
+    }
+
+  }
+
+  return String(value);
+}
+
+function showStatus(el,message,type=""){
+
+  if(!el) return;
+
+  el.className =
+    "status" +
+    (type ? " " + type : "");
+
+  el.textContent = message;
+
+}
+
+function formatDate(value){
+
+  if(!value)
+    return "—";
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime()))
+    return value;
+
+  return date.toLocaleString(
+    "en-US",
+    {
+      timeZone:"America/Los_Angeles",
+      dateStyle:"medium",
+      timeStyle:"short"
+    }
+  );
+}
+
+function isoFromLocalInput(value){
+
+  if(!value)
+    return null;
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime()))
+    return null;
+
+  return date.toISOString();
+
+}
+
+function localInputFromIso(value){
+
+  if(!value)
+    return "";
+
+  const d = new Date(value);
+
+  if(Number.isNaN(d.getTime()))
+    return "";
+
+  const pad =
+    n => String(n).padStart(2,"0");
+
+  return (
+    d.getFullYear() +
+    "-" +
+    pad(d.getMonth()+1) +
+    "-" +
+    pad(d.getDate()) +
+    "T" +
+    pad(d.getHours()) +
+    ":" +
+    pad(d.getMinutes())
+  );
+
+}
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+async function getSession(){
+
+  const {
+    data,
+    error
+  } = await supabaseClient.auth.getSession();
+
+  if(error)
+    throw error;
+
+  return data.session;
+}
+
+async function verifyAdmin(){
+
+  if(!currentUser)
+    return false;
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("cr_admins")
+      .select("*")
+      .eq("user_id",currentUser.id)
+      .eq("is_active",true)
+      .maybeSingle();
+
+  if(error){
+
+    console.error(
+      "Admin verification failed:",
+      error
+    );
+
+    return false;
+  }
+
+  return !!data;
+}
+
+async function handleSession(session){
+
+  currentUser =
+    session?.user || null;
+
+  if(!currentUser){
+
+    $("loginScreen")
+      .classList.remove("hidden");
+
+    $("app")
+      .classList.add("hidden");
+
+    return;
+  }
+
+  const isAdmin =
+    await verifyAdmin();
+
+  if(!isAdmin){
+
+    $("loginError").textContent =
+      "Your account is authenticated but is not an active CrowRules administrator.";
+
+    await supabaseClient.auth.signOut();
+
+    return;
+  }
+
+  $("loginScreen")
+    .classList.add("hidden");
+
+  $("app")
+    .classList.remove("hidden");
+
+  $("adminPill").textContent =
+    "ADMIN VERIFIED";
+
+  setConnection(true);
+
+  await bootAdmin();
+
+}
+
+async function signIn(event){
+
+  event.preventDefault();
+
+  const email =
+    $("loginEmail").value.trim();
+
+  const password =
+    $("loginPassword").value;
+
+  $("loginError").textContent =
+    "";
+
+  const {
+    error
+  } =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if(error){
+
+    $("loginError").textContent =
+      error.message;
+
+    return;
+  }
+
+}
+
+async function signOut(){
+
+  await supabaseClient.auth.signOut();
+
+}
+
+supabaseClient.auth.onAuthStateChange(
+  async (_event,session)=>{
+    setTimeout(
+      ()=>handleSession(session),
+      0
+    );
+  }
+);
+
+/* =========================================================
+   CONNECTION
+========================================================= */
+
+function setConnection(online){
+
+  const dot =
+    $("connectionDot");
+
+  const text =
+    $("connectionText");
+
+  if(online){
+
+    dot.classList.add("online");
+    text.textContent =
+      "SUPABASE ONLINE";
+
+  }else{
+
+    dot.classList.remove("online");
+    text.textContent =
+      "SUPABASE OFFLINE";
+
+  }
+
+}
+
+async function connectionTest(){
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("cr_admin_category_registry")
+        .select("category_key")
+        .limit(1);
+
+    if(error)
+      throw error;
+
+    setConnection(true);
+
+    return true;
+
+  }catch(error){
+
+    console.error(error);
+
+    setConnection(false);
+
+    return false;
+
+  }
+
+}
+
+/* =========================================================
+   BOOT
+========================================================= */
+
+async function bootAdmin(){
+
+  await connectionTest();
+
+  await loadCategories();
+
+  await loadThemes();
+
+  renderNavigation();
+
+  await renderDashboard();
+
+}
+
+/* =========================================================
+   CATEGORY REGISTRY
+========================================================= */
 
 async function loadCategories(){
- const {data,error}=await supabaseClient.from("cr_admin_category_registry").select("*").order("sort_order");
- categories=error?categoryFallback.map(x=>({category_key:x[0],name:x[1],description:x[2],icon:x[3],table_names:[]})):data||[];
- document.getElementById("statCategories").textContent=categories.length;
- renderCategories();
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("cr_admin_category_registry")
+      .select("*")
+      .eq("enabled",true)
+      .order("sort_order",{ascending:true});
+
+  if(error){
+
+    console.error(error);
+
+    showStatus(
+      $("categoryStatus"),
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  categories =
+    data || [];
+
 }
 
-function renderCategories(){
- document.getElementById("categoryGrid").innerHTML=categories.map(c=>`
- <button class="card category" style="text-align:left;color:inherit" onclick="openCategory('${esc(c.category_key)}')">
-  <div class="icon">${esc(c.icon||"•")}</div>
-  <h3>${esc(c.name)}</h3>
-  <p>${esc(c.description||"")}</p>
-  <div class="tables">${esc((c.table_names||[]).slice(0,6).join(" • "))}${(c.table_names||[]).length>6?" • …":""}</div>
- </button>`).join("");
+function renderNavigation(){
+
+  const nav =
+    $("nav");
+
+  nav.innerHTML = "";
+
+  const core =
+    categories.filter(
+      c =>
+        [
+          "dashboard",
+          "content",
+          "tv",
+          "shows",
+          "live",
+          "members",
+          "watch",
+          "community",
+          "crowspace",
+          "creators",
+          "podcasts",
+          "sports",
+          "business",
+          "donations",
+          "partnerships",
+          "news",
+          "analytics",
+          "celebrity",
+          "themes",
+          "navigation",
+          "projects",
+          "admin",
+          "contacts"
+        ].includes(c.category_key)
+    );
+
+  core.forEach(category=>{
+
+    const button =
+      document.createElement("button");
+
+    button.dataset.route =
+      category.route ||
+      category.category_key;
+
+    button.innerHTML = `
+      <span class="nav-icon">
+        ${ICONS[category.category_key] || "•"}
+      </span>
+
+      <span>
+        ${escapeHtml(category.name)}
+      </span>
+    `;
+
+    button.addEventListener(
+      "click",
+      ()=>{
+        if(category.category_key === "themes"){
+          openView("themes");
+        }else{
+          openCategory(category.category_key);
+        }
+
+        $("sidebar").classList.remove("open");
+      }
+    );
+
+    nav.appendChild(button);
+
+  });
+
 }
+
+function updateNavActive(route){
+
+  document
+    .querySelectorAll("#nav button")
+    .forEach(button=>{
+      button.classList.toggle(
+        "active",
+        button.dataset.route === route
+      );
+    });
+
+}
+
+/* =========================================================
+   VIEWS
+========================================================= */
+
+function openView(name){
+
+  document
+    .querySelectorAll(".view")
+    .forEach(view=>{
+      view.classList.remove("active");
+    });
+
+  const view =
+    $("view-" + name);
+
+  if(view)
+    view.classList.add("active");
+
+  updateNavActive(name);
+
+  if(name === "dashboard"){
+    $("pageTitle").textContent =
+      "ADMIN PRO";
+  }
+
+  if(name === "themes"){
+    $("pageTitle").textContent =
+      "THEMES & SPECIAL EVENTS";
+  }
+
+  if(name === "connection"){
+    $("pageTitle").textContent =
+      "SUPABASE CONNECTION";
+
+    renderConnectionDiagnostics();
+  }
+
+}
+
+async function openCategory(key){
+
+  const category =
+    categories.find(
+      c => c.category_key === key
+    );
+
+  if(!category)
+    return;
+
+  currentCategory =
+    category;
+
+  currentTable =
+    null;
+
+  $("pageTitle").textContent =
+    category.name.toUpperCase();
+
+  $("categoryTitle").textContent =
+    category.name;
+
+  $("categoryDescription").textContent =
+    CATEGORY_DESCRIPTIONS[key] ||
+    category.description ||
+    "Supabase data management.";
+
+  renderCategoryTables();
+
+  populateTableSelect();
+
+  $("tableContainer").innerHTML =
+    `<div class="empty">
+      Select a table to load records.
+    </div>`;
+
+  showStatus(
+    $("categoryStatus"),
+    `${category.table_names?.length || 0} registered tables ready.`
+  );
+
+  openView("category");
+
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+async function renderDashboard(){
+
+  openView("dashboard");
+
+  $("statCategories").textContent =
+    categories.length;
+
+  const totalTables =
+    categories.reduce(
+      (sum,c)=>
+        sum +
+        (c.table_names?.length || 0),
+      0
+    );
+
+  $("statTables").textContent =
+    totalTables;
+
+  $("statThemes").textContent =
+    themes.length;
+
+  const active =
+    getActiveThemes();
+
+  $("statActiveThemes").textContent =
+    active.length;
+
+  const container =
+    $("dashboardCategories");
+
+  container.innerHTML = "";
+
+  categories.forEach(category=>{
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "category-card";
+
+    card.innerHTML = `
+
+      <h3>
+        ${ICONS[category.category_key] || "•"}
+        ${escapeHtml(category.name)}
+      </h3>
+
+      <p>
+        ${escapeHtml(
+          CATEGORY_DESCRIPTIONS[
+            category.category_key
+          ] ||
+          category.description ||
+          ""
+        )}
+      </p>
+
+      <div class="category-count">
+        ${category.table_names?.length || 0}
+        SUPABASE TABLES
+      </div>
+
+      <div class="category-tables">
+        ${(category.table_names || [])
+          .slice(0,6)
+          .map(escapeHtml)
+          .join(" • ")}
+        ${(category.table_names || []).length > 6
+          ? " • ..."
+          : ""}
+      </div>
+    `;
+
+    card.addEventListener(
+      "click",
+      ()=>{
+        if(category.category_key === "themes"){
+          openView("themes");
+        }else{
+          openCategory(
+            category.category_key
+          );
+        }
+      }
+    );
+
+    container.appendChild(card);
+
+  });
+
+}
+
+/* =========================================================
+   CATEGORY TABLES
+========================================================= */
+
+function renderCategoryTables(){
+
+  const container =
+    $("categoryTables");
+
+  container.innerHTML = "";
+
+  const tables =
+    currentCategory?.table_names || [];
+
+  $("categoryTableCount").textContent =
+    `${tables.length} tables`;
+
+  tables.forEach(tableName=>{
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "category-card";
+
+    card.innerHTML = `
+
+      <h3>▣ ${escapeHtml(tableName)}</h3>
+
+      <p>
+        Supabase table
+      </p>
+
+      <div class="category-count">
+        OPEN TABLE →
+      </div>
+    `;
+
+    card.addEventListener(
+      "click",
+      ()=>{
+        $("tableSelect").value =
+          tableName;
+
+        loadTable();
+      }
+    );
+
+    container.appendChild(card);
+
+  });
+
+}
+
+function populateTableSelect(){
+
+  const select =
+    $("tableSelect");
+
+  select.innerHTML =
+    `<option value="">
+      Select Supabase table...
+    </option>`;
+
+  (
+    currentCategory?.table_names ||
+    []
+  ).forEach(tableName=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      tableName;
+
+    option.textContent =
+      tableName;
+
+    select.appendChild(option);
+
+  });
+
+}
+
+/* =========================================================
+   TABLE ACCESS
+========================================================= */
+
+async function loadTable(){
+
+  const table =
+    $("tableSelect").value;
+
+  if(!table)
+    return;
+
+  currentTable =
+    table;
+
+  currentPage =
+    0;
+
+  await fetchTable();
+
+}
+
+async function fetchTable(){
+
+  if(!currentCategory || !currentTable)
+    return;
+
+  showStatus(
+    $("categoryStatus"),
+    `Loading ${currentTable}...`
+  );
+
+  $("tableContainer").innerHTML =
+    `<div class="empty">
+      <span class="loading"></span>
+      Loading records...
+    </div>`;
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(currentTable)
+        .select("*")
+        .range(
+          currentPage * pageSize,
+          (currentPage + 1) * pageSize - 1
+        );
+
+    if(error)
+      throw error;
+
+    currentRows =
+      data || [];
+
+    currentColumns =
+      currentRows.length
+        ? Object.keys(currentRows[0])
+        : [];
+
+    renderTable();
+
+    showStatus(
+      $("categoryStatus"),
+      `${currentRows.length} records loaded from ${currentTable}.`,
+      "success"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    currentRows = [];
+
+    $("tableContainer").innerHTML =
+      `<div class="empty">
+        Unable to load this table.<br><br>
+        ${escapeHtml(error.message)}
+      </div>`;
+
+    showStatus(
+      $("categoryStatus"),
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   TABLE RENDERING
+========================================================= */
+
+function renderTable(){
+
+  if(!currentRows.length){
+
+    $("tableContainer").innerHTML =
+      `<div class="empty">
+        No records found in ${escapeHtml(currentTable)}.
+      </div>`;
+
+    return;
+  }
+
+  const columns =
+    Object.keys(
+      currentRows[0]
+    );
+
+  currentColumns =
+    columns;
+
+  let html =
+    `<table>
+      <thead>
+        <tr>`;
+
+  columns.forEach(column=>{
+    html +=
+      `<th>${escapeHtml(column)}</th>`;
+  });
+
+  html +=
+    `<th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>`;
+
+  currentRows.forEach((row,index)=>{
+
+    html += `<tr>`;
+
+    columns.forEach(column=>{
+
+      const value =
+        row[column];
+
+      let display;
+
+      if(
+        value !== null &&
+        typeof value === "object"
+      ){
+
+        display =
+          `<div class="json">
+            ${escapeHtml(
+              pretty(value)
+            )}
+          </div>`;
+
+      }else{
+
+        const stringValue =
+          value === null ||
+          value === undefined
+            ? "—"
+            : String(value);
+
+        display =
+          escapeHtml(
+            stringValue.length > 240
+              ? stringValue.slice(0,240) + "…"
+              : stringValue
+          );
+
+      }
+
+      html +=
+        `<td>${display}</td>`;
+
+    });
+
+    html += `
+
+      <td>
+
+        <div class="actions">
+
+          <button
+            class="mini-btn"
+            data-edit="${index}">
+            Edit
+          </button>
+
+          <button
+            class="mini-btn"
+            data-duplicate="${index}">
+            Duplicate
+          </button>
+
+          <button
+            class="mini-btn"
+            data-delete="${index}">
+            Delete
+          </button>
+
+        </div>
+
+      </td>
+
+    </tr>`;
+
+  });
+
+  html +=
+    `</tbody></table>`;
+
+  $("tableContainer").innerHTML =
+    html;
+
+  $("tableContainer")
+    .querySelectorAll("[data-edit]")
+    .forEach(button=>{
+      button.addEventListener(
+        "click",
+        ()=>{
+          editRow(
+            Number(button.dataset.edit)
+          );
+        }
+      );
+    });
+
+  $("tableContainer")
+    .querySelectorAll("[data-delete]")
+    .forEach(button=>{
+      button.addEventListener(
+        "click",
+        ()=>{
+          deleteRow(
+            Number(button.dataset.delete)
+          );
+        }
+      );
+    });
+
+  $("tableContainer")
+    .querySelectorAll("[data-duplicate]")
+    .forEach(button=>{
+      button.addEventListener(
+        "click",
+        ()=>{
+          duplicateRow(
+            Number(button.dataset.duplicate)
+          );
+        }
+      );
+    });
+
+}
+
+/* =========================================================
+   ROW EDITING
+========================================================= */
+
+function editRow(index){
+
+  editingRow =
+    currentRows[index];
+
+  editingRowMode =
+    "edit";
+
+  $("rowModalTitle").textContent =
+    `Edit ${currentTable}`;
+
+  $("rowJson").value =
+    JSON.stringify(
+      editingRow,
+      null,
+      2
+    );
+
+  $("rowModalStatus")
+    .classList.add("hidden");
+
+  openModal("rowModal");
+
+}
+
+function newRow(){
+
+  editingRow =
+    null;
+
+  editingRowMode =
+    "insert";
+
+  $("rowModalTitle").textContent =
+    `New Row — ${currentTable}`;
+
+  $("rowJson").value =
+    "{\n  \n}";
+
+  $("rowModalStatus")
+    .classList.add("hidden");
+
+  openModal("rowModal");
+
+}
+
+async function saveRow(){
+
+  if(!currentTable)
+    return;
+
+  let payload;
+
+  try{
+
+    payload =
+      JSON.parse(
+        $("rowJson").value
+      );
+
+  }catch(error){
+
+    showStatus(
+      $("rowModalStatus"),
+      "Invalid JSON: " + error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  showStatus(
+    $("rowModalStatus"),
+    "Saving..."
+  );
+
+  try{
+
+    if(editingRowMode === "insert"){
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(currentTable)
+          .insert(payload);
+
+      if(error)
+        throw error;
+
+    }else{
+
+      const primaryKey =
+        findPrimaryKey(
+          editingRow,
+          payload
+        );
+
+      if(!primaryKey){
+
+        throw new Error(
+          "Unable to determine a primary key for this row. Use the table's UUID/id column."
+        );
+
+      }
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(currentTable)
+          .update(payload)
+          .eq(
+            primaryKey.column,
+            primaryKey.value
+          );
+
+      if(error)
+        throw error;
+
+    }
+
+    showStatus(
+      $("rowModalStatus"),
+      "Saved successfully.",
+      "success"
+    );
+
+    await fetchTable();
+
+    setTimeout(
+      ()=>closeModal("rowModal"),
+      500
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showStatus(
+      $("rowModalStatus"),
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+function findPrimaryKey(original,payload){
+
+  const candidates =
+    ["id","uuid","user_id","slug"];
+
+  for(const column of candidates){
+
+    if(
+      original &&
+      original[column] !== undefined &&
+      original[column] !== null
+    ){
+
+      return {
+        column,
+        value:original[column]
+      };
+
+    }
+
+  }
+
+  return null;
+
+}
+
+/* =========================================================
+   DUPLICATE
+========================================================= */
+
+function duplicateRow(index){
+
+  const row =
+    structuredClone(
+      currentRows[index]
+    );
+
+  delete row.id;
+
+  $("rowModalTitle").textContent =
+    `Duplicate ${currentTable}`;
+
+  $("rowJson").value =
+    JSON.stringify(
+      row,
+      null,
+      2
+    );
+
+  editingRow =
+    null;
+
+  editingRowMode =
+    "insert";
+
+  openModal("rowModal");
+
+}
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deleteRow(index){
+
+  const row =
+    currentRows[index];
+
+  const primaryKey =
+    findPrimaryKey(
+      row,
+      row
+    );
+
+  if(!primaryKey){
+
+    alert(
+      "Unable to determine the primary key for this record."
+    );
+
+    return;
+  }
+
+  const confirmed =
+    confirm(
+      `Delete this ${currentTable} record?\n\n${primaryKey.column}: ${primaryKey.value}`
+    );
+
+  if(!confirmed)
+    return;
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(currentTable)
+        .delete()
+        .eq(
+          primaryKey.column,
+          primaryKey.value
+        );
+
+    if(error)
+      throw error;
+
+    await fetchTable();
+
+  }catch(error){
+
+    console.error(error);
+
+    showStatus(
+      $("categoryStatus"),
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   THEMES
+========================================================= */
 
 async function loadThemes(){
- const {data,error}=await supabaseClient.from("cr_admin_theme_events").select("*").order("priority",{ascending:false}).order("start_at",{ascending:true,nullsFirst:false});
- if(error){themes=[];toast("Theme catalog unavailable: "+error.message,true);return;}
- themes=data||[];
- document.getElementById("statThemes").textContent=themes.length;
- const now=Date.now();
- document.getElementById("statActiveThemes").textContent=themes.filter(t=>t.enabled&&(!t.start_at||new Date(t.start_at).getTime()<=now)&&(!t.end_at||new Date(t.end_at).getTime()>now)).length;
- renderThemes();renderPreview();
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("cr_admin_theme_events")
+        .select("*")
+        .order(
+          "priority",
+          {ascending:false}
+        )
+        .order(
+          "start_at",
+          {ascending:false}
+        );
+
+    if(error)
+      throw error;
+
+    themes =
+      data || [];
+
+    renderThemeTable();
+
+  }catch(error){
+
+    console.error(error);
+
+    themes = [];
+
+    showStatus(
+      $("themeStatus"),
+      error.message,
+      "error"
+    );
+
+  }
+
 }
 
-function renderThemes(){
- document.getElementById("themeRows").innerHTML=themes.map(t=>`
- <tr>
-  <td><strong>${esc(t.name)}</strong><div class="small muted">${esc(t.slug)}</div></td>
-  <td>${esc(t.theme_type)}</td>
-  <td>${fmt(t.start_at)}</td><td>${fmt(t.end_at)}</td>
-  <td><span class="pill ${t.enabled?"":"off"}">${t.enabled?"ENABLED":"OFF"}</span></td>
-  <td>${esc(t.priority)}</td>
-  <td><button class="btn" onclick="editTheme('${t.id}')">Edit</button> <button class="btn danger" onclick="deleteTheme('${t.id}')">Delete</button></td>
- </tr>`).join("");
+function getActiveThemes(){
+
+  const now =
+    Date.now();
+
+  return themes.filter(theme=>{
+
+    if(!theme.enabled)
+      return false;
+
+    const start =
+      theme.start_at
+        ? new Date(
+            theme.start_at
+          ).getTime()
+        : -Infinity;
+
+    const end =
+      theme.end_at
+        ? new Date(
+            theme.end_at
+          ).getTime()
+        : Infinity;
+
+    return now >= start &&
+           now <= end;
+
+  });
+
 }
 
-function renderPreview(){
- const s=document.getElementById("previewSelect");
- s.innerHTML='<option value="">Select a theme</option>'+themes.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join("");
+function renderThemeTable(){
+
+  const body =
+    $("themeTableBody");
+
+  body.innerHTML = "";
+
+  if(!themes.length){
+
+    body.innerHTML =
+      `<tr>
+        <td colspan="7">
+          <div class="empty">
+            No themes configured.
+          </div>
+        </td>
+      </tr>`;
+
+    return;
+  }
+
+  themes.forEach(theme=>{
+
+    const active =
+      getActiveThemes()
+        .some(
+          t => t.id === theme.id
+        );
+
+    const tr =
+      document.createElement("tr");
+
+    const shows =
+      Array.isArray(
+        theme.show_ids
+      )
+        ? theme.show_ids.join(", ")
+        : "All shows";
+
+    tr.innerHTML = `
+
+      <td>
+        <strong>
+          ${escapeHtml(theme.name)}
+        </strong>
+
+        <div style="color:#64728a;font-size:8px;margin-top:4px">
+          ${escapeHtml(theme.slug || "")}
+        </div>
+      </td>
+
+      <td>
+        ${escapeHtml(
+          theme.theme_type || ""
+        )}
+      </td>
+
+      <td>
+        ${formatDate(theme.start_at)}
+        →
+        ${formatDate(theme.end_at)}
+      </td>
+
+      <td>
+        ${escapeHtml(
+          theme.priority ?? 0
+        )}
+      </td>
+
+      <td>
+        ${escapeHtml(shows)}
+      </td>
+
+      <td>
+
+        ${
+          active
+            ? `<span class="badge live">
+                 ACTIVE NOW
+               </span>`
+            : theme.enabled
+              ? `<span class="badge enabled">
+                   ENABLED
+                 </span>`
+              : `<span class="badge disabled">
+                   DISABLED
+                 </span>`
+        }
+
+      </td>
+
+      <td>
+
+        <div class="actions">
+
+          <button
+            class="mini-btn"
+            data-theme-edit="${theme.id}">
+            Edit
+          </button>
+
+          <button
+            class="mini-btn"
+            data-theme-toggle="${theme.id}">
+            ${theme.enabled
+              ? "Disable"
+              : "Enable"}
+          </button>
+
+          <button
+            class="mini-btn"
+            data-theme-delete="${theme.id}">
+            Delete
+          </button>
+
+        </div>
+
+      </td>
+
+    `;
+
+    body.appendChild(tr);
+
+  });
+
+  body
+    .querySelectorAll("[data-theme-edit]")
+    .forEach(button=>{
+      button.addEventListener(
+        "click",
+        ()=>{
+          const theme =
+            themes.find(
+              t =>
+                String(t.id) ===
+                button.dataset.themeEdit
+            );
+
+          if(theme)
+            editTheme(theme);
+        }
+      );
+    });
+
+  body
+    .querySelectorAll("[data-theme-toggle]")
+    .forEach(button=>{
+      button.addEventListener(
+        "click",
+        ()=>{
+          toggleTheme(
+            button.dataset.themeToggle
+          );
+        }
+      );
+    });
+
+  body
+    .querySelectorAll("[data-theme-delete]")
+    .forEach(button=>{
+      button.addEventListener(
+        "click",
+        ()=>{
+          deleteTheme(
+            button.dataset.themeDelete
+          );
+        }
+      );
+    });
+
+  showStatus(
+    $("themeStatus"),
+    `${themes.length} themes loaded. ${getActiveThemes().length} active now.`,
+    "success"
+  );
+
 }
-document.getElementById("previewSelect").onchange=()=>{
- const t=themes.find(x=>x.id===document.getElementById("previewSelect").value);
- const p=document.getElementById("themePreview");
- if(!t){p.style.removeProperty("--preview");p.innerHTML='<div class="small muted">Select a theme.</div><h3>Theme Preview</h3><div class="accent">CrowRules TV</div>';return}
- p.style.setProperty("--preview",t.accent||"#00eaff");
- p.innerHTML=`<div class="small muted">${esc(t.theme_type.toUpperCase())}</div><h3>${esc(t.name)}</h3><div class="accent">${esc(t.hero_description||"CrowRules TV Special Event")}</div>`;
-};
 
-function openCategory(key){
- if(key==="themes"){showView("themes");return}
- const c=categories.find(x=>x.category_key===key)||categoryFallback.map(x=>({category_key:x[0],name:x[1],description:x[2],icon:x[3]})).find(x=>x.category_key===key);
- document.getElementById("genericTitle").textContent=(c?.icon||"")+" "+(c?.name||key);
- document.getElementById("genericSubtitle").textContent=c?.description||"Supabase category";
- document.getElementById("genericContent").innerHTML=`
- <div class="status">Category registered. Use the linked Admin Pro module for CRUD operations and RLS-protected data access.</div>
- <div class="sectionTitle"><div><h2>TABLES</h2><p>Existing Supabase tables assigned to this category.</p></div></div>
- <div class="grid categoryGrid">${(c?.table_names||[]).map(t=>`<div class="card"><strong>${esc(t)}</strong><div class="small muted" style="margin-top:6px">Supabase table</div></div>`).join("")||'<div class="card"><span class="muted">No table registry entries.</span></div>'}</div>`;
- showView("generic");
+/* =========================================================
+   THEME FORM
+========================================================= */
+
+function clearThemeForm(){
+
+  $("themeName").value = "";
+  $("themeSlug").value = "";
+  $("themeType").value = "holiday";
+  $("themePriority").value = "100";
+  $("themeStart").value = "";
+  $("themeEnd").value = "";
+  $("themeAccent").value = "#00eaff";
+  $("themeAccent2").value = "#9d5cff";
+  $("themeShows").value = "";
+  $("themeBanner").value = "";
+  $("themeHeroTitle").value = "";
+  $("themeHeroDescription").value = "";
+
+  $("themeEffects").value =
+`{
+  "glow": true,
+  "particles": false,
+  "fog": false,
+  "ghosts": false,
+  "bats": false,
+  "snow": false,
+  "hearts": false,
+  "confetti": false,
+  "rainbow": false,
+  "glitch": false
+}`;
+
+  $("themeMetadata").value =
+    "{}";
+
+  updateThemePreview();
+
 }
 
-function showView(key){
- document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
- const target=document.getElementById("view-"+key);
- if(target)target.classList.add("active");
- document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===key));
- const c=categories.find(x=>x.category_key===key);
- document.getElementById("pageTitle").textContent=c?.name||({dashboard:"Admin Dashboard",themes:"Themes & Special Events",generic:"Category"}[key]||"Admin Pro");
- document.getElementById("pageSubtitle").textContent=c?.description||"CrowRules Entertainment Supabase control center";
+function editTheme(theme){
+
+  $("themeModalTitle").textContent =
+    "Edit Theme";
+
+  $("themeName").value =
+    theme.name || "";
+
+  $("themeSlug").value =
+    theme.slug || "";
+
+  $("themeType").value =
+    theme.theme_type || "special_event";
+
+  $("themePriority").value =
+    theme.priority ?? 100;
+
+  $("themeStart").value =
+    localInputFromIso(
+      theme.start_at
+    );
+
+  $("themeEnd").value =
+    localInputFromIso(
+      theme.end_at
+    );
+
+  $("themeAccent").value =
+    theme.accent || "#00eaff";
+
+  $("themeAccent2").value =
+    theme.accent_2 || "#9d5cff";
+
+  $("themeShows").value =
+    Array.isArray(theme.show_ids)
+      ? theme.show_ids.join(",")
+      : "";
+
+  $("themeBanner").value =
+    theme.banner_text || "";
+
+  $("themeHeroTitle").value =
+    theme.hero_title || "";
+
+  $("themeHeroDescription").value =
+    theme.hero_description || "";
+
+  $("themeEffects").value =
+    JSON.stringify(
+      theme.effects || {},
+      null,
+      2
+    );
+
+  $("themeMetadata").value =
+    JSON.stringify(
+      theme.metadata || {},
+      null,
+      2
+    );
+
+  $("themeModal").dataset.editId =
+    theme.id;
+
+  updateThemePreview();
+
+  openModal("themeModal");
+
 }
 
-document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>showView(b.dataset.view));
-document.getElementById("refreshBtn").onclick=async()=>{await loadCategories();await loadThemes();toast("Admin Pro refreshed.");};
-document.getElementById("signOutBtn").onclick=async()=>{await supabaseClient.auth.signOut();location.reload();};
+async function saveTheme(){
 
-function openModal(theme=null){
- editingTheme=theme;
- document.getElementById("themeModal").classList.add("open");
- document.getElementById("modalTitle").textContent=theme?"Edit Theme":"New Theme";
- document.getElementById("themeId").value=theme?.id||"";
- document.getElementById("themeName").value=theme?.name||"";
- document.getElementById("themeSlug").value=theme?.slug||"";
- document.getElementById("themeType").value=theme?.theme_type||"holiday";
- document.getElementById("themePriority").value=theme?.priority??100;
- document.getElementById("themeStart").value=theme?.start_at?new Date(theme.start_at).toISOString().slice(0,16):"";
- document.getElementById("themeEnd").value=theme?.end_at?new Date(theme.end_at).toISOString().slice(0,16):"";
- document.getElementById("themeAccent").value=theme?.accent||"#00eaff";
- document.getElementById("themeAccent2").value=theme?.accent_2||"#9d5cff";
- document.getElementById("themeDescription").value=theme?.hero_description||"";
- document.getElementById("themeEffects").value=JSON.stringify(theme?.effects||{},null,2);
- document.getElementById("themeEnabled").value=String(theme?.enabled??true);
- document.getElementById("themeShows").value=(theme?.show_ids||[]).join(",");
+  let effects;
+  let metadata;
+
+  try{
+
+    effects =
+      JSON.parse(
+        $("themeEffects").value ||
+        "{}"
+      );
+
+    metadata =
+      JSON.parse(
+        $("themeMetadata").value ||
+        "{}"
+      );
+
+  }catch(error){
+
+    showStatus(
+      $("themeModalStatus"),
+      "Effects or metadata contains invalid JSON.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const name =
+    $("themeName").value.trim();
+
+  const slug =
+    $("themeSlug").value.trim() ||
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g,"-")
+      .replace(/^-|-$/g,"");
+
+  if(!name){
+
+    showStatus(
+      $("themeModalStatus"),
+      "Theme name is required.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const showIds =
+    $("themeShows")
+      .value
+      .split(",")
+      .map(v=>v.trim())
+      .filter(Boolean);
+
+  const payload = {
+
+    slug,
+
+    name,
+
+    theme_type:
+      $("themeType").value,
+
+    start_at:
+      isoFromLocalInput(
+        $("themeStart").value
+      ),
+
+    end_at:
+      isoFromLocalInput(
+        $("themeEnd").value
+      ),
+
+    enabled:true,
+
+    priority:
+      Number(
+        $("themePriority").value || 100
+      ),
+
+    show_ids:
+      showIds.length
+        ? showIds
+        : null,
+
+    background:null,
+
+    accent:
+      $("themeAccent").value.trim(),
+
+    accent_2:
+      $("themeAccent2").value.trim(),
+
+    banner_text:
+      $("themeBanner").value.trim(),
+
+    hero_title:
+      $("themeHeroTitle").value.trim(),
+
+    hero_description:
+      $("themeHeroDescription")
+        .value
+        .trim(),
+
+    effects,
+
+    metadata,
+
+    updated_at:
+      new Date().toISOString()
+
+  };
+
+  showStatus(
+    $("themeModalStatus"),
+    "Saving..."
+  );
+
+  try{
+
+    const editId =
+      $("themeModal").dataset.editId;
+
+    if(editId){
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("cr_admin_theme_events")
+          .update(payload)
+          .eq("id",editId);
+
+      if(error)
+        throw error;
+
+    }else{
+
+      payload.created_by =
+        currentUser?.id || null;
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("cr_admin_theme_events")
+          .insert(payload);
+
+      if(error)
+        throw error;
+
+    }
+
+    showStatus(
+      $("themeModalStatus"),
+      "Theme saved.",
+      "success"
+    );
+
+    await loadThemes();
+
+    setTimeout(
+      ()=>{
+        closeModal("themeModal");
+        delete $("themeModal").dataset.editId;
+      },
+      500
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showStatus(
+      $("themeModalStatus"),
+      error.message,
+      "error"
+    );
+
+  }
+
 }
-function closeModal(){document.getElementById("themeModal").classList.remove("open")}
-document.getElementById("newThemeBtn").onclick=()=>openModal();
-document.getElementById("closeModal").onclick=closeModal;
 
-window.editTheme=id=>openModal(themes.find(t=>t.id===id));
-window.deleteTheme=async id=>{
- if(!confirm("Delete this theme?"))return;
- const {error}=await supabaseClient.from("cr_admin_theme_events").delete().eq("id",id);
- if(error){toast(error.message,true);return}
- await loadThemes();toast("Theme deleted.");
-};
+async function toggleTheme(id){
 
-document.getElementById("themeForm").onsubmit=async e=>{
- e.preventDefault();
- let effects={};
- try{effects=JSON.parse(document.getElementById("themeEffects").value||"{}")}catch{document.getElementById("formStatus").style.display="block";document.getElementById("formStatus").textContent="Effects must be valid JSON.";return}
- const payload={
-  slug:document.getElementById("themeSlug").value.trim(),
-  name:document.getElementById("themeName").value.trim(),
-  theme_type:document.getElementById("themeType").value,
-  start_at:document.getElementById("themeStart").value?new Date(document.getElementById("themeStart").value).toISOString():null,
-  end_at:document.getElementById("themeEnd").value?new Date(document.getElementById("themeEnd").value).toISOString():null,
-  enabled:document.getElementById("themeEnabled").value==="true",
-  priority:Number(document.getElementById("themePriority").value)||100,
-  show_ids:document.getElementById("themeShows").value.split(",").map(x=>x.trim()).filter(Boolean),
-  accent:document.getElementById("themeAccent").value.trim(),
-  accent_2:document.getElementById("themeAccent2").value.trim(),
-  hero_description:document.getElementById("themeDescription").value.trim(),
-  effects
- };
- let q;
- if(editingTheme)q=await supabaseClient.from("cr_admin_theme_events").update(payload).eq("id",editingTheme.id);
- else q=await supabaseClient.from("cr_admin_theme_events").insert(payload);
- const fs=document.getElementById("formStatus");fs.style.display="block";
- if(q.error){fs.className="status error";fs.textContent=q.error.message;return}
- fs.className="status";fs.textContent="Theme saved.";
- await loadThemes();setTimeout(closeModal,500);
-};
+  const theme =
+    themes.find(
+      t => String(t.id) === String(id)
+    );
 
-supabaseClient.auth.onAuthStateChange(()=>{});
-(async()=>{await ensureAuth();await loadCategories();await loadThemes();})();
+  if(!theme)
+    return;
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("cr_admin_theme_events")
+        .update({
+          enabled:!theme.enabled,
+          updated_at:
+            new Date().toISOString()
+        })
+        .eq("id",id);
+
+    if(error)
+      throw error;
+
+    await loadThemes();
+
+  }catch(error){
+
+    showStatus(
+      $("themeStatus"),
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+async function deleteTheme(id){
+
+  const theme =
+    themes.find(
+      t => String(t.id) === String(id)
+    );
+
+  if(!theme)
+    return;
+
+  if(
+    !confirm(
+      `Delete theme "${theme.name}"?`
+    )
+  )
+    return;
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("cr_admin_theme_events")
+        .delete()
+        .eq("id",id);
+
+    if(error)
+      throw error;
+
+    await loadThemes();
+
+  }catch(error){
+
+    showStatus(
+      $("themeStatus"),
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   THEME PREVIEW
+========================================================= */
+
+function updateThemePreview(){
+
+  const accent =
+    $("themeAccent").value ||
+    "#00eaff";
+
+  const accent2 =
+    $("themeAccent2").value ||
+    "#9d5cff";
+
+  const preview =
+    $("themePreview");
+
+  preview.style.setProperty(
+    "--preview-accent",
+    accent
+  );
+
+  preview.style.setProperty(
+    "--preview-accent2",
+    accent2
+  );
+
+  $("previewTitle").textContent =
+    $("themeHeroTitle").value ||
+    $("themeName").value ||
+    "CrowRules Theme";
+
+  $("previewDescription").textContent =
+    $("themeHeroDescription").value ||
+    $("themeBanner").value ||
+    "Holiday and special-event preview.";
+
+}
+
+/* =========================================================
+   CONNECTION DIAGNOSTICS
+========================================================= */
+
+async function renderConnectionDiagnostics(){
+
+  const container =
+    $("connectionDiagnostics");
+
+  container.innerHTML =
+    `<div class="card" style="padding:18px">
+      <div class="loading"></div>
+      Running diagnostics...
+    </div>`;
+
+  const registry =
+    await connectionTest();
+
+  const themeResult =
+    await testTable(
+      "cr_admin_theme_events"
+    );
+
+  const adminResult =
+    await testTable(
+      "cr_admins"
+    );
+
+  container.innerHTML = `
+
+    <div class="grid stats">
+
+      <div class="card stat">
+
+        <div class="stat-label">
+          Supabase
+        </div>
+
+        <div class="stat-value">
+          ${registry ? "ONLINE" : "ERROR"}
+        </div>
+
+        <div class="stat-detail">
+          ${SUPABASE_URL}
+        </div>
+
+      </div>
+
+      <div class="card stat">
+
+        <div class="stat-label">
+          Admin Registry
+        </div>
+
+        <div class="stat-value">
+          ${adminResult ? "OK" : "ERROR"}
+        </div>
+
+        <div class="stat-detail">
+          cr_admins
+        </div>
+
+      </div>
+
+      <div class="card stat">
+
+        <div class="stat-label">
+          Theme Engine
+        </div>
+
+        <div class="stat-value">
+          ${themeResult ? "OK" : "ERROR"}
+        </div>
+
+        <div class="stat-detail">
+          cr_admin_theme_events
+        </div>
+
+      </div>
+
+      <div class="card stat">
+
+        <div class="stat-label">
+          Current User
+        </div>
+
+        <div class="stat-value"
+             style="font-size:12px">
+          ${escapeHtml(
+            currentUser?.email || "—"
+          )}
+        </div>
+
+        <div class="stat-detail">
+          Authenticated administrator
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="card"
+           style="padding:18px">
+
+        <h2 style="
+          font-family:Orbitron;
+          font-size:14px;
+          margin-top:0">
+          Supabase Configuration
+        </h2>
+
+        <div class="status success">
+          Publishable browser key configured.
+          Service-role key is not exposed.
+        </div>
+
+        <br>
+
+        <div class="status">
+          Project:
+          ${escapeHtml(
+            SUPABASE_URL
+          )}
+        </div>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+async function testTable(table){
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(table)
+        .select("*")
+        .limit(1);
+
+    return !error;
+
+  }catch{
+
+    return false;
+
+  }
+
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function openModal(id){
+
+  $(id)
+    .classList.add("open");
+
+}
+
+function closeModal(id){
+
+  $(id)
+    .classList.remove("open");
+
+}
+
+document
+  .querySelectorAll("[data-close]")
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+        closeModal(
+          button.dataset.close
+        );
+      }
+    );
+
+  });
+
+document
+  .querySelectorAll(".modal-backdrop")
+  .forEach(backdrop=>{
+
+    backdrop.addEventListener(
+      "click",
+      event=>{
+        if(
+          event.target === backdrop
+        ){
+          backdrop.classList.remove(
+            "open"
+          );
+        }
+      }
+    );
+
+  });
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+$("loginForm")
+  .addEventListener(
+    "submit",
+    signIn
+  );
+
+$("signOutBtn")
+  .addEventListener(
+    "click",
+    signOut
+  );
+
+$("refreshBtn")
+  .addEventListener(
+    "click",
+    async ()=>{
+      await bootAdmin();
+
+      if(
+        currentCategory &&
+        currentTable
+      ){
+        await fetchTable();
+      }
+    }
+  );
+
+$("loadTableBtn")
+  .addEventListener(
+    "click",
+    loadTable
+  );
+
+$("newRowBtn")
+  .addEventListener(
+    "click",
+    newRow
+  );
+
+$("saveRowBtn")
+  .addEventListener(
+    "click",
+    saveRow
+  );
+
+$("newThemeBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      clearThemeForm();
+
+      delete $("themeModal")
+        .dataset.editId;
+
+      $("themeModalTitle")
+        .textContent =
+          "New Theme";
+
+      openModal("themeModal");
+    }
+  );
+
+$("saveThemeBtn")
+  .addEventListener(
+    "click",
+    saveTheme
+  );
+
+$("reloadThemesBtn")
+  .addEventListener(
+    "click",
+    loadThemes
+  );
+
+$("activeThemeBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      const active =
+        getActiveThemes();
+
+      if(!active.length){
+
+        showStatus(
+          $("themeStatus"),
+          "No themes are active right now.",
+          "warning"
+        );
+
+        return;
+
+      }
+
+      showStatus(
+        $("themeStatus"),
+        active
+          .map(
+            theme =>
+              `ACTIVE: ${theme.name}`
+          )
+          .join(" | "),
+        "success"
+      );
+
+    }
+  );
+
+$("tableSearch")
+  .addEventListener(
+    "input",
+    filterRenderedTable
+  );
+
+$("tableSelect")
+  .addEventListener(
+    "change",
+    loadTable
+  );
+
+$("mobileMenu")
+  .addEventListener(
+    "click",
+    ()=>{
+      $("sidebar")
+        .classList.toggle("open");
+    }
+  );
+
+[
+  "themeName",
+  "themeHeroTitle",
+  "themeHeroDescription",
+  "themeBanner",
+  "themeAccent",
+  "themeAccent2"
+].forEach(id=>{
+
+  $(id)
+    .addEventListener(
+      "input",
+      updateThemePreview
+    );
+
+});
+
+/* =========================================================
+   TABLE SEARCH
+========================================================= */
+
+function filterRenderedTable(){
+
+  const search =
+    $("tableSearch")
+      .value
+      .trim()
+      .toLowerCase();
+
+  if(!search){
+
+    renderTable();
+
+    return;
+
+  }
+
+  const filtered =
+    currentRows.filter(row=>{
+
+      try{
+
+        return JSON.stringify(row)
+          .toLowerCase()
+          .includes(search);
+
+      }catch{
+
+        return false;
+
+      }
+
+    });
+
+  const original =
+    currentRows;
+
+  currentRows =
+    filtered;
+
+  renderTable();
+
+  currentRows =
+    original;
+
+}
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      event.key === "Escape"
+    ){
+
+      document
+        .querySelectorAll(
+          ".modal-backdrop.open"
+        )
+        .forEach(modal=>{
+          modal.classList.remove(
+            "open"
+          );
+        });
+
+    }
+
+  }
+);
+
+/* =========================================================
+   INITIAL SESSION
+========================================================= */
+
+(async function(){
+
+  try{
+
+    const session =
+      await getSession();
+
+    await handleSession(session);
+
+  }catch(error){
+
+    console.error(error);
+
+    setConnection(false);
+
+  }
+
+})();
+
 </script>
+
 </body>
 </html>
