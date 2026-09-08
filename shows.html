@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Shows — CrowRules Entertainment Admin</title>
+<title>CrowRules Entertainment — Shows Admin</title>
 <meta name="theme-color" content="#050505">
 <meta name="description" content="CrowRules Entertainment Administration — Shows Management">
 
@@ -12,45 +12,76 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<!-- FIXED: lowercase @supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
   --bg:#050505;
-  --bg2:#090909;
-  --panel:#0d0d0f;
-  --panel2:#121214;
-  --panel3:#18181b;
-  --line:#27272b;
-  --line2:#333338;
-  --text:#f4f4f5;
-  --muted:#9a9aa3;
-  --red:#e50914;
-  --red2:#ff1f2d;
-  --green:#22c55e;
-  --yellow:#f59e0b;
-  --blue:#3b82f6;
-  --shadow:0 20px 60px rgba(0,0,0,.45);
-  --radius:14px;
-  --sidebar:280px;
+  --bg2:#08080b;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#16161d;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#90909b;
+  --muted2:#62626d;
+
+  --red:#e51b23;
+  --red2:#ff4650;
+  --purple:#b66cff;
+  --purple2:#7045d8;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --orange:#ff8a4c;
+
+  --shadow:0 18px 60px rgba(0,0,0,.48);
+  --radius:15px;
+  --sidebar:285px;
+  --topbar:78px;
 }
 
 *{
   box-sizing:border-box;
 }
 
-html,
-body{
-  margin:0;
-  padding:0;
-  min-height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Montserrat,Arial,sans-serif;
+html{
+  scroll-behavior:smooth;
 }
 
 body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 85% 5%,rgba(229,27,35,.08),transparent 25%),
+    radial-gradient(circle at 15% 85%,rgba(182,108,255,.06),transparent 25%),
+    var(--bg);
+  font-family:Montserrat,Arial,sans-serif;
   overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  pointer-events:none;
+  opacity:.025;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 2px,
+      #fff 3px
+    );
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
 }
 
 button,
@@ -64,377 +95,504 @@ button{
   cursor:pointer;
 }
 
-a{
-  color:inherit;
-  text-decoration:none;
+button:disabled{
+  cursor:not-allowed;
+  opacity:.55;
 }
+
+/* =========================================================
+   APP
+   ========================================================= */
 
 .app{
   min-height:100vh;
 }
 
-/* SIDEBAR */
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
 
 .sidebar{
   position:fixed;
   inset:0 auto 0 0;
   width:var(--sidebar);
-  background:
-    linear-gradient(180deg,#090909 0%,#050505 100%);
-  border-right:1px solid var(--line);
-  z-index:1000;
+  z-index:200;
+  display:flex;
+  flex-direction:column;
   overflow-y:auto;
+  background:
+    linear-gradient(180deg,#09090c 0%,#060608 100%);
+  border-right:1px solid var(--line);
   transition:transform .25s ease;
 }
 
 .brand{
-  height:78px;
+  min-height:82px;
+  padding:0 19px;
   display:flex;
   align-items:center;
-  gap:13px;
-  padding:0 20px;
+  gap:12px;
+  flex-shrink:0;
   border-bottom:1px solid var(--line);
 }
 
 .brand-mark{
-  width:42px;
-  height:42px;
-  border:2px solid var(--red);
-  border-radius:10px;
+  width:43px;
+  height:43px;
+  flex-shrink:0;
   display:grid;
   place-items:center;
-  color:var(--red);
+  border:1px solid rgba(229,27,35,.55);
+  border-radius:12px;
+  color:#fff;
   font-family:Orbitron,sans-serif;
+  font-size:11px;
   font-weight:800;
-  box-shadow:0 0 20px rgba(229,9,20,.18);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(229,27,35,.22),
+      rgba(182,108,255,.08)
+    );
+  box-shadow:0 0 28px rgba(229,27,35,.10);
 }
 
-.brand-copy{
-  min-width:0;
-}
-
-.brand-copy strong{
-  display:block;
+.brand-title{
   font-family:Orbitron,sans-serif;
-  font-size:14px;
-  letter-spacing:1px;
-  white-space:nowrap;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:1.5px;
 }
 
-.brand-copy span{
-  display:block;
-  margin-top:3px;
-  color:var(--muted);
-  font-size:10px;
+.brand-sub{
+  margin-top:4px;
+  color:var(--muted2);
+  font-size:8px;
+  letter-spacing:1.4px;
   text-transform:uppercase;
-  letter-spacing:1.3px;
 }
 
 .nav{
-  padding:15px 12px 30px;
+  padding:12px 11px 20px;
 }
 
-.nav-section{
-  margin:19px 9px 7px;
-  color:#66666e;
+.nav-label{
+  padding:14px 10px 7px;
+  color:#50505a;
   font-family:Orbitron,sans-serif;
-  font-size:9px;
-  font-weight:700;
-  letter-spacing:1.5px;
+  font-size:8px;
+  letter-spacing:1.7px;
   text-transform:uppercase;
 }
 
 .nav a{
+  min-height:39px;
+  margin:2px 0;
+  padding:0 11px;
   display:flex;
   align-items:center;
-  gap:11px;
-  min-height:38px;
-  padding:8px 11px;
-  margin:2px 0;
+  gap:10px;
   border:1px solid transparent;
   border-radius:9px;
-  color:#b8b8c0;
-  font-size:12px;
-  font-weight:600;
+  color:#a9a9b3;
+  font-size:11px;
+  font-weight:700;
   transition:.18s ease;
 }
 
 .nav a:hover{
-  background:#111114;
   color:#fff;
-  border-color:#222228;
+  background:#111116;
+  border-color:#22222b;
+  transform:translateX(2px);
 }
 
 .nav a.active{
-  background:linear-gradient(90deg,rgba(229,9,20,.18),rgba(229,9,20,.04));
-  border-color:rgba(229,9,20,.35);
   color:#fff;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(229,27,35,.17),
+      rgba(182,108,255,.06)
+    );
+  border-color:rgba(229,27,35,.28);
+  box-shadow:inset 3px 0 0 var(--red);
 }
 
 .nav-icon{
   width:20px;
   text-align:center;
-  color:#777780;
   font-size:14px;
+  color:#777782;
 }
 
 .nav a.active .nav-icon{
   color:var(--red2);
 }
 
-.sidebar-footer{
-  padding:15px 16px 25px;
-  border-top:1px solid var(--line);
-  color:#66666e;
-  font-size:10px;
-  line-height:1.6;
+.nav-badge{
+  margin-left:auto;
+  min-width:20px;
+  height:19px;
+  padding:0 6px;
+  display:grid;
+  place-items:center;
+  border-radius:999px;
+  color:#fff;
+  background:rgba(229,27,35,.25);
+  border:1px solid rgba(229,27,35,.35);
+  font-size:8px;
 }
 
-/* MAIN */
+.sidebar-bottom{
+  margin-top:auto;
+  padding:12px;
+  border-top:1px solid var(--line);
+}
+
+.system-status{
+  padding:12px;
+  border:1px solid #202027;
+  border-radius:12px;
+  background:#0c0c10;
+}
+
+.status-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.status-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#aaaab4;
+  font-size:9px;
+  font-weight:700;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
+.status-version{
+  color:#555560;
+  font-family:Orbitron,sans-serif;
+  font-size:7px;
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
 
 .main{
   min-height:100vh;
   margin-left:var(--sidebar);
 }
 
-/* TOPBAR */
-
 .topbar{
   position:sticky;
   top:0;
-  z-index:500;
-  height:70px;
+  z-index:100;
+  min-height:var(--topbar);
+  padding:0 28px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:20px;
-  padding:0 26px;
-  background:rgba(5,5,5,.94);
-  backdrop-filter:blur(15px);
+  background:rgba(5,5,5,.90);
+  backdrop-filter:blur(18px);
   border-bottom:1px solid var(--line);
 }
 
-.topbar-left{
+.top-left{
+  min-width:0;
   display:flex;
   align-items:center;
-  gap:15px;
-  min-width:0;
+  gap:12px;
 }
 
-.menu-toggle{
+.menu-btn{
   display:none;
-  width:40px;
-  height:40px;
-  border:1px solid var(--line2);
+  width:38px;
+  height:38px;
+  place-items:center;
+  border:1px solid var(--line);
   border-radius:9px;
-  background:#111;
+  background:#0d0d11;
   color:#fff;
 }
 
-.page-title{
-  min-width:0;
+.eyebrow{
+  color:var(--red2);
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+  letter-spacing:2px;
+  text-transform:uppercase;
 }
 
-.page-title h1{
-  margin:0;
+.page-title{
+  margin:5px 0 0;
   font-family:Orbitron,sans-serif;
   font-size:19px;
-  letter-spacing:.5px;
+  letter-spacing:.7px;
 }
 
-.page-title p{
-  margin:4px 0 0;
-  color:var(--muted);
-  font-size:10px;
-}
-
-.topbar-right{
+.top-actions{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
 }
 
-.user-pill{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:7px 11px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:#0d0d0f;
-}
-
-.user-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 10px rgba(34,197,94,.5);
-}
-
-.user-info strong{
-  display:block;
+.top-btn{
+  min-height:38px;
+  padding:0 13px;
+  border:1px solid var(--line2);
+  border-radius:9px;
+  color:#bbbcc5;
+  background:#0e0e13;
   font-size:10px;
+  font-weight:800;
 }
 
-.user-info span{
-  display:block;
-  margin-top:2px;
-  color:var(--muted);
-  font-size:9px;
+.top-btn:hover{
+  color:#fff;
+  border-color:#55555f;
 }
 
-/* CONTENT */
+.top-btn.primary{
+  color:#fff;
+  border-color:rgba(229,27,35,.5);
+  background:
+    linear-gradient(
+      135deg,
+      #c4161d,
+      #7e1820
+    );
+  box-shadow:0 8px 25px rgba(229,27,35,.13);
+}
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
 
 .content{
-  padding:25px;
   max-width:1800px;
   margin:auto;
+  padding:28px 30px 65px;
 }
+
+.page-head{
+  margin-bottom:24px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.page-head h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:26px;
+}
+
+.page-head p{
+  margin:8px 0 0;
+  max-width:760px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.65;
+}
+
+.head-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+/* =========================================================
+   CONFIG BANNER
+   ========================================================= */
+
+.config-banner{
+  display:none;
+  margin-bottom:20px;
+  padding:14px 16px;
+  border:1px solid rgba(243,201,105,.28);
+  border-radius:12px;
+  background:rgba(243,201,105,.06);
+  color:#e5d18c;
+  font-size:10px;
+  line-height:1.6;
+}
+
+.config-banner strong{
+  color:#fff;
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:14px;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
   margin-bottom:20px;
 }
 
 .stat{
   position:relative;
-  overflow:hidden;
   min-height:105px;
-  padding:17px;
+  overflow:hidden;
+  padding:16px;
   border:1px solid var(--line);
-  border-radius:var(--radius);
+  border-radius:14px;
   background:
-    radial-gradient(circle at top right,rgba(229,9,20,.08),transparent 40%),
+    linear-gradient(145deg,rgba(255,255,255,.025),transparent),
     var(--panel);
   box-shadow:var(--shadow);
 }
 
+.stat:after{
+  content:"";
+  position:absolute;
+  right:-45px;
+  bottom:-55px;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background:rgba(229,27,35,.08);
+  filter:blur(8px);
+}
+
 .stat-label{
   color:var(--muted);
-  font-size:10px;
-  text-transform:uppercase;
+  font-size:9px;
+  font-weight:800;
   letter-spacing:1px;
+  text-transform:uppercase;
 }
 
 .stat-value{
-  margin-top:10px;
+  margin-top:9px;
   font-family:Orbitron,sans-serif;
-  font-size:27px;
+  font-size:26px;
   font-weight:700;
 }
 
-.stat-icon{
-  position:absolute;
-  right:16px;
-  bottom:12px;
-  color:#222228;
-  font-size:38px;
+.stat-meta{
+  margin-top:5px;
+  color:var(--muted2);
+  font-size:8px;
 }
 
-/* TOOLBAR */
-
-.panel{
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  background:var(--panel);
-  box-shadow:var(--shadow);
-}
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
 
 .toolbar{
-  padding:15px;
+  margin-bottom:14px;
   display:flex;
-  flex-wrap:wrap;
-  gap:10px;
   align-items:center;
-  border-bottom:1px solid var(--line);
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-.search{
-  flex:1 1 250px;
-  min-width:220px;
+.search-box{
   position:relative;
+  flex:1;
+  min-width:240px;
 }
 
-.search input{
+.search-box input{
   width:100%;
-  height:42px;
-  padding:0 13px 0 40px;
-  color:#fff;
-  background:#080809;
-  border:1px solid var(--line2);
-  border-radius:9px;
+  height:44px;
+  padding:0 14px 0 39px;
+  border:1px solid var(--line);
+  border-radius:10px;
   outline:none;
+  color:#fff;
+  background:#0c0c10;
+  font-size:11px;
 }
 
-.search input:focus{
-  border-color:rgba(229,9,20,.65);
-  box-shadow:0 0 0 3px rgba(229,9,20,.08);
+.search-box input:focus{
+  border-color:rgba(229,27,35,.55);
+  box-shadow:0 0 0 3px rgba(229,27,35,.07);
 }
 
-.search span{
+.search-icon{
   position:absolute;
   left:14px;
   top:12px;
-  color:#66666e;
+  color:#666672;
+  font-size:16px;
 }
 
-.filter{
-  height:42px;
-  min-width:145px;
-  padding:0 12px;
-  color:#ddd;
-  background:#080809;
-  border:1px solid var(--line2);
-  border-radius:9px;
-  outline:none;
-}
-
-.btn{
-  min-height:42px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+.filters{
+  display:flex;
   gap:8px;
-  padding:0 14px;
-  border:1px solid var(--line2);
-  border-radius:9px;
-  color:#ddd;
-  background:#111114;
-  font-size:11px;
-  font-weight:700;
-  transition:.18s ease;
 }
 
-.btn:hover{
-  background:#18181c;
-  border-color:#44444b;
-}
-
-.btn-primary{
-  background:var(--red);
-  border-color:var(--red);
-  color:#fff;
-}
-
-.btn-primary:hover{
-  background:var(--red2);
-  border-color:var(--red2);
-}
-
-.btn-danger{
-  color:#ff7078;
-}
-
-.btn-small{
-  min-height:31px;
-  padding:0 9px;
+.select{
+  height:44px;
+  min-width:145px;
+  padding:0 11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  outline:none;
+  color:#c6c6cf;
+  background:#0c0c10;
   font-size:10px;
 }
 
-/* TABLE */
+/* =========================================================
+   PANEL
+   ========================================================= */
+
+.panel{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.018),transparent),
+    var(--panel);
+  box-shadow:var(--shadow);
+}
+
+.panel-header{
+  min-height:61px;
+  padding:0 17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  letter-spacing:.9px;
+}
+
+.panel-meta{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
 
 .table-wrap{
   overflow:auto;
@@ -442,36 +600,39 @@ a{
 
 table{
   width:100%;
+  min-width:1050px;
   border-collapse:collapse;
-  min-width:980px;
 }
 
 thead{
-  background:#09090a;
+  background:#0a0a0e;
 }
 
 th{
-  padding:12px 14px;
-  border-bottom:1px solid var(--line);
-  color:#777780;
+  padding:12px 15px;
   text-align:left;
-  font-family:Orbitron,sans-serif;
-  font-size:9px;
-  font-weight:700;
-  letter-spacing:.7px;
+  color:#676771;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
   text-transform:uppercase;
+  border-bottom:1px solid var(--line);
 }
 
 td{
-  padding:13px 14px;
-  border-bottom:1px solid #19191c;
-  color:#ddd;
-  font-size:11px;
+  padding:13px 15px;
+  color:#c6c6ce;
+  font-size:10px;
+  border-bottom:1px solid #1b1b21;
   vertical-align:middle;
 }
 
+tbody tr{
+  transition:.16s ease;
+}
+
 tbody tr:hover{
-  background:#101012;
+  background:rgba(255,255,255,.018);
 }
 
 .show-cell{
@@ -480,115 +641,248 @@ tbody tr:hover{
   gap:12px;
 }
 
-.show-image{
-  width:44px;
-  height:44px;
-  flex:0 0 44px;
-  border-radius:9px;
-  overflow:hidden;
-  background:#17171a;
-  border:1px solid var(--line2);
+.show-poster{
+  width:76px;
+  height:48px;
+  flex-shrink:0;
   display:grid;
   place-items:center;
-  color:var(--red);
-  font-family:Orbitron,sans-serif;
-  font-size:12px;
-  font-weight:700;
+  overflow:hidden;
+  border:1px solid #2b2b34;
+  border-radius:8px;
+  color:#70707b;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(229,27,35,.14),
+      rgba(182,108,255,.08)
+    ),
+    #15151b;
+  font-size:17px;
 }
 
-.show-image img{
+.show-poster img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-.show-title{
-  font-weight:800;
+.show-name{
   color:#fff;
+  font-size:11px;
+  font-weight:800;
 }
 
-.show-meta{
-  margin-top:3px;
-  color:#6f6f78;
-  font-size:9px;
+.show-key{
+  margin-top:4px;
+  color:#60606b;
+  font-family:monospace;
+  font-size:8px;
 }
+
+.show-type{
+  margin-top:3px;
+  color:#777782;
+  font-size:8px;
+}
+
+/* =========================================================
+   BADGES
+   ========================================================= */
 
 .badge{
   display:inline-flex;
   align-items:center;
+  gap:5px;
   min-height:24px;
   padding:0 8px;
-  border:1px solid var(--line2);
+  border:1px solid transparent;
   border-radius:999px;
-  background:#121214;
-  color:#aaa;
-  font-size:9px;
-  font-weight:700;
+  font-size:8px;
+  font-weight:800;
+}
+
+.badge:before{
+  content:"";
+  width:5px;
+  height:5px;
+  border-radius:50%;
 }
 
 .badge.active{
-  color:#72e39a;
-  border-color:rgba(34,197,94,.25);
-  background:rgba(34,197,94,.07);
+  color:#72f0b3;
+  background:rgba(69,230,154,.08);
+  border-color:rgba(69,230,154,.20);
+}
+
+.badge.active:before{
+  background:var(--green);
 }
 
 .badge.inactive{
-  color:#ff858b;
-  border-color:rgba(229,9,20,.25);
-  background:rgba(229,9,20,.07);
+  color:#a7a7b0;
+  background:#17171d;
+  border-color:#292932;
+}
+
+.badge.inactive:before{
+  background:#777782;
 }
 
 .badge.live{
-  color:#ff5962;
-  border-color:rgba(229,9,20,.35);
-  background:rgba(229,9,20,.1);
+  color:#6eeaff;
+  background:rgba(55,215,255,.07);
+  border-color:rgba(55,215,255,.2);
+}
+
+.badge.live:before{
+  background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan);
 }
 
 .badge.featured{
-  color:#ffd36a;
-  border-color:rgba(245,158,11,.25);
-  background:rgba(245,158,11,.07);
+  color:#e1b9ff;
+  background:rgba(182,108,255,.08);
+  border-color:rgba(182,108,255,.2);
 }
+
+.badge.featured:before{
+  background:var(--purple);
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
 
 .actions{
   display:flex;
   gap:5px;
 }
 
-/* EMPTY / LOADING */
+.icon-btn{
+  width:31px;
+  height:31px;
+  display:grid;
+  place-items:center;
+  border:1px solid #27272e;
+  border-radius:8px;
+  color:#8b8b96;
+  background:#101015;
+}
 
-.state{
-  padding:60px 20px;
+.icon-btn:hover{
+  color:#fff;
+  border-color:#50505a;
+}
+
+.icon-btn.delete:hover{
+  color:#ff7183;
+  border-color:rgba(229,27,35,.4);
+}
+
+/* =========================================================
+   EMPTY / LOADING
+   ========================================================= */
+
+.loading{
+  padding:55px 20px;
   text-align:center;
-  color:var(--muted);
+  color:#777782;
+  font-size:10px;
 }
 
 .spinner{
   width:25px;
   height:25px;
   margin:0 auto 12px;
-  border:3px solid #222;
+  border:2px solid #28282f;
   border-top-color:var(--red);
   border-radius:50%;
   animation:spin .8s linear infinite;
 }
 
 @keyframes spin{
-  to{transform:rotate(360deg)}
+  to{
+    transform:rotate(360deg);
+  }
 }
 
-/* MODAL */
+.empty{
+  display:none;
+  padding:65px 25px;
+  text-align:center;
+}
+
+.empty-icon{
+  opacity:.35;
+  font-size:38px;
+}
+
+.empty h3{
+  margin:13px 0 7px;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.empty p{
+  max-width:480px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn{
+  min-height:39px;
+  padding:0 14px;
+  border:1px solid var(--line2);
+  border-radius:9px;
+  color:#c4c4cc;
+  background:#111116;
+  font-size:10px;
+  font-weight:800;
+}
+
+.btn:hover{
+  color:#fff;
+  border-color:#50505a;
+}
+
+.btn.primary{
+  color:#fff;
+  border-color:rgba(229,27,35,.5);
+  background:
+    linear-gradient(
+      135deg,
+      #c4161d,
+      #771820
+    );
+}
+
+.btn.secondary{
+  border-color:rgba(182,108,255,.4);
+  color:#e3c8ff;
+  background:rgba(182,108,255,.08);
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
 
 .modal-backdrop{
   position:fixed;
   inset:0;
-  z-index:2000;
+  z-index:700;
   display:none;
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:rgba(0,0,0,.78);
-  backdrop-filter:blur(7px);
+  background:rgba(0,0,0,.80);
+  backdrop-filter:blur(10px);
 }
 
 .modal-backdrop.open{
@@ -596,192 +890,278 @@ tbody tr:hover{
 }
 
 .modal{
-  width:min(760px,100%);
+  width:min(820px,100%);
   max-height:92vh;
   overflow:auto;
-  border:1px solid var(--line2);
-  border-radius:16px;
-  background:#0b0b0d;
-  box-shadow:0 30px 100px rgba(0,0,0,.7);
+  border:1px solid #35353e;
+  border-radius:18px;
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(229,27,35,.10),
+      transparent 30%
+    ),
+    #0c0c10;
+  box-shadow:0 30px 100px rgba(0,0,0,.75);
 }
 
-.modal-head{
-  position:sticky;
-  top:0;
-  z-index:2;
+.modal-header{
+  min-height:61px;
+  padding:0 20px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:18px 20px;
   border-bottom:1px solid var(--line);
-  background:#0b0b0d;
 }
 
-.modal-head h2{
-  margin:0;
+.modal-title{
   font-family:Orbitron,sans-serif;
-  font-size:15px;
+  font-size:13px;
 }
 
 .modal-close{
-  width:35px;
-  height:35px;
-  border:1px solid var(--line2);
+  width:34px;
+  height:34px;
+  border:1px solid var(--line);
   border-radius:8px;
-  background:#121214;
-  color:#fff;
+  color:#aaa;
+  background:#121217;
 }
 
 .form{
-  padding:20px;
+  padding:21px;
 }
 
-.grid{
+.form-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:14px;
 }
 
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
 .field.full{
-  grid-column:1 / -1;
+  grid-column:1/-1;
 }
 
 .field label{
-  color:#9999a1;
+  display:block;
+  margin-bottom:7px;
+  color:#9999a4;
   font-size:9px;
-  font-weight:700;
+  font-weight:800;
+  letter-spacing:.8px;
   text-transform:uppercase;
-  letter-spacing:.9px;
 }
 
 .field input,
 .field select,
 .field textarea{
   width:100%;
-  color:#fff;
-  background:#070708;
-  border:1px solid var(--line2);
+  padding:11px;
+  border:1px solid #292930;
   border-radius:9px;
   outline:none;
-}
-
-.field input,
-.field select{
-  height:42px;
-  padding:0 11px;
+  color:#fff;
+  background:#08080b;
+  font-size:10px;
 }
 
 .field textarea{
-  min-height:110px;
-  padding:11px;
+  min-height:125px;
   resize:vertical;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus{
-  border-color:rgba(229,9,20,.6);
-  box-shadow:0 0 0 3px rgba(229,9,20,.08);
+  border-color:rgba(229,27,35,.55);
+  box-shadow:0 0 0 3px rgba(229,27,35,.06);
 }
 
-.check-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:2px;
+.field-help{
+  margin-top:5px;
+  color:#5e5e69;
+  font-size:8px;
+  line-height:1.5;
 }
 
-.check{
+.checkbox-row{
   display:flex;
   align-items:center;
-  gap:8px;
-  min-height:40px;
-  padding:0 11px;
-  border:1px solid var(--line2);
+  gap:9px;
+  min-height:42px;
+  padding:10px;
+  border:1px solid #25252d;
   border-radius:9px;
-  background:#080809;
-  color:#ccc;
-  font-size:10px;
-  font-weight:600;
+  background:#09090c;
 }
 
-.check input{
-  accent-color:var(--red);
+.checkbox-row input{
+  width:16px;
+  height:16px;
 }
 
-.modal-foot{
+.checkbox-row span{
+  color:#b8b8c1;
+  font-size:9px;
+  font-weight:700;
+}
+
+.form-footer{
+  margin-top:21px;
+  padding-top:17px;
   display:flex;
   justify-content:flex-end;
-  gap:9px;
-  padding:15px 20px;
+  gap:8px;
   border-top:1px solid var(--line);
 }
 
-/* TOAST */
+/* =========================================================
+   DETAIL MODAL
+   ========================================================= */
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:20px;
+  padding:22px;
+}
+
+.detail-image{
+  width:180px;
+  height:120px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+  border:1px solid #292930;
+  border-radius:12px;
+  background:#111116;
+  color:#666672;
+  font-size:30px;
+}
+
+.detail-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.detail-title{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:18px;
+}
+
+.detail-key{
+  margin-top:5px;
+  color:#676771;
+  font-family:monospace;
+  font-size:9px;
+}
+
+.detail-description{
+  margin-top:15px;
+  color:#aaaab4;
+  font-size:10px;
+  line-height:1.7;
+}
+
+.detail-list{
+  margin-top:15px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.detail-item{
+  padding:10px;
+  border:1px solid #22222a;
+  border-radius:9px;
+  background:#0a0a0e;
+}
+
+.detail-item-label{
+  color:#60606a;
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.detail-item-value{
+  margin-top:4px;
+  color:#dddde3;
+  font-size:9px;
+  font-weight:700;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
 
 .toast{
   position:fixed;
   right:22px;
   bottom:22px;
-  z-index:3000;
-  max-width:430px;
+  z-index:1200;
+  width:min(390px,calc(100vw - 44px));
   padding:14px 16px;
-  border:1px solid var(--line2);
-  border-radius:10px;
-  background:#111114;
-  color:#fff;
-  box-shadow:var(--shadow);
-  font-size:11px;
+  border:1px solid #35353e;
+  border-radius:12px;
+  background:#101015;
+  box-shadow:0 20px 60px rgba(0,0,0,.55);
+  transform:translateY(30px);
   opacity:0;
-  transform:translateY(15px);
   pointer-events:none;
-  transition:.2s ease;
+  transition:.25s;
 }
 
 .toast.show{
-  opacity:1;
   transform:translateY(0);
+  opacity:1;
 }
 
-.toast.success{
-  border-color:rgba(34,197,94,.4);
+.toast-title{
+  font-size:10px;
+  font-weight:800;
 }
 
-.toast.error{
-  border-color:rgba(229,9,20,.5);
+.toast-message{
+  margin-top:4px;
+  color:#92929d;
+  font-size:9px;
+  line-height:1.5;
 }
 
-/* OVERLAY */
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
 
-.mobile-overlay{
+.sidebar-overlay{
   position:fixed;
   inset:0;
-  z-index:900;
+  z-index:150;
   display:none;
-  background:rgba(0,0,0,.7);
+  background:rgba(0,0,0,.65);
 }
 
-.mobile-overlay.show{
+.sidebar-overlay.show{
   display:block;
 }
 
-/* RESPONSIVE */
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
-@media(max-width:1200px){
+@media(max-width:1300px){
   .stats{
-    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-columns:repeat(3,1fr);
   }
 }
 
-@media(max-width:900px){
+@media(max-width:950px){
+
   :root{
-    --sidebar:280px;
+    --sidebar:285px;
   }
 
   .sidebar{
@@ -796,61 +1176,54 @@ tbody tr:hover{
     margin-left:0;
   }
 
-  .menu-toggle{
-    display:block;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-
-  .content{
-    padding:18px;
+  .menu-btn{
+    display:grid;
   }
 
   .topbar{
-    padding:0 18px;
+    padding:0 17px;
   }
-}
 
-@media(max-width:620px){
-  .stats{
+  .content{
+    padding:22px 17px 50px;
+  }
+
+  .page-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .detail-grid{
     grid-template-columns:1fr;
   }
 
-  .topbar{
-    height:auto;
-    min-height:68px;
-    padding:12px 15px;
+  .detail-image{
+    width:100%;
+    max-width:300px;
+  }
+}
+
+@media(max-width:650px){
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
   }
 
-  .topbar-right{
+  .stat{
+    min-height:96px;
+    padding:13px;
+  }
+
+  .stat-value{
+    font-size:21px;
+  }
+
+  .top-actions .top-btn:not(.primary){
     display:none;
   }
 
-  .page-title h1{
-    font-size:15px;
-  }
-
-  .content{
-    padding:12px;
-  }
-
-  .toolbar{
-    align-items:stretch;
-  }
-
-  .search{
-    flex-basis:100%;
-  }
-
-  .filter,
-  .toolbar .btn{
-    flex:1;
-    min-width:0;
-  }
-
-  .grid{
+  .form-grid{
     grid-template-columns:1fr;
   }
 
@@ -858,12 +1231,36 @@ tbody tr:hover{
     grid-column:auto;
   }
 
-  .modal-backdrop{
-    padding:8px;
+  .filters{
+    width:100%;
   }
 
-  .modal{
-    max-height:96vh;
+  .select{
+    flex:1;
+    min-width:0;
+  }
+
+  .detail-list{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:440px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .page-title{
+    font-size:15px;
+  }
+
+  .head-actions{
+    width:100%;
+  }
+
+  .head-actions .btn{
+    flex:1;
   }
 }
 </style>
@@ -873,19 +1270,27 @@ tbody tr:hover{
 
 <div class="app">
 
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- =====================================================
+       SIDEBAR
+       ===================================================== -->
+
   <aside class="sidebar" id="sidebar">
 
     <div class="brand">
       <div class="brand-mark">CR</div>
-      <div class="brand-copy">
-        <strong>CROWRULES</strong>
-        <span>Entertainment Admin</span>
+
+      <div>
+        <div class="brand-title">CROWRULES</div>
+        <div class="brand-sub">Entertainment Administration</div>
       </div>
     </div>
 
     <nav class="nav">
 
-      <div class="nav-section">Main</div>
+      <!-- COMMAND -->
+      <div class="nav-label">Command</div>
 
       <a href="index.html">
         <span class="nav-icon">⌂</span>
@@ -893,45 +1298,47 @@ tbody tr:hover{
       </a>
 
       <a href="activity.html">
-        <span class="nav-icon">◌</span>
+        <span class="nav-icon">≋</span>
         Activity
       </a>
 
       <a href="notifications.html">
-        <span class="nav-icon">●</span>
+        <span class="nav-icon">♢</span>
         Notifications
+        <span class="nav-badge">4</span>
       </a>
 
-      <div class="nav-section">Content</div>
+      <!-- CONTENT -->
+      <div class="nav-label">Content</div>
 
       <a href="content.html">
-        <span class="nav-icon">▣</span>
+        <span class="nav-icon">▦</span>
         All Content
       </a>
 
+      <a href="pages.html">
+        <span class="nav-icon">▤</span>
+        Pages
+      </a>
+
       <a href="shows.html" class="active">
-        <span class="nav-icon">▶</span>
+        <span class="nav-icon">▣</span>
         Shows
       </a>
 
       <a href="episodes.html">
-        <span class="nav-icon">▤</span>
+        <span class="nav-icon">▶</span>
         Episodes
       </a>
 
       <a href="movies.html">
-        <span class="nav-icon">▰</span>
+        <span class="nav-icon">◆</span>
         Movies
       </a>
 
       <a href="videos.html">
-        <span class="nav-icon">▷</span>
+        <span class="nav-icon">▻</span>
         Videos
-      </a>
-
-      <a href="photos.html">
-        <span class="nav-icon">▧</span>
-        Photos
       </a>
 
       <a href="audio.html">
@@ -939,13 +1346,13 @@ tbody tr:hover{
         Audio
       </a>
 
-      <a href="articles.html">
-        <span class="nav-icon">A</span>
-        Articles
+      <a href="photos.html">
+        <span class="nav-icon">▧</span>
+        Photos
       </a>
 
       <a href="categories.html">
-        <span class="nav-icon">▦</span>
+        <span class="nav-icon">◈</span>
         Categories
       </a>
 
@@ -954,12 +1361,18 @@ tbody tr:hover{
         Tags
       </a>
 
-      <a href="media-library.html">
-        <span class="nav-icon">▤</span>
+      <a href="media.html">
+        <span class="nav-icon">▥</span>
         Media Library
       </a>
 
-      <div class="nav-section">Television</div>
+      <!-- TELEVISION -->
+      <div class="nav-label">CrowRules TV</div>
+
+      <a href="tv.html">
+        <span class="nav-icon">▣</span>
+        TV Dashboard
+      </a>
 
       <a href="channels.html">
         <span class="nav-icon">◉</span>
@@ -971,22 +1384,23 @@ tbody tr:hover{
         Schedule
       </a>
 
-      <a href="live-control.html">
+      <a href="live.html">
         <span class="nav-icon">●</span>
         Live Control
       </a>
 
-      <a href="tv-guide.html">
+      <a href="guide.html">
         <span class="nav-icon">☷</span>
         TV Guide
       </a>
 
-      <a href="on-demand.html">
+      <a href="ondemand.html">
         <span class="nav-icon">▹</span>
         On Demand
       </a>
 
-      <div class="nav-section">Members</div>
+      <!-- MEMBERS -->
+      <div class="nav-label">Members</div>
 
       <a href="members.html">
         <span class="nav-icon">♙</span>
@@ -999,22 +1413,22 @@ tbody tr:hover{
       </a>
 
       <a href="membership.html">
-        <span class="nav-icon">★</span>
+        <span class="nav-icon">♕</span>
         Membership
       </a>
 
       <a href="subscriptions.html">
-        <span class="nav-icon">$</span>
+        <span class="nav-icon">◒</span>
         Subscriptions
       </a>
 
       <a href="friends.html">
         <span class="nav-icon">♧</span>
-        Friends
+        Friendships
       </a>
 
       <a href="community.html">
-        <span class="nav-icon">☷</span>
+        <span class="nav-icon">♤</span>
         Community
       </a>
 
@@ -1024,33 +1438,34 @@ tbody tr:hover{
       </a>
 
       <a href="favorites.html">
-        <span class="nav-icon">♥</span>
+        <span class="nav-icon">♡</span>
         Favorites
       </a>
 
-      <a href="watch-history.html">
-        <span class="nav-icon">◴</span>
+      <a href="history.html">
+        <span class="nav-icon">↺</span>
         Watch History
       </a>
 
-      <div class="nav-section">Moderation</div>
-
-      <a href="moderation.html">
-        <span class="nav-icon">⚑</span>
-        Moderation
+      <a href="leaderboard.html">
+        <span class="nav-icon">♛</span>
+        Leaderboard
       </a>
 
+      <!-- CREATORS -->
+      <div class="nav-label">Creators</div>
+
       <a href="creators.html">
-        <span class="nav-icon">♟</span>
+        <span class="nav-icon">✦</span>
         Creators
       </a>
 
       <a href="creator-content.html">
-        <span class="nav-icon">✦</span>
+        <span class="nav-icon">✧</span>
         Creator Content
       </a>
 
-      <a href="approvals.html">
+      <a href="creator-approvals.html">
         <span class="nav-icon">✓</span>
         Approvals
       </a>
@@ -1060,10 +1475,16 @@ tbody tr:hover{
         Payouts
       </a>
 
-      <div class="nav-section">Records</div>
+      <!-- RECORDS -->
+      <div class="nav-label">CrowRules Records</div>
+
+      <a href="records.html">
+        <span class="nav-icon">♫</span>
+        Records Dashboard
+      </a>
 
       <a href="artists.html">
-        <span class="nav-icon">♬</span>
+        <span class="nav-icon">♩</span>
         Artists
       </a>
 
@@ -1073,34 +1494,35 @@ tbody tr:hover{
       </a>
 
       <a href="tracks.html">
-        <span class="nav-icon">♫</span>
+        <span class="nav-icon">♪</span>
         Tracks
       </a>
 
       <a href="releases.html">
-        <span class="nav-icon">◈</span>
+        <span class="nav-icon">◉</span>
         Releases
       </a>
 
       <a href="playlists.html">
-        <span class="nav-icon">≡</span>
+        <span class="nav-icon">☷</span>
         Playlists
       </a>
 
-      <div class="nav-section">Sports</div>
+      <!-- SPORTS -->
+      <div class="nav-label">CrowRules Sports</div>
 
       <a href="sports.html">
-        <span class="nav-icon">⚽</span>
-        Sports
+        <span class="nav-icon">◆</span>
+        Sports Dashboard
       </a>
 
       <a href="teams.html">
-        <span class="nav-icon">♜</span>
+        <span class="nav-icon">◇</span>
         Teams
       </a>
 
       <a href="games.html">
-        <span class="nav-icon">◆</span>
+        <span class="nav-icon">●</span>
         Games
       </a>
 
@@ -1110,19 +1532,20 @@ tbody tr:hover{
       </a>
 
       <a href="rankings.html">
-        <span class="nav-icon">↕</span>
+        <span class="nav-icon">♜</span>
         Rankings
       </a>
 
       <a href="pickem.html">
-        <span class="nav-icon">✓</span>
+        <span class="nav-icon">?</span>
         Pick'em
       </a>
 
-      <div class="nav-section">Memorials</div>
+      <!-- MEMORIALS -->
+      <div class="nav-label">Memorials</div>
 
       <a href="memorials.html">
-        <span class="nav-icon">✝</span>
+        <span class="nav-icon">✧</span>
         Memorials
       </a>
 
@@ -1131,49 +1554,74 @@ tbody tr:hover{
         Memorial Photos
       </a>
 
+      <a href="memorial-videos.html">
+        <span class="nav-icon">▻</span>
+        Memorial Videos
+      </a>
+
       <a href="candles.html">
         <span class="nav-icon">♨</span>
         Candles
       </a>
 
-      <a href="memorial-videos.html">
-        <span class="nav-icon">▷</span>
-        Memorial Videos
+      <!-- AWARDS -->
+      <div class="nav-label">Spectrum Awards</div>
+
+      <a href="awards.html">
+        <span class="nav-icon">★</span>
+        Awards
       </a>
 
-      <div class="nav-section">Publishing</div>
-
-      <a href="records.html">
-        <span class="nav-icon">♫</span>
-        CrowRules Records
+      <a href="award-categories.html">
+        <span class="nav-icon">◇</span>
+        Categories
       </a>
+
+      <a href="award-nominees.html">
+        <span class="nav-icon">♕</span>
+        Nominees
+      </a>
+
+      <a href="award-votes.html">
+        <span class="nav-icon">✓</span>
+        Votes
+      </a>
+
+      <a href="award-ceremonies.html">
+        <span class="nav-icon">◆</span>
+        Ceremonies
+      </a>
+
+      <!-- NETWORK -->
+      <div class="nav-label">Network</div>
 
       <a href="publishing.html">
-        <span class="nav-icon">✎</span>
-        CrowRules Publishing
+        <span class="nav-icon">▤</span>
+        Publishing
       </a>
 
       <a href="yearbooks.html">
-        <span class="nav-icon">▤</span>
+        <span class="nav-icon">▥</span>
         Yearbooks
       </a>
 
       <a href="studios.html">
-        <span class="nav-icon">▥</span>
+        <span class="nav-icon">◉</span>
         Studios
       </a>
 
       <a href="crowspace.html">
-        <span class="nav-icon">◉</span>
+        <span class="nav-icon">♧</span>
         CrowSpace
       </a>
 
-      <a href="awards.html">
-        <span class="nav-icon">★</span>
-        Spectrum Awards
+      <a href="brands.html">
+        <span class="nav-icon">✦</span>
+        Brands
       </a>
 
-      <div class="nav-section">Business</div>
+      <!-- BUSINESS -->
+      <div class="nav-label">Business</div>
 
       <a href="business.html">
         <span class="nav-icon">▣</span>
@@ -1181,12 +1629,12 @@ tbody tr:hover{
       </a>
 
       <a href="shop.html">
-        <span class="nav-icon">🛒</span>
+        <span class="nav-icon">□</span>
         Shop
       </a>
 
       <a href="products.html">
-        <span class="nav-icon">▰</span>
+        <span class="nav-icon">◇</span>
         Products
       </a>
 
@@ -1196,24 +1644,30 @@ tbody tr:hover{
       </a>
 
       <a href="donations.html">
-        <span class="nav-icon">♥</span>
+        <span class="nav-icon">$</span>
         Donations
       </a>
 
       <a href="transactions.html">
-        <span class="nav-icon">$</span>
+        <span class="nav-icon">⇄</span>
         Transactions
       </a>
 
-      <div class="nav-section">System</div>
+      <a href="inquiries.html">
+        <span class="nav-icon">✉</span>
+        Inquiries
+      </a>
+
+      <!-- SYSTEM -->
+      <div class="nav-label">System</div>
 
       <a href="analytics.html">
-        <span class="nav-icon">◒</span>
+        <span class="nav-icon">⌁</span>
         Analytics
       </a>
 
       <a href="database.html">
-        <span class="nav-icon">▦</span>
+        <span class="nav-icon">▤</span>
         Database
       </a>
 
@@ -1223,7 +1677,7 @@ tbody tr:hover{
       </a>
 
       <a href="authentication.html">
-        <span class="nav-icon">♙</span>
+        <span class="nav-icon">⊙</span>
         Authentication
       </a>
 
@@ -1233,18 +1687,23 @@ tbody tr:hover{
       </a>
 
       <a href="permissions.html">
-        <span class="nav-icon">⚿</span>
+        <span class="nav-icon">⊛</span>
         Permissions
       </a>
 
       <a href="api.html">
-        <span class="nav-icon">⌘</span>
+        <span class="nav-icon">{ }</span>
         API
+      </a>
+
+      <a href="moderation.html">
+        <span class="nav-icon">⚑</span>
+        Moderation
       </a>
 
       <a href="logs.html">
         <span class="nav-icon">≡</span>
-        Logs
+        System Logs
       </a>
 
       <a href="settings.html">
@@ -1252,51 +1711,75 @@ tbody tr:hover{
         Settings
       </a>
 
-      <a href="system-health.html">
-        <span class="nav-icon">♥</span>
+      <a href="system.html">
+        <span class="nav-icon">◉</span>
         System Health
       </a>
 
     </nav>
 
-    <div class="sidebar-footer">
-      CrowRules Entertainment Admin<br>
-      Secure administration console
+    <div class="sidebar-bottom">
+      <div class="system-status">
+        <div class="status-row">
+          <div class="status-left">
+            <span class="status-dot"></span>
+            <span id="sidebarStatus">System Ready</span>
+          </div>
+
+          <div class="status-version">
+            ADMIN 2.0
+          </div>
+        </div>
+      </div>
     </div>
 
   </aside>
 
-  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
 
   <main class="main">
 
     <header class="topbar">
 
-      <div class="topbar-left">
+      <div class="top-left">
 
-        <button class="menu-toggle" id="menuToggle" type="button">
-          ☰
-        </button>
+        <button
+          class="menu-btn"
+          id="menuBtn"
+          type="button"
+          aria-label="Open administration menu"
+        >☰</button>
 
-        <div class="page-title">
-          <h1>Shows</h1>
-          <p>Manage CrowRules Entertainment television programming</p>
+        <div>
+          <div class="eyebrow">
+            CrowRules Entertainment / Administration
+          </div>
+
+          <h1 class="page-title">
+            Shows Management
+          </h1>
         </div>
 
       </div>
 
-      <div class="topbar-right">
+      <div class="top-actions">
 
-        <div class="user-pill">
-          <span class="user-dot"></span>
-          <div class="user-info">
-            <strong id="userEmail">Authenticated</strong>
-            <span id="userRole">Checking role...</span>
-          </div>
-        </div>
+        <button
+          class="top-btn"
+          type="button"
+          id="refreshTopBtn"
+        >
+          ↻ Refresh
+        </button>
 
-        <button class="btn" id="logoutBtn" type="button">
-          Sign Out
+        <button
+          class="top-btn primary"
+          type="button"
+          id="newShowTopBtn"
+        >
+          + New Show
         </button>
 
       </div>
@@ -1305,108 +1788,237 @@ tbody tr:hover{
 
     <section class="content">
 
-      <div class="stats">
+      <!-- CONFIGURATION -->
+      <div
+        class="config-banner"
+        id="configBanner"
+      >
+        <strong>Supabase configuration required.</strong>
+        This page could not initialize the Supabase browser client.
+        Add your project URL and publishable key through
+        <code>window.CROWRULES_SUPABASE_URL</code> and
+        <code>window.CROWRULES_SUPABASE_ANON_KEY</code>
+        before this page's script.
+        Never put a service-role or secret key in this page.
+      </div>
 
-        <div class="stat">
-          <div class="stat-label">Total Shows</div>
-          <div class="stat-value" id="statTotal">0</div>
-          <div class="stat-icon">▶</div>
+      <!-- PAGE HEADER -->
+      <div class="page-head">
+
+        <div>
+          <h2>Shows</h2>
+
+          <p>
+            Create, edit, publish and organize CrowRules Entertainment
+            television programs and original series.
+            This administration page is connected to the current
+            CrowRules <code>public.shows</code> schema.
+          </p>
         </div>
 
-        <div class="stat">
-          <div class="stat-label">Active</div>
-          <div class="stat-value" id="statActive">0</div>
-          <div class="stat-icon">●</div>
-        </div>
+        <div class="head-actions">
 
-        <div class="stat">
-          <div class="stat-label">Inactive</div>
-          <div class="stat-value" id="statInactive">0</div>
-          <div class="stat-icon">○</div>
-        </div>
+          <button
+            class="btn"
+            type="button"
+            id="exportBtn"
+          >
+            Export CSV
+          </button>
 
-        <div class="stat">
-          <div class="stat-label">Live Shows</div>
-          <div class="stat-value" id="statLive">0</div>
-          <div class="stat-icon">●</div>
-        </div>
+          <button
+            class="btn"
+            type="button"
+            id="refreshBtn"
+          >
+            Refresh Data
+          </button>
 
-        <div class="stat">
-          <div class="stat-label">Featured</div>
-          <div class="stat-value" id="statFeatured">0</div>
-          <div class="stat-icon">★</div>
+          <button
+            class="btn primary"
+            type="button"
+            id="createBtn"
+          >
+            + Create Show
+          </button>
+
         </div>
 
       </div>
 
-      <section class="panel">
+      <!-- STATS -->
+      <div class="stats">
 
-        <div class="toolbar">
+        <div class="stat">
+          <div class="stat-label">Total Shows</div>
+          <div
+            class="stat-value"
+            id="totalShows"
+          >0</div>
+          <div class="stat-meta">All show records</div>
+        </div>
 
-          <div class="search">
-            <span>⌕</span>
-            <input
-              id="searchInput"
-              type="search"
-              placeholder="Search title, slug, key, category..."
-              autocomplete="off">
-          </div>
+        <div class="stat">
+          <div class="stat-label">Active</div>
+          <div
+            class="stat-value"
+            id="activeShows"
+          >0</div>
+          <div class="stat-meta">Currently active</div>
+        </div>
 
-          <select id="statusFilter" class="filter">
+        <div class="stat">
+          <div class="stat-label">Inactive</div>
+          <div
+            class="stat-value"
+            id="inactiveShows"
+          >0</div>
+          <div class="stat-meta">Currently disabled</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Featured</div>
+          <div
+            class="stat-value"
+            id="featuredShows"
+          >0</div>
+          <div class="stat-meta">Featured programs</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Categories</div>
+          <div
+            class="stat-value"
+            id="categoryCount"
+          >0</div>
+          <div class="stat-meta">Unique show categories</div>
+        </div>
+
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+
+        <div class="search-box">
+
+          <span class="search-icon">⌕</span>
+
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search shows, categories, descriptions..."
+            autocomplete="off"
+          >
+
+        </div>
+
+        <div class="filters">
+
+          <select
+            class="select"
+            id="activeFilter"
+          >
             <option value="all">All Statuses</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
+            <option value="featured">Featured</option>
           </select>
 
-          <select id="categoryFilter" class="filter">
+          <select
+            class="select"
+            id="categoryFilter"
+          >
             <option value="all">All Categories</option>
           </select>
 
-          <button class="btn" id="refreshBtn" type="button">
-            ↻ Refresh
-          </button>
+        </div>
 
-          <button class="btn" id="exportBtn" type="button">
-            ↓ CSV
-          </button>
+      </div>
 
-          <button class="btn btn-primary" id="newShowBtn" type="button">
-            + New Show
+      <!-- TABLE -->
+      <section class="panel">
+
+        <div class="panel-header">
+
+          <div>
+            <div class="panel-title">
+              SHOW CATALOG
+            </div>
+
+            <div
+              class="panel-meta"
+              id="resultMeta"
+            >
+              Loading shows...
+            </div>
+          </div>
+
+          <button
+            class="btn primary"
+            type="button"
+            id="addShowBtn"
+          >
+            + Add Show
           </button>
 
         </div>
 
         <div class="table-wrap">
 
-          <table>
+          <div
+            class="loading"
+            id="loading"
+          >
+            <div class="spinner"></div>
+            Loading CrowRules shows...
+          </div>
+
+          <table
+            id="showTable"
+            style="display:none"
+          >
 
             <thead>
               <tr>
                 <th>Show</th>
                 <th>Category</th>
-                <th>Type</th>
                 <th>Status</th>
                 <th>Featured</th>
                 <th>Order</th>
-                <th>Updated</th>
+                <th>Created</th>
                 <th>Actions</th>
               </tr>
             </thead>
 
-            <tbody id="showsBody">
-
-              <tr>
-                <td colspan="8">
-                  <div class="state">
-                    <div class="spinner"></div>
-                    Loading shows...
-                  </div>
-                </td>
-              </tr>
-
-            </tbody>
+            <tbody id="showBody"></tbody>
 
           </table>
+
+          <div
+            class="empty"
+            id="emptyState"
+          >
+
+            <div class="empty-icon">▣</div>
+
+            <h3>No Shows Found</h3>
+
+            <p>
+              No shows match the current search or filters.
+              Create a CrowRules show to begin building the catalog.
+            </p>
+
+            <br>
+
+            <button
+              class="btn primary"
+              type="button"
+              id="emptyCreateBtn"
+            >
+              + Create Show
+            </button>
+
+          </div>
 
         </div>
 
@@ -1418,179 +2030,409 @@ tbody tr:hover{
 
 </div>
 
+<!-- =========================================================
+     CREATE / EDIT MODAL
+     ========================================================= -->
 
-<!-- MODAL -->
-
-<div class="modal-backdrop" id="modalBackdrop">
+<div
+  class="modal-backdrop"
+  id="formModal"
+>
 
   <div class="modal">
 
-    <div class="modal-head">
+    <div class="modal-header">
 
-      <h2 id="modalTitle">New Show</h2>
+      <div
+        class="modal-title"
+        id="modalTitle"
+      >
+        CREATE SHOW
+      </div>
 
       <button
         class="modal-close"
-        id="modalClose"
-        type="button">
+        type="button"
+        id="closeFormBtn"
+      >
         ×
       </button>
 
     </div>
 
-    <form class="form" id="showForm">
+    <form
+      class="form"
+      id="showForm"
+      novalidate
+    >
 
-      <input type="hidden" id="showId">
+      <input
+        type="hidden"
+        id="editId"
+      >
 
-      <div class="grid">
+      <div class="form-grid">
 
         <div class="field">
-          <label for="showKey">Show Key</label>
+          <label for="showTitle">
+            Show Title
+          </label>
+
+          <input
+            id="showTitle"
+            type="text"
+            required
+            maxlength="200"
+            placeholder="Example: Tacoma Nights"
+          >
+        </div>
+
+        <div class="field">
+          <label for="showKey">
+            Show Key
+          </label>
+
           <input
             id="showKey"
-            name="show_key"
+            type="text"
             maxlength="120"
-            placeholder="tacoma-nights"
-            required>
+            placeholder="tacoma_nights"
+          >
+
+          <div class="field-help">
+            Must be unique. Automatically generated when blank.
+          </div>
         </div>
 
         <div class="field">
-          <label for="slug">Slug</label>
+          <label for="showSlug">
+            Slug
+          </label>
+
           <input
-            id="slug"
-            name="slug"
+            id="showSlug"
+            type="text"
             maxlength="160"
             placeholder="tacoma-nights"
-            required>
-        </div>
+          >
 
-        <div class="field full">
-          <label for="title">Title</label>
-          <input
-            id="title"
-            name="title"
-            maxlength="200"
-            placeholder="Tacoma Nights"
-            required>
+          <div class="field-help">
+            Must be unique. Automatically generated from the title when blank.
+          </div>
         </div>
 
         <div class="field">
-          <label for="category">Category</label>
+          <label for="showCategory">
+            Category
+          </label>
 
-          <select id="category" name="category" required>
+          <select id="showCategory">
 
-            <option value="">Select category</option>
-            <option value="talk">Talk</option>
-            <option value="live">Live</option>
-            <option value="documentary">Documentary</option>
-            <option value="story">Story</option>
-            <option value="music">Music</option>
+            <option value="talk">
+              Talk
+            </option>
+
+            <option value="live">
+              Live
+            </option>
+
+            <option value="documentary">
+              Documentary
+            </option>
+
+            <option value="story">
+              Story
+            </option>
+
+            <option value="music">
+              Music
+            </option>
 
           </select>
 
+          <div class="field-help">
+            Uses the actual category values permitted by public.shows.
+          </div>
         </div>
 
         <div class="field">
-          <label for="showType">Show Type</label>
+          <label for="showType">
+            Show Type
+          </label>
+
           <input
             id="showType"
-            name="show_type"
-            maxlength="100"
-            placeholder="Original Series">
+            type="text"
+            maxlength="120"
+            placeholder="Original Series"
+          >
+        </div>
+
+        <div class="field">
+          <label for="showInitials">
+            Initials
+          </label>
+
+          <input
+            id="showInitials"
+            type="text"
+            maxlength="20"
+            placeholder="TN"
+          >
+        </div>
+
+        <div class="field">
+          <label for="showDestination">
+            Destination URL
+          </label>
+
+          <input
+            id="showDestination"
+            type="url"
+            placeholder="https://..."
+          >
+        </div>
+
+        <div class="field">
+          <label for="showImage">
+            Image URL
+          </label>
+
+          <input
+            id="showImage"
+            type="url"
+            placeholder="https://..."
+          >
         </div>
 
         <div class="field full">
-          <label for="description">Description</label>
+
+          <label for="showDescription">
+            Description
+          </label>
+
           <textarea
-            id="description"
-            name="description"
+            id="showDescription"
             maxlength="5000"
-            placeholder="Describe the show..."></textarea>
+            placeholder="Describe this CrowRules show..."
+          ></textarea>
+
         </div>
 
         <div class="field">
-          <label for="initials">Initials</label>
-          <input
-            id="initials"
-            name="initials"
-            maxlength="10"
-            placeholder="TN">
+
+          <div class="checkbox-row">
+
+            <input
+              id="showActive"
+              type="checkbox"
+              checked
+            >
+
+            <span>
+              Show is active
+            </span>
+
+          </div>
+
         </div>
 
         <div class="field">
-          <label for="sortOrder">Sort Order</label>
+
+          <div class="checkbox-row">
+
+            <input
+              id="showFeatured"
+              type="checkbox"
+            >
+
+            <span>
+              Feature this show
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="field full">
+
+          <label for="showSortOrder">
+            Sort Order
+          </label>
+
           <input
-            id="sortOrder"
-            name="sort_order"
+            id="showSortOrder"
             type="number"
+            min="0"
             step="1"
-            value="0">
+            value="0"
+          >
+
         </div>
 
-        <div class="field full">
-          <label for="destinationUrl">Destination URL</label>
-          <input
-            id="destinationUrl"
-            name="destination_url"
-            type="url"
-            maxlength="1000"
-            placeholder="https://...">
+      </div>
+
+      <div class="form-footer">
+
+        <button
+          class="btn"
+          type="button"
+          id="cancelFormBtn"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+          type="submit"
+          id="saveBtn"
+        >
+          Create Show
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- =========================================================
+     DETAIL MODAL
+     ========================================================= -->
+
+<div
+  class="modal-backdrop"
+  id="detailModal"
+>
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        SHOW DETAILS
+      </div>
+
+      <button
+        class="modal-close"
+        type="button"
+        id="closeDetailBtn"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="detail-grid">
+
+      <div
+        class="detail-image"
+        id="detailImage"
+      >
+        ▣
+      </div>
+
+      <div>
+
+        <h2
+          class="detail-title"
+          id="detailTitle"
+        >
+          —
+        </h2>
+
+        <div
+          class="detail-key"
+          id="detailKey"
+        >
+          —
         </div>
 
-        <div class="field full">
-          <label for="imageUrl">Image URL</label>
-          <input
-            id="imageUrl"
-            name="image_url"
-            type="url"
-            maxlength="1000"
-            placeholder="https://...">
+        <div
+          class="detail-description"
+          id="detailDescription"
+        >
+          —
         </div>
 
-        <div class="field full">
+        <div class="detail-list">
 
-          <label>Publishing</label>
+          <div class="detail-item">
+            <div class="detail-item-label">
+              Category
+            </div>
 
-          <div class="check-row">
+            <div
+              class="detail-item-value"
+              id="detailCategory"
+            >
+              —
+            </div>
+          </div>
 
-            <label class="check">
-              <input
-                id="isActive"
-                type="checkbox"
-                checked>
-              Active
-            </label>
+          <div class="detail-item">
+            <div class="detail-item-label">
+              Type
+            </div>
 
-            <label class="check">
-              <input
-                id="isFeatured"
-                type="checkbox">
-              Featured
-            </label>
+            <div
+              class="detail-item-value"
+              id="detailType"
+            >
+              —
+            </div>
+          </div>
 
+          <div class="detail-item">
+            <div class="detail-item-label">
+              Status
+            </div>
+
+            <div
+              class="detail-item-value"
+              id="detailStatus"
+            >
+              —
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-item-label">
+              Created
+            </div>
+
+            <div
+              class="detail-item-value"
+              id="detailCreated"
+            >
+              —
+            </div>
           </div>
 
         </div>
 
       </div>
 
-    </form>
+    </div>
 
-    <div class="modal-foot">
+    <div class="form-footer" style="margin:0;padding:15px 21px 21px">
 
       <button
         class="btn"
-        id="cancelBtn"
-        type="button">
-        Cancel
+        type="button"
+        id="detailEditBtn"
+      >
+        Edit Show
       </button>
 
       <button
-        class="btn btn-primary"
-        id="saveBtn"
-        type="submit"
-        form="showForm">
-        Save Show
+        class="btn primary"
+        type="button"
+        id="detailPublicBtn"
+      >
+        Open Public Page
       </button>
 
     </div>
@@ -1599,1315 +2441,198 @@ tbody tr:hover{
 
 </div>
 
+<!-- TOAST -->
 
-<div class="toast" id="toast"></div>
+<div
+  class="toast"
+  id="toast"
+  role="status"
+  aria-live="polite"
+>
 
+  <div
+    class="toast-title"
+    id="toastTitle"
+  >
+    CrowRules Admin
+  </div>
+
+  <div
+    class="toast-message"
+    id="toastMessage"
+  >
+    Ready.
+  </div>
+
+</div>
 
 <script>
-(() => {
-  "use strict";
+/* =========================================================
+   CROWRULES ENTERTAINMENT
+   SHOWS ADMIN 2.0
+   ========================================================= */
 
-  /* =========================================================
-     CONFIGURATION
-     ========================================================= */
+/*
+  IMPORTANT
+  ----------------------------------------------------------
+  Put these values before this script, preferably in a shared
+  configuration file:
 
-  const SUPABASE_URL =
-    window.CROWRULES_SUPABASE_URL ||
-    "https://cevylpnoexugwgygvtgu.supabase.co";
+  window.CROWRULES_SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+  window.CROWRULES_SUPABASE_ANON_KEY = "YOUR_PUBLISHABLE_KEY";
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    window.CROWRULES_SUPABASE_PUBLISHABLE_KEY ||
-    window.CROWRULES_SUPABASE_ANON_KEY ||
-    "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+  Use only the publishable key / legacy anon key in browser code.
+  NEVER use service_role or sb_secret in this page.
+*/
 
-  if (!window.supabase) {
-    document.body.innerHTML = `
-      <div style="
-        min-height:100vh;
-        display:grid;
-        place-items:center;
-        background:#050505;
-        color:#fff;
-        font-family:Arial,sans-serif;
-        padding:30px;
-        text-align:center;">
-        <div>
-          <h1>Supabase failed to load</h1>
-          <p>Please check your internet connection and Supabase CDN configuration.</p>
-        </div>
-      </div>
-    `;
+/* =========================================================
+   CONFIG
+   ========================================================= */
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL || "";
+
+const SUPABASE_ANON_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY || "";
+
+const SHOWS_TABLE = "shows";
+
+let supabaseClient = null;
+
+if (
+  SUPABASE_URL &&
+  SUPABASE_ANON_KEY &&
+  window.supabase &&
+  typeof window.supabase.createClient === "function"
+) {
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        auth:{
+          autoRefreshToken:true,
+          persistSession:true,
+          detectSessionInUrl:true
+        }
+      }
+    );
+}
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let shows = [];
+let filteredShows = [];
+let editingShow = null;
+let detailShow = null;
+let toastTimer = null;
+
+/* =========================================================
+   DOM
+   ========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+const sidebar =
+  $("sidebar");
+
+const sidebarOverlay =
+  $("sidebarOverlay");
+
+const formModal =
+  $("formModal");
+
+const detailModal =
+  $("detailModal");
+
+const showForm =
+  $("showForm");
+
+const showBody =
+  $("showBody");
+
+const showTable =
+  $("showTable");
+
+const loading =
+  $("loading");
+
+const emptyState =
+  $("emptyState");
+
+const searchInput =
+  $("searchInput");
+
+const activeFilter =
+  $("activeFilter");
+
+const categoryFilter =
+  $("categoryFilter");
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  initialize
+);
+
+async function initialize(){
+
+  bindEvents();
+
+  updateDate();
+
+  if (!supabaseClient){
+
+    $("configBanner").style.display =
+      "block";
+
+    $("sidebarStatus").textContent =
+      "Configuration Needed";
+
+    setLoading(false);
+
+    shows = [];
+
+    render();
+
+    showToast(
+      "Supabase Not Configured",
+      "Add the project URL and publishable key to connect this page."
+    );
+
     return;
   }
 
-  const sb = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+  await verifyAuthentication();
 
-  const ADMIN_ROLES = new Set([
-    "admin",
-    "super_admin",
-    "owner"
-  ]);
+  await loadShows();
+}
 
-  const CATEGORY_VALUES = [
-    "talk",
-    "live",
-    "documentary",
-    "story",
-    "music"
-  ];
+/* =========================================================
+   EVENTS
+   ========================================================= */
 
-  const CATEGORY_LABELS = {
-    talk: "Talk",
-    live: "Live",
-    documentary: "Documentary",
-    story: "Story",
-    music: "Music"
-  };
-
-  let allShows = [];
-  let editingId = null;
-  let authorizedUser = null;
-
-
-  /* =========================================================
-     DOM
-     ========================================================= */
-
-  const $ = id => document.getElementById(id);
-
-  const sidebar = $("sidebar");
-  const mobileOverlay = $("mobileOverlay");
-  const menuToggle = $("menuToggle");
-
-  const searchInput = $("searchInput");
-  const statusFilter = $("statusFilter");
-  const categoryFilter = $("categoryFilter");
-
-  const showsBody = $("showsBody");
-
-  const modalBackdrop = $("modalBackdrop");
-  const modalTitle = $("modalTitle");
-  const modalClose = $("modalClose");
-  const cancelBtn = $("cancelBtn");
-  const newShowBtn = $("newShowBtn");
-  const showForm = $("showForm");
-  const saveBtn = $("saveBtn");
-
-  const toast = $("toast");
-
-
-  /* =========================================================
-     UTILITIES
-     ========================================================= */
-
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function slugify(value) {
-    return String(value || "")
-      .toLowerCase()
-      .trim()
-      .replace(/['"]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 160);
-  }
-
-  function makeInitials(title) {
-    return String(title || "")
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 3)
-      .map(word => word[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 6);
-  }
-
-  function formatDate(value) {
-    if (!value) return "—";
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) {
-      return "—";
-    }
-
-    return new Intl.DateTimeFormat(undefined, {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    }).format(date);
-  }
-
-  function showToast(message, type = "") {
-    toast.textContent = message;
-    toast.className = "toast show " + type;
-
-    clearTimeout(showToast.timer);
-
-    showToast.timer = setTimeout(() => {
-      toast.className = "toast";
-    }, 4200);
-  }
-
-  function friendlyError(error, action = "Operation") {
-
-    if (!error) {
-      return `${action} failed.`;
-    }
-
-    const code = String(error.code || "");
-    const message = String(error.message || "");
-    const details = String(error.details || "");
-    const hint = String(error.hint || "");
-
-    const combined =
-      `${message} ${details} ${hint}`.toLowerCase();
-
-    if (
-      code === "42501" ||
-      combined.includes("permission denied") ||
-      combined.includes("row-level security")
-    ) {
-      return (
-        `${action} blocked by Supabase permissions/RLS. ` +
-        `Make sure your account has app_metadata.role = ` +
-        `admin, super_admin, or owner, and run the shows RLS SQL supplied below this page.`
-      );
-    }
-
-    if (
-      code === "23505" ||
-      combined.includes("duplicate key") ||
-      combined.includes("unique constraint")
-    ) {
-      return (
-        `${action} failed because the Show Key or Slug already exists.`
-      );
-    }
-
-    if (
-      combined.includes("schema cache") ||
-      combined.includes("could not find the")
-    ) {
-      return (
-        `${action} failed because Supabase's schema cache does not match the shows table. ` +
-        `Refresh the schema/database after confirming the columns used by this page. ` +
-        `Original error: ${message}`
-      );
-    }
-
-    if (combined.includes("violates check constraint")) {
-      return (
-        `${action} failed because one of the values violates a database CHECK constraint. ` +
-        `Use a valid category such as talk, live, documentary, story, or music.`
-      );
-    }
-
-    return `${action} failed: ${message || "Unknown Supabase error."}`;
-  }
-
-
-  /* =========================================================
-     AUTH
-     ========================================================= */
-
-  async function getAuthorizedUser() {
-
-    let {
-      data: { session },
-      error
-    } = await sb.auth.getSession();
-
-    if (error) {
-      throw error;
-    }
-
-    if (!session) {
-      return null;
-    }
-
-    /*
-      Refreshing here helps ensure app_metadata role changes
-      are reflected in the current JWT.
-    */
-    const refreshed = await sb.auth.refreshSession();
-
-    if (
-      !refreshed.error &&
-      refreshed.data &&
-      refreshed.data.session
-    ) {
-      session = refreshed.data.session;
-    }
-
-    const result = await sb.auth.getUser();
-
-    if (result.error) {
-      throw result.error;
-    }
-
-    const user = result.data.user || session.user;
-
-    const role = String(
-      user?.app_metadata?.role || ""
-    ).toLowerCase();
-
-    if (!ADMIN_ROLES.has(role)) {
-
-      throw new Error(
-        "Admin access required. " +
-        "Your account does not have an approved admin role."
-      );
-    }
-
-    return {
-      user,
-      role
-    };
-  }
-
-
-  /* =========================================================
-     AUTH UI
-     ========================================================= */
-
-  async function bootAuth() {
-
-    try {
-
-      authorizedUser = await getAuthorizedUser();
-
-      if (!authorizedUser) {
-        window.location.href = "login.html";
-        return false;
-      }
-
-      $("userEmail").textContent =
-        authorizedUser.user.email || "Admin";
-
-      $("userRole").textContent =
-        authorizedUser.role.replace("_", " ").toUpperCase();
-
-      return true;
-
-    } catch (error) {
-
-      console.error("Authentication error:", error);
-
-      showToast(
-        error.message ||
-        "Unable to verify administrator access.",
-        "error"
-      );
-
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 1800);
-
-      return false;
-    }
-  }
-
-
-  /* =========================================================
-     LOAD SHOWS
-     ========================================================= */
-
-  async function loadShows() {
-
-    renderLoading();
-
-    const {
-      data,
-      error
-    } = await sb
-      .from("shows")
-      .select(`
-        id,
-        show_key,
-        slug,
-        title,
-        category,
-        show_type,
-        description,
-        initials,
-        destination_url,
-        image_url,
-        is_featured,
-        is_active,
-        sort_order,
-        created_at,
-        updated_at
-      `)
-      .order("sort_order", {
-        ascending: true,
-        nullsFirst: true
-      })
-      .order("created_at", {
-        ascending: false
-      });
-
-    if (error) {
-
-      console.error("loadShows:", error);
-
-      showsBody.innerHTML = `
-        <tr>
-          <td colspan="8">
-            <div class="state">
-              <strong>Unable to load shows</strong>
-              <p>${escapeHtml(
-                friendlyError(error, "Loading shows")
-              )}</p>
-            </div>
-          </td>
-        </tr>
-      `;
-
-      showToast(
-        friendlyError(error, "Loading shows"),
-        "error"
-      );
-
-      return;
-    }
-
-    allShows = Array.isArray(data)
-      ? data
-      : [];
-
-    buildCategoryFilter();
-
-    updateStats();
-
-    renderShows();
-  }
-
-
-  /* =========================================================
-     CATEGORY FILTER
-     ========================================================= */
-
-  function buildCategoryFilter() {
-
-    const existing = new Set(
-      allShows
-        .map(show => String(show.category || "").trim())
-        .filter(Boolean)
-    );
-
-    CATEGORY_VALUES.forEach(value => {
-      existing.add(value);
-    });
-
-    const current = categoryFilter.value;
-
-    categoryFilter.innerHTML = `
-      <option value="all">All Categories</option>
-    `;
-
-    [...existing]
-      .sort()
-      .forEach(category => {
-
-        const option = document.createElement("option");
-
-        option.value = category;
-
-        option.textContent =
-          CATEGORY_LABELS[category] ||
-          category.charAt(0).toUpperCase() +
-          category.slice(1);
-
-        categoryFilter.appendChild(option);
-      });
-
-    if (
-      [...categoryFilter.options]
-        .some(option => option.value === current)
-    ) {
-      categoryFilter.value = current;
-    }
-  }
-
-
-  /* =========================================================
-     STATS
-     ========================================================= */
-
-  function updateStats() {
-
-    const total = allShows.length;
-
-    const active =
-      allShows.filter(show => show.is_active === true).length;
-
-    const inactive = total - active;
-
-    const live =
-      allShows.filter(show =>
-        String(show.category || "").toLowerCase() === "live" ||
-        String(show.show_type || "").toLowerCase().includes("live")
-      ).length;
-
-    const featured =
-      allShows.filter(show => show.is_featured === true).length;
-
-    $("statTotal").textContent = total;
-    $("statActive").textContent = active;
-    $("statInactive").textContent = inactive;
-    $("statLive").textContent = live;
-    $("statFeatured").textContent = featured;
-  }
-
-
-  /* =========================================================
-     FILTERING
-     ========================================================= */
-
-  function getFilteredShows() {
-
-    const search =
-      searchInput.value.trim().toLowerCase();
-
-    const status =
-      statusFilter.value;
-
-    const category =
-      categoryFilter.value;
-
-    return allShows.filter(show => {
-
-      if (
-        status === "active" &&
-        show.is_active !== true
-      ) {
-        return false;
-      }
-
-      if (
-        status === "inactive" &&
-        show.is_active === true
-      ) {
-        return false;
-      }
-
-      if (
-        category !== "all" &&
-        String(show.category || "") !== category
-      ) {
-        return false;
-      }
-
-      if (!search) {
-        return true;
-      }
-
-      const haystack = [
-        show.title,
-        show.slug,
-        show.show_key,
-        show.category,
-        show.show_type,
-        show.description
-      ]
-        .map(value => String(value || "").toLowerCase())
-        .join(" ");
-
-      return haystack.includes(search);
-    });
-  }
-
-
-  /* =========================================================
-     RENDER
-     ========================================================= */
-
-  function renderLoading() {
-
-    showsBody.innerHTML = `
-      <tr>
-        <td colspan="8">
-          <div class="state">
-            <div class="spinner"></div>
-            Loading shows...
-          </div>
-        </td>
-      </tr>
-    `;
-  }
-
-  function renderShows() {
-
-    const shows = getFilteredShows();
-
-    if (!shows.length) {
-
-      showsBody.innerHTML = `
-        <tr>
-          <td colspan="8">
-            <div class="state">
-              <strong>No shows found</strong>
-              <p>
-                Try changing your filters or create a new show.
-              </p>
-            </div>
-          </td>
-        </tr>
-      `;
-
-      return;
-    }
-
-    showsBody.innerHTML =
-      shows.map(renderShowRow).join("");
-  }
-
-
-  function renderShowRow(show) {
-
-    const initials =
-      show.initials ||
-      makeInitials(show.title) ||
-      "CR";
-
-    const category =
-      String(show.category || "—");
-
-    const categoryLabel =
-      CATEGORY_LABELS[category] ||
-      category;
-
-    const image =
-      show.image_url
-        ? `
-          <img
-            src="${escapeHtml(show.image_url)}"
-            alt=""
-            loading="lazy"
-            data-fallback-initials="${escapeHtml(initials)}">
-        `
-        : escapeHtml(initials);
-
-    return `
-      <tr>
-
-        <td>
-          <div class="show-cell">
-
-            <div class="show-image">
-              ${image}
-            </div>
-
-            <div>
-              <div class="show-title">
-                ${escapeHtml(show.title || "Untitled")}
-              </div>
-
-              <div class="show-meta">
-                ${escapeHtml(show.slug || show.show_key || "No slug")}
-              </div>
-            </div>
-
-          </div>
-        </td>
-
-        <td>
-          <span class="badge">
-            ${escapeHtml(categoryLabel)}
-          </span>
-        </td>
-
-        <td>
-          ${escapeHtml(show.show_type || "—")}
-        </td>
-
-        <td>
-          ${
-            show.is_active
-              ? `<span class="badge active">ACTIVE</span>`
-              : `<span class="badge inactive">INACTIVE</span>`
-          }
-
-          ${
-            category === "live"
-              ? `<span class="badge live" style="margin-left:4px">LIVE</span>`
-              : ""
-          }
-        </td>
-
-        <td>
-          ${
-            show.is_featured
-              ? `<span class="badge featured">FEATURED</span>`
-              : "—"
-          }
-        </td>
-
-        <td>
-          ${escapeHtml(show.sort_order ?? 0)}
-        </td>
-
-        <td>
-          ${escapeHtml(
-            formatDate(show.updated_at || show.created_at)
-          )}
-        </td>
-
-        <td>
-
-          <div class="actions">
-
-            <button
-              class="btn btn-small"
-              type="button"
-              data-action="view"
-              data-id="${escapeHtml(show.id)}">
-              View
-            </button>
-
-            <button
-              class="btn btn-small"
-              type="button"
-              data-action="edit"
-              data-id="${escapeHtml(show.id)}">
-              Edit
-            </button>
-
-            <button
-              class="btn btn-small btn-danger"
-              type="button"
-              data-action="delete"
-              data-id="${escapeHtml(show.id)}">
-              Delete
-            </button>
-
-          </div>
-
-        </td>
-
-      </tr>
-    `;
-  }
-
-
-  /* =========================================================
-     IMAGE FALLBACK
-     ========================================================= */
-
-  function attachImageFallbacks() {
-
-    document
-      .querySelectorAll(".show-image img")
-      .forEach(img => {
-
-        img.addEventListener(
-          "error",
-          () => {
-
-            const wrapper =
-              img.closest(".show-image");
-
-            if (!wrapper) return;
-
-            wrapper.textContent =
-              img.dataset.fallbackInitials || "CR";
-          },
-          { once:true }
-        );
-
-      });
-  }
-
-
-  /* =========================================================
-     MODAL
-     ========================================================= */
-
-  function openModal(show = null) {
-
-    editingId =
-      show
-        ? show.id
-        : null;
-
-    modalTitle.textContent =
-      show
-        ? "Edit Show"
-        : "New Show";
-
-    $("showId").value =
-      show?.id || "";
-
-    $("showKey").value =
-      show?.show_key || "";
-
-    $("slug").value =
-      show?.slug || "";
-
-    $("title").value =
-      show?.title || "";
-
-    setCategoryValue(
-      show?.category || ""
-    );
-
-    $("showType").value =
-      show?.show_type || "";
-
-    $("description").value =
-      show?.description || "";
-
-    $("initials").value =
-      show?.initials || "";
-
-    $("destinationUrl").value =
-      show?.destination_url || "";
-
-    $("imageUrl").value =
-      show?.image_url || "";
-
-    $("sortOrder").value =
-      show?.sort_order ?? 0;
-
-    $("isActive").checked =
-      show
-        ? show.is_active === true
-        : true;
-
-    $("isFeatured").checked =
-      show?.is_featured === true;
-
-    modalBackdrop.classList.add("open");
-
-    setTimeout(() => {
-      $("title").focus();
-    }, 50);
-  }
-
-
-  function setCategoryValue(value) {
-
-    const select = $("category");
-
-    const normalized =
-      String(value || "");
-
-    const exists =
-      [...select.options]
-        .some(option => option.value === normalized);
-
-    if (
-      normalized &&
-      !exists
-    ) {
-
-      const option =
-        document.createElement("option");
-
-      option.value = normalized;
-      option.textContent =
-        normalized.charAt(0).toUpperCase() +
-        normalized.slice(1);
-
-      select.appendChild(option);
-    }
-
-    select.value = normalized;
-  }
-
-
-  function closeModal() {
-
-    modalBackdrop.classList.remove("open");
-
-    editingId = null;
-
-    showForm.reset();
-
-    $("sortOrder").value = 0;
-    $("isActive").checked = true;
-    $("isFeatured").checked = false;
-  }
-
-
-  /* =========================================================
-     SAVE
-     ========================================================= */
-
-  async function saveShow(event) {
-
-    event.preventDefault();
-
-    const title =
-      $("title").value.trim();
-
-    let showKey =
-      $("showKey").value.trim();
-
-    let slug =
-      $("slug").value.trim();
-
-    const category =
-      $("category").value.trim();
-
-    if (!title) {
-      showToast(
-        "Show title is required.",
-        "error"
-      );
-      return;
-    }
-
-    if (!category) {
-      showToast(
-        "Show category is required.",
-        "error"
-      );
-      return;
-    }
-
-    if (!showKey) {
-      showKey = slugify(title);
-    }
-
-    if (!slug) {
-      slug = slugify(title);
-    }
-
-    showKey = slugify(showKey);
-    slug = slugify(slug);
-
-    if (!showKey || !slug) {
-      showToast(
-        "A valid Show Key and Slug are required.",
-        "error"
-      );
-      return;
-    }
-
-    const sortValue =
-      Number.parseInt(
-        $("sortOrder").value,
-        10
-      );
-
-    const payload = {
-
-      show_key: showKey,
-
-      slug: slug,
-
-      title: title,
-
-      category: category,
-
-      show_type:
-        $("showType").value.trim() || null,
-
-      description:
-        $("description").value.trim() || null,
-
-      initials:
-        $("initials").value.trim() ||
-        makeInitials(title) ||
-        null,
-
-      destination_url:
-        $("destinationUrl").value.trim() || null,
-
-      image_url:
-        $("imageUrl").value.trim() || null,
-
-      is_featured:
-        $("isFeatured").checked,
-
-      is_active:
-        $("isActive").checked,
-
-      sort_order:
-        Number.isFinite(sortValue)
-          ? sortValue
-          : 0
-    };
-
-
-    saveBtn.disabled = true;
-
-    saveBtn.textContent =
-      editingId
-        ? "Updating..."
-        : "Saving...";
-
-    try {
-
-      let result;
-
-      if (editingId) {
-
-        payload.updated_at =
-          new Date().toISOString();
-
-        result =
-          await sb
-            .from("shows")
-            .update(payload)
-            .eq("id", editingId)
-            .select()
-            .single();
-
-      } else {
-
-        result =
-          await sb
-            .from("shows")
-            .insert(payload)
-            .select()
-            .single();
-      }
-
-      if (result.error) {
-        throw result.error;
-      }
-
-      showToast(
-        editingId
-          ? "Show updated successfully."
-          : "Show created successfully.",
-        "success"
-      );
-
-      closeModal();
-
-      await loadShows();
-
-    } catch (error) {
-
-      console.error("saveShow:", error);
-
-      showToast(
-        friendlyError(
-          error,
-          editingId
-            ? "Updating show"
-            : "Creating show"
-        ),
-        "error"
-      );
-
-    } finally {
-
-      saveBtn.disabled = false;
-
-      saveBtn.textContent =
-        "Save Show";
-    }
-  }
-
-
-  /* =========================================================
-     DELETE
-     ========================================================= */
-
-  async function deleteShow(id) {
-
-    const show =
-      allShows.find(item =>
-        String(item.id) === String(id)
-      );
-
-    if (!show) {
-      showToast(
-        "Show could not be found.",
-        "error"
-      );
-      return;
-    }
-
-    const confirmed =
-      window.confirm(
-        `Delete "${show.title}"?\n\n` +
-        `This action cannot be undone.`
-      );
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-
-      const {
-        error
-      } = await sb
-        .from("shows")
-        .delete()
-        .eq("id", id);
-
-      if (error) {
-        throw error;
-      }
-
-      showToast(
-        "Show deleted successfully.",
-        "success"
-      );
-
-      await loadShows();
-
-    } catch (error) {
-
-      console.error("deleteShow:", error);
-
-      showToast(
-        friendlyError(
-          error,
-          "Deleting show"
-        ),
-        "error"
-      );
-    }
-  }
-
-
-  /* =========================================================
-     VIEW
-     ========================================================= */
-
-  function viewShow(id) {
-
-    const show =
-      allShows.find(item =>
-        String(item.id) === String(id)
-      );
-
-    if (!show) {
-      showToast(
-        "Show could not be found.",
-        "error"
-      );
-      return;
-    }
-
-    if (show.destination_url) {
-
-      window.open(
-        show.destination_url,
-        "_blank",
-        "noopener,noreferrer"
-      );
-
-      return;
-    }
-
-    if (show.slug) {
-
-      window.open(
-        `../tv/show.html?slug=${encodeURIComponent(show.slug)}`,
-        "_blank",
-        "noopener,noreferrer"
-      );
-
-      return;
-    }
-
-    showToast(
-      "This show does not have a destination URL or slug.",
-      "error"
-    );
-  }
-
-
-  /* =========================================================
-     CSV
-     ========================================================= */
-
-  function csvEscape(value) {
-
-    const string =
-      String(value ?? "");
-
-    return `"${string.replace(/"/g, '""')}"`;
-  }
-
-
-  function exportCsv() {
-
-    const rows =
-      getFilteredShows();
-
-    if (!rows.length) {
-      showToast(
-        "There are no shows to export.",
-        "error"
-      );
-      return;
-    }
-
-    const headers = [
-      "ID",
-      "Show Key",
-      "Slug",
-      "Title",
-      "Category",
-      "Show Type",
-      "Description",
-      "Initials",
-      "Destination URL",
-      "Image URL",
-      "Featured",
-      "Active",
-      "Sort Order",
-      "Created At",
-      "Updated At"
-    ];
-
-    const lines = [
-      headers.map(csvEscape).join(",")
-    ];
-
-    rows.forEach(show => {
-
-      lines.push([
-        show.id,
-        show.show_key,
-        show.slug,
-        show.title,
-        show.category,
-        show.show_type,
-        show.description,
-        show.initials,
-        show.destination_url,
-        show.image_url,
-        show.is_featured,
-        show.is_active,
-        show.sort_order,
-        show.created_at,
-        show.updated_at
-      ].map(csvEscape).join(","));
-
-    });
-
-    const blob =
-      new Blob(
-        [lines.join("\r\n")],
-        { type:"text/csv;charset=utf-8;" }
-      );
-
-    const url =
-      URL.createObjectURL(blob);
-
-    const link =
-      document.createElement("a");
-
-    link.href = url;
-    link.download =
-      "crowrules-shows.csv";
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-    URL.revokeObjectURL(url);
-
-    showToast(
-      `${rows.length} show(s) exported.`,
-      "success"
-    );
-  }
-
-
-  /* =========================================================
-     MOBILE MENU
-     ========================================================= */
-
-  function closeMobileMenu() {
-
-    sidebar.classList.remove("open");
-
-    mobileOverlay.classList.remove("show");
-  }
-
-
-  function toggleMobileMenu() {
-
-    sidebar.classList.toggle("open");
-
-    mobileOverlay.classList.toggle(
-      "show",
-      sidebar.classList.contains("open")
-    );
-  }
-
-
-  /* =========================================================
-     EVENTS
-     ========================================================= */
+function bindEvents(){
 
   searchInput.addEventListener(
     "input",
-    renderShows
+    applyFilters
   );
 
-  statusFilter.addEventListener(
+  activeFilter.addEventListener(
     "change",
-    renderShows
+    applyFilters
   );
 
   categoryFilter.addEventListener(
     "change",
-    renderShows
-  );
-
-  $("refreshBtn").addEventListener(
-    "click",
-    loadShows
-  );
-
-  $("exportBtn").addEventListener(
-    "click",
-    exportCsv
-  );
-
-  newShowBtn.addEventListener(
-    "click",
-    () => openModal()
-  );
-
-  modalClose.addEventListener(
-    "click",
-    closeModal
-  );
-
-  cancelBtn.addEventListener(
-    "click",
-    closeModal
-  );
-
-  modalBackdrop.addEventListener(
-    "click",
-    event => {
-
-      if (
-        event.target === modalBackdrop
-      ) {
-        closeModal();
-      }
-
-    }
+    applyFilters
   );
 
   showForm.addEventListener(
@@ -2915,173 +2640,1967 @@ tbody tr:hover{
     saveShow
   );
 
-  $("title").addEventListener(
-    "input",
+  $("createBtn").addEventListener(
+    "click",
+    openCreateModal
+  );
+
+  $("addShowBtn").addEventListener(
+    "click",
+    openCreateModal
+  );
+
+  $("emptyCreateBtn").addEventListener(
+    "click",
+    openCreateModal
+  );
+
+  $("newShowTopBtn").addEventListener(
+    "click",
+    openCreateModal
+  );
+
+  $("refreshBtn").addEventListener(
+    "click",
+    refreshShows
+  );
+
+  $("refreshTopBtn").addEventListener(
+    "click",
+    refreshShows
+  );
+
+  $("exportBtn").addEventListener(
+    "click",
+    exportShows
+  );
+
+  $("closeFormBtn").addEventListener(
+    "click",
+    closeFormModal
+  );
+
+  $("cancelFormBtn").addEventListener(
+    "click",
+    closeFormModal
+  );
+
+  $("closeDetailBtn").addEventListener(
+    "click",
+    closeDetailModal
+  );
+
+  $("detailEditBtn").addEventListener(
+    "click",
+    editDetailShow
+  );
+
+  $("detailPublicBtn").addEventListener(
+    "click",
+    openDetailPublicPage
+  );
+
+  $("menuBtn").addEventListener(
+    "click",
+    toggleSidebar
+  );
+
+  sidebarOverlay.addEventListener(
+    "click",
+    closeSidebar
+  );
+
+  formModal.addEventListener(
+    "click",
     event => {
 
-      if (!$("slug").value.trim()) {
-
-        $("slug").value =
-          slugify(event.target.value);
-      }
-
-      if (!$("showKey").value.trim()) {
-
-        $("showKey").value =
-          slugify(event.target.value);
-      }
-
-      if (!$("initials").value.trim()) {
-
-        $("initials").value =
-          makeInitials(event.target.value);
+      if (
+        event.target ===
+        formModal
+      ){
+        closeFormModal();
       }
 
     }
   );
 
-  showsBody.addEventListener(
+  detailModal.addEventListener(
     "click",
     event => {
 
-      const button =
-        event.target.closest("button[data-action]");
-
-      if (!button) {
-        return;
+      if (
+        event.target ===
+        detailModal
+      ){
+        closeDetailModal();
       }
 
-      const action =
-        button.dataset.action;
+    }
+  );
 
-      const id =
-        button.dataset.id;
+  document.addEventListener(
+    "keydown",
+    event => {
 
-      if (action === "edit") {
+      if (
+        event.key === "Escape"
+      ){
 
-        const show =
-          allShows.find(item =>
-            String(item.id) === String(id)
-          );
+        if (
+          formModal.classList.contains("open")
+        ){
+          closeFormModal();
+        }
 
-        if (show) {
-          openModal(show);
+        if (
+          detailModal.classList.contains("open")
+        ){
+          closeDetailModal();
+        }
+
+        closeSidebar();
+      }
+
+    }
+  );
+
+  document.querySelectorAll(
+    ".nav a"
+  ).forEach(link => {
+
+    link.addEventListener(
+      "click",
+      () => {
+
+        if (
+          window.innerWidth <= 950
+        ){
+          closeSidebar();
         }
 
       }
+    );
 
-      if (action === "view") {
-        viewShow(id);
-      }
+  });
+}
 
-      if (action === "delete") {
-        deleteShow(id);
-      }
+/* =========================================================
+   AUTHENTICATION
+   ========================================================= */
 
+async function verifyAuthentication(){
+
+  if (!supabaseClient){
+    return false;
+  }
+
+  try{
+
+    /*
+      getUser performs a server-confirmed lookup.
+      Authorization should ultimately be enforced by RLS,
+      not by client-side UI checks.
+    */
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getUser();
+
+    if (error){
+      throw error;
     }
+
+    if (!data || !data.user){
+
+      $("sidebarStatus").textContent =
+        "Sign-In Required";
+
+      showToast(
+        "Authentication Required",
+        "Sign in with an authorized CrowRules account to manage shows."
+      );
+
+      /*
+        Change this if your project has a dedicated admin login.
+      */
+      setTimeout(() => {
+
+        if (
+          !location.pathname.endsWith(
+            "/login.html"
+          )
+        ){
+          location.href =
+            "login.html?next=" +
+            encodeURIComponent(
+              location.pathname
+            );
+        }
+
+      },1200);
+
+      return false;
+    }
+
+    $("sidebarStatus").textContent =
+      "Authenticated";
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "Authentication error:",
+      error
+    );
+
+    $("sidebarStatus").textContent =
+      "Auth Error";
+
+    showToast(
+      "Authentication Error",
+      error.message ||
+      "Could not verify your session."
+    );
+
+    return false;
+  }
+}
+
+/* =========================================================
+   LOAD SHOWS
+   ========================================================= */
+
+async function loadShows(){
+
+  setLoading(true);
+
+  if (!supabaseClient){
+    setLoading(false);
+    return;
+  }
+
+  try{
+
+    /*
+      IMPORTANT:
+      This query intentionally matches the actual
+      public.shows table:
+
+      id
+      show_key
+      slug
+      title
+      category
+      show_type
+      description
+      initials
+      destination_url
+      image_url
+      is_featured
+      is_active
+      sort_order
+      created_at
+      updated_at
+
+      It does NOT request nonexistent fields such as:
+      genre
+      status
+      thumbnail_url
+      banner_url
+      is_published
+    */
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(SHOWS_TABLE)
+        .select(
+          [
+            "id",
+            "show_key",
+            "slug",
+            "title",
+            "category",
+            "show_type",
+            "description",
+            "initials",
+            "destination_url",
+            "image_url",
+            "is_featured",
+            "is_active",
+            "sort_order",
+            "created_at",
+            "updated_at"
+          ].join(",")
+        )
+        .order(
+          "sort_order",
+          {
+            ascending:true
+          }
+        )
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        );
+
+    if (error){
+      throw error;
+    }
+
+    shows =
+      Array.isArray(data)
+        ? data
+        : [];
+
+    $("sidebarStatus").textContent =
+      "Database Connected";
+
+    setLoading(false);
+
+    render();
+
+  }catch(error){
+
+    console.error(
+      "Shows load error:",
+      error
+    );
+
+    shows = [];
+
+    setLoading(false);
+
+    render();
+
+    $("sidebarStatus").textContent =
+      "Database Error";
+
+    showToast(
+      "Shows Load Failed",
+      friendlyDatabaseError(error)
+    );
+  }
+}
+
+/* =========================================================
+   REFRESH
+   ========================================================= */
+
+async function refreshShows(){
+
+  showToast(
+    "Refreshing",
+    "Reloading the CrowRules show catalog..."
   );
 
-  menuToggle.addEventListener(
-    "click",
-    toggleMobileMenu
-  );
+  await loadShows();
 
-  mobileOverlay.addEventListener(
-    "click",
-    closeMobileMenu
-  );
+  if (shows.length){
+    showToast(
+      "Refresh Complete",
+      `${shows.length} show${shows.length === 1 ? "" : "s"} loaded.`
+    );
+  }
+}
 
-  document
-    .querySelectorAll(".nav a")
-    .forEach(link => {
+/* =========================================================
+   RENDER
+   ========================================================= */
 
-      link.addEventListener(
-        "click",
-        closeMobileMenu
+function render(){
+
+  updateStats();
+
+  populateCategoryFilter();
+
+  applyFilters();
+}
+
+/* =========================================================
+   FILTERING
+   ========================================================= */
+
+function applyFilters(){
+
+  const search =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+  const active =
+    activeFilter.value;
+
+  const category =
+    categoryFilter.value;
+
+  filteredShows =
+    shows.filter(show => {
+
+      const title =
+        String(
+          show.title || ""
+        ).toLowerCase();
+
+      const description =
+        String(
+          show.description || ""
+        ).toLowerCase();
+
+      const showKey =
+        String(
+          show.show_key || ""
+        ).toLowerCase();
+
+      const slug =
+        String(
+          show.slug || ""
+        ).toLowerCase();
+
+      const showCategory =
+        String(
+          show.category || ""
+        ).toLowerCase();
+
+      const matchesSearch =
+        !search ||
+        title.includes(search) ||
+        description.includes(search) ||
+        showKey.includes(search) ||
+        slug.includes(search) ||
+        showCategory.includes(search);
+
+      let matchesActive = true;
+
+      if (active === "active"){
+        matchesActive =
+          show.is_active === true;
+      }
+
+      if (active === "inactive"){
+        matchesActive =
+          show.is_active !== true;
+      }
+
+      if (active === "featured"){
+        matchesActive =
+          show.is_featured === true;
+      }
+
+      const matchesCategory =
+        category === "all" ||
+        showCategory ===
+          category.toLowerCase();
+
+      return (
+        matchesSearch &&
+        matchesActive &&
+        matchesCategory
       );
 
     });
 
-  $("logoutBtn").addEventListener(
-    "click",
-    async () => {
+  renderTable();
+}
 
-      $("logoutBtn").disabled = true;
+/* =========================================================
+   STATS
+   ========================================================= */
 
-      try {
+function updateStats(){
 
-        await sb.auth.signOut();
+  const total =
+    shows.length;
 
-      } catch (error) {
+  const active =
+    shows.filter(
+      show =>
+        show.is_active === true
+    ).length;
 
-        console.error(error);
+  const inactive =
+    shows.filter(
+      show =>
+        show.is_active !== true
+    ).length;
 
-      } finally {
+  const featured =
+    shows.filter(
+      show =>
+        show.is_featured === true
+    ).length;
 
-        window.location.href =
-          "login.html";
-      }
+  const categories =
+    new Set(
+      shows
+        .map(
+          show =>
+            String(
+              show.category || ""
+            )
+            .trim()
+            .toLowerCase()
+        )
+        .filter(Boolean)
+    );
 
-    }
-  );
+  $("totalShows").textContent =
+    total;
 
+  $("activeShows").textContent =
+    active;
 
-  /* =========================================================
-     AUTH STATE
-     ========================================================= */
+  $("inactiveShows").textContent =
+    inactive;
 
-  sb.auth.onAuthStateChange(
-    (event) => {
+  $("featuredShows").textContent =
+    featured;
 
-      if (event === "SIGNED_OUT") {
-        window.location.href =
-          "login.html";
-      }
+  $("categoryCount").textContent =
+    categories.size;
+}
 
-    }
-  );
+/* =========================================================
+   CATEGORY FILTER
+   ========================================================= */
 
+function populateCategoryFilter(){
 
-  /* =========================================================
-     START
-     ========================================================= */
+  const current =
+    categoryFilter.value;
 
-  async function init() {
+  const categories =
+    [...new Set(
+      shows
+        .map(
+          show =>
+            String(
+              show.category || ""
+            ).trim()
+        )
+        .filter(Boolean)
+    )].sort(
+      (a,b) =>
+        a.localeCompare(b)
+    );
 
-    const authorized =
-      await bootAuth();
-
-    if (!authorized) {
-      return;
-    }
-
-    await loadShows();
-
-    /*
-      Attach image handlers after the initial render.
-    */
-    attachImageFallbacks();
-
-    /*
-      Reattach image handlers after every render.
-    */
-    const observer =
-      new MutationObserver(() => {
-        attachImageFallbacks();
-      });
-
-    observer.observe(
-      showsBody,
-      {
-        childList:true,
-        subtree:true
-      }
+  while (
+    categoryFilter.options.length > 1
+  ){
+    categoryFilter.remove(
+      categoryFilter.options.length - 1
     );
   }
 
-  init();
+  categories.forEach(
+    category => {
 
-})();
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        category.toLowerCase();
+
+      option.textContent =
+        titleCase(category);
+
+      categoryFilter.appendChild(
+        option
+      );
+
+    }
+  );
+
+  const valid =
+    [...categoryFilter.options]
+      .some(
+        option =>
+          option.value === current
+      );
+
+  if (valid){
+    categoryFilter.value =
+      current;
+  }
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+function renderTable(){
+
+  showBody.replaceChildren();
+
+  $("resultMeta").textContent =
+    `${filteredShows.length} show${filteredShows.length === 1 ? "" : "s"} displayed`;
+
+  if (!filteredShows.length){
+
+    showTable.style.display =
+      "none";
+
+    emptyState.style.display =
+      "block";
+
+    return;
+  }
+
+  showTable.style.display =
+    "table";
+
+  emptyState.style.display =
+    "none";
+
+  filteredShows.forEach(
+    show => {
+
+      const tr =
+        document.createElement("tr");
+
+      /* SHOW */
+
+      const showCell =
+        document.createElement("td");
+
+      const showWrap =
+        document.createElement("div");
+
+      showWrap.className =
+        "show-cell";
+
+      const poster =
+        document.createElement("div");
+
+      poster.className =
+        "show-poster";
+
+      const imageUrl =
+        safeUrl(
+          show.image_url
+        );
+
+      if (imageUrl){
+
+        const img =
+          document.createElement("img");
+
+        img.src =
+          imageUrl;
+
+        img.alt =
+          `${show.title || "Show"} artwork`;
+
+        img.loading =
+          "lazy";
+
+        img.onerror =
+          () => {
+
+            img.remove();
+
+            poster.textContent =
+              "▣";
+
+          };
+
+        poster.appendChild(img);
+
+      }else{
+
+        poster.textContent =
+          "▣";
+
+      }
+
+      const showInfo =
+        document.createElement("div");
+
+      const name =
+        document.createElement("div");
+
+      name.className =
+        "show-name";
+
+      name.textContent =
+        show.title ||
+        "Untitled Show";
+
+      const key =
+        document.createElement("div");
+
+      key.className =
+        "show-key";
+
+      key.textContent =
+        show.show_key ||
+        show.slug ||
+        "no-key";
+
+      const type =
+        document.createElement("div");
+
+      type.className =
+        "show-type";
+
+      type.textContent =
+        show.show_type ||
+        "Program";
+
+      showInfo.appendChild(name);
+      showInfo.appendChild(key);
+      showInfo.appendChild(type);
+
+      showWrap.appendChild(poster);
+      showWrap.appendChild(showInfo);
+
+      showCell.appendChild(showWrap);
+
+      tr.appendChild(showCell);
+
+      /* CATEGORY */
+
+      const categoryCell =
+        document.createElement("td");
+
+      categoryCell.textContent =
+        titleCase(
+          show.category ||
+          "Uncategorized"
+        );
+
+      tr.appendChild(
+        categoryCell
+      );
+
+      /* STATUS */
+
+      const statusCell =
+        document.createElement("td");
+
+      statusCell.appendChild(
+        statusBadge(
+          show.is_active
+        )
+      );
+
+      tr.appendChild(
+        statusCell
+      );
+
+      /* FEATURED */
+
+      const featuredCell =
+        document.createElement("td");
+
+      if (show.is_featured){
+
+        const badge =
+          document.createElement(
+            "span"
+          );
+
+        badge.className =
+          "badge featured";
+
+        badge.textContent =
+          "Featured";
+
+        featuredCell.appendChild(
+          badge
+        );
+
+      }else{
+
+        featuredCell.textContent =
+          "—";
+
+      }
+
+      tr.appendChild(
+        featuredCell
+      );
+
+      /* ORDER */
+
+      const orderCell =
+        document.createElement("td");
+
+      orderCell.textContent =
+        Number(
+          show.sort_order || 0
+        );
+
+      tr.appendChild(
+        orderCell
+      );
+
+      /* CREATED */
+
+      const createdCell =
+        document.createElement("td");
+
+      createdCell.textContent =
+        formatDate(
+          show.created_at
+        );
+
+      tr.appendChild(
+        createdCell
+      );
+
+      /* ACTIONS */
+
+      const actionsCell =
+        document.createElement("td");
+
+      const actions =
+        document.createElement("div");
+
+      actions.className =
+        "actions";
+
+      const edit =
+        createActionButton(
+          "✎",
+          "Edit",
+          () =>
+            editShow(show.id)
+        );
+
+      const view =
+        createActionButton(
+          "◉",
+          "View",
+          () =>
+            viewShow(show.id)
+        );
+
+      const deleteButton =
+        createActionButton(
+          "×",
+          "Delete",
+          () =>
+            deleteShow(show.id),
+          true
+        );
+
+      actions.appendChild(edit);
+      actions.appendChild(view);
+      actions.appendChild(deleteButton);
+
+      actionsCell.appendChild(
+        actions
+      );
+
+      tr.appendChild(
+        actionsCell
+      );
+
+      showBody.appendChild(
+        tr
+      );
+
+    }
+  );
+}
+
+/* =========================================================
+   ACTION BUTTON
+   ========================================================= */
+
+function createActionButton(
+  text,
+  title,
+  handler,
+  danger = false
+){
+
+  const button =
+    document.createElement(
+      "button"
+    );
+
+  button.type =
+    "button";
+
+  button.className =
+    "icon-btn" +
+    (danger ? " delete" : "");
+
+  button.textContent =
+    text;
+
+  button.title =
+    title;
+
+  button.setAttribute(
+    "aria-label",
+    title
+  );
+
+  button.addEventListener(
+    "click",
+    handler
+  );
+
+  return button;
+}
+
+/* =========================================================
+   STATUS BADGE
+   ========================================================= */
+
+function statusBadge(active){
+
+  const badge =
+    document.createElement(
+      "span"
+    );
+
+  badge.className =
+    "badge " +
+    (
+      active
+        ? "active"
+        : "inactive"
+    );
+
+  badge.textContent =
+    active
+      ? "Active"
+      : "Inactive";
+
+  return badge;
+}
+
+/* =========================================================
+   CREATE
+   ========================================================= */
+
+function openCreateModal(){
+
+  editingShow = null;
+
+  $("modalTitle").textContent =
+    "CREATE SHOW";
+
+  $("saveBtn").textContent =
+    "Create Show";
+
+  showForm.reset();
+
+  $("editId").value =
+    "";
+
+  $("showActive").checked =
+    true;
+
+  $("showFeatured").checked =
+    false;
+
+  $("showSortOrder").value =
+    "0";
+
+  formModal.classList.add(
+    "open"
+  );
+
+  setTimeout(
+    () =>
+      $("showTitle").focus(),
+    80
+  );
+}
+
+/* =========================================================
+   EDIT
+   ========================================================= */
+
+function editShow(id){
+
+  const show =
+    shows.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if (!show){
+
+    showToast(
+      "Show Not Found",
+      "The selected show could not be found."
+    );
+
+    return;
+  }
+
+  editingShow =
+    show;
+
+  $("modalTitle").textContent =
+    "EDIT SHOW";
+
+  $("saveBtn").textContent =
+    "Save Changes";
+
+  $("editId").value =
+    show.id || "";
+
+  $("showTitle").value =
+    show.title || "";
+
+  $("showKey").value =
+    show.show_key || "";
+
+  $("showSlug").value =
+    show.slug || "";
+
+  $("showCategory").value =
+    validCategory(
+      show.category
+    );
+
+  $("showType").value =
+    show.show_type || "";
+
+  $("showInitials").value =
+    show.initials || "";
+
+  $("showDestination").value =
+    show.destination_url || "";
+
+  $("showImage").value =
+    show.image_url || "";
+
+  $("showDescription").value =
+    show.description || "";
+
+  $("showActive").checked =
+    show.is_active === true;
+
+  $("showFeatured").checked =
+    show.is_featured === true;
+
+  $("showSortOrder").value =
+    Number(
+      show.sort_order || 0
+    );
+
+  formModal.classList.add(
+    "open"
+  );
+}
+
+/* =========================================================
+   SAVE
+   ========================================================= */
+
+async function saveShow(event){
+
+  event.preventDefault();
+
+  const title =
+    $("showTitle")
+      .value
+      .trim();
+
+  if (!title){
+
+    showToast(
+      "Missing Title",
+      "Enter a show title before saving."
+    );
+
+    $("showTitle").focus();
+
+    return;
+  }
+
+  const category =
+    validCategory(
+      $("showCategory").value
+    );
+
+  const slug =
+    $("showSlug")
+      .value
+      .trim() ||
+    slugify(title);
+
+  const showKey =
+    $("showKey")
+      .value
+      .trim() ||
+    slug
+      .replace(/-/g,"_");
+
+  const payload = {
+    title,
+    show_key:showKey,
+    slug,
+    category,
+    show_type:
+      $("showType")
+        .value
+        .trim() ||
+      null,
+    description:
+      $("showDescription")
+        .value
+        .trim() ||
+      null,
+    initials:
+      $("showInitials")
+        .value
+        .trim() ||
+      null,
+    destination_url:
+      normalizeOptionalUrl(
+        $("showDestination").value
+      ),
+    image_url:
+      normalizeOptionalUrl(
+        $("showImage").value
+      ),
+    is_featured:
+      $("showFeatured").checked,
+    is_active:
+      $("showActive").checked,
+    sort_order:
+      Math.max(
+        0,
+        Number(
+          $("showSortOrder").value
+        ) || 0
+      )
+  };
+
+  const saveButton =
+    $("saveBtn");
+
+  saveButton.disabled =
+    true;
+
+  saveButton.textContent =
+    editingShow
+      ? "Saving..."
+      : "Creating...";
+
+  try{
+
+    if (!supabaseClient){
+
+      throw new Error(
+        "Supabase is not configured."
+      );
+    }
+
+    if (editingShow){
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from(SHOWS_TABLE)
+          .update(payload)
+          .eq(
+            "id",
+            editingShow.id
+          )
+          .select()
+          .single();
+
+      if (error){
+        throw error;
+      }
+
+      const index =
+        shows.findIndex(
+          item =>
+            String(item.id) ===
+            String(editingShow.id)
+        );
+
+      if (index >= 0){
+        shows[index] =
+          data;
+      }
+
+      showToast(
+        "Show Updated",
+        `${title} was successfully updated.`
+      );
+
+    }else{
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from(SHOWS_TABLE)
+          .insert(payload)
+          .select()
+          .single();
+
+      if (error){
+        throw error;
+      }
+
+      shows.unshift(
+        data
+      );
+
+      showToast(
+        "Show Created",
+        `${title} was successfully added to the catalog.`
+      );
+    }
+
+    closeFormModal();
+
+    render();
+
+  }catch(error){
+
+    console.error(
+      "Save show error:",
+      error
+    );
+
+    showToast(
+      "Save Failed",
+      friendlyDatabaseError(error)
+    );
+
+  }finally{
+
+    saveButton.disabled =
+      false;
+
+    saveButton.textContent =
+      editingShow
+        ? "Save Changes"
+        : "Create Show";
+  }
+}
+
+/* =========================================================
+   DELETE
+   ========================================================= */
+
+async function deleteShow(id){
+
+  const show =
+    shows.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if (!show){
+    return;
+  }
+
+  const title =
+    show.title ||
+    "this show";
+
+  const confirmed =
+    window.confirm(
+      `Delete "${title}"?\n\nThis action cannot be undone.`
+    );
+
+  if (!confirmed){
+    return;
+  }
+
+  if (!supabaseClient){
+
+    showToast(
+      "Database Unavailable",
+      "Supabase is not configured."
+    );
+
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(SHOWS_TABLE)
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+    if (error){
+      throw error;
+    }
+
+    shows =
+      shows.filter(
+        item =>
+          String(item.id) !==
+          String(id)
+      );
+
+    render();
+
+    showToast(
+      "Show Deleted",
+      `${title} was removed from the catalog.`
+    );
+
+  }catch(error){
+
+    console.error(
+      "Delete show error:",
+      error
+    );
+
+    showToast(
+      "Delete Failed",
+      friendlyDatabaseError(error)
+    );
+  }
+}
+
+/* =========================================================
+   VIEW
+   ========================================================= */
+
+function viewShow(id){
+
+  const show =
+    shows.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if (!show){
+    return;
+  }
+
+  detailShow =
+    show;
+
+  $("detailTitle").textContent =
+    show.title ||
+    "Untitled Show";
+
+  $("detailKey").textContent =
+    show.show_key ||
+    show.slug ||
+    "No show key";
+
+  $("detailDescription").textContent =
+    show.description ||
+    "No description has been provided.";
+
+  $("detailCategory").textContent =
+    titleCase(
+      show.category ||
+      "Uncategorized"
+    );
+
+  $("detailType").textContent =
+    show.show_type ||
+    "Program";
+
+  $("detailStatus").textContent =
+    show.is_active
+      ? "Active"
+      : "Inactive";
+
+  $("detailCreated").textContent =
+    formatDate(
+      show.created_at
+    );
+
+  const detailImage =
+    $("detailImage");
+
+  detailImage.replaceChildren();
+
+  const imageUrl =
+    safeUrl(
+      show.image_url
+    );
+
+  if (imageUrl){
+
+    const img =
+      document.createElement(
+        "img"
+      );
+
+    img.src =
+      imageUrl;
+
+    img.alt =
+      show.title ||
+      "Show artwork";
+
+    img.onerror =
+      () => {
+
+        img.remove();
+
+        detailImage.textContent =
+          "▣";
+
+      };
+
+    detailImage.appendChild(
+      img
+    );
+
+  }else{
+
+    detailImage.textContent =
+      "▣";
+  }
+
+  detailModal.classList.add(
+    "open"
+  );
+}
+
+/* =========================================================
+   EDIT FROM DETAIL
+   ========================================================= */
+
+function editDetailShow(){
+
+  if (!detailShow){
+    return;
+  }
+
+  const id =
+    detailShow.id;
+
+  closeDetailModal();
+
+  editShow(id);
+}
+
+/* =========================================================
+   PUBLIC PAGE
+   ========================================================= */
+
+function openDetailPublicPage(){
+
+  if (!detailShow){
+    return;
+  }
+
+  const destination =
+    safeUrl(
+      detailShow.destination_url
+    );
+
+  if (destination){
+
+    window.open(
+      destination,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    return;
+  }
+
+  const slug =
+    detailShow.slug ||
+    slugify(
+      detailShow.title ||
+      ""
+    );
+
+  /*
+    Default public destination.
+    Change this route if your public TV show page
+    lives somewhere else.
+  */
+
+  window.open(
+    `../tv/show.html?slug=${encodeURIComponent(slug)}`,
+    "_blank",
+    "noopener,noreferrer"
+  );
+}
+
+/* =========================================================
+   CLOSE MODALS
+   ========================================================= */
+
+function closeFormModal(){
+
+  formModal.classList.remove(
+    "open"
+  );
+
+  editingShow =
+    null;
+}
+
+function closeDetailModal(){
+
+  detailModal.classList.remove(
+    "open"
+  );
+
+  detailShow =
+    null;
+}
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+
+function exportShows(){
+
+  if (!shows.length){
+
+    showToast(
+      "Nothing to Export",
+      "There are no shows in the catalog."
+    );
+
+    return;
+  }
+
+  const headers = [
+    "id",
+    "show_key",
+    "slug",
+    "title",
+    "category",
+    "show_type",
+    "description",
+    "initials",
+    "destination_url",
+    "image_url",
+    "is_featured",
+    "is_active",
+    "sort_order",
+    "created_at",
+    "updated_at"
+  ];
+
+  const rows =
+    shows.map(
+      show =>
+        headers
+          .map(
+            key =>
+              csvEscape(
+                show[key] ?? ""
+              )
+          )
+          .join(",")
+    );
+
+  const csv =
+    [
+      headers.join(","),
+      ...rows
+    ].join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+  link.href =
+    url;
+
+  link.download =
+    `crowrules-shows-${new Date()
+      .toISOString()
+      .slice(0,10)}.csv`;
+
+  document.body.appendChild(
+    link
+  );
+
+  link.click();
+
+  link.remove();
+
+  setTimeout(
+    () =>
+      URL.revokeObjectURL(url),
+    1000
+  );
+
+  showToast(
+    "Export Complete",
+    `${shows.length} shows exported to CSV.`
+  );
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+function setLoading(value){
+
+  loading.style.display =
+    value
+      ? "block"
+      : "none";
+
+  if (value){
+
+    showTable.style.display =
+      "none";
+
+    emptyState.style.display =
+      "none";
+  }
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+function toggleSidebar(){
+
+  sidebar.classList.toggle(
+    "open"
+  );
+
+  sidebarOverlay.classList.toggle(
+    "show"
+  );
+}
+
+function closeSidebar(){
+
+  sidebar.classList.remove(
+    "open"
+  );
+
+  sidebarOverlay.classList.remove(
+    "show"
+  );
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+function showToast(
+  title,
+  message
+){
+
+  const toast =
+    $("toast");
+
+  $("toastTitle").textContent =
+    title;
+
+  $("toastMessage").textContent =
+    message;
+
+  toast.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    toastTimer
+  );
+
+  toastTimer =
+    setTimeout(
+      () => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      4500
+    );
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function slugify(value){
+
+  return String(
+    value || ""
+  )
+    .toLowerCase()
+    .trim()
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      "");
+}
+
+function slugToKey(value){
+
+  return slugify(
+    value
+  ).replace(
+    /-/g,
+    "_"
+  );
+}
+
+function validCategory(value){
+
+  const categories = [
+    "talk",
+    "live",
+    "documentary",
+    "story",
+    "music"
+  ];
+
+  return categories.includes(
+    String(
+      value || ""
+    ).toLowerCase()
+  )
+    ? String(value).toLowerCase()
+    : "talk";
+}
+
+function titleCase(value){
+
+  return String(
+    value || ""
+  )
+    .replace(
+      /[_-]+/g,
+      " "
+    )
+    .replace(
+      /\b\w/g,
+      letter =>
+        letter.toUpperCase()
+    );
+}
+
+function formatDate(value){
+
+  if (!value){
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+    return "—";
+  }
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric"
+    }
+  );
+}
+
+function safeUrl(value){
+
+  if (!value){
+    return "";
+  }
+
+  try{
+
+    const url =
+      new URL(
+        String(value),
+        window.location.href
+      );
+
+    if (
+      url.protocol ===
+        "https:" ||
+      url.protocol ===
+        "http:"
+    ){
+      return url.href;
+    }
+
+    return "";
+
+  }catch{
+    return "";
+  }
+}
+
+function normalizeOptionalUrl(value){
+
+  const trimmed =
+    String(
+      value || ""
+    ).trim();
+
+  if (!trimmed){
+    return null;
+  }
+
+  return safeUrl(
+    trimmed
+  ) || null;
+}
+
+function csvEscape(value){
+
+  return `"${String(
+    value
+  ).replace(
+    /"/g,
+    '""'
+  )}"`;
+}
+
+function friendlyDatabaseError(
+  error
+){
+
+  const message =
+    String(
+      error?.message ||
+      error ||
+      "Unknown database error."
+    );
+
+  if (
+    /row-level security/i.test(
+      message
+    )
+  ){
+    return (
+      "Supabase Row Level Security blocked this operation. " +
+      "The logged-in account needs an appropriate RLS policy."
+    );
+  }
+
+  if (
+    /duplicate key/i.test(
+      message
+    ) ||
+    /unique constraint/i.test(
+      message
+    )
+  ){
+    return (
+      "A show with the same show key or slug already exists."
+    );
+  }
+
+  if (
+    /column .* does not exist/i.test(
+      message
+    )
+  ){
+    return (
+      "The page and database schema are out of sync. " +
+      "This version uses the current public.shows columns."
+    );
+  }
+
+  if (
+    /relation .* does not exist/i.test(
+      message
+    )
+  ){
+    return (
+      "The public.shows table could not be found."
+    );
+  }
+
+  return message;
+}
+
+function updateDate(){
+
+  /*
+    Reserved for future admin topbar date/time.
+    Keeping this isolated makes it easy to add a global
+    CrowRules administration clock later.
+  */
+
+  document.title =
+    "CrowRules Entertainment — Shows Admin";
+}
+
+/* =========================================================
+   EXPOSE OPTIONAL GLOBAL API
+   ========================================================= */
+
+window.CrowRulesShowsAdmin = {
+
+  refresh:
+    refreshShows,
+
+  create:
+    openCreateModal,
+
+  search:
+    value => {
+
+      searchInput.value =
+        String(
+          value || ""
+        );
+
+      applyFilters();
+    }
+
+};
 </script>
 
 </body>
