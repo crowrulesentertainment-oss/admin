@@ -6,12 +6,13 @@
 
 <title>Analytics — CrowRules Entertainment</title>
 <meta name="theme-color" content="#050505">
-<meta name="description" content="CrowRules Entertainment Main Admin Analytics Dashboard.">
+<meta name="description" content="CrowRules Entertainment Main Admin Analytics Command Center.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+<!-- Supabase JS v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -81,15 +82,17 @@ a{
   text-decoration:none;
 }
 
-/* SIDEBAR */
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .sidebar{
   position:fixed;
   left:0;
   top:0;
   bottom:0;
-  width:260px;
-  background:rgba(8,8,11,.96);
+  width:270px;
+  background:rgba(8,8,11,.97);
   border-right:1px solid var(--line);
   z-index:100;
   overflow-y:auto;
@@ -102,6 +105,10 @@ a{
   align-items:center;
   gap:13px;
   border-bottom:1px solid var(--line);
+  position:sticky;
+  top:0;
+  background:rgba(8,8,11,.98);
+  z-index:5;
 }
 
 .brand-mark{
@@ -132,7 +139,7 @@ a{
 }
 
 .nav{
-  padding:15px 11px 30px;
+  padding:15px 11px 40px;
 }
 
 .nav-label{
@@ -153,7 +160,7 @@ a{
   border:1px solid transparent;
   border-radius:7px;
   color:#a8a8b1;
-  font-size:12px;
+  font-size:11px;
   transition:.2s;
 }
 
@@ -165,7 +172,12 @@ a{
 
 .nav a.active{
   color:#fff;
-  background:linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.05));
+  background:
+    linear-gradient(
+      90deg,
+      rgba(182,108,255,.16),
+      rgba(108,92,255,.05)
+    );
   border-color:rgba(182,108,255,.35);
   box-shadow:inset 3px 0 0 var(--accent);
 }
@@ -174,19 +186,22 @@ a{
   width:18px;
   text-align:center;
   opacity:.9;
+  flex:none;
 }
 
-/* MAIN */
+/* =========================================================
+   MAIN
+========================================================= */
 
 .main{
-  margin-left:260px;
+  margin-left:270px;
   min-height:100vh;
 }
 
 .topbar{
   height:70px;
   border-bottom:1px solid var(--line);
-  background:rgba(5,5,5,.75);
+  background:rgba(5,5,5,.82);
   backdrop-filter:blur(16px);
   display:flex;
   align-items:center;
@@ -230,6 +245,16 @@ a{
   box-shadow:0 0 10px var(--green);
 }
 
+.status-dot.offline{
+  background:var(--red);
+  box-shadow:0 0 10px var(--red);
+}
+
+.status-dot.warning{
+  background:var(--yellow);
+  box-shadow:0 0 10px var(--yellow);
+}
+
 .top-actions{
   display:flex;
   align-items:center;
@@ -259,11 +284,13 @@ a{
 
 .page{
   padding:30px;
-  max-width:1700px;
+  max-width:1750px;
   margin:auto;
 }
 
-/* HERO */
+/* =========================================================
+   HERO
+========================================================= */
 
 .hero{
   border:1px solid var(--line);
@@ -287,6 +314,7 @@ a{
   font-weight:800;
   color:rgba(255,255,255,.025);
   letter-spacing:6px;
+  pointer-events:none;
 }
 
 .kicker{
@@ -306,7 +334,7 @@ a{
 }
 
 .hero p{
-  max-width:760px;
+  max-width:820px;
   color:var(--muted);
   font-size:13px;
   line-height:1.7;
@@ -329,7 +357,9 @@ a{
   letter-spacing:.8px;
 }
 
-/* CONTROLS */
+/* =========================================================
+   CONTROLS
+========================================================= */
 
 .controls{
   display:flex;
@@ -346,6 +376,7 @@ a{
   background:var(--panel);
   padding:4px;
   border-radius:7px;
+  overflow:auto;
 }
 
 .period-tabs button{
@@ -355,6 +386,7 @@ a{
   padding:8px 13px;
   border-radius:4px;
   font-size:10px;
+  white-space:nowrap;
 }
 
 .period-tabs button.active{
@@ -378,7 +410,14 @@ a{
   font-size:10px;
 }
 
-/* STAT CARDS */
+.control-right select:focus{
+  outline:none;
+  border-color:var(--accent);
+}
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
 
 .stats{
   display:grid;
@@ -438,7 +477,9 @@ a{
   color:var(--muted);
 }
 
-/* GRID */
+/* =========================================================
+   PANELS
+========================================================= */
 
 .grid{
   display:grid;
@@ -484,10 +525,41 @@ a{
   border-radius:4px;
 }
 
-/* CHART */
+.panel-action:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+/* =========================================================
+   CHART
+========================================================= */
 
 .chart-wrap{
   padding:18px;
+}
+
+.chart-legend{
+  display:flex;
+  gap:18px;
+  margin-bottom:12px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+.legend{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.legend-line{
+  width:18px;
+  height:2px;
+  background:var(--accent);
+}
+
+.legend-line.cyan{
+  background:var(--cyan);
 }
 
 .chart{
@@ -518,31 +590,20 @@ a{
   padding-top:9px;
 }
 
-.chart-legend{
-  display:flex;
-  gap:18px;
-  margin-bottom:12px;
-  color:var(--muted);
-  font-size:9px;
+.empty-chart{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#60606a;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
-.legend{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-
-.legend-line{
-  width:18px;
-  height:2px;
-  background:var(--accent);
-}
-
-.legend-line.cyan{
-  background:var(--cyan);
-}
-
-/* MINI METRICS */
+/* =========================================================
+   METRICS
+========================================================= */
 
 .metric-list{
   padding:4px 17px 15px;
@@ -584,10 +645,17 @@ a{
 .bar span{
   display:block;
   height:100%;
-  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  background:linear-gradient(
+    90deg,
+    var(--accent2),
+    var(--accent)
+  );
+  transition:width .35s ease;
 }
 
-/* LOWER GRID */
+/* =========================================================
+   LOWER GRID
+========================================================= */
 
 .lower-grid{
   display:grid;
@@ -596,7 +664,9 @@ a{
   margin-bottom:18px;
 }
 
-/* TABLE */
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table-wrap{
   overflow:auto;
@@ -605,7 +675,7 @@ a{
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:650px;
+  min-width:620px;
 }
 
 th{
@@ -644,7 +714,16 @@ td strong{
   color:var(--cyan);
 }
 
-/* DEVICE CARDS */
+.table-empty{
+  padding:30px;
+  text-align:center;
+  color:#666671;
+  font-size:10px;
+}
+
+/* =========================================================
+   DEVICES
+========================================================= */
 
 .device-list{
   padding:8px 17px 16px;
@@ -689,7 +768,9 @@ td strong{
   font-size:10px;
 }
 
-/* LIVE */
+/* =========================================================
+   LIVE
+========================================================= */
 
 .live-box{
   padding:17px;
@@ -725,10 +806,15 @@ td strong{
 }
 
 @keyframes pulse{
-  50%{opacity:.25;transform:scale(.65)}
+  50%{
+    opacity:.25;
+    transform:scale(.65)
+  }
 }
 
-/* INSIGHTS */
+/* =========================================================
+   INSIGHTS
+========================================================= */
 
 .insight-list{
   padding:8px 17px 17px;
@@ -768,7 +854,35 @@ td strong{
   line-height:1.5;
 }
 
-/* TOAST */
+/* =========================================================
+   DATABASE STATUS
+========================================================= */
+
+.db-status{
+  padding:10px 17px;
+  border-top:1px solid var(--line);
+  background:#0a0a0e;
+  color:var(--muted);
+  font-size:9px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.db-status-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--green);
+}
+
+.db-status-dot.error{
+  background:var(--red);
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
 
 .toast{
   position:fixed;
@@ -791,9 +905,12 @@ td strong{
   opacity:1;
 }
 
-/* MOBILE */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:1250px){
+
   .stats{
     grid-template-columns:repeat(3,1fr);
   }
@@ -801,9 +918,11 @@ td strong{
   .lower-grid{
     grid-template-columns:1fr 1fr;
   }
+
 }
 
 @media(max-width:900px){
+
   .sidebar{
     transform:translateX(-100%);
     transition:.25s;
@@ -811,6 +930,7 @@ td strong{
 
   .sidebar.open{
     transform:translateX(0);
+    box-shadow:20px 0 60px rgba(0,0,0,.5);
   }
 
   .main{
@@ -844,9 +964,11 @@ td strong{
   .hero:after{
     font-size:60px;
   }
+
 }
 
 @media(max-width:600px){
+
   .topbar{
     padding:0 15px;
   }
@@ -869,12 +991,10 @@ td strong{
 
   .period-tabs{
     width:100%;
-    overflow:auto;
   }
 
   .period-tabs button{
     flex:1;
-    white-space:nowrap;
   }
 
   .control-right{
@@ -889,11 +1009,16 @@ td strong{
   .page{
     padding:15px;
   }
+
 }
 </style>
 </head>
 
 <body>
+
+<!-- =======================================================
+     SIDEBAR
+======================================================= -->
 
 <aside class="sidebar" id="sidebar">
 
@@ -910,1035 +1035,4515 @@ td strong{
     <div class="nav-label">Core</div>
 
     <a href="index.html">
-      <span class="nav-icon">⌂</span> Dashboard
+      <span class="nav-icon">⌂</span>
+      Dashboard
     </a>
 
     <a href="content.html">
-      <span class="nav-icon">▦</span> Content
+      <span class="nav-icon">▦</span>
+      Content
     </a>
 
     <a href="pages.html">
-      <span class="nav-icon">▤</span> Pages
+      <span class="nav-icon">▤</span>
+      Pages
     </a>
 
     <a href="categories.html">
-      <span class="nav-icon">◈</span> Categories
+      <span class="nav-icon">◈</span>
+      Categories
     </a>
 
     <a href="tags.html">
-      <span class="nav-icon">#</span> Tags
+      <span class="nav-icon">#</span>
+      Tags
     </a>
 
     <div class="nav-label">Television</div>
 
     <a href="shows.html">
-      <span class="nav-icon">▣</span> Shows
+      <span class="nav-icon">▣</span>
+      Shows
     </a>
 
     <a href="episodes.html">
-      <span class="nav-icon">▶</span> Episodes
+      <span class="nav-icon">▶</span>
+      Episodes
     </a>
 
     <a href="movies.html">
-      <span class="nav-icon">▤</span> Movies
+      <span class="nav-icon">▤</span>
+      Movies
     </a>
 
     <a href="channels.html">
-      <span class="nav-icon">◉</span> Channels
+      <span class="nav-icon">◉</span>
+      Channels
     </a>
 
     <a href="schedule.html">
-      <span class="nav-icon">◷</span> Schedule
+      <span class="nav-icon">◷</span>
+      Schedule
     </a>
 
     <a href="live.html">
-      <span class="nav-icon">●</span> Live
+      <span class="nav-icon">●</span>
+      Live
     </a>
 
     <a href="guide.html">
-      <span class="nav-icon">☷</span> TV Guide
+      <span class="nav-icon">☷</span>
+      TV Guide
+    </a>
+
+    <a href="watch.html">
+      <span class="nav-icon">▷</span>
+      Watch
+    </a>
+
+    <a href="watchlist.html">
+      <span class="nav-icon">☆</span>
+      Watchlist
     </a>
 
     <div class="nav-label">Members</div>
 
     <a href="members.html">
-      <span class="nav-icon">♙</span> Members
+      <span class="nav-icon">♙</span>
+      Members
     </a>
 
     <a href="membership.html">
-      <span class="nav-icon">◆</span> Membership
+      <span class="nav-icon">◆</span>
+      Membership
     </a>
 
     <a href="subscriptions.html">
-      <span class="nav-icon">↻</span> Subscriptions
+      <span class="nav-icon">↻</span>
+      Subscriptions
+    </a>
+
+    <a href="profiles.html">
+      <span class="nav-icon">◎</span>
+      Profiles
     </a>
 
     <a href="friends.html">
-      <span class="nav-icon">♧</span> Friends
+      <span class="nav-icon">♧</span>
+      Friends
+    </a>
+
+    <a href="messages.html">
+      <span class="nav-icon">✉</span>
+      Messages
     </a>
 
     <a href="community.html">
-      <span class="nav-icon">☷</span> Community
+      <span class="nav-icon">☷</span>
+      Community
+    </a>
+
+    <a href="groups.html">
+      <span class="nav-icon">♧</span>
+      Groups
     </a>
 
     <div class="nav-label">Commerce</div>
 
     <a href="shop.html">
-      <span class="nav-icon">⌑</span> Shop
+      <span class="nav-icon">⌑</span>
+      Shop
+    </a>
+
+    <a href="products.html">
+      <span class="nav-icon">▤</span>
+      Products
     </a>
 
     <a href="orders.html">
-      <span class="nav-icon">▣</span> Orders
+      <span class="nav-icon">▣</span>
+      Orders
     </a>
 
     <a href="donations.html">
-      <span class="nav-icon">♥</span> Donations
+      <span class="nav-icon">♥</span>
+      Donations
     </a>
 
     <div class="nav-label">Creators</div>
 
     <a href="creator.html">
-      <span class="nav-icon">♟</span> Creators
+      <span class="nav-icon">♟</span>
+      Creators
     </a>
 
     <a href="creator-content.html">
-      <span class="nav-icon">◆</span> Creator Content
+      <span class="nav-icon">◆</span>
+      Creator Content
     </a>
 
     <a href="creator-approvals.html">
-      <span class="nav-icon">✓</span> Approvals
+      <span class="nav-icon">✓</span>
+      Approvals
+    </a>
+
+    <a href="creator-submissions.html">
+      <span class="nav-icon">＋</span>
+      Submissions
     </a>
 
     <div class="nav-label">Records</div>
 
     <a href="artists.html">
-      <span class="nav-icon">♬</span> Artists
+      <span class="nav-icon">♬</span>
+      Artists
     </a>
 
     <a href="albums.html">
-      <span class="nav-icon">▤</span> Albums
+      <span class="nav-icon">▤</span>
+      Albums
     </a>
 
     <a href="tracks.html">
-      <span class="nav-icon">♫</span> Tracks
+      <span class="nav-icon">♫</span>
+      Tracks
+    </a>
+
+    <a href="playlists.html">
+      <span class="nav-icon">☷</span>
+      Playlists
+    </a>
+
+    <div class="nav-label">Podcasts</div>
+
+    <a href="podcasts.html">
+      <span class="nav-icon">◉</span>
+      Podcasts
+    </a>
+
+    <a href="podcast-episodes.html">
+      <span class="nav-icon">▶</span>
+      Episodes
+    </a>
+
+    <a href="podcast-schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a href="podcast-live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <a href="podcast-news.html">
+      <span class="nav-icon">▤</span>
+      Newsroom
     </a>
 
     <div class="nav-label">Sports</div>
 
     <a href="sports.html">
-      <span class="nav-icon">◆</span> Sports
+      <span class="nav-icon">◆</span>
+      Sports
+    </a>
+
+    <a href="leagues.html">
+      <span class="nav-icon">◈</span>
+      Leagues
     </a>
 
     <a href="teams.html">
-      <span class="nav-icon">♛</span> Teams
+      <span class="nav-icon">♛</span>
+      Teams
+    </a>
+
+    <a href="players.html">
+      <span class="nav-icon">♙</span>
+      Players
     </a>
 
     <a href="rankings.html">
-      <span class="nav-icon">↕</span> Rankings
+      <span class="nav-icon">↕</span>
+      Rankings
     </a>
 
     <a href="standings.html">
-      <span class="nav-icon">☷</span> Standings
+      <span class="nav-icon">☷</span>
+      Standings
     </a>
 
     <a href="games.html">
-      <span class="nav-icon">●</span> Games
+      <span class="nav-icon">●</span>
+      Games
     </a>
 
     <a href="pickem.html">
-      <span class="nav-icon">✓</span> Pick'em
+      <span class="nav-icon">✓</span>
+      Pick'em
+    </a>
+
+    <a href="sports-news.html">
+      <span class="nav-icon">▤</span>
+      Sports News
+    </a>
+
+    <div class="nav-label">Community</div>
+
+    <a href="spaces.html">
+      <span class="nav-icon">◉</span>
+      Spaces
+    </a>
+
+    <a href="posts.html">
+      <span class="nav-icon">▦</span>
+      Posts
+    </a>
+
+    <a href="comments.html">
+      <span class="nav-icon">☷</span>
+      Comments
+    </a>
+
+    <a href="reports.html">
+      <span class="nav-icon">⚠</span>
+      Reports
+    </a>
+
+    <a href="moderation.html">
+      <span class="nav-icon">⚠</span>
+      Moderation
+    </a>
+
+    <div class="nav-label">Awards</div>
+
+    <a href="awards.html">
+      <span class="nav-icon">◆</span>
+      Awards
+    </a>
+
+    <a href="award-categories.html">
+      <span class="nav-icon">◈</span>
+      Categories
+    </a>
+
+    <a href="award-nominees.html">
+      <span class="nav-icon">♙</span>
+      Nominees
+    </a>
+
+    <a href="award-votes.html">
+      <span class="nav-icon">✓</span>
+      Votes
+    </a>
+
+    <a href="award-winners.html">
+      <span class="nav-icon">♛</span>
+      Winners
+    </a>
+
+    <a href="award-ceremonies.html">
+      <span class="nav-icon">◷</span>
+      Ceremonies
+    </a>
+
+    <div class="nav-label">Memorials</div>
+
+    <a href="memorials.html">
+      <span class="nav-icon">✦</span>
+      Memorials
+    </a>
+
+    <a href="memorial-tributes.html">
+      <span class="nav-icon">♥</span>
+      Tributes
+    </a>
+
+    <a href="memorial-candles.html">
+      <span class="nav-icon">●</span>
+      Candles
+    </a>
+
+    <a href="memorial-photos.html">
+      <span class="nav-icon">▣</span>
+      Photos
+    </a>
+
+    <a href="memorial-videos.html">
+      <span class="nav-icon">▶</span>
+      Videos
+    </a>
+
+    <div class="nav-label">Publishing</div>
+
+    <a href="publishing.html">
+      <span class="nav-icon">▤</span>
+      Publishing
+    </a>
+
+    <a href="publications.html">
+      <span class="nav-icon">▣</span>
+      Publications
+    </a>
+
+    <a href="books.html">
+      <span class="nav-icon">▤</span>
+      Books
+    </a>
+
+    <a href="articles.html">
+      <span class="nav-icon">▦</span>
+      Articles
+    </a>
+
+    <div class="nav-label">Yearbooks</div>
+
+    <a href="yearbooks.html">
+      <span class="nav-icon">▤</span>
+      Yearbooks
+    </a>
+
+    <a href="yearbook-editions.html">
+      <span class="nav-icon">◷</span>
+      Editions
+    </a>
+
+    <a href="yearbook-projects.html">
+      <span class="nav-icon">◆</span>
+      Projects
+    </a>
+
+    <a href="yearbook-sections.html">
+      <span class="nav-icon">☷</span>
+      Sections
+    </a>
+
+    <div class="nav-label">Holidays</div>
+
+    <a href="holidays.html">
+      <span class="nav-icon">◆</span>
+      Holidays
+    </a>
+
+    <a href="holiday-years.html">
+      <span class="nav-icon">◷</span>
+      Holiday Years
+    </a>
+
+    <a href="holiday-pages.html">
+      <span class="nav-icon">▤</span>
+      Pages
+    </a>
+
+    <a href="holiday-events.html">
+      <span class="nav-icon">●</span>
+      Events
+    </a>
+
+    <a href="holiday-programming.html">
+      <span class="nav-icon">▶</span>
+      Programming
+    </a>
+
+    <a href="holiday-countdowns.html">
+      <span class="nav-icon">◷</span>
+      Countdowns
+    </a>
+
+    <div class="nav-label">Studio</div>
+
+    <a href="studio.html">
+      <span class="nav-icon">◆</span>
+      Studio
+    </a>
+
+    <a href="studio-projects.html">
+      <span class="nav-icon">▣</span>
+      Projects
+    </a>
+
+    <a href="production.html">
+      <span class="nav-icon">●</span>
+      Production
+    </a>
+
+    <a href="production-inquiries.html">
+      <span class="nav-icon">✉</span>
+      Inquiries
+    </a>
+
+    <div class="nav-label">Business</div>
+
+    <a href="business.html">
+      <span class="nav-icon">◆</span>
+      Business
+    </a>
+
+    <a href="business-inquiries.html">
+      <span class="nav-icon">✉</span>
+      Inquiries
+    </a>
+
+    <a href="partnerships.html">
+      <span class="nav-icon">♧</span>
+      Partnerships
+    </a>
+
+    <a href="press.html">
+      <span class="nav-icon">▤</span>
+      Press
+    </a>
+
+    <a href="careers.html">
+      <span class="nav-icon">♙</span>
+      Careers
     </a>
 
     <div class="nav-label">Management</div>
 
     <a href="points.html">
-      <span class="nav-icon">✦</span> Points
+      <span class="nav-icon">✦</span>
+      Points
     </a>
 
     <a href="leaderboard.html">
-      <span class="nav-icon">♛</span> Leaderboard
+      <span class="nav-icon">♛</span>
+      Leaderboard
     </a>
 
     <a href="roles.html">
-      <span class="nav-icon">⚿</span> Roles
+      <span class="nav-icon">⚿</span>
+      Roles
     </a>
 
     <a href="analytics.html" class="active">
-      <span class="nav-icon">⌁</span> Analytics
-    </a>
-
-    <a href="moderation.html">
-      <span class="nav-icon">⚠</span> Moderation
+      <span class="nav-icon">⌁</span>
+      Analytics
     </a>
 
     <a href="logs.html">
-      <span class="nav-icon">≡</span> Logs
+      <span class="nav-icon">≡</span>
+      Logs
     </a>
 
     <a href="notifications.html">
-      <span class="nav-icon">♢</span> Notifications
+      <span class="nav-icon">♢</span>
+      Notifications
     </a>
 
     <a href="activity.html">
-      <span class="nav-icon">◌</span> Activity
+      <span class="nav-icon">◌</span>
+      Activity
     </a>
 
     <a href="settings.html">
-      <span class="nav-icon">⚙</span> Settings
+      <span class="nav-icon">⚙</span>
+      Settings
     </a>
 
   </nav>
+
 </aside>
+
+<!-- =======================================================
+     MAIN
+======================================================= -->
 
 <main class="main">
 
-  <header class="topbar">
+<header class="topbar">
 
-    <div class="top-left">
-      <button class="mobile-menu" id="mobileMenu">☰</button>
+  <div class="top-left">
 
-      <div class="system-status">
-        <span class="status-dot"></span>
-        ADMIN SYSTEM ONLINE
-      </div>
+    <button
+      class="mobile-menu"
+      id="mobileMenu"
+      aria-label="Open menu"
+    >☰</button>
+
+    <div class="system-status">
+      <span
+        class="status-dot"
+        id="systemDot"
+      ></span>
+
+      <span id="systemStatusText">
+        CONNECTING TO ANALYTICS
+      </span>
     </div>
-
-    <div class="top-actions">
-      <div class="clock" id="clock">--:--:--</div>
-      <button class="top-btn" id="refreshBtn">↻ Refresh</button>
-      <a class="top-btn" href="profile.html">Profile</a>
-    </div>
-
-  </header>
-
-  <div class="page">
-
-    <section class="hero">
-
-      <div class="kicker">CROWRULES / DATA CENTER</div>
-
-      <h1>Analytics Command Center</h1>
-
-      <p>
-        Monitor audience behavior, content performance, member activity,
-        streaming activity, commerce performance, traffic sources and
-        platform growth across the CrowRules Entertainment network.
-      </p>
-
-      <div class="hero-meta">
-        <span class="badge">REAL-TIME MONITORING</span>
-        <span class="badge">SUPABASE READY</span>
-        <span class="badge">AUDIENCE INTELLIGENCE</span>
-        <span class="badge">CONTENT PERFORMANCE</span>
-      </div>
-
-    </section>
-
-    <section class="controls">
-
-      <div class="period-tabs">
-        <button data-period="24h">24 Hours</button>
-        <button data-period="7d" class="active">7 Days</button>
-        <button data-period="30d">30 Days</button>
-        <button data-period="90d">90 Days</button>
-        <button data-period="1y">1 Year</button>
-      </div>
-
-      <div class="control-right">
-
-        <select id="propertySelect">
-          <option value="all">All Properties</option>
-          <option value="tv">CrowRules TV</option>
-          <option value="records">CrowRules Records</option>
-          <option value="community">CrowSpace / Community</option>
-          <option value="sports">CrowRules Sports</option>
-          <option value="memorials">CrowRules Memorials</option>
-          <option value="publishing">CrowRules Publishing</option>
-        </select>
-
-        <button id="exportBtn">Export CSV</button>
-
-      </div>
-
-    </section>
-
-    <section class="stats">
-
-      <div class="stat">
-        <div class="stat-label">Total Visitors</div>
-        <div class="stat-value" id="visitors">184.6K</div>
-        <div class="stat-change up">▲ 18.4% vs previous</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Page Views</div>
-        <div class="stat-value" id="pageviews">692.8K</div>
-        <div class="stat-change up">▲ 22.7% vs previous</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Watch Hours</div>
-        <div class="stat-value" id="watchhours">14.8K</div>
-        <div class="stat-change up">▲ 31.2% vs previous</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">New Members</div>
-        <div class="stat-value" id="newmembers">1,284</div>
-        <div class="stat-change up">▲ 14.8% vs previous</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Revenue</div>
-        <div class="stat-value" id="revenue">$18.7K</div>
-        <div class="stat-change up">▲ 12.9% vs previous</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Engagement</div>
-        <div class="stat-value" id="engagement">68.4%</div>
-        <div class="stat-change up">▲ 5.6% vs previous</div>
-      </div>
-
-    </section>
-
-    <section class="grid">
-
-      <div class="panel">
-
-        <div class="panel-head">
-
-          <div>
-            <div class="panel-title">Audience Overview</div>
-            <div class="panel-sub">Visitors and page views over selected period</div>
-          </div>
-
-          <button class="panel-action" id="chartRefresh">LIVE</button>
-
-        </div>
-
-        <div class="chart-wrap">
-
-          <div class="chart-legend">
-
-            <div class="legend">
-              <span class="legend-line"></span>
-              Visitors
-            </div>
-
-            <div class="legend">
-              <span class="legend-line cyan"></span>
-              Page Views
-            </div>
-
-          </div>
-
-          <div class="chart">
-
-            <svg viewBox="0 0 1000 290" preserveAspectRatio="none">
-
-              <defs>
-
-                <linearGradient id="areaPurple" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stop-color="#b66cff" stop-opacity=".28"/>
-                  <stop offset="100%" stop-color="#b66cff" stop-opacity="0"/>
-                </linearGradient>
-
-                <linearGradient id="areaCyan" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stop-color="#37d7ff" stop-opacity=".20"/>
-                  <stop offset="100%" stop-color="#37d7ff" stop-opacity="0"/>
-                </linearGradient>
-
-              </defs>
-
-              <path
-                d="M0 220
-                   C55 210 75 205 110 190
-                   S170 215 220 175
-                   S275 160 320 180
-                   S380 125 430 145
-                   S490 110 540 135
-                   S600 90 650 120
-                   S710 95 760 105
-                   S820 62 860 88
-                   S930 55 1000 68
-                   L1000 290 L0 290 Z"
-                fill="url(#areaPurple)"
-                stroke="none"/>
-
-              <path
-                d="M0 220
-                   C55 210 75 205 110 190
-                   S170 215 220 175
-                   S275 160 320 180
-                   S380 125 430 145
-                   S490 110 540 135
-                   S600 90 650 120
-                   S710 95 760 105
-                   S820 62 860 88
-                   S930 55 1000 68"
-                fill="none"
-                stroke="#b66cff"
-                stroke-width="3"
-                vector-effect="non-scaling-stroke"/>
-
-              <path
-                d="M0 245
-                   C55 232 85 238 125 225
-                   S190 240 235 210
-                   S295 225 340 200
-                   S400 170 450 185
-                   S505 155 555 175
-                   S620 145 665 158
-                   S725 132 770 150
-                   S825 112 875 130
-                   S940 98 1000 115
-                   L1000 290 L0 290 Z"
-                fill="url(#areaCyan)"
-                stroke="none"/>
-
-              <path
-                d="M0 245
-                   C55 232 85 238 125 225
-                   S190 240 235 210
-                   S295 225 340 200
-                   S400 170 450 185
-                   S505 155 555 175
-                   S620 145 665 158
-                   S725 132 770 150
-                   S825 112 875 130
-                   S940 98 1000 115"
-                fill="none"
-                stroke="#37d7ff"
-                stroke-width="2"
-                vector-effect="non-scaling-stroke"/>
-
-            </svg>
-
-          </div>
-
-          <div class="chart-labels">
-            <span>SEP 02</span>
-            <span>SEP 03</span>
-            <span>SEP 04</span>
-            <span>SEP 05</span>
-            <span>SEP 06</span>
-            <span>SEP 07</span>
-            <span>TODAY</span>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="panel">
-
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Traffic Sources</div>
-            <div class="panel-sub">Where visitors are coming from</div>
-          </div>
-        </div>
-
-        <div class="metric-list">
-
-          <div class="metric-row">
-            <div class="metric-top">
-              <span class="metric-name">Direct</span>
-              <span class="metric-number">34.8%</span>
-            </div>
-            <div class="bar"><span style="width:84%"></span></div>
-          </div>
-
-          <div class="metric-row">
-            <div class="metric-top">
-              <span class="metric-name">YouTube</span>
-              <span class="metric-number">26.4%</span>
-            </div>
-            <div class="bar"><span style="width:68%"></span></div>
-          </div>
-
-          <div class="metric-row">
-            <div class="metric-top">
-              <span class="metric-name">Google Search</span>
-              <span class="metric-number">17.9%</span>
-            </div>
-            <div class="bar"><span style="width:52%"></span></div>
-          </div>
-
-          <div class="metric-row">
-            <div class="metric-top">
-              <span class="metric-name">Facebook</span>
-              <span class="metric-number">9.7%</span>
-            </div>
-            <div class="bar"><span style="width:36%"></span></div>
-          </div>
-
-          <div class="metric-row">
-            <div class="metric-top">
-              <span class="metric-name">Instagram</span>
-              <span class="metric-number">6.8%</span>
-            </div>
-            <div class="bar"><span style="width:26%"></span></div>
-          </div>
-
-          <div class="metric-row">
-            <div class="metric-top">
-              <span class="metric-name">Other</span>
-              <span class="metric-number">4.4%</span>
-            </div>
-            <div class="bar"><span style="width:18%"></span></div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="lower-grid">
-
-      <div class="panel">
-
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Top Content</div>
-            <div class="panel-sub">Most viewed content</div>
-          </div>
-        </div>
-
-        <div class="table-wrap">
-
-          <table>
-
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Content</th>
-                <th>Views</th>
-                <th>Growth</th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr>
-                <td class="rank">01</td>
-                <td><strong>Tacoma Nights</strong></td>
-                <td>28,421</td>
-                <td class="percent">+31%</td>
-              </tr>
-
-              <tr>
-                <td class="rank">02</td>
-                <td><strong>Voices From The Void</strong></td>
-                <td>22,804</td>
-                <td class="percent">+27%</td>
-              </tr>
-
-              <tr>
-                <td class="rank">03</td>
-                <td><strong>Back Deck Live</strong></td>
-                <td>18,642</td>
-                <td class="percent">+22%</td>
-              </tr>
-
-              <tr>
-                <td class="rank">04</td>
-                <td><strong>CrowRules TV Live</strong></td>
-                <td>16,309</td>
-                <td class="percent">+19%</td>
-              </tr>
-
-              <tr>
-                <td class="rank">05</td>
-                <td><strong>Memorials</strong></td>
-                <td>12,882</td>
-                <td class="percent">+14%</td>
-              </tr>
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </div>
-
-      <div class="panel">
-
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Devices</div>
-            <div class="panel-sub">Audience device breakdown</div>
-          </div>
-        </div>
-
-        <div class="device-list">
-
-          <div class="device">
-            <div class="device-icon">▣</div>
-            <div>
-              <div class="device-name">Desktop</div>
-              <div class="device-count">86,432 sessions</div>
-            </div>
-            <div class="device-percent">46.8%</div>
-          </div>
-
-          <div class="device">
-            <div class="device-icon">▯</div>
-            <div>
-              <div class="device-name">Mobile</div>
-              <div class="device-count">72,841 sessions</div>
-            </div>
-            <div class="device-percent">39.5%</div>
-          </div>
-
-          <div class="device">
-            <div class="device-icon">▭</div>
-            <div>
-              <div class="device-name">Tablet</div>
-              <div class="device-count">13,908 sessions</div>
-            </div>
-            <div class="device-percent">7.5%</div>
-          </div>
-
-          <div class="device">
-            <div class="device-icon">▶</div>
-            <div>
-              <div class="device-name">TV / Streaming</div>
-              <div class="device-count">11,419 sessions</div>
-            </div>
-            <div class="device-percent">6.2%</div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="panel">
-
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Live Activity</div>
-            <div class="panel-sub">Current platform activity</div>
-          </div>
-        </div>
-
-        <div class="live-box">
-
-          <div class="live-label">ACTIVE USERS RIGHT NOW</div>
-
-          <div class="live-number" id="liveUsers">247</div>
-
-          <div class="live-label">
-            users currently browsing or watching
-          </div>
-
-          <div class="live-pulse">
-            <span class="pulse"></span>
-            LIVE DATA STREAM
-          </div>
-
-          <div style="margin-top:22px">
-
-            <div class="metric-row">
-              <div class="metric-top">
-                <span class="metric-name">Watching Video</span>
-                <span class="metric-number">142</span>
-              </div>
-              <div class="bar">
-                <span style="width:58%"></span>
-              </div>
-            </div>
-
-            <div class="metric-row">
-              <div class="metric-top">
-                <span class="metric-name">Browsing</span>
-                <span class="metric-number">71</span>
-              </div>
-              <div class="bar">
-                <span style="width:29%"></span>
-              </div>
-            </div>
-
-            <div class="metric-row">
-              <div class="metric-top">
-                <span class="metric-name">Community</span>
-                <span class="metric-number">34</span>
-              </div>
-              <div class="bar">
-                <span style="width:14%"></span>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="grid">
-
-      <div class="panel">
-
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Top Pages</div>
-            <div class="panel-sub">Highest traffic pages during selected period</div>
-          </div>
-        </div>
-
-        <div class="table-wrap">
-
-          <table>
-
-            <thead>
-              <tr>
-                <th>Page</th>
-                <th>Views</th>
-                <th>Unique</th>
-                <th>Avg. Time</th>
-                <th>Bounce</th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr>
-                <td class="page-url">/tacoma-nights.html</td>
-                <td>48,821</td>
-                <td>31,284</td>
-                <td>04:28</td>
-                <td>29.4%</td>
-              </tr>
-
-              <tr>
-                <td class="page-url">/index.html</td>
-                <td>42,615</td>
-                <td>27,903</td>
-                <td>03:12</td>
-                <td>31.7%</td>
-              </tr>
-
-              <tr>
-                <td class="page-url">/watch.html</td>
-                <td>38,442</td>
-                <td>24,816</td>
-                <td>12:41</td>
-                <td>18.2%</td>
-              </tr>
-
-              <tr>
-                <td class="page-url">/community.html</td>
-                <td>21,903</td>
-                <td>14,822</td>
-                <td>08:22</td>
-                <td>22.9%</td>
-              </tr>
-
-              <tr>
-                <td class="page-url">/memorials.html</td>
-                <td>17,284</td>
-                <td>12,601</td>
-                <td>05:31</td>
-                <td>27.1%</td>
-              </tr>
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </div>
-
-      <div class="panel">
-
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Audience Insights</div>
-            <div class="panel-sub">Automated performance signals</div>
-          </div>
-        </div>
-
-        <div class="insight-list">
-
-          <div class="insight">
-            <div class="insight-icon">▲</div>
-            <div>
-              <div class="insight-title">Video engagement is rising</div>
-              <div class="insight-text">
-                Average watch time increased 18% during the selected period.
-              </div>
-            </div>
-          </div>
-
-          <div class="insight">
-            <div class="insight-icon">◆</div>
-            <div>
-              <div class="insight-title">Tacoma Nights leads traffic</div>
-              <div class="insight-text">
-                The series is currently the strongest content acquisition source.
-              </div>
-            </div>
-          </div>
-
-          <div class="insight">
-            <div class="insight-icon">●</div>
-            <div>
-              <div class="insight-title">Mobile audience expanding</div>
-              <div class="insight-text">
-                Mobile sessions increased 11.6% compared with the previous period.
-              </div>
-            </div>
-          </div>
-
-          <div class="insight">
-            <div class="insight-icon">✦</div>
-            <div>
-              <div class="insight-title">Membership conversion improved</div>
-              <div class="insight-text">
-                Visitor-to-member conversion is currently tracking above baseline.
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
 
   </div>
 
+  <div class="top-actions">
+
+    <div
+      class="clock"
+      id="clock"
+    >--:--:--</div>
+
+    <button
+      class="top-btn"
+      id="refreshBtn"
+    >↻ Refresh</button>
+
+    <a
+      class="top-btn"
+      href="profile.html"
+    >Profile</a>
+
+  </div>
+
+</header>
+
+<div class="page">
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
+<section class="hero">
+
+  <div class="kicker">
+    CROWRULES / DATA CENTER
+  </div>
+
+  <h1>
+    Analytics Command Center
+  </h1>
+
+  <p>
+    Monitor audience behavior, content performance,
+    member activity, streaming activity, commerce,
+    traffic sources and network growth across
+    CrowRules Entertainment.
+  </p>
+
+  <div class="hero-meta">
+
+    <span class="badge">
+      SUPABASE CONNECTED
+    </span>
+
+    <span class="badge">
+      REAL-TIME EVENTS
+    </span>
+
+    <span class="badge">
+      AUDIENCE INTELLIGENCE
+    </span>
+
+    <span class="badge">
+      CONTENT PERFORMANCE
+    </span>
+
+    <span class="badge">
+      PROPERTY ANALYTICS
+    </span>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     CONTROLS
+======================================================= -->
+
+<section class="controls">
+
+  <div class="period-tabs">
+
+    <button data-period="24h">
+      24 Hours
+    </button>
+
+    <button
+      data-period="7d"
+      class="active"
+    >
+      7 Days
+    </button>
+
+    <button data-period="30d">
+      30 Days
+    </button>
+
+    <button data-period="90d">
+      90 Days
+    </button>
+
+    <button data-period="1y">
+      1 Year
+    </button>
+
+  </div>
+
+  <div class="control-right">
+
+    <select id="propertySelect">
+
+      <option value="all">
+        All Properties
+      </option>
+
+      <option value="tv">
+        CrowRules TV
+      </option>
+
+      <option value="records">
+        CrowRules Records
+      </option>
+
+      <option value="community">
+        CrowSpace / Community
+      </option>
+
+      <option value="sports">
+        CrowRules Sports
+      </option>
+
+      <option value="memorials">
+        CrowRules Memorials
+      </option>
+
+      <option value="publishing">
+        CrowRules Publishing
+      </option>
+
+      <option value="podcasting">
+        CrowRules Podcasting
+      </option>
+
+      <option value="yearbooks">
+        CrowRules Yearbooks
+      </option>
+
+      <option value="holidays">
+        CrowRules Holidays
+      </option>
+
+      <option value="studio">
+        CrowRules Studios
+      </option>
+
+      <option value="business">
+        CrowRules Business
+      </option>
+
+    </select>
+
+    <button id="exportBtn">
+      Export CSV
+    </button>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     STATISTICS
+======================================================= -->
+
+<section class="stats">
+
+  <div class="stat">
+
+    <div class="stat-label">
+      Total Visitors
+    </div>
+
+    <div
+      class="stat-value"
+      id="visitors"
+    >—</div>
+
+    <div
+      class="stat-change neutral"
+      id="visitorsChange"
+    >
+      Waiting for data
+    </div>
+
+  </div>
+
+  <div class="stat">
+
+    <div class="stat-label">
+      Page Views
+    </div>
+
+    <div
+      class="stat-value"
+      id="pageviews"
+    >—</div>
+
+    <div
+      class="stat-change neutral"
+      id="pageviewsChange"
+    >
+      Waiting for data
+    </div>
+
+  </div>
+
+  <div class="stat">
+
+    <div class="stat-label">
+      Watch Hours
+    </div>
+
+    <div
+      class="stat-value"
+      id="watchhours"
+    >—</div>
+
+    <div
+      class="stat-change neutral"
+      id="watchhoursChange"
+    >
+      Waiting for data
+    </div>
+
+  </div>
+
+  <div class="stat">
+
+    <div class="stat-label">
+      New Members
+    </div>
+
+    <div
+      class="stat-value"
+      id="newmembers"
+    >—</div>
+
+    <div
+      class="stat-change neutral"
+      id="newmembersChange"
+    >
+      Waiting for data
+    </div>
+
+  </div>
+
+  <div class="stat">
+
+    <div class="stat-label">
+      Revenue
+    </div>
+
+    <div
+      class="stat-value"
+      id="revenue"
+    >—</div>
+
+    <div
+      class="stat-change neutral"
+      id="revenueChange"
+    >
+      Waiting for data
+    </div>
+
+  </div>
+
+  <div class="stat">
+
+    <div class="stat-label">
+      Engagement
+    </div>
+
+    <div
+      class="stat-value"
+      id="engagement"
+    >—</div>
+
+    <div
+      class="stat-change neutral"
+      id="engagementChange"
+    >
+      Calculated from activity
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     AUDIENCE / TRAFFIC
+======================================================= -->
+
+<section class="grid">
+
+  <div class="panel">
+
+    <div class="panel-head">
+
+      <div>
+
+        <div class="panel-title">
+          Audience Overview
+        </div>
+
+        <div class="panel-sub">
+          Visitors and page views over selected period
+        </div>
+
+      </div>
+
+      <button
+        class="panel-action"
+        id="chartRefresh"
+      >
+        LIVE
+      </button>
+
+    </div>
+
+    <div class="chart-wrap">
+
+      <div class="chart-legend">
+
+        <div class="legend">
+          <span class="legend-line"></span>
+          Visitors
+        </div>
+
+        <div class="legend">
+          <span class="legend-line cyan"></span>
+          Page Views
+        </div>
+
+      </div>
+
+      <div
+        class="chart"
+        id="audienceChart"
+      >
+
+        <svg
+          viewBox="0 0 1000 290"
+          preserveAspectRatio="none"
+          id="chartSvg"
+        >
+
+          <defs>
+
+            <linearGradient
+              id="areaPurple"
+              x1="0"
+              x2="0"
+              y1="0"
+              y2="1"
+            >
+              <stop
+                offset="0%"
+                stop-color="#b66cff"
+                stop-opacity=".28"
+              />
+
+              <stop
+                offset="100%"
+                stop-color="#b66cff"
+                stop-opacity="0"
+              />
+
+            </linearGradient>
+
+            <linearGradient
+              id="areaCyan"
+              x1="0"
+              x2="0"
+              y1="0"
+              y2="1"
+            >
+
+              <stop
+                offset="0%"
+                stop-color="#37d7ff"
+                stop-opacity=".20"
+              />
+
+              <stop
+                offset="100%"
+                stop-color="#37d7ff"
+                stop-opacity="0"
+              />
+
+            </linearGradient>
+
+          </defs>
+
+          <path
+            id="visitorArea"
+            fill="url(#areaPurple)"
+            stroke="none"
+          ></path>
+
+          <path
+            id="visitorLine"
+            fill="none"
+            stroke="#b66cff"
+            stroke-width="3"
+            vector-effect="non-scaling-stroke"
+          ></path>
+
+          <path
+            id="pageArea"
+            fill="url(#areaCyan)"
+            stroke="none"
+          ></path>
+
+          <path
+            id="pageLine"
+            fill="none"
+            stroke="#37d7ff"
+            stroke-width="2"
+            vector-effect="non-scaling-stroke"
+          ></path>
+
+        </svg>
+
+        <div
+          class="empty-chart"
+          id="chartEmpty"
+        >
+          No analytics events yet
+        </div>
+
+      </div>
+
+      <div
+        class="chart-labels"
+        id="chartLabels"
+      ></div>
+
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-head">
+
+      <div>
+
+        <div class="panel-title">
+          Traffic Sources
+        </div>
+
+        <div class="panel-sub">
+          Where visitors are coming from
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="metric-list"
+      id="trafficSources"
+    ></div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     CONTENT / DEVICES / LIVE
+======================================================= -->
+
+<section class="lower-grid">
+
+  <div class="panel">
+
+    <div class="panel-head">
+
+      <div>
+
+        <div class="panel-title">
+          Top Content
+        </div>
+
+        <div class="panel-sub">
+          Most viewed content
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>#</th>
+            <th>Content</th>
+            <th>Views</th>
+            <th>Growth</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="topContentBody">
+
+          <tr>
+            <td colspan="4">
+              <div class="table-empty">
+                No content analytics yet
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-head">
+
+      <div>
+
+        <div class="panel-title">
+          Devices
+        </div>
+
+        <div class="panel-sub">
+          Audience device breakdown
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="device-list"
+      id="deviceList"
+    ></div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-head">
+
+      <div>
+
+        <div class="panel-title">
+          Live Activity
+        </div>
+
+        <div class="panel-sub">
+          Current platform activity
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="live-box">
+
+      <div class="live-label">
+        ACTIVE USERS RIGHT NOW
+      </div>
+
+      <div
+        class="live-number"
+        id="liveUsers"
+      >0</div>
+
+      <div class="live-label">
+        active analytics sessions
+      </div>
+
+      <div class="live-pulse">
+        <span class="pulse"></span>
+        LIVE DATABASE ACTIVITY
+      </div>
+
+      <div
+        style="margin-top:22px"
+        id="liveBreakdown"
+      ></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     TOP PAGES
+======================================================= -->
+
+<section class="grid">
+
+  <div class="panel">
+
+    <div class="panel-head">
+
+      <div>
+
+        <div class="panel-title">
+          Top Pages
+        </div>
+
+        <div class="panel-sub">
+          Highest traffic pages
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Page</th>
+            <th>Views</th>
+            <th>Unique</th>
+            <th>Avg. Time</th>
+            <th>Bounce</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="topPagesBody">
+
+          <tr>
+
+            <td colspan="5">
+
+              <div class="table-empty">
+                No page-view events yet
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-head">
+
+      <div>
+
+        <div class="panel-title">
+          Audience Insights
+        </div>
+
+        <div class="panel-sub">
+          Automated performance signals
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="insight-list"
+      id="insights"
+    ></div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     DATABASE STATUS
+======================================================= -->
+
+<div class="panel">
+
+  <div class="db-status">
+
+    <span
+      class="db-status-dot"
+      id="dbStatusDot"
+    ></span>
+
+    <span id="dbStatusText">
+      Connecting to Supabase…
+    </span>
+
+  </div>
+
+</div>
+
+</div>
+
 </main>
 
-<div class="toast" id="toast"></div>
+<div
+  class="toast"
+  id="toast"
+></div>
 
 <script>
 /*
-  CrowRules Entertainment
-  Main Admin Analytics
+  ==========================================================
+  CROWRULES ENTERTAINMENT
+  ANALYTICS COMMAND CENTER
+  ==========================================================
 
-  Supabase-ready architecture.
+  Supabase project:
+  cevylpnoexugwgygvtgu
 
-  Suggested analytics tables:
+  Analytics tables:
+    analytics_events
+    analytics_realtime
+    analytics_daily
 
-  analytics_events
-  analytics_sessions
-  analytics_page_views
-  analytics_video_views
-  analytics_watch_sessions
-  analytics_daily
-  analytics_realtime
+  SECURITY:
+    - Browser uses publishable key only.
+    - Never place service_role / secret keys here.
+    - analytics_events is INSERT-only for public clients.
+    - Dashboard analytics require authenticated access.
 
-  Recommended analytics event structure:
+  Event format:
 
-  id
-  user_id
-  session_id
-  event_name
-  property
-  page_url
-  content_id
-  content_type
-  metadata
-  created_at
+  {
+    event_name: "page_view",
+    property: "tv",
+    page_url: location.pathname,
+    session_id: "...",
+    content_id: "...",
+    content_type: "episode",
+    watch_seconds: 0,
+    duration_seconds: 0,
+    metadata: {
+      referrer: "...",
+      device: "desktop"
+    }
+  }
 
-  IMPORTANT:
-  Never store passwords, payment-card numbers,
-  CVV codes, authentication secrets, or other
-  sensitive credentials in analytics tables.
+  ==========================================================
 */
 
+/* =========================================================
+   SUPABASE CONFIG
+========================================================= */
+
 const SUPABASE_URL =
-  window.CROWRULES_SUPABASE_URL || "";
+  window.CROWRULES_SUPABASE_URL ||
+  "https://cevylpnoexugwgygvtgu.supabase.co";
 
-const SUPABASE_ANON_KEY =
-  window.CROWRULES_SUPABASE_ANON_KEY || "";
+const SUPABASE_PUBLISHABLE_KEY =
+  window.CROWRULES_SUPABASE_PUBLISHABLE_KEY ||
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
 
-const ANALYTICS_TABLE =
-  window.CROWRULES_ANALYTICS_TABLE || "analytics_events";
-
-let supabaseClient = null;
-
-if(
-  SUPABASE_URL &&
-  SUPABASE_ANON_KEY &&
+const supabaseClient =
   window.supabase
-){
-  supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
+    ? window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      )
+    : null;
+
+const EVENTS_TABLE =
+  "analytics_events";
+
+const REALTIME_TABLE =
+  "analytics_realtime";
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const state = {
+
+  period:"7d",
+
+  property:"all",
+
+  events:[],
+
+  previousEvents:[],
+
+  realtime:[],
+
+  channel:null,
+
+  sessionId:
+    getSessionId()
+
+};
+
+/* =========================================================
+   SESSION
+========================================================= */
+
+function getSessionId(){
+
+  const key =
+    "crowrules_analytics_session";
+
+  let value =
+    sessionStorage.getItem(key);
+
+  if(!value){
+
+    value =
+      crypto.randomUUID
+        ? crypto.randomUUID()
+        : (
+            Date.now().toString(36) +
+            Math.random().toString(36).slice(2)
+          );
+
+    sessionStorage.setItem(
+      key,
+      value
     );
+
+  }
+
+  return value;
+
 }
 
-/* CLOCK */
+/* =========================================================
+   CLOCK
+========================================================= */
 
 function updateClock(){
 
-  const now = new Date();
+  const now =
+    new Date();
 
-  document.getElementById("clock").textContent =
-    now.toLocaleTimeString([],{
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit"
-    });
+  const el =
+    document.getElementById(
+      "clock"
+    );
+
+  if(!el) return;
+
+  el.textContent =
+    now.toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
 
 }
 
-setInterval(updateClock,1000);
+setInterval(
+  updateClock,
+  1000
+);
+
 updateClock();
 
-/* MOBILE MENU */
+/* =========================================================
+   TOAST
+========================================================= */
 
-document
-  .getElementById("mobileMenu")
-  .addEventListener("click",()=>{
-
-    document
-      .getElementById("sidebar")
-      .classList.toggle("open");
-
-  });
-
-/* TOAST */
-
-let toastTimer;
+let toastTimer = null;
 
 function toast(message){
 
   const el =
-    document.getElementById("toast");
+    document.getElementById(
+      "toast"
+    );
 
-  el.textContent = message;
-  el.classList.add("show");
+  if(!el) return;
 
-  clearTimeout(toastTimer);
+  el.textContent =
+    message;
+
+  el.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    toastTimer
+  );
 
   toastTimer =
-    setTimeout(()=>{
-      el.classList.remove("show");
-    },2600);
+    setTimeout(
+      ()=>{
+        el.classList.remove(
+          "show"
+        );
+      },
+      2800
+    );
 
 }
 
-/* PERIOD */
+/* =========================================================
+   SYSTEM STATUS
+========================================================= */
+
+function setSystemStatus(
+  status,
+  message
+){
+
+  const dot =
+    document.getElementById(
+      "systemDot"
+    );
+
+  const text =
+    document.getElementById(
+      "systemStatusText"
+    );
+
+  const dbDot =
+    document.getElementById(
+      "dbStatusDot"
+    );
+
+  const dbText =
+    document.getElementById(
+      "dbStatusText"
+    );
+
+  if(status === "online"){
+
+    dot?.classList.remove(
+      "offline",
+      "warning"
+    );
+
+    dbDot?.classList.remove(
+      "error"
+    );
+
+  }
+
+  if(status === "warning"){
+
+    dot?.classList.remove(
+      "offline"
+    );
+
+    dot?.classList.add(
+      "warning"
+    );
+
+  }
+
+  if(status === "offline"){
+
+    dot?.classList.remove(
+      "warning"
+    );
+
+    dot?.classList.add(
+      "offline"
+    );
+
+    dbDot?.classList.add(
+      "error"
+    );
+
+  }
+
+  if(text){
+    text.textContent =
+      message;
+  }
+
+  if(dbText){
+    dbText.textContent =
+      message;
+  }
+
+}
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
 document
-  .querySelectorAll(".period-tabs button")
+  .getElementById(
+    "mobileMenu"
+  )
+  ?.addEventListener(
+    "click",
+    ()=>{
+      document
+        .getElementById(
+          "sidebar"
+        )
+        ?.classList.toggle(
+          "open"
+        );
+    }
+  );
+
+/* Close sidebar after navigation on mobile */
+
+document
+  .querySelectorAll(
+    ".nav a"
+  )
+  .forEach(link=>{
+
+    link.addEventListener(
+      "click",
+      ()=>{
+        if(
+          window.innerWidth <=
+          900
+        ){
+
+          document
+            .getElementById(
+              "sidebar"
+            )
+            ?.classList.remove(
+              "open"
+            );
+
+        }
+      }
+    );
+
+  });
+
+/* =========================================================
+   PERIOD
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".period-tabs button"
+  )
   .forEach(button=>{
 
-    button.addEventListener("click",()=>{
+    button.addEventListener(
+      "click",
+      ()=>{
 
-      document
-        .querySelectorAll(".period-tabs button")
-        .forEach(btn =>
-          btn.classList.remove("active")
+        document
+          .querySelectorAll(
+            ".period-tabs button"
+          )
+          .forEach(btn =>
+            btn.classList.remove(
+              "active"
+            )
+          );
+
+        button.classList.add(
+          "active"
         );
 
-      button.classList.add("active");
+        state.period =
+          button.dataset.period;
 
-      const period =
-        button.dataset.period;
+        toast(
+          "Analytics period: " +
+          state.period.toUpperCase()
+        );
+
+        refreshAnalytics();
+
+      }
+    );
+
+  });
+
+/* =========================================================
+   PROPERTY
+========================================================= */
+
+document
+  .getElementById(
+    "propertySelect"
+  )
+  ?.addEventListener(
+    "change",
+    event=>{
+
+      state.property =
+        event.target.value;
 
       toast(
-        "Analytics period changed to " +
-        period.toUpperCase()
+        "Property filter: " +
+        event.target
+          .options[
+            event.target.selectedIndex
+          ]
+          .text
       );
 
       refreshAnalytics();
 
-    });
+    }
+  );
 
-  });
+/* =========================================================
+   DATE RANGE
+========================================================= */
 
-/* PROPERTY */
+function getDays(){
 
-document
-  .getElementById("propertySelect")
-  .addEventListener("change",event=>{
+  switch(
+    state.period
+  ){
 
-    toast(
-      "Property filter: " +
-      event.target.options[
-        event.target.selectedIndex
-      ].text
+    case "24h":
+      return 1;
+
+    case "7d":
+      return 7;
+
+    case "30d":
+      return 30;
+
+    case "90d":
+      return 90;
+
+    case "1y":
+      return 365;
+
+    default:
+      return 7;
+
+  }
+
+}
+
+function getRange(){
+
+  const days =
+    getDays();
+
+  const end =
+    new Date();
+
+  const start =
+    new Date(
+      end.getTime() -
+      days *
+      86400000
     );
 
-    refreshAnalytics();
+  return {
+    start,
+    end
+  };
 
-  });
+}
 
-/* SUPABASE ANALYTICS */
+/* =========================================================
+   EVENT QUERY
+========================================================= */
+
+async function fetchEvents(){
+
+  if(!supabaseClient){
+
+    throw new Error(
+      "Supabase client unavailable"
+    );
+
+  }
+
+  const {
+    start,
+    end
+  } =
+    getRange();
+
+  let query =
+    supabaseClient
+      .from(
+        EVENTS_TABLE
+      )
+      .select(
+        "id,user_id,session_id,event_name,property,page_url,content_id,content_type,watch_seconds,duration_seconds,metadata,created_at"
+      )
+      .gte(
+        "created_at",
+        start.toISOString()
+      )
+      .lte(
+        "created_at",
+        end.toISOString()
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      )
+      .limit(
+        10000
+      );
+
+  if(
+    state.property !==
+    "all"
+  ){
+
+    query =
+      query.eq(
+        "property",
+        state.property
+      );
+
+  }
+
+  const {
+    data,
+    error
+  } =
+    await query;
+
+  if(error){
+
+    throw error;
+
+  }
+
+  return data || [];
+
+}
+
+/* =========================================================
+   PREVIOUS RANGE
+========================================================= */
+
+async function fetchPreviousEvents(){
+
+  if(!supabaseClient)
+    return [];
+
+  const days =
+    getDays();
+
+  const end =
+    new Date();
+
+  const currentStart =
+    new Date(
+      end.getTime() -
+      days *
+      86400000
+    );
+
+  const previousStart =
+    new Date(
+      currentStart.getTime() -
+      days *
+      86400000
+    );
+
+  let query =
+    supabaseClient
+      .from(
+        EVENTS_TABLE
+      )
+      .select(
+        "id,user_id,session_id,event_name,page_url,property,content_id,content_type,watch_seconds,duration_seconds,metadata,created_at"
+      )
+      .gte(
+        "created_at",
+        previousStart.toISOString()
+      )
+      .lt(
+        "created_at",
+        currentStart.toISOString()
+      )
+      .limit(
+        10000
+      );
+
+  if(
+    state.property !==
+    "all"
+  ){
+
+    query =
+      query.eq(
+        "property",
+        state.property
+      );
+
+  }
+
+  const {
+    data,
+    error
+  } =
+    await query;
+
+  if(error){
+
+    console.warn(
+      "Previous analytics unavailable:",
+      error.message
+    );
+
+    return [];
+
+  }
+
+  return data || [];
+
+}
+
+/* =========================================================
+   REALTIME
+========================================================= */
+
+async function fetchRealtime(){
+
+  if(!supabaseClient)
+    return [];
+
+  const cutoff =
+    new Date(
+      Date.now() -
+      2 *
+      60000
+    ).toISOString();
+
+  let query =
+    supabaseClient
+      .from(
+        REALTIME_TABLE
+      )
+      .select(
+        "session_id,user_id,property,page_url,activity_type,last_seen_at,metadata"
+      )
+      .gte(
+        "last_seen_at",
+        cutoff
+      );
+
+  if(
+    state.property !==
+    "all"
+  ){
+
+    query =
+      query.eq(
+        "property",
+        state.property
+      );
+
+  }
+
+  const {
+    data,
+    error
+  } =
+    await query;
+
+  if(error){
+
+    console.warn(
+      "Realtime data unavailable:",
+      error.message
+    );
+
+    return [];
+
+  }
+
+  return data || [];
+
+}
+
+/* =========================================================
+   REFRESH
+========================================================= */
 
 async function refreshAnalytics(){
 
   if(!supabaseClient){
 
+    setSystemStatus(
+      "offline",
+      "SUPABASE CLIENT UNAVAILABLE"
+    );
+
     return;
+
   }
 
   try{
 
-    const period =
-      document.querySelector(
-        ".period-tabs button.active"
-      )?.dataset.period || "7d";
+    setSystemStatus(
+      "warning",
+      "LOADING ANALYTICS"
+    );
 
-    const property =
-      document.getElementById(
-        "propertySelect"
-      ).value;
+    const [
+      events,
+      previousEvents,
+      realtime
+    ] =
+      await Promise.all([
+        fetchEvents(),
+        fetchPreviousEvents(),
+        fetchRealtime()
+      ]);
 
-    const days =
-      period === "24h" ? 1 :
-      period === "7d" ? 7 :
-      period === "30d" ? 30 :
-      period === "90d" ? 90 :
-      365;
+    state.events =
+      events;
 
-    const since =
-      new Date(
-        Date.now() -
-        days * 86400000
-      ).toISOString();
+    state.previousEvents =
+      previousEvents;
 
-    let query =
-      supabaseClient
-        .from(ANALYTICS_TABLE)
-        .select("*")
-        .gte("created_at",since)
-        .order("created_at",{
-          ascending:false
-        })
-        .limit(5000);
+    state.realtime =
+      realtime;
 
-    if(property !== "all"){
+    renderDashboard();
 
-      query =
-        query.eq("property",property);
-
-    }
-
-    const {data,error} =
-      await query;
-
-    if(error) throw error;
-
-    if(!data) return;
-
-    calculateAnalytics(data);
+    setSystemStatus(
+      "online",
+      "ADMIN SYSTEM ONLINE"
+    );
 
   }catch(error){
 
+    console.error(
+      "Analytics error:",
+      error
+    );
+
+    setSystemStatus(
+      "offline",
+      "ANALYTICS DATABASE ERROR"
+    );
+
+    toast(
+      "Analytics error: " +
+      (
+        error.message ||
+        "Unable to load data"
+      )
+    );
+
+  }
+
+}
+
+/* =========================================================
+   EVENT NORMALIZATION
+========================================================= */
+
+function eventName(event){
+
+  return String(
+    event.event_name ||
+    ""
+  )
+  .toLowerCase()
+  .trim();
+
+}
+
+function isPageView(event){
+
+  return [
+    "page_view",
+    "pageview"
+  ].includes(
+    eventName(event)
+  );
+
+}
+
+function isVideo(event){
+
+  return [
+    "video_watch",
+    "video_play",
+    "watch",
+    "video_progress",
+    "watch_progress"
+  ].includes(
+    eventName(event)
+  );
+
+}
+
+function isMemberEvent(event){
+
+  return [
+    "member_signup",
+    "member_join",
+    "signup",
+    "registration"
+  ].includes(
+    eventName(event)
+  );
+
+}
+
+/* =========================================================
+   UNIQUE VISITORS
+========================================================= */
+
+function uniqueVisitors(
+  events
+){
+
+  return new Set(
+    events
+      .map(
+        e =>
+          e.user_id ||
+          e.session_id
+      )
+      .filter(Boolean)
+  ).size;
+
+}
+
+/* =========================================================
+   WATCH HOURS
+========================================================= */
+
+function watchHours(
+  events
+){
+
+  const seconds =
+    events.reduce(
+      (total,event)=>{
+
+        const value =
+          Number(
+            event.watch_seconds ||
+            event.duration_seconds ||
+            0
+          );
+
+        return total +
+          Math.max(
+            0,
+            value
+          );
+
+      },
+      0
+    );
+
+  return seconds /
+    3600;
+
+}
+
+/* =========================================================
+   ENGAGEMENT
+========================================================= */
+
+function calculateEngagement(
+  events
+){
+
+  if(!events.length)
+    return 0;
+
+  const engagedSessions =
+    new Set(
+      events
+        .filter(
+          e =>
+            isVideo(e) ||
+            !isPageView(e) ||
+            Number(
+              e.watch_seconds ||
+              0
+            ) > 10
+        )
+        .map(
+          e =>
+            e.session_id ||
+            e.user_id
+        )
+        .filter(Boolean)
+    ).size;
+
+  const sessions =
+    new Set(
+      events
+        .map(
+          e =>
+            e.session_id ||
+            e.user_id
+        )
+        .filter(Boolean)
+    ).size;
+
+  if(!sessions)
+    return 0;
+
+  return Math.min(
+    100,
+    (
+      engagedSessions /
+      sessions
+    ) *
+    100
+  );
+
+}
+
+/* =========================================================
+   NUMBER FORMAT
+========================================================= */
+
+function formatNumber(
+  number
+){
+
+  number =
+    Number(number) || 0;
+
+  if(
+    number >=
+    1000000
+  ){
+
+    return (
+      number /
+      1000000
+    ).toFixed(1) +
+    "M";
+
+  }
+
+  if(
+    number >=
+    1000
+  ){
+
+    return (
+      number /
+      1000
+    ).toFixed(1) +
+    "K";
+
+  }
+
+  return number
+    .toLocaleString();
+
+}
+
+/* =========================================================
+   PERCENT CHANGE
+========================================================= */
+
+function percentChange(
+  current,
+  previous
+){
+
+  current =
+    Number(current) || 0;
+
+  previous =
+    Number(previous) || 0;
+
+  if(
+    previous === 0
+  ){
+
+    if(
+      current === 0
+    )
+      return 0;
+
+    return 100;
+
+  }
+
+  return (
+    (
+      current -
+      previous
+    ) /
+    previous
+  ) *
+  100;
+
+}
+
+/* =========================================================
+   CHANGE LABEL
+========================================================= */
+
+function changeLabel(
+  current,
+  previous
+){
+
+  const change =
+    percentChange(
+      current,
+      previous
+    );
+
+  const text =
+    (
+      Math.abs(change)
+    ).toFixed(1) +
+    "% vs previous";
+
+  return {
+    change,
+    text
+  };
+
+}
+
+function applyChange(
+  elementId,
+  current,
+  previous
+){
+
+  const el =
+    document.getElementById(
+      elementId
+    );
+
+  if(!el) return;
+
+  const result =
+    changeLabel(
+      current,
+      previous
+    );
+
+  el.className =
+    "stat-change " +
+    (
+      result.change > 0
+        ? "up"
+        : result.change < 0
+          ? "down"
+          : "neutral"
+    );
+
+  el.textContent =
+    (
+      result.change > 0
+        ? "▲ "
+        : result.change < 0
+          ? "▼ "
+          : "— "
+    ) +
+    result.text;
+
+}
+
+/* =========================================================
+   RENDER STATISTICS
+========================================================= */
+
+function renderStats(){
+
+  const events =
+    state.events;
+
+  const previous =
+    state.previousEvents;
+
+  const visitors =
+    uniqueVisitors(
+      events
+    );
+
+  const previousVisitors =
+    uniqueVisitors(
+      previous
+    );
+
+  const pageviews =
+    events.filter(
+      isPageView
+    ).length;
+
+  const previousPageviews =
+    previous.filter(
+      isPageView
+    ).length;
+
+  const hours =
+    watchHours(
+      events
+    );
+
+  const previousHours =
+    watchHours(
+      previous
+    );
+
+  const members =
+    events.filter(
+      isMemberEvent
+    ).length;
+
+  const previousMembers =
+    previous.filter(
+      isMemberEvent
+    ).length;
+
+  const revenueCents =
+    events.reduce(
+      (
+        total,
+        event
+      )=>{
+
+        const value =
+          Number(
+            event.metadata
+              ?.revenue_cents ||
+            event.metadata
+              ?.amount_cents ||
+            0
+          );
+
+        return total +
+          Math.max(
+            0,
+            value
+          );
+
+      },
+      0
+    );
+
+  const previousRevenueCents =
+    previous.reduce(
+      (
+        total,
+        event
+      )=>{
+
+        const value =
+          Number(
+            event.metadata
+              ?.revenue_cents ||
+            event.metadata
+              ?.amount_cents ||
+            0
+          );
+
+        return total +
+          Math.max(
+            0,
+            value
+          );
+
+      },
+      0
+    );
+
+  const engagement =
+    calculateEngagement(
+      events
+    );
+
+  const previousEngagement =
+    calculateEngagement(
+      previous
+    );
+
+  document
+    .getElementById(
+      "visitors"
+    )
+    .textContent =
+      formatNumber(
+        visitors
+      );
+
+  document
+    .getElementById(
+      "pageviews"
+    )
+    .textContent =
+      formatNumber(
+        pageviews
+      );
+
+  document
+    .getElementById(
+      "watchhours"
+    )
+    .textContent =
+      hours.toFixed(1) +
+      "h";
+
+  document
+    .getElementById(
+      "newmembers"
+    )
+    .textContent =
+      formatNumber(
+        members
+      );
+
+  document
+    .getElementById(
+      "revenue"
+    )
+    .textContent =
+      "$" +
+      (
+        revenueCents /
+        100
+      ).toLocaleString(
+        undefined,
+        {
+          maximumFractionDigits:2
+        }
+      );
+
+  document
+    .getElementById(
+      "engagement"
+    )
+    .textContent =
+      engagement.toFixed(
+        1
+      ) +
+      "%";
+
+  applyChange(
+    "visitorsChange",
+    visitors,
+    previousVisitors
+  );
+
+  applyChange(
+    "pageviewsChange",
+    pageviews,
+    previousPageviews
+  );
+
+  applyChange(
+    "watchhoursChange",
+    hours,
+    previousHours
+  );
+
+  applyChange(
+    "newmembersChange",
+    members,
+    previousMembers
+  );
+
+  applyChange(
+    "revenueChange",
+    revenueCents,
+    previousRevenueCents
+  );
+
+  applyChange(
+    "engagementChange",
+    engagement,
+    previousEngagement
+  );
+
+}
+
+/* =========================================================
+   DAILY CHART DATA
+========================================================= */
+
+function buildDailyData(){
+
+  const days =
+    getDays();
+
+  const map =
+    new Map();
+
+  for(
+    let i = days - 1;
+    i >= 0;
+    i--
+  ){
+
+    const date =
+      new Date();
+
+    date.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    date.setDate(
+      date.getDate() -
+      i
+    );
+
+    const key =
+      date
+        .toISOString()
+        .slice(
+          0,
+          10
+        );
+
+    map.set(
+      key,
+      {
+        visitors:new Set(),
+        pageviews:0
+      }
+    );
+
+  }
+
+  state.events
+    .forEach(
+      event=>{
+
+        const key =
+          new Date(
+            event.created_at
+          )
+          .toISOString()
+          .slice(
+            0,
+            10
+          );
+
+        if(
+          !map.has(key)
+        )
+          return;
+
+        const bucket =
+          map.get(key);
+
+        const visitor =
+          event.user_id ||
+          event.session_id;
+
+        if(visitor)
+          bucket
+            .visitors
+            .add(
+              visitor
+            );
+
+        if(
+          isPageView(
+            event
+          )
+        ){
+
+          bucket.pageviews++;
+
+        }
+
+      }
+    );
+
+  return Array
+    .from(
+      map.entries()
+    )
+    .map(
+      ([date,value])=>({
+        date,
+        visitors:
+          value.visitors.size,
+        pageviews:
+          value.pageviews
+      })
+    );
+
+}
+
+/* =========================================================
+   CHART
+========================================================= */
+
+function renderChart(){
+
+  const data =
+    buildDailyData();
+
+  const empty =
+    document.getElementById(
+      "chartEmpty"
+    );
+
+  if(
+    !data.some(
+      d =>
+        d.visitors ||
+        d.pageviews
+    )
+  ){
+
+    empty.style.display =
+      "grid";
+
+    document
+      .getElementById(
+        "visitorLine"
+      )
+      .setAttribute(
+        "d",
+        ""
+      );
+
+    document
+      .getElementById(
+        "visitorArea"
+      )
+      .setAttribute(
+        "d",
+        ""
+      );
+
+    document
+      .getElementById(
+        "pageLine"
+      )
+      .setAttribute(
+        "d",
+        ""
+      );
+
+    document
+      .getElementById(
+        "pageArea"
+      )
+      .setAttribute(
+        "d",
+        ""
+      );
+
+    renderChartLabels(
+      data
+    );
+
+    return;
+
+  }
+
+  empty.style.display =
+    "none";
+
+  const width =
+    1000;
+
+  const height =
+    290;
+
+  const pad =
+    12;
+
+  const max =
+    Math.max(
+      1,
+      ...data.map(
+        d =>
+          Math.max(
+            d.visitors,
+            d.pageviews
+          )
+      )
+    );
+
+  function points(
+    key
+  ){
+
+    return data
+      .map(
+        (d,i)=>{
+
+          const x =
+            data.length === 1
+              ? width / 2
+              : (
+                  i /
+                  (
+                    data.length -
+                    1
+                  )
+                ) *
+                (
+                  width -
+                  pad * 2
+                ) +
+                pad;
+
+          const y =
+            height -
+            pad -
+            (
+              d[key] /
+              max
+            ) *
+            (
+              height -
+              pad * 2
+            );
+
+          return {
+            x,
+            y
+          };
+
+        }
+      );
+
+  }
+
+  function linePath(
+    pts
+  ){
+
+    if(!pts.length)
+      return "";
+
+    let d =
+      "M" +
+      pts[0].x +
+      " " +
+      pts[0].y;
+
+    for(
+      let i = 1;
+      i < pts.length;
+      i++
+    ){
+
+      const prev =
+        pts[i - 1];
+
+      const curr =
+        pts[i];
+
+      const midX =
+        (
+          prev.x +
+          curr.x
+        ) / 2;
+
+      d +=
+        " C " +
+        midX +
+        " " +
+        prev.y +
+        ", " +
+        midX +
+        " " +
+        curr.y +
+        ", " +
+        curr.x +
+        " " +
+        curr.y;
+
+    }
+
+    return d;
+
+  }
+
+  function areaPath(
+    pts
+  ){
+
+    if(!pts.length)
+      return "";
+
+    return (
+      linePath(
+        pts
+      ) +
+      " L " +
+      pts[
+        pts.length - 1
+      ].x +
+      " " +
+      height +
+      " L " +
+      pts[0].x +
+      " " +
+      height +
+      " Z"
+    );
+
+  }
+
+  const visitorPoints =
+    points(
+      "visitors"
+    );
+
+  const pagePoints =
+    points(
+      "pageviews"
+    );
+
+  document
+    .getElementById(
+      "visitorLine"
+    )
+    .setAttribute(
+      "d",
+      linePath(
+        visitorPoints
+      )
+    );
+
+  document
+    .getElementById(
+      "visitorArea"
+    )
+    .setAttribute(
+      "d",
+      areaPath(
+        visitorPoints
+      )
+    );
+
+  document
+    .getElementById(
+      "pageLine"
+    )
+    .setAttribute(
+      "d",
+      linePath(
+        pagePoints
+      )
+    );
+
+  document
+    .getElementById(
+      "pageArea"
+    )
+    .setAttribute(
+      "d",
+      areaPath(
+        pagePoints
+      )
+    );
+
+  renderChartLabels(
+    data
+  );
+
+}
+
+function renderChartLabels(
+  data
+){
+
+  const labels =
+    document.getElementById(
+      "chartLabels"
+    );
+
+  labels.innerHTML =
+    "";
+
+  if(!data.length)
+    return;
+
+  const count =
+    Math.min(
+      7,
+      data.length
+    );
+
+  const selected =
+    data.filter(
+      (_,i)=>{
+        return (
+          i %
+          Math.ceil(
+            data.length /
+            count
+          )
+        ) === 0;
+      }
+    );
+
+  const final =
+    selected
+      .slice(
+        0,
+        7
+      );
+
+  final
+    .forEach(
+      item=>{
+
+        const span =
+          document.createElement(
+            "span"
+          );
+
+        const date =
+          new Date(
+            item.date +
+            "T00:00:00"
+          );
+
+        span.textContent =
+          date.toLocaleDateString(
+            undefined,
+            {
+              month:"short",
+              day:"2-digit"
+            }
+          ).toUpperCase();
+
+        labels.appendChild(
+          span
+        );
+
+      }
+    );
+
+}
+
+/* =========================================================
+   TRAFFIC SOURCES
+========================================================= */
+
+function sourceName(
+  event
+){
+
+  const metadata =
+    event.metadata ||
+    {};
+
+  const raw =
+    metadata.utm_source ||
+    metadata.source ||
+    metadata.referrer ||
+    "";
+
+  if(!raw)
+    return "Direct";
+
+  const value =
+    String(raw)
+      .toLowerCase();
+
+  if(
+    value.includes(
+      "youtube"
+    )
+  )
+    return "YouTube";
+
+  if(
+    value.includes(
+      "google"
+    )
+  )
+    return "Google Search";
+
+  if(
+    value.includes(
+      "facebook"
+    )
+  )
+    return "Facebook";
+
+  if(
+    value.includes(
+      "instagram"
+    )
+  )
+    return "Instagram";
+
+  if(
+    value.includes(
+      "tiktok"
+    )
+  )
+    return "TikTok";
+
+  if(
+    value.includes(
+      "x.com"
+    ) ||
+    value.includes(
+      "twitter"
+    )
+  )
+    return "X / Twitter";
+
+  return String(
+    raw
+  )
+  .replace(
+    /^https?:\/\//,
+    ""
+  )
+  .split(
+    "/"
+  )[0]
+  .slice(
+    0,
+    25
+  );
+
+}
+
+function renderTrafficSources(){
+
+  const container =
+    document.getElementById(
+      "trafficSources"
+    );
+
+  const counts =
+    new Map();
+
+  state.events
+    .filter(
+      isPageView
+    )
+    .forEach(
+      event=>{
+
+        const name =
+          sourceName(
+            event
+          );
+
+        counts.set(
+          name,
+          (
+            counts.get(
+              name
+            ) || 0
+          ) + 1
+        );
+
+      }
+    );
+
+  const total =
+    Array
+      .from(
+        counts.values()
+      )
+      .reduce(
+        (
+          a,
+          b
+        ) =>
+          a + b,
+        0
+      );
+
+  const rows =
+    Array
+      .from(
+        counts.entries()
+      )
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b[1] -
+          a[1]
+      )
+      .slice(
+        0,
+        7
+      );
+
+  if(!rows.length){
+
+    container.innerHTML =
+      emptyMetrics(
+        "No traffic-source data yet"
+      );
+
+    return;
+
+  }
+
+  container.innerHTML =
+    rows
+      .map(
+        ([name,count])=>{
+
+          const pct =
+            total
+              ? (
+                  count /
+                  total
+                ) *
+                100
+              : 0;
+
+          const bar =
+            total
+              ? pct
+              : 0;
+
+          return `
+            <div class="metric-row">
+
+              <div class="metric-top">
+
+                <span class="metric-name">
+                  ${escapeHtml(name)}
+                </span>
+
+                <span class="metric-number">
+                  ${pct.toFixed(1)}%
+                </span>
+
+              </div>
+
+              <div class="bar">
+                <span style="width:${Math.min(100,bar)}%"></span>
+              </div>
+
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+function emptyMetrics(
+  text
+){
+
+  return `
+    <div
+      class="table-empty"
+    >
+      ${escapeHtml(text)}
+    </div>
+  `;
+
+}
+
+/* =========================================================
+   TOP CONTENT
+========================================================= */
+
+function renderTopContent(){
+
+  const body =
+    document.getElementById(
+      "topContentBody"
+    );
+
+  const counts =
+    new Map();
+
+  state.events
+    .filter(
+      isVideo
+    )
+    .forEach(
+      event=>{
+
+        const key =
+          event.content_id ||
+          event.metadata
+            ?.content_key ||
+          event.page_url ||
+          "Unknown";
+
+        const title =
+          event.metadata
+            ?.title ||
+          event.metadata
+            ?.content_title ||
+          event.page_url ||
+          "Unknown Content";
+
+        if(
+          !counts.has(key)
+        ){
+
+          counts.set(
+            key,
+            {
+              title,
+              views:0
+            }
+          );
+
+        }
+
+        counts
+          .get(key)
+          .views++;
+
+      }
+    );
+
+  const rows =
+    Array
+      .from(
+        counts.values()
+      )
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b.views -
+          a.views
+      )
+      .slice(
+        0,
+        5
+      );
+
+  if(!rows.length){
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="4">
+          <div class="table-empty">
+            No video analytics yet
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+  const max =
+    rows[0]
+      .views;
+
+  body.innerHTML =
+    rows
+      .map(
+        (row,index)=>{
+
+          const growth =
+            max
+              ? (
+                  row.views /
+                  max
+                ) *
+                100
+              : 0;
+
+          return `
+            <tr>
+
+              <td class="rank">
+                ${String(index + 1)
+                  .padStart(2,"0")}
+              </td>
+
+              <td>
+                <strong>
+                  ${escapeHtml(
+                    row.title
+                  )}
+                </strong>
+              </td>
+
+              <td>
+                ${formatNumber(
+                  row.views
+                )}
+              </td>
+
+              <td class="percent">
+                ${growth.toFixed(0)}%
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+/* =========================================================
+   DEVICES
+========================================================= */
+
+function getDevice(
+  event
+){
+
+  const metadata =
+    event.metadata ||
+    {};
+
+  const value =
+    String(
+      metadata.device ||
+      metadata.device_type ||
+      ""
+    ).toLowerCase();
+
+  if(
+    value.includes(
+      "mobile"
+    ) ||
+    value.includes(
+      "phone"
+    )
+  )
+    return "Mobile";
+
+  if(
+    value.includes(
+      "tablet"
+    )
+  )
+    return "Tablet";
+
+  if(
+    value.includes(
+      "tv"
+    ) ||
+    value.includes(
+      "stream"
+    )
+  )
+    return "TV / Streaming";
+
+  return "Desktop";
+
+}
+
+function renderDevices(){
+
+  const container =
+    document.getElementById(
+      "deviceList"
+    );
+
+  const counts =
+    new Map([
+      ["Desktop",0],
+      ["Mobile",0],
+      ["Tablet",0],
+      ["TV / Streaming",0]
+    ]);
+
+  state.events
+    .forEach(
+      event=>{
+
+        const device =
+          getDevice(
+            event
+          );
+
+        counts.set(
+          device,
+          (
+            counts.get(
+              device
+            ) || 0
+          ) + 1
+        );
+
+      }
+    );
+
+  const total =
+    Array
+      .from(
+        counts.values()
+      )
+      .reduce(
+        (
+          a,
+          b
+        ) =>
+          a + b,
+        0
+      );
+
+  const icons = {
+    "Desktop":"▣",
+    "Mobile":"▯",
+    "Tablet":"▭",
+    "TV / Streaming":"▶"
+  };
+
+  container.innerHTML =
+    Array
+      .from(
+        counts.entries()
+      )
+      .map(
+        ([name,count])=>{
+
+          const pct =
+            total
+              ? (
+                  count /
+                  total
+                ) *
+                100
+              : 0;
+
+          return `
+            <div class="device">
+
+              <div class="device-icon">
+                ${icons[name] || "▣"}
+              </div>
+
+              <div>
+
+                <div class="device-name">
+                  ${escapeHtml(name)}
+                </div>
+
+                <div class="device-count">
+                  ${formatNumber(count)}
+                  events
+                </div>
+
+              </div>
+
+              <div class="device-percent">
+                ${pct.toFixed(1)}%
+              </div>
+
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+/* =========================================================
+   TOP PAGES
+========================================================= */
+
+function renderTopPages(){
+
+  const body =
+    document.getElementById(
+      "topPagesBody"
+    );
+
+  const pages =
+    new Map();
+
+  state.events
+    .filter(
+      isPageView
+    )
+    .forEach(
+      event=>{
+
+        const page =
+          event.page_url ||
+          "/";
+
+        if(
+          !pages.has(page)
+        ){
+
+          pages.set(
+            page,
+            {
+              views:0,
+              visitors:new Set(),
+              seconds:0,
+              sessions:new Set()
+            }
+          );
+
+        }
+
+        const item =
+          pages.get(page);
+
+        item.views++;
+
+        const visitor =
+          event.user_id ||
+          event.session_id;
+
+        if(visitor)
+          item.visitors
+            .add(
+              visitor
+            );
+
+        const seconds =
+          Number(
+            event.metadata
+              ?.time_on_page_seconds ||
+            0
+          );
+
+        item.seconds +=
+          Math.max(
+            0,
+            seconds
+          );
+
+        if(
+          event.session_id
+        ){
+
+          item.sessions
+            .add(
+              event.session_id
+            );
+
+        }
+
+      }
+    );
+
+  const rows =
+    Array
+      .from(
+        pages.entries()
+      )
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b[1].views -
+          a[1].views
+      )
+      .slice(
+        0,
+        10
+      );
+
+  if(!rows.length){
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="5">
+          <div class="table-empty">
+            No page-view events yet
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+  body.innerHTML =
+    rows
+      .map(
+        ([page,item])=>{
+
+          const avgSeconds =
+            item.views
+              ? (
+                  item.seconds /
+                  item.views
+                )
+              : 0;
+
+          const minutes =
+            Math.floor(
+              avgSeconds /
+              60
+            );
+
+          const seconds =
+            Math.floor(
+              avgSeconds %
+              60
+            )
+            .toString()
+            .padStart(
+              2,
+              "0"
+            );
+
+          return `
+            <tr>
+
+              <td class="page-url">
+                ${escapeHtml(page)}
+              </td>
+
+              <td>
+                ${formatNumber(
+                  item.views
+                )}
+              </td>
+
+              <td>
+                ${formatNumber(
+                  item.visitors.size
+                )}
+              </td>
+
+              <td>
+                ${String(minutes)
+                  .padStart(2,"0")}:${seconds}
+              </td>
+
+              <td>
+                —
+              </td>
+
+            </tr>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+/* =========================================================
+   LIVE ACTIVITY
+========================================================= */
+
+function renderLive(){
+
+  const live =
+    state.realtime;
+
+  document
+    .getElementById(
+      "liveUsers"
+    )
+    .textContent =
+      formatNumber(
+        live.length
+      );
+
+  const breakdown =
+    new Map();
+
+  live.forEach(
+    item=>{
+
+      const type =
+        item.activity_type ||
+        "browsing";
+
+      breakdown.set(
+        type,
+        (
+          breakdown.get(
+            type
+          ) || 0
+        ) + 1
+      );
+
+    }
+  );
+
+  const total =
+    live.length || 1;
+
+  const container =
+    document.getElementById(
+      "liveBreakdown"
+    );
+
+  const rows =
+    Array
+      .from(
+        breakdown.entries()
+      )
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b[1] -
+          a[1]
+      );
+
+  if(!rows.length){
+
+    container.innerHTML =
+      `
+        <div class="metric-row">
+          <div class="metric-top">
+            <span class="metric-name">
+              No active sessions
+            </span>
+            <span class="metric-number">
+              0
+            </span>
+          </div>
+        </div>
+      `;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    rows
+      .map(
+        ([name,count])=>{
+
+          const pct =
+            (
+              count /
+              total
+            ) *
+            100;
+
+          return `
+            <div class="metric-row">
+
+              <div class="metric-top">
+
+                <span class="metric-name">
+                  ${escapeHtml(name)}
+                </span>
+
+                <span class="metric-number">
+                  ${count}
+                </span>
+
+              </div>
+
+              <div class="bar">
+                <span style="width:${pct}%"></span>
+              </div>
+
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+/* =========================================================
+   INSIGHTS
+========================================================= */
+
+function renderInsights(){
+
+  const container =
+    document.getElementById(
+      "insights"
+    );
+
+  const events =
+    state.events;
+
+  const pageviews =
+    events.filter(
+      isPageView
+    ).length;
+
+  const videos =
+    events.filter(
+      isVideo
+    ).length;
+
+  const members =
+    events.filter(
+      isMemberEvent
+    ).length;
+
+  const engagement =
+    calculateEngagement(
+      events
+    );
+
+  const insights = [];
+
+  if(
+    events.length === 0
+  ){
+
+    insights.push({
+      icon:"●",
+      title:"Analytics is ready",
+      text:
+        "The analytics database is connected. Events will appear here as your CrowRules properties begin sending data."
+    });
+
+  }else{
+
+    if(
+      videos >
+      pageviews * .15
+    ){
+
+      insights.push({
+        icon:"▲",
+        title:"Video activity is strong",
+        text:
+          `${formatNumber(videos)} video-related events were recorded during the selected period.`
+      });
+
+    }
+
+    if(
+      engagement >= 50
+    ){
+
+      insights.push({
+        icon:"◆",
+        title:"Audience engagement is healthy",
+        text:
+          `Calculated session engagement is ${engagement.toFixed(1)}% for the selected period.`
+      });
+
+    }else{
+
+      insights.push({
+        icon:"●",
+        title:"Engagement opportunity detected",
+        text:
+          `Current calculated engagement is ${engagement.toFixed(1)}%.`
+      });
+
+    }
+
+    if(
+      members > 0
+    ){
+
+      insights.push({
+        icon:"✦",
+        title:"Membership activity detected",
+        text:
+          `${formatNumber(members)} membership-related events were recorded.`
+      });
+
+    }
+
+    const topPage =
+      getTopPage();
+
+    if(topPage){
+
+      insights.push({
+        icon:"◆",
+        title:"Top traffic page",
+        text:
+          `${topPage.page} currently leads page-view activity with ${formatNumber(topPage.views)} views.`
+      });
+
+    }
+
+    const properties =
+      new Set(
+        events
+          .map(
+            e =>
+              e.property
+          )
+          .filter(Boolean)
+      );
+
+    if(
+      properties.size > 1
+    ){
+
+      insights.push({
+        icon:"✦",
+        title:"Network-wide activity detected",
+        text:
+          `${properties.size} CrowRules properties are currently represented in analytics.`
+      });
+
+    }
+
+  }
+
+  container.innerHTML =
+    insights
+      .slice(
+        0,
+        5
+      )
+      .map(
+        insight=>`
+          <div class="insight">
+
+            <div class="insight-icon">
+              ${insight.icon}
+            </div>
+
+            <div>
+
+              <div class="insight-title">
+                ${escapeHtml(
+                  insight.title
+                )}
+              </div>
+
+              <div class="insight-text">
+                ${escapeHtml(
+                  insight.text
+                )}
+              </div>
+
+            </div>
+
+          </div>
+        `
+      )
+      .join("");
+
+}
+
+/* =========================================================
+   TOP PAGE HELPER
+========================================================= */
+
+function getTopPage(){
+
+  const pages =
+    new Map();
+
+  state.events
+    .filter(
+      isPageView
+    )
+    .forEach(
+      event=>{
+
+        const page =
+          event.page_url ||
+          "/";
+
+        pages.set(
+          page,
+          (
+            pages.get(
+              page
+            ) || 0
+          ) + 1
+        );
+
+      }
+    );
+
+  const sorted =
+    Array
+      .from(
+        pages.entries()
+      )
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b[1] -
+          a[1]
+      );
+
+  if(!sorted.length)
+    return null;
+
+  return {
+    page:
+      sorted[0][0],
+    views:
+      sorted[0][1]
+  };
+
+}
+
+/* =========================================================
+   DASHBOARD RENDER
+========================================================= */
+
+function renderDashboard(){
+
+  renderStats();
+
+  renderChart();
+
+  renderTrafficSources();
+
+  renderTopContent();
+
+  renderDevices();
+
+  renderTopPages();
+
+  renderLive();
+
+  renderInsights();
+
+}
+
+/* =========================================================
+   REALTIME SUBSCRIPTION
+========================================================= */
+
+function subscribeRealtime(){
+
+  if(!supabaseClient)
+    return;
+
+  if(state.channel){
+
+    try{
+      supabaseClient
+        .removeChannel(
+          state.channel
+        );
+    }catch(error){}
+
+  }
+
+  state.channel =
+    supabaseClient
+      .channel(
+        "crowrules-analytics-events"
+      )
+      .on(
+        "postgres_changes",
+        {
+          event:"INSERT",
+          schema:"public",
+          table:EVENTS_TABLE
+        },
+        payload=>{
+
+          const row =
+            payload.new;
+
+          if(
+            state.property !==
+            "all" &&
+            row.property !==
+            state.property
+          ){
+
+            return;
+
+          }
+
+          state.events.unshift(
+            row
+          );
+
+          if(
+            state.events.length >
+            10000
+          ){
+
+            state.events =
+              state.events.slice(
+                0,
+                10000
+              );
+
+          }
+
+          renderDashboard();
+
+        }
+      )
+      .subscribe(
+        status=>{
+
+          if(
+            status ===
+            "SUBSCRIBED"
+          ){
+
+            setSystemStatus(
+              "online",
+              "ADMIN SYSTEM ONLINE"
+            );
+
+          }
+
+        }
+      );
+
+}
+
+/* =========================================================
+   REALTIME POLLING
+========================================================= */
+
+setInterval(
+  async()=>{
+
+    try{
+
+      state.realtime =
+        await fetchRealtime();
+
+      renderLive();
+
+    }catch(error){
+
+      console.warn(
+        "Realtime refresh failed:",
+        error.message
+      );
+
+    }
+
+  },
+  15000
+);
+
+/* =========================================================
+   REFRESH BUTTON
+========================================================= */
+
+document
+  .getElementById(
+    "refreshBtn"
+  )
+  ?.addEventListener(
+    "click",
+    async()=>{
+
+      toast(
+        "Refreshing analytics…"
+      );
+
+      await refreshAnalytics();
+
+      toast(
+        "Analytics refreshed"
+      );
+
+    }
+  );
+
+document
+  .getElementById(
+    "chartRefresh"
+  )
+  ?.addEventListener(
+    "click",
+    async()=>{
+
+      toast(
+        "Refreshing live analytics…"
+      );
+
+      await refreshAnalytics();
+
+    }
+  );
+
+/* =========================================================
+   CSV
+========================================================= */
+
+function csvEscape(
+  value
+){
+
+  return '"' +
+    String(
+      value ??
+      ""
+    )
+      .replace(
+        /"/g,
+        '""'
+      ) +
+    '"';
+
+}
+
+function exportCSV(){
+
+  const events =
+    state.events;
+
+  const rows = [
+    [
+      "Timestamp",
+      "Event",
+      "Property",
+      "Page",
+      "Session",
+      "User",
+      "Content Type",
+      "Content ID",
+      "Watch Seconds"
+    ]
+  ];
+
+  events
+    .forEach(
+      event=>{
+
+        rows.push([
+          event.created_at,
+          event.event_name,
+          event.property,
+          event.page_url,
+          event.session_id,
+          event.user_id,
+          event.content_type,
+          event.content_id,
+          event.watch_seconds
+        ]);
+
+      }
+    );
+
+  const csv =
+    rows
+      .map(
+        row =>
+          row
+            .map(
+              csvEscape
+            )
+            .join(",")
+      )
+      .join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+  link.href =
+    url;
+
+  link.download =
+    "crowrules-analytics-" +
+    new Date()
+      .toISOString()
+      .slice(
+        0,
+        10
+      ) +
+    ".csv";
+
+  document.body.appendChild(
+    link
+  );
+
+  link.click();
+
+  link.remove();
+
+  URL.revokeObjectURL(
+    url
+  );
+
+  toast(
+    "Analytics CSV exported"
+  );
+
+}
+
+document
+  .getElementById(
+    "exportBtn"
+  )
+  ?.addEventListener(
+    "click",
+    exportCSV
+  );
+
+/* =========================================================
+   ANALYTICS EVENT HELPER
+   Can be reused by CrowRules public pages.
+========================================================= */
+
+async function trackAnalytics(
+  eventName,
+  options = {}
+){
+
+  if(!supabaseClient)
+    return;
+
+  const {
+    property =
+      "all",
+
+    pageUrl =
+      location.pathname,
+
+    contentId =
+      null,
+
+    contentType =
+      null,
+
+    watchSeconds =
+      0,
+
+    durationSeconds =
+      null,
+
+    metadata =
+      {}
+  } =
+    options;
+
+  let userId =
+    null;
+
+  try{
+
+    const {
+      data
+    } =
+      await supabaseClient
+        .auth
+        .getUser();
+
+    userId =
+      data?.user?.id ||
+      null;
+
+  }catch(error){
+
+    userId =
+      null;
+
+  }
+
+  const payload = {
+
+    user_id:
+      userId,
+
+    session_id:
+      state.sessionId,
+
+    event_name:
+      eventName,
+
+    property:
+      property,
+
+    page_url:
+      pageUrl,
+
+    content_id:
+      contentId,
+
+    content_type:
+      contentType,
+
+    watch_seconds:
+      Math.max(
+        0,
+        Number(
+          watchSeconds
+        ) || 0
+      ),
+
+    duration_seconds:
+      durationSeconds === null
+        ? null
+        : Math.max(
+            0,
+            Number(
+              durationSeconds
+            ) || 0
+          ),
+
+    metadata:{
+      ...metadata,
+
+      device:
+        metadata.device ||
+        detectDevice(),
+
+      referrer:
+        metadata.referrer ||
+        document.referrer ||
+        null
+    }
+
+  };
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from(
+        EVENTS_TABLE
+      )
+      .insert(
+        payload
+      );
+
+  if(error){
+
     console.warn(
-      "Analytics data unavailable:",
+      "Analytics event failed:",
       error.message
     );
 
@@ -1946,276 +5551,280 @@ async function refreshAnalytics(){
 
 }
 
-/* CALCULATE FROM EVENTS */
+/* =========================================================
+   DEVICE DETECTION
+========================================================= */
 
-function calculateAnalytics(events){
+function detectDevice(){
 
-  if(!Array.isArray(events)) return;
+  const width =
+    window.innerWidth;
 
-  const visitors =
-    new Set(
-      events
-        .map(e =>
-          e.user_id ||
-          e.session_id
-        )
-        .filter(Boolean)
-    ).size;
+  if(width <= 600)
+    return "mobile";
 
-  const pageviews =
-    events.filter(e =>
-      [
-        "page_view",
-        "pageview"
-      ].includes(
-        String(
-          e.event_name || ""
-        ).toLowerCase()
-      )
-    ).length;
+  if(width <= 1024)
+    return "tablet";
 
-  const videoEvents =
-    events.filter(e =>
-      [
-        "video_watch",
-        "video_play",
-        "watch"
-      ].includes(
-        String(
-          e.event_name || ""
-        ).toLowerCase()
-      )
+  return "desktop";
+
+}
+
+/* =========================================================
+   AUTOMATIC PAGE VIEW
+========================================================= */
+
+function trackPageView(){
+
+  trackAnalytics(
+    "page_view",
+    {
+      property:
+        document.body
+          .dataset
+          .property ||
+        "all",
+
+      pageUrl:
+        location.pathname,
+
+      metadata:{
+        title:
+          document.title,
+
+        device:
+          detectDevice(),
+
+        viewport:
+          window.innerWidth +
+          "x" +
+          window.innerHeight
+      }
+    }
+  );
+
+}
+
+/* =========================================================
+   AUTH CHECK
+========================================================= */
+
+async function checkAuthentication(){
+
+  if(!supabaseClient)
+    return false;
+
+  try{
+
+    const {
+      data
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
+
+    if(
+      data?.session
+    ){
+
+      return true;
+
+    }
+
+    setSystemStatus(
+      "warning",
+      "AUTHENTICATION REQUIRED FOR DASHBOARD DATA"
     );
 
-  const watchSeconds =
-    videoEvents.reduce(
-      (total,event)=>{
+    return false;
 
-        return total +
-          Number(
-            event.watch_seconds ||
-            event.duration_seconds ||
-            0
+  }catch(error){
+
+    console.warn(
+      "Auth check failed:",
+      error.message
+    );
+
+    return false;
+
+  }
+
+}
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(
+  value
+){
+
+  return String(
+    value ??
+    ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+/* =========================================================
+   AUTH STATE LISTENER
+========================================================= */
+
+if(
+  supabaseClient
+){
+
+  supabaseClient
+    .auth
+    .onAuthStateChange(
+      (
+        event,
+        session
+      )=>{
+
+        if(
+          session
+        ){
+
+          setSystemStatus(
+            "online",
+            "ADMIN SYSTEM ONLINE"
           );
 
-      },
-      0
-    );
+          refreshAnalytics();
 
-  const watchHours =
-    watchSeconds / 3600;
+        }else{
 
-  const visitorEl =
-    document.getElementById("visitors");
+          setSystemStatus(
+            "warning",
+            "AUTHENTICATION REQUIRED"
+          );
 
-  const pageviewEl =
-    document.getElementById("pageviews");
-
-  const watchEl =
-    document.getElementById("watchhours");
-
-  if(visitorEl && visitors){
-    visitorEl.textContent =
-      formatNumber(visitors);
-  }
-
-  if(pageviewEl && pageviews){
-    pageviewEl.textContent =
-      formatNumber(pageviews);
-  }
-
-  if(watchEl && watchHours){
-    watchEl.textContent =
-      watchHours.toFixed(1) + "K";
-  }
-
-}
-
-/* FORMAT */
-
-function formatNumber(number){
-
-  if(number >= 1000000){
-
-    return (
-      number / 1000000
-    ).toFixed(1) + "M";
-
-  }
-
-  if(number >= 1000){
-
-    return (
-      number / 1000
-    ).toFixed(1) + "K";
-
-  }
-
-  return number.toLocaleString();
-
-}
-
-/* REFRESH */
-
-document
-  .getElementById("refreshBtn")
-  .addEventListener("click",()=>{
-
-    toast("Refreshing analytics…");
-
-    refreshAnalytics();
-
-    setTimeout(()=>{
-      toast("Analytics refreshed");
-    },700);
-
-  });
-
-document
-  .getElementById("chartRefresh")
-  .addEventListener("click",()=>{
-
-    toast("Live analytics refreshed");
-
-    refreshAnalytics();
-
-  });
-
-/* EXPORT */
-
-document
-  .getElementById("exportBtn")
-  .addEventListener("click",()=>{
-
-    const rows = [
-
-      [
-        "Metric",
-        "Value"
-      ],
-
-      [
-        "Total Visitors",
-        document.getElementById(
-          "visitors"
-        ).textContent
-      ],
-
-      [
-        "Page Views",
-        document.getElementById(
-          "pageviews"
-        ).textContent
-      ],
-
-      [
-        "Watch Hours",
-        document.getElementById(
-          "watchhours"
-        ).textContent
-      ],
-
-      [
-        "New Members",
-        document.getElementById(
-          "newmembers"
-        ).textContent
-      ],
-
-      [
-        "Revenue",
-        document.getElementById(
-          "revenue"
-        ).textContent
-      ],
-
-      [
-        "Engagement",
-        document.getElementById(
-          "engagement"
-        ).textContent
-      ]
-
-    ];
-
-    const csv =
-      rows
-        .map(row =>
-          row.map(value =>
-            '"' +
-            String(value)
-              .replace(/"/g,'""') +
-            '"'
-          ).join(",")
-        )
-        .join("\n");
-
-    const blob =
-      new Blob(
-        [csv],
-        {
-          type:"text/csv;charset=utf-8;"
         }
-      );
 
-    const url =
-      URL.createObjectURL(blob);
-
-    const link =
-      document.createElement("a");
-
-    link.href = url;
-    link.download =
-      "crowrules-analytics-" +
-      new Date()
-        .toISOString()
-        .slice(0,10) +
-      ".csv";
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    URL.revokeObjectURL(url);
-
-    toast("Analytics CSV exported");
-
-  });
-
-/* DEMO LIVE COUNTER */
-
-setInterval(()=>{
-
-  const el =
-    document.getElementById(
-      "liveUsers"
+      }
     );
 
-  if(!el) return;
+}
 
-  const current =
-    Number(
-      el.textContent
-        .replace(/,/g,"")
-    ) || 247;
+/* =========================================================
+   INITIALIZATION
+========================================================= */
 
-  const next =
-    Math.max(
-      1,
-      current +
-      Math.floor(
-        Math.random() * 13
-      ) - 6
+async function initialize(){
+
+  if(!window.supabase){
+
+    setSystemStatus(
+      "offline",
+      "SUPABASE JS FAILED TO LOAD"
     );
 
-  el.textContent =
-    next.toLocaleString();
+    toast(
+      "Supabase JavaScript library failed to load."
+    );
 
-},5000);
+    return;
 
-/* INITIAL LOAD */
+  }
 
-refreshAnalytics();
+  if(!supabaseClient){
+
+    setSystemStatus(
+      "offline",
+      "SUPABASE CLIENT UNAVAILABLE"
+    );
+
+    return;
+
+  }
+
+  try{
+
+    await checkAuthentication();
+
+    subscribeRealtime();
+
+    await refreshAnalytics();
+
+  }catch(error){
+
+    console.error(
+      "Initialization error:",
+      error
+    );
+
+    setSystemStatus(
+      "offline",
+      "ANALYTICS INITIALIZATION FAILED"
+    );
+
+  }
+
+}
+
+initialize();
+
+/*
+  ==========================================================
+  PUBLIC ANALYTICS API
+
+  Other CrowRules pages can call:
+
+    window.CrowRulesAnalytics.track(
+      "page_view",
+      {
+        property:"tv"
+      }
+    );
+
+  or:
+
+    window.CrowRulesAnalytics.track(
+      "video_watch",
+      {
+        property:"tv",
+        contentId:"...",
+        contentType:"episode",
+        watchSeconds:120
+      }
+    );
+
+  ==========================================================
+*/
+
+window.CrowRulesAnalytics = {
+
+  track:
+    trackAnalytics,
+
+  pageView:
+    trackPageView,
+
+  getSessionId:
+    ()=>state.sessionId
+
+};
 
 </script>
 

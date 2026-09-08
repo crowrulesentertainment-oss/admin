@@ -6,7 +6,7 @@
 
 <title>Activity — CrowRules Entertainment Admin</title>
 <meta name="theme-color" content="#050505">
-<meta name="description" content="CrowRules Entertainment Main Admin activity and audit center.">
+<meta name="description" content="CrowRules Entertainment administrative activity and audit center.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,10 +87,6 @@ a{
   color:inherit;
   text-decoration:none;
 }
-
-/* =========================================================
-   APP
-   ========================================================= */
 
 .app{
   min-height:100vh;
@@ -252,6 +248,16 @@ a{
   box-shadow:0 0 12px var(--green);
 }
 
+.dot.warn{
+  background:var(--yellow);
+  box-shadow:0 0 12px var(--yellow);
+}
+
+.dot.off{
+  background:var(--muted2);
+  box-shadow:none;
+}
+
 .system-mini-row{
   display:flex;
   justify-content:space-between;
@@ -259,10 +265,6 @@ a{
   color:var(--muted);
   font-size:10px;
 }
-
-/* =========================================================
-   MAIN / TOPBAR
-   ========================================================= */
 
 .main{
   margin-left:var(--sidebar);
@@ -354,10 +356,6 @@ a{
   font-size:11px;
   font-weight:800;
 }
-
-/* =========================================================
-   CONTENT
-   ========================================================= */
 
 .content{
   max-width:1800px;
@@ -482,10 +480,6 @@ a{
   color:var(--red);
 }
 
-/* =========================================================
-   GRID
-   ========================================================= */
-
 .layout{
   display:grid;
   grid-template-columns:minmax(0,1fr) 350px;
@@ -545,20 +539,10 @@ a{
   color:#fff;
 }
 
-.btn.danger{
-  color:#ff8a99;
-  border-color:rgba(255,82,109,.2);
-  background:rgba(255,82,109,.05);
-}
-
 .btn.small{
   padding:7px 9px;
   font-size:9px;
 }
-
-/* =========================================================
-   TOOLBAR
-   ========================================================= */
 
 .toolbar{
   display:grid;
@@ -587,10 +571,6 @@ a{
   box-shadow:0 0 0 3px rgba(182,108,255,.06);
 }
 
-/* =========================================================
-   ACTIVITY STREAM
-   ========================================================= */
-
 .activity-list{
   min-height:350px;
 }
@@ -598,7 +578,7 @@ a{
 .activity-item{
   position:relative;
   display:grid;
-  grid-template-columns:42px minmax(0,1fr) 95px;
+  grid-template-columns:42px minmax(0,1fr) 110px;
   gap:13px;
   padding:15px 16px;
   border-bottom:1px solid rgba(39,39,47,.75);
@@ -618,6 +598,7 @@ a{
   border:1px solid var(--line);
   background:#111117;
   font-size:16px;
+  font-weight:800;
 }
 
 .activity-icon.create{
@@ -771,19 +752,30 @@ a{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:10px;
   padding:12px 15px;
   color:var(--muted);
   font-size:9px;
 }
 
-/* =========================================================
-   RIGHT SIDE
-   ========================================================= */
+.loading{
+  padding:70px 20px;
+  text-align:center;
+  color:var(--muted);
+}
 
-.side-stack{
-  display:flex;
-  flex-direction:column;
-  gap:17px;
+.loading-spinner{
+  width:28px;
+  height:28px;
+  margin:auto;
+  border:2px solid var(--line2);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
 }
 
 .quick-list{
@@ -897,10 +889,6 @@ a{
 .type-dot.live{background:var(--orange)}
 .type-dot.system{background:#888894}
 
-/* =========================================================
-   MODAL
-   ========================================================= */
-
 .modal{
   position:fixed;
   inset:0;
@@ -983,7 +971,7 @@ a{
 
 .raw-json{
   margin-top:14px;
-  max-height:220px;
+  max-height:260px;
   overflow:auto;
   padding:14px;
   border:1px solid var(--line);
@@ -994,15 +982,12 @@ a{
   white-space:pre-wrap;
 }
 
-/* =========================================================
-   TOAST
-   ========================================================= */
-
 .toast{
   position:fixed;
   right:22px;
   bottom:22px;
   z-index:500;
+  max-width:360px;
   padding:11px 14px;
   border:1px solid var(--line2);
   border-radius:11px;
@@ -1020,10 +1005,6 @@ a{
   transform:translateY(0);
   opacity:1;
 }
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
 
 @media(max-width:1200px){
 
@@ -1043,7 +1024,6 @@ a{
   .toolbar{
     grid-template-columns:1fr 1fr 1fr;
   }
-
 }
 
 @media(max-width:900px){
@@ -1082,7 +1062,6 @@ a{
   .content{
     padding:18px;
   }
-
 }
 
 @media(max-width:650px){
@@ -1135,7 +1114,6 @@ a{
   .detail-grid{
     grid-template-columns:1fr;
   }
-
 }
 
 @media(max-width:430px){
@@ -1147,7 +1125,6 @@ a{
   .toolbar{
     grid-template-columns:1fr;
   }
-
 }
 </style>
 </head>
@@ -1156,599 +1133,174 @@ a{
 
 <div class="app">
 
-  <!-- ======================================================
-       SIDEBAR
-       ====================================================== -->
-
- <!-- ======================================================
-     FULL CROWRULES ENTERTAINMENT ADMIN SIDEBAR
-     ====================================================== -->
+<!-- =========================================================
+     SIDEBAR
+     ========================================================= -->
 
 <aside class="sidebar" id="sidebar">
 
-  <!-- BRAND -->
   <div class="brand">
-
-    <div class="brand-mark">
-      CR
-    </div>
+    <div class="brand-mark">CR</div>
 
     <div class="brand-copy">
       <strong>CROWRULES</strong>
       <span>Entertainment Admin</span>
     </div>
-
   </div>
 
-  <!-- NAVIGATION -->
   <nav class="nav">
 
-    <!-- ==================================================
-         COMMAND CENTER
-         ================================================== -->
-
-    <div class="nav-section">
-      Command Center
-    </div>
-
-    <a href="index.html">
-      <span class="nav-icon">⌂</span>
-      Dashboard
-    </a>
-
-    <a href="analytics.html">
-      <span class="nav-icon">◈</span>
-      Analytics
-    </a>
-
-    <a href="activity.html" class="active">
-      <span class="nav-icon">⌁</span>
-      Activity
-    </a>
-
-    <a href="notifications.html">
-      <span class="nav-icon">♢</span>
-      Notifications
-      <span class="nav-badge">3</span>
-    </a>
-
-    <a href="system-health.html">
-      <span class="nav-icon">◉</span>
-      System Health
-    </a>
-
-
-    <!-- ==================================================
-         CONTENT MANAGEMENT
-         ================================================== -->
-
-    <div class="nav-section">
-      Content Management
-    </div>
-
-    <a href="content.html">
-      <span class="nav-icon">▦</span>
-      All Content
-    </a>
-
-    <a href="pages.html">
-      <span class="nav-icon">▤</span>
-      Pages
-    </a>
-
-    <a href="categories.html">
-      <span class="nav-icon">▥</span>
-      Categories
-    </a>
-
-    <a href="tags.html">
-      <span class="nav-icon">#</span>
-      Tags
-    </a>
-
-    <a href="videos.html">
-      <span class="nav-icon">▶</span>
-      Videos
-    </a>
-
-    <a href="audio.html">
-      <span class="nav-icon">♫</span>
-      Audio
-    </a>
-
-    <a href="articles.html">
-      <span class="nav-icon">▧</span>
-      Articles
-    </a>
-
-
-    <!-- ==================================================
-         CROWRULES TV
-         ================================================== -->
-
-    <div class="nav-section">
-      CrowRules TV
-    </div>
-
-    <a href="tv.html">
-      <span class="nav-icon">▣</span>
-      TV Dashboard
-    </a>
-
-    <a href="shows.html">
-      <span class="nav-icon">▣</span>
-      Shows
-    </a>
-
-    <a href="episodes.html">
-      <span class="nav-icon">▶</span>
-      Episodes
-    </a>
-
-    <a href="movies.html">
-      <span class="nav-icon">◉</span>
-      Movies
-    </a>
-
-    <a href="channels.html">
-      <span class="nav-icon">◫</span>
-      Live Channels
-    </a>
-
-    <a href="playlists.html">
-      <span class="nav-icon">☷</span>
-      Playlists
-    </a>
-
-    <a href="schedule.html">
-      <span class="nav-icon">◷</span>
-      Schedules
-    </a>
-
-    <a href="live.html">
-      <span class="nav-icon">●</span>
-      Live Control
-    </a>
-
-    <a href="guide.html">
-      <span class="nav-icon">☰</span>
-      TV Guide
-    </a>
-
-    <a href="top10.html">
-      <span class="nav-icon">⑩</span>
-      Top 10
-    </a>
-
-
-    <!-- ==================================================
-         PEOPLE & MEMBERS
-         ================================================== -->
-
-    <div class="nav-section">
-      People & Members
-    </div>
-
-    <a href="members.html">
-      <span class="nav-icon">♙</span>
-      Members
-    </a>
-
-    <a href="member.html">
-      <span class="nav-icon">◌</span>
-      Member Profiles
-    </a>
-
-    <a href="membership.html">
-      <span class="nav-icon">◆</span>
-      Membership
-    </a>
-
-    <a href="subscriptions.html">
-      <span class="nav-icon">↻</span>
-      Subscriptions
-    </a>
-
-    <a href="friends.html">
-      <span class="nav-icon">♧</span>
-      Friends
-    </a>
-
-    <a href="points.html">
-      <span class="nav-icon">✦</span>
-      Points
-    </a>
-
-    <a href="leaderboard.html">
-      <span class="nav-icon">♛</span>
-      Leaderboard
-    </a>
-
-
-    <!-- ==================================================
-         CROWSPACE
-         ================================================== -->
-
-    <div class="nav-section">
-      CrowSpace
-    </div>
-
-    <a href="crowspace.html">
-      <span class="nav-icon">☁</span>
-      CrowSpace
-    </a>
-
-    <a href="community.html">
-      <span class="nav-icon">◎</span>
-      Community
-    </a>
-
-    <a href="posts.html">
-      <span class="nav-icon">▰</span>
-      Posts
-    </a>
-
-    <a href="groups.html">
-      <span class="nav-icon">♟</span>
-      Groups
-    </a>
-
-    <a href="moderation.html">
-      <span class="nav-icon">⚑</span>
-      Moderation
-      <span class="nav-badge">5</span>
-    </a>
-
-
-    <!-- ==================================================
-         CREATORS
-         ================================================== -->
-
-    <div class="nav-section">
-      Creators
-    </div>
-
-    <a href="creator.html">
-      <span class="nav-icon">✦</span>
-      Creator Center
-    </a>
-
-    <a href="creator-content.html">
-      <span class="nav-icon">▦</span>
-      Creator Content
-    </a>
-
-    <a href="creator-approvals.html">
-      <span class="nav-icon">✓</span>
-      Creator Approvals
-      <span class="nav-badge">2</span>
-    </a>
-
-
-    <!-- ==================================================
-         CROWRULES RECORDS
-         ================================================== -->
-
-    <div class="nav-section">
-      CrowRules Records
-    </div>
-
-    <a href="records.html">
-      <span class="nav-icon">♫</span>
-      Records Dashboard
-    </a>
-
-    <a href="artists.html">
-      <span class="nav-icon">♬</span>
-      Artists
-    </a>
-
-    <a href="albums.html">
-      <span class="nav-icon">▰</span>
-      Albums
-    </a>
-
-    <a href="tracks.html">
-      <span class="nav-icon">♪</span>
-      Tracks
-    </a>
-
-
-    <!-- ==================================================
-         SPORTS
-         ================================================== -->
-
-    <div class="nav-section">
-      CrowRules Sports
-    </div>
-
-    <a href="sports.html">
-      <span class="nav-icon">◇</span>
-      Sports Center
-    </a>
-
-    <a href="teams.html">
-      <span class="nav-icon">◆</span>
-      Teams
-    </a>
-
-    <a href="games.html">
-      <span class="nav-icon">◈</span>
-      Games
-    </a>
-
-    <a href="standings.html">
-      <span class="nav-icon">☷</span>
-      Standings
-    </a>
-
-    <a href="rankings.html">
-      <span class="nav-icon">♛</span>
-      Rankings
-    </a>
-
-    <a href="pickem.html">
-      <span class="nav-icon">✓</span>
-      Pick'em Challenge
-    </a>
-
-
-    <!-- ==================================================
-         MEMORIALS
-         ================================================== -->
-
-    <div class="nav-section">
-      CrowRules Memorials
-    </div>
-
-    <a href="memorials.html">
-      <span class="nav-icon">✞</span>
-      Memorials
-    </a>
-
-    <a href="memorial-photos.html">
-      <span class="nav-icon">▧</span>
-      Memorial Photos
-    </a>
-
-    <a href="memorial-video-upload.html">
-      <span class="nav-icon">▶</span>
-      Memorial Videos
-    </a>
-
-
-    <!-- ==================================================
-         SPECTRUM AWARDS
-         ================================================== -->
-
-    <div class="nav-section">
-      Spectrum Awards
-    </div>
-
-    <a href="awards.html">
-      <span class="nav-icon">★</span>
-      Awards
-    </a>
-
-    <a href="awards-categories.html">
-      <span class="nav-icon">▥</span>
-      Award Categories
-    </a>
-
-    <a href="nominees.html">
-      <span class="nav-icon">♙</span>
-      Nominees
-    </a>
-
-    <a href="voting.html">
-      <span class="nav-icon">✓</span>
-      Voting
-    </a>
-
-
-    <!-- ==================================================
-         BUSINESS
-         ================================================== -->
-
-    <div class="nav-section">
-      Business
-    </div>
-
-    <a href="business.html">
-      <span class="nav-icon">▣</span>
-      Business Center
-    </a>
-
-    <a href="subscriptions.html">
-      <span class="nav-icon">◆</span>
-      Subscriptions
-    </a>
-
-    <a href="donations.html">
-      <span class="nav-icon">♥</span>
-      Donations
-    </a>
-
-    <a href="shop.html">
-      <span class="nav-icon">▢</span>
-      Shop
-    </a>
-
-    <a href="orders.html">
-      <span class="nav-icon">☷</span>
-      Orders
-    </a>
-
-
-    <!-- ==================================================
-         ADMINISTRATION
-         ================================================== -->
-
-    <div class="nav-section">
-      Administration
-    </div>
-
-    <a href="roles.html">
-      <span class="nav-icon">♙</span>
-      Roles
-    </a>
-
-    <a href="permissions.html">
-      <span class="nav-icon">⚿</span>
-      Permissions
-    </a>
-
-    <a href="authentication.html">
-      <span class="nav-icon">⌁</span>
-      Authentication
-    </a>
-
-    <a href="moderation.html">
-      <span class="nav-icon">⚑</span>
-      Moderation
-    </a>
-
-    <a href="notifications.html">
-      <span class="nav-icon">♢</span>
-      Notifications
-    </a>
-
-    <a href="activity.html" class="active">
-      <span class="nav-icon">⌁</span>
-      Activity
-    </a>
-
-    <a href="logs.html">
-      <span class="nav-icon">≡</span>
-      System Logs
-    </a>
-
-
-    <!-- ==================================================
-         DATABASE & INFRASTRUCTURE
-         ================================================== -->
-
-    <div class="nav-section">
-      Database & Infrastructure
-    </div>
-
-    <a href="database.html">
-      <span class="nav-icon">▤</span>
-      Database
-    </a>
-
-    <a href="storage.html">
-      <span class="nav-icon">▰</span>
-      Storage
-    </a>
-
-    <a href="api.html">
-      <span class="nav-icon">⌘</span>
-      API
-    </a>
-
-    <a href="backups.html">
-      <span class="nav-icon">◫</span>
-      Backups
-    </a>
-
-    <a href="system-health.html">
-      <span class="nav-icon">◉</span>
-      System Health
-    </a>
-
-
-    <!-- ==================================================
-         SYSTEM
-         ================================================== -->
-
-    <div class="nav-section">
-      System
-    </div>
-
-    <a href="settings.html">
-      <span class="nav-icon">⚙</span>
-      Settings
-    </a>
-
-    <a href="profile.html">
-      <span class="nav-icon">◌</span>
-      My Profile
-    </a>
-
-    <a href="login.html">
-      <span class="nav-icon">↪</span>
-      Sign Out
-    </a>
+    <div class="nav-section">Command Center</div>
+
+    <a href="index.html"><span class="nav-icon">⌂</span>Dashboard</a>
+    <a href="analytics.html"><span class="nav-icon">◈</span>Analytics</a>
+    <a href="activity.html" class="active"><span class="nav-icon">⌁</span>Activity</a>
+    <a href="notifications.html"><span class="nav-icon">♢</span>Notifications<span class="nav-badge">3</span></a>
+    <a href="system-health.html"><span class="nav-icon">◉</span>System Health</a>
+
+    <div class="nav-section">Content Management</div>
+
+    <a href="content.html"><span class="nav-icon">▦</span>All Content</a>
+    <a href="pages.html"><span class="nav-icon">▤</span>Pages</a>
+    <a href="categories.html"><span class="nav-icon">▥</span>Categories</a>
+    <a href="tags.html"><span class="nav-icon">#</span>Tags</a>
+    <a href="videos.html"><span class="nav-icon">▶</span>Videos</a>
+    <a href="audio.html"><span class="nav-icon">♫</span>Audio</a>
+    <a href="articles.html"><span class="nav-icon">▧</span>Articles</a>
+
+    <div class="nav-section">CrowRules TV</div>
+
+    <a href="tv.html"><span class="nav-icon">▣</span>TV Dashboard</a>
+    <a href="shows.html"><span class="nav-icon">▣</span>Shows</a>
+    <a href="episodes.html"><span class="nav-icon">▶</span>Episodes</a>
+    <a href="movies.html"><span class="nav-icon">◉</span>Movies</a>
+    <a href="channels.html"><span class="nav-icon">◫</span>Live Channels</a>
+    <a href="playlists.html"><span class="nav-icon">☷</span>Playlists</a>
+    <a href="schedule.html"><span class="nav-icon">◷</span>Schedules</a>
+    <a href="live.html"><span class="nav-icon">●</span>Live Control</a>
+    <a href="guide.html"><span class="nav-icon">☰</span>TV Guide</a>
+    <a href="top10.html"><span class="nav-icon">⑩</span>Top 10</a>
+
+    <div class="nav-section">People & Members</div>
+
+    <a href="members.html"><span class="nav-icon">♙</span>Members</a>
+    <a href="member.html"><span class="nav-icon">◌</span>Member Profiles</a>
+    <a href="membership.html"><span class="nav-icon">◆</span>Membership</a>
+    <a href="subscriptions.html"><span class="nav-icon">↻</span>Subscriptions</a>
+    <a href="friends.html"><span class="nav-icon">♧</span>Friends</a>
+    <a href="points.html"><span class="nav-icon">✦</span>Points</a>
+    <a href="leaderboard.html"><span class="nav-icon">♛</span>Leaderboard</a>
+
+    <div class="nav-section">CrowSpace</div>
+
+    <a href="crowspace.html"><span class="nav-icon">☁</span>CrowSpace</a>
+    <a href="community.html"><span class="nav-icon">◎</span>Community</a>
+    <a href="posts.html"><span class="nav-icon">▰</span>Posts</a>
+    <a href="groups.html"><span class="nav-icon">♟</span>Groups</a>
+    <a href="moderation.html"><span class="nav-icon">⚑</span>Moderation<span class="nav-badge">5</span></a>
+
+    <div class="nav-section">Creators</div>
+
+    <a href="creator.html"><span class="nav-icon">✦</span>Creator Center</a>
+    <a href="creator-content.html"><span class="nav-icon">▦</span>Creator Content</a>
+    <a href="creator-approvals.html"><span class="nav-icon">✓</span>Creator Approvals<span class="nav-badge">2</span></a>
+
+    <div class="nav-section">CrowRules Records</div>
+
+    <a href="records.html"><span class="nav-icon">♫</span>Records Dashboard</a>
+    <a href="artists.html"><span class="nav-icon">♬</span>Artists</a>
+    <a href="albums.html"><span class="nav-icon">▰</span>Albums</a>
+    <a href="tracks.html"><span class="nav-icon">♪</span>Tracks</a>
+
+    <div class="nav-section">CrowRules Sports</div>
+
+    <a href="sports.html"><span class="nav-icon">◇</span>Sports Center</a>
+    <a href="teams.html"><span class="nav-icon">◆</span>Teams</a>
+    <a href="games.html"><span class="nav-icon">◈</span>Games</a>
+    <a href="standings.html"><span class="nav-icon">☷</span>Standings</a>
+    <a href="rankings.html"><span class="nav-icon">♛</span>Rankings</a>
+    <a href="pickem.html"><span class="nav-icon">✓</span>Pick'em Challenge</a>
+
+    <div class="nav-section">CrowRules Memorials</div>
+
+    <a href="memorials.html"><span class="nav-icon">✞</span>Memorials</a>
+    <a href="memorial-photos.html"><span class="nav-icon">▧</span>Memorial Photos</a>
+    <a href="memorial-video-upload.html"><span class="nav-icon">▶</span>Memorial Videos</a>
+
+    <div class="nav-section">Spectrum Awards</div>
+
+    <a href="awards.html"><span class="nav-icon">★</span>Awards</a>
+    <a href="awards-categories.html"><span class="nav-icon">▥</span>Award Categories</a>
+    <a href="nominees.html"><span class="nav-icon">♙</span>Nominees</a>
+    <a href="voting.html"><span class="nav-icon">✓</span>Voting</a>
+
+    <div class="nav-section">Business</div>
+
+    <a href="business.html"><span class="nav-icon">▣</span>Business Center</a>
+    <a href="subscriptions.html"><span class="nav-icon">◆</span>Subscriptions</a>
+    <a href="donations.html"><span class="nav-icon">♥</span>Donations</a>
+    <a href="shop.html"><span class="nav-icon">▢</span>Shop</a>
+    <a href="orders.html"><span class="nav-icon">☷</span>Orders</a>
+
+    <div class="nav-section">Administration</div>
+
+    <a href="roles.html"><span class="nav-icon">♙</span>Roles</a>
+    <a href="permissions.html"><span class="nav-icon">⚿</span>Permissions</a>
+    <a href="authentication.html"><span class="nav-icon">⌁</span>Authentication</a>
+    <a href="moderation.html"><span class="nav-icon">⚑</span>Moderation</a>
+    <a href="notifications.html"><span class="nav-icon">♢</span>Notifications</a>
+    <a href="activity.html" class="active"><span class="nav-icon">⌁</span>Activity</a>
+    <a href="logs.html"><span class="nav-icon">≡</span>System Logs</a>
+
+    <div class="nav-section">Database & Infrastructure</div>
+
+    <a href="database.html"><span class="nav-icon">▤</span>Database</a>
+    <a href="storage.html"><span class="nav-icon">▰</span>Storage</a>
+    <a href="api.html"><span class="nav-icon">⌘</span>API</a>
+    <a href="backups.html"><span class="nav-icon">◫</span>Backups</a>
+    <a href="system-health.html"><span class="nav-icon">◉</span>System Health</a>
+
+    <div class="nav-section">System</div>
+
+    <a href="settings.html"><span class="nav-icon">⚙</span>Settings</a>
+    <a href="profile.html"><span class="nav-icon">◌</span>My Profile</a>
+    <a href="login.html"><span class="nav-icon">↪</span>Sign Out</a>
 
   </nav>
-
-
-  <!-- ======================================================
-       SIDEBAR SYSTEM STATUS
-       ====================================================== -->
 
   <div class="sidebar-bottom">
 
     <div class="system-mini">
 
       <div class="system-mini-title">
-
         SYSTEM STATUS
-
-        <span class="dot"></span>
-
+        <span class="dot" id="sidebarStatusDot"></span>
       </div>
 
       <div class="system-mini-row">
-
-        <span>
-          Core Services
-        </span>
-
-        <strong style="color:var(--green)">
-          ONLINE
-        </strong>
-
+        <span>Core Services</span>
+        <strong style="color:var(--green)">ONLINE</strong>
       </div>
 
       <div class="system-mini-row">
-
-        <span>
-          Supabase
-        </span>
-
-        <strong
-          id="sidebarSupabaseStatus"
-          style="color:var(--green)"
-        >
-          READY
+        <span>Supabase</span>
+        <strong id="sidebarSupabaseStatus" style="color:var(--yellow)">
+          CONNECTING
         </strong>
-
       </div>
 
       <div class="system-mini-row">
-
-        <span>
-          Activity Monitor
-        </span>
-
-        <strong style="color:var(--green)">
-          LIVE
+        <span>Activity Monitor</span>
+        <strong id="sidebarActivityStatus" style="color:var(--yellow)">
+          STARTING
         </strong>
-
       </div>
 
       <div class="system-mini-row">
-
-        <span>
-          Admin Session
-        </span>
-
-        <strong style="color:var(--green)">
-          ACTIVE
+        <span>Admin Session</span>
+        <strong id="sidebarSessionStatus" style="color:var(--yellow)">
+          CHECKING
         </strong>
-
       </div>
 
     </div>
@@ -1757,657 +1309,454 @@ a{
 
 </aside>
 
-  <!-- ======================================================
-       MAIN
-       ====================================================== -->
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
 
-  <main class="main">
+<main class="main">
 
-    <header class="topbar">
+<header class="topbar">
 
-      <div class="top-left">
+  <div class="top-left">
 
-        <button
-          class="mobile-menu"
-          id="mobileMenu"
-          aria-label="Open navigation"
-        >
-          ☰
-        </button>
+    <button
+      class="mobile-menu"
+      id="mobileMenu"
+      aria-label="Open navigation"
+      type="button"
+    >
+      ☰
+    </button>
 
-        <div>
+    <div>
+      <div class="page-title">ACTIVITY</div>
+      <div class="page-subtitle">
+        CrowRules Entertainment administrative activity stream
+      </div>
+    </div>
 
-          <div class="page-title">
-            ACTIVITY
-          </div>
+  </div>
 
-          <div class="page-subtitle">
-            CrowRules Entertainment administrative activity stream
-          </div>
+  <div class="top-actions">
 
-        </div>
+    <button
+      class="top-icon"
+      id="dashboardButton"
+      title="Dashboard"
+      type="button"
+    >
+      ⌂
+    </button>
 
+    <button
+      class="top-icon"
+      id="notificationsButton"
+      title="Notifications"
+      type="button"
+    >
+      ♢
+    </button>
+
+    <div class="clock" id="clock">--:--:--</div>
+
+    <div class="admin-avatar">CR</div>
+
+  </div>
+
+</header>
+
+<section class="content">
+
+<section class="hero">
+
+  <div class="kicker">
+    CROWRULES ADMIN / ACTIVITY MONITOR
+  </div>
+
+  <h1>Activity Command Center</h1>
+
+  <p>
+    Track administrative actions, publishing events, member activity,
+    live-channel changes, system operations and platform events through the
+    CrowRules Entertainment audit stream.
+  </p>
+
+  <div class="hero-status">
+    <span class="dot" id="heroStatusDot"></span>
+    <span id="heroStatusText">Connecting to activity monitor...</span>
+  </div>
+
+</section>
+
+<section class="stats">
+
+  <div class="stat">
+    <div class="stat-label">Total Events</div>
+    <div class="stat-value" id="totalCount">0</div>
+    <div class="stat-meta">Activity history</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Today</div>
+    <div class="stat-value" id="todayCount">0</div>
+    <div class="stat-meta">Events received today</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Administrative</div>
+    <div class="stat-value" id="adminCount">0</div>
+    <div class="stat-meta">Admin operations</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Warnings</div>
+    <div class="stat-value" id="warningCount">0</div>
+    <div class="stat-meta alert">Warnings and critical events</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Monitor</div>
+    <div class="stat-value" style="font-size:19px" id="monitorValue">
+      LIVE
+    </div>
+    <div class="stat-meta good" id="monitorMeta">
+      Realtime ready
+    </div>
+  </div>
+
+</section>
+
+<div class="layout">
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">ACTIVITY STREAM</div>
+      <div class="panel-sub">
+        Recent platform and administrator activity
+      </div>
+    </div>
+
+    <div style="display:flex;gap:7px">
+
+      <button
+        class="btn small"
+        id="refreshButton"
+        type="button"
+      >
+        ↻ Refresh
+      </button>
+
+      <button
+        class="btn small"
+        id="exportButton"
+        type="button"
+      >
+        ⇩ Export
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="toolbar">
+
+    <input
+      class="input"
+      id="searchInput"
+      type="search"
+      autocomplete="off"
+      placeholder="Search activity..."
+      aria-label="Search activity"
+    >
+
+    <select class="select" id="eventFilter" aria-label="Event type">
+      <option value="all">All Events</option>
+      <option value="create">Create</option>
+      <option value="update">Update</option>
+      <option value="publish">Publish</option>
+      <option value="delete">Delete</option>
+      <option value="login">Login</option>
+      <option value="live">Live</option>
+      <option value="system">System</option>
+    </select>
+
+    <select class="select" id="severityFilter" aria-label="Severity">
+      <option value="all">All Severity</option>
+      <option value="info">Info</option>
+      <option value="success">Success</option>
+      <option value="warning">Warning</option>
+      <option value="danger">Critical</option>
+    </select>
+
+    <select class="select" id="sourceFilter" aria-label="Source">
+      <option value="all">All Sources</option>
+      <option value="admin">Admin</option>
+      <option value="content">Content</option>
+      <option value="members">Members</option>
+      <option value="live">Live TV</option>
+      <option value="system">System</option>
+    </select>
+
+    <select class="select" id="sortFilter" aria-label="Sort">
+      <option value="newest">Newest</option>
+      <option value="oldest">Oldest</option>
+      <option value="severity">Severity</option>
+    </select>
+
+  </div>
+
+  <div class="activity-list" id="activityList">
+
+    <div class="loading">
+      <div class="loading-spinner"></div>
+
+      <div style="
+        margin-top:15px;
+        color:#dddde3;
+        font-family:Orbitron,sans-serif;
+        font-size:11px;
+      ">
+        CONNECTING
       </div>
 
-      <div class="top-actions">
-
-        <button
-          class="top-icon"
-          onclick="location.href='index.html'"
-          title="Dashboard"
-        >
-          ⌂
-        </button>
-
-        <button
-          class="top-icon"
-          onclick="location.href='notifications.html'"
-          title="Notifications"
-        >
-          ♢
-        </button>
-
-        <div class="clock" id="clock">
-          --:--:--
-        </div>
-
-        <div class="admin-avatar">
-          CR
-        </div>
-
+      <div style="
+        margin-top:6px;
+        font-size:9px;
+      ">
+        Loading CrowRules activity records...
       </div>
+    </div>
 
-    </header>
+  </div>
 
-    <section class="content">
+  <div class="list-footer">
 
-      <!-- ==================================================
-           HERO
-           ================================================== -->
+    <span id="listSummary">
+      Showing 0 events
+    </span>
 
-      <section class="hero">
+    <span id="connectionSummary">
+      Supabase: connecting
+    </span>
 
-        <div class="kicker">
-          CROWRULES ADMIN / ACTIVITY MONITOR
-        </div>
+  </div>
 
-        <h1>
-          Activity Command Center
-        </h1>
+</section>
 
-        <p>
-          Track administrative actions, publishing events, member activity,
-          live-channel changes, system operations and platform events in a
-          centralized audit stream.
-        </p>
+<aside class="side-stack">
 
-        <div class="hero-status">
-          <span class="dot"></span>
-          Activity monitor online
-        </div>
+<section class="panel">
 
-      </section>
+  <div class="panel-head">
 
-      <!-- ==================================================
-           STATS
-           ================================================== -->
-
-      <section class="stats">
-
-        <div class="stat">
-
-          <div class="stat-label">
-            Total Events
-          </div>
-
-          <div class="stat-value" id="totalCount">
-            0
-          </div>
-
-          <div class="stat-meta">
-            Activity history
-          </div>
-
-        </div>
-
-        <div class="stat">
-
-          <div class="stat-label">
-            Today
-          </div>
-
-          <div class="stat-value" id="todayCount">
-            0
-          </div>
-
-          <div class="stat-meta">
-            Events received today
-          </div>
-
-        </div>
-
-        <div class="stat">
-
-          <div class="stat-label">
-            Administrative
-          </div>
-
-          <div class="stat-value" id="adminCount">
-            0
-          </div>
-
-          <div class="stat-meta">
-            Admin operations
-          </div>
-
-        </div>
-
-        <div class="stat">
-
-          <div class="stat-label">
-            Warnings
-          </div>
-
-          <div class="stat-value" id="warningCount">
-            0
-          </div>
-
-          <div class="stat-meta alert">
-            Requires awareness
-          </div>
-
-        </div>
-
-        <div class="stat">
-
-          <div class="stat-label">
-            Monitor
-          </div>
-
-          <div
-            class="stat-value"
-            style="font-size:19px"
-          >
-            LIVE
-          </div>
-
-          <div class="stat-meta good">
-            Processing events
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- ==================================================
-           MAIN GRID
-           ================================================== -->
-
-      <div class="layout">
-
-        <section class="panel">
-
-          <div class="panel-head">
-
-            <div>
-
-              <div class="panel-title">
-                ACTIVITY STREAM
-              </div>
-
-              <div class="panel-sub">
-                Recent platform and administrator activity
-              </div>
-
-            </div>
-
-            <div style="display:flex;gap:7px">
-
-              <button
-                class="btn small"
-                onclick="refreshActivity()"
-              >
-                ↻ Refresh
-              </button>
-
-              <button
-                class="btn small"
-                onclick="exportActivity()"
-              >
-                ⇩ Export
-              </button>
-
-            </div>
-
-          </div>
-
-          <!-- FILTERS -->
-
-          <div class="toolbar">
-
-            <input
-              class="input"
-              id="searchInput"
-              type="search"
-              placeholder="Search activity..."
-            >
-
-            <select
-              class="select"
-              id="eventFilter"
-            >
-              <option value="all">
-                All Events
-              </option>
-
-              <option value="create">
-                Create
-              </option>
-
-              <option value="update">
-                Update
-              </option>
-
-              <option value="publish">
-                Publish
-              </option>
-
-              <option value="delete">
-                Delete
-              </option>
-
-              <option value="login">
-                Login
-              </option>
-
-              <option value="live">
-                Live
-              </option>
-
-              <option value="system">
-                System
-              </option>
-            </select>
-
-            <select
-              class="select"
-              id="severityFilter"
-            >
-              <option value="all">
-                All Severity
-              </option>
-
-              <option value="info">
-                Info
-              </option>
-
-              <option value="success">
-                Success
-              </option>
-
-              <option value="warning">
-                Warning
-              </option>
-
-              <option value="danger">
-                Critical
-              </option>
-            </select>
-
-            <select
-              class="select"
-              id="sourceFilter"
-            >
-              <option value="all">
-                All Sources
-              </option>
-
-              <option value="admin">
-                Admin
-              </option>
-
-              <option value="content">
-                Content
-              </option>
-
-              <option value="members">
-                Members
-              </option>
-
-              <option value="live">
-                Live TV
-              </option>
-
-              <option value="system">
-                System
-              </option>
-            </select>
-
-            <select
-              class="select"
-              id="sortFilter"
-            >
-              <option value="newest">
-                Newest
-              </option>
-
-              <option value="oldest">
-                Oldest
-              </option>
-
-              <option value="severity">
-                Severity
-              </option>
-            </select>
-
-          </div>
-
-          <div
-            class="activity-list"
-            id="activityList"
-          ></div>
-
-          <div class="list-footer">
-
-            <span id="listSummary">
-              Showing 0 events
-            </span>
-
-            <button
-              class="btn small danger"
-              onclick="clearLocalActivity()"
-            >
-              Clear Demo
-            </button>
-
-          </div>
-
-        </section>
-
-        <!-- ==================================================
-             RIGHT COLUMN
-             ================================================== -->
-
-        <aside class="side-stack">
-
-          <!-- QUICK STATS -->
-
-          <section class="panel">
-
-            <div class="panel-head">
-
-              <div>
-
-                <div class="panel-title">
-                  ACTIVITY SUMMARY
-                </div>
-
-                <div class="panel-sub">
-                  Current event distribution
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="quick-list">
-
-              <div class="quick-row">
-
-                <div class="quick-copy">
-                  <strong>Content Changes</strong>
-                  <span>Shows, episodes and movies</span>
-                </div>
-
-                <div
-                  class="number"
-                  id="contentActivity"
-                >
-                  0
-                </div>
-
-              </div>
-
-              <div class="quick-row">
-
-                <div class="quick-copy">
-                  <strong>Member Activity</strong>
-                  <span>Accounts and profiles</span>
-                </div>
-
-                <div
-                  class="number"
-                  id="memberActivity"
-                >
-                  0
-                </div>
-
-              </div>
-
-              <div class="quick-row">
-
-                <div class="quick-copy">
-                  <strong>Live Events</strong>
-                  <span>Channels and broadcasts</span>
-                </div>
-
-                <div
-                  class="number"
-                  id="liveActivity"
-                >
-                  0
-                </div>
-
-              </div>
-
-              <div class="quick-row">
-
-                <div class="quick-copy">
-                  <strong>System Events</strong>
-                  <span>Infrastructure operations</span>
-                </div>
-
-                <div
-                  class="number"
-                  id="systemActivity"
-                >
-                  0
-                </div>
-
-              </div>
-
-              <div class="quick-row">
-
-                <div class="quick-copy">
-                  <strong>Security Events</strong>
-                  <span>Authentication activity</span>
-                </div>
-
-                <div
-                  class="number"
-                  id="securityActivity"
-                >
-                  0
-                </div>
-
-              </div>
-
-            </div>
-
-          </section>
-
-          <!-- SYSTEM STATUS -->
-
-          <section class="panel">
-
-            <div class="panel-head">
-
-              <div>
-
-                <div class="panel-title">
-                  MONITOR STATUS
-                </div>
-
-                <div class="panel-sub">
-                  Activity infrastructure
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="status-list">
-
-              <div class="status-row">
-
-                <span class="status-name">
-                  Activity Engine
-                </span>
-
-                <span class="status-value">
-                  <i class="status-dot ok"></i>
-                  Online
-                </span>
-
-              </div>
-
-              <div class="status-row">
-
-                <span class="status-name">
-                  Database
-                </span>
-
-                <span
-                  class="status-value"
-                  id="databaseStatus"
-                >
-                  <i class="status-dot warn"></i>
-                  Demo Mode
-                </span>
-
-              </div>
-
-              <div class="status-row">
-
-                <span class="status-name">
-                  Realtime
-                </span>
-
-                <span class="status-value">
-                  <i class="status-dot ok"></i>
-                  Ready
-                </span>
-
-              </div>
-
-              <div class="status-row">
-
-                <span class="status-name">
-                  Audit Queue
-                </span>
-
-                <span class="status-value">
-                  <i class="status-dot ok"></i>
-                  Clear
-                </span>
-
-              </div>
-
-            </div>
-
-          </section>
-
-          <!-- EVENT TYPES -->
-
-          <section class="panel">
-
-            <div class="panel-head">
-
-              <div>
-
-                <div class="panel-title">
-                  EVENT TYPES
-                </div>
-
-                <div class="panel-sub">
-                  Activity classification
-                </div>
-
-              </div>
-
-            </div>
-
-            <div class="event-types">
-
-              <div class="type">
-                <span class="type-dot create"></span>
-                Create
-              </div>
-
-              <div class="type">
-                <span class="type-dot update"></span>
-                Update
-              </div>
-
-              <div class="type">
-                <span class="type-dot publish"></span>
-                Publish
-              </div>
-
-              <div class="type">
-                <span class="type-dot delete"></span>
-                Delete
-              </div>
-
-              <div class="type">
-                <span class="type-dot login"></span>
-                Login
-              </div>
-
-              <div class="type">
-                <span class="type-dot live"></span>
-                Live
-              </div>
-
-              <div class="type">
-                <span class="type-dot system"></span>
-                System
-              </div>
-
-            </div>
-
-          </section>
-
-        </aside>
-
+    <div>
+      <div class="panel-title">ACTIVITY SUMMARY</div>
+      <div class="panel-sub">
+        Current event distribution
       </div>
+    </div>
 
-    </section>
+  </div>
 
-  </main>
+  <div class="quick-list">
+
+    <div class="quick-row">
+      <div class="quick-copy">
+        <strong>Content Changes</strong>
+        <span>Shows, episodes and movies</span>
+      </div>
+      <div class="number" id="contentActivity">0</div>
+    </div>
+
+    <div class="quick-row">
+      <div class="quick-copy">
+        <strong>Member Activity</strong>
+        <span>Accounts and profiles</span>
+      </div>
+      <div class="number" id="memberActivity">0</div>
+    </div>
+
+    <div class="quick-row">
+      <div class="quick-copy">
+        <strong>Live Events</strong>
+        <span>Channels and broadcasts</span>
+      </div>
+      <div class="number" id="liveActivity">0</div>
+    </div>
+
+    <div class="quick-row">
+      <div class="quick-copy">
+        <strong>System Events</strong>
+        <span>Infrastructure operations</span>
+      </div>
+      <div class="number" id="systemActivity">0</div>
+    </div>
+
+    <div class="quick-row">
+      <div class="quick-copy">
+        <strong>Security Events</strong>
+        <span>Authentication activity</span>
+      </div>
+      <div class="number" id="securityActivity">0</div>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">MONITOR STATUS</div>
+      <div class="panel-sub">
+        Activity infrastructure
+      </div>
+    </div>
+
+  </div>
+
+  <div class="status-list">
+
+    <div class="status-row">
+      <span class="status-name">Activity Engine</span>
+      <span class="status-value">
+        <i class="status-dot ok"></i>
+        Online
+      </span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-name">Database</span>
+      <span class="status-value" id="databaseStatus">
+        <i class="status-dot warn"></i>
+        Connecting
+      </span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-name">Realtime</span>
+      <span class="status-value" id="realtimeStatus">
+        <i class="status-dot warn"></i>
+        Connecting
+      </span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-name">Audit Queue</span>
+      <span class="status-value">
+        <i class="status-dot ok"></i>
+        Clear
+      </span>
+    </div>
+
+    <div class="status-row">
+      <span class="status-name">Auth Session</span>
+      <span class="status-value" id="authStatus">
+        <i class="status-dot warn"></i>
+        Checking
+      </span>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">EVENT TYPES</div>
+      <div class="panel-sub">
+        Activity classification
+      </div>
+    </div>
+
+  </div>
+
+  <div class="event-types">
+
+    <div class="type">
+      <span class="type-dot create"></span>
+      Create
+    </div>
+
+    <div class="type">
+      <span class="type-dot update"></span>
+      Update
+    </div>
+
+    <div class="type">
+      <span class="type-dot publish"></span>
+      Publish
+    </div>
+
+    <div class="type">
+      <span class="type-dot delete"></span>
+      Delete
+    </div>
+
+    <div class="type">
+      <span class="type-dot login"></span>
+      Login
+    </div>
+
+    <div class="type">
+      <span class="type-dot live"></span>
+      Live
+    </div>
+
+    <div class="type">
+      <span class="type-dot system"></span>
+      System
+    </div>
+
+  </div>
+
+</section>
+
+</aside>
 
 </div>
 
-<!-- ========================================================
+</section>
+
+</main>
+
+</div>
+
+<!-- =========================================================
      DETAIL MODAL
-     ======================================================== -->
+     ========================================================= -->
 
-<div
-  class="modal"
-  id="detailModal"
->
+<div class="modal" id="detailModal">
 
-  <div class="modal-box">
+  <div
+    class="modal-box"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="detailModalTitle"
+  >
 
     <div class="modal-head">
 
-      <div class="modal-title">
+      <div
+        class="modal-title"
+        id="detailModalTitle"
+      >
         ACTIVITY DETAILS
       </div>
 
       <button
         class="icon-btn"
-        onclick="closeModal()"
+        id="closeModalButton"
+        type="button"
+        aria-label="Close"
       >
         ×
       </button>
@@ -2419,93 +1768,43 @@ a{
       <div class="detail-grid">
 
         <div class="detail-card">
-
-          <div class="detail-label">
-            Event
-          </div>
-
-          <div
-            class="detail-value"
-            id="detailEvent"
-          >
-            —
-          </div>
-
+          <div class="detail-label">Event</div>
+          <div class="detail-value" id="detailEvent">—</div>
         </div>
 
         <div class="detail-card">
-
-          <div class="detail-label">
-            Severity
-          </div>
-
-          <div
-            class="detail-value"
-            id="detailSeverity"
-          >
-            —
-          </div>
-
+          <div class="detail-label">Severity</div>
+          <div class="detail-value" id="detailSeverity">—</div>
         </div>
 
         <div class="detail-card">
-
-          <div class="detail-label">
-            Actor
-          </div>
-
-          <div
-            class="detail-value"
-            id="detailActor"
-          >
-            —
-          </div>
-
+          <div class="detail-label">Actor</div>
+          <div class="detail-value" id="detailActor">—</div>
         </div>
 
         <div class="detail-card">
-
-          <div class="detail-label">
-            Source
-          </div>
-
-          <div
-            class="detail-value"
-            id="detailSource"
-          >
-            —
-          </div>
-
+          <div class="detail-label">Source</div>
+          <div class="detail-value" id="detailSource">—</div>
         </div>
 
         <div class="detail-card">
-
-          <div class="detail-label">
-            Created
-          </div>
-
-          <div
-            class="detail-value"
-            id="detailCreated"
-          >
-            —
-          </div>
-
+          <div class="detail-label">Created</div>
+          <div class="detail-value" id="detailCreated">—</div>
         </div>
 
         <div class="detail-card">
+          <div class="detail-label">Record ID</div>
+          <div class="detail-value" id="detailId">—</div>
+        </div>
 
-          <div class="detail-label">
-            Record ID
-          </div>
+        <div class="detail-card">
+          <div class="detail-label">Record Type</div>
+          <div class="detail-value" id="detailRecordType">—</div>
+        </div>
 
-          <div
-            class="detail-value"
-            id="detailId"
-          >
-            —
-          </div>
-
+        <div class="detail-card">
+          <div class="detail-label">Actor User ID</div>
+          <div class="detail-value" id="detailActorUserId">—</div>
         </div>
 
       </div>
@@ -2522,17 +1821,16 @@ a{
         id="detailJson"
       >{}</pre>
 
-      <div
-        style="
-          margin-top:15px;
-          display:flex;
-          justify-content:flex-end;
-        "
-      >
+      <div style="
+        margin-top:15px;
+        display:flex;
+        justify-content:flex-end;
+      ">
 
         <button
           class="btn"
-          onclick="closeModal()"
+          id="modalCloseBottom"
+          type="button"
         >
           Close
         </button>
@@ -2545,224 +1843,52 @@ a{
 
 </div>
 
-<div
-  class="toast"
-  id="toast"
-></div>
+<div class="toast" id="toast"></div>
 
 <script>
 /* ============================================================
    CROWRULES ENTERTAINMENT
-   MAIN ADMIN — ACTIVITY
+   MAIN ADMIN — ACTIVITY CENTER
+   SUPABASE CONNECTED VERSION
    ============================================================ */
+
+"use strict";
+
+/*
+  Production Supabase configuration.
+
+  The publishable key is intentionally used in this browser page.
+  NEVER put a service_role or secret key here.
+
+  Project:
+  cevylpnoexugwgygvtgu
+*/
 
 const SUPABASE_URL =
-  window.CROWRULES_SUPABASE_URL ||
-  localStorage.getItem("CROWRULES_SUPABASE_URL") ||
-  "";
+  "https://cevylpnoexugwgygvtgu.supabase.co";
 
-const SUPABASE_KEY =
-  window.CROWRULES_SUPABASE_ANON_KEY ||
-  localStorage.getItem("CROWRULES_SUPABASE_ANON_KEY") ||
-  "";
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
 
-const ACTIVITY_TABLE =
-  window.CROWRULES_ACTIVITY_TABLE ||
-  "activity";
+const ACTIVITY_TABLE = "activity";
+const ACTIVITY_LIMIT = 500;
 
 let supabaseClient = null;
-
-if(
-  SUPABASE_URL &&
-  SUPABASE_KEY &&
-  window.supabase
-){
-  try{
-
-    supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-
-  }catch(error){
-
-    console.warn(
-      "Supabase initialization failed:",
-      error
-    );
-
-  }
-}
-
-/* ============================================================
-   DEMO ACTIVITY
-   ============================================================ */
-
-const now = Date.now();
-
-const demoActivity = [
-
-  {
-    id:"activity-001",
-    event_type:"publish",
-    severity:"success",
-    title:"Episode published",
-    description:"A new episode was published to the CrowRules TV catalog.",
-    actor:"Admin",
-    source:"content",
-    created_at:new Date(
-      now - 8 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-002",
-    event_type:"login",
-    severity:"info",
-    title:"Administrator session started",
-    description:"An administrator successfully authenticated with the admin system.",
-    actor:"Administrator",
-    source:"admin",
-    created_at:new Date(
-      now - 17 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-003",
-    event_type:"live",
-    severity:"success",
-    title:"Live channel started",
-    description:"A configured CrowRules TV channel entered live programming.",
-    actor:"Broadcast Engine",
-    source:"live",
-    created_at:new Date(
-      now - 31 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-004",
-    event_type:"update",
-    severity:"info",
-    title:"Show information updated",
-    description:"Show metadata and presentation information were updated.",
-    actor:"Admin",
-    source:"content",
-    created_at:new Date(
-      now - 48 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-005",
-    event_type:"create",
-    severity:"success",
-    title:"New member created",
-    description:"A new member account was added to the CrowRules platform.",
-    actor:"Member System",
-    source:"members",
-    created_at:new Date(
-      now - 72 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-006",
-    event_type:"update",
-    severity:"warning",
-    title:"Schedule adjustment",
-    description:"A programming block was adjusted because of a detected schedule conflict.",
-    actor:"Scheduler",
-    source:"live",
-    created_at:new Date(
-      now - 95 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-007",
-    event_type:"delete",
-    severity:"danger",
-    title:"Content removed",
-    description:"An administrative user removed an unpublished content item.",
-    actor:"Admin",
-    source:"content",
-    created_at:new Date(
-      now - 2 * 60 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-008",
-    event_type:"system",
-    severity:"success",
-    title:"Database health check completed",
-    description:"The automated database health check completed without a critical error.",
-    actor:"System Monitor",
-    source:"system",
-    created_at:new Date(
-      now - 4 * 60 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-009",
-    event_type:"login",
-    severity:"warning",
-    title:"Failed administrator login",
-    description:"An administrator authentication attempt failed.",
-    actor:"Authentication",
-    source:"admin",
-    created_at:new Date(
-      now - 6 * 60 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-010",
-    event_type:"create",
-    severity:"success",
-    title:"Memorial record created",
-    description:"A new memorial record was added to the CrowRules Memorials system.",
-    actor:"Admin",
-    source:"content",
-    created_at:new Date(
-      now - 8 * 60 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-011",
-    event_type:"publish",
-    severity:"success",
-    title:"Movie catalog entry published",
-    description:"A movie catalog entry was made available to the CrowRules TV library.",
-    actor:"Admin",
-    source:"content",
-    created_at:new Date(
-      now - 26 * 60 * 60 * 1000
-    ).toISOString()
-  },
-
-  {
-    id:"activity-012",
-    event_type:"system",
-    severity:"info",
-    title:"Nightly maintenance completed",
-    description:"Scheduled platform maintenance completed successfully.",
-    actor:"System",
-    source:"system",
-    created_at:new Date(
-      now - 36 * 60 * 60 * 1000
-    ).toISOString()
-  }
-
-];
+let realtimeChannel = null;
 
 let activities = [];
 let filteredActivities = [];
+let selectedActivityId = null;
+
+let databaseConnected = false;
+let realtimeConnected = false;
+let authChecked = false;
+
+/* ============================================================
+   DOM
+   ============================================================ */
+
+const $ = id => document.getElementById(id);
 
 /* ============================================================
    HELPERS
@@ -2781,10 +1907,10 @@ function escapeHTML(value){
 
 function normalizeEventType(value){
 
-  const type=String(value || "system")
-    .toLowerCase();
+  const type =
+    String(value || "system").toLowerCase();
 
-  const allowed=[
+  const allowed = [
     "create",
     "update",
     "publish",
@@ -2802,10 +1928,10 @@ function normalizeEventType(value){
 
 function normalizeSeverity(value){
 
-  const severity=String(value || "info")
-    .toLowerCase();
+  const severity =
+    String(value || "info").toLowerCase();
 
-  const allowed=[
+  const allowed = [
     "info",
     "success",
     "warning",
@@ -2820,10 +1946,10 @@ function normalizeSeverity(value){
 
 function normalizeSource(value){
 
-  const source=String(value || "system")
-    .toLowerCase();
+  const source =
+    String(value || "system").toLowerCase();
 
-  const allowed=[
+  const allowed = [
     "admin",
     "content",
     "members",
@@ -2841,77 +1967,73 @@ function normalizeActivity(row,index){
 
   const id =
     row.id ??
-    row.activity_id ??
-    row.event_id ??
-    `supabase-${index}`;
-
-  const eventType =
-    row.event_type ??
-    row.type ??
-    row.action ??
-    row.activity_type ??
-    "system";
-
-  const severity =
-    row.severity ??
-    row.level ??
-    row.priority ??
-    "info";
-
-  const title =
-    row.title ??
-    row.event ??
-    row.action_name ??
-    row.name ??
-    "CrowRules Activity";
-
-  const description =
-    row.description ??
-    row.message ??
-    row.details ??
-    row.body ??
-    row.content ??
-    "A platform activity event was recorded.";
-
-  const actor =
-    row.actor ??
-    row.actor_name ??
-    row.user_name ??
-    row.email ??
-    row.user_id ??
-    "System";
-
-  const source =
-    row.source ??
-    row.module ??
-    row.service ??
-    "system";
-
-  const created =
-    row.created_at ??
-    row.timestamp ??
-    row.occurred_at ??
-    row.date_created ??
-    row.created ??
-    new Date().toISOString();
+    `activity-${index}`;
 
   return {
     ...row,
+
     id:String(id),
-    event_type:normalizeEventType(eventType),
-    severity:normalizeSeverity(severity),
-    title:String(title),
-    description:String(description),
-    actor:String(actor),
-    source:normalizeSource(source),
-    created_at:created
+
+    event_type:
+      normalizeEventType(row.event_type),
+
+    severity:
+      normalizeSeverity(row.severity),
+
+    title:
+      String(
+        row.title ||
+        "CrowRules Activity"
+      ),
+
+    description:
+      String(
+        row.description ||
+        row.message ||
+        row.details ||
+        "A platform activity event was recorded."
+      ),
+
+    actor:
+      String(
+        row.actor ||
+        "System"
+      ),
+
+    actor_user_id:
+      row.actor_user_id
+        ? String(row.actor_user_id)
+        : "",
+
+    source:
+      normalizeSource(row.source),
+
+    record_type:
+      row.record_type
+        ? String(row.record_type)
+        : "",
+
+    record_id:
+      row.record_id
+        ? String(row.record_id)
+        : "",
+
+    metadata:
+      row.metadata &&
+      typeof row.metadata === "object"
+        ? row.metadata
+        : {},
+
+    created_at:
+      row.created_at ||
+      new Date().toISOString()
   };
 
 }
 
 function iconForEvent(type){
 
-  const icons={
+  const icons = {
     create:"+",
     update:"↻",
     publish:"◆",
@@ -2927,7 +2049,7 @@ function iconForEvent(type){
 
 function formatDate(value){
 
-  const d=new Date(value);
+  const d = new Date(value);
 
   if(Number.isNaN(d.getTime())){
     return "Unknown";
@@ -2945,33 +2067,39 @@ function formatDate(value){
 
 function relativeTime(value){
 
-  const timestamp=new Date(value).getTime();
+  const timestamp =
+    new Date(value).getTime();
 
   if(!Number.isFinite(timestamp)){
     return "Unknown";
   }
 
-  const difference=Date.now()-timestamp;
+  const difference =
+    Date.now() - timestamp;
 
-  if(difference < 60*1000){
+  if(difference < 0){
+    return "In the future";
+  }
+
+  if(difference < 60 * 1000){
     return "Just now";
   }
 
-  if(difference < 60*60*1000){
+  if(difference < 60 * 60 * 1000){
     return `${Math.floor(
-      difference/(60*1000)
+      difference / (60 * 1000)
     )}m ago`;
   }
 
-  if(difference < 24*60*60*1000){
+  if(difference < 24 * 60 * 60 * 1000){
     return `${Math.floor(
-      difference/(60*60*1000)
+      difference / (60 * 60 * 1000)
     )}h ago`;
   }
 
-  if(difference < 7*24*60*60*1000){
+  if(difference < 7 * 24 * 60 * 60 * 1000){
     return `${Math.floor(
-      difference/(24*60*60*1000)
+      difference / (24 * 60 * 60 * 1000)
     )}d ago`;
   }
 
@@ -2981,13 +2109,13 @@ function relativeTime(value){
 
 function isToday(value){
 
-  const d=new Date(value);
-  const n=new Date();
+  const d = new Date(value);
+  const n = new Date();
 
   return (
-    d.getFullYear()===n.getFullYear() &&
-    d.getMonth()===n.getMonth() &&
-    d.getDate()===n.getDate()
+    d.getFullYear() === n.getFullYear() &&
+    d.getMonth() === n.getMonth() &&
+    d.getDate() === n.getDate()
   );
 
 }
@@ -3005,10 +2133,9 @@ function severityRank(value){
 
 function showToast(message){
 
-  const toast=
-    document.getElementById("toast");
+  const toast = $("toast");
 
-  toast.textContent=message;
+  toast.textContent = message;
 
   toast.classList.add("show");
 
@@ -3016,27 +2143,120 @@ function showToast(message){
     window.__toastTimer
   );
 
-  window.__toastTimer=setTimeout(()=>{
-    toast.classList.remove("show");
-  },2600);
+  window.__toastTimer =
+    setTimeout(()=>{
+      toast.classList.remove("show");
+    },2800);
 
 }
 
 /* ============================================================
-   SUPABASE
+   SUPABASE INITIALIZATION
    ============================================================ */
 
-async function loadActivity(){
+function initializeSupabase(){
 
-  activities=
-    demoActivity.map(normalizeActivity);
+  if(!window.supabase){
+
+    console.error(
+      "Supabase JavaScript library did not load."
+    );
+
+    updateDatabaseStatus(false,"SDK unavailable");
+
+    return false;
+
+  }
+
+  try{
+
+    supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+          auth:{
+            persistSession:true,
+            autoRefreshToken:true,
+            detectSessionInUrl:true
+          }
+        }
+      );
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "Supabase initialization failed:",
+      error
+    );
+
+    updateDatabaseStatus(false,"Initialization error");
+
+    return false;
+
+  }
+
+}
+
+/* ============================================================
+   DATABASE STATUS
+   ============================================================ */
+
+function updateDatabaseStatus(
+  connected,
+  label = null
+){
+
+  databaseConnected = connected;
+
+  const status = $("databaseStatus");
+
+  if(connected){
+
+    status.innerHTML = `
+      <i class="status-dot ok"></i>
+      Connected
+    `;
+
+    $("sidebarSupabaseStatus").textContent =
+      "ONLINE";
+
+    $("sidebarSupabaseStatus").style.color =
+      "var(--green)";
+
+    $("connectionSummary").textContent =
+      "Supabase: connected";
+
+  }else{
+
+    status.innerHTML = `
+      <i class="status-dot warn"></i>
+      ${escapeHTML(label || "Unavailable")}
+    `;
+
+    $("sidebarSupabaseStatus").textContent =
+      "OFFLINE";
+
+    $("sidebarSupabaseStatus").style.color =
+      "var(--red)";
+
+    $("connectionSummary").textContent =
+      "Supabase: unavailable";
+
+  }
+
+}
+
+/* ============================================================
+   AUTH STATUS
+   ============================================================ */
+
+async function checkAuth(){
 
   if(!supabaseClient){
-
-    updateDatabaseStatus(false);
-    render();
     return;
-
   }
 
   try{
@@ -3044,41 +2264,142 @@ async function loadActivity(){
     const {
       data,
       error
-    }=await supabaseClient
-      .from(ACTIVITY_TABLE)
-      .select("*")
-      .limit(500);
+    } =
+      await supabaseClient.auth.getSession();
 
     if(error){
       throw error;
     }
 
-    if(Array.isArray(data)){
+    authChecked = true;
 
-      activities=
-        data
-          .map(normalizeActivity)
-          .sort((a,b)=>
-            new Date(b.created_at) -
-            new Date(a.created_at)
-          );
+    if(data?.session){
 
-      updateDatabaseStatus(true);
+      $("authStatus").innerHTML = `
+        <i class="status-dot ok"></i>
+        Authenticated
+      `;
+
+      $("sidebarSessionStatus").textContent =
+        "ACTIVE";
+
+      $("sidebarSessionStatus").style.color =
+        "var(--green)";
 
     }else{
 
-      updateDatabaseStatus(false);
+      $("authStatus").innerHTML = `
+        <i class="status-dot warn"></i>
+        Guest
+      `;
+
+      $("sidebarSessionStatus").textContent =
+        "GUEST";
+
+      $("sidebarSessionStatus").style.color =
+        "var(--yellow)";
 
     }
 
   }catch(error){
 
     console.warn(
-      "Activity table unavailable. Using demo activity.",
+      "Auth session check failed:",
       error
     );
 
-    updateDatabaseStatus(false);
+    $("authStatus").innerHTML = `
+      <i class="status-dot warn"></i>
+      Unknown
+    `;
+
+    $("sidebarSessionStatus").textContent =
+      "UNKNOWN";
+
+  }
+
+}
+
+/* ============================================================
+   LOAD ACTIVITY
+   ============================================================ */
+
+async function loadActivity(){
+
+  if(!supabaseClient){
+
+    activities = [];
+
+    updateDatabaseStatus(
+      false,
+      "Unavailable"
+    );
+
+    render();
+
+    return;
+
+  }
+
+  renderLoading();
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(ACTIVITY_TABLE)
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(ACTIVITY_LIMIT);
+
+    if(error){
+      throw error;
+    }
+
+    activities =
+      Array.isArray(data)
+        ? data.map(normalizeActivity)
+        : [];
+
+    updateDatabaseStatus(
+      true
+    );
+
+    updateHeroStatus(
+      true,
+      "Activity monitor online"
+    );
+
+  }catch(error){
+
+    console.error(
+      "Activity query failed:",
+      error
+    );
+
+    activities = [];
+
+    updateDatabaseStatus(
+      false,
+      "Query error"
+    );
+
+    updateHeroStatus(
+      false,
+      "Activity database unavailable"
+    );
+
+    renderDatabaseError(error);
+
+    return;
 
   }
 
@@ -3086,95 +2407,270 @@ async function loadActivity(){
 
 }
 
-function updateDatabaseStatus(connected){
+/* ============================================================
+   REALTIME
+   ============================================================ */
 
-  const el=
-    document.getElementById(
-      "databaseStatus"
+function subscribeToRealtime(){
+
+  if(!supabaseClient){
+    return;
+  }
+
+  if(realtimeChannel){
+
+    try{
+      supabaseClient.removeChannel(
+        realtimeChannel
+      );
+    }catch(error){
+      console.warn(
+        "Could not remove old channel:",
+        error
+      );
+    }
+
+    realtimeChannel = null;
+
+  }
+
+  realtimeChannel =
+    supabaseClient
+      .channel("crowrules-activity-monitor")
+
+      .on(
+        "postgres_changes",
+        {
+          event:"INSERT",
+          schema:"public",
+          table:ACTIVITY_TABLE
+        },
+        payload=>{
+          handleRealtimeInsert(
+            payload.new
+          );
+        }
+      )
+
+      .on(
+        "postgres_changes",
+        {
+          event:"UPDATE",
+          schema:"public",
+          table:ACTIVITY_TABLE
+        },
+        payload=>{
+          handleRealtimeUpdate(
+            payload.new
+          );
+        }
+      )
+
+      .on(
+        "postgres_changes",
+        {
+          event:"DELETE",
+          schema:"public",
+          table:ACTIVITY_TABLE
+        },
+        payload=>{
+          handleRealtimeDelete(
+            payload.old
+          );
+        }
+      )
+
+      .subscribe(
+        (status,error)=>{
+
+          if(status === "SUBSCRIBED"){
+
+            realtimeConnected = true;
+
+            updateRealtimeStatus(
+              true,
+              "Connected"
+            );
+
+            $("monitorValue").textContent =
+              "LIVE";
+
+            $("monitorMeta").textContent =
+              "Realtime monitoring";
+
+            $("sidebarActivityStatus").textContent =
+              "LIVE";
+
+            $("sidebarActivityStatus").style.color =
+              "var(--green)";
+
+          }else if(
+            status === "CHANNEL_ERROR" ||
+            status === "TIMED_OUT"
+          ){
+
+            realtimeConnected = false;
+
+            console.warn(
+              "Realtime error:",
+              error
+            );
+
+            updateRealtimeStatus(
+              false,
+              "Offline"
+            );
+
+            $("monitorValue").textContent =
+              "READY";
+
+            $("monitorMeta").textContent =
+              "Realtime unavailable";
+
+            $("sidebarActivityStatus").textContent =
+              "OFFLINE";
+
+            $("sidebarActivityStatus").style.color =
+              "var(--yellow)";
+
+          }
+
+        }
+      );
+
+}
+
+function handleRealtimeInsert(row){
+
+  const item =
+    normalizeActivity(row);
+
+  const existing =
+    activities.find(
+      x => x.id === item.id
     );
 
-  if(connected){
+  if(existing){
+    return;
+  }
 
-    el.innerHTML=`
-      <i class="status-dot ok"></i>
-      Connected
-    `;
+  activities.unshift(item);
+
+  if(
+    activities.length >
+    ACTIVITY_LIMIT
+  ){
+    activities =
+      activities.slice(
+        0,
+        ACTIVITY_LIMIT
+      );
+  }
+
+  render();
+
+  showToast(
+    `New activity: ${item.title}`
+  );
+
+}
+
+function handleRealtimeUpdate(row){
+
+  const item =
+    normalizeActivity(row);
+
+  const index =
+    activities.findIndex(
+      x => x.id === item.id
+    );
+
+  if(index === -1){
+
+    activities.unshift(item);
 
   }else{
 
-    el.innerHTML=`
-      <i class="status-dot warn"></i>
-      Demo Mode
-    `;
+    activities[index] = item;
 
   }
+
+  render();
+
+}
+
+function handleRealtimeDelete(row){
+
+  const id =
+    String(
+      row?.id || ""
+    );
+
+  activities =
+    activities.filter(
+      item =>
+        String(item.id) !== id
+    );
+
+  render();
 
 }
 
 /* ============================================================
-   FILTERS
+   FILTERING
    ============================================================ */
 
 function applyFilters(){
 
-  const search=
-    document
-      .getElementById("searchInput")
+  const search =
+    $("searchInput")
       .value
       .trim()
       .toLowerCase();
 
-  const eventType=
-    document
-      .getElementById("eventFilter")
-      .value;
+  const eventType =
+    $("eventFilter").value;
 
-  const severity=
-    document
-      .getElementById("severityFilter")
-      .value;
+  const severity =
+    $("severityFilter").value;
 
-  const source=
-    document
-      .getElementById("sourceFilter")
-      .value;
+  const source =
+    $("sourceFilter").value;
 
-  const sort=
-    document
-      .getElementById("sortFilter")
-      .value;
+  const sort =
+    $("sortFilter").value;
 
-  filteredActivities=
+  filteredActivities =
     activities.filter(item=>{
 
-      const searchMatch=
+      const haystack = [
+        item.title,
+        item.description,
+        item.actor,
+        item.source,
+        item.record_type,
+        item.record_id
+      ]
+      .join(" ")
+      .toLowerCase();
+
+      const searchMatch =
         !search ||
-        item.title
-          .toLowerCase()
-          .includes(search) ||
-        item.description
-          .toLowerCase()
-          .includes(search) ||
-        item.actor
-          .toLowerCase()
-          .includes(search) ||
-        item.source
-          .toLowerCase()
-          .includes(search);
+        haystack.includes(search);
 
-      const eventMatch=
-        eventType==="all" ||
-        item.event_type===eventType;
+      const eventMatch =
+        eventType === "all" ||
+        item.event_type === eventType;
 
-      const severityMatch=
-        severity==="all" ||
-        item.severity===severity;
+      const severityMatch =
+        severity === "all" ||
+        item.severity === severity;
 
-      const sourceMatch=
-        source==="all" ||
-        item.source===source;
+      const sourceMatch =
+        source === "all" ||
+        item.source === source;
 
-      return(
+      return (
         searchMatch &&
         eventMatch &&
         severityMatch &&
@@ -3183,25 +2679,28 @@ function applyFilters(){
 
     });
 
-  if(sort==="oldest"){
+  if(sort === "oldest"){
 
-    filteredActivities.sort((a,b)=>
-      new Date(a.created_at) -
-      new Date(b.created_at)
+    filteredActivities.sort(
+      (a,b)=>
+        new Date(a.created_at) -
+        new Date(b.created_at)
     );
 
-  }else if(sort==="severity"){
+  }else if(sort === "severity"){
 
-    filteredActivities.sort((a,b)=>
-      severityRank(b.severity) -
-      severityRank(a.severity)
+    filteredActivities.sort(
+      (a,b)=>
+        severityRank(b.severity) -
+        severityRank(a.severity)
     );
 
   }else{
 
-    filteredActivities.sort((a,b)=>
-      new Date(b.created_at) -
-      new Date(a.created_at)
+    filteredActivities.sort(
+      (a,b)=>
+        new Date(b.created_at) -
+        new Date(a.created_at)
     );
 
   }
@@ -3217,20 +2716,104 @@ function applyFilters(){
 function render(){
 
   updateStats();
+
   applyFilters();
+
+}
+
+function renderLoading(){
+
+  $("activityList").innerHTML = `
+    <div class="loading">
+      <div class="loading-spinner"></div>
+
+      <div style="
+        margin-top:15px;
+        color:#dddde3;
+        font-family:Orbitron,sans-serif;
+        font-size:11px;
+      ">
+        LOADING ACTIVITY
+      </div>
+
+      <div style="
+        margin-top:6px;
+        font-size:9px;
+      ">
+        Reading the CrowRules audit stream...
+      </div>
+    </div>
+  `;
+
+}
+
+function renderDatabaseError(error){
+
+  $("activityList").innerHTML = `
+    <div class="loading">
+
+      <div style="
+        font-size:30px;
+        color:var(--red);
+        opacity:.8;
+      ">
+        !
+      </div>
+
+      <div style="
+        margin-top:12px;
+        color:#dddde3;
+        font-family:Orbitron,sans-serif;
+        font-size:11px;
+      ">
+        ACTIVITY DATABASE UNAVAILABLE
+      </div>
+
+      <div style="
+        max-width:520px;
+        margin:8px auto 0;
+        font-size:9px;
+        line-height:1.7;
+      ">
+        The Activity Center could not read the
+        <strong>public.activity</strong> table.
+      </div>
+
+      <button
+        class="btn small primary"
+        type="button"
+        style="margin-top:15px"
+        onclick="refreshActivity()"
+      >
+        Retry Connection
+      </button>
+
+      <div style="
+        max-width:620px;
+        margin:15px auto 0;
+        color:var(--muted2);
+        font:8px/1.6 Consolas,monospace;
+        word-break:break-word;
+      ">
+        ${escapeHTML(error?.message || "Unknown Supabase error")}
+      </div>
+
+    </div>
+  `;
+
+  $("listSummary").textContent =
+    "Activity could not be loaded";
 
 }
 
 function renderList(){
 
-  const list=
-    document.getElementById(
-      "activityList"
-    );
+  const list =
+    $("activityList");
 
   if(!filteredActivities.length){
 
-    list.innerHTML=`
+    list.innerHTML = `
       <div style="
         padding:70px 20px;
         text-align:center;
@@ -3250,14 +2833,20 @@ function renderList(){
           font-family:Orbitron,sans-serif;
           font-size:11px;
         ">
-          NO ACTIVITY FOUND
+          ${activities.length
+            ? "NO MATCHING ACTIVITY"
+            : "NO ACTIVITY RECORDED"}
         </div>
 
         <div style="
           margin-top:6px;
           font-size:9px;
         ">
-          Try changing your search or filters.
+          ${
+            activities.length
+              ? "Try changing your search or filters."
+              : "New audit events will appear here automatically."
+          }
         </div>
 
       </div>
@@ -3265,17 +2854,29 @@ function renderList(){
 
   }else{
 
-    list.innerHTML=
+    list.innerHTML =
       filteredActivities
         .map(item=>{
 
+          const safeId =
+            encodeURIComponent(
+              item.id
+            );
+
           return `
-            <article class="activity-item">
+            <article
+              class="activity-item"
+              data-activity-id="${escapeHTML(item.id)}"
+            >
 
               <div class="activity-icon ${escapeHTML(
                 item.event_type
               )}">
-                ${iconForEvent(item.event_type)}
+                ${escapeHTML(
+                  iconForEvent(
+                    item.event_type
+                  )
+                )}
               </div>
 
               <div>
@@ -3312,17 +2913,34 @@ function renderList(){
 
                   <span>
                     ◷ ${escapeHTML(
-                      relativeTime(item.created_at)
+                      relativeTime(
+                        item.created_at
+                      )
                     )}
                   </span>
+
+                  ${
+                    item.record_type
+                      ? `
+                        <span>
+                          ▫ ${escapeHTML(
+                            item.record_type
+                          )}
+                        </span>
+                      `
+                      : ""
+                  }
 
                 </div>
 
               </div>
 
               <div class="activity-time">
+
                 ${escapeHTML(
-                  formatDate(item.created_at)
+                  formatDate(
+                    item.created_at
+                  )
                 )}
 
                 <div
@@ -3331,11 +2949,11 @@ function renderList(){
                 >
 
                   <button
-                    class="icon-btn"
+                    class="icon-btn activity-detail-button"
+                    type="button"
                     title="View details"
-                    onclick="openActivity('${escapeHTML(
-                      item.id
-                    )}')"
+                    aria-label="View activity details"
+                    data-id="${safeId}"
                   >
                     ⌕
                   </button>
@@ -3352,9 +2970,7 @@ function renderList(){
 
   }
 
-  document.getElementById(
-    "listSummary"
-  ).textContent=
+  $("listSummary").textContent =
     `Showing ${filteredActivities.length} of ${activities.length} events`;
 
 }
@@ -3365,150 +2981,223 @@ function renderList(){
 
 function updateStats(){
 
-  const total=activities.length;
+  const total =
+    activities.length;
 
-  const today=activities.filter(item=>
-    isToday(item.created_at)
-  ).length;
+  const today =
+    activities.filter(
+      item =>
+        isToday(item.created_at)
+    ).length;
 
-  const admin=activities.filter(item=>
-    item.source==="admin"
-  ).length;
+  const admin =
+    activities.filter(
+      item =>
+        item.source === "admin"
+    ).length;
 
-  const warnings=activities.filter(item=>
-    item.severity==="warning" ||
-    item.severity==="danger"
-  ).length;
+  const warnings =
+    activities.filter(
+      item =>
+        item.severity === "warning" ||
+        item.severity === "danger"
+    ).length;
 
-  const content=activities.filter(item=>
-    item.source==="content"
-  ).length;
+  const content =
+    activities.filter(
+      item =>
+        item.source === "content"
+    ).length;
 
-  const members=activities.filter(item=>
-    item.source==="members"
-  ).length;
+  const members =
+    activities.filter(
+      item =>
+        item.source === "members"
+    ).length;
 
-  const live=activities.filter(item=>
-    item.source==="live"
-  ).length;
+  const live =
+    activities.filter(
+      item =>
+        item.source === "live"
+    ).length;
 
-  const system=activities.filter(item=>
-    item.source==="system"
-  ).length;
+  const system =
+    activities.filter(
+      item =>
+        item.source === "system"
+    ).length;
 
-  const security=activities.filter(item=>
-    item.event_type==="login"
-  ).length;
+  const security =
+    activities.filter(
+      item =>
+        item.event_type === "login"
+    ).length;
 
-  document.getElementById(
-    "totalCount"
-  ).textContent=total;
+  $("totalCount").textContent =
+    total;
 
-  document.getElementById(
-    "todayCount"
-  ).textContent=today;
+  $("todayCount").textContent =
+    today;
 
-  document.getElementById(
-    "adminCount"
-  ).textContent=admin;
+  $("adminCount").textContent =
+    admin;
 
-  document.getElementById(
-    "warningCount"
-  ).textContent=warnings;
+  $("warningCount").textContent =
+    warnings;
 
-  document.getElementById(
-    "contentActivity"
-  ).textContent=content;
+  $("contentActivity").textContent =
+    content;
 
-  document.getElementById(
-    "memberActivity"
-  ).textContent=members;
+  $("memberActivity").textContent =
+    members;
 
-  document.getElementById(
-    "liveActivity"
-  ).textContent=live;
+  $("liveActivity").textContent =
+    live;
 
-  document.getElementById(
-    "systemActivity"
-  ).textContent=system;
+  $("systemActivity").textContent =
+    system;
 
-  document.getElementById(
-    "securityActivity"
-  ).textContent=security;
+  $("securityActivity").textContent =
+    security;
 
 }
 
 /* ============================================================
-   DETAIL
+   HERO / REALTIME STATUS
+   ============================================================ */
+
+function updateHeroStatus(
+  online,
+  message
+){
+
+  const dot =
+    $("heroStatusDot");
+
+  const text =
+    $("heroStatusText");
+
+  if(online){
+
+    dot.className =
+      "dot";
+
+    text.textContent =
+      message;
+
+  }else{
+
+    dot.className =
+      "dot warn";
+
+    text.textContent =
+      message;
+
+  }
+
+}
+
+function updateRealtimeStatus(
+  connected,
+  label
+){
+
+  realtimeConnected =
+    connected;
+
+  const el =
+    $("realtimeStatus");
+
+  if(connected){
+
+    el.innerHTML = `
+      <i class="status-dot ok"></i>
+      ${escapeHTML(label)}
+    `;
+
+  }else{
+
+    el.innerHTML = `
+      <i class="status-dot warn"></i>
+      ${escapeHTML(label)}
+    `;
+
+  }
+
+}
+
+/* ============================================================
+   DETAIL MODAL
    ============================================================ */
 
 function openActivity(id){
 
-  const item=
+  const item =
     activities.find(
-      activity=>
-        String(activity.id)===String(id)
+      activity =>
+        String(activity.id) ===
+        String(id)
     );
 
   if(!item){
     return;
   }
 
-  document.getElementById(
-    "detailEvent"
-  ).textContent=
-    `${item.title} (${item.event_type.toUpperCase()})`;
-
-  document.getElementById(
-    "detailSeverity"
-  ).textContent=
-    item.severity.toUpperCase();
-
-  document.getElementById(
-    "detailActor"
-  ).textContent=
-    item.actor;
-
-  document.getElementById(
-    "detailSource"
-  ).textContent=
-    item.source;
-
-  document.getElementById(
-    "detailCreated"
-  ).textContent=
-    formatDate(item.created_at);
-
-  document.getElementById(
-    "detailId"
-  ).textContent=
+  selectedActivityId =
     item.id;
 
-  document.getElementById(
-    "detailMessage"
-  ).textContent=
-    item.description;
+  $("detailEvent").textContent =
+    `${item.title} (${item.event_type.toUpperCase()})`;
 
-  document.getElementById(
-    "detailJson"
-  ).textContent=
+  $("detailSeverity").textContent =
+    item.severity.toUpperCase();
+
+  $("detailActor").textContent =
+    item.actor || "System";
+
+  $("detailSource").textContent =
+    item.source || "system";
+
+  $("detailCreated").textContent =
+    formatDate(
+      item.created_at
+    );
+
+  $("detailId").textContent =
+    item.id;
+
+  $("detailRecordType").textContent =
+    item.record_type || "—";
+
+  $("detailActorUserId").textContent =
+    item.actor_user_id || "—";
+
+  $("detailMessage").textContent =
+    item.description ||
+    "No description provided.";
+
+  $("detailJson").textContent =
     JSON.stringify(
       item,
       null,
       2
     );
 
-  document
-    .getElementById("detailModal")
+  $("detailModal")
     .classList.add("open");
+
+  $("closeModalButton")
+    .focus();
 
 }
 
 function closeModal(){
 
-  document
-    .getElementById("detailModal")
+  $("detailModal")
     .classList.remove("open");
+
+  selectedActivityId =
+    null;
 
 }
 
@@ -3524,14 +3213,18 @@ async function refreshActivity(){
 
   await loadActivity();
 
-  showToast(
-    "Activity stream refreshed."
-  );
+  if(databaseConnected){
+
+    showToast(
+      "Activity stream refreshed."
+    );
+
+  }
 
 }
 
 /* ============================================================
-   EXPORT
+   CSV EXPORT
    ============================================================ */
 
 function csvEscape(value){
@@ -3553,37 +3246,56 @@ function exportActivity(){
 
   }
 
-  const headers=[
+  const headers = [
     "ID",
     "Event Type",
     "Severity",
     "Title",
     "Description",
     "Actor",
+    "Actor User ID",
     "Source",
-    "Created At"
+    "Record Type",
+    "Record ID",
+    "Created At",
+    "Metadata"
   ];
 
-  const rows=
-    filteredActivities.map(item=>[
-      item.id,
-      item.event_type,
-      item.severity,
-      item.title,
-      item.description,
-      item.actor,
-      item.source,
-      item.created_at
-    ]);
+  const rows =
+    filteredActivities.map(
+      item=>[
+        item.id,
+        item.event_type,
+        item.severity,
+        item.title,
+        item.description,
+        item.actor,
+        item.actor_user_id,
+        item.source,
+        item.record_type,
+        item.record_id,
+        item.created_at,
+        JSON.stringify(
+          item.metadata || {}
+        )
+      ]
+    );
 
-  const csv=[
-    headers.map(csvEscape).join(","),
-    ...rows.map(row=>
-      row.map(csvEscape).join(",")
+  const csv = [
+    headers
+      .map(csvEscape)
+      .join(","),
+
+    ...rows.map(
+      row =>
+        row
+          .map(csvEscape)
+          .join(",")
     )
+
   ].join("\n");
 
-  const blob=
+  const blob =
     new Blob(
       [csv],
       {
@@ -3591,15 +3303,16 @@ function exportActivity(){
       }
     );
 
-  const url=
+  const url =
     URL.createObjectURL(blob);
 
-  const link=
+  const link =
     document.createElement("a");
 
-  link.href=url;
+  link.href =
+    url;
 
-  link.download=
+  link.download =
     `crowrules-activity-${new Date()
       .toISOString()
       .slice(0,10)}.csv`;
@@ -3619,155 +3332,130 @@ function exportActivity(){
 }
 
 /* ============================================================
-   DEMO CLEAR
+   EVENT DELEGATION
    ============================================================ */
 
-function clearLocalActivity(){
+$("activityList")
+  .addEventListener(
+    "click",
+    event=>{
 
-  if(supabaseClient){
+      const button =
+        event.target.closest(
+          ".activity-detail-button"
+        );
 
-    showToast(
-      "Connected activity data is read-only from this page."
-    );
+      if(!button){
+        return;
+      }
 
-    return;
+      const encodedId =
+        button.dataset.id;
 
-  }
+      if(!encodedId){
+        return;
+      }
 
-  activities=[];
+      let id;
 
-  render();
+      try{
 
-  showToast(
-    "Demo activity cleared."
+        id =
+          decodeURIComponent(
+            encodedId
+          );
+
+      }catch(error){
+
+        id =
+          encodedId;
+
+      }
+
+      openActivity(id);
+
+    }
   );
-
-}
 
 /* ============================================================
    FILTER EVENTS
    ============================================================ */
 
-document
-  .getElementById("searchInput")
-  .addEventListener(
-    "input",
+[
+  "searchInput",
+  "eventFilter",
+  "severityFilter",
+  "sourceFilter",
+  "sortFilter"
+].forEach(id=>{
+
+  $(id).addEventListener(
+    id === "searchInput"
+      ? "input"
+      : "change",
     applyFilters
   );
 
-document
-  .getElementById("eventFilter")
-  .addEventListener(
-    "change",
-    applyFilters
-  );
-
-document
-  .getElementById("severityFilter")
-  .addEventListener(
-    "change",
-    applyFilters
-  );
-
-document
-  .getElementById("sourceFilter")
-  .addEventListener(
-    "change",
-    applyFilters
-  );
-
-document
-  .getElementById("sortFilter")
-  .addEventListener(
-    "change",
-    applyFilters
-  );
+});
 
 /* ============================================================
-   CLOCK
+   BUTTONS
    ============================================================ */
 
-function updateClock(){
+$("refreshButton")
+  .addEventListener(
+    "click",
+    refreshActivity
+  );
 
-  const clock=
-    document.getElementById(
-      "clock"
-    );
+$("exportButton")
+  .addEventListener(
+    "click",
+    exportActivity
+  );
 
-  clock.textContent=
-    new Date().toLocaleTimeString([],{
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit"
-    });
-
-}
-
-setInterval(
-  updateClock,
-  1000
-);
-
-updateClock();
-
-/* ============================================================
-   MOBILE NAV
-   ============================================================ */
-
-document
-  .getElementById("mobileMenu")
+$("dashboardButton")
   .addEventListener(
     "click",
     ()=>{
-      document
-        .getElementById("sidebar")
-        .classList.toggle("open");
+      location.href =
+        "index.html";
     }
   );
 
-document.addEventListener(
-  "click",
-  event=>{
-
-    const sidebar=
-      document.getElementById(
-        "sidebar"
-      );
-
-    const button=
-      document.getElementById(
-        "mobileMenu"
-      );
-
-    if(
-      window.innerWidth<=900 &&
-      sidebar.classList.contains("open") &&
-      !sidebar.contains(event.target) &&
-      !button.contains(event.target)
-    ){
-
-      sidebar.classList.remove(
-        "open"
-      );
-
+$("notificationsButton")
+  .addEventListener(
+    "click",
+    ()=>{
+      location.href =
+        "notifications.html";
     }
-
-  }
-);
+  );
 
 /* ============================================================
-   MODAL
+   MODAL EVENTS
    ============================================================ */
 
-document
-  .getElementById("detailModal")
+$("closeModalButton")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+$("modalCloseBottom")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+$("detailModal")
   .addEventListener(
     "click",
     event=>{
 
       if(
-        event.target.id===
-        "detailModal"
+        event.target ===
+        $("detailModal")
       ){
 
         closeModal();
@@ -3781,8 +3469,147 @@ document.addEventListener(
   "keydown",
   event=>{
 
-    if(event.key==="Escape"){
+    if(
+      event.key ===
+      "Escape"
+    ){
+
       closeModal();
+
+    }
+
+  }
+);
+
+/* ============================================================
+   CLOCK
+   ============================================================ */
+
+function updateClock(){
+
+  $("clock").textContent =
+    new Date().toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+}
+
+setInterval(
+  updateClock,
+  1000
+);
+
+updateClock();
+
+/* ============================================================
+   RELATIVE TIME REFRESH
+   ============================================================ */
+
+setInterval(
+  ()=>{
+    if(activities.length){
+      renderList();
+    }
+  },
+  30000
+);
+
+/* ============================================================
+   MOBILE NAV
+   ============================================================ */
+
+$("mobileMenu")
+  .addEventListener(
+    "click",
+    ()=>{
+      $("sidebar")
+        .classList.toggle("open");
+    }
+  );
+
+document.addEventListener(
+  "click",
+  event=>{
+
+    const sidebar =
+      $("sidebar");
+
+    const button =
+      $("mobileMenu");
+
+    if(
+      window.innerWidth <= 900 &&
+      sidebar.classList.contains("open") &&
+      !sidebar.contains(
+        event.target
+      ) &&
+      !button.contains(
+        event.target
+      )
+    ){
+
+      sidebar.classList.remove(
+        "open"
+      );
+
+    }
+
+  }
+);
+
+/* ============================================================
+   AUTH STATE LISTENER
+   ============================================================ */
+
+function listenForAuthChanges(){
+
+  if(!supabaseClient){
+    return;
+  }
+
+  supabaseClient.auth.onAuthStateChange(
+    (_event,_session)=>{
+
+      checkAuth();
+
+    }
+  );
+
+}
+
+/* ============================================================
+   CLEANUP
+   ============================================================ */
+
+window.addEventListener(
+  "beforeunload",
+  ()=>{
+
+    if(
+      supabaseClient &&
+      realtimeChannel
+    ){
+
+      try{
+
+        supabaseClient.removeChannel(
+          realtimeChannel
+        );
+
+      }catch(error){
+
+        console.warn(
+          "Realtime cleanup failed:",
+          error
+        );
+
+      }
+
     }
 
   }
@@ -3792,25 +3619,39 @@ document.addEventListener(
    INITIALIZE
    ============================================================ */
 
-loadActivity();
+async function initialize(){
 
-/*
-  Optional Supabase configuration:
+  updateHeroStatus(
+    false,
+    "Connecting to activity monitor..."
+  );
 
-  window.CROWRULES_SUPABASE_URL =
-    "https://YOUR-PROJECT.supabase.co";
+  const initialized =
+    initializeSupabase();
 
-  window.CROWRULES_SUPABASE_ANON_KEY =
-    "YOUR-PUBLISHABLE-OR-ANON-KEY";
+  if(!initialized){
 
-  Optional table override:
+    renderDatabaseError(
+      new Error(
+        "Supabase JavaScript client could not be initialized."
+      )
+    );
 
-  window.CROWRULES_ACTIVITY_TABLE =
-    "activity";
+    return;
 
-  The page intentionally uses select("*") and flexible
-  field mapping so it does not depend on a rigid schema.
-*/
+  }
+
+  await checkAuth();
+
+  listenForAuthChanges();
+
+  await loadActivity();
+
+  subscribeToRealtime();
+
+}
+
+initialize();
 
 </script>
 

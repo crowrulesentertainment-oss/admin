@@ -6,11 +6,13 @@
 
 <title>Albums — CrowRules Entertainment Admin</title>
 <meta name="theme-color" content="#050505">
-<meta name="description" content="CrowRules Entertainment Main Admin — Album Command Center">
+<meta name="description" content="CrowRules Entertainment Main Admin — CrowRules Records Album Command Center">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
@@ -80,9 +82,15 @@ a{
   text-decoration:none;
 }
 
-/* =========================
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none!important;
+}
+
+/* =========================================================
    SHELL
-========================= */
+========================================================= */
 
 .app{
   display:flex;
@@ -90,12 +98,12 @@ a{
 }
 
 .sidebar{
-  width:270px;
+  width:280px;
   position:fixed;
   left:0;
   top:0;
   bottom:0;
-  z-index:50;
+  z-index:80;
   overflow-y:auto;
   background:
     linear-gradient(180deg,rgba(255,255,255,.025),transparent 30%),
@@ -110,7 +118,7 @@ a{
   gap:12px;
   padding:6px 10px 22px;
   border-bottom:1px solid var(--line);
-  margin-bottom:18px;
+  margin-bottom:16px;
 }
 
 .logo{
@@ -162,11 +170,11 @@ a{
   display:flex;
   align-items:center;
   gap:10px;
-  min-height:40px;
-  padding:9px 11px;
+  min-height:38px;
+  padding:8px 11px;
   border:1px solid transparent;
   color:#aaaab4;
-  font-size:12px;
+  font-size:11px;
   border-radius:7px;
   transition:.18s ease;
 }
@@ -196,15 +204,15 @@ a{
   padding:13px 10px;
   border-top:1px solid var(--line);
   color:#676773;
-  font-size:9px;
-  line-height:1.6;
+  font-size:8px;
+  line-height:1.7;
   text-transform:uppercase;
   letter-spacing:1px;
 }
 
 .main{
-  width:calc(100% - 270px);
-  margin-left:270px;
+  width:calc(100% - 280px);
+  margin-left:280px;
   min-width:0;
 }
 
@@ -212,7 +220,7 @@ a{
   height:68px;
   position:sticky;
   top:0;
-  z-index:30;
+  z-index:40;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -238,6 +246,14 @@ a{
   border-radius:7px;
 }
 
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
 .crumb{
   color:var(--muted);
   font-size:11px;
@@ -247,14 +263,6 @@ a{
   color:#fff;
 }
 
-.status-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 12px var(--green);
-}
-
 .clock{
   font-family:Orbitron,sans-serif;
   font-size:10px;
@@ -262,13 +270,25 @@ a{
   letter-spacing:1px;
 }
 
-/* =========================
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.auth-user{
+  display:none;
+  color:#777783;
+  font-size:9px;
+}
+
+/* =========================================================
    CONTENT
-========================= */
+========================================================= */
 
 .content{
   padding:30px;
-  max-width:1800px;
+  max-width:1900px;
   margin:auto;
 }
 
@@ -284,12 +304,12 @@ a{
 }
 
 .hero:after{
-  content:"ALBUMS";
+  content:"RECORDS";
   position:absolute;
-  right:-20px;
-  bottom:-42px;
+  right:-15px;
+  bottom:-40px;
   font-family:Orbitron,sans-serif;
-  font-size:100px;
+  font-size:90px;
   font-weight:800;
   letter-spacing:-8px;
   color:rgba(255,255,255,.018);
@@ -314,7 +334,7 @@ a{
 }
 
 .hero p{
-  max-width:720px;
+  max-width:780px;
   color:var(--muted);
   font-size:13px;
   line-height:1.7;
@@ -334,7 +354,7 @@ a{
   color:#eee;
   padding:11px 15px;
   border-radius:6px;
-  font-size:11px;
+  font-size:10px;
   font-weight:800;
   letter-spacing:.4px;
   transition:.18s ease;
@@ -357,9 +377,33 @@ a{
   color:var(--cyan);
 }
 
-/* =========================
+.btn.danger{
+  color:var(--red);
+  border-color:rgba(255,82,109,.25);
+}
+
+/* =========================================================
+   SYSTEM NOTICE
+========================================================= */
+
+.system-notice{
+  display:none;
+  margin-top:14px;
+  padding:13px 15px;
+  border:1px solid rgba(255,82,109,.25);
+  background:rgba(255,82,109,.05);
+  color:#ff9aaa;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.system-notice.show{
+  display:block;
+}
+
+/* =========================================================
    STATS
-========================= */
+========================================================= */
 
 .stats{
   display:grid;
@@ -394,7 +438,7 @@ a{
 .stat-meta{
   margin-top:7px;
   color:#686873;
-  font-size:9px;
+  font-size:8px;
 }
 
 .stat-accent{
@@ -422,9 +466,9 @@ a{
   background:var(--orange);
 }
 
-/* =========================
+/* =========================================================
    TOOLBAR
-========================= */
+========================================================= */
 
 .toolbar{
   margin-top:18px;
@@ -476,9 +520,9 @@ a{
   outline:none;
 }
 
-/* =========================
-   FEATURED ALBUMS
-========================= */
+/* =========================================================
+   SECTION
+========================================================= */
 
 .section{
   margin-top:22px;
@@ -504,6 +548,15 @@ a{
   color:#71717d;
   font-size:10px;
 }
+
+.result-count{
+  color:#666671;
+  font-size:9px;
+}
+
+/* =========================================================
+   FEATURED
+========================================================= */
 
 .album-grid{
   display:grid;
@@ -548,17 +601,17 @@ a{
 
 .cover img{
   position:relative;
+  z-index:1;
   width:100%;
   height:100%;
   object-fit:cover;
-  opacity:.86;
 }
 
 .cover-badge{
   position:absolute;
   left:10px;
   top:10px;
-  z-index:2;
+  z-index:3;
   padding:5px 7px;
   background:rgba(5,5,5,.82);
   border:1px solid rgba(182,108,255,.45);
@@ -573,7 +626,7 @@ a{
   position:absolute;
   right:10px;
   bottom:10px;
-  z-index:2;
+  z-index:3;
   padding:5px 7px;
   background:rgba(5,5,5,.78);
   border:1px solid rgba(255,255,255,.12);
@@ -604,6 +657,7 @@ a{
 .album-meta{
   display:flex;
   justify-content:space-between;
+  gap:8px;
   margin-top:13px;
   color:#777783;
   font-size:9px;
@@ -631,9 +685,9 @@ a{
   border-color:#4a4a55;
 }
 
-/* =========================
+/* =========================================================
    REGISTRY
-========================= */
+========================================================= */
 
 .registry{
   overflow:hidden;
@@ -647,7 +701,7 @@ a{
 
 table{
   width:100%;
-  min-width:1050px;
+  min-width:1100px;
   border-collapse:collapse;
 }
 
@@ -760,6 +814,12 @@ tbody tr:hover{
   background:rgba(182,108,255,.05);
 }
 
+.badge.not-featured{
+  color:#666671;
+  border-color:#25252c;
+  background:#0e0e12;
+}
+
 .type-pill{
   color:#aaaab4;
   font-size:9px;
@@ -792,9 +852,30 @@ tbody tr:hover{
   border-color:rgba(255,82,109,.35);
 }
 
-/* =========================
+.loading-row{
+  text-align:center;
+  padding:35px!important;
+  color:#6c6c76;
+}
+
+.empty{
+  display:none;
+  padding:45px 20px;
+  text-align:center;
+  color:#6b6b75;
+  font-size:11px;
+}
+
+.empty strong{
+  display:block;
+  color:#aaa;
+  font-family:Orbitron,sans-serif;
+  margin-bottom:5px;
+}
+
+/* =========================================================
    LOWER PANELS
-========================= */
+========================================================= */
 
 .lower-grid{
   display:grid;
@@ -908,17 +989,19 @@ tbody tr:hover{
 .bar i{
   display:block;
   height:100%;
+  width:0;
   background:linear-gradient(90deg,var(--accent2),var(--accent));
+  transition:width .35s ease;
 }
 
-/* =========================
+/* =========================================================
    MODAL
-========================= */
+========================================================= */
 
 .modal{
   position:fixed;
   inset:0;
-  z-index:100;
+  z-index:120;
   display:none;
   align-items:center;
   justify-content:center;
@@ -932,8 +1015,8 @@ tbody tr:hover{
 }
 
 .modal-box{
-  width:min(760px,100%);
-  max-height:90vh;
+  width:min(800px,100%);
+  max-height:92vh;
   overflow:auto;
   border:1px solid #3a3a44;
   background:#0d0d12;
@@ -1000,7 +1083,7 @@ tbody tr:hover{
 }
 
 .field textarea{
-  min-height:90px;
+  min-height:100px;
   resize:vertical;
 }
 
@@ -1012,14 +1095,18 @@ tbody tr:hover{
 }
 
 .checkbox{
-  display:flex;
+  display:flex!important;
   align-items:center;
   gap:9px;
-  color:#aaa;
-  font-size:10px;
+  color:#aaa!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
 }
 
 .checkbox input{
+  width:auto;
   accent-color:var(--accent);
 }
 
@@ -1031,9 +1118,9 @@ tbody tr:hover{
   border-top:1px solid var(--line);
 }
 
-/* =========================
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
 .toast{
   position:fixed;
@@ -1041,7 +1128,7 @@ tbody tr:hover{
   bottom:22px;
   z-index:200;
   min-width:240px;
-  max-width:360px;
+  max-width:380px;
   padding:13px 15px;
   border:1px solid #3a3a45;
   background:#111117;
@@ -1067,30 +1154,66 @@ tbody tr:hover{
   font-size:9px;
 }
 
-/* =========================
-   EMPTY
-========================= */
+/* =========================================================
+   ACCESS SCREEN
+========================================================= */
 
-.empty{
+.access-screen{
+  position:fixed;
+  inset:0;
+  z-index:500;
   display:none;
-  padding:45px 20px;
+  align-items:center;
+  justify-content:center;
+  background:#050505;
+}
+
+.access-screen.show{
+  display:flex;
+}
+
+.access-box{
+  width:min(460px,calc(100% - 30px));
+  padding:35px;
   text-align:center;
-  color:#6b6b75;
-  font-size:11px;
+  border:1px solid var(--line);
+  background:
+    radial-gradient(circle at 50% 0%,rgba(182,108,255,.1),transparent 45%),
+    #0d0d12;
+  box-shadow:var(--shadow);
 }
 
-.empty strong{
-  display:block;
-  color:#aaa;
+.access-logo{
+  width:60px;
+  height:60px;
+  margin:0 auto 18px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(182,108,255,.5);
+  color:var(--accent);
   font-family:Orbitron,sans-serif;
-  margin-bottom:5px;
+  font-weight:800;
+  font-size:18px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+.access-box h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:18px;
+}
 
-@media(max-width:1200px){
+.access-box p{
+  color:#777783;
+  font-size:10px;
+  line-height:1.7;
+  margin:12px 0 20px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1250px){
 
   .stats{
     grid-template-columns:repeat(3,1fr);
@@ -1102,7 +1225,7 @@ tbody tr:hover{
 
 }
 
-@media(max-width:900px){
+@media(max-width:950px){
 
   .sidebar{
     transform:translateX(-100%);
@@ -1152,7 +1275,7 @@ tbody tr:hover{
   }
 
   .hero:after{
-    font-size:65px;
+    font-size:60px;
   }
 
   .form-grid{
@@ -1163,7 +1286,8 @@ tbody tr:hover{
     grid-column:auto;
   }
 
-  .clock{
+  .clock,
+  .auth-user{
     display:none;
   }
 
@@ -1187,83 +1311,62 @@ tbody tr:hover{
     width:100%;
   }
 
+  .top-actions .btn{
+    padding:9px;
+  }
+
 }
 </style>
 </head>
 
 <body>
 
+<!-- =========================================================
+     ACCESS SCREEN
+========================================================= -->
+
+<div class="access-screen" id="accessScreen">
+  <div class="access-box">
+    <div class="access-logo">CR</div>
+    <h2>ADMIN ACCESS REQUIRED</h2>
+    <p>
+      This CrowRules Records command center requires an authenticated
+      CrowRules administrator account.
+    </p>
+    <button class="btn primary" id="accessLoginBtn">
+      Open Admin Login
+    </button>
+  </div>
+</div>
+
 <div class="app">
 
-<!-- ======================================================
-     FULL CROWRULES ENTERTAINMENT ADMIN SIDEBAR
-     ====================================================== -->
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
 
 <aside class="sidebar" id="sidebar">
 
-  <!-- BRAND -->
   <div class="brand">
-
-    <div class="brand-mark">
-      CR
-    </div>
-
-    <div class="brand-copy">
+    <div class="logo">CR</div>
+    <div>
       <strong>CROWRULES</strong>
       <span>Entertainment Admin</span>
     </div>
-
   </div>
 
-  <!-- NAVIGATION -->
+  <div class="nav-title">Command Center</div>
+
   <nav class="nav">
-
-    <!-- ==================================================
-         COMMAND CENTER
-         ================================================== -->
-
-    <div class="nav-section">
-      Command Center
-    </div>
 
     <a href="index.html">
       <span class="nav-icon">⌂</span>
       Dashboard
     </a>
 
-    <a href="analytics.html">
-      <span class="nav-icon">◈</span>
-      Analytics
-    </a>
-
-    <a href="activity.html" class="active">
-      <span class="nav-icon">⌁</span>
-      Activity
-    </a>
-
-    <a href="notifications.html">
-      <span class="nav-icon">♢</span>
-      Notifications
-      <span class="nav-badge">3</span>
-    </a>
-
-    <a href="system-health.html">
-      <span class="nav-icon">◉</span>
-      System Health
-    </a>
-
-
-    <!-- ==================================================
-         CONTENT MANAGEMENT
-         ================================================== -->
-
-    <div class="nav-section">
-      Content Management
-    </div>
-
     <a href="content.html">
-      <span class="nav-icon">▦</span>
-      All Content
+      <span class="nav-icon">◈</span>
+      Content
     </a>
 
     <a href="pages.html">
@@ -1272,7 +1375,7 @@ tbody tr:hover{
     </a>
 
     <a href="categories.html">
-      <span class="nav-icon">▥</span>
+      <span class="nav-icon">◫</span>
       Categories
     </a>
 
@@ -1281,34 +1384,16 @@ tbody tr:hover{
       Tags
     </a>
 
-    <a href="videos.html">
-      <span class="nav-icon">▶</span>
-      Videos
-    </a>
-
-    <a href="audio.html">
-      <span class="nav-icon">♫</span>
-      Audio
-    </a>
-
     <a href="articles.html">
-      <span class="nav-icon">▧</span>
+      <span class="nav-icon">✎</span>
       Articles
     </a>
 
+  </nav>
 
-    <!-- ==================================================
-         CROWRULES TV
-         ================================================== -->
+  <div class="nav-title">CrowRules TV</div>
 
-    <div class="nav-section">
-      CrowRules TV
-    </div>
-
-    <a href="tv.html">
-      <span class="nav-icon">▣</span>
-      TV Dashboard
-    </a>
+  <nav class="nav">
 
     <a href="shows.html">
       <span class="nav-icon">▣</span>
@@ -1321,57 +1406,44 @@ tbody tr:hover{
     </a>
 
     <a href="movies.html">
-      <span class="nav-icon">◉</span>
+      <span class="nav-icon">▰</span>
       Movies
     </a>
 
     <a href="channels.html">
-      <span class="nav-icon">◫</span>
-      Live Channels
-    </a>
-
-    <a href="playlists.html">
-      <span class="nav-icon">☷</span>
-      Playlists
+      <span class="nav-icon">◉</span>
+      Channels
     </a>
 
     <a href="schedule.html">
       <span class="nav-icon">◷</span>
-      Schedules
+      Schedule
     </a>
 
     <a href="live.html">
       <span class="nav-icon">●</span>
-      Live Control
+      Live
     </a>
 
     <a href="guide.html">
-      <span class="nav-icon">☰</span>
+      <span class="nav-icon">☷</span>
       TV Guide
     </a>
 
-    <a href="top10.html">
-      <span class="nav-icon">⑩</span>
-      Top 10
+    <a href="audio.html">
+      <span class="nav-icon">♫</span>
+      Audio
     </a>
 
+  </nav>
 
-    <!-- ==================================================
-         PEOPLE & MEMBERS
-         ================================================== -->
+  <div class="nav-title">Members</div>
 
-    <div class="nav-section">
-      People & Members
-    </div>
+  <nav class="nav">
 
     <a href="members.html">
       <span class="nav-icon">♙</span>
       Members
-    </a>
-
-    <a href="member.html">
-      <span class="nav-icon">◌</span>
-      Member Profiles
     </a>
 
     <a href="membership.html">
@@ -1389,97 +1461,39 @@ tbody tr:hover{
       Friends
     </a>
 
-    <a href="points.html">
-      <span class="nav-icon">✦</span>
-      Points
-    </a>
-
-    <a href="leaderboard.html">
-      <span class="nav-icon">♛</span>
-      Leaderboard
-    </a>
-
-
-    <!-- ==================================================
-         CROWSPACE
-         ================================================== -->
-
-    <div class="nav-section">
-      CrowSpace
-    </div>
-
-    <a href="crowspace.html">
-      <span class="nav-icon">☁</span>
-      CrowSpace
-    </a>
-
     <a href="community.html">
-      <span class="nav-icon">◎</span>
+      <span class="nav-icon">☍</span>
       Community
     </a>
 
-    <a href="posts.html">
-      <span class="nav-icon">▰</span>
-      Posts
+    <a href="messages.html">
+      <span class="nav-icon">✉</span>
+      Messages
     </a>
 
-    <a href="groups.html">
-      <span class="nav-icon">♟</span>
-      Groups
+    <a href="profiles.html">
+      <span class="nav-icon">◎</span>
+      Profiles
     </a>
 
-    <a href="moderation.html">
-      <span class="nav-icon">⚑</span>
-      Moderation
-      <span class="nav-badge">5</span>
+    <a href="watch-history.html">
+      <span class="nav-icon">◷</span>
+      Watch History
     </a>
 
+  </nav>
 
-    <!-- ==================================================
-         CREATORS
-         ================================================== -->
+  <div class="nav-title">CrowRules Records</div>
 
-    <div class="nav-section">
-      Creators
-    </div>
-
-    <a href="creator.html">
-      <span class="nav-icon">✦</span>
-      Creator Center
-    </a>
-
-    <a href="creator-content.html">
-      <span class="nav-icon">▦</span>
-      Creator Content
-    </a>
-
-    <a href="creator-approvals.html">
-      <span class="nav-icon">✓</span>
-      Creator Approvals
-      <span class="nav-badge">2</span>
-    </a>
-
-
-    <!-- ==================================================
-         CROWRULES RECORDS
-         ================================================== -->
-
-    <div class="nav-section">
-      CrowRules Records
-    </div>
-
-    <a href="records.html">
-      <span class="nav-icon">♫</span>
-      Records Dashboard
-    </a>
+  <nav class="nav">
 
     <a href="artists.html">
-      <span class="nav-icon">♬</span>
+      <span class="nav-icon">♫</span>
       Artists
     </a>
 
-    <a href="albums.html">
-      <span class="nav-icon">▰</span>
+    <a class="active" href="albums.html">
+      <span class="nav-icon">▣</span>
       Albums
     </a>
 
@@ -1488,115 +1502,143 @@ tbody tr:hover{
       Tracks
     </a>
 
+    <a href="records.html">
+      <span class="nav-icon">◉</span>
+      Records
+    </a>
 
-    <!-- ==================================================
-         SPORTS
-         ================================================== -->
+    <a href="releases.html">
+      <span class="nav-icon">◆</span>
+      Releases
+    </a>
 
-    <div class="nav-section">
-      CrowRules Sports
-    </div>
+    <a href="playlists.html">
+      <span class="nav-icon">☷</span>
+      Playlists
+    </a>
+
+    <a href="charts.html">
+      <span class="nav-icon">⌁</span>
+      Charts
+    </a>
+
+  </nav>
+
+  <div class="nav-title">Creators</div>
+
+  <nav class="nav">
+
+    <a href="creators.html">
+      <span class="nav-icon">✦</span>
+      Creators
+    </a>
+
+    <a href="creator-content.html">
+      <span class="nav-icon">◈</span>
+      Creator Content
+    </a>
+
+    <a href="creator-approvals.html">
+      <span class="nav-icon">✓</span>
+      Approvals
+    </a>
+
+  </nav>
+
+  <div class="nav-title">Sports</div>
+
+  <nav class="nav">
 
     <a href="sports.html">
       <span class="nav-icon">◇</span>
-      Sports Center
+      Sports
     </a>
 
-    <a href="teams.html">
+    <a href="sports-teams.html">
       <span class="nav-icon">◆</span>
       Teams
     </a>
 
-    <a href="games.html">
-      <span class="nav-icon">◈</span>
+    <a href="sports-games.html">
+      <span class="nav-icon">●</span>
       Games
     </a>
 
-    <a href="standings.html">
-      <span class="nav-icon">☷</span>
-      Standings
+    <a href="sports-rankings.html">
+      <span class="nav-icon">#</span>
+      Rankings
     </a>
 
-    <a href="rankings.html">
-      <span class="nav-icon">♛</span>
-      Rankings
+    <a href="sports-standings.html">
+      <span class="nav-icon">≡</span>
+      Standings
     </a>
 
     <a href="pickem.html">
       <span class="nav-icon">✓</span>
-      Pick'em Challenge
+      Pick'em
     </a>
 
+  </nav>
 
-    <!-- ==================================================
-         MEMORIALS
-         ================================================== -->
+  <div class="nav-title">Network</div>
 
-    <div class="nav-section">
-      CrowRules Memorials
-    </div>
+  <nav class="nav">
 
     <a href="memorials.html">
-      <span class="nav-icon">✞</span>
+      <span class="nav-icon">✧</span>
       Memorials
     </a>
-
-    <a href="memorial-photos.html">
-      <span class="nav-icon">▧</span>
-      Memorial Photos
-    </a>
-
-    <a href="memorial-video-upload.html">
-      <span class="nav-icon">▶</span>
-      Memorial Videos
-    </a>
-
-
-    <!-- ==================================================
-         SPECTRUM AWARDS
-         ================================================== -->
-
-    <div class="nav-section">
-      Spectrum Awards
-    </div>
 
     <a href="awards.html">
       <span class="nav-icon">★</span>
       Awards
     </a>
 
-    <a href="awards-categories.html">
+    <a href="publishing.html">
+      <span class="nav-icon">▤</span>
+      Publishing
+    </a>
+
+    <a href="yearbooks.html">
       <span class="nav-icon">▥</span>
-      Award Categories
+      Yearbooks
     </a>
 
-    <a href="nominees.html">
-      <span class="nav-icon">♙</span>
-      Nominees
+    <a href="holidays.html">
+      <span class="nav-icon">✺</span>
+      Holidays
     </a>
 
-    <a href="voting.html">
-      <span class="nav-icon">✓</span>
-      Voting
+    <a href="studios.html">
+      <span class="nav-icon">▦</span>
+      Studios
     </a>
 
-
-    <!-- ==================================================
-         BUSINESS
-         ================================================== -->
-
-    <div class="nav-section">
-      Business
-    </div>
-
-    <a href="business.html">
-      <span class="nav-icon">▣</span>
-      Business Center
+    <a href="crowspace.html">
+      <span class="nav-icon">◎</span>
+      CrowSpace
     </a>
 
-    <a href="subscriptions.html">
-      <span class="nav-icon">◆</span>
-      Subscriptions
+  </nav>
+
+  <div class="nav-title">Commerce</div>
+
+  <nav class="nav">
+
+    <a href="shop.html">
+      <span class="nav-icon">◇</span>
+      Shop
+    </a>
+
+    <a href="products.html">
+      <span class="nav-icon">▰</span>
+      Products
+    </a>
+
+    <a href="orders.html">
+      <span class="nav-icon">▤</span>
+      Orders
     </a>
 
     <a href="donations.html">
@@ -1604,43 +1646,40 @@ tbody tr:hover{
       Donations
     </a>
 
-    <a href="shop.html">
-      <span class="nav-icon">▢</span>
-      Shop
+  </nav>
+
+  <div class="nav-title">Management</div>
+
+  <nav class="nav">
+
+    <a href="points.html">
+      <span class="nav-icon">+</span>
+      Points
     </a>
 
-    <a href="orders.html">
-      <span class="nav-icon">☷</span>
-      Orders
+    <a href="leaderboard.html">
+      <span class="nav-icon">#</span>
+      Leaderboard
     </a>
-
-
-    <!-- ==================================================
-         ADMINISTRATION
-         ================================================== -->
-
-    <div class="nav-section">
-      Administration
-    </div>
 
     <a href="roles.html">
       <span class="nav-icon">♙</span>
       Roles
     </a>
 
-    <a href="permissions.html">
-      <span class="nav-icon">⚿</span>
-      Permissions
-    </a>
-
-    <a href="authentication.html">
+    <a href="analytics.html">
       <span class="nav-icon">⌁</span>
-      Authentication
+      Analytics
     </a>
 
     <a href="moderation.html">
-      <span class="nav-icon">⚑</span>
+      <span class="nav-icon">⚠</span>
       Moderation
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span>
+      Logs
     </a>
 
     <a href="notifications.html">
@@ -1648,152 +1687,30 @@ tbody tr:hover{
       Notifications
     </a>
 
-    <a href="activity.html" class="active">
-      <span class="nav-icon">⌁</span>
+    <a href="activity.html">
+      <span class="nav-icon">◌</span>
       Activity
     </a>
-
-    <a href="logs.html">
-      <span class="nav-icon">≡</span>
-      System Logs
-    </a>
-
-
-    <!-- ==================================================
-         DATABASE & INFRASTRUCTURE
-         ================================================== -->
-
-    <div class="nav-section">
-      Database & Infrastructure
-    </div>
-
-    <a href="database.html">
-      <span class="nav-icon">▤</span>
-      Database
-    </a>
-
-    <a href="storage.html">
-      <span class="nav-icon">▰</span>
-      Storage
-    </a>
-
-    <a href="api.html">
-      <span class="nav-icon">⌘</span>
-      API
-    </a>
-
-    <a href="backups.html">
-      <span class="nav-icon">◫</span>
-      Backups
-    </a>
-
-    <a href="system-health.html">
-      <span class="nav-icon">◉</span>
-      System Health
-    </a>
-
-
-    <!-- ==================================================
-         SYSTEM
-         ================================================== -->
-
-    <div class="nav-section">
-      System
-    </div>
 
     <a href="settings.html">
       <span class="nav-icon">⚙</span>
       Settings
     </a>
 
-    <a href="profile.html">
-      <span class="nav-icon">◌</span>
-      My Profile
-    </a>
-
-    <a href="login.html">
-      <span class="nav-icon">↪</span>
-      Sign Out
-    </a>
-
   </nav>
 
-
-  <!-- ======================================================
-       SIDEBAR SYSTEM STATUS
-       ====================================================== -->
-
-  <div class="sidebar-bottom">
-
-    <div class="system-mini">
-
-      <div class="system-mini-title">
-
-        SYSTEM STATUS
-
-        <span class="dot"></span>
-
-      </div>
-
-      <div class="system-mini-row">
-
-        <span>
-          Core Services
-        </span>
-
-        <strong style="color:var(--green)">
-          ONLINE
-        </strong>
-
-      </div>
-
-      <div class="system-mini-row">
-
-        <span>
-          Supabase
-        </span>
-
-        <strong
-          id="sidebarSupabaseStatus"
-          style="color:var(--green)"
-        >
-          READY
-        </strong>
-
-      </div>
-
-      <div class="system-mini-row">
-
-        <span>
-          Activity Monitor
-        </span>
-
-        <strong style="color:var(--green)">
-          LIVE
-        </strong>
-
-      </div>
-
-      <div class="system-mini-row">
-
-        <span>
-          Admin Session
-        </span>
-
-        <strong style="color:var(--green)">
-          ACTIVE
-        </strong>
-
-      </div>
-
-    </div>
-
+  <div class="sidebar-footer">
+    CrowRules Entertainment<br>
+    Main Administration System<br>
+    CrowRules Records<br>
+    SUPABASE / POSTGRES / AUTH
   </div>
 
 </aside>
-<!-- =====================================================
+
+<!-- =========================================================
      MAIN
-====================================================== -->
+========================================================= -->
 
 <main class="main">
 
@@ -1801,27 +1718,40 @@ tbody tr:hover{
 
   <div class="topbar-left">
 
-    <button class="menu-btn" id="menuBtn">☰</button>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+      ☰
+    </button>
 
     <div class="status-dot"></div>
 
     <div class="crumb">
-      CrowRules Records / <b>Albums</b>
+      CrowRules Records /
+      <b>Albums</b>
     </div>
 
   </div>
 
-  <div class="clock" id="clock">
-    SYSTEM TIME --:--:--
+  <div class="top-actions">
+
+    <span class="auth-user" id="authUser"></span>
+
+    <button class="btn" id="refreshBtn">
+      ↻ Refresh
+    </button>
+
+    <div class="clock" id="clock">
+      SYSTEM TIME --:--:--
+    </div>
+
   </div>
 
 </header>
 
 <div class="content">
 
-<!-- =====================================================
+<!-- =========================================================
      HERO
-====================================================== -->
+========================================================= -->
 
 <section class="hero">
 
@@ -1832,15 +1762,16 @@ tbody tr:hover{
   <h1>Album Command Center</h1>
 
   <p>
-    Manage CrowRules Records albums, EPs, compilations and major releases.
-    Control artwork, artists, release dates, publishing status, featured
-    placement and release metadata from one central system.
+    Manage CrowRules Records albums, EPs, singles, compilations and
+    soundtracks. Artwork, artists, release dates, catalog numbers,
+    publishing state, featured placement and release statistics are
+    managed directly through Supabase.
   </p>
 
   <div class="hero-actions">
 
     <button class="btn primary" id="newAlbumBtn">
-      + New Album
+      + New Release
     </button>
 
     <button class="btn cyan" id="featuredBtn">
@@ -1851,98 +1782,155 @@ tbody tr:hover{
       Export Registry
     </button>
 
+    <button class="btn" id="clearFiltersBtn">
+      Reset Filters
+    </button>
+
   </div>
 
 </section>
 
-<!-- =====================================================
+<div class="system-notice" id="systemNotice"></div>
+
+<!-- =========================================================
      STATS
-====================================================== -->
+========================================================= -->
 
 <section class="stats">
 
   <div class="stat">
     <div class="stat-label">Total Releases</div>
-    <div class="stat-value">84</div>
+    <div class="stat-value" id="statTotal">0</div>
     <div class="stat-meta">Albums, EPs & compilations</div>
     <div class="stat-accent"></div>
   </div>
 
   <div class="stat">
     <div class="stat-label">Published</div>
-    <div class="stat-value">67</div>
+    <div class="stat-value" id="statPublished">0</div>
     <div class="stat-meta">Available to listeners</div>
     <div class="stat-accent"></div>
   </div>
 
   <div class="stat">
     <div class="stat-label">Featured</div>
-    <div class="stat-value">16</div>
+    <div class="stat-value" id="statFeatured">0</div>
     <div class="stat-meta">Records spotlight</div>
     <div class="stat-accent"></div>
   </div>
 
   <div class="stat">
     <div class="stat-label">Tracks</div>
-    <div class="stat-value">742</div>
-    <div class="stat-meta">Across all releases</div>
+    <div class="stat-value" id="statTracks">0</div>
+    <div class="stat-meta">Across release registry</div>
     <div class="stat-accent"></div>
   </div>
 
   <div class="stat">
     <div class="stat-label">Streams</div>
-    <div class="stat-value">2.4M</div>
-    <div class="stat-meta">Total release plays</div>
+    <div class="stat-value" id="statStreams">0</div>
+    <div class="stat-meta">Tracked release streams</div>
     <div class="stat-accent"></div>
   </div>
 
 </section>
 
-<!-- =====================================================
+<!-- =========================================================
      FILTERS
-====================================================== -->
+========================================================= -->
 
 <section class="toolbar">
 
   <div class="search">
+
     <span class="search-icon">⌕</span>
+
     <input
       id="search"
       type="search"
-      placeholder="Search albums, artists, genres..."
+      autocomplete="off"
+      placeholder="Search releases, artists, genres, catalog numbers..."
     >
+
   </div>
 
   <select class="filter" id="statusFilter">
-    <option value="">All Statuses</option>
-    <option value="published">Published</option>
-    <option value="scheduled">Scheduled</option>
-    <option value="draft">Draft</option>
-    <option value="archived">Archived</option>
+
+    <option value="">
+      All Statuses
+    </option>
+
+    <option value="published">
+      Published
+    </option>
+
+    <option value="scheduled">
+      Scheduled
+    </option>
+
+    <option value="draft">
+      Draft
+    </option>
+
+    <option value="archived">
+      Archived
+    </option>
+
   </select>
 
   <select class="filter" id="typeFilter">
-    <option value="">All Release Types</option>
-    <option value="album">Album</option>
-    <option value="ep">EP</option>
-    <option value="single">Single</option>
-    <option value="compilation">Compilation</option>
-    <option value="soundtrack">Soundtrack</option>
+
+    <option value="">
+      All Release Types
+    </option>
+
+    <option value="album">
+      Album
+    </option>
+
+    <option value="ep">
+      EP
+    </option>
+
+    <option value="single">
+      Single
+    </option>
+
+    <option value="compilation">
+      Compilation
+    </option>
+
+    <option value="soundtrack">
+      Soundtrack
+    </option>
+
   </select>
 
   <select class="filter" id="featuredFilter">
-    <option value="">Featured: All</option>
-    <option value="yes">Featured</option>
-    <option value="no">Not Featured</option>
+
+    <option value="">
+      Featured: All
+    </option>
+
+    <option value="yes">
+      Featured
+    </option>
+
+    <option value="no">
+      Not Featured
+    </option>
+
   </select>
 
-  <button class="btn" id="resetBtn">Reset</button>
+  <button class="btn" id="resetBtn">
+    Reset
+  </button>
 
 </section>
 
-<!-- =====================================================
-     FEATURED ALBUMS
-====================================================== -->
+<!-- =========================================================
+     FEATURED RELEASES
+========================================================= -->
 
 <section class="section" id="featuredSection">
 
@@ -1953,169 +1941,19 @@ tbody tr:hover{
       <p>Current CrowRules Records release spotlight</p>
     </div>
 
-    <button class="btn" id="manageFeaturedBtn">
-      Manage Featured
-    </button>
+    <span class="result-count" id="featuredCount">
+      0 featured
+    </span>
 
   </div>
 
-  <div class="album-grid">
-
-    <article
-      class="album-card"
-      data-name="Neon Rain"
-      data-artist="Neon Raven"
-      data-type="album"
-      data-status="published"
-      data-featured="yes"
-    >
-
-      <div class="cover">
-        <div class="cover-badge">Featured</div>
-        <div class="release-year">2026</div>
-      </div>
-
-      <div class="album-info">
-
-        <div class="album-name">Neon Rain</div>
-
-        <div class="album-artist">
-          Neon Raven
-        </div>
-
-        <div class="album-meta">
-          <span>12 Tracks</span>
-          <span>Electronic</span>
-        </div>
-
-        <div class="album-actions">
-          <button class="small-btn view-btn">View</button>
-          <button class="small-btn edit-btn">Edit</button>
-        </div>
-
-      </div>
-
-    </article>
-
-    <article
-      class="album-card"
-      data-name="Tacoma After Dark"
-      data-artist="Tacoma Static"
-      data-type="album"
-      data-status="published"
-      data-featured="yes"
-    >
-
-      <div class="cover">
-        <div class="cover-badge">Featured</div>
-        <div class="release-year">2026</div>
-      </div>
-
-      <div class="album-info">
-
-        <div class="album-name">Tacoma After Dark</div>
-
-        <div class="album-artist">
-          Tacoma Static
-        </div>
-
-        <div class="album-meta">
-          <span>10 Tracks</span>
-          <span>Alternative</span>
-        </div>
-
-        <div class="album-actions">
-          <button class="small-btn view-btn">View</button>
-          <button class="small-btn edit-btn">Edit</button>
-        </div>
-
-      </div>
-
-    </article>
-
-    <article
-      class="album-card"
-      data-name="Signals From The Void"
-      data-artist="Void Signal"
-      data-type="ep"
-      data-status="published"
-      data-featured="yes"
-    >
-
-      <div class="cover">
-        <div class="cover-badge">Featured</div>
-        <div class="release-year">2026</div>
-      </div>
-
-      <div class="album-info">
-
-        <div class="album-name">
-          Signals From The Void
-        </div>
-
-        <div class="album-artist">
-          Void Signal
-        </div>
-
-        <div class="album-meta">
-          <span>6 Tracks</span>
-          <span>Ambient</span>
-        </div>
-
-        <div class="album-actions">
-          <button class="small-btn view-btn">View</button>
-          <button class="small-btn edit-btn">Edit</button>
-        </div>
-
-      </div>
-
-    </article>
-
-    <article
-      class="album-card"
-      data-name="The Crow Sessions"
-      data-artist="The Crow Collective"
-      data-type="compilation"
-      data-status="published"
-      data-featured="yes"
-    >
-
-      <div class="cover">
-        <div class="cover-badge">Featured</div>
-        <div class="release-year">2026</div>
-      </div>
-
-      <div class="album-info">
-
-        <div class="album-name">
-          The Crow Sessions
-        </div>
-
-        <div class="album-artist">
-          The Crow Collective
-        </div>
-
-        <div class="album-meta">
-          <span>18 Tracks</span>
-          <span>Experimental</span>
-        </div>
-
-        <div class="album-actions">
-          <button class="small-btn view-btn">View</button>
-          <button class="small-btn edit-btn">Edit</button>
-        </div>
-
-      </div>
-
-    </article>
-
-  </div>
+  <div class="album-grid" id="featuredGrid"></div>
 
 </section>
 
-<!-- =====================================================
+<!-- =========================================================
      RELEASE REGISTRY
-====================================================== -->
+========================================================= -->
 
 <section class="section">
 
@@ -2126,8 +1964,8 @@ tbody tr:hover{
       <p>Master CrowRules Records album and release database</p>
     </div>
 
-    <span id="resultCount" style="color:#666671;font-size:9px;">
-      8 releases shown
+    <span class="result-count" id="resultCount">
+      Loading...
     </span>
 
   </div>
@@ -2139,7 +1977,9 @@ tbody tr:hover{
       <table id="albumTable">
 
         <thead>
+
           <tr>
+
             <th>Release</th>
             <th>Artist</th>
             <th>Type</th>
@@ -2149,365 +1989,17 @@ tbody tr:hover{
             <th>Featured</th>
             <th>Streams</th>
             <th>Actions</th>
+
           </tr>
+
         </thead>
 
-        <tbody>
+        <tbody id="albumBody">
 
-          <tr
-            data-name="Neon Rain"
-            data-artist="Neon Raven"
-            data-type="album"
-            data-status="published"
-            data-featured="yes"
-          >
-
-            <td>
-              <div class="album-cell">
-                <div class="thumb">NR</div>
-                <div>
-                  <strong>Neon Rain</strong>
-                  <span>Electronic / Full Album</span>
-                </div>
-              </div>
+          <tr>
+            <td colspan="9" class="loading-row">
+              Loading CrowRules Records...
             </td>
-
-            <td>Neon Raven</td>
-            <td><span class="type-pill">Album</span></td>
-            <td>12</td>
-            <td>Sep 06, 2026</td>
-
-            <td>
-              <span class="badge published">
-                Published
-              </span>
-            </td>
-
-            <td>
-              <span class="badge featured">
-                Featured
-              </span>
-            </td>
-
-            <td>482K</td>
-
-            <td>
-              <div class="row-actions">
-                <button class="icon-btn view-btn">↗</button>
-                <button class="icon-btn edit-btn">✎</button>
-                <button class="icon-btn delete delete-btn">×</button>
-              </div>
-            </td>
-
-          </tr>
-
-          <tr
-            data-name="Tacoma After Dark"
-            data-artist="Tacoma Static"
-            data-type="album"
-            data-status="published"
-            data-featured="yes"
-          >
-
-            <td>
-              <div class="album-cell">
-                <div class="thumb">TS</div>
-                <div>
-                  <strong>Tacoma After Dark</strong>
-                  <span>Alternative / Full Album</span>
-                </div>
-              </div>
-            </td>
-
-            <td>Tacoma Static</td>
-            <td><span class="type-pill">Album</span></td>
-            <td>10</td>
-            <td>Sep 02, 2026</td>
-
-            <td>
-              <span class="badge published">
-                Published
-              </span>
-            </td>
-
-            <td>
-              <span class="badge featured">
-                Featured
-              </span>
-            </td>
-
-            <td>371K</td>
-
-            <td>
-              <div class="row-actions">
-                <button class="icon-btn view-btn">↗</button>
-                <button class="icon-btn edit-btn">✎</button>
-                <button class="icon-btn delete delete-btn">×</button>
-              </div>
-            </td>
-
-          </tr>
-
-          <tr
-            data-name="Signals From The Void"
-            data-artist="Void Signal"
-            data-type="ep"
-            data-status="published"
-            data-featured="yes"
-          >
-
-            <td>
-              <div class="album-cell">
-                <div class="thumb">VS</div>
-                <div>
-                  <strong>Signals From The Void</strong>
-                  <span>Ambient / EP</span>
-                </div>
-              </div>
-            </td>
-
-            <td>Void Signal</td>
-            <td><span class="type-pill">EP</span></td>
-            <td>6</td>
-            <td>Aug 29, 2026</td>
-
-            <td>
-              <span class="badge published">
-                Published
-              </span>
-            </td>
-
-            <td>
-              <span class="badge featured">
-                Featured
-              </span>
-            </td>
-
-            <td>284K</td>
-
-            <td>
-              <div class="row-actions">
-                <button class="icon-btn view-btn">↗</button>
-                <button class="icon-btn edit-btn">✎</button>
-                <button class="icon-btn delete delete-btn">×</button>
-              </div>
-            </td>
-
-          </tr>
-
-          <tr
-            data-name="The Crow Sessions"
-            data-artist="The Crow Collective"
-            data-type="compilation"
-            data-status="published"
-            data-featured="yes"
-          >
-
-            <td>
-              <div class="album-cell">
-                <div class="thumb">CC</div>
-                <div>
-                  <strong>The Crow Sessions</strong>
-                  <span>Experimental / Compilation</span>
-                </div>
-              </div>
-            </td>
-
-            <td>The Crow Collective</td>
-            <td><span class="type-pill">Compilation</span></td>
-            <td>18</td>
-            <td>Aug 22, 2026</td>
-
-            <td>
-              <span class="badge published">
-                Published
-              </span>
-            </td>
-
-            <td>
-              <span class="badge featured">
-                Featured
-              </span>
-            </td>
-
-            <td>192K</td>
-
-            <td>
-              <div class="row-actions">
-                <button class="icon-btn view-btn">↗</button>
-                <button class="icon-btn edit-btn">✎</button>
-                <button class="icon-btn delete delete-btn">×</button>
-              </div>
-            </td>
-
-          </tr>
-
-          <tr
-            data-name="Midnight Drive"
-            data-artist="Midnight Circuit"
-            data-type="album"
-            data-status="scheduled"
-            data-featured="no"
-          >
-
-            <td>
-              <div class="album-cell">
-                <div class="thumb">MD</div>
-                <div>
-                  <strong>Midnight Drive</strong>
-                  <span>House / Full Album</span>
-                </div>
-              </div>
-            </td>
-
-            <td>Midnight Circuit</td>
-            <td><span class="type-pill">Album</span></td>
-            <td>9</td>
-            <td>Sep 18, 2026</td>
-
-            <td>
-              <span class="badge scheduled">
-                Scheduled
-              </span>
-            </td>
-
-            <td>—</td>
-            <td>—</td>
-
-            <td>
-              <div class="row-actions">
-                <button class="icon-btn view-btn">↗</button>
-                <button class="icon-btn edit-btn">✎</button>
-                <button class="icon-btn delete delete-btn">×</button>
-              </div>
-            </td>
-
-          </tr>
-
-          <tr
-            data-name="Rain City Echoes"
-            data-artist="Rain City Echo"
-            data-type="ep"
-            data-status="published"
-            data-featured="no"
-          >
-
-            <td>
-              <div class="album-cell">
-                <div class="thumb">RE</div>
-                <div>
-                  <strong>Rain City Echoes</strong>
-                  <span>Indie / EP</span>
-                </div>
-              </div>
-            </td>
-
-            <td>Rain City Echo</td>
-            <td><span class="type-pill">EP</span></td>
-            <td>5</td>
-            <td>Aug 15, 2026</td>
-
-            <td>
-              <span class="badge published">
-                Published
-              </span>
-            </td>
-
-            <td>—</td>
-            <td>154K</td>
-
-            <td>
-              <div class="row-actions">
-                <button class="icon-btn view-btn">↗</button>
-                <button class="icon-btn edit-btn">✎</button>
-                <button class="icon-btn delete delete-btn">×</button>
-              </div>
-            </td>
-
-          </tr>
-
-          <tr
-            data-name="Static Hearts"
-            data-artist="Static Angels"
-            data-type="album"
-            data-status="draft"
-            data-featured="no"
-          >
-
-            <td>
-              <div class="album-cell">
-                <div class="thumb">SA</div>
-                <div>
-                  <strong>Static Hearts</strong>
-                  <span>Rock / Full Album</span>
-                </div>
-              </div>
-            </td>
-
-            <td>Static Angels</td>
-            <td><span class="type-pill">Album</span></td>
-            <td>11</td>
-            <td>—</td>
-
-            <td>
-              <span class="badge draft">
-                Draft
-              </span>
-            </td>
-
-            <td>—</td>
-            <td>—</td>
-
-            <td>
-              <div class="row-actions">
-                <button class="icon-btn view-btn">↗</button>
-                <button class="icon-btn edit-btn">✎</button>
-                <button class="icon-btn delete delete-btn">×</button>
-              </div>
-            </td>
-
-          </tr>
-
-          <tr
-            data-name="Echoes After Dark"
-            data-artist="Echoes After Dark"
-            data-type="album"
-            data-status="archived"
-            data-featured="no"
-          >
-
-            <td>
-              <div class="album-cell">
-                <div class="thumb">EA</div>
-                <div>
-                  <strong>Echoes After Dark</strong>
-                  <span>Darkwave / Full Album</span>
-                </div>
-              </div>
-            </td>
-
-            <td>Echoes After Dark</td>
-            <td><span class="type-pill">Album</span></td>
-            <td>8</td>
-            <td>Jun 12, 2026</td>
-
-            <td>
-              <span class="badge archived">
-                Archived
-              </span>
-            </td>
-
-            <td>—</td>
-            <td>81K</td>
-
-            <td>
-              <div class="row-actions">
-                <button class="icon-btn view-btn">↗</button>
-                <button class="icon-btn edit-btn">✎</button>
-                <button class="icon-btn delete delete-btn">×</button>
-              </div>
-            </td>
-
           </tr>
 
         </tbody>
@@ -2517,69 +2009,52 @@ tbody tr:hover{
     </div>
 
     <div class="empty" id="emptyState">
+
       <strong>No releases found</strong>
+
       Try changing your search or filters.
+
     </div>
 
   </div>
 
 </section>
 
-<!-- =====================================================
+<!-- =========================================================
      LOWER PANELS
-====================================================== -->
+========================================================= -->
 
 <section class="section lower-grid">
 
   <div class="panel">
 
     <div class="panel-head">
+
       <h3>Recent Release Activity</h3>
-      <span>LIVE LOG</span>
+
+      <span>
+        SUPABASE ACTIVITY
+      </span>
+
     </div>
 
-    <div class="activity">
+    <div class="activity" id="activityList">
 
       <div class="activity-item">
 
-        <div class="activity-icon">♫</div>
-
-        <div class="activity-text">
-          <strong>Neon Rain</strong> received updated cover artwork.
-          <span class="activity-time">12 minutes ago</span>
+        <div class="activity-icon">
+          ◌
         </div>
 
-      </div>
-
-      <div class="activity-item">
-
-        <div class="activity-icon">▶</div>
-
         <div class="activity-text">
-          <strong>Midnight Drive</strong> scheduled for September 18.
-          <span class="activity-time">38 minutes ago</span>
-        </div>
 
-      </div>
+          <strong>System</strong>
+          Waiting for release activity.
 
-      <div class="activity-item">
+          <span class="activity-time">
+            No activity loaded
+          </span>
 
-        <div class="activity-icon">★</div>
-
-        <div class="activity-text">
-          <strong>Signals From The Void</strong> added to featured releases.
-          <span class="activity-time">1 hour ago</span>
-        </div>
-
-      </div>
-
-      <div class="activity-item">
-
-        <div class="activity-icon">✎</div>
-
-        <div class="activity-text">
-          <strong>Static Hearts</strong> saved as a draft release.
-          <span class="activity-time">3 hours ago</span>
         </div>
 
       </div>
@@ -2591,8 +2066,13 @@ tbody tr:hover{
   <div class="panel">
 
     <div class="panel-head">
+
       <h3>Release Breakdown</h3>
-      <span>84 TOTAL</span>
+
+      <span id="breakdownTotal">
+        0 TOTAL
+      </span>
+
     </div>
 
     <div class="breakdown">
@@ -2601,11 +2081,11 @@ tbody tr:hover{
 
         <div class="metric-top">
           <span>Albums</span>
-          <strong>42 / 84</strong>
+          <strong id="albumsMetric">0 / 0</strong>
         </div>
 
         <div class="bar">
-          <i style="width:50%"></i>
+          <i id="albumsBar"></i>
         </div>
 
       </div>
@@ -2614,11 +2094,11 @@ tbody tr:hover{
 
         <div class="metric-top">
           <span>EPs</span>
-          <strong>21 / 84</strong>
+          <strong id="epsMetric">0 / 0</strong>
         </div>
 
         <div class="bar">
-          <i style="width:25%"></i>
+          <i id="epsBar"></i>
         </div>
 
       </div>
@@ -2627,11 +2107,11 @@ tbody tr:hover{
 
         <div class="metric-top">
           <span>Singles</span>
-          <strong>13 / 84</strong>
+          <strong id="singlesMetric">0 / 0</strong>
         </div>
 
         <div class="bar">
-          <i style="width:15%"></i>
+          <i id="singlesBar"></i>
         </div>
 
       </div>
@@ -2640,11 +2120,11 @@ tbody tr:hover{
 
         <div class="metric-top">
           <span>Compilations</span>
-          <strong>5 / 84</strong>
+          <strong id="compilationsMetric">0 / 0</strong>
         </div>
 
         <div class="bar">
-          <i style="width:6%"></i>
+          <i id="compilationsBar"></i>
         </div>
 
       </div>
@@ -2653,11 +2133,11 @@ tbody tr:hover{
 
         <div class="metric-top">
           <span>Soundtracks</span>
-          <strong>3 / 84</strong>
+          <strong id="soundtracksMetric">0 / 0</strong>
         </div>
 
         <div class="bar">
-          <i style="width:4%"></i>
+          <i id="soundtracksBar"></i>
         </div>
 
       </div>
@@ -2674,9 +2154,9 @@ tbody tr:hover{
 
 </div>
 
-<!-- =====================================================
+<!-- =========================================================
      MODAL
-====================================================== -->
+========================================================= -->
 
 <div class="modal" id="albumModal">
 
@@ -2688,7 +2168,7 @@ tbody tr:hover{
         Create Release
       </h3>
 
-      <button class="close" id="closeModal">
+      <button class="close" id="closeModal" type="button">
         ×
       </button>
 
@@ -2699,59 +2179,40 @@ tbody tr:hover{
       <div class="form-grid">
 
         <div class="field">
-          <label>Release Title</label>
+
+          <label for="albumName">
+            Release Title
+          </label>
 
           <input
             id="albumName"
             type="text"
             required
+            maxlength="200"
             placeholder="Album or release title"
           >
+
         </div>
 
         <div class="field">
-          <label>Artist</label>
+
+          <label for="albumArtist">
+            Artist
+          </label>
 
           <select id="albumArtist">
-
-            <option value="Neon Raven">
-              Neon Raven
+            <option value="">
+              Select artist
             </option>
-
-            <option value="Tacoma Static">
-              Tacoma Static
-            </option>
-
-            <option value="Void Signal">
-              Void Signal
-            </option>
-
-            <option value="The Crow Collective">
-              The Crow Collective
-            </option>
-
-            <option value="Midnight Circuit">
-              Midnight Circuit
-            </option>
-
-            <option value="Rain City Echo">
-              Rain City Echo
-            </option>
-
-            <option value="Static Angels">
-              Static Angels
-            </option>
-
-            <option value="Other">
-              Other
-            </option>
-
           </select>
 
         </div>
 
         <div class="field">
-          <label>Release Type</label>
+
+          <label for="albumType">
+            Release Type
+          </label>
 
           <select id="albumType">
 
@@ -2780,27 +2241,38 @@ tbody tr:hover{
         </div>
 
         <div class="field">
-          <label>Genre</label>
+
+          <label for="albumGenre">
+            Genre
+          </label>
 
           <input
             id="albumGenre"
             type="text"
+            maxlength="120"
             placeholder="Electronic, Rock, Ambient..."
           >
 
         </div>
 
         <div class="field">
-          <label>Release Date</label>
+
+          <label for="releaseDate">
+            Release Date
+          </label>
 
           <input
             id="releaseDate"
             type="date"
           >
+
         </div>
 
         <div class="field">
-          <label>Status</label>
+
+          <label for="albumStatus">
+            Status
+          </label>
 
           <select id="albumStatus">
 
@@ -2825,33 +2297,46 @@ tbody tr:hover{
         </div>
 
         <div class="field">
-          <label>Track Count</label>
+
+          <label for="trackCount">
+            Track Count
+          </label>
 
           <input
             id="trackCount"
             type="number"
             min="0"
+            step="1"
             placeholder="12"
           >
+
         </div>
 
         <div class="field">
-          <label>Catalog Number</label>
+
+          <label for="catalogNumber">
+            Catalog Number
+          </label>
 
           <input
             id="catalogNumber"
             type="text"
+            maxlength="80"
             placeholder="CRR-001"
           >
+
         </div>
 
         <div class="field full">
 
-          <label>Cover Artwork URL</label>
+          <label for="coverUrl">
+            Cover Artwork URL
+          </label>
 
           <input
             id="coverUrl"
             type="url"
+            maxlength="1000"
             placeholder="https://..."
           >
 
@@ -2859,10 +2344,13 @@ tbody tr:hover{
 
         <div class="field full">
 
-          <label>Release Description</label>
+          <label for="albumDescription">
+            Release Description
+          </label>
 
           <textarea
             id="albumDescription"
+            maxlength="5000"
             placeholder="Describe the release..."
           ></textarea>
 
@@ -2870,11 +2358,15 @@ tbody tr:hover{
 
         <div class="field">
 
-          <label>Slug</label>
+          <label for="albumSlug">
+            Slug
+          </label>
 
           <input
             id="albumSlug"
             type="text"
+            maxlength="200"
+            required
             placeholder="album-release-slug"
           >
 
@@ -2882,19 +2374,20 @@ tbody tr:hover{
 
         <div class="field">
 
-          <label>Label</label>
+          <label for="albumLabel">
+            Label
+          </label>
 
           <input
             id="albumLabel"
             type="text"
+            maxlength="200"
             value="CrowRules Records"
           >
 
         </div>
 
         <div class="field full">
-
-          <label>Publishing</label>
 
           <label class="checkbox">
 
@@ -2915,11 +2408,19 @@ tbody tr:hover{
 
     <div class="modal-foot">
 
-      <button class="btn" id="cancelModal">
+      <button
+        class="btn"
+        id="cancelModal"
+        type="button"
+      >
         Cancel
       </button>
 
-      <button class="btn primary" id="saveAlbum">
+      <button
+        class="btn primary"
+        id="saveAlbum"
+        type="button"
+      >
         Save Release
       </button>
 
@@ -2929,9 +2430,9 @@ tbody tr:hover{
 
 </div>
 
-<!-- =====================================================
+<!-- =========================================================
      TOAST
-====================================================== -->
+========================================================= -->
 
 <div class="toast" id="toast">
 
@@ -2945,53 +2446,57 @@ tbody tr:hover{
 
 <script>
 /* ==========================================================
-   CROWRULES ALBUMS ADMIN
+   CROWRULES RECORDS — ALBUM COMMAND CENTER
+   Supabase-connected production rewrite
 
-   SUPABASE-READY ARCHITECTURE
+   Database:
+     public.artists
+     public.albums
+     public.album_tracks
 
-   Suggested canonical table:
+   Analytics:
+     public.analytics_events
+     public.analytics_realtime
+     public.analytics_daily
 
-   albums
-   ----------------------------------------------------------
-   id
-   title
-   slug
-   artist_id
-   artist_name
-   release_type
-   genre
-   description
-   cover_url
-   catalog_number
-   label
-   track_count
-   status
-   featured
-   release_date
-   stream_count
-   created_at
-   updated_at
+   Admin authorization:
+     public.crowrules_is_admin()
 
-   Potential related table:
-
-   album_tracks
-   ----------------------------------------------------------
-   id
-   album_id
-   title
-   track_number
-   audio_url
-   duration_seconds
-   featured
-   created_at
-   updated_at
-
-   IMPORTANT:
-   Inspect the existing Supabase schema before connecting.
-   Do not blindly create duplicate release systems.
+   NEVER place a secret/service-role key in this file.
 ========================================================== */
 
 const $ = id => document.getElementById(id);
+
+/* ==========================================================
+   SUPABASE CONFIG
+========================================================== */
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL ||
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  window.CROWRULES_SUPABASE_PUBLISHABLE_KEY ||
+  window.CROWRULES_SUPABASE_ANON_KEY ||
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const { createClient } = window.supabase;
+
+const supabase =
+  createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+/* ==========================================================
+   STATE
+========================================================== */
+
+let albums = [];
+let artists = [];
+let editingAlbum = null;
+let realtimeChannel = null;
+let toastTimer = null;
 
 /* ==========================================================
    CLOCK
@@ -3030,99 +2535,1584 @@ setInterval(updateClock,1000);
    MOBILE MENU
 ========================================================== */
 
-$("menuBtn").addEventListener("click",()=>{
+$("menuBtn").addEventListener(
+  "click",
+  ()=>{
+    $("sidebar").classList.toggle("open");
+  }
+);
 
-  $("sidebar").classList.toggle("open");
+document
+  .querySelectorAll(".nav a")
+  .forEach(link=>{
 
-});
+    link.addEventListener(
+      "click",
+      ()=>{
+        $("sidebar").classList.remove("open");
+      }
+    );
+
+  });
+
+/* ==========================================================
+   TOAST
+========================================================== */
+
+function toast(message){
+
+  $("toastMessage").textContent =
+    message;
+
+  $("toast").classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      ()=>{
+        $("toast").classList.remove("show");
+      },
+      3200
+    );
+}
+
+/* ==========================================================
+   SYSTEM NOTICE
+========================================================== */
+
+function showNotice(message){
+
+  $("systemNotice").textContent =
+    message;
+
+  $("systemNotice").classList.add("show");
+}
+
+function clearNotice(){
+
+  $("systemNotice").textContent = "";
+
+  $("systemNotice")
+    .classList
+    .remove("show");
+}
+
+/* ==========================================================
+   FORMATTERS
+========================================================== */
+
+const numberFormatter =
+  new Intl.NumberFormat(
+    undefined,
+    {
+      maximumFractionDigits:0
+    }
+  );
+
+function formatNumber(value){
+
+  const number =
+    Number(value || 0);
+
+  if(number >= 1000000000){
+
+    return (
+      (number / 1000000000)
+        .toFixed(number >= 10000000000 ? 0 : 1)
+      + "B"
+    );
+
+  }
+
+  if(number >= 1000000){
+
+    return (
+      (number / 1000000)
+        .toFixed(number >= 10000000 ? 0 : 1)
+      + "M"
+    );
+
+  }
+
+  if(number >= 1000){
+
+    return (
+      (number / 1000)
+        .toFixed(number >= 10000 ? 0 : 1)
+      + "K"
+    );
+
+  }
+
+  return numberFormatter.format(number);
+}
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const date =
+    new Date(
+      value + (
+        /^\d{4}-\d{2}-\d{2}$/.test(value)
+          ? "T00:00:00"
+          : ""
+      )
+    );
+
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      month:"short",
+      day:"2-digit",
+      year:"numeric"
+    }
+  );
+}
+
+function formatRelativeTime(value){
+
+  if(!value){
+    return "";
+  }
+
+  const date =
+    new Date(value);
+
+  const seconds =
+    Math.floor(
+      (Date.now() - date.getTime()) / 1000
+    );
+
+  if(seconds < 60){
+    return "just now";
+  }
+
+  const minutes =
+    Math.floor(seconds / 60);
+
+  if(minutes < 60){
+    return minutes + " min ago";
+  }
+
+  const hours =
+    Math.floor(minutes / 60);
+
+  if(hours < 24){
+    return hours + " hr ago";
+  }
+
+  const days =
+    Math.floor(hours / 24);
+
+  return days + " day" +
+    (days === 1 ? "" : "s") +
+    " ago";
+}
+
+/* ==========================================================
+   SLUG
+========================================================== */
+
+function makeSlug(value){
+
+  return String(value || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-+|-+$/g,"")
+    .slice(0,200);
+}
+
+$("albumName").addEventListener(
+  "input",
+  ()=>{
+    if(!editingAlbum){
+      $("albumSlug").value =
+        makeSlug(
+          $("albumName").value
+        );
+    }
+  }
+);
+
+/* ==========================================================
+   ADMIN AUTHORIZATION
+========================================================== */
+
+async function requireAdmin(){
+
+  const {
+    data:sessionData,
+    error:sessionError
+  } =
+    await supabase.auth.getSession();
+
+  if(sessionError){
+    throw sessionError;
+  }
+
+  const session =
+    sessionData?.session;
+
+  if(!session){
+
+    $("accessScreen")
+      .classList
+      .add("show");
+
+    return false;
+  }
+
+  const {
+    data:isAdmin,
+    error:adminError
+  } =
+    await supabase.rpc(
+      "crowrules_is_admin"
+    );
+
+  if(adminError){
+
+    console.error(
+      "Admin check failed:",
+      adminError
+    );
+
+    showNotice(
+      "Administrator authorization could not be verified."
+    );
+
+    return false;
+  }
+
+  if(isAdmin !== true){
+
+    $("accessScreen")
+      .classList
+      .add("show");
+
+    return false;
+  }
+
+  $("accessScreen")
+    .classList
+    .remove("show");
+
+  const email =
+    session.user?.email || "";
+
+  if(email){
+
+    $("authUser").textContent =
+      email;
+
+    $("authUser").style.display =
+      "inline";
+  }
+
+  return true;
+}
+
+$("accessLoginBtn").addEventListener(
+  "click",
+  ()=>{
+    window.location.href =
+      "login.html?redirect=albums.html";
+  }
+);
+
+/* ==========================================================
+   LOAD ARTISTS
+========================================================== */
+
+async function loadArtists(){
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from("artists")
+      .select(
+        "id,name,slug,status"
+      )
+      .eq(
+        "status",
+        "active"
+      )
+      .order(
+        "name",
+        {
+          ascending:true
+        }
+      );
+
+  if(error){
+    throw error;
+  }
+
+  artists =
+    data || [];
+
+  renderArtistOptions();
+}
+
+function renderArtistOptions(){
+
+  const select =
+    $("albumArtist");
+
+  const current =
+    select.value;
+
+  select.innerHTML = "";
+
+  const placeholder =
+    document.createElement("option");
+
+  placeholder.value = "";
+
+  placeholder.textContent =
+    artists.length
+      ? "Select artist"
+      : "No active artists";
+
+  select.appendChild(
+    placeholder
+  );
+
+  artists.forEach(
+    artist=>{
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        artist.id;
+
+      option.textContent =
+        artist.name;
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+  if(current){
+    select.value =
+      current;
+  }
+}
+
+/* ==========================================================
+   LOAD ALBUMS
+========================================================== */
+
+async function loadAlbums(){
+
+  $("albumBody").innerHTML = `
+    <tr>
+      <td colspan="9" class="loading-row">
+        Loading CrowRules Records...
+      </td>
+    </tr>
+  `;
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from("albums")
+      .select(`
+        id,
+        artist_id,
+        title,
+        slug,
+        release_type,
+        genre,
+        description,
+        cover_url,
+        catalog_number,
+        label,
+        track_count,
+        status,
+        featured,
+        release_date,
+        stream_count,
+        created_at,
+        updated_at,
+        artists (
+          id,
+          name,
+          slug
+        )
+      `)
+      .order(
+        "release_date",
+        {
+          ascending:false,
+          nullsFirst:false
+        }
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+  if(error){
+    throw error;
+  }
+
+  albums =
+    (data || []).map(
+      album=>({
+
+        ...album,
+
+        artist_name:
+          album.artists?.name ||
+          "Unassigned"
+
+      })
+    );
+
+  renderAll();
+}
+
+/* ==========================================================
+   LOAD RELEASE STREAM COUNTS
+========================================================== */
+
+async function loadTrackedStreams(){
+
+  if(!albums.length){
+    return;
+  }
+
+  const ids =
+    albums
+      .map(album=>album.id)
+      .filter(Boolean);
+
+  if(!ids.length){
+    return;
+  }
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from("analytics_events")
+      .select(
+        "content_id,event_name"
+      )
+      .in(
+        "content_id",
+        ids
+      )
+      .in(
+        "event_name",
+        [
+          "stream",
+          "play",
+          "music_play",
+          "album_stream",
+          "track_stream"
+        ]
+      )
+      .limit(10000);
+
+  if(error){
+
+    console.warn(
+      "Analytics stream query:",
+      error.message
+    );
+
+    return;
+  }
+
+  const counts =
+    {};
+
+  (data || []).forEach(
+    event=>{
+
+      if(!event.content_id){
+        return;
+      }
+
+      counts[event.content_id] =
+        (counts[event.content_id] || 0) + 1;
+    }
+  );
+
+  albums =
+    albums.map(
+      album=>({
+
+        ...album,
+
+        tracked_streams:
+          counts[album.id] || 0
+
+      })
+    );
+}
+
+/* ==========================================================
+   RENDER ALL
+========================================================== */
+
+function renderAll(){
+
+  renderStats();
+
+  renderFeatured();
+
+  renderRegistry();
+
+  renderBreakdown();
+}
+
+/* ==========================================================
+   STATS
+========================================================== */
+
+function renderStats(){
+
+  const total =
+    albums.length;
+
+  const published =
+    albums.filter(
+      album=>album.status === "published"
+    ).length;
+
+  const featured =
+    albums.filter(
+      album=>album.featured === true
+    ).length;
+
+  const tracks =
+    albums.reduce(
+      (sum,album)=>
+        sum + Number(
+          album.track_count || 0
+        ),
+      0
+    );
+
+  const streams =
+    albums.reduce(
+      (sum,album)=>
+        sum +
+        Number(
+          album.stream_count || 0
+        ),
+      0
+    );
+
+  $("statTotal").textContent =
+    formatNumber(total);
+
+  $("statPublished").textContent =
+    formatNumber(published);
+
+  $("statFeatured").textContent =
+    formatNumber(featured);
+
+  $("statTracks").textContent =
+    formatNumber(tracks);
+
+  $("statStreams").textContent =
+    formatNumber(streams);
+}
+
+/* ==========================================================
+   FEATURED RELEASES
+========================================================== */
+
+function renderFeatured(){
+
+  const featured =
+    albums
+      .filter(
+        album=>
+          album.featured === true &&
+          album.status !== "archived"
+      )
+      .slice(0,8);
+
+  $("featuredCount").textContent =
+    featured.length +
+    " featured";
+
+  const grid =
+    $("featuredGrid");
+
+  grid.innerHTML = "";
+
+  if(!featured.length){
+
+    const empty =
+      document.createElement("div");
+
+    empty.style.gridColumn =
+      "1/-1";
+
+    empty.style.padding =
+      "35px";
+
+    empty.style.textAlign =
+      "center";
+
+    empty.style.border =
+      "1px solid var(--line)";
+
+    empty.style.color =
+      "#666671";
+
+    empty.textContent =
+      "No featured releases have been configured yet.";
+
+    grid.appendChild(empty);
+
+    return;
+  }
+
+  featured.forEach(
+    album=>{
+
+      const card =
+        document.createElement("article");
+
+      card.className =
+        "album-card";
+
+      const cover =
+        document.createElement("div");
+
+      cover.className =
+        "cover";
+
+      if(album.cover_url){
+
+        const img =
+          document.createElement("img");
+
+        img.src =
+          album.cover_url;
+
+        img.alt =
+          album.title +
+          " cover artwork";
+
+        img.loading =
+          "lazy";
+
+        img.onerror =
+          ()=>{
+            img.remove();
+          };
+
+        cover.appendChild(img);
+      }
+
+      const badge =
+        document.createElement("div");
+
+      badge.className =
+        "cover-badge";
+
+      badge.textContent =
+        "Featured";
+
+      cover.appendChild(badge);
+
+      const year =
+        document.createElement("div");
+
+      year.className =
+        "release-year";
+
+      year.textContent =
+        album.release_date
+          ? new Date(
+              album.release_date +
+              "T00:00:00"
+            ).getFullYear()
+          : "—";
+
+      cover.appendChild(year);
+
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "album-info";
+
+      const name =
+        document.createElement("div");
+
+      name.className =
+        "album-name";
+
+      name.textContent =
+        album.title;
+
+      info.appendChild(name);
+
+      const artist =
+        document.createElement("div");
+
+      artist.className =
+        "album-artist";
+
+      artist.textContent =
+        album.artist_name;
+
+      info.appendChild(artist);
+
+      const meta =
+        document.createElement("div");
+
+      meta.className =
+        "album-meta";
+
+      const tracks =
+        document.createElement("span");
+
+      tracks.textContent =
+        Number(album.track_count || 0) +
+        " Tracks";
+
+      const genre =
+        document.createElement("span");
+
+      genre.textContent =
+        album.genre ||
+        "Uncategorized";
+
+      meta.appendChild(tracks);
+
+      meta.appendChild(genre);
+
+      info.appendChild(meta);
+
+      const actions =
+        document.createElement("div");
+
+      actions.className =
+        "album-actions";
+
+      const view =
+        document.createElement("button");
+
+      view.className =
+        "small-btn";
+
+      view.type =
+        "button";
+
+      view.textContent =
+        "View";
+
+      view.addEventListener(
+        "click",
+        ()=>{
+          viewAlbum(album);
+        }
+      );
+
+      const edit =
+        document.createElement("button");
+
+      edit.className =
+        "small-btn";
+
+      edit.type =
+        "button";
+
+      edit.textContent =
+        "Edit";
+
+      edit.addEventListener(
+        "click",
+        ()=>{
+          openModal(album);
+        }
+      );
+
+      actions.appendChild(view);
+
+      actions.appendChild(edit);
+
+      info.appendChild(actions);
+
+      card.appendChild(cover);
+
+      card.appendChild(info);
+
+      grid.appendChild(card);
+    }
+  );
+}
+
+/* ==========================================================
+   REGISTRY
+========================================================== */
+
+function renderRegistry(){
+
+  const query =
+    $("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const status =
+    $("statusFilter").value;
+
+  const type =
+    $("typeFilter").value;
+
+  const featured =
+    $("featuredFilter").value;
+
+  const filtered =
+    albums.filter(
+      album=>{
+
+        const searchable =
+          [
+            album.title,
+            album.artist_name,
+            album.genre,
+            album.catalog_number,
+            album.label,
+            album.slug
+          ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        const matchesSearch =
+          !query ||
+          searchable.includes(query);
+
+        const matchesStatus =
+          !status ||
+          album.status === status;
+
+        const matchesType =
+          !type ||
+          album.release_type === type;
+
+        const matchesFeatured =
+          !featured ||
+          (
+            featured === "yes"
+              ? album.featured === true
+              : album.featured !== true
+          );
+
+        return (
+          matchesSearch &&
+          matchesStatus &&
+          matchesType &&
+          matchesFeatured
+        );
+      }
+    );
+
+  $("resultCount").textContent =
+    filtered.length +
+    " release" +
+    (
+      filtered.length === 1
+        ? ""
+        : "s"
+    ) +
+    " shown";
+
+  const body =
+    $("albumBody");
+
+  body.innerHTML = "";
+
+  if(!filtered.length){
+
+    $("emptyState")
+      .style
+      .display = "block";
+
+    return;
+  }
+
+  $("emptyState")
+    .style
+    .display = "none";
+
+  filtered.forEach(
+    album=>{
+
+      body.appendChild(
+        createAlbumRow(album)
+      );
+
+    }
+  );
+}
+
+function createAlbumRow(album){
+
+  const row =
+    document.createElement("tr");
+
+  row.dataset.id =
+    album.id;
+
+  /* RELEASE */
+
+  const releaseCell =
+    document.createElement("td");
+
+  const albumCell =
+    document.createElement("div");
+
+  albumCell.className =
+    "album-cell";
+
+  const thumb =
+    document.createElement("div");
+
+  thumb.className =
+    "thumb";
+
+  if(album.cover_url){
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      album.cover_url;
+
+    img.alt =
+      "";
+
+    img.loading =
+      "lazy";
+
+    img.onerror =
+      ()=>{
+        img.remove();
+
+        thumb.textContent =
+          initials(
+            album.title
+          );
+      };
+
+    thumb.appendChild(img);
+
+  }else{
+
+    thumb.textContent =
+      initials(
+        album.title
+      );
+  }
+
+  albumCell.appendChild(thumb);
+
+  const titleBox =
+    document.createElement("div");
+
+  const title =
+    document.createElement("strong");
+
+  title.textContent =
+    album.title;
+
+  titleBox.appendChild(title);
+
+  const subtitle =
+    document.createElement("span");
+
+  subtitle.textContent =
+    [
+      album.genre,
+      album.catalog_number
+    ]
+    .filter(Boolean)
+    .join(" / ") ||
+    "CrowRules Records";
+
+  titleBox.appendChild(
+    subtitle
+  );
+
+  albumCell.appendChild(
+    titleBox
+  );
+
+  releaseCell.appendChild(
+    albumCell
+  );
+
+  row.appendChild(
+    releaseCell
+  );
+
+  /* ARTIST */
+
+  const artist =
+    document.createElement("td");
+
+  artist.textContent =
+    album.artist_name;
+
+  row.appendChild(artist);
+
+  /* TYPE */
+
+  const type =
+    document.createElement("td");
+
+  const typePill =
+    document.createElement("span");
+
+  typePill.className =
+    "type-pill";
+
+  typePill.textContent =
+    releaseTypeLabel(
+      album.release_type
+    );
+
+  type.appendChild(
+    typePill
+  );
+
+  row.appendChild(type);
+
+  /* TRACKS */
+
+  const tracks =
+    document.createElement("td");
+
+  tracks.textContent =
+    Number(
+      album.track_count || 0
+    );
+
+  row.appendChild(tracks);
+
+  /* DATE */
+
+  const date =
+    document.createElement("td");
+
+  date.textContent =
+    formatDate(
+      album.release_date
+    );
+
+  row.appendChild(date);
+
+  /* STATUS */
+
+  const status =
+    document.createElement("td");
+
+  const statusBadge =
+    document.createElement("span");
+
+  statusBadge.className =
+    "badge " +
+    (
+      [
+        "published",
+        "scheduled",
+        "draft",
+        "archived"
+      ].includes(album.status)
+        ? album.status
+        : "draft"
+    );
+
+  statusBadge.textContent =
+    album.status ||
+    "draft";
+
+  status.appendChild(
+    statusBadge
+  );
+
+  row.appendChild(status);
+
+  /* FEATURED */
+
+  const featured =
+    document.createElement("td");
+
+  const featuredBadge =
+    document.createElement("span");
+
+  featuredBadge.className =
+    "badge " +
+    (
+      album.featured
+        ? "featured"
+        : "not-featured"
+    );
+
+  featuredBadge.textContent =
+    album.featured
+      ? "Featured"
+      : "—";
+
+  featured.appendChild(
+    featuredBadge
+  );
+
+  row.appendChild(featured);
+
+  /* STREAMS */
+
+  const streams =
+    document.createElement("td");
+
+  streams.textContent =
+    album.stream_count
+      ? formatNumber(
+          album.stream_count
+        )
+      : "—";
+
+  row.appendChild(streams);
+
+  /* ACTIONS */
+
+  const actionsCell =
+    document.createElement("td");
+
+  const actions =
+    document.createElement("div");
+
+  actions.className =
+    "row-actions";
+
+  const viewBtn =
+    document.createElement("button");
+
+  viewBtn.type =
+    "button";
+
+  viewBtn.className =
+    "icon-btn";
+
+  viewBtn.title =
+    "View release";
+
+  viewBtn.textContent =
+    "↗";
+
+  viewBtn.addEventListener(
+    "click",
+    ()=>{
+      viewAlbum(album);
+    }
+  );
+
+  const editBtn =
+    document.createElement("button");
+
+  editBtn.type =
+    "button";
+
+  editBtn.className =
+    "icon-btn";
+
+  editBtn.title =
+    "Edit release";
+
+  editBtn.textContent =
+    "✎";
+
+  editBtn.addEventListener(
+    "click",
+    ()=>{
+      openModal(album);
+    }
+  );
+
+  const archiveBtn =
+    document.createElement("button");
+
+  archiveBtn.type =
+    "button";
+
+  archiveBtn.className =
+    "icon-btn delete";
+
+  archiveBtn.title =
+    "Archive release";
+
+  archiveBtn.textContent =
+    "×";
+
+  archiveBtn.addEventListener(
+    "click",
+    ()=>{
+      archiveAlbum(album);
+    }
+  );
+
+  actions.appendChild(
+    viewBtn
+  );
+
+  actions.appendChild(
+    editBtn
+  );
+
+  actions.appendChild(
+    archiveBtn
+  );
+
+  actionsCell.appendChild(
+    actions
+  );
+
+  row.appendChild(
+    actionsCell
+  );
+
+  return row;
+}
+
+/* ==========================================================
+   HELPERS
+========================================================== */
+
+function initials(value){
+
+  return String(value || "CR")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0,2)
+    .map(
+      part =>
+        part.charAt(0)
+          .toUpperCase()
+    )
+    .join("");
+}
+
+function releaseTypeLabel(type){
+
+  const labels = {
+    album:"Album",
+    ep:"EP",
+    single:"Single",
+    compilation:"Compilation",
+    soundtrack:"Soundtrack"
+  };
+
+  return labels[type] ||
+    "Release";
+}
+
+/* ==========================================================
+   BREAKDOWN
+========================================================== */
+
+function renderBreakdown(){
+
+  const total =
+    albums.length;
+
+  const types = {
+    album:0,
+    ep:0,
+    single:0,
+    compilation:0,
+    soundtrack:0
+  };
+
+  albums.forEach(
+    album=>{
+
+      if(
+        Object.prototype.hasOwnProperty.call(
+          types,
+          album.release_type
+        )
+      ){
+
+        types[album.release_type]++;
+      }
+
+    }
+  );
+
+  $("breakdownTotal").textContent =
+    total +
+    " TOTAL";
+
+  setMetric(
+    "albums",
+    types.album,
+    total
+  );
+
+  setMetric(
+    "eps",
+    types.ep,
+    total
+  );
+
+  setMetric(
+    "singles",
+    types.single,
+    total
+  );
+
+  setMetric(
+    "compilations",
+    types.compilation,
+    total
+  );
+
+  setMetric(
+    "soundtracks",
+    types.soundtrack,
+    total
+  );
+}
+
+function setMetric(
+  key,
+  count,
+  total
+){
+
+  $(key + "Metric").textContent =
+    count +
+    " / " +
+    total;
+
+  const percent =
+    total
+      ? (count / total) * 100
+      : 0;
+
+  $(key + "Bar").style.width =
+    percent + "%";
+}
+
+/* ==========================================================
+   FILTER EVENTS
+========================================================== */
+
+[
+  "search",
+  "statusFilter",
+  "typeFilter",
+  "featuredFilter"
+]
+.forEach(
+  id=>{
+
+    $(id).addEventListener(
+      id === "search"
+        ? "input"
+        : "change",
+      renderRegistry
+    );
+
+  }
+);
+
+$("resetBtn").addEventListener(
+  "click",
+  resetFilters
+);
+
+$("clearFiltersBtn").addEventListener(
+  "click",
+  resetFilters
+);
+
+function resetFilters(){
+
+  $("search").value = "";
+
+  $("statusFilter").value = "";
+
+  $("typeFilter").value = "";
+
+  $("featuredFilter").value = "";
+
+  renderRegistry();
+
+  toast(
+    "Release filters reset."
+  );
+}
+
+/* ==========================================================
+   FEATURED BUTTON
+========================================================== */
+
+$("featuredBtn").addEventListener(
+  "click",
+  ()=>{
+
+    $("featuredFilter").value =
+      "yes";
+
+    renderRegistry();
+
+    $("featuredSection")
+      .scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    toast(
+      "Featured release filter enabled."
+    );
+  }
+);
 
 /* ==========================================================
    MODAL
 ========================================================== */
 
-let editingAlbum = null;
-
 function openModal(album=null){
 
-  editingAlbum = album;
+  editingAlbum =
+    album;
 
   $("modalTitle").textContent =
     album
       ? "Edit Release"
       : "Create Release";
 
+  $("albumForm").reset();
+
   if(album){
 
     $("albumName").value =
-      album.name || "";
+      album.title || "";
 
     $("albumArtist").value =
-      album.artist || "Neon Raven";
+      album.artist_id || "";
 
     $("albumType").value =
-      album.type || "album";
+      album.release_type ||
+      "album";
 
     $("albumGenre").value =
       album.genre || "";
 
     $("releaseDate").value =
-      album.releaseDate || "";
+      album.release_date || "";
 
     $("albumStatus").value =
-      album.status || "draft";
+      album.status ||
+      "draft";
 
     $("trackCount").value =
-      album.trackCount || "";
+      Number(
+        album.track_count || 0
+      );
 
     $("catalogNumber").value =
-      album.catalogNumber || "";
+      album.catalog_number ||
+      "";
 
     $("coverUrl").value =
-      album.coverUrl || "";
+      album.cover_url ||
+      "";
 
     $("albumDescription").value =
-      album.description || "";
+      album.description ||
+      "";
 
     $("albumSlug").value =
-      album.slug || "";
+      album.slug ||
+      "";
 
     $("albumLabel").value =
-      album.label || "CrowRules Records";
+      album.label ||
+      "CrowRules Records";
 
     $("albumFeatured").checked =
-      album.featured === "yes";
+      album.featured === true;
 
   }else{
 
-    $("albumForm").reset();
-
-    $("albumLabel").value =
-      "CrowRules Records";
+    $("albumType").value =
+      "album";
 
     $("albumStatus").value =
       "draft";
 
+    $("trackCount").value =
+      "0";
+
+    $("albumLabel").value =
+      "CrowRules Records";
+
+    $("albumFeatured").checked =
+      false;
   }
 
-  $("albumModal").classList.add("show");
+  $("albumModal")
+    .classList
+    .add("show");
 
-  setTimeout(()=>{
-    $("albumName").focus();
-  },50);
-
+  setTimeout(
+    ()=>{
+      $("albumName").focus();
+    },
+    60
+  );
 }
 
 function closeModal(){
 
-  $("albumModal").classList.remove("show");
+  $("albumModal")
+    .classList
+    .remove("show");
 
-  editingAlbum = null;
-
+  editingAlbum =
+    null;
 }
 
 $("newAlbumBtn").addEventListener(
   "click",
-  ()=>openModal()
+  ()=>{
+    openModal();
+  }
 );
 
 $("closeModal").addEventListener(
@@ -3137,379 +4127,90 @@ $("cancelModal").addEventListener(
 
 $("albumModal").addEventListener(
   "click",
-  e=>{
-    if(e.target === $("albumModal")){
+  event=>{
+
+    if(
+      event.target ===
+      $("albumModal")
+    ){
+
       closeModal();
     }
+
   }
 );
 
 document.addEventListener(
   "keydown",
-  e=>{
-    if(e.key === "Escape"){
+  event=>{
+
+    if(
+      event.key === "Escape" &&
+      $("albumModal")
+        .classList
+        .contains("show")
+    ){
+
       closeModal();
     }
+
   }
 );
 
 /* ==========================================================
-   AUTO SLUG
+   VALIDATION
 ========================================================== */
 
-$("albumName").addEventListener(
-  "input",
-  ()=>{
+function validateRelease(){
 
-    if(editingAlbum) return;
+  const title =
+    $("albumName")
+      .value
+      .trim();
+
+  const slug =
+    $("albumSlug")
+      .value
+      .trim();
+
+  if(!title){
+
+    toast(
+      "Release title is required."
+    );
+
+    $("albumName").focus();
+
+    return false;
+  }
+
+  if(!slug){
 
     $("albumSlug").value =
-      $("albumName").value
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]+/g,"-")
-        .replace(/^-+|-+$/g,"");
-
+      makeSlug(title);
   }
-);
 
-/* ==========================================================
-   TOAST
-========================================================== */
+  const trackCount =
+    Number(
+      $("trackCount").value || 0
+    );
 
-let toastTimer;
+  if(
+    !Number.isInteger(trackCount) ||
+    trackCount < 0
+  ){
 
-function toast(message){
+    toast(
+      "Track count must be zero or greater."
+    );
 
-  $("toastMessage").textContent =
-    message;
+    $("trackCount").focus();
 
-  $("toast").classList.add("show");
+    return false;
+  }
 
-  clearTimeout(toastTimer);
-
-  toastTimer =
-    setTimeout(()=>{
-      $("toast").classList.remove("show");
-    },3000);
-
+  return true;
 }
-
-/* ==========================================================
-   FILTERING
-========================================================== */
-
-const search =
-  $("search");
-
-const statusFilter =
-  $("statusFilter");
-
-const typeFilter =
-  $("typeFilter");
-
-const featuredFilter =
-  $("featuredFilter");
-
-function filterAlbums(){
-
-  const query =
-    search.value.trim().toLowerCase();
-
-  const status =
-    statusFilter.value;
-
-  const type =
-    typeFilter.value;
-
-  const featured =
-    featuredFilter.value;
-
-  let visible = 0;
-
-  document
-    .querySelectorAll("#albumTable tbody tr")
-    .forEach(row=>{
-
-      const name =
-        (row.dataset.name || "")
-          .toLowerCase();
-
-      const artist =
-        (row.dataset.artist || "")
-          .toLowerCase();
-
-      const rowStatus =
-        row.dataset.status || "";
-
-      const rowType =
-        row.dataset.type || "";
-
-      const rowFeatured =
-        row.dataset.featured || "";
-
-      const matchesSearch =
-        !query ||
-        name.includes(query) ||
-        artist.includes(query) ||
-        row.textContent
-          .toLowerCase()
-          .includes(query);
-
-      const matchesStatus =
-        !status ||
-        rowStatus === status;
-
-      const matchesType =
-        !type ||
-        rowType === type;
-
-      const matchesFeatured =
-        !featured ||
-        rowFeatured === featured;
-
-      const show =
-        matchesSearch &&
-        matchesStatus &&
-        matchesType &&
-        matchesFeatured;
-
-      row.style.display =
-        show ? "" : "none";
-
-      if(show){
-        visible++;
-      }
-
-    });
-
-  $("resultCount").textContent =
-    visible +
-    " release" +
-    (visible === 1 ? "" : "s") +
-    " shown";
-
-  $("emptyState").style.display =
-    visible ? "none" : "block";
-
-}
-
-search.addEventListener(
-  "input",
-  filterAlbums
-);
-
-statusFilter.addEventListener(
-  "change",
-  filterAlbums
-);
-
-typeFilter.addEventListener(
-  "change",
-  filterAlbums
-);
-
-featuredFilter.addEventListener(
-  "change",
-  filterAlbums
-);
-
-/* ==========================================================
-   RESET
-========================================================== */
-
-$("resetBtn").addEventListener(
-  "click",
-  ()=>{
-
-    search.value = "";
-    statusFilter.value = "";
-    typeFilter.value = "";
-    featuredFilter.value = "";
-
-    filterAlbums();
-
-    toast(
-      "Release filters reset."
-    );
-
-  }
-);
-
-/* ==========================================================
-   FEATURED FILTER
-========================================================== */
-
-$("featuredBtn").addEventListener(
-  "click",
-  ()=>{
-
-    featuredFilter.value = "yes";
-
-    filterAlbums();
-
-    window.scrollTo({
-      top:$("albumTable").offsetTop - 120,
-      behavior:"smooth"
-    });
-
-    toast(
-      "Showing featured releases."
-    );
-
-  }
-);
-
-$("manageFeaturedBtn").addEventListener(
-  "click",
-  ()=>{
-
-    featuredFilter.value = "yes";
-
-    filterAlbums();
-
-    toast(
-      "Featured release filter enabled."
-    );
-
-  }
-);
-
-/* ==========================================================
-   VIEW ACTIONS
-========================================================== */
-
-document
-  .querySelectorAll(".view-btn")
-  .forEach(btn=>{
-
-    btn.addEventListener(
-      "click",
-      e=>{
-
-        const card =
-          e.currentTarget
-            .closest(".album-card");
-
-        const row =
-          e.currentTarget
-            .closest("tr");
-
-        const source =
-          card || row;
-
-        const name =
-          source.dataset.name ||
-          source.querySelector(
-            ".album-name"
-          )?.textContent ||
-          "Release";
-
-        toast(
-          "Opening release: " +
-          name
-        );
-
-      }
-    );
-
-  });
-
-/* ==========================================================
-   EDIT ACTIONS
-========================================================== */
-
-document
-  .querySelectorAll(".edit-btn")
-  .forEach(btn=>{
-
-    btn.addEventListener(
-      "click",
-      e=>{
-
-        const card =
-          e.currentTarget
-            .closest(".album-card");
-
-        const row =
-          e.currentTarget
-            .closest("tr");
-
-        const source =
-          card || row;
-
-        const album = {
-
-          name:
-            source.dataset.name,
-
-          artist:
-            source.dataset.artist ||
-            "Neon Raven",
-
-          type:
-            source.dataset.type ||
-            "album",
-
-          status:
-            source.dataset.status ||
-            "draft",
-
-          featured:
-            source.dataset.featured ||
-            "no"
-
-        };
-
-        openModal(album);
-
-      }
-    );
-
-  });
-
-/* ==========================================================
-   DELETE / ARCHIVE ACTIONS
-========================================================== */
-
-document
-  .querySelectorAll(".delete-btn")
-  .forEach(btn=>{
-
-    btn.addEventListener(
-      "click",
-      e=>{
-
-        const row =
-          e.currentTarget
-            .closest("tr");
-
-        const name =
-          row.dataset.name ||
-          "this release";
-
-        const confirmed =
-          confirm(
-            "Archive " +
-            name +
-            "?\n\n" +
-            "This demo interface does not " +
-            "delete database records."
-          );
-
-        if(confirmed){
-
-          toast(
-            name +
-            " marked for archival."
-          );
-
-        }
-
-      }
-    );
-
-  });
 
 /* ==========================================================
    SAVE RELEASE
@@ -3517,72 +4218,93 @@ document
 
 $("saveAlbum").addEventListener(
   "click",
-  ()=>{
+  saveAlbum
+);
 
-    const name =
-      $("albumName").value.trim();
+async function saveAlbum(){
 
-    if(!name){
+  if(!validateRelease()){
+    return;
+  }
 
-      toast(
-        "Release title is required."
-      );
+  const button =
+    $("saveAlbum");
 
-      $("albumName").focus();
+  button.disabled =
+    true;
 
-      return;
-    }
+  button.textContent =
+    "Saving...";
+
+  try{
 
     const payload = {
 
-      title:name,
-
-      slug:
-        $("albumSlug")
+      title:
+        $("albumName")
           .value
           .trim(),
 
-      artist_name:
-        $("albumArtist").value,
+      slug:
+        makeSlug(
+          $("albumSlug")
+            .value
+        ),
+
+      artist_id:
+        $("albumArtist")
+          .value ||
+        null,
 
       release_type:
-        $("albumType").value,
+        $("albumType")
+          .value,
 
       genre:
         $("albumGenre")
           .value
-          .trim(),
+          .trim() ||
+        null,
 
       release_date:
-        $("releaseDate").value || null,
+        $("releaseDate")
+          .value ||
+        null,
 
       status:
-        $("albumStatus").value,
+        $("albumStatus")
+          .value,
 
       track_count:
         Number(
-          $("trackCount").value || 0
+          $("trackCount")
+            .value ||
+          0
         ),
 
       catalog_number:
         $("catalogNumber")
           .value
-          .trim(),
+          .trim() ||
+        null,
 
       cover_url:
         $("coverUrl")
           .value
-          .trim(),
+          .trim() ||
+        null,
 
       description:
         $("albumDescription")
           .value
-          .trim(),
+          .trim() ||
+        null,
 
       label:
         $("albumLabel")
           .value
-          .trim(),
+          .trim() ||
+        "CrowRules Records",
 
       featured:
         $("albumFeatured")
@@ -3590,203 +4312,921 @@ $("saveAlbum").addEventListener(
 
     };
 
-    console.log(
-      "CrowRules release payload:",
-      payload
-    );
+    let saved;
 
-    /*
-      Supabase example after schema verification:
+    if(editingAlbum){
 
-      const { data, error } = await supabase
-        .from("albums")
-        .insert(payload)
-        .select()
-        .single();
+      const {
+        data,
+        error
+      } =
+        await supabase
+          .from("albums")
+          .update(payload)
+          .eq(
+            "id",
+            editingAlbum.id
+          )
+          .select()
+          .single();
 
-      For edits:
+      if(error){
+        throw error;
+      }
 
-      const { data, error } = await supabase
-        .from("albums")
-        .update(payload)
-        .eq("id", albumId)
-        .select()
-        .single();
+      saved =
+        data;
 
-      Adapt the field names to your existing schema.
-    */
+      await logAdminActivity(
+        "update",
+        "Release updated",
+        payload.title,
+        "success",
+        "content",
+        "album",
+        saved?.id
+      );
+
+      toast(
+        payload.title +
+        " updated successfully."
+      );
+
+    }else{
+
+      const {
+        data,
+        error
+      } =
+        await supabase
+          .from("albums")
+          .insert(
+            payload
+          )
+          .select()
+          .single();
+
+      if(error){
+        throw error;
+      }
+
+      saved =
+        data;
+
+      await logAdminActivity(
+        "create",
+        "Release created",
+        payload.title,
+        "success",
+        "content",
+        "album",
+        saved?.id
+      );
+
+      toast(
+        payload.title +
+        " created successfully."
+      );
+    }
 
     closeModal();
 
-    toast(
-      editingAlbum
-        ? "Release update saved."
-        : "Release created successfully."
+    await refreshData();
+
+  }catch(error){
+
+    console.error(
+      "Save release failed:",
+      error
     );
 
+    toast(
+      friendlySupabaseError(
+        error
+      )
+    );
+
+  }finally{
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "Save Release";
   }
-);
+}
 
 /* ==========================================================
-   EXPORT REGISTRY
+   ARCHIVE
+========================================================== */
+
+async function archiveAlbum(album){
+
+  if(!album?.id){
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      "Archive \"" +
+      album.title +
+      "\"?\n\n" +
+      "The release will remain in the database and its status will be changed to archived."
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabase
+        .from("albums")
+        .update({
+          status:"archived",
+          featured:false
+        })
+        .eq(
+          "id",
+          album.id
+        );
+
+    if(error){
+      throw error;
+    }
+
+    await logAdminActivity(
+      "update",
+      "Release archived",
+      album.title,
+      "warning",
+      "content",
+      "album",
+      album.id
+    );
+
+    toast(
+      album.title +
+      " archived."
+    );
+
+    await refreshData();
+
+  }catch(error){
+
+    console.error(
+      "Archive failed:",
+      error
+    );
+
+    toast(
+      friendlySupabaseError(
+        error
+      )
+    );
+  }
+}
+
+/* ==========================================================
+   VIEW
+========================================================== */
+
+function viewAlbum(album){
+
+  if(!album){
+    return;
+  }
+
+  const slug =
+    encodeURIComponent(
+      album.slug ||
+      ""
+    );
+
+  const destination =
+    "album.html?slug=" +
+    slug;
+
+  /*
+    If the public Records album page exists,
+    navigate there. Otherwise the fallback
+    remains within the admin interface.
+  */
+
+  window.location.href =
+    destination;
+}
+
+/* ==========================================================
+   ADMIN ACTIVITY
+========================================================== */
+
+async function logAdminActivity(
+  eventType,
+  title,
+  description,
+  severity,
+  source,
+  entityType,
+  entityId
+){
+
+  try{
+
+    const {
+      error
+    } =
+      await supabase.rpc(
+        "crowrules_admin_log",
+        {
+          p_event_type:
+            eventType,
+
+          p_title:
+            title,
+
+          p_description:
+            description,
+
+          p_severity:
+            severity,
+
+          p_source:
+            source,
+
+          p_entity_type:
+            entityType,
+
+          p_entity_id:
+            entityId
+              ? String(entityId)
+              : null,
+
+          p_metadata:
+            {}
+        }
+      );
+
+    if(error){
+
+      console.warn(
+        "Admin activity log failed:",
+        error.message
+      );
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Admin activity exception:",
+      error
+    );
+  }
+}
+
+/* ==========================================================
+   RECENT ACTIVITY
+========================================================== */
+
+async function loadActivity(){
+
+  const list =
+    $("activityList");
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabase
+        .from("activity")
+        .select(`
+          id,
+          event_type,
+          severity,
+          title,
+          description,
+          actor,
+          record_type,
+          record_id,
+          created_at
+        `)
+        .in(
+          "record_type",
+          [
+            "album",
+            "albums"
+          ]
+        )
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(6);
+
+    if(error){
+      throw error;
+    }
+
+    list.innerHTML = "";
+
+    if(!data?.length){
+
+      list.innerHTML = `
+        <div class="activity-item">
+          <div class="activity-icon">◌</div>
+          <div class="activity-text">
+            <strong>System</strong>
+            No release activity has been recorded yet.
+            <span class="activity-time">
+              Waiting for activity
+            </span>
+          </div>
+        </div>
+      `;
+
+      return;
+    }
+
+    data.forEach(
+      item=>{
+
+        const wrapper =
+          document.createElement(
+            "div"
+          );
+
+        wrapper.className =
+          "activity-item";
+
+        const icon =
+          document.createElement(
+            "div"
+          );
+
+        icon.className =
+          "activity-icon";
+
+        icon.textContent =
+          activityIcon(
+            item.event_type
+          );
+
+        const text =
+          document.createElement(
+            "div"
+          );
+
+        text.className =
+          "activity-text";
+
+        const strong =
+          document.createElement(
+            "strong"
+          );
+
+        strong.textContent =
+          item.title ||
+          "Release activity";
+
+        text.appendChild(
+          strong
+        );
+
+        text.appendChild(
+          document.createTextNode(
+            item.description
+              ? " " +
+                item.description
+              : ""
+          )
+        );
+
+        const time =
+          document.createElement(
+            "span"
+          );
+
+        time.className =
+          "activity-time";
+
+        time.textContent =
+          formatRelativeTime(
+            item.created_at
+          );
+
+        text.appendChild(
+          time
+        );
+
+        wrapper.appendChild(
+          icon
+        );
+
+        wrapper.appendChild(
+          text
+        );
+
+        list.appendChild(
+          wrapper
+        );
+      }
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Activity load failed:",
+      error.message
+    );
+
+    list.innerHTML = `
+      <div class="activity-item">
+        <div class="activity-icon">!</div>
+        <div class="activity-text">
+          <strong>Activity unavailable</strong>
+          Release activity could not be loaded.
+          <span class="activity-time">
+            Check administrator permissions
+          </span>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function activityIcon(type){
+
+  const icons = {
+    create:"+",
+    update:"✎",
+    publish:"✓",
+    delete:"×",
+    login:"♙",
+    live:"●",
+    system:"◌"
+  };
+
+  return icons[type] ||
+    "◌";
+}
+
+/* ==========================================================
+   EXPORT CSV
 ========================================================== */
 
 $("exportBtn").addEventListener(
   "click",
-  ()=>{
+  exportRegistry
+);
 
-    const rows =
-      [
-        ...document.querySelectorAll(
-          "#albumTable tbody tr"
-        )
-      ].filter(
-        row=>row.style.display !== "none"
-      );
+function exportRegistry(){
 
-    const data =
-      rows.map(row=>{
+  const query =
+    $("search")
+      .value
+      .trim()
+      .toLowerCase();
 
-        const cells =
+  const status =
+    $("statusFilter").value;
+
+  const type =
+    $("typeFilter").value;
+
+  const featured =
+    $("featuredFilter").value;
+
+  const filtered =
+    albums.filter(
+      album=>{
+
+        const searchable =
           [
-            ...row.querySelectorAll("td")
-          ];
+            album.title,
+            album.artist_name,
+            album.genre,
+            album.catalog_number,
+            album.label
+          ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
 
-        return {
+        return (
+          (!query ||
+            searchable.includes(query)) &&
+          (!status ||
+            album.status === status) &&
+          (!type ||
+            album.release_type === type) &&
+          (!featured ||
+            (
+              featured === "yes"
+                ? album.featured === true
+                : album.featured !== true
+            ))
+        );
+      }
+    );
 
-          release:
-            row.dataset.name,
+  const headers = [
+    "id",
+    "title",
+    "artist",
+    "release_type",
+    "genre",
+    "catalog_number",
+    "label",
+    "track_count",
+    "status",
+    "featured",
+    "release_date",
+    "stream_count",
+    "slug",
+    "created_at",
+    "updated_at"
+  ];
 
-          artist:
-            row.dataset.artist,
+  const rows =
+    filtered.map(
+      album=>[
+        album.id,
+        album.title,
+        album.artist_name,
+        album.release_type,
+        album.genre,
+        album.catalog_number,
+        album.label,
+        album.track_count,
+        album.status,
+        album.featured,
+        album.release_date,
+        album.stream_count,
+        album.slug,
+        album.created_at,
+        album.updated_at
+      ]
+    );
 
-          type:
-            cells[2]?.innerText.trim(),
+  const csv =
+    [
+      headers,
+      ...rows
+    ]
+    .map(
+      row =>
+        row
+          .map(csvEscape)
+          .join(",")
+    )
+    .join("\r\n");
 
-          tracks:
-            cells[3]?.innerText.trim(),
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
 
-          release_date:
-            cells[4]?.innerText.trim(),
+  const url =
+    URL.createObjectURL(
+      blob
+    );
 
-          status:
-            cells[5]?.innerText.trim(),
+  const link =
+    document.createElement(
+      "a"
+    );
 
-          featured:
-            cells[6]?.innerText.trim(),
+  link.href =
+    url;
 
-          streams:
-            cells[7]?.innerText.trim()
+  link.download =
+    "crowrules-records-albums-" +
+    new Date()
+      .toISOString()
+      .slice(0,10) +
+    ".csv";
 
-        };
+  document.body.appendChild(
+    link
+  );
 
-      });
+  link.click();
 
-    const blob =
-      new Blob(
-        [
-          JSON.stringify(
-            data,
-            null,
-            2
-          )
-        ],
+  link.remove();
+
+  URL.revokeObjectURL(
+    url
+  );
+
+  toast(
+    filtered.length +
+    " releases exported to CSV."
+  );
+}
+
+function csvEscape(value){
+
+  const string =
+    value === null ||
+    value === undefined
+      ? ""
+      : String(value);
+
+  return '"' +
+    string
+      .replace(/"/g,'""') +
+    '"';
+}
+
+/* ==========================================================
+   REALTIME
+========================================================== */
+
+function subscribeRealtime(){
+
+  if(realtimeChannel){
+
+    supabase.removeChannel(
+      realtimeChannel
+    );
+  }
+
+  realtimeChannel =
+    supabase
+      .channel(
+        "crowrules-albums-admin"
+      )
+      .on(
+        "postgres_changes",
         {
-          type:
-            "application/json"
+          event:"*",
+          schema:"public",
+          table:"albums"
+        },
+        ()=>{
+          refreshData({
+            silent:true
+          });
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event:"*",
+          schema:"public",
+          table:"artists"
+        },
+        ()=>{
+          loadArtists()
+            .catch(
+              console.error
+            );
+        }
+      )
+      .subscribe(
+        status=>{
+          if(
+            status ===
+            "SUBSCRIBED"
+          ){
+
+            console.info(
+              "CrowRules Records realtime connected."
+            );
+          }
         }
       );
+}
 
-    const url =
-      URL.createObjectURL(blob);
+/* ==========================================================
+   REFRESH
+========================================================== */
 
-    const a =
-      document.createElement("a");
+$("refreshBtn").addEventListener(
+  "click",
+  ()=>{
+    refreshData();
+  }
+);
 
-    a.href = url;
+async function refreshData(
+  options={}
+){
 
-    a.download =
-      "crowrules-albums-" +
-      new Date()
-        .toISOString()
-        .slice(0,10) +
-      ".json";
+  const silent =
+    options.silent === true;
 
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove();
-
-    URL.revokeObjectURL(url);
+  if(!silent){
 
     toast(
-      "Release registry exported."
+      "Refreshing Records data..."
     );
+  }
+
+  try{
+
+    clearNotice();
+
+    await Promise.all([
+      loadArtists(),
+      loadAlbums()
+    ]);
+
+    await loadTrackedStreams();
+
+    renderAll();
+
+    await loadActivity();
+
+    if(!silent){
+
+      toast(
+        "CrowRules Records data refreshed."
+      );
+    }
+
+  }catch(error){
+
+    console.error(
+      "Records refresh failed:",
+      error
+    );
+
+    showNotice(
+      friendlySupabaseError(
+        error
+      )
+    );
+
+    $("albumBody").innerHTML = `
+      <tr>
+        <td colspan="9" class="loading-row">
+          Unable to load the release registry.
+        </td>
+      </tr>
+    `;
+
+  }
+}
+
+/* ==========================================================
+   ERROR MESSAGES
+========================================================== */
+
+function friendlySupabaseError(error){
+
+  const message =
+    error?.message ||
+    String(error || "Unknown error");
+
+  if(
+    message.includes(
+      "row-level security"
+    )
+  ){
+
+    return "Administrator permission was denied by Row Level Security.";
+  }
+
+  if(
+    message.includes(
+      "duplicate key"
+    )
+  ){
+
+    return "That slug or catalog number already exists.";
+  }
+
+  if(
+    message.includes(
+      "foreign key"
+    )
+  ){
+
+    return "The selected artist could not be linked to this release.";
+  }
+
+  if(
+    message.includes(
+      "JWT"
+    )
+  ){
+
+    return "Your administrator session has expired. Please sign in again.";
+  }
+
+  return message;
+}
+
+/* ==========================================================
+   AUTH STATE
+========================================================== */
+
+supabase.auth.onAuthStateChange(
+  async event=>{
+
+    if(
+      event === "SIGNED_OUT"
+    ){
+
+      window.location.href =
+        "login.html?redirect=albums.html";
+
+      return;
+    }
+
+    if(
+      event === "TOKEN_REFRESHED" ||
+      event === "SIGNED_IN"
+    ){
+
+      try{
+
+        const allowed =
+          await requireAdmin();
+
+        if(allowed){
+
+          await refreshData({
+            silent:true
+          });
+        }
+
+      }catch(error){
+
+        console.error(
+          "Auth refresh failed:",
+          error
+        );
+      }
+    }
 
   }
 );
 
 /* ==========================================================
-   SUPABASE CONFIGURATION HOOK
+   INITIALIZE
 ========================================================== */
 
-/*
-  Configure these values from your deployment:
+async function init(){
 
-  window.CROWRULES_SUPABASE_URL =
-    "https://cevylpnoexugwgygvtgu.supabase.co";
+  try{
 
-  window.CROWRULES_SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNldnlscG5vZXh1Z3dneWd2dGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4MTYxOTYsImV4cCI6MjEwNDM5MjE5Nn0.bvSF3qRqFNvCtaF5CSDeeEO3yJnsnYt9CXmgUaBWjNQ";
+    const allowed =
+      await requireAdmin();
 
-  Load Supabase JS v2:
+    if(!allowed){
+      return;
+    }
 
-  https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2
+    await refreshData({
+      silent:true
+    });
 
-  NEVER place a service-role key in this HTML file.
-*/
+    subscribeRealtime();
 
-/*
-  Recommended CrowRules Records architecture:
+  }catch(error){
 
-  artists
-      ↓
-  albums
-      ↓
-  album_tracks
+    console.error(
+      "CrowRules Albums initialization failed:",
+      error
+    );
 
-  Example relationship:
+    showNotice(
+      friendlySupabaseError(
+        error
+      )
+    );
+  }
+}
 
-  artists.id
-       |
-       +---- albums.artist_id
-                    |
-                    +---- album_tracks.album_id
-
-  This allows the Records system to power:
-
-  • Artist pages
-  • Album pages
-  • Track pages
-  • Music player
-  • Release schedules
-  • Featured releases
-  • CrowRules Records charts
-  • Streaming statistics
-  • Artist dashboards
-  • Public catalog
-  • Admin analytics
-
-  Before creating or altering these tables,
-  inspect your existing Supabase schema first.
-*/
+init();
 
 /* ==========================================================
-   INITIAL FILTER
+   CLEANUP
 ========================================================== */
 
-filterAlbums();
+window.addEventListener(
+  "beforeunload",
+  ()=>{
+    if(realtimeChannel){
+      supabase.removeChannel(
+        realtimeChannel
+      );
+    }
+  }
+);
 </script>
 
 </body>
