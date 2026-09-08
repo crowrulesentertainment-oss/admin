@@ -19,11 +19,13 @@
   --bg:#050505;
   --panel:#0d0d11;
   --panel2:#111117;
-  --panel3:#15151c;
+  --panel3:#16161d;
   --line:#27272f;
-  --line2:#383842;
+  --line2:#3a3a45;
   --text:#f5f5f7;
-  --muted:#8d8d98;
+  --muted:#90909b;
+  --dim:#62626d;
+
   --accent:#b66cff;
   --accent2:#6c5cff;
   --cyan:#37d7ff;
@@ -31,7 +33,8 @@
   --yellow:#f3c969;
   --red:#ff526d;
   --orange:#ff8a4c;
-  --sidebar:255px;
+
+  --sidebar:270px;
   --radius:16px;
 }
 
@@ -45,13 +48,13 @@ html{
 
 body{
   margin:0;
+  min-height:100vh;
   background:
-    radial-gradient(circle at 80% 0%,rgba(182,108,255,.08),transparent 28%),
-    radial-gradient(circle at 20% 100%,rgba(55,215,255,.04),transparent 25%),
+    radial-gradient(circle at 82% 0%,rgba(182,108,255,.08),transparent 28%),
+    radial-gradient(circle at 10% 100%,rgba(55,215,255,.04),transparent 25%),
     var(--bg);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
-  min-height:100vh;
 }
 
 button,
@@ -65,20 +68,25 @@ button{
   cursor:pointer;
 }
 
+button:disabled{
+  cursor:not-allowed;
+  opacity:.55;
+}
+
 a{
   color:inherit;
   text-decoration:none;
 }
 
-/* =========================
-   SHELL
-========================= */
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .sidebar{
   position:fixed;
   inset:0 auto 0 0;
   width:var(--sidebar);
-  background:rgba(7,7,9,.97);
+  background:rgba(7,7,9,.98);
   border-right:1px solid var(--line);
   z-index:1000;
   overflow-y:auto;
@@ -91,17 +99,22 @@ a{
   gap:12px;
   padding:0 20px;
   border-bottom:1px solid var(--line);
+  position:sticky;
+  top:0;
+  background:rgba(7,7,9,.98);
+  z-index:2;
 }
 
 .brand-mark{
-  width:38px;
-  height:38px;
+  width:39px;
+  height:39px;
   border:1px solid var(--accent);
   border-radius:10px;
   display:grid;
   place-items:center;
   color:var(--accent);
   font-family:Orbitron,sans-serif;
+  font-size:11px;
   font-weight:800;
   box-shadow:0 0 24px rgba(182,108,255,.18);
 }
@@ -111,20 +124,20 @@ a{
   font-size:13px;
   font-weight:800;
   letter-spacing:1px;
-  line-height:1.25;
+  line-height:1.2;
 }
 
 .brand-text span{
   display:block;
   color:var(--muted);
   font-family:Montserrat,sans-serif;
-  font-size:9px;
+  font-size:8px;
   letter-spacing:2px;
-  margin-top:3px;
+  margin-top:4px;
 }
 
 .nav{
-  padding:14px 10px 30px;
+  padding:12px 10px 40px;
 }
 
 .nav-section{
@@ -132,7 +145,7 @@ a{
   font-size:9px;
   font-weight:800;
   letter-spacing:2px;
-  padding:14px 11px 7px;
+  padding:15px 11px 7px;
   text-transform:uppercase;
 }
 
@@ -144,8 +157,8 @@ a{
   padding:9px 11px;
   margin:2px 0;
   border-radius:9px;
-  color:#9a9aa5;
-  font-size:12px;
+  color:#9898a4;
+  font-size:11px;
   font-weight:600;
   transition:.2s ease;
 }
@@ -156,18 +169,23 @@ a{
 }
 
 .nav a.active{
-  background:
-    linear-gradient(90deg,rgba(182,108,255,.18),rgba(108,92,255,.07));
   color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.19),rgba(108,92,255,.06));
   border:1px solid rgba(182,108,255,.2);
   box-shadow:inset 3px 0 0 var(--accent);
 }
 
 .nav-icon{
   width:20px;
+  min-width:20px;
   text-align:center;
-  font-size:14px;
+  font-size:13px;
 }
+
+/* =========================================================
+   MAIN
+========================================================= */
 
 .main{
   margin-left:var(--sidebar);
@@ -176,16 +194,16 @@ a{
 
 .topbar{
   height:76px;
-  border-bottom:1px solid var(--line);
-  background:rgba(7,7,9,.84);
-  backdrop-filter:blur(14px);
+  position:sticky;
+  top:0;
+  z-index:900;
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:0 28px;
-  position:sticky;
-  top:0;
-  z-index:900;
+  background:rgba(7,7,9,.88);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(16px);
 }
 
 .topbar-left{
@@ -195,9 +213,10 @@ a{
 }
 
 .page-kicker{
-  font-family:Orbitron,sans-serif;
-  font-size:11px;
   color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:700;
   letter-spacing:2px;
   text-transform:uppercase;
 }
@@ -205,14 +224,15 @@ a{
 .topbar-right{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:9px;
 }
 
 .clock{
   color:var(--muted);
-  font-size:11px;
   font-family:Orbitron,sans-serif;
+  font-size:9px;
   letter-spacing:1px;
+  margin-right:6px;
 }
 
 .icon-btn{
@@ -221,98 +241,104 @@ a{
   display:grid;
   place-items:center;
   border:1px solid var(--line);
+  border-radius:9px;
   background:#0e0e13;
   color:#bbb;
-  border-radius:9px;
 }
 
 .icon-btn:hover{
-  border-color:var(--accent);
   color:#fff;
-}
-
-.profile-chip{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:6px 10px 6px 6px;
-  background:#101016;
-  border:1px solid var(--line);
-  border-radius:30px;
-  font-size:11px;
-  font-weight:700;
-}
-
-.avatar{
-  width:27px;
-  height:27px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:white;
-  font-family:Orbitron,sans-serif;
-  font-size:9px;
+  border-color:var(--accent);
 }
 
 .mobile-toggle{
   display:none;
 }
 
-/* =========================
+.profile-chip{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:5px 11px 5px 5px;
+  background:#101016;
+  border:1px solid var(--line);
+  border-radius:30px;
+  color:#ddd;
+  font-size:10px;
+  font-weight:700;
+}
+
+.avatar{
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+}
+
+/* =========================================================
    CONTENT
-========================= */
+========================================================= */
 
 .content{
-  padding:30px;
-  max-width:1700px;
+  width:100%;
+  max-width:1750px;
   margin:auto;
+  padding:30px;
 }
+
+/* =========================================================
+   HERO
+========================================================= */
 
 .hero{
   position:relative;
   overflow:hidden;
+  margin-bottom:20px;
+  padding:30px;
   border:1px solid var(--line);
   border-radius:var(--radius);
   background:
-    linear-gradient(120deg,rgba(182,108,255,.09),transparent 42%),
+    linear-gradient(120deg,rgba(182,108,255,.1),transparent 45%),
     linear-gradient(180deg,#101017,#0b0b0f);
-  padding:30px;
-  margin-bottom:22px;
 }
 
 .hero:after{
   content:"API";
   position:absolute;
   right:25px;
-  top:8px;
-  font-family:Orbitron,sans-serif;
-  font-size:110px;
-  font-weight:800;
+  top:3px;
   color:rgba(255,255,255,.018);
+  font-family:Orbitron,sans-serif;
+  font-size:115px;
+  font-weight:800;
   pointer-events:none;
 }
 
 .hero h1{
-  margin:0 0 9px;
+  margin:0 0 10px;
   font-family:Orbitron,sans-serif;
   font-size:30px;
   letter-spacing:1px;
 }
 
 .hero p{
-  max-width:780px;
+  max-width:850px;
   margin:0;
   color:var(--muted);
-  line-height:1.7;
-  font-size:13px;
+  font-size:12px;
+  line-height:1.8;
 }
 
 .hero-row{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:20px;
+  gap:15px;
   margin-top:22px;
 }
 
@@ -322,12 +348,24 @@ a{
   gap:8px;
   padding:8px 12px;
   border:1px solid rgba(69,230,154,.25);
+  border-radius:999px;
   background:rgba(69,230,154,.07);
   color:var(--green);
-  border-radius:999px;
-  font-size:10px;
+  font-size:9px;
   font-weight:800;
   letter-spacing:1px;
+}
+
+.status-pill.warning{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.25);
+  background:rgba(243,201,105,.06);
+}
+
+.status-pill.danger{
+  color:var(--red);
+  border-color:rgba(255,82,109,.25);
+  background:rgba(255,82,109,.06);
 }
 
 .status-dot{
@@ -338,47 +376,85 @@ a{
   box-shadow:0 0 12px currentColor;
 }
 
-/* =========================
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+  border:1px solid var(--line2);
+  border-radius:8px;
+  background:#111117;
+  color:#ddd;
+  padding:9px 13px;
+  font-size:9px;
+  font-weight:800;
+  transition:.2s;
+}
+
+.btn:hover{
+  color:#fff;
+  border-color:var(--accent);
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.45);
+  background:rgba(182,108,255,.12);
+  color:#ddbaff;
+}
+
+.btn.success{
+  border-color:rgba(69,230,154,.35);
+  background:rgba(69,230,154,.08);
+  color:var(--green);
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.35);
+  background:rgba(255,82,109,.08);
+  color:#ff91a1;
+}
+
+/* =========================================================
    STATS
-========================= */
+========================================================= */
 
 .stats{
   display:grid;
   grid-template-columns:repeat(6,1fr);
-  gap:12px;
-  margin-bottom:22px;
+  gap:11px;
+  margin-bottom:20px;
 }
 
 .stat{
-  background:var(--panel);
+  padding:17px;
   border:1px solid var(--line);
   border-radius:14px;
-  padding:18px;
+  background:var(--panel);
 }
 
 .stat-label{
   color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:1.5px;
-  font-size:9px;
+  font-size:8px;
   font-weight:800;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
 }
 
 .stat-value{
   margin-top:9px;
   font-family:Orbitron,sans-serif;
-  font-size:21px;
+  font-size:20px;
 }
 
 .stat-sub{
-  color:#62626d;
-  font-size:9px;
   margin-top:6px;
+  color:var(--dim);
+  font-size:8px;
 }
 
-/* =========================
-   GRID
-========================= */
+/* =========================================================
+   PANELS
+========================================================= */
 
 .grid{
   display:grid;
@@ -388,47 +464,49 @@ a{
 }
 
 .panel{
-  background:var(--panel);
+  overflow:hidden;
   border:1px solid var(--line);
   border-radius:var(--radius);
-  overflow:hidden;
+  background:var(--panel);
 }
 
 .panel-head{
-  min-height:58px;
+  min-height:59px;
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:15px;
   padding:14px 18px;
   border-bottom:1px solid var(--line);
 }
 
 .panel-title{
   font-family:Orbitron,sans-serif;
-  font-size:12px;
+  font-size:11px;
+  font-weight:700;
   letter-spacing:1px;
 }
 
 .panel-sub{
-  color:var(--muted);
-  font-size:10px;
   margin-top:4px;
+  color:var(--muted);
+  font-size:9px;
 }
 
 .panel-body{
   padding:18px;
 }
 
-/* =========================
+/* =========================================================
    ENDPOINTS
-========================= */
+========================================================= */
 
 .endpoint{
   display:grid;
-  grid-template-columns:70px 1fr auto;
+  grid-template-columns:67px 1fr auto;
   gap:14px;
   align-items:center;
-  padding:13px 0;
+  padding:12px 0;
   border-bottom:1px solid #1e1e25;
 }
 
@@ -440,125 +518,102 @@ a{
   padding:6px 7px;
   border-radius:6px;
   text-align:center;
-  font-size:9px;
   font-family:Orbitron,sans-serif;
+  font-size:8px;
   font-weight:800;
 }
 
 .get{
-  background:rgba(55,215,255,.1);
   color:var(--cyan);
   border:1px solid rgba(55,215,255,.2);
+  background:rgba(55,215,255,.1);
 }
 
 .post{
-  background:rgba(69,230,154,.1);
   color:var(--green);
   border:1px solid rgba(69,230,154,.2);
+  background:rgba(69,230,154,.1);
 }
 
+.put,
 .patch{
-  background:rgba(243,201,105,.1);
   color:var(--yellow);
   border:1px solid rgba(243,201,105,.2);
+  background:rgba(243,201,105,.1);
 }
 
 .delete{
-  background:rgba(255,82,109,.1);
   color:var(--red);
   border:1px solid rgba(255,82,109,.2);
+  background:rgba(255,82,109,.1);
 }
 
 .endpoint-path{
-  font-family:monospace;
-  font-size:12px;
   color:#ddd;
+  font-family:monospace;
+  font-size:11px;
 }
 
 .endpoint-desc{
-  color:var(--muted);
-  font-size:10px;
   margin-top:4px;
-}
-
-.endpoint-version{
-  color:#6d6d78;
+  color:var(--muted);
   font-size:9px;
 }
 
-/* =========================
-   API KEY
-========================= */
+.endpoint-version{
+  color:#666672;
+  font-size:8px;
+}
+
+/* =========================================================
+   API KEYS
+========================================================= */
 
 .key-box{
-  padding:15px;
-  background:#09090d;
+  padding:14px;
   border:1px solid var(--line);
   border-radius:11px;
+  background:#09090d;
+  margin-bottom:10px;
 }
 
-.key-row{
+.key-box:last-child{
+  margin-bottom:0;
+}
+
+.key-top{
   display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-
-.key-input{
-  flex:1;
-  min-width:0;
-  border:1px solid var(--line2);
-  background:#0c0c11;
-  color:#aaa;
-  border-radius:8px;
-  padding:10px;
-  font-family:monospace;
-  font-size:10px;
-}
-
-.btn{
-  border:1px solid var(--line2);
-  background:#111117;
-  color:#ddd;
-  border-radius:8px;
-  padding:9px 13px;
-  font-size:10px;
-  font-weight:800;
-}
-
-.btn:hover{
-  border-color:var(--accent);
-  color:#fff;
-}
-
-.btn.primary{
-  border-color:rgba(182,108,255,.45);
-  background:rgba(182,108,255,.12);
-  color:#dcbaff;
-}
-
-.btn.danger{
-  border-color:rgba(255,82,109,.35);
-  background:rgba(255,82,109,.08);
-  color:#ff8da0;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
 }
 
 .key-title{
+  color:#eee;
   font-size:10px;
   font-weight:800;
 }
 
 .key-meta{
-  color:var(--muted);
-  font-size:9px;
   margin-top:4px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.key-prefix{
+  margin-top:10px;
+  color:#aaa;
+  font-family:monospace;
+  font-size:9px;
 }
 
 .key-status{
   display:flex;
   justify-content:space-between;
+  gap:10px;
   margin-top:12px;
-  font-size:9px;
   color:var(--muted);
+  font-size:8px;
 }
 
 .active-text{
@@ -566,14 +621,19 @@ a{
   font-weight:800;
 }
 
-/* =========================
+.inactive-text{
+  color:var(--red);
+  font-weight:800;
+}
+
+/* =========================================================
    SERVICES
-========================= */
+========================================================= */
 
 .service{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   padding:12px 0;
   border-bottom:1px solid #1e1e25;
 }
@@ -591,41 +651,43 @@ a{
 .service-icon{
   width:32px;
   height:32px;
-  border-radius:8px;
-  background:#15151c;
-  border:1px solid var(--line);
   display:grid;
   place-items:center;
-  font-size:13px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#15151c;
+  color:#ccc;
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
 }
 
 .service-name{
-  font-size:11px;
-  font-weight:700;
+  font-size:10px;
+  font-weight:800;
 }
 
 .service-meta{
-  color:var(--muted);
-  font-size:9px;
   margin-top:3px;
+  color:var(--muted);
+  font-size:8px;
 }
 
 .service-status{
   color:var(--green);
-  font-size:9px;
+  font-size:8px;
   font-weight:800;
 }
 
-/* =========================
-   REQUEST LOG
-========================= */
+/* =========================================================
+   REQUESTS
+========================================================= */
 
 .request-row{
   display:grid;
-  grid-template-columns:120px 1fr 90px 100px;
+  grid-template-columns:80px 1fr 95px 105px;
   gap:12px;
   align-items:center;
-  padding:12px 0;
+  padding:11px 0;
   border-bottom:1px solid #1e1e25;
 }
 
@@ -635,22 +697,42 @@ a{
 
 .request-method{
   font-family:Orbitron,sans-serif;
-  font-size:9px;
+  font-size:8px;
+}
+
+.request-method.GET{
   color:var(--cyan);
 }
 
+.request-method.POST{
+  color:var(--green);
+}
+
+.request-method.PATCH,
+.request-method.PUT{
+  color:var(--yellow);
+}
+
+.request-method.DELETE{
+  color:var(--red);
+}
+
 .request-path{
+  color:#ddd;
   font-family:monospace;
-  font-size:10px;
+  font-size:9px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .request-time{
   color:var(--muted);
-  font-size:9px;
+  font-size:8px;
 }
 
 .response{
-  font-size:9px;
+  font-size:8px;
   font-weight:800;
 }
 
@@ -666,20 +748,20 @@ a{
   color:var(--red);
 }
 
-/* =========================
+/* =========================================================
    WEBHOOKS
-========================= */
+========================================================= */
 
 .webhook{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   gap:15px;
   padding:13px;
   margin-bottom:9px;
   border:1px solid var(--line);
-  background:#0b0b10;
   border-radius:10px;
+  background:#0b0b10;
 }
 
 .webhook:last-child{
@@ -692,25 +774,36 @@ a{
 }
 
 .webhook-url{
-  font-family:monospace;
-  color:#777783;
-  font-size:9px;
+  max-width:700px;
   margin-top:4px;
+  color:#777783;
+  font-family:monospace;
+  font-size:8px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.webhook-meta{
+  margin-top:4px;
+  color:#555560;
+  font-size:8px;
 }
 
 .toggle{
-  width:40px;
-  height:22px;
+  width:42px;
+  height:23px;
+  padding:3px;
+  border:0;
   border-radius:30px;
   background:#25252d;
-  padding:3px;
-  transition:.2s;
+  flex:none;
 }
 
 .toggle span{
   display:block;
-  width:16px;
-  height:16px;
+  width:17px;
+  height:17px;
   border-radius:50%;
   background:#888;
   transition:.2s;
@@ -721,13 +814,13 @@ a{
 }
 
 .toggle.on span{
-  margin-left:18px;
+  margin-left:19px;
   background:var(--green);
 }
 
-/* =========================
+/* =========================================================
    SECURITY
-========================= */
+========================================================= */
 
 .security{
   display:grid;
@@ -737,21 +830,21 @@ a{
 
 .security-card{
   padding:14px;
-  background:#0a0a0e;
   border:1px solid var(--line);
   border-radius:10px;
+  background:#0a0a0e;
 }
 
 .security-label{
   color:var(--muted);
-  font-size:9px;
-  text-transform:uppercase;
+  font-size:8px;
   letter-spacing:1px;
+  text-transform:uppercase;
 }
 
 .security-value{
   margin-top:7px;
-  font-size:11px;
+  font-size:10px;
   font-weight:800;
 }
 
@@ -763,19 +856,39 @@ a{
   color:var(--yellow);
 }
 
-/* =========================
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
+
+.empty{
+  padding:28px 10px;
+  text-align:center;
+  color:#62626d;
+  font-size:9px;
+}
+
+.loading{
+  padding:25px 10px;
+  text-align:center;
+  color:var(--muted);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+/* =========================================================
    MODAL
-========================= */
+========================================================= */
 
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.76);
-  backdrop-filter:blur(8px);
+  z-index:2000;
   display:none;
   place-items:center;
-  z-index:2000;
   padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(8px);
 }
 
 .modal.open{
@@ -783,24 +896,27 @@ a{
 }
 
 .modal-card{
-  width:min(620px,100%);
-  background:#0c0c11;
+  width:min(650px,100%);
+  max-height:90vh;
+  overflow:auto;
   border:1px solid var(--line2);
   border-radius:16px;
+  background:#0c0c11;
   box-shadow:0 30px 100px rgba(0,0,0,.65);
-  overflow:hidden;
 }
 
 .modal-head{
-  padding:18px 20px;
   display:flex;
+  align-items:center;
   justify-content:space-between;
+  padding:18px 20px;
   border-bottom:1px solid var(--line);
 }
 
 .modal-title{
   font-family:Orbitron,sans-serif;
-  font-size:13px;
+  font-size:12px;
+  letter-spacing:1px;
 }
 
 .modal-body{
@@ -813,22 +929,23 @@ a{
 
 .form-label{
   display:block;
-  color:#a4a4ae;
-  font-size:9px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:1px;
   margin-bottom:6px;
+  color:#a5a5b0;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
 }
 
 .form-control{
   width:100%;
+  outline:none;
   border:1px solid var(--line2);
-  background:#09090d;
-  color:#fff;
   border-radius:8px;
   padding:11px;
-  outline:none;
+  background:#09090d;
+  color:#fff;
+  font-size:10px;
 }
 
 .form-control:focus{
@@ -848,27 +965,119 @@ textarea.form-control{
   border-top:1px solid var(--line);
 }
 
-/* =========================
+.secret-box{
+  padding:15px;
+  border:1px solid rgba(243,201,105,.3);
+  border-radius:10px;
+  background:rgba(243,201,105,.06);
+}
+
+.secret-warning{
+  color:var(--yellow);
+  font-size:9px;
+  font-weight:800;
+  line-height:1.6;
+}
+
+.secret-value{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.secret-value input{
+  flex:1;
+  min-width:0;
+  border:1px solid var(--line2);
+  border-radius:8px;
+  background:#08080c;
+  color:#fff;
+  padding:11px;
+  font-family:monospace;
+  font-size:9px;
+}
+
+/* =========================================================
+   ACCESS SCREEN
+========================================================= */
+
+.access-screen{
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 50% 30%,rgba(182,108,255,.12),transparent 35%),
+    #050505;
+}
+
+.access-card{
+  width:min(480px,100%);
+  padding:35px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#0d0d11;
+  text-align:center;
+  box-shadow:0 30px 100px rgba(0,0,0,.6);
+}
+
+.access-mark{
+  width:58px;
+  height:58px;
+  margin:0 auto 20px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--accent);
+  border-radius:14px;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+}
+
+.access-card h2{
+  margin:0 0 10px;
+  font-family:Orbitron,sans-serif;
+  font-size:18px;
+}
+
+.access-card p{
+  margin:0;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+}
+
+.access-actions{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:22px;
+}
+
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
 .toast{
   position:fixed;
   right:24px;
   bottom:24px;
-  background:#111117;
+  z-index:6000;
+  max-width:390px;
+  padding:13px 16px;
   border:1px solid var(--line2);
   border-left:3px solid var(--accent);
-  padding:13px 16px;
   border-radius:9px;
+  background:#111117;
   color:#ddd;
-  font-size:11px;
+  font-size:10px;
   box-shadow:0 15px 50px rgba(0,0,0,.5);
   transform:translateY(30px);
   opacity:0;
   pointer-events:none;
   transition:.25s;
-  z-index:3000;
 }
 
 .toast.show{
@@ -876,11 +1085,20 @@ textarea.form-control{
   opacity:1;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+.toast.success{
+  border-left-color:var(--green);
+}
 
-@media(max-width:1200px){
+.toast.error{
+  border-left-color:var(--red);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1250px){
+
   .stats{
     grid-template-columns:repeat(3,1fr);
   }
@@ -895,14 +1113,15 @@ textarea.form-control{
 }
 
 @media(max-width:850px){
+
   :root{
     --sidebar:0px;
   }
 
   .sidebar{
+    width:270px;
     transform:translateX(-100%);
     transition:.25s;
-    width:255px;
   }
 
   body.menu-open .sidebar{
@@ -934,7 +1153,7 @@ textarea.form-control{
   }
 
   .request-row{
-    grid-template-columns:75px 1fr 70px;
+    grid-template-columns:65px 1fr 85px;
   }
 
   .request-time{
@@ -943,12 +1162,18 @@ textarea.form-control{
 }
 
 @media(max-width:560px){
+
   .hero{
     padding:22px;
   }
 
   .hero h1{
-    font-size:23px;
+    font-size:22px;
+  }
+
+  .hero-row{
+    align-items:flex-start;
+    flex-direction:column;
   }
 
   .stats{
@@ -960,11 +1185,11 @@ textarea.form-control{
   }
 
   .stat-value{
-    font-size:17px;
+    font-size:16px;
   }
 
   .endpoint{
-    grid-template-columns:58px 1fr;
+    grid-template-columns:57px 1fr;
   }
 
   .endpoint-version{
@@ -978,15 +1203,23 @@ textarea.form-control{
   .profile-chip span{
     display:none;
   }
+
+  .webhook{
+    align-items:flex-start;
+  }
+
+  .webhook-url{
+    max-width:210px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     SIDEBAR
-========================= -->
+<!-- =======================================================
+     SIDEBAR — FULL ADMIN MENU
+======================================================= -->
 
 <aside class="sidebar">
 
@@ -1076,6 +1309,11 @@ textarea.form-control{
       TV Guide
     </a>
 
+    <a href="tv-catalog.html">
+      <span class="nav-icon">▤</span>
+      TV Catalog
+    </a>
+
     <div class="nav-section">Members</div>
 
     <a href="members.html">
@@ -1103,6 +1341,11 @@ textarea.form-control{
       Community
     </a>
 
+    <a href="leaderboard.html">
+      <span class="nav-icon">♛</span>
+      Leaderboard
+    </a>
+
     <div class="nav-section">Creators</div>
 
     <a href="creator.html">
@@ -1118,6 +1361,11 @@ textarea.form-control{
     <a href="creator-approvals.html">
       <span class="nav-icon">✓</span>
       Approvals
+    </a>
+
+    <a href="creator-submissions.html">
+      <span class="nav-icon">✦</span>
+      Submissions
     </a>
 
     <div class="nav-section">Music</div>
@@ -1137,6 +1385,28 @@ textarea.form-control{
       Tracks
     </a>
 
+    <div class="nav-section">Podcasts</div>
+
+    <a href="podcasts.html">
+      <span class="nav-icon">◉</span>
+      Podcasts
+    </a>
+
+    <a href="podcast-episodes.html">
+      <span class="nav-icon">▹</span>
+      Podcast Episodes
+    </a>
+
+    <a href="podcast-schedule.html">
+      <span class="nav-icon">◷</span>
+      Podcast Schedule
+    </a>
+
+    <a href="podcast-news.html">
+      <span class="nav-icon">✎</span>
+      Podcast News
+    </a>
+
     <div class="nav-section">Sports</div>
 
     <a href="sports.html">
@@ -1144,9 +1414,19 @@ textarea.form-control{
       Sports
     </a>
 
+    <a href="leagues.html">
+      <span class="nav-icon">◈</span>
+      Leagues
+    </a>
+
     <a href="teams.html">
       <span class="nav-icon">⚑</span>
       Teams
+    </a>
+
+    <a href="players.html">
+      <span class="nav-icon">♟</span>
+      Players
     </a>
 
     <a href="rankings.html">
@@ -1169,6 +1449,33 @@ textarea.form-control{
       Pick'em
     </a>
 
+    <div class="nav-section">Awards</div>
+
+    <a href="awards.html">
+      <span class="nav-icon">✦</span>
+      Awards
+    </a>
+
+    <a href="award-categories.html">
+      <span class="nav-icon">◇</span>
+      Award Categories
+    </a>
+
+    <a href="award-nominees.html">
+      <span class="nav-icon">★</span>
+      Nominees
+    </a>
+
+    <a href="award-winners.html">
+      <span class="nav-icon">♛</span>
+      Winners
+    </a>
+
+    <a href="award-ceremonies.html">
+      <span class="nav-icon">◷</span>
+      Ceremonies
+    </a>
+
     <div class="nav-section">Memorials</div>
 
     <a href="memorials.html">
@@ -1181,11 +1488,97 @@ textarea.form-control{
       Memorial Photos
     </a>
 
+    <a href="memorial-videos.html">
+      <span class="nav-icon">▹</span>
+      Memorial Videos
+    </a>
+
+    <a href="memorial-candles.html">
+      <span class="nav-icon">◈</span>
+      Candles
+    </a>
+
+    <a href="memorial-tributes.html">
+      <span class="nav-icon">✧</span>
+      Tributes
+    </a>
+
+    <div class="nav-section">Holidays</div>
+
+    <a href="holidays.html">
+      <span class="nav-icon">✺</span>
+      Holidays
+    </a>
+
+    <a href="holiday-years.html">
+      <span class="nav-icon">▤</span>
+      Holiday Years
+    </a>
+
+    <a href="holiday-pages.html">
+      <span class="nav-icon">▣</span>
+      Holiday Pages
+    </a>
+
+    <a href="holiday-events.html">
+      <span class="nav-icon">◷</span>
+      Holiday Events
+    </a>
+
+    <a href="holiday-programming.html">
+      <span class="nav-icon">▶</span>
+      Holiday Programming
+    </a>
+
+    <div class="nav-section">Publishing</div>
+
+    <a href="publishing.html">
+      <span class="nav-icon">▤</span>
+      Publishing
+    </a>
+
+    <a href="publications.html">
+      <span class="nav-icon">▣</span>
+      Publications
+    </a>
+
+    <a href="yearbooks.html">
+      <span class="nav-icon">▥</span>
+      Yearbooks
+    </a>
+
+    <a href="yearbook-sections.html">
+      <span class="nav-icon">◇</span>
+      Yearbook Sections
+    </a>
+
+    <div class="nav-section">Studios</div>
+
+    <a href="studios.html">
+      <span class="nav-icon">▣</span>
+      Studios
+    </a>
+
+    <a href="production.html">
+      <span class="nav-icon">●</span>
+      Production
+    </a>
+
+    <a href="projects.html">
+      <span class="nav-icon">◆</span>
+      Projects
+    </a>
+
     <div class="nav-section">Commerce</div>
 
     <a href="business.html">
       <span class="nav-icon">⌘</span>
       Business
+    </a>
+
+    <a href="inquiries.html">
+      <span class="nav-icon">✉</span>
+      Inquiries
     </a>
 
     <a href="donations.html">
@@ -1268,785 +1661,588 @@ textarea.form-control{
   </nav>
 </aside>
 
-<!-- =========================
+<!-- =======================================================
      MAIN
-========================= -->
+======================================================= -->
 
 <main class="main">
 
-  <header class="topbar">
+<header class="topbar">
 
-    <div class="topbar-left">
+  <div class="topbar-left">
 
-      <button class="icon-btn mobile-toggle" id="menuBtn" aria-label="Open menu">
-        ☰
-      </button>
+    <button
+      class="icon-btn mobile-toggle"
+      id="menuBtn"
+      aria-label="Open admin menu"
+    >
+      ☰
+    </button>
 
-      <div class="page-kicker">
-        API / Developer Infrastructure
-      </div>
-
+    <div class="page-kicker">
+      API / Developer Infrastructure
     </div>
 
-    <div class="topbar-right">
+  </div>
 
-      <div class="clock" id="clock">
-        --
-      </div>
+  <div class="topbar-right">
 
-      <button class="icon-btn" id="refreshBtn" title="Refresh">
-        ↻
-      </button>
+    <div class="clock" id="clock">--</div>
 
-      <button class="icon-btn" id="docsBtn" title="API documentation">
-        ?
-      </button>
+    <button
+      class="icon-btn"
+      id="refreshBtn"
+      title="Refresh API dashboard"
+    >
+      ↻
+    </button>
 
-      <div class="profile-chip">
-        <div class="avatar">CR</div>
-        <span>Administrator</span>
-      </div>
+    <button
+      class="icon-btn"
+      id="docsBtn"
+      title="API documentation"
+    >
+      ?
+    </button>
 
+    <div class="profile-chip">
+      <div class="avatar" id="avatar">CR</div>
+      <span id="profileName">Administrator</span>
     </div>
 
-  </header>
+  </div>
 
-  <section class="content">
+</header>
 
-    <!-- HERO -->
+<section class="content">
 
-    <div class="hero">
+<!-- =======================================================
+     HERO
+======================================================= -->
 
-      <div class="page-kicker">CrowRules Developer Core</div>
+<div class="hero">
 
-      <h1>API Command Center</h1>
+  <div class="page-kicker">
+    CrowRules Developer Core
+  </div>
 
-      <p>
-        Manage CrowRules Entertainment API access, endpoints, API keys,
-        webhooks, service integrations, request activity and developer
-        infrastructure from one centralized control panel.
-      </p>
+  <h1>API Command Center</h1>
 
-      <div class="hero-row">
+  <p>
+    Centralized management for CrowRules Entertainment API endpoints,
+    credentials, webhooks, request activity, integrations and
+    developer infrastructure.
+  </p>
 
-        <div class="status-pill">
-          <span class="status-dot"></span>
-          API SYSTEM OPERATIONAL
-        </div>
+  <div class="hero-row">
 
-        <button class="btn primary" id="newKeyBtn">
-          + Create API Key
-        </button>
-
-      </div>
-
+    <div
+      class="status-pill"
+      id="apiStatus"
+    >
+      <span class="status-dot"></span>
+      CHECKING API STATUS
     </div>
 
-    <!-- STATS -->
+    <button
+      class="btn primary"
+      id="newKeyBtn"
+    >
+      + Create API Key
+    </button>
 
-    <div class="stats">
+  </div>
 
-      <div class="stat">
-        <div class="stat-label">Endpoints</div>
-        <div class="stat-value" id="endpointCount">42</div>
-        <div class="stat-sub">Registered routes</div>
+</div>
+
+<!-- =======================================================
+     STATS
+======================================================= -->
+
+<div class="stats">
+
+  <div class="stat">
+    <div class="stat-label">Endpoints</div>
+    <div class="stat-value" id="endpointCount">—</div>
+    <div class="stat-sub">Registered routes</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">API Keys</div>
+    <div class="stat-value" id="keyCount">—</div>
+    <div class="stat-sub">Active credentials</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Requests</div>
+    <div class="stat-value" id="requestCount">—</div>
+    <div class="stat-sub">Last 24 hours</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Webhooks</div>
+    <div class="stat-value" id="webhookCount">—</div>
+    <div class="stat-sub">Active hooks</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Errors</div>
+    <div class="stat-value" id="errorRate">—</div>
+    <div class="stat-sub">24-hour error rate</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Version</div>
+    <div class="stat-value">v1</div>
+    <div class="stat-sub">Current API</div>
+  </div>
+
+</div>
+
+<!-- =======================================================
+     ENDPOINTS + KEYS
+======================================================= -->
+
+<div class="grid">
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        API ENDPOINTS
       </div>
 
-      <div class="stat">
-        <div class="stat-label">API Keys</div>
-        <div class="stat-value" id="keyCount">18</div>
-        <div class="stat-sub">Active credentials</div>
+      <div class="panel-sub">
+        Live routes registered in Supabase
       </div>
-
-      <div class="stat">
-        <div class="stat-label">Requests</div>
-        <div class="stat-value">184K</div>
-        <div class="stat-sub">Last 24 hours</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Webhooks</div>
-        <div class="stat-value">12</div>
-        <div class="stat-sub">Configured hooks</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Error Rate</div>
-        <div class="stat-value">0.18%</div>
-        <div class="stat-sub">Last 24 hours</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Version</div>
-        <div class="stat-value">v1</div>
-        <div class="stat-sub">Current API</div>
-      </div>
-
     </div>
 
-    <!-- MAIN GRID -->
+    <button
+      class="btn"
+      id="endpointBtn"
+    >
+      + Endpoint
+    </button>
 
-    <div class="grid">
+  </div>
 
-      <!-- ENDPOINTS -->
+  <div
+    class="panel-body"
+    id="endpointList"
+  >
+    <div class="loading">
+      LOADING ENDPOINTS
+    </div>
+  </div>
 
-      <section class="panel">
+</section>
 
-        <div class="panel-head">
+<section class="panel">
 
-          <div>
-            <div class="panel-title">API ENDPOINTS</div>
-            <div class="panel-sub">
-              Registered CrowRules API routes
-            </div>
-          </div>
+  <div class="panel-head">
 
-          <button class="btn" id="endpointBtn">
-            Manage
-          </button>
+    <div>
+      <div class="panel-title">
+        API KEYS
+      </div>
 
-        </div>
-
-        <div class="panel-body">
-
-          <div class="endpoint">
-            <div class="method get">GET</div>
-            <div>
-              <div class="endpoint-path">/api/v1/content</div>
-              <div class="endpoint-desc">
-                Retrieve published content
-              </div>
-            </div>
-            <div class="endpoint-version">v1</div>
-          </div>
-
-          <div class="endpoint">
-            <div class="method get">GET</div>
-            <div>
-              <div class="endpoint-path">/api/v1/shows</div>
-              <div class="endpoint-desc">
-                Retrieve television shows
-              </div>
-            </div>
-            <div class="endpoint-version">v1</div>
-          </div>
-
-          <div class="endpoint">
-            <div class="method get">GET</div>
-            <div>
-              <div class="endpoint-path">/api/v1/episodes</div>
-              <div class="endpoint-desc">
-                Retrieve published episodes
-              </div>
-            </div>
-            <div class="endpoint-version">v1</div>
-          </div>
-
-          <div class="endpoint">
-            <div class="method get">GET</div>
-            <div>
-              <div class="endpoint-path">/api/v1/channels</div>
-              <div class="endpoint-desc">
-                Retrieve CrowRules TV channels
-              </div>
-            </div>
-            <div class="endpoint-version">v1</div>
-          </div>
-
-          <div class="endpoint">
-            <div class="method post">POST</div>
-            <div>
-              <div class="endpoint-path">/api/v1/community/posts</div>
-              <div class="endpoint-desc">
-                Create a community post
-              </div>
-            </div>
-            <div class="endpoint-version">v1</div>
-          </div>
-
-          <div class="endpoint">
-            <div class="method get">GET</div>
-            <div>
-              <div class="endpoint-path">/api/v1/members</div>
-              <div class="endpoint-desc">
-                Retrieve authorized member information
-              </div>
-            </div>
-            <div class="endpoint-version">v1</div>
-          </div>
-
-          <div class="endpoint">
-            <div class="method get">GET</div>
-            <div>
-              <div class="endpoint-path">/api/v1/sports/games</div>
-              <div class="endpoint-desc">
-                Retrieve sports game data
-              </div>
-            </div>
-            <div class="endpoint-version">v1</div>
-          </div>
-
-          <div class="endpoint">
-            <div class="method get">GET</div>
-            <div>
-              <div class="endpoint-path">/api/v1/memorials</div>
-              <div class="endpoint-desc">
-                Retrieve public memorial records
-              </div>
-            </div>
-            <div class="endpoint-version">v1</div>
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- API KEYS -->
-
-      <section class="panel">
-
-        <div class="panel-head">
-
-          <div>
-            <div class="panel-title">API KEYS</div>
-            <div class="panel-sub">
-              Credential management
-            </div>
-          </div>
-
-          <button class="btn primary" id="quickKeyBtn">
-            + Key
-          </button>
-
-        </div>
-
-        <div class="panel-body">
-
-          <div class="key-box">
-
-            <div class="key-title">
-              CrowRules Admin Key
-            </div>
-
-            <div class="key-meta">
-              Created today · Full API access
-            </div>
-
-            <div class="key-row">
-
-              <input
-                class="key-input"
-                value="cr_live_••••••••••••••••••••"
-                readonly
-              >
-
-              <button class="btn" data-copy="cr_live_demo_key">
-                Copy
-              </button>
-
-            </div>
-
-            <div class="key-status">
-              <span>Last used 4 minutes ago</span>
-              <span class="active-text">ACTIVE</span>
-            </div>
-
-          </div>
-
-          <div style="height:10px"></div>
-
-          <div class="key-box">
-
-            <div class="key-title">
-              CrowRules TV Public Key
-            </div>
-
-            <div class="key-meta">
-              Created Aug 2026 · Read-only
-            </div>
-
-            <div class="key-row">
-
-              <input
-                class="key-input"
-                value="cr_public_••••••••••••••••"
-                readonly
-              >
-
-              <button class="btn" data-copy="cr_public_demo_key">
-                Copy
-              </button>
-
-            </div>
-
-            <div class="key-status">
-              <span>Last used 11 minutes ago</span>
-              <span class="active-text">ACTIVE</span>
-            </div>
-
-          </div>
-
-          <div style="height:10px"></div>
-
-          <div class="key-box">
-
-            <div class="key-title">
-              Creator Integration Key
-            </div>
-
-            <div class="key-meta">
-              Created Jul 2026 · Creator API
-            </div>
-
-            <div class="key-row">
-
-              <input
-                class="key-input"
-                value="cr_creator_••••••••••••"
-                readonly
-              >
-
-              <button class="btn" data-copy="cr_creator_demo_key">
-                Copy
-              </button>
-
-            </div>
-
-            <div class="key-status">
-              <span>Last used 1 hour ago</span>
-              <span class="active-text">ACTIVE</span>
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
+      <div class="panel-sub">
+        Hashed credentials
+      </div>
     </div>
 
-    <!-- SERVICES -->
+    <button
+      class="btn primary"
+      id="quickKeyBtn"
+    >
+      + Key
+    </button>
 
-    <section class="panel" style="margin-bottom:18px">
+  </div>
 
-      <div class="panel-head">
+  <div
+    class="panel-body"
+    id="keyList"
+  >
+    <div class="loading">
+      LOADING API KEYS
+    </div>
+  </div>
+
+</section>
+
+</div>
+
+<!-- =======================================================
+     SERVICES
+======================================================= -->
+
+<section
+  class="panel"
+  style="margin-bottom:18px"
+>
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        API SERVICES
+      </div>
+
+      <div class="panel-sub">
+        Connected CrowRules infrastructure
+      </div>
+    </div>
+
+    <div
+      class="status-pill"
+      id="serviceStatus"
+    >
+      <span class="status-dot"></span>
+      CHECKING
+    </div>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div class="service">
+
+      <div class="service-left">
+
+        <div class="service-icon">S</div>
 
         <div>
-          <div class="panel-title">API SERVICES</div>
-          <div class="panel-sub">
-            Connected infrastructure and service health
+          <div class="service-name">
+            Supabase Database
           </div>
-        </div>
 
-        <div class="status-pill">
-          <span class="status-dot"></span>
-          ALL SYSTEMS GO
+          <div class="service-meta">
+            PostgreSQL / Data API
+          </div>
         </div>
 
       </div>
 
-      <div class="panel-body">
-
-        <div class="service">
-
-          <div class="service-left">
-            <div class="service-icon">S</div>
-
-            <div>
-              <div class="service-name">
-                Supabase Database
-              </div>
-
-              <div class="service-meta">
-                PostgreSQL / API
-              </div>
-            </div>
-          </div>
-
-          <div class="service-status">
-            ONLINE
-          </div>
-
-        </div>
-
-        <div class="service">
-
-          <div class="service-left">
-            <div class="service-icon">A</div>
-
-            <div>
-              <div class="service-name">
-                Supabase Authentication
-              </div>
-
-              <div class="service-meta">
-                User identity / sessions
-              </div>
-            </div>
-          </div>
-
-          <div class="service-status">
-            ONLINE
-          </div>
-
-        </div>
-
-        <div class="service">
-
-          <div class="service-left">
-            <div class="service-icon">◫</div>
-
-            <div>
-              <div class="service-name">
-                Supabase Storage
-              </div>
-
-              <div class="service-meta">
-                Media / asset delivery
-              </div>
-            </div>
-          </div>
-
-          <div class="service-status">
-            ONLINE
-          </div>
-
-        </div>
-
-        <div class="service">
-
-          <div class="service-left">
-            <div class="service-icon">⚡</div>
-
-            <div>
-              <div class="service-name">
-                Edge Functions
-              </div>
-
-              <div class="service-meta">
-                Server-side API operations
-              </div>
-            </div>
-          </div>
-
-          <div class="service-status">
-            ONLINE
-          </div>
-
-        </div>
-
-        <div class="service">
-
-          <div class="service-left">
-            <div class="service-icon">↻</div>
-
-            <div>
-              <div class="service-name">
-                Webhook Dispatcher
-              </div>
-
-              <div class="service-meta">
-                Event delivery
-              </div>
-            </div>
-          </div>
-
-          <div class="service-status">
-            ONLINE
-          </div>
-
-        </div>
-
+      <div
+        class="service-status"
+        id="databaseService"
+      >
+        CHECKING
       </div>
 
-    </section>
+    </div>
 
-    <!-- REQUEST LOG -->
+    <div class="service">
 
-    <section class="panel" style="margin-bottom:18px">
+      <div class="service-left">
 
-      <div class="panel-head">
+        <div class="service-icon">A</div>
 
         <div>
-          <div class="panel-title">RECENT API REQUESTS</div>
-          <div class="panel-sub">
-            Latest request activity
+          <div class="service-name">
+            Supabase Authentication
+          </div>
+
+          <div class="service-meta">
+            Identity / sessions
           </div>
         </div>
 
-        <button class="btn" id="clearLogBtn">
-          Clear View
-        </button>
-
       </div>
 
-      <div class="panel-body" id="requestLog">
-
-        <div class="request-row">
-          <div class="request-method">GET</div>
-          <div class="request-path">/api/v1/shows</div>
-          <div class="request-time">12:14:02</div>
-          <div class="response ok">200 OK</div>
-        </div>
-
-        <div class="request-row">
-          <div class="request-method">GET</div>
-          <div class="request-path">/api/v1/episodes</div>
-          <div class="request-time">12:13:48</div>
-          <div class="response ok">200 OK</div>
-        </div>
-
-        <div class="request-row">
-          <div class="request-method">POST</div>
-          <div class="request-path">/api/v1/community/posts</div>
-          <div class="request-time">12:12:37</div>
-          <div class="response ok">201 CREATED</div>
-        </div>
-
-        <div class="request-row">
-          <div class="request-method">GET</div>
-          <div class="request-path">/api/v1/members</div>
-          <div class="request-time">12:11:22</div>
-          <div class="response ok">200 OK</div>
-        </div>
-
-        <div class="request-row">
-          <div class="request-method">GET</div>
-          <div class="request-path">/api/v1/sports/games</div>
-          <div class="request-time">12:10:54</div>
-          <div class="response warn">429 RATE</div>
-        </div>
-
-        <div class="request-row">
-          <div class="request-method">GET</div>
-          <div class="request-path">/api/v1/content</div>
-          <div class="request-time">12:09:11</div>
-          <div class="response ok">200 OK</div>
-        </div>
-
+      <div
+        class="service-status"
+        id="authService"
+      >
+        CHECKING
       </div>
 
-    </section>
+    </div>
 
-    <!-- WEBHOOKS -->
+    <div class="service">
 
-    <section class="panel" style="margin-bottom:18px">
+      <div class="service-left">
 
-      <div class="panel-head">
+        <div class="service-icon">◫</div>
 
         <div>
-          <div class="panel-title">WEBHOOKS</div>
-          <div class="panel-sub">
-            External event destinations
-          </div>
-        </div>
-
-        <button class="btn primary" id="webhookBtn">
-          + Add Webhook
-        </button>
-
-      </div>
-
-      <div class="panel-body">
-
-        <div class="webhook">
-
-          <div>
-            <div class="webhook-name">
-              CrowRules TV Events
-            </div>
-
-            <div class="webhook-url">
-              https://example.com/hooks/tv
-            </div>
+          <div class="service-name">
+            Supabase Storage
           </div>
 
-          <div
-            class="toggle on"
-            data-toggle
-            title="Toggle webhook"
-          >
-            <span></span>
+          <div class="service-meta">
+            Media / assets
           </div>
-
-        </div>
-
-        <div class="webhook">
-
-          <div>
-            <div class="webhook-name">
-              Membership Events
-            </div>
-
-            <div class="webhook-url">
-              https://example.com/hooks/members
-            </div>
-          </div>
-
-          <div
-            class="toggle on"
-            data-toggle
-            title="Toggle webhook"
-          >
-            <span></span>
-          </div>
-
-        </div>
-
-        <div class="webhook">
-
-          <div>
-            <div class="webhook-name">
-              Creator Publishing
-            </div>
-
-            <div class="webhook-url">
-              https://example.com/hooks/creators
-            </div>
-          </div>
-
-          <div
-            class="toggle"
-            data-toggle
-            title="Toggle webhook"
-          >
-            <span></span>
-          </div>
-
-        </div>
-
-        <div class="webhook">
-
-          <div>
-            <div class="webhook-name">
-              Sports Updates
-            </div>
-
-            <div class="webhook-url">
-              https://example.com/hooks/sports
-            </div>
-          </div>
-
-          <div
-            class="toggle on"
-            data-toggle
-            title="Toggle webhook"
-          >
-            <span></span>
-          </div>
-
         </div>
 
       </div>
 
-    </section>
+      <div class="service-status">
+        AVAILABLE
+      </div>
 
-    <!-- SECURITY -->
+    </div>
 
-    <section class="panel">
+    <div class="service">
 
-      <div class="panel-head">
+      <div class="service-left">
+
+        <div class="service-icon">⚡</div>
 
         <div>
-          <div class="panel-title">API SECURITY</div>
-          <div class="panel-sub">
-            Current API protection posture
+          <div class="service-name">
+            Edge Functions
+          </div>
+
+          <div class="service-meta">
+            Server-side operations
           </div>
         </div>
 
       </div>
 
-      <div class="panel-body">
+      <div
+        class="service-status"
+        id="edgeService"
+      >
+        AVAILABLE
+      </div>
 
-        <div class="security">
+    </div>
 
-          <div class="security-card">
-            <div class="security-label">
-              TLS
-            </div>
-            <div class="security-value good">
-              ENFORCED
-            </div>
+    <div class="service">
+
+      <div class="service-left">
+
+        <div class="service-icon">↻</div>
+
+        <div>
+          <div class="service-name">
+            Webhook Dispatcher
           </div>
 
-          <div class="security-card">
-            <div class="security-label">
-              Authentication
-            </div>
-            <div class="security-value good">
-              SUPABASE AUTH
-            </div>
+          <div class="service-meta">
+            Event delivery configuration
           </div>
-
-          <div class="security-card">
-            <div class="security-label">
-              Rate Limiting
-            </div>
-            <div class="security-value good">
-              ENABLED
-            </div>
-          </div>
-
-          <div class="security-card">
-            <div class="security-label">
-              RLS
-            </div>
-            <div class="security-value good">
-              ENABLED
-            </div>
-          </div>
-
-          <div class="security-card">
-            <div class="security-label">
-              Key Rotation
-            </div>
-            <div class="security-value medium">
-              2 DUE
-            </div>
-          </div>
-
-          <div class="security-card">
-            <div class="security-label">
-              CORS
-            </div>
-            <div class="security-value good">
-              RESTRICTED
-            </div>
-          </div>
-
-          <div class="security-card">
-            <div class="security-label">
-              Logging
-            </div>
-            <div class="security-value good">
-              ENABLED
-            </div>
-          </div>
-
-          <div class="security-card">
-            <div class="security-label">
-              Secret Exposure
-            </div>
-            <div class="security-value good">
-              NONE DETECTED
-            </div>
-          </div>
-
         </div>
 
       </div>
 
-    </section>
+      <div
+        class="service-status"
+        id="webhookService"
+      >
+        CHECKING
+      </div>
 
-  </section>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =======================================================
+     REQUEST LOG
+======================================================= -->
+
+<section
+  class="panel"
+  style="margin-bottom:18px"
+>
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        RECENT API REQUESTS
+      </div>
+
+      <div class="panel-sub">
+        Requests recorded by the CrowRules API layer
+      </div>
+    </div>
+
+    <button
+      class="btn"
+      id="clearLogBtn"
+    >
+      Clear View
+    </button>
+
+  </div>
+
+  <div
+    class="panel-body"
+    id="requestLog"
+  >
+    <div class="loading">
+      LOADING REQUEST LOG
+    </div>
+  </div>
+
+</section>
+
+<!-- =======================================================
+     WEBHOOKS
+======================================================= -->
+
+<section
+  class="panel"
+  style="margin-bottom:18px"
+>
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        WEBHOOKS
+      </div>
+
+      <div class="panel-sub">
+        External event destinations
+      </div>
+    </div>
+
+    <button
+      class="btn primary"
+      id="webhookBtn"
+    >
+      + Add Webhook
+    </button>
+
+  </div>
+
+  <div
+    class="panel-body"
+    id="webhookList"
+  >
+    <div class="loading">
+      LOADING WEBHOOKS
+    </div>
+  </div>
+
+</section>
+
+<!-- =======================================================
+     SECURITY
+======================================================= -->
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        API SECURITY
+      </div>
+
+      <div class="panel-sub">
+        Current API protection posture
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div class="security">
+
+      <div class="security-card">
+        <div class="security-label">
+          TLS
+        </div>
+        <div class="security-value good">
+          ENFORCED
+        </div>
+      </div>
+
+      <div class="security-card">
+        <div class="security-label">
+          Frontend Key
+        </div>
+        <div class="security-value good">
+          PUBLISHABLE
+        </div>
+      </div>
+
+      <div class="security-card">
+        <div class="security-label">
+          RLS
+        </div>
+        <div class="security-value good">
+          ENABLED
+        </div>
+      </div>
+
+      <div class="security-card">
+        <div class="security-label">
+          Auth
+        </div>
+        <div class="security-value good">
+          REQUIRED
+        </div>
+      </div>
+
+      <div class="security-card">
+        <div class="security-label">
+          Key Storage
+        </div>
+        <div class="security-value good">
+          HASHED
+        </div>
+      </div>
+
+      <div class="security-card">
+        <div class="security-label">
+          Secret Exposure
+        </div>
+        <div class="security-value good">
+          NONE
+        </div>
+      </div>
+
+      <div class="security-card">
+        <div class="security-label">
+          Request Logging
+        </div>
+        <div class="security-value good">
+          ENABLED
+        </div>
+      </div>
+
+      <div class="security-card">
+        <div class="security-label">
+          Key Rotation
+        </div>
+        <div
+          class="security-value medium"
+          id="rotationStatus"
+        >
+          CHECKING
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</section>
 
 </main>
 
-<!-- =========================
-     API KEY MODAL
-========================= -->
+<!-- =======================================================
+     CREATE API KEY MODAL
+======================================================= -->
 
-<div class="modal" id="keyModal">
+<div
+  class="modal"
+  id="keyModal"
+>
 
   <div class="modal-card">
 
@@ -2056,7 +2252,10 @@ textarea.form-control{
         CREATE API KEY
       </div>
 
-      <button class="icon-btn" data-close>
+      <button
+        class="icon-btn"
+        data-close
+      >
         ×
       </button>
 
@@ -2073,6 +2272,7 @@ textarea.form-control{
         <input
           class="form-control"
           id="keyName"
+          maxlength="100"
           placeholder="Example: CrowRules TV Production"
         >
 
@@ -2084,12 +2284,21 @@ textarea.form-control{
           Access Level
         </label>
 
-        <select class="form-control" id="keyAccess">
+        <select
+          class="form-control"
+          id="keyAccess"
+        >
+          <option value="read">
+            Read Only
+          </option>
 
-          <option value="read">Read Only</option>
-          <option value="creator">Creator API</option>
-          <option value="admin">Administrator</option>
+          <option value="creator">
+            Creator API
+          </option>
 
+          <option value="admin">
+            Administrator
+          </option>
         </select>
 
       </div>
@@ -2103,7 +2312,8 @@ textarea.form-control{
         <textarea
           class="form-control"
           id="keyDescription"
-          placeholder="Describe what this key will be used for..."
+          maxlength="500"
+          placeholder="Describe what this API key will be used for..."
         ></textarea>
 
       </div>
@@ -2112,11 +2322,17 @@ textarea.form-control{
 
     <div class="modal-actions">
 
-      <button class="btn" data-close>
+      <button
+        class="btn"
+        data-close
+      >
         Cancel
       </button>
 
-      <button class="btn primary" id="createKeyBtn">
+      <button
+        class="btn primary"
+        id="createKeyBtn"
+      >
         Generate Key
       </button>
 
@@ -2126,11 +2342,79 @@ textarea.form-control{
 
 </div>
 
-<!-- =========================
-     WEBHOOK MODAL
-========================= -->
+<!-- =======================================================
+     SECRET DISPLAY MODAL
+======================================================= -->
 
-<div class="modal" id="webhookModal">
+<div
+  class="modal"
+  id="secretModal"
+>
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        API KEY CREATED
+      </div>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="secret-box">
+
+        <div class="secret-warning">
+          IMPORTANT: This is the only time the complete API
+          secret will be displayed. Copy it now and store it
+          somewhere secure. CrowRules does not store the
+          plaintext secret.
+        </div>
+
+        <div class="secret-value">
+
+          <input
+            id="generatedSecret"
+            readonly
+          >
+
+          <button
+            class="btn primary"
+            id="copyGeneratedSecret"
+          >
+            Copy
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn primary"
+        id="secretDoneBtn"
+      >
+        Done
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     WEBHOOK MODAL
+======================================================= -->
+
+<div
+  class="modal"
+  id="webhookModal"
+>
 
   <div class="modal-card">
 
@@ -2140,7 +2424,10 @@ textarea.form-control{
         ADD WEBHOOK
       </div>
 
-      <button class="icon-btn" data-close>
+      <button
+        class="icon-btn"
+        data-close
+      >
         ×
       </button>
 
@@ -2157,6 +2444,7 @@ textarea.form-control{
         <input
           class="form-control"
           id="webhookName"
+          maxlength="100"
           placeholder="Example: Membership Events"
         >
 
@@ -2171,6 +2459,8 @@ textarea.form-control{
         <input
           class="form-control"
           id="webhookUrl"
+          type="url"
+          maxlength="1000"
           placeholder="https://example.com/webhook"
         >
 
@@ -2182,15 +2472,38 @@ textarea.form-control{
           Event Type
         </label>
 
-        <select class="form-control" id="webhookEvent">
+        <select
+          class="form-control"
+          id="webhookEvent"
+        >
 
-          <option>All Events</option>
-          <option>Content Published</option>
-          <option>Member Created</option>
-          <option>Subscription Updated</option>
-          <option>Creator Submission</option>
-          <option>Sports Update</option>
-          <option>Memorial Updated</option>
+          <option value="All Events">
+            All Events
+          </option>
+
+          <option value="Content Published">
+            Content Published
+          </option>
+
+          <option value="Member Created">
+            Member Created
+          </option>
+
+          <option value="Subscription Updated">
+            Subscription Updated
+          </option>
+
+          <option value="Creator Submission">
+            Creator Submission
+          </option>
+
+          <option value="Sports Update">
+            Sports Update
+          </option>
+
+          <option value="Memorial Updated">
+            Memorial Updated
+          </option>
 
         </select>
 
@@ -2200,11 +2513,17 @@ textarea.form-control{
 
     <div class="modal-actions">
 
-      <button class="btn" data-close>
+      <button
+        class="btn"
+        data-close
+      >
         Cancel
       </button>
 
-      <button class="btn primary" id="createWebhookBtn">
+      <button
+        class="btn primary"
+        id="createWebhookBtn"
+      >
         Create Webhook
       </button>
 
@@ -2214,68 +2533,428 @@ textarea.form-control{
 
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- =======================================================
+     ENDPOINT MODAL
+======================================================= -->
+
+<div
+  class="modal"
+  id="endpointModal"
+>
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        REGISTER API ENDPOINT
+      </div>
+
+      <button
+        class="icon-btn"
+        data-close
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-group">
+
+        <label class="form-label">
+          HTTP Method
+        </label>
+
+        <select
+          class="form-control"
+          id="endpointMethod"
+        >
+
+          <option>GET</option>
+          <option>POST</option>
+          <option>PUT</option>
+          <option>PATCH</option>
+          <option>DELETE</option>
+          <option>OPTIONS</option>
+          <option>HEAD</option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          API Path
+        </label>
+
+        <input
+          class="form-control"
+          id="endpointPath"
+          maxlength="250"
+          placeholder="/api/v1/example"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Description
+        </label>
+
+        <textarea
+          class="form-control"
+          id="endpointDescription"
+          maxlength="500"
+          placeholder="Describe this endpoint..."
+        ></textarea>
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Version
+        </label>
+
+        <input
+          class="form-control"
+          id="endpointVersion"
+          value="v1"
+          maxlength="20"
+        >
+
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn"
+        data-close
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        id="createEndpointBtn"
+      >
+        Register Endpoint
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     API DOCS MODAL
+======================================================= -->
+
+<div
+  class="modal"
+  id="docsModal"
+>
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        CROW RULES API
+      </div>
+
+      <button
+        class="icon-btn"
+        data-close
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Base URL
+        </label>
+
+        <input
+          class="form-control"
+          value="/api/v1"
+          readonly
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Authentication
+        </label>
+
+        <input
+          class="form-control"
+          value="Authorization: Bearer YOUR_API_KEY"
+          readonly
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Public API
+        </label>
+
+        <div
+          style="
+            color:#9999a4;
+            font-size:9px;
+            line-height:1.8;
+          "
+        >
+          API routes are registered through the API Command
+          Center. Sensitive administrative operations should
+          be implemented server-side through Supabase Edge
+          Functions rather than exposing privileged credentials
+          in browser code.
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn primary"
+        data-close
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     ACCESS SCREEN
+======================================================= -->
+
+<div
+  class="access-screen"
+  id="accessScreen"
+  style="display:none"
+>
+
+  <div class="access-card">
+
+    <div class="access-mark">
+      CR
+    </div>
+
+    <h2>
+      ADMIN ACCESS REQUIRED
+    </h2>
+
+    <p id="accessMessage">
+      You must be signed in as a CrowRules administrator
+      to access the API Command Center.
+    </p>
+
+    <div class="access-actions">
+
+      <button
+        class="btn primary"
+        id="loginBtn"
+      >
+        Open Login
+      </button>
+
+      <button
+        class="btn"
+        id="accessReloadBtn"
+      >
+        Retry
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div
+  class="toast"
+  id="toast"
+></div>
 
 <script>
-/* =========================================
-   CROWRULES API COMMAND CENTER
-========================================= */
+/* =========================================================
+   CROWRULES ENTERTAINMENT
+   MAIN ADMIN — API COMMAND CENTER
+========================================================= */
+
+"use strict";
+
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
 const CONFIG = {
+
   supabaseUrl:
-    window.CROWRULES_SUPABASE_URL || "",
+    window.CROWRULES_SUPABASE_URL ||
+    "https://cevylpnoexugwgygvtgu.supabase.co",
 
-  supabaseAnonKey:
-    window.CROWRULES_SUPABASE_ANON_KEY || "",
+  supabaseKey:
+    window.CROWRULES_SUPABASE_PUBLISHABLE_KEY ||
+    "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-",
 
-  apiKeysTable:
-    window.CROWRULES_API_KEYS_TABLE || "api_keys",
+  tables:{
+    endpoints:"api_endpoints",
+    keys:"api_keys",
+    webhooks:"api_webhooks",
+    requests:"api_request_logs"
+  },
 
-  webhooksTable:
-    window.CROWRULES_API_WEBHOOKS_TABLE || "api_webhooks"
+  adminRoles:[
+    "admin",
+    "super_admin",
+    "owner"
+  ]
+
 };
 
 let supabaseClient = null;
+let currentUser = null;
+let requestCache = [];
 
-/* =========================================
-   INIT
-========================================= */
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 function initSupabase(){
 
   if(
-    CONFIG.supabaseUrl &&
-    CONFIG.supabaseAnonKey &&
-    window.supabase
+    !window.supabase ||
+    !CONFIG.supabaseUrl ||
+    !CONFIG.supabaseKey
   ){
 
-    supabaseClient =
-      window.supabase.createClient(
-        CONFIG.supabaseUrl,
-        CONFIG.supabaseAnonKey
-      );
-
-    return true;
+    return false;
   }
 
-  return false;
+  supabaseClient =
+    window.supabase.createClient(
+      CONFIG.supabaseUrl,
+      CONFIG.supabaseKey,
+      {
+        auth:{
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:true
+        }
+      }
+    );
+
+  return true;
 }
 
-/* =========================================
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function formatNumber(value){
+
+  return Number(value || 0)
+    .toLocaleString();
+}
+
+function formatDate(value){
+
+  if(!value){
+    return "Never";
+  }
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "Unknown";
+  }
+
+  return date.toLocaleString(
+    [],
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric",
+      hour:"numeric",
+      minute:"2-digit"
+    }
+  );
+}
+
+function formatTime(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
+
+  return date.toLocaleTimeString(
+    [],
+    {
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    }
+  );
+}
+
+/* =========================================================
    CLOCK
-========================================= */
+========================================================= */
 
 function updateClock(){
 
-  const el =
-    document.getElementById("clock");
+  const clock = $("clock");
 
-  if(!el) return;
+  if(!clock){
+    return;
+  }
 
-  const now = new Date();
-
-  el.textContent =
-    now.toLocaleString(
+  clock.textContent =
+    new Date().toLocaleString(
       [],
       {
         month:"short",
@@ -2287,54 +2966,54 @@ function updateClock(){
     );
 }
 
-setInterval(updateClock,1000);
+setInterval(
+  updateClock,
+  1000
+);
+
 updateClock();
 
-/* =========================================
+/* =========================================================
    TOAST
-========================================= */
+========================================================= */
 
-let toastTimer;
+let toastTimer = null;
 
-function toast(message){
+function toast(
+  message,
+  type=""
+){
 
-  const el =
-    document.getElementById("toast");
+  const el = $("toast");
 
-  el.textContent = message;
-  el.classList.add("show");
+  if(!el){
+    return;
+  }
 
   clearTimeout(toastTimer);
 
+  el.textContent = message;
+
+  el.className =
+    "toast show " +
+    (type || "");
+
   toastTimer =
     setTimeout(
-      () => el.classList.remove("show"),
-      2600
+      () => {
+        el.classList.remove("show");
+      },
+      3200
     );
 }
 
-/* =========================================
-   MOBILE MENU
-========================================= */
-
-document
-  .getElementById("menuBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-      document.body.classList.toggle("menu-open");
-    }
-  );
-
-/* =========================================
+/* =========================================================
    MODALS
-========================================= */
+========================================================= */
 
 function openModal(id){
 
-  document
-    .getElementById(id)
-    ?.classList.add("open");
+  $(id)?.classList.add("open");
 }
 
 function closeModals(){
@@ -2342,15 +3021,16 @@ function closeModals(){
   document
     .querySelectorAll(".modal")
     .forEach(
-      modal => modal.classList.remove("open")
+      modal =>
+        modal.classList.remove("open")
     );
 }
 
 document
   .querySelectorAll("[data-close]")
   .forEach(
-    btn =>
-      btn.addEventListener(
+    button =>
+      button.addEventListener(
         "click",
         closeModals
       )
@@ -2363,58 +3043,12 @@ document
       modal.addEventListener(
         "click",
         event => {
-          if(event.target === modal){
+
+          if(
+            event.target === modal
+          ){
+
             modal.classList.remove("open");
-          }
-        }
-      )
-  );
-
-document
-  .getElementById("newKeyBtn")
-  ?.addEventListener(
-    "click",
-    () => openModal("keyModal")
-  );
-
-document
-  .getElementById("quickKeyBtn")
-  ?.addEventListener(
-    "click",
-    () => openModal("keyModal")
-  );
-
-document
-  .getElementById("webhookBtn")
-  ?.addEventListener(
-    "click",
-    () => openModal("webhookModal")
-  );
-
-/* =========================================
-   COPY KEY
-========================================= */
-
-document
-  .querySelectorAll("[data-copy]")
-  .forEach(
-    btn =>
-      btn.addEventListener(
-        "click",
-        async () => {
-
-          const value =
-            btn.dataset.copy;
-
-          try{
-
-            await navigator.clipboard.writeText(value);
-
-            toast("API key copied to clipboard.");
-
-          }catch{
-
-            toast("Clipboard access unavailable.");
 
           }
 
@@ -2422,345 +3056,328 @@ document
       )
   );
 
-/* =========================================
-   WEBHOOK TOGGLES
-========================================= */
+document.addEventListener(
+  "keydown",
+  event => {
 
-document
-  .querySelectorAll("[data-toggle]")
-  .forEach(
-    toggle =>
-      toggle.addEventListener(
-        "click",
-        () => {
+    if(event.key === "Escape"){
+      closeModals();
+    }
 
-          toggle.classList.toggle("on");
+  }
+);
 
-          toast(
-            toggle.classList.contains("on")
-              ? "Webhook enabled."
-              : "Webhook disabled."
-          );
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-        }
+$("menuBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      document.body
+        .classList
+        .toggle("menu-open");
+
+    }
+  );
+
+/* =========================================================
+   AUTHORIZATION
+========================================================= */
+
+function hasAdminAccess(user){
+
+  if(!user){
+    return false;
+  }
+
+  const metadata =
+    user.app_metadata || {};
+
+  const role =
+    metadata.role ||
+    metadata.user_role ||
+    "";
+
+  if(
+    CONFIG.adminRoles
+      .includes(
+        String(role).toLowerCase()
       )
-  );
+  ){
 
-/* =========================================
-   CREATE API KEY
-========================================= */
+    return true;
+  }
 
-document
-  .getElementById("createKeyBtn")
-  ?.addEventListener(
-    "click",
-    async () => {
+  if(
+    metadata.is_admin === true
+  ){
 
-      const name =
-        document
-          .getElementById("keyName")
-          .value
-          .trim();
+    return true;
+  }
 
-      const access =
-        document
-          .getElementById("keyAccess")
-          .value;
+  if(
+    Array.isArray(metadata.roles)
+  ){
 
-      const description =
-        document
-          .getElementById("keyDescription")
-          .value
-          .trim();
+    return metadata.roles.some(
+      role =>
+        CONFIG.adminRoles
+          .includes(
+            String(role).toLowerCase()
+          )
+    );
 
-      if(!name){
+  }
 
-        toast("Enter an API key name.");
+  return false;
+}
 
-        return;
-      }
-
-      /*
-       * Never generate or store a real secret
-       * in client-side JavaScript.
-       *
-       * This insert is intentionally conservative.
-       * Your production Edge Function should generate
-       * and hash the secret server-side.
-       */
-
-      if(supabaseClient){
-
-        const payload = {
-          name,
-          access_level:access,
-          description:description || null,
-          is_active:true
-        };
-
-        const {
-          error
-        } =
-          await supabaseClient
-            .from(CONFIG.apiKeysTable)
-            .insert(payload);
-
-        if(error){
-
-          console.error(error);
-
-          toast(
-            "API key table/schema is not configured for this payload."
-          );
-
-          return;
-        }
-
-      }
-
-      document
-        .getElementById("keyName")
-        .value = "";
-
-      document
-        .getElementById("keyDescription")
-        .value = "";
-
-      closeModals();
-
-      toast(
-        supabaseClient
-          ? "API key record created."
-          : "Demo API key request created."
-      );
-
-    }
-  );
-
-/* =========================================
-   CREATE WEBHOOK
-========================================= */
-
-document
-  .getElementById("createWebhookBtn")
-  ?.addEventListener(
-    "click",
-    async () => {
-
-      const name =
-        document
-          .getElementById("webhookName")
-          .value
-          .trim();
-
-      const url =
-        document
-          .getElementById("webhookUrl")
-          .value
-          .trim();
-
-      const eventType =
-        document
-          .getElementById("webhookEvent")
-          .value;
-
-      if(!name || !url){
-
-        toast(
-          "Webhook name and URL are required."
-        );
-
-        return;
-      }
-
-      try{
-
-        new URL(url);
-
-      }catch{
-
-        toast("Enter a valid webhook URL.");
-
-        return;
-      }
-
-      if(supabaseClient){
-
-        const payload = {
-          name,
-          endpoint_url:url,
-          event_type:eventType,
-          is_active:true
-        };
-
-        const {
-          error
-        } =
-          await supabaseClient
-            .from(CONFIG.webhooksTable)
-            .insert(payload);
-
-        if(error){
-
-          console.error(error);
-
-          toast(
-            "Webhook table/schema is not configured for this payload."
-          );
-
-          return;
-        }
-
-      }
-
-      document
-        .getElementById("webhookName")
-        .value = "";
-
-      document
-        .getElementById("webhookUrl")
-        .value = "";
-
-      closeModals();
-
-      toast(
-        supabaseClient
-          ? "Webhook created."
-          : "Demo webhook created."
-      );
-
-    }
-  );
-
-/* =========================================
-   CLEAR REQUEST LOG VIEW
-========================================= */
-
-document
-  .getElementById("clearLogBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById("requestLog")
-        .innerHTML =
-        `
-          <div style="
-            padding:25px 0;
-            color:#666671;
-            text-align:center;
-            font-size:10px;
-          ">
-            Request log view cleared.
-          </div>
-        `;
-
-      toast("Request log cleared from view.");
-
-    }
-  );
-
-/* =========================================
-   BUTTONS
-========================================= */
-
-document
-  .getElementById("refreshBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-
-      toast("Refreshing API command center...");
-
-      setTimeout(
-        () => location.reload(),
-        500
-      );
-
-    }
-  );
-
-document
-  .getElementById("docsBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-
-      toast(
-        "API documentation portal is ready for integration."
-      );
-
-    }
-  );
-
-document
-  .getElementById("endpointBtn")
-  ?.addEventListener(
-    "click",
-    () => {
-
-      toast(
-        "Endpoint management module selected."
-      );
-
-    }
-  );
-
-/* =========================================
-   LOAD API DATA
-========================================= */
-
-async function loadApiData(){
+async function requireAdmin(){
 
   if(!supabaseClient){
 
-    console.info(
-      "Supabase not configured. Running API dashboard in demo mode."
+    showAccess(
+      "Supabase could not be initialized."
     );
 
+    return false;
+  }
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .auth
+      .getUser();
+
+  if(error || !data?.user){
+
+    showAccess(
+      "Please sign in before accessing the API Command Center."
+    );
+
+    return false;
+  }
+
+  currentUser =
+    data.user;
+
+  if(
+    !hasAdminAccess(currentUser)
+  ){
+
+    showAccess(
+      "Your account is signed in, but it does not have an administrator role."
+    );
+
+    return false;
+  }
+
+  updateProfile(currentUser);
+
+  return true;
+}
+
+function showAccess(message){
+
+  $("accessMessage").textContent =
+    message;
+
+  $("accessScreen").style.display =
+    "grid";
+}
+
+function hideAccess(){
+
+  $("accessScreen").style.display =
+    "none";
+}
+
+function updateProfile(user){
+
+  const email =
+    user.email ||
+    "Administrator";
+
+  const name =
+    user.user_metadata?.full_name ||
+    user.user_metadata?.name ||
+    email.split("@")[0] ||
+    "Administrator";
+
+  $("profileName").textContent =
+    name;
+
+  const initials =
+    name
+      .split(/\s+/)
+      .map(part => part[0])
+      .join("")
+      .slice(0,2)
+      .toUpperCase();
+
+  $("avatar").textContent =
+    initials || "CR";
+}
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+async function initAuth(){
+
+  if(!supabaseClient){
+    return false;
+  }
+
+  const allowed =
+    await requireAdmin();
+
+  if(!allowed){
+    return false;
+  }
+
+  supabaseClient
+    .auth
+    .onAuthStateChange(
+      async event => {
+
+        if(
+          event === "SIGNED_OUT"
+        ){
+
+          showAccess(
+            "Your administrator session has ended."
+          );
+
+          return;
+        }
+
+        if(
+          event === "SIGNED_IN" ||
+          event === "TOKEN_REFRESHED"
+        ){
+
+          await requireAdmin();
+
+        }
+
+      }
+    );
+
+  hideAccess();
+
+  return true;
+}
+
+/* =========================================================
+   API STATUS
+========================================================= */
+
+function setApiStatus(
+  state,
+  message
+){
+
+  const el =
+    $("apiStatus");
+
+  if(!el){
     return;
   }
 
-  /*
-   * Defensive reads:
-   * select("*") avoids assuming an exact schema.
-   */
+  el.className =
+    "status-pill " +
+    (
+      state === "danger"
+        ? "danger"
+        : state === "warning"
+          ? "warning"
+          : ""
+    );
+
+  el.innerHTML =
+    `<span class="status-dot"></span>${escapeHtml(message)}`;
+}
+
+async function checkApiStatus(){
 
   try{
 
     const {
-      data,
       error
     } =
       await supabaseClient
-        .from(CONFIG.apiKeysTable)
-        .select("*")
-        .limit(500);
+        .from(CONFIG.tables.endpoints)
+        .select("id")
+        .limit(1);
 
-    if(!error && Array.isArray(data)){
+    if(error){
 
-      const activeKeys =
-        data.filter(
-          row =>
-            row.is_active !== false
-        );
-
-      document
-        .getElementById("keyCount")
-        .textContent =
-        activeKeys.length.toLocaleString();
+      throw error;
 
     }
 
+    setApiStatus(
+      "good",
+      "API SYSTEM OPERATIONAL"
+    );
+
+    $("databaseService").textContent =
+      "ONLINE";
+
+    $("authService").textContent =
+      "ONLINE";
+
+    $("webhookService").textContent =
+      "CONFIGURED";
+
+    $("serviceStatus").innerHTML =
+      '<span class="status-dot"></span>ALL SYSTEMS GO';
+
   }catch(error){
 
-    console.warn(
-      "API key data unavailable:",
+    console.error(
+      "API status error:",
       error
     );
 
+    setApiStatus(
+      "danger",
+      "DATABASE CONNECTION ERROR"
+    );
+
+    $("databaseService").textContent =
+      "ERROR";
+
+    $("authService").textContent =
+      "ONLINE";
+
+    $("webhookService").textContent =
+      "UNKNOWN";
+
+    $("serviceStatus").innerHTML =
+      '<span class="status-dot"></span>CHECK REQUIRED';
+
+    $("serviceStatus").className =
+      "status-pill warning";
+
   }
+
+}
+
+/* =========================================================
+   LOAD ENDPOINTS
+========================================================= */
+
+async function loadEndpoints(){
+
+  const container =
+    $("endpointList");
 
   try{
 
@@ -2769,51 +3386,1590 @@ async function loadApiData(){
       error
     } =
       await supabaseClient
-        .from(CONFIG.webhooksTable)
-        .select("*")
-        .limit(500);
-
-    if(!error && Array.isArray(data)){
-
-      const activeHooks =
-        data.filter(
-          row =>
-            row.is_active !== false
+        .from(CONFIG.tables.endpoints)
+        .select(
+          "id,method,path,description,version,is_active,created_at,updated_at"
+        )
+        .order(
+          "path",
+          {
+            ascending:true
+          }
         );
 
-      const statValues =
-        document.querySelectorAll(".stat-value");
+    if(error){
+      throw error;
+    }
 
-      /*
-       * Webhook stat is the fourth stat.
-       */
+    const endpoints =
+      Array.isArray(data)
+        ? data
+        : [];
 
-      if(statValues[3]){
+    $("endpointCount").textContent =
+      formatNumber(
+        endpoints.filter(
+          item =>
+            item.is_active !== false
+        ).length
+      );
 
-        statValues[3].textContent =
-          activeHooks.length.toLocaleString();
+    if(!endpoints.length){
 
-      }
+      container.innerHTML =
+        `
+        <div class="empty">
+          No API endpoints are registered yet.
+        </div>
+        `;
+
+      return;
 
     }
 
+    container.innerHTML =
+      endpoints
+        .map(
+          endpoint => {
+
+            const method =
+              String(
+                endpoint.method || "GET"
+              ).toUpperCase();
+
+            const methodClass =
+              ["GET","POST","PUT","PATCH","DELETE"]
+                .includes(method)
+                ? method.toLowerCase()
+                : "get";
+
+            return `
+              <div class="endpoint">
+
+                <div class="method ${methodClass}">
+                  ${escapeHtml(method)}
+                </div>
+
+                <div>
+                  <div class="endpoint-path">
+                    ${escapeHtml(endpoint.path)}
+                  </div>
+
+                  <div class="endpoint-desc">
+                    ${escapeHtml(
+                      endpoint.description ||
+                      "No description"
+                    )}
+                  </div>
+                </div>
+
+                <div class="endpoint-version">
+                  ${escapeHtml(
+                    endpoint.version || "v1"
+                  )}
+                </div>
+
+              </div>
+            `;
+
+          }
+        )
+        .join("");
+
   }catch(error){
 
-    console.warn(
-      "Webhook data unavailable:",
+    console.error(
+      "Endpoint load error:",
       error
+    );
+
+    container.innerHTML =
+      `
+      <div class="empty">
+        Unable to load API endpoints.
+      </div>
+      `;
+
+    toast(
+      "Could not load API endpoints.",
+      "error"
     );
 
   }
 
 }
 
-/* =========================================
-   START
-========================================= */
+/* =========================================================
+   LOAD API KEYS
+========================================================= */
 
-initSupabase();
-loadApiData();
+async function loadKeys(){
+
+  const container =
+    $("keyList");
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.keys)
+        .select(
+          "id,name,access_level,description,key_prefix,last_used_at,expires_at,is_active,created_by,created_at"
+        )
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(100);
+
+    if(error){
+      throw error;
+    }
+
+    const keys =
+      Array.isArray(data)
+        ? data
+        : [];
+
+    const activeKeys =
+      keys.filter(
+        key =>
+          key.is_active !== false
+      );
+
+    $("keyCount").textContent =
+      formatNumber(
+        activeKeys.length
+      );
+
+    const dueCount =
+      keys.filter(
+        key => {
+
+          if(!key.expires_at){
+            return false;
+          }
+
+          return (
+            new Date(
+              key.expires_at
+            ) <=
+            new Date(
+              Date.now() +
+              30 * 24 * 60 * 60 * 1000
+            )
+          );
+
+        }
+      ).length;
+
+    $("rotationStatus").textContent =
+      dueCount
+        ? `${dueCount} DUE`
+        : "CURRENT";
+
+    if(!keys.length){
+
+      container.innerHTML =
+        `
+        <div class="empty">
+          No API keys have been created.
+        </div>
+        `;
+
+      return;
+
+    }
+
+    container.innerHTML =
+      keys
+        .map(
+          key => {
+
+            const active =
+              key.is_active !== false;
+
+            const access =
+              String(
+                key.access_level || "read"
+              ).toUpperCase();
+
+            return `
+              <div class="key-box">
+
+                <div class="key-top">
+
+                  <div>
+
+                    <div class="key-title">
+                      ${escapeHtml(
+                        key.name ||
+                        "Unnamed Key"
+                      )}
+                    </div>
+
+                    <div class="key-meta">
+                      ${escapeHtml(access)}
+                      · Created
+                      ${escapeHtml(
+                        formatDate(
+                          key.created_at
+                        )
+                      )}
+                    </div>
+
+                  </div>
+
+                  <button
+                    class="btn ${active ? "danger" : "success"}"
+                    data-key-toggle="${escapeHtml(key.id)}"
+                  >
+                    ${active ? "Revoke" : "Activate"}
+                  </button>
+
+                </div>
+
+                <div class="key-prefix">
+                  ${escapeHtml(
+                    key.key_prefix ||
+                    "cr_••••••••"
+                  )}••••••••••••
+                </div>
+
+                <div class="key-status">
+
+                  <span>
+                    Last used:
+                    ${escapeHtml(
+                      formatDate(
+                        key.last_used_at
+                      )
+                    )}
+                  </span>
+
+                  <span class="${
+                    active
+                      ? "active-text"
+                      : "inactive-text"
+                  }">
+                    ${active ? "ACTIVE" : "REVOKED"}
+                  </span>
+
+                </div>
+
+              </div>
+            `;
+
+          }
+        )
+        .join("");
+
+    document
+      .querySelectorAll(
+        "[data-key-toggle]"
+      )
+      .forEach(
+        button =>
+          button.addEventListener(
+            "click",
+            () =>
+              toggleApiKey(
+                button.dataset.keyToggle
+              )
+          )
+      );
+
+  }catch(error){
+
+    console.error(
+      "API key load error:",
+      error
+    );
+
+    container.innerHTML =
+      `
+      <div class="empty">
+        Unable to load API keys.
+      </div>
+      `;
+
+  }
+
+}
+
+/* =========================================================
+   GENERATE RANDOM BYTES
+========================================================= */
+
+function randomHex(bytes = 24){
+
+  const array =
+    new Uint8Array(bytes);
+
+  crypto
+    .getRandomValues(array);
+
+  return Array
+    .from(array)
+    .map(
+      value =>
+        value
+          .toString(16)
+          .padStart(2,"0")
+    )
+    .join("");
+
+}
+
+/* =========================================================
+   SHA-256
+========================================================= */
+
+async function sha256(value){
+
+  const data =
+    new TextEncoder()
+      .encode(value);
+
+  const hash =
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
+    );
+
+  return Array
+    .from(
+      new Uint8Array(hash)
+    )
+    .map(
+      value =>
+        value
+          .toString(16)
+          .padStart(2,"0")
+    )
+    .join("");
+
+}
+
+/* =========================================================
+   CREATE API KEY
+========================================================= */
+
+async function createApiKey(){
+
+  if(!currentUser){
+
+    toast(
+      "Administrator session required.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const name =
+    $("keyName")
+      .value
+      .trim();
+
+  const access =
+    $("keyAccess")
+      .value;
+
+  const description =
+    $("keyDescription")
+      .value
+      .trim();
+
+  if(!name){
+
+    toast(
+      "Enter an API key name.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const button =
+    $("createKeyBtn");
+
+  button.disabled = true;
+  button.textContent =
+    "Generating...";
+
+  try{
+
+    /*
+     * The plaintext API key is generated locally.
+     * Only the hash and prefix are stored in Supabase.
+     */
+
+    const randomPart =
+      randomHex(32);
+
+    const secret =
+      "cr_live_" +
+      randomPart;
+
+    const prefix =
+      secret.slice(
+        0,
+        16
+      );
+
+    const hash =
+      await sha256(secret);
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.keys)
+        .insert({
+
+          name,
+
+          access_level:
+            access,
+
+          description:
+            description || null,
+
+          key_prefix:
+            prefix,
+
+          key_hash:
+            hash,
+
+          is_active:
+            true,
+
+          created_by:
+            currentUser.id
+
+        });
+
+    if(error){
+      throw error;
+    }
+
+    $("keyName").value =
+      "";
+
+    $("keyDescription").value =
+      "";
+
+    closeModals();
+
+    $("generatedSecret").value =
+      secret;
+
+    openModal(
+      "secretModal"
+    );
+
+    await loadKeys();
+
+    toast(
+      "API key created successfully.",
+      "success"
+    );
+
+  }catch(error){
+
+    console.error(
+      "Create API key error:",
+      error
+    );
+
+    toast(
+      error?.message ||
+      "Could not create API key.",
+      "error"
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "Generate Key";
+
+  }
+
+}
+
+/* =========================================================
+   REVOKE / ACTIVATE API KEY
+========================================================= */
+
+async function toggleApiKey(id){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.keys)
+        .select(
+          "id,is_active,name"
+        )
+        .eq(
+          "id",
+          id
+        )
+        .single();
+
+    if(error){
+      throw error;
+    }
+
+    const nextState =
+      data.is_active === false;
+
+    const {
+      error:updateError
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.keys)
+        .update({
+          is_active:
+            nextState,
+          updated_at:
+            new Date()
+              .toISOString()
+        })
+        .eq(
+          "id",
+          id
+        );
+
+    if(updateError){
+      throw updateError;
+    }
+
+    await loadKeys();
+
+    toast(
+      nextState
+        ? "API key activated."
+        : "API key revoked.",
+      nextState
+        ? "success"
+        : ""
+    );
+
+  }catch(error){
+
+    console.error(
+      "API key toggle error:",
+      error
+    );
+
+    toast(
+      "Could not update API key.",
+      "error"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   LOAD WEBHOOKS
+========================================================= */
+
+async function loadWebhooks(){
+
+  const container =
+    $("webhookList");
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.webhooks)
+        .select(
+          "id,name,endpoint_url,event_type,is_active,last_delivery_at,last_status_code,failure_count,created_by,created_at,updated_at"
+        )
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(100);
+
+    if(error){
+      throw error;
+    }
+
+    const hooks =
+      Array.isArray(data)
+        ? data
+        : [];
+
+    const activeHooks =
+      hooks.filter(
+        hook =>
+          hook.is_active !== false
+      );
+
+    $("webhookCount").textContent =
+      formatNumber(
+        activeHooks.length
+      );
+
+    if(!hooks.length){
+
+      container.innerHTML =
+        `
+        <div class="empty">
+          No webhooks have been configured.
+        </div>
+        `;
+
+      return;
+
+    }
+
+    container.innerHTML =
+      hooks
+        .map(
+          hook => {
+
+            const active =
+              hook.is_active !== false;
+
+            return `
+              <div class="webhook">
+
+                <div>
+
+                  <div class="webhook-name">
+                    ${escapeHtml(
+                      hook.name ||
+                      "Unnamed Webhook"
+                    )}
+                  </div>
+
+                  <div class="webhook-url">
+                    ${escapeHtml(
+                      hook.endpoint_url
+                    )}
+                  </div>
+
+                  <div class="webhook-meta">
+                    ${escapeHtml(
+                      hook.event_type ||
+                      "All Events"
+                    )}
+                    · Failures:
+                    ${formatNumber(
+                      hook.failure_count
+                    )}
+                    · Last:
+                    ${escapeHtml(
+                      formatDate(
+                        hook.last_delivery_at
+                      )
+                    )}
+                  </div>
+
+                </div>
+
+                <button
+                  class="toggle ${
+                    active ? "on" : ""
+                  }"
+                  data-webhook-toggle="${
+                    escapeHtml(hook.id)
+                  }"
+                  aria-label="Toggle webhook"
+                >
+                  <span></span>
+                </button>
+
+              </div>
+            `;
+
+          }
+        )
+        .join("");
+
+    document
+      .querySelectorAll(
+        "[data-webhook-toggle]"
+      )
+      .forEach(
+        button =>
+          button.addEventListener(
+            "click",
+            () =>
+              toggleWebhook(
+                button.dataset.webhookToggle
+              )
+          )
+      );
+
+  }catch(error){
+
+    console.error(
+      "Webhook load error:",
+      error
+    );
+
+    container.innerHTML =
+      `
+      <div class="empty">
+        Unable to load webhooks.
+      </div>
+      `;
+
+  }
+
+}
+
+/* =========================================================
+   TOGGLE WEBHOOK
+========================================================= */
+
+async function toggleWebhook(id){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.webhooks)
+        .select(
+          "id,is_active"
+        )
+        .eq(
+          "id",
+          id
+        )
+        .single();
+
+    if(error){
+      throw error;
+    }
+
+    const nextState =
+      data.is_active === false;
+
+    const {
+      error:updateError
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.webhooks)
+        .update({
+          is_active:
+            nextState,
+          updated_at:
+            new Date()
+              .toISOString()
+        })
+        .eq(
+          "id",
+          id
+        );
+
+    if(updateError){
+      throw updateError;
+    }
+
+    await loadWebhooks();
+
+    toast(
+      nextState
+        ? "Webhook enabled."
+        : "Webhook disabled.",
+      nextState
+        ? "success"
+        : ""
+    );
+
+  }catch(error){
+
+    console.error(
+      "Webhook toggle error:",
+      error
+    );
+
+    toast(
+      "Could not update webhook.",
+      "error"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   CREATE WEBHOOK
+========================================================= */
+
+async function createWebhook(){
+
+  if(!currentUser){
+
+    toast(
+      "Administrator session required.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const name =
+    $("webhookName")
+      .value
+      .trim();
+
+  const url =
+    $("webhookUrl")
+      .value
+      .trim();
+
+  const eventType =
+    $("webhookEvent")
+      .value;
+
+  if(!name || !url){
+
+    toast(
+      "Webhook name and URL are required.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  try{
+
+    const parsed =
+      new URL(url);
+
+    if(
+      parsed.protocol !==
+      "https:"
+    ){
+
+      toast(
+        "Webhook URLs must use HTTPS.",
+        "error"
+      );
+
+      return;
+
+    }
+
+  }catch{
+
+    toast(
+      "Enter a valid HTTPS webhook URL.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const button =
+    $("createWebhookBtn");
+
+  button.disabled = true;
+  button.textContent =
+    "Creating...";
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.webhooks)
+        .insert({
+
+          name,
+
+          endpoint_url:
+            url,
+
+          event_type:
+            eventType,
+
+          is_active:
+            true,
+
+          created_by:
+            currentUser.id
+
+        });
+
+    if(error){
+      throw error;
+    }
+
+    $("webhookName").value =
+      "";
+
+    $("webhookUrl").value =
+      "";
+
+    closeModals();
+
+    await loadWebhooks();
+
+    toast(
+      "Webhook created.",
+      "success"
+    );
+
+  }catch(error){
+
+    console.error(
+      "Create webhook error:",
+      error
+    );
+
+    toast(
+      error?.message ||
+      "Could not create webhook.",
+      "error"
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "Create Webhook";
+
+  }
+
+}
+
+/* =========================================================
+   LOAD REQUEST LOG
+========================================================= */
+
+async function loadRequests(){
+
+  const container =
+    $("requestLog");
+
+  try{
+
+    const since =
+      new Date(
+        Date.now() -
+        24 * 60 * 60 * 1000
+      ).toISOString();
+
+    const {
+      data,
+      error,
+      count
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.requests)
+        .select(
+          "id,api_key_id,method,path,status_code,response_ms,user_id,created_at",
+          {
+            count:"exact"
+          }
+        )
+        .gte(
+          "created_at",
+          since
+        )
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(100);
+
+    if(error){
+      throw error;
+    }
+
+    requestCache =
+      Array.isArray(data)
+        ? data
+        : [];
+
+    $("requestCount").textContent =
+      formatNumber(
+        count ??
+        requestCache.length
+      );
+
+    const total =
+      count ??
+      requestCache.length;
+
+    const errors =
+      requestCache.filter(
+        row =>
+          Number(
+            row.status_code
+          ) >= 400
+      ).length;
+
+    const errorPercent =
+      total > 0
+        ? (
+            errors /
+            total *
+            100
+          )
+        : 0;
+
+    $("errorRate").textContent =
+      errorPercent < .01
+        ? "<0.01%"
+        : errorPercent.toFixed(2) + "%";
+
+    if(!requestCache.length){
+
+      container.innerHTML =
+        `
+        <div class="empty">
+          No API requests have been logged in the last 24 hours.
+        </div>
+        `;
+
+      return;
+
+    }
+
+    container.innerHTML =
+      requestCache
+        .slice(0,50)
+        .map(
+          row => {
+
+            const method =
+              String(
+                row.method ||
+                "GET"
+              ).toUpperCase();
+
+            const code =
+              Number(
+                row.status_code ||
+                0
+              );
+
+            const responseClass =
+              code >= 500
+                ? "err"
+                : code >= 400
+                  ? "warn"
+                  : "ok";
+
+            return `
+              <div class="request-row">
+
+                <div class="request-method ${escapeHtml(method)}">
+                  ${escapeHtml(method)}
+                </div>
+
+                <div class="request-path">
+                  ${escapeHtml(
+                    row.path ||
+                    "/"
+                  )}
+                </div>
+
+                <div class="request-time">
+                  ${escapeHtml(
+                    formatTime(
+                      row.created_at
+                    )
+                  )}
+                </div>
+
+                <div class="response ${responseClass}">
+                  ${escapeHtml(
+                    code
+                      ? String(code)
+                      : "UNKNOWN"
+                  )}
+                  ${
+                    row.response_ms != null
+                      ? " · " +
+                        escapeHtml(
+                          String(
+                            row.response_ms
+                          )
+                        ) +
+                        "ms"
+                      : ""
+                  }
+                </div>
+
+              </div>
+            `;
+
+          }
+        )
+        .join("");
+
+  }catch(error){
+
+    console.error(
+      "Request log error:",
+      error
+    );
+
+    container.innerHTML =
+      `
+      <div class="empty">
+        Request logging is unavailable.
+      </div>
+      `;
+
+    $("requestCount").textContent =
+      "—";
+
+    $("errorRate").textContent =
+      "—";
+
+  }
+
+}
+
+/* =========================================================
+   REGISTER ENDPOINT
+========================================================= */
+
+async function createEndpoint(){
+
+  const method =
+    $("endpointMethod")
+      .value;
+
+  const path =
+    $("endpointPath")
+      .value
+      .trim();
+
+  const description =
+    $("endpointDescription")
+      .value
+      .trim();
+
+  const version =
+    $("endpointVersion")
+      .value
+      .trim() ||
+    "v1";
+
+  if(!path){
+
+    toast(
+      "Enter an API path.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  if(!path.startsWith("/")){
+
+    toast(
+      "API paths must begin with /.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const button =
+    $("createEndpointBtn");
+
+  button.disabled = true;
+  button.textContent =
+    "Registering...";
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.tables.endpoints)
+        .insert({
+
+          method,
+
+          path,
+
+          description:
+            description || null,
+
+          version,
+
+          is_active:
+            true
+
+        });
+
+    if(error){
+      throw error;
+    }
+
+    $("endpointPath").value =
+      "";
+
+    $("endpointDescription").value =
+      "";
+
+    closeModals();
+
+    await loadEndpoints();
+
+    toast(
+      "API endpoint registered.",
+      "success"
+    );
+
+  }catch(error){
+
+    console.error(
+      "Endpoint creation error:",
+      error
+    );
+
+    toast(
+      error?.message ||
+      "Could not register endpoint.",
+      "error"
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "Register Endpoint";
+
+  }
+
+}
+
+/* =========================================================
+   COPY GENERATED SECRET
+========================================================= */
+
+$("copyGeneratedSecret")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      const value =
+        $("generatedSecret")
+          .value;
+
+      try{
+
+        await navigator.clipboard
+          .writeText(value);
+
+        toast(
+          "API secret copied.",
+          "success"
+        );
+
+      }catch{
+
+        $("generatedSecret")
+          .select();
+
+        toast(
+          "Select and copy the secret manually.",
+          "error"
+        );
+
+      }
+
+    }
+  );
+
+/* =========================================================
+   SECRET DONE
+========================================================= */
+
+$("secretDoneBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      $("generatedSecret")
+        .value = "";
+
+      closeModals();
+
+    }
+  );
+
+/* =========================================================
+   CLEAR REQUEST LOG VIEW
+========================================================= */
+
+$("clearLogBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      $("requestLog").innerHTML =
+        `
+        <div class="empty">
+          Request log view cleared.
+          The database records were not deleted.
+        </div>
+        `;
+
+      toast(
+        "Request log cleared from view."
+      );
+
+    }
+  );
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+$("refreshBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      toast(
+        "Refreshing API command center..."
+      );
+
+      await refreshDashboard();
+
+      toast(
+        "API command center refreshed.",
+        "success"
+      );
+
+    }
+  );
+
+async function refreshDashboard(){
+
+  await Promise.all([
+    checkApiStatus(),
+    loadEndpoints(),
+    loadKeys(),
+    loadWebhooks(),
+    loadRequests()
+  ]);
+
+}
+
+/* =========================================================
+   DOCS
+========================================================= */
+
+$("docsBtn")
+  ?.addEventListener(
+    "click",
+    () =>
+      openModal(
+        "docsModal"
+      )
+  );
+
+/* =========================================================
+   MODAL BUTTONS
+========================================================= */
+
+$("newKeyBtn")
+  ?.addEventListener(
+    "click",
+    () =>
+      openModal(
+        "keyModal"
+      )
+  );
+
+$("quickKeyBtn")
+  ?.addEventListener(
+    "click",
+    () =>
+      openModal(
+        "keyModal"
+      )
+  );
+
+$("webhookBtn")
+  ?.addEventListener(
+    "click",
+    () =>
+      openModal(
+        "webhookModal"
+      )
+  );
+
+$("endpointBtn")
+  ?.addEventListener(
+    "click",
+    () =>
+      openModal(
+        "endpointModal"
+      )
+  );
+
+$("createKeyBtn")
+  ?.addEventListener(
+    "click",
+    createApiKey
+  );
+
+$("createWebhookBtn")
+  ?.addEventListener(
+    "click",
+    createWebhook
+  );
+
+$("createEndpointBtn")
+  ?.addEventListener(
+    "click",
+    createEndpoint
+  );
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+$("loginBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      window.location.href =
+        "login.html?redirect=api.html";
+
+    }
+  );
+
+$("accessReloadBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      if(
+        await requireAdmin()
+      ){
+
+        hideAccess();
+
+        await refreshDashboard();
+
+      }
+
+    }
+  );
+
+/* =========================================================
+   AUTO REFRESH
+========================================================= */
+
+let refreshTimer =
+  null;
+
+function startAutoRefresh(){
+
+  clearInterval(
+    refreshTimer
+  );
+
+  refreshTimer =
+    setInterval(
+      async () => {
+
+        if(
+          document.visibilityState ===
+          "visible" &&
+          currentUser
+        ){
+
+          await Promise.all([
+            loadKeys(),
+            loadWebhooks(),
+            loadRequests()
+          ]);
+
+        }
+
+      },
+      60000
+    );
+
+}
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+async function init(){
+
+  const initialized =
+    initSupabase();
+
+  if(!initialized){
+
+    showAccess(
+      "Supabase configuration is missing."
+    );
+
+    return;
+
+  }
+
+  const allowed =
+    await initAuth();
+
+  if(!allowed){
+    return;
+  }
+
+  await refreshDashboard();
+
+  startAutoRefresh();
+
+}
+
+init();
 
 </script>
 
