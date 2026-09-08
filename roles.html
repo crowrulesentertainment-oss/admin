@@ -1,0 +1,3083 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Roles — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Roles and permissions management.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 18px 55px rgba(0,0,0,.45);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 75% -10%,rgba(182,108,255,.12),transparent 30%),
+    radial-gradient(circle at 15% 20%,rgba(55,215,255,.06),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   SHELL
+========================= */
+
+.app{
+  min-height:100vh;
+}
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:260px;
+  background:rgba(7,7,10,.97);
+  border-right:1px solid var(--line);
+  z-index:1000;
+  display:flex;
+  flex-direction:column;
+  transition:.25s ease;
+}
+
+.brand{
+  height:76px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  background:
+    linear-gradient(135deg,rgba(182,108,255,.25),rgba(55,215,255,.12)),
+    #111117;
+  border:1px solid rgba(182,108,255,.45);
+  box-shadow:0 0 24px rgba(182,108,255,.12);
+}
+
+.brand-text{
+  min-width:0;
+}
+
+.brand-text strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  letter-spacing:1px;
+}
+
+.brand-text span{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.6px;
+}
+
+.nav{
+  flex:1;
+  overflow:auto;
+  padding:14px 10px 22px;
+}
+
+.nav-section{
+  margin:16px 10px 7px;
+  color:#5e5e69;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:39px;
+  padding:8px 12px;
+  margin:2px 0;
+  color:#9c9ca7;
+  border:1px solid transparent;
+  border-radius:9px;
+  font-size:12px;
+  transition:.18s ease;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:#101016;
+  border-color:#24242c;
+}
+
+.nav a.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.07));
+  border-color:rgba(182,108,255,.34);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+  color:#777783;
+  font-size:14px;
+}
+
+.nav a.active .nav-icon{
+  color:var(--accent);
+}
+
+.sidebar-footer{
+  padding:13px;
+  border-top:1px solid var(--line);
+}
+
+.admin-chip{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  border:1px solid var(--line);
+  background:#0d0d12;
+  border-radius:10px;
+}
+
+.avatar{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#282838,#171721);
+  border:1px solid #414151;
+  font-weight:800;
+  font-size:11px;
+}
+
+.admin-chip strong{
+  display:block;
+  font-size:11px;
+}
+
+.admin-chip span{
+  color:var(--green);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.main{
+  margin-left:260px;
+  min-height:100vh;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:900;
+  height:76px;
+  padding:0 30px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  background:rgba(5,5,5,.86);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.mobile-toggle{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line2);
+  background:#101016;
+  color:#fff;
+  border-radius:9px;
+}
+
+.breadcrumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  padding:8px 11px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  color:#9f9faa;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:.5px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding:32px;
+  max-width:1800px;
+  margin:auto;
+}
+
+.hero{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:30px;
+  margin-bottom:28px;
+}
+
+.eyebrow{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:32px;
+  line-height:1.15;
+}
+
+.hero p{
+  max-width:780px;
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.hero-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.btn{
+  min-height:38px;
+  padding:0 14px;
+  border-radius:8px;
+  border:1px solid var(--line2);
+  background:#101016;
+  color:#eee;
+  font-size:11px;
+  font-weight:700;
+  transition:.18s ease;
+}
+
+.btn:hover{
+  border-color:#565662;
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  color:#fff;
+  border-color:rgba(182,108,255,.5);
+  background:linear-gradient(135deg,#8d50d7,#624ed1);
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.3);
+  color:#ff8093;
+}
+
+.btn.small{
+  min-height:32px;
+  padding:0 10px;
+  font-size:10px;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:linear-gradient(145deg,#0e0e13,#0a0a0e);
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:17px;
+  box-shadow:var(--shadow);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+}
+
+.stat-value{
+  margin-top:9px;
+  font-family:Orbitron,sans-serif;
+  font-size:24px;
+}
+
+.stat-meta{
+  margin-top:7px;
+  color:#666672;
+  font-size:10px;
+}
+
+.stat-meta.up{
+  color:var(--green);
+}
+
+.stat-meta.warn{
+  color:var(--yellow);
+}
+
+/* =========================
+   PANEL
+========================= */
+
+.panel{
+  background:rgba(13,13,17,.9);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.panel-head{
+  min-height:64px;
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  letter-spacing:.4px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  padding:14px 18px;
+  border-bottom:1px solid var(--line);
+  background:#0a0a0e;
+}
+
+.field{
+  position:relative;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  border:1px solid var(--line2);
+  background:#0f0f15;
+  color:#eee;
+  border-radius:8px;
+  outline:none;
+  padding:10px 11px;
+  font-size:11px;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:rgba(182,108,255,.65);
+  box-shadow:0 0 0 3px rgba(182,108,255,.08);
+}
+
+.search{
+  min-width:240px;
+  flex:1;
+}
+
+.select{
+  min-width:145px;
+}
+
+/* =========================
+   TABS
+========================= */
+
+.tabs{
+  display:flex;
+  overflow:auto;
+  gap:2px;
+  padding:0 18px;
+  border-bottom:1px solid var(--line);
+  background:#0b0b0f;
+}
+
+.tab{
+  white-space:nowrap;
+  border:0;
+  border-bottom:2px solid transparent;
+  background:transparent;
+  color:#777783;
+  padding:14px 13px;
+  font-size:10px;
+  font-weight:700;
+}
+
+.tab.active{
+  color:#fff;
+  border-bottom-color:var(--accent);
+}
+
+/* =========================
+   ROLE GRID
+========================= */
+
+.role-grid{
+  padding:18px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+}
+
+.role-card{
+  position:relative;
+  min-height:255px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.025),transparent),
+    #0e0e13;
+  transition:.2s ease;
+}
+
+.role-card:hover{
+  transform:translateY(-2px);
+  border-color:#41414d;
+}
+
+.role-card.system{
+  border-color:rgba(182,108,255,.25);
+}
+
+.role-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.role-icon{
+  width:42px;
+  height:42px;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  background:#17171f;
+  border:1px solid #343440;
+  font-family:Orbitron,sans-serif;
+  color:var(--accent);
+}
+
+.role-actions{
+  display:flex;
+  gap:5px;
+}
+
+.icon-btn{
+  width:30px;
+  height:30px;
+  border-radius:7px;
+  border:1px solid var(--line2);
+  background:#101016;
+  color:#aaaab4;
+}
+
+.icon-btn:hover{
+  color:#fff;
+  border-color:#5a5a68;
+}
+
+.role-name{
+  margin-top:17px;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.role-desc{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.65;
+  margin-top:7px;
+  min-height:50px;
+}
+
+.role-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:12px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:22px;
+  padding:0 8px;
+  border-radius:999px;
+  border:1px solid var(--line2);
+  background:#111117;
+  color:#aaaab4;
+  font-size:9px;
+  font-weight:700;
+}
+
+.badge.green{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+}
+
+.badge.purple{
+  color:#d2adff;
+  border-color:rgba(182,108,255,.3);
+}
+
+.badge.cyan{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.25);
+}
+
+.badge.yellow{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.25);
+}
+
+.badge.red{
+  color:#ff7c91;
+  border-color:rgba(255,82,109,.25);
+}
+
+.permission-preview{
+  margin-top:15px;
+  padding-top:13px;
+  border-top:1px solid var(--line);
+}
+
+.permission-title{
+  color:#6f6f7b;
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+}
+
+.permission-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:7px;
+}
+
+.permission{
+  padding:5px 7px;
+  border-radius:5px;
+  background:#15151b;
+  color:#9999a5;
+  font-size:8px;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1000px;
+}
+
+th{
+  text-align:left;
+  padding:11px 14px;
+  background:#0b0b0f;
+  border-bottom:1px solid var(--line);
+  color:#656571;
+  font-size:8px;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+
+td{
+  padding:12px 14px;
+  border-bottom:1px solid #1d1d24;
+  color:#b5b5bf;
+  font-size:10px;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.012);
+}
+
+.user{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.user .avatar{
+  width:31px;
+  height:31px;
+  font-size:9px;
+}
+
+.user-name strong{
+  display:block;
+  color:#eee;
+  font-size:10px;
+}
+
+.user-name span{
+  color:#666672;
+  font-size:8px;
+}
+
+.mono{
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+}
+
+/* =========================
+   LOWER GRID
+========================= */
+
+.lower-grid{
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:18px;
+  margin-top:18px;
+}
+
+.activity{
+  padding:0 18px 18px;
+}
+
+.activity-item{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  padding:13px 0;
+  border-bottom:1px solid #1c1c23;
+}
+
+.activity-item:last-child{
+  border-bottom:0;
+}
+
+.activity-dot{
+  width:8px;
+  height:8px;
+  margin-top:4px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 12px rgba(182,108,255,.4);
+}
+
+.activity-item strong{
+  display:block;
+  font-size:10px;
+}
+
+.activity-item span{
+  display:block;
+  margin-top:4px;
+  color:#6f6f79;
+  font-size:9px;
+}
+
+.permission-matrix{
+  padding:18px;
+}
+
+.matrix-row{
+  display:grid;
+  grid-template-columns:1fr repeat(3,42px);
+  gap:7px;
+  align-items:center;
+  padding:9px 0;
+  border-bottom:1px solid #1c1c23;
+}
+
+.matrix-row:last-child{
+  border-bottom:0;
+}
+
+.matrix-row label{
+  color:#aaaab4;
+  font-size:9px;
+}
+
+.matrix-head{
+  color:#60606b;
+  font-size:8px;
+  text-align:center;
+  text-transform:uppercase;
+}
+
+.check{
+  width:27px;
+  height:27px;
+  margin:auto;
+  border-radius:7px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line2);
+  color:#555561;
+  background:#0d0d12;
+  font-size:11px;
+}
+
+.check.on{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+  background:rgba(69,230,154,.06);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.76);
+  backdrop-filter:blur(9px);
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-card{
+  width:min(760px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid #363641;
+  border-radius:15px;
+  background:#0c0c11;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:1px solid var(--line2);
+  background:#111117;
+  color:#aaa;
+  border-radius:7px;
+}
+
+.modal-body{
+  padding:19px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+.form-group{
+  margin-bottom:14px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:7px;
+  color:#858590;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  padding:11px;
+  border-radius:8px;
+  border:1px solid var(--line2);
+  background:#111117;
+  color:#eee;
+  outline:none;
+}
+
+.form-group textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.check-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+}
+
+.check-option{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#101016;
+  color:#9999a4;
+  font-size:9px;
+}
+
+.check-option input{
+  width:auto;
+}
+
+.modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:14px 19px;
+  border-top:1px solid var(--line);
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:3000;
+  transform:translateY(30px);
+  opacity:0;
+  pointer-events:none;
+  padding:12px 15px;
+  border:1px solid rgba(69,230,154,.3);
+  border-radius:9px;
+  background:#0d1713;
+  color:#b9ffdf;
+  font-size:10px;
+  transition:.25s ease;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1350px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .role-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:1000px){
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-toggle{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 18px;
+  }
+
+  .content{
+    padding:22px 18px;
+  }
+
+  .hero{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .hero-actions{
+    justify-content:flex-start;
+  }
+
+  .lower-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:700px){
+  h1{
+    font-size:25px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .role-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+
+  .check-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .clock{
+    display:none;
+  }
+}
+
+@media(max-width:450px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .content{
+    padding:17px 12px;
+  }
+
+  .topbar{
+    padding:0 12px;
+  }
+
+  .check-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div class="brand-text">
+      <strong>CROWRULES</strong>
+      <span>Main Admin</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-section">Core</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a href="content.html">
+      <span class="nav-icon">▦</span>
+      Content
+    </a>
+
+    <a href="pages.html">
+      <span class="nav-icon">▤</span>
+      Pages
+    </a>
+
+    <a href="categories.html">
+      <span class="nav-icon">◫</span>
+      Categories
+    </a>
+
+    <a href="tags.html">
+      <span class="nav-icon">#</span>
+      Tags
+    </a>
+
+    <a href="shows.html">
+      <span class="nav-icon">▶</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">◉</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">▣</span>
+      Movies
+    </a>
+
+    <a href="audio.html">
+      <span class="nav-icon">♫</span>
+      Audio
+    </a>
+
+    <a href="articles.html">
+      <span class="nav-icon">✎</span>
+      Articles
+    </a>
+
+    <div class="nav-section">Broadcast</div>
+
+    <a href="channels.html">
+      <span class="nav-icon">◈</span>
+      Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">▤</span>
+      TV Guide
+    </a>
+
+    <div class="nav-section">People</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♙</span>
+      Members
+    </a>
+
+    <a href="member.html">
+      <span class="nav-icon">◎</span>
+      Member
+    </a>
+
+    <a href="membership.html">
+      <span class="nav-icon">◆</span>
+      Membership
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">☷</span>
+      Community
+    </a>
+
+    <a href="creators.html">
+      <span class="nav-icon">✦</span>
+      Creators
+    </a>
+
+    <a href="creator.html">
+      <span class="nav-icon">★</span>
+      Creator
+    </a>
+
+    <a href="creator-content.html">
+      <span class="nav-icon">◌</span>
+      Creator Content
+    </a>
+
+    <a href="creator-approvals.html">
+      <span class="nav-icon">✓</span>
+      Creator Approvals
+    </a>
+
+    <div class="nav-section">CrowRules Network</div>
+
+    <a href="artists.html">
+      <span class="nav-icon">♬</span>
+      Artists
+    </a>
+
+    <a href="albums.html">
+      <span class="nav-icon">▰</span>
+      Albums
+    </a>
+
+    <a href="tracks.html">
+      <span class="nav-icon">♪</span>
+      Tracks
+    </a>
+
+    <a href="records.html">
+      <span class="nav-icon">◉</span>
+      Records
+    </a>
+
+    <a href="sports.html">
+      <span class="nav-icon">◇</span>
+      Sports
+    </a>
+
+    <a href="teams.html">
+      <span class="nav-icon">♜</span>
+      Teams
+    </a>
+
+    <a href="rankings.html">
+      <span class="nav-icon">↕</span>
+      Rankings
+    </a>
+
+    <a href="standings.html">
+      <span class="nav-icon">☷</span>
+      Standings
+    </a>
+
+    <a href="games.html">
+      <span class="nav-icon">⚑</span>
+      Games
+    </a>
+
+    <a href="pickem.html">
+      <span class="nav-icon">?</span>
+      Pick'em
+    </a>
+
+    <a href="memorials.html">
+      <span class="nav-icon">†</span>
+      Memorials
+    </a>
+
+    <a href="memorial-photos.html">
+      <span class="nav-icon">▧</span>
+      Memorial Photos
+    </a>
+
+    <a href="awards.html">
+      <span class="nav-icon">✪</span>
+      Awards
+    </a>
+
+    <div class="nav-section">System</div>
+
+    <a href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      Analytics
+    </a>
+
+    <a href="moderation.html">
+      <span class="nav-icon">⚠</span>
+      Moderation
+    </a>
+
+    <a href="roles.html" class="active">
+      <span class="nav-icon">♚</span>
+      Roles
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span>
+      Logs
+    </a>
+
+    <a href="notifications.html">
+      <span class="nav-icon">♢</span>
+      Notifications
+    </a>
+
+    <a href="activity.html">
+      <span class="nav-icon">◴</span>
+      Activity
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="admin-chip">
+      <div class="avatar">AD</div>
+      <div>
+        <strong>Administrator</strong>
+        <span>Online</span>
+      </div>
+    </div>
+  </div>
+
+</aside>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="top-left">
+      <button class="mobile-toggle" id="mobileToggle">☰</button>
+
+      <div class="breadcrumb">
+        System / <strong>Roles & Permissions</strong>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <div class="clock" id="clock">--:--:--</div>
+      <button class="btn small" id="refreshBtn">↻ Refresh</button>
+    </div>
+
+  </header>
+
+  <section class="content">
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+      <div>
+        <div class="eyebrow">System / Access Control</div>
+
+        <h1>Roles & Permissions</h1>
+
+        <p>
+          Manage CrowRules administrator roles, staff access levels,
+          permission groups, protected resources, and role assignments
+          across the entire CrowRules Entertainment network.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn primary" id="addRoleBtn">
+          + Create Role
+        </button>
+
+        <button class="btn" id="permissionBtn">
+          Permission Matrix
+        </button>
+
+        <button class="btn" id="exportBtn">
+          Export
+        </button>
+      </div>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Total Roles</div>
+        <div class="stat-value" id="totalRoles">8</div>
+        <div class="stat-meta up">+2 this quarter</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Active Roles</div>
+        <div class="stat-value">7</div>
+        <div class="stat-meta">1 archived</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Administrators</div>
+        <div class="stat-value">6</div>
+        <div class="stat-meta">Full access</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Staff Users</div>
+        <div class="stat-value">24</div>
+        <div class="stat-meta up">+5 this month</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Permissions</div>
+        <div class="stat-value">64</div>
+        <div class="stat-meta">Across 11 groups</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Pending Changes</div>
+        <div class="stat-value">3</div>
+        <div class="stat-meta warn">Needs review</div>
+      </div>
+
+    </div>
+
+    <!-- ROLE LIBRARY -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Role Library</div>
+          <div class="panel-sub">
+            Configure access profiles used throughout the CrowRules network.
+          </div>
+        </div>
+
+        <button class="btn small" id="bulkBtn">
+          Bulk Actions
+        </button>
+      </div>
+
+      <div class="toolbar">
+
+        <div class="field search">
+          <input
+            type="search"
+            id="roleSearch"
+            placeholder="Search roles..."
+          >
+        </div>
+
+        <div class="field select">
+          <select id="roleStatus">
+            <option value="">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="archived">Archived</option>
+          </select>
+        </div>
+
+        <div class="field select">
+          <select id="roleScope">
+            <option value="">All Scopes</option>
+            <option value="global">Global</option>
+            <option value="content">Content</option>
+            <option value="broadcast">Broadcast</option>
+            <option value="community">Community</option>
+            <option value="network">Network</option>
+          </select>
+        </div>
+
+        <button class="btn small" id="resetFilters">
+          Reset
+        </button>
+
+      </div>
+
+      <div class="tabs">
+
+        <button class="tab active" data-tab="all">
+          All Roles
+        </button>
+
+        <button class="tab" data-tab="system">
+          System Roles
+        </button>
+
+        <button class="tab" data-tab="content">
+          Content
+        </button>
+
+        <button class="tab" data-tab="community">
+          Community
+        </button>
+
+        <button class="tab" data-tab="broadcast">
+          Broadcast
+        </button>
+
+        <button class="tab" data-tab="network">
+          Network
+        </button>
+
+      </div>
+
+      <div class="role-grid" id="roleGrid">
+
+        <!-- ROLE -->
+
+        <article
+          class="role-card system"
+          data-name="Super Administrator"
+          data-status="active"
+          data-scope="global"
+        >
+
+          <div class="role-top">
+
+            <div class="role-icon">SA</div>
+
+            <div class="role-actions">
+              <button class="icon-btn edit-role">✎</button>
+              <button class="icon-btn duplicate-role">⧉</button>
+            </div>
+
+          </div>
+
+          <div class="role-name">Super Administrator</div>
+
+          <div class="role-desc">
+            Complete control over CrowRules Entertainment,
+            configuration, users, content, security, and system resources.
+          </div>
+
+          <div class="role-meta">
+            <span class="badge purple">System</span>
+            <span class="badge green">Active</span>
+            <span class="badge">3 Users</span>
+          </div>
+
+          <div class="permission-preview">
+            <div class="permission-title">Key Permissions</div>
+
+            <div class="permission-list">
+              <span class="permission">All Content</span>
+              <span class="permission">Users</span>
+              <span class="permission">System</span>
+              <span class="permission">Security</span>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- ROLE -->
+
+        <article
+          class="role-card system"
+          data-name="Administrator"
+          data-status="active"
+          data-scope="global"
+        >
+
+          <div class="role-top">
+
+            <div class="role-icon">AD</div>
+
+            <div class="role-actions">
+              <button class="icon-btn edit-role">✎</button>
+              <button class="icon-btn duplicate-role">⧉</button>
+            </div>
+
+          </div>
+
+          <div class="role-name">Administrator</div>
+
+          <div class="role-desc">
+            Full operational access with security-sensitive
+            system configuration restricted.
+          </div>
+
+          <div class="role-meta">
+            <span class="badge purple">System</span>
+            <span class="badge green">Active</span>
+            <span class="badge">6 Users</span>
+          </div>
+
+          <div class="permission-preview">
+            <div class="permission-title">Key Permissions</div>
+
+            <div class="permission-list">
+              <span class="permission">Content</span>
+              <span class="permission">Members</span>
+              <span class="permission">Broadcast</span>
+              <span class="permission">Analytics</span>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- ROLE -->
+
+        <article
+          class="role-card"
+          data-name="Content Manager"
+          data-status="active"
+          data-scope="content"
+        >
+
+          <div class="role-top">
+
+            <div class="role-icon">CM</div>
+
+            <div class="role-actions">
+              <button class="icon-btn edit-role">✎</button>
+              <button class="icon-btn duplicate-role">⧉</button>
+            </div>
+
+          </div>
+
+          <div class="role-name">Content Manager</div>
+
+          <div class="role-desc">
+            Manages shows, episodes, movies, articles, pages,
+            categories, tags, and publishing workflows.
+          </div>
+
+          <div class="role-meta">
+            <span class="badge cyan">Content</span>
+            <span class="badge green">Active</span>
+            <span class="badge">8 Users</span>
+          </div>
+
+          <div class="permission-preview">
+            <div class="permission-title">Key Permissions</div>
+
+            <div class="permission-list">
+              <span class="permission">Shows</span>
+              <span class="permission">Episodes</span>
+              <span class="permission">Movies</span>
+              <span class="permission">Articles</span>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- ROLE -->
+
+        <article
+          class="role-card"
+          data-name="Broadcast Manager"
+          data-status="active"
+          data-scope="broadcast"
+        >
+
+          <div class="role-top">
+
+            <div class="role-icon">BM</div>
+
+            <div class="role-actions">
+              <button class="icon-btn edit-role">✎</button>
+              <button class="icon-btn duplicate-role">⧉</button>
+            </div>
+
+          </div>
+
+          <div class="role-name">Broadcast Manager</div>
+
+          <div class="role-desc">
+            Controls live channels, schedules, programming,
+            TV Guide operations, and broadcast metadata.
+          </div>
+
+          <div class="role-meta">
+            <span class="badge cyan">Broadcast</span>
+            <span class="badge green">Active</span>
+            <span class="badge">4 Users</span>
+          </div>
+
+          <div class="permission-preview">
+            <div class="permission-title">Key Permissions</div>
+
+            <div class="permission-list">
+              <span class="permission">Channels</span>
+              <span class="permission">Schedule</span>
+              <span class="permission">Live</span>
+              <span class="permission">Guide</span>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- ROLE -->
+
+        <article
+          class="role-card"
+          data-name="Community Manager"
+          data-status="active"
+          data-scope="community"
+        >
+
+          <div class="role-top">
+
+            <div class="role-icon">CO</div>
+
+            <div class="role-actions">
+              <button class="icon-btn edit-role">✎</button>
+              <button class="icon-btn duplicate-role">⧉</button>
+            </div>
+
+          </div>
+
+          <div class="role-name">Community Manager</div>
+
+          <div class="role-desc">
+            Oversees member communities, moderation,
+            discussions, reports, and member engagement.
+          </div>
+
+          <div class="role-meta">
+            <span class="badge yellow">Community</span>
+            <span class="badge green">Active</span>
+            <span class="badge">5 Users</span>
+          </div>
+
+          <div class="permission-preview">
+            <div class="permission-title">Key Permissions</div>
+
+            <div class="permission-list">
+              <span class="permission">Members</span>
+              <span class="permission">Community</span>
+              <span class="permission">Moderation</span>
+              <span class="permission">Reports</span>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- ROLE -->
+
+        <article
+          class="role-card"
+          data-name="Creator Manager"
+          data-status="active"
+          data-scope="network"
+        >
+
+          <div class="role-top">
+
+            <div class="role-icon">CR</div>
+
+            <div class="role-actions">
+              <button class="icon-btn edit-role">✎</button>
+              <button class="icon-btn duplicate-role">⧉</button>
+            </div>
+
+          </div>
+
+          <div class="role-name">Creator Manager</div>
+
+          <div class="role-desc">
+            Manages creator profiles, creator submissions,
+            approvals, publishing permissions, and creator content.
+          </div>
+
+          <div class="role-meta">
+            <span class="badge purple">Network</span>
+            <span class="badge green">Active</span>
+            <span class="badge">3 Users</span>
+          </div>
+
+          <div class="permission-preview">
+            <div class="permission-title">Key Permissions</div>
+
+            <div class="permission-list">
+              <span class="permission">Creators</span>
+              <span class="permission">Approvals</span>
+              <span class="permission">Uploads</span>
+              <span class="permission">Profiles</span>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- ROLE -->
+
+        <article
+          class="role-card"
+          data-name="Sports Manager"
+          data-status="active"
+          data-scope="network"
+        >
+
+          <div class="role-top">
+
+            <div class="role-icon">SP</div>
+
+            <div class="role-actions">
+              <button class="icon-btn edit-role">✎</button>
+              <button class="icon-btn duplicate-role">⧉</button>
+            </div>
+
+          </div>
+
+          <div class="role-name">Sports Manager</div>
+
+          <div class="role-desc">
+            Manages sports leagues, teams, rankings, standings,
+            games, schedules, and Pick'em competitions.
+          </div>
+
+          <div class="role-meta">
+            <span class="badge purple">Network</span>
+            <span class="badge green">Active</span>
+            <span class="badge">2 Users</span>
+          </div>
+
+          <div class="permission-preview">
+            <div class="permission-title">Key Permissions</div>
+
+            <div class="permission-list">
+              <span class="permission">Teams</span>
+              <span class="permission">Rankings</span>
+              <span class="permission">Games</span>
+              <span class="permission">Pick'em</span>
+            </div>
+          </div>
+
+        </article>
+
+        <!-- ROLE -->
+
+        <article
+          class="role-card"
+          data-name="Memorial Manager"
+          data-status="active"
+          data-scope="community"
+        >
+
+          <div class="role-top">
+
+            <div class="role-icon">ME</div>
+
+            <div class="role-actions">
+              <button class="icon-btn edit-role">✎</button>
+              <button class="icon-btn duplicate-role">⧉</button>
+            </div>
+
+          </div>
+
+          <div class="role-name">Memorial Manager</div>
+
+          <div class="role-desc">
+            Manages memorial records, photos, videos,
+            candles, tributes, and remembrance archives.
+          </div>
+
+          <div class="role-meta">
+            <span class="badge yellow">Community</span>
+            <span class="badge green">Active</span>
+            <span class="badge">2 Users</span>
+          </div>
+
+          <div class="permission-preview">
+            <div class="permission-title">Key Permissions</div>
+
+            <div class="permission-list">
+              <span class="permission">Memorials</span>
+              <span class="permission">Photos</span>
+              <span class="permission">Videos</span>
+              <span class="permission">Tributes</span>
+            </div>
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+    <!-- ASSIGNED USERS -->
+
+    <section class="panel" style="margin-top:18px;">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">Role Assignments</div>
+          <div class="panel-sub">
+            Users currently assigned to elevated CrowRules roles.
+          </div>
+        </div>
+
+        <button class="btn small" id="assignBtn">
+          + Assign Role
+        </button>
+
+      </div>
+
+      <div class="toolbar">
+
+        <div class="field search">
+          <input
+            type="search"
+            id="userSearch"
+            placeholder="Search users..."
+          >
+        </div>
+
+        <div class="field select">
+          <select id="assignmentRole">
+            <option value="">All Roles</option>
+            <option>Super Administrator</option>
+            <option>Administrator</option>
+            <option>Content Manager</option>
+            <option>Broadcast Manager</option>
+            <option>Community Manager</option>
+            <option>Creator Manager</option>
+            <option>Sports Manager</option>
+            <option>Memorial Manager</option>
+          </select>
+        </div>
+
+        <div class="field select">
+          <select>
+            <option>All Statuses</option>
+            <option>Active</option>
+            <option>Suspended</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Role</th>
+              <th>Scope</th>
+              <th>Status</th>
+              <th>Assigned</th>
+              <th>Last Active</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="assignmentTable">
+
+            <tr>
+              <td>
+                <div class="user">
+                  <div class="avatar">AD</div>
+                  <div class="user-name">
+                    <strong>Admin User</strong>
+                    <span>admin@crowrules.com</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="badge purple">Super Administrator</span>
+              </td>
+
+              <td>Global</td>
+
+              <td>
+                <span class="badge green">Active</span>
+              </td>
+
+              <td>Jan 04, 2026</td>
+              <td>2 min ago</td>
+
+              <td>
+                <div class="actions">
+                  <button class="btn small edit-assignment">Edit</button>
+                  <button class="btn small danger remove-assignment">Remove</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="user">
+                  <div class="avatar">JR</div>
+                  <div class="user-name">
+                    <strong>Jonathan</strong>
+                    <span>administrator account</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="badge purple">Administrator</span>
+              </td>
+
+              <td>Global</td>
+
+              <td>
+                <span class="badge green">Active</span>
+              </td>
+
+              <td>Feb 12, 2026</td>
+              <td>Today</td>
+
+              <td>
+                <div class="actions">
+                  <button class="btn small edit-assignment">Edit</button>
+                  <button class="btn small danger remove-assignment">Remove</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="user">
+                  <div class="avatar">CM</div>
+                  <div class="user-name">
+                    <strong>Content Team</strong>
+                    <span>content operations</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="badge cyan">Content Manager</span>
+              </td>
+
+              <td>Content</td>
+
+              <td>
+                <span class="badge green">Active</span>
+              </td>
+
+              <td>Mar 03, 2026</td>
+              <td>18 min ago</td>
+
+              <td>
+                <div class="actions">
+                  <button class="btn small edit-assignment">Edit</button>
+                  <button class="btn small danger remove-assignment">Remove</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <div class="user">
+                  <div class="avatar">BM</div>
+                  <div class="user-name">
+                    <strong>Broadcast Team</strong>
+                    <span>broadcast operations</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <span class="badge cyan">Broadcast Manager</span>
+              </td>
+
+              <td>Broadcast</td>
+
+              <td>
+                <span class="badge green">Active</span>
+              </td>
+
+              <td>Apr 21, 2026</td>
+              <td>1 hr ago</td>
+
+              <td>
+                <div class="actions">
+                  <button class="btn small edit-assignment">Edit</button>
+                  <button class="btn small danger remove-assignment">Remove</button>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+    <!-- LOWER -->
+
+    <div class="lower-grid">
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">Access Activity</div>
+            <div class="panel-sub">
+              Recent role and permission events.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="activity">
+
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div>
+              <strong>Administrator role assigned</strong>
+              <span>Role assignment updated · 8 minutes ago</span>
+            </div>
+          </div>
+
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div>
+              <strong>Content Manager permissions changed</strong>
+              <span>Episodes permission enabled · 24 minutes ago</span>
+            </div>
+          </div>
+
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div>
+              <strong>Sports Manager created</strong>
+              <span>New network role · Today at 09:42</span>
+            </div>
+          </div>
+
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div>
+              <strong>Memorial Manager reviewed</strong>
+              <span>Photo archive access verified · Yesterday</span>
+            </div>
+          </div>
+
+          <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div>
+              <strong>Permission matrix exported</strong>
+              <span>System audit export · Yesterday</span>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">Permission Matrix</div>
+            <div class="panel-sub">
+              Quick overview of high-level access.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="permission-matrix">
+
+          <div class="matrix-row">
+            <div></div>
+            <div class="matrix-head">Admin</div>
+            <div class="matrix-head">Mgr</div>
+            <div class="matrix-head">Staff</div>
+          </div>
+
+          <div class="matrix-row">
+            <label>Content</label>
+            <div class="check on">✓</div>
+            <div class="check on">✓</div>
+            <div class="check">—</div>
+          </div>
+
+          <div class="matrix-row">
+            <label>Members</label>
+            <div class="check on">✓</div>
+            <div class="check on">✓</div>
+            <div class="check">—</div>
+          </div>
+
+          <div class="matrix-row">
+            <label>Broadcast</label>
+            <div class="check on">✓</div>
+            <div class="check on">✓</div>
+            <div class="check">—</div>
+          </div>
+
+          <div class="matrix-row">
+            <label>Moderation</label>
+            <div class="check on">✓</div>
+            <div class="check on">✓</div>
+            <div class="check on">✓</div>
+          </div>
+
+          <div class="matrix-row">
+            <label>System</label>
+            <div class="check on">✓</div>
+            <div class="check">—</div>
+            <div class="check">—</div>
+          </div>
+
+          <div class="matrix-row">
+            <label>Security</label>
+            <div class="check on">✓</div>
+            <div class="check">—</div>
+            <div class="check">—</div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </section>
+
+</main>
+
+</div>
+
+<!-- =========================
+     ROLE MODAL
+========================= -->
+
+<div class="modal" id="roleModal">
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div class="modal-title" id="modalTitle">
+        Create Role
+      </div>
+
+      <button class="close" id="closeModal">×</button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <form id="roleForm">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Role Name</label>
+            <input
+              type="text"
+              id="roleName"
+              placeholder="Example: Video Manager"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Role Key</label>
+            <input
+              type="text"
+              id="roleKey"
+              placeholder="video_manager"
+            >
+          </div>
+
+          <div class="form-group">
+
+            <label>Scope</label>
+
+            <select id="roleScopeForm">
+              <option value="global">Global</option>
+              <option value="content">Content</option>
+              <option value="broadcast">Broadcast</option>
+              <option value="community">Community</option>
+              <option value="network">Network</option>
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Status</label>
+
+            <select id="roleStatusForm">
+              <option value="active">Active</option>
+              <option value="archived">Archived</option>
+            </select>
+
+          </div>
+
+          <div class="form-group full">
+
+            <label>Description</label>
+
+            <textarea
+              id="roleDescription"
+              placeholder="Describe what this role is responsible for..."
+            ></textarea>
+
+          </div>
+
+          <div class="form-group full">
+
+            <label>Permissions</label>
+
+            <div class="check-grid">
+
+              <label class="check-option">
+                <input type="checkbox" value="content.read">
+                Content Read
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="content.write">
+                Content Write
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="content.publish">
+                Publish
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="members.read">
+                Members Read
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="members.write">
+                Members Write
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="broadcast.manage">
+                Broadcast
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="community.manage">
+                Community
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="moderation.manage">
+                Moderation
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="analytics.read">
+                Analytics
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="sports.manage">
+                Sports
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="memorials.manage">
+                Memorials
+              </label>
+
+              <label class="check-option">
+                <input type="checkbox" value="system.manage">
+                System
+              </label>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button class="btn" id="cancelModal">
+        Cancel
+      </button>
+
+      <button class="btn primary" id="saveRole">
+        Save Role
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div class="toast" id="toast">
+  Saved successfully.
+</div>
+
+<script>
+/* =========================================
+   CROWRULES ROLES ADMIN
+========================================= */
+
+const $ = (selector, root = document) =>
+  root.querySelector(selector);
+
+const $$ = (selector, root = document) =>
+  [...root.querySelectorAll(selector)];
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock(){
+
+  const now = new Date();
+
+  const time = now.toLocaleTimeString([], {
+    hour:'2-digit',
+    minute:'2-digit',
+    second:'2-digit'
+  });
+
+  $('#clock').textContent = time;
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+/* =========================
+   SIDEBAR
+========================= */
+
+$('#mobileToggle').addEventListener('click',()=>{
+
+  $('#sidebar').classList.toggle('open');
+
+});
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer;
+
+function toast(message){
+
+  const el = $('#toast');
+
+  el.textContent = message;
+
+  el.classList.add('show');
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(()=>{
+    el.classList.remove('show');
+  },2600);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+const modal = $('#roleModal');
+
+let editingRole = null;
+
+function openRoleModal(role = null){
+
+  editingRole = role;
+
+  modal.classList.add('open');
+
+  if(role){
+
+    $('#modalTitle').textContent = 'Edit Role';
+
+    $('#roleName').value =
+      role.dataset.name || '';
+
+    $('#roleKey').value =
+      role.dataset.name
+        .toLowerCase()
+        .replace(/\s+/g,'_');
+
+    $('#roleScopeForm').value =
+      role.dataset.scope || 'global';
+
+    $('#roleStatusForm').value =
+      role.dataset.status || 'active';
+
+    $('#roleDescription').value =
+      role.querySelector('.role-desc')?.textContent.trim() || '';
+
+  }else{
+
+    $('#modalTitle').textContent = 'Create Role';
+
+    $('#roleForm').reset();
+
+  }
+
+}
+
+function closeRoleModal(){
+
+  modal.classList.remove('open');
+
+  editingRole = null;
+
+}
+
+$('#addRoleBtn').addEventListener('click',()=>{
+  openRoleModal();
+});
+
+$('#closeModal').addEventListener('click',closeRoleModal);
+$('#cancelModal').addEventListener('click',closeRoleModal);
+
+modal.addEventListener('click',(event)=>{
+
+  if(event.target === modal){
+    closeRoleModal();
+  }
+
+});
+
+/* =========================
+   EDIT ROLE
+========================= */
+
+$$('.edit-role').forEach(button=>{
+
+  button.addEventListener('click',()=>{
+
+    const card = button.closest('.role-card');
+
+    openRoleModal(card);
+
+  });
+
+});
+
+/* =========================
+   DUPLICATE ROLE
+========================= */
+
+$$('.duplicate-role').forEach(button=>{
+
+  button.addEventListener('click',()=>{
+
+    const card = button.closest('.role-card');
+
+    const name =
+      card.dataset.name || 'Role';
+
+    toast(`${name} duplicated as a draft.`);
+
+  });
+
+});
+
+/* =========================
+   SAVE ROLE
+========================= */
+
+$('#saveRole').addEventListener('click',()=>{
+
+  const name = $('#roleName').value.trim();
+
+  if(!name){
+
+    toast('Role name is required.');
+
+    $('#roleName').focus();
+
+    return;
+
+  }
+
+  if(editingRole){
+
+    editingRole.dataset.name = name;
+
+    editingRole.querySelector('.role-name').textContent = name;
+
+    editingRole.dataset.scope =
+      $('#roleScopeForm').value;
+
+    editingRole.dataset.status =
+      $('#roleStatusForm').value;
+
+    editingRole.querySelector('.role-desc').textContent =
+      $('#roleDescription').value.trim() ||
+      'Custom CrowRules administrative role.';
+
+    toast('Role updated.');
+
+  }else{
+
+    toast(
+      `${name} created in demo mode.`
+    );
+
+  }
+
+  closeRoleModal();
+
+});
+
+/* =========================
+   SEARCH / FILTER
+========================= */
+
+function filterRoles(){
+
+  const search =
+    $('#roleSearch').value
+      .trim()
+      .toLowerCase();
+
+  const status =
+    $('#roleStatus').value;
+
+  const scope =
+    $('#roleScope').value;
+
+  $$('.role-card').forEach(card=>{
+
+    const name =
+      (card.dataset.name || '').toLowerCase();
+
+    const cardStatus =
+      card.dataset.status || '';
+
+    const cardScope =
+      card.dataset.scope || '';
+
+    const matchesSearch =
+      !search ||
+      name.includes(search);
+
+    const matchesStatus =
+      !status ||
+      cardStatus === status;
+
+    const matchesScope =
+      !scope ||
+      cardScope === scope;
+
+    card.style.display =
+      matchesSearch &&
+      matchesStatus &&
+      matchesScope
+        ? ''
+        : 'none';
+
+  });
+
+}
+
+$('#roleSearch').addEventListener('input',filterRoles);
+$('#roleStatus').addEventListener('change',filterRoles);
+$('#roleScope').addEventListener('change',filterRoles);
+
+/* =========================
+   TABS
+========================= */
+
+$$('.tab').forEach(tab=>{
+
+  tab.addEventListener('click',()=>{
+
+    $$('.tab').forEach(t=>{
+      t.classList.remove('active');
+    });
+
+    tab.classList.add('active');
+
+    const value =
+      tab.dataset.tab;
+
+    $$('.role-card').forEach(card=>{
+
+      if(value === 'all'){
+
+        card.style.display = '';
+
+        return;
+
+      }
+
+      if(value === 'system'){
+
+        card.style.display =
+          card.classList.contains('system')
+            ? ''
+            : 'none';
+
+        return;
+
+      }
+
+      card.style.display =
+        card.dataset.scope === value
+          ? ''
+          : 'none';
+
+    });
+
+  });
+
+});
+
+/* =========================
+   RESET
+========================= */
+
+$('#resetFilters').addEventListener('click',()=>{
+
+  $('#roleSearch').value = '';
+  $('#roleStatus').value = '';
+  $('#roleScope').value = '';
+
+  $$('.tab').forEach(tab=>{
+    tab.classList.remove('active');
+  });
+
+  $('.tab[data-tab="all"]').classList.add('active');
+
+  filterRoles();
+
+});
+
+/* =========================
+   USER SEARCH
+========================= */
+
+$('#userSearch').addEventListener('input',function(){
+
+  const value =
+    this.value.trim().toLowerCase();
+
+  $$('#assignmentTable tr').forEach(row=>{
+
+    row.style.display =
+      !value ||
+      row.textContent.toLowerCase().includes(value)
+        ? ''
+        : 'none';
+
+  });
+
+});
+
+/* =========================
+   ROLE ASSIGNMENT FILTER
+========================= */
+
+$('#assignmentRole').addEventListener('change',function(){
+
+  const value = this.value.toLowerCase();
+
+  $$('#assignmentTable tr').forEach(row=>{
+
+    if(!value){
+
+      row.style.display = '';
+
+      return;
+
+    }
+
+    row.style.display =
+      row.textContent.toLowerCase().includes(value)
+        ? ''
+        : 'none';
+
+  });
+
+});
+
+/* =========================
+   ASSIGN ROLE
+========================= */
+
+$('#assignBtn').addEventListener('click',()=>{
+
+  toast(
+    'Role assignment dialog is ready for Supabase integration.'
+  );
+
+});
+
+/* =========================
+   ASSIGNMENT ACTIONS
+========================= */
+
+$$('.edit-assignment').forEach(button=>{
+
+  button.addEventListener('click',()=>{
+
+    toast(
+      'Assignment editor opened in demo mode.'
+    );
+
+  });
+
+});
+
+$$('.remove-assignment').forEach(button=>{
+
+  button.addEventListener('click',()=>{
+
+    if(confirm('Remove this role assignment?')){
+
+      button.closest('tr').remove();
+
+      toast('Role assignment removed.');
+
+    }
+
+  });
+
+});
+
+/* =========================
+   BULK ACTIONS
+========================= */
+
+$('#bulkBtn').addEventListener('click',()=>{
+
+  toast(
+    'Bulk role actions are available for Supabase integration.'
+  );
+
+});
+
+/* =========================
+   PERMISSION MATRIX
+========================= */
+
+$('#permissionBtn').addEventListener('click',()=>{
+
+  document
+    .querySelector('.permission-matrix')
+    .scrollIntoView({
+      behavior:'smooth',
+      block:'center'
+    });
+
+  toast('Permission matrix opened.');
+
+});
+
+/* =========================
+   REFRESH
+========================= */
+
+$('#refreshBtn').addEventListener('click',()=>{
+
+  toast('Roles refreshed.');
+
+});
+
+/* =========================
+   EXPORT CSV
+========================= */
+
+$('#exportBtn').addEventListener('click',()=>{
+
+  const rows = [
+    ['Role','Status','Scope','Users'],
+    ['Super Administrator','Active','Global','3'],
+    ['Administrator','Active','Global','6'],
+    ['Content Manager','Active','Content','8'],
+    ['Broadcast Manager','Active','Broadcast','4'],
+    ['Community Manager','Active','Community','5'],
+    ['Creator Manager','Active','Network','3'],
+    ['Sports Manager','Active','Network','2'],
+    ['Memorial Manager','Active','Community','2']
+  ];
+
+  const csv =
+    rows
+      .map(row =>
+        row
+          .map(value =>
+            `"${String(value).replace(/"/g,'""')}"`
+          )
+          .join(',')
+      )
+      .join('\n');
+
+  const blob =
+    new Blob([csv],{
+      type:'text/csv;charset=utf-8;'
+    });
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement('a');
+
+  a.href = url;
+  a.download = 'crowrules-roles.csv';
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+  toast('Role CSV exported.');
+
+});
+
+/* =========================
+   ESCAPE
+========================= */
+
+document.addEventListener('keydown',(event)=>{
+
+  if(event.key === 'Escape'){
+
+    closeRoleModal();
+
+    $('#sidebar').classList.remove('open');
+
+  }
+
+});
+
+/* =========================================
+   SUPABASE PRODUCTION ARCHITECTURE
+=========================================
+
+Recommended tables:
+
+roles
+-----------------------------------------
+id
+name
+slug
+description
+scope
+status
+is_system
+created_at
+updated_at
+
+permissions
+-----------------------------------------
+id
+key
+name
+description
+resource
+action
+created_at
+
+role_permissions
+-----------------------------------------
+id
+role_id
+permission_id
+created_at
+
+user_roles
+-----------------------------------------
+id
+user_id
+role_id
+assigned_by
+created_at
+updated_at
+
+role_audit_log
+-----------------------------------------
+id
+user_id
+actor_id
+role_id
+action
+metadata
+created_at
+
+
+IMPORTANT:
+
+Do not expose a Supabase service-role key in this page.
+
+The production browser should use only the
+publishable/anon key with Row Level Security.
+
+Recommended authorization model:
+
+profiles
+    ↓
+user_roles
+    ↓
+roles
+    ↓
+role_permissions
+    ↓
+permissions
+
+
+Example browser configuration:
+
+window.CROWRULES_SUPABASE_URL =
+  "https://YOUR-PROJECT.supabase.co";
+
+window.CROWRULES_SUPABASE_ANON_KEY =
+  "YOUR-PUBLISHABLE-OR-ANON-KEY";
+
+
+Example client-side reads:
+
+const { data, error } =
+  await supabase
+    .from("roles")
+    .select("*")
+    .order("name");
+
+
+const { data: permissions, error } =
+  await supabase
+    .from("permissions")
+    .select("*")
+    .order("resource");
+
+
+const { data: assignments, error } =
+  await supabase
+    .from("user_roles")
+    .select("*");
+
+
+For production authorization, enforce access
+with Postgres RLS policies and server-side checks.
+Never rely only on hiding admin controls in HTML.
+
+========================================= */
+</script>
+
+</body>
+</html>

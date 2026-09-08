@@ -1,0 +1,3244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Groups — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — CrowSpace Groups Management">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 80% -10%,rgba(182,108,255,.10),transparent 30%),
+    radial-gradient(circle at 10% 30%,rgba(55,215,255,.05),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:260px;
+  background:rgba(8,8,11,.96);
+  border-right:1px solid var(--line);
+  z-index:100;
+  overflow-y:auto;
+  backdrop-filter:blur(18px);
+}
+
+.brand{
+  padding:24px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-logo{
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  font-size:22px;
+  letter-spacing:1px;
+}
+
+.brand-logo span{color:var(--accent)}
+
+.brand-sub{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.nav{padding:16px 12px 30px}
+
+.nav-label{
+  color:#666671;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  margin:17px 10px 8px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 12px;
+  margin:2px 0;
+  border:1px solid transparent;
+  border-radius:9px;
+  color:#aaaab4;
+  font-size:13px;
+  transition:.2s;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:#121218;
+  border-color:#25252e;
+}
+
+.nav a.active{
+  color:#fff;
+  background:linear-gradient(90deg,rgba(182,108,255,.15),rgba(108,92,255,.06));
+  border-color:rgba(182,108,255,.28);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+  font-size:15px;
+}
+
+.main{
+  margin-left:260px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:70px;
+  position:sticky;
+  top:0;
+  z-index:80;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(5,5,5,.82);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(18px);
+}
+
+.top-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:1px;
+}
+
+.top-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  color:var(--muted);
+  font-size:11px;
+  margin-right:8px;
+}
+
+.admin-chip{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  border-radius:999px;
+  padding:7px 11px;
+  font-size:11px;
+  color:#ddd;
+}
+
+.mobile-menu{
+  display:none;
+}
+
+.page{
+  padding:30px;
+  max-width:1800px;
+  margin:auto;
+}
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:20px;
+  margin-bottom:26px;
+}
+
+.eyebrow{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:9px;
+}
+
+h1{
+  font-family:Orbitron,sans-serif;
+  font-size:32px;
+  margin:0;
+  letter-spacing:.5px;
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:720px;
+  line-height:1.6;
+  margin:10px 0 0;
+  font-size:13px;
+}
+
+.hero-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#eee;
+  border-radius:8px;
+  padding:10px 14px;
+  font-size:12px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.btn:hover{
+  border-color:#565662;
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.5);
+  background:linear-gradient(135deg,#8f50d4,#654fd0);
+  color:#fff;
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.35);
+  color:#ff8295;
+}
+
+.btn.small{
+  padding:7px 10px;
+  font-size:11px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.stat{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(145deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+
+.stat:after{
+  content:"";
+  position:absolute;
+  right:-25px;
+  bottom:-35px;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:rgba(182,108,255,.07);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.stat-value{
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+  margin-top:9px;
+}
+
+.stat-note{
+  margin-top:5px;
+  font-size:10px;
+  color:#6f6f79;
+}
+
+.toolbar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:14px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+.search{
+  flex:1;
+  min-width:240px;
+}
+
+.search input{
+  width:100%;
+  background:#09090d;
+  border:1px solid var(--line);
+  color:#fff;
+  border-radius:8px;
+  padding:11px 13px;
+  outline:none;
+}
+
+.search input:focus,
+select:focus,
+.form-input:focus,
+textarea:focus{
+  border-color:rgba(182,108,255,.6);
+  box-shadow:0 0 0 3px rgba(182,108,255,.08);
+}
+
+select{
+  background:#09090d;
+  border:1px solid var(--line);
+  color:#ddd;
+  border-radius:8px;
+  padding:10px 12px;
+  outline:none;
+}
+
+.tabs{
+  display:flex;
+  gap:7px;
+  overflow:auto;
+  margin-bottom:16px;
+  padding-bottom:3px;
+}
+
+.tab{
+  white-space:nowrap;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--muted);
+  border-radius:8px;
+  padding:9px 13px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.tab.active{
+  color:#fff;
+  border-color:rgba(182,108,255,.4);
+  background:rgba(182,108,255,.10);
+}
+
+.content-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 330px;
+  gap:16px;
+}
+
+.panel{
+  background:linear-gradient(145deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);
+  border-radius:13px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.7px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.groups-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  padding:16px;
+}
+
+.group-card{
+  position:relative;
+  min-height:250px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(182,108,255,.12),transparent 42%),
+    #0a0a0e;
+  transition:.2s;
+}
+
+.group-card:hover{
+  border-color:rgba(182,108,255,.35);
+  transform:translateY(-2px);
+}
+
+.group-cover{
+  height:74px;
+  border-radius:9px;
+  background:
+    linear-gradient(135deg,rgba(182,108,255,.25),rgba(55,215,255,.08)),
+    #15151c;
+  border:1px solid var(--line);
+  margin-bottom:14px;
+  display:flex;
+  align-items:flex-end;
+  padding:10px;
+}
+
+.group-mark{
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:#0b0b10;
+  border:1px solid var(--line2);
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  color:var(--accent);
+}
+
+.group-name{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.group-description{
+  color:#777783;
+  font-size:10px;
+  line-height:1.5;
+  min-height:31px;
+}
+
+.group-meta{
+  display:flex;
+  gap:14px;
+  margin-top:14px;
+  color:#858590;
+  font-size:10px;
+}
+
+.group-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-top:17px;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 8px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.status:before{
+  content:"";
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:currentColor;
+}
+
+.status.active{
+  color:var(--green);
+  background:rgba(69,230,154,.07);
+}
+
+.status.pending{
+  color:var(--yellow);
+  background:rgba(243,201,105,.07);
+}
+
+.status.private{
+  color:var(--accent);
+  background:rgba(182,108,255,.07);
+}
+
+.status.archived{
+  color:#9999a5;
+  background:rgba(150,150,160,.07);
+}
+
+.side-list{
+  padding:5px 0;
+}
+
+.side-item{
+  padding:13px 17px;
+  border-bottom:1px solid rgba(39,39,47,.65);
+}
+
+.side-item:last-child{border-bottom:0}
+
+.side-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.side-name{
+  font-size:11px;
+  font-weight:700;
+}
+
+.side-count{
+  font-family:Orbitron,sans-serif;
+  color:var(--accent);
+  font-size:11px;
+}
+
+.side-meta{
+  color:#686873;
+  font-size:9px;
+  margin-top:5px;
+}
+
+.progress{
+  height:5px;
+  background:#09090d;
+  border-radius:99px;
+  margin-top:9px;
+  overflow:hidden;
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  border-radius:99px;
+}
+
+.activity{
+  padding:8px 0;
+}
+
+.activity-item{
+  display:flex;
+  gap:10px;
+  padding:12px 16px;
+  border-bottom:1px solid rgba(39,39,47,.6);
+}
+
+.activity-icon{
+  width:27px;
+  height:27px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#17171e;
+  border:1px solid var(--line);
+  color:var(--accent);
+  flex:none;
+}
+
+.activity-text{
+  color:#aaaab4;
+  font-size:10px;
+  line-height:1.45;
+}
+
+.activity-time{
+  color:#666671;
+  font-size:9px;
+  margin-top:3px;
+}
+
+.loading,
+.empty{
+  padding:45px 20px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.spinner{
+  width:25px;
+  height:25px;
+  margin:0 auto 12px;
+  border:2px solid #292932;
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+  z-index:500;
+}
+
+.modal.show{display:flex}
+
+.modal-card{
+  width:min(720px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0d0d12;
+  border:1px solid var(--line2);
+  border-radius:15px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.close{
+  background:transparent;
+  border:0;
+  color:#999;
+  font-size:20px;
+}
+
+.modal-body{padding:20px}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.form-group.full{grid-column:1/-1}
+
+.form-label{
+  color:#9999a4;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:700;
+}
+
+.form-input,
+textarea{
+  width:100%;
+  background:#08080c;
+  border:1px solid var(--line);
+  border-radius:8px;
+  color:#fff;
+  padding:11px 12px;
+  outline:none;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:15px 20px;
+  border-top:1px solid var(--line);
+}
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:700;
+  min-width:260px;
+  max-width:420px;
+  background:#111117;
+  border:1px solid var(--line2);
+  border-left:3px solid var(--accent);
+  border-radius:9px;
+  padding:13px 15px;
+  box-shadow:var(--shadow);
+  transform:translateY(30px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  font-size:11px;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+@media(max-width:1400px){
+  .groups-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:1250px){
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .content-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:850px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{transform:translateX(0)}
+
+  .main{margin-left:0}
+
+  .mobile-menu{
+    display:block;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:#fff;
+    border-radius:7px;
+    padding:7px 10px;
+  }
+
+  .topbar{padding:0 15px}
+
+  .page{padding:20px 14px}
+
+  .hero{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  h1{font-size:25px}
+}
+
+@media(max-width:600px){
+  .stats{grid-template-columns:1fr 1fr}
+  .groups-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:auto}
+  .clock{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-logo">CROW<span>RULES</span></div>
+    <div class="brand-sub">Entertainment Admin</div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-label">Command</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span> Dashboard
+    </a>
+
+    <a href="content.html">
+      <span class="nav-icon">▦</span> Content
+    </a>
+
+    <a href="analytics.html">
+      <span class="nav-icon">◒</span> Analytics
+    </a>
+
+    <div class="nav-label">CrowSpace</div>
+
+    <a href="crowspace.html">
+      <span class="nav-icon">◈</span> CrowSpace
+    </a>
+
+    <a href="posts.html">
+      <span class="nav-icon">✦</span> Posts
+    </a>
+
+    <a href="groups.html" class="active">
+      <span class="nav-icon">♧</span> Groups
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">☷</span> Community
+    </a>
+
+    <a href="members.html">
+      <span class="nav-icon">♙</span> Members
+    </a>
+
+    <a href="friends.html">
+      <span class="nav-icon">♢</span> Friends
+    </a>
+
+    <div class="nav-label">Moderation</div>
+
+    <a href="notifications.html">
+      <span class="nav-icon">◉</span> Notifications
+    </a>
+
+    <a href="activity.html">
+      <span class="nav-icon">↯</span> Activity
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span> Logs
+    </a>
+
+    <div class="nav-label">System</div>
+
+    <a href="database.html">
+      <span class="nav-icon">▤</span> Database
+    </a>
+
+    <a href="storage.html">
+      <span class="nav-icon">□</span> Storage
+    </a>
+
+    <a href="authentication.html">
+      <span class="nav-icon">♙</span> Authentication
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span> Settings
+    </a>
+
+  </nav>
+</aside>
+
+
+<main class="main">
+
+<header class="topbar">
+
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="mobile-menu" id="menuBtn">☰</button>
+    <div class="top-title">CROWSPACE / GROUPS</div>
+  </div>
+
+  <div class="top-right">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="admin-chip">ADMIN • ONLINE</div>
+  </div>
+
+</header>
+
+
+<section class="page">
+
+<div class="hero">
+
+  <div>
+    <div class="eyebrow">CrowSpace Command Center</div>
+    <h1>Groups Manager</h1>
+    <p>
+      Create and manage CrowSpace communities, monitor membership,
+      review group activity, and control public, private, and moderated spaces.
+    </p>
+  </div>
+
+  <div class="hero-actions">
+    <button class="btn" onclick="loadGroups()">↻ Refresh</button>
+    <button class="btn" onclick="exportGroups()">⇩ Export CSV</button>
+    <button class="btn primary" onclick="openCreateGroup()">＋ Create Group</button>
+  </div>
+
+</div>
+
+
+<section class="stats">
+
+  <div class="stat">
+    <div class="stat-label">Total Groups</div>
+    <div class="stat-value" id="statTotal">—</div>
+    <div class="stat-note">All CrowSpace communities</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Active</div>
+    <div class="stat-value" id="statActive">—</div>
+    <div class="stat-note">Currently available</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Members</div>
+    <div class="stat-value" id="statMembers">—</div>
+    <div class="stat-note">Group memberships</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Posts</div>
+    <div class="stat-value" id="statPosts">—</div>
+    <div class="stat-note">Group content</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Private</div>
+    <div class="stat-value" id="statPrivate">—</div>
+    <div class="stat-note">Private communities</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Pending</div>
+    <div class="stat-value" id="statPending">—</div>
+    <div class="stat-note">Awaiting approval</div>
+  </div>
+
+</section>
+
+
+<div class="toolbar">
+
+  <div class="search">
+    <input
+      id="search"
+      type="search"
+      placeholder="Search groups, descriptions, slugs..."
+      oninput="applyFilters()"
+    >
+  </div>
+
+  <select id="visibilityFilter" onchange="applyFilters()">
+    <option value="all">All Visibility</option>
+    <option value="public">Public</option>
+    <option value="private">Private</option>
+    <option value="restricted">Restricted</option>
+  </select>
+
+  <select id="statusFilter" onchange="applyFilters()">
+    <option value="all">All Statuses</option>
+    <option value="active">Active</option>
+    <option value="pending">Pending</option>
+    <option value="archived">Archived</option>
+  </select>
+
+  <select id="sortFilter" onchange="applyFilters()">
+    <option value="members">Most Members</option>
+    <option value="newest">Newest</option>
+    <option value="oldest">Oldest</option>
+    <option value="posts">Most Posts</option>
+    <option value="name">Name A–Z</option>
+  </select>
+
+  <button class="btn small" onclick="clearFilters()">Clear</button>
+
+</div>
+
+
+<div class="tabs">
+
+  <button class="tab active"
+          data-tab="all"
+          onclick="setTab('all',this)">
+    All Groups
+  </button>
+
+  <button class="tab"
+          data-tab="active"
+          onclick="setTab('active',this)">
+    Active
+  </button>
+
+  <button class="tab"
+          data-tab="public"
+          onclick="setTab('public',this)">
+    Public
+  </button>
+
+  <button class="tab"
+          data-tab="private"
+          onclick="setTab('private',this)">
+    Private
+  </button>
+
+  <button class="tab"
+          data-tab="pending"
+          onclick="setTab('pending',this)">
+    Pending
+  </button>
+
+  <button class="tab"
+          data-tab="archived"
+          onclick="setTab('archived',this)">
+    Archived
+  </button>
+
+</div>
+
+
+<div class="content-grid">
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">GROUP DIRECTORY</div>
+      <div class="panel-sub" id="resultLabel">
+        Loading CrowSpace groups...
+      </div>
+    </div>
+
+    <button class="btn small" onclick="openCreateGroup()">
+      ＋ New Group
+    </button>
+
+  </div>
+
+  <div class="groups-grid" id="groupsGrid">
+
+    <div class="loading" style="grid-column:1/-1">
+      <div class="spinner"></div>
+      Loading groups...
+    </div>
+
+  </div>
+
+</section>
+
+
+<aside>
+
+<section class="panel" style="margin-bottom:16px">
+
+  <div class="panel-head">
+    <div>
+      <div class="panel-title">TOP COMMUNITIES</div>
+      <div class="panel-sub">Largest groups by membership</div>
+    </div>
+  </div>
+
+  <div class="side-list" id="topGroups">
+    <div class="loading">Loading...</div>
+  </div>
+
+</section>
+
+
+<section class="panel">
+
+  <div class="panel-head">
+    <div>
+      <div class="panel-title">GROUP ACTIVITY</div>
+      <div class="panel-sub">Recent community events</div>
+    </div>
+  </div>
+
+  <div class="activity" id="activityList">
+    <div class="loading">Loading...</div>
+  </div>
+
+</section>
+
+</aside>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- CREATE / EDIT GROUP MODAL -->
+
+<div class="modal" id="groupModal">
+
+<div class="modal-card">
+
+  <div class="modal-head">
+    <div class="modal-title" id="modalTitle">
+      CREATE GROUP
+    </div>
+
+    <button class="close" onclick="closeGroupModal()">×</button>
+  </div>
+
+  <div class="modal-body">
+
+    <form id="groupForm">
+
+      <input type="hidden" id="groupId">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">Group Name</label>
+          <input
+            class="form-input"
+            id="groupName"
+            placeholder="Example: Tacoma Creators"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Slug</label>
+          <input
+            class="form-input"
+            id="groupSlug"
+            placeholder="tacoma-creators"
+          >
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Description</label>
+          <textarea
+            id="groupDescription"
+            placeholder="Describe this CrowSpace community..."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Visibility</label>
+          <select class="form-input" id="groupVisibility">
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+            <option value="restricted">Restricted</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-input" id="groupStatus">
+            <option value="active">Active</option>
+            <option value="pending">Pending</option>
+            <option value="archived">Archived</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Featured</label>
+          <select class="form-input" id="groupFeatured">
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Maximum Members</label>
+          <input
+            class="form-input"
+            id="groupMaxMembers"
+            type="number"
+            min="0"
+            placeholder="0 = unlimited"
+          >
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="modal-footer">
+
+    <button class="btn" onclick="closeGroupModal()">
+      Cancel
+    </button>
+
+    <button class="btn primary" onclick="saveGroup()">
+      Save Group
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- GROUP DETAIL MODAL -->
+
+<div class="modal" id="detailModal">
+
+<div class="modal-card">
+
+  <div class="modal-head">
+
+    <div class="modal-title">
+      GROUP DETAILS
+    </div>
+
+    <button class="close" onclick="closeDetailModal()">×</button>
+
+  </div>
+
+  <div class="modal-body" id="detailBody"></div>
+
+  <div class="modal-footer">
+
+    <button class="btn" onclick="closeDetailModal()">
+      Close
+    </button>
+
+    <button class="btn danger" id="archiveButton">
+      Archive Group
+    </button>
+
+    <button class="btn primary" id="editFromDetail">
+      Edit Group
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+/* =========================================================
+   CROWRULES ENTERTAINMENT
+   CROWSPACE GROUPS MANAGER
+   ========================================================= */
+
+/*
+  Configure your project before production:
+
+  window.CROWRULES_SUPABASE_URL =
+    "https://YOUR_PROJECT.supabase.co";
+
+  window.CROWRULES_SUPABASE_ANON_KEY =
+    "YOUR_ANON_OR_PUBLISHABLE_KEY";
+
+  Never place a Supabase service-role key in this page.
+*/
+
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL || "";
+
+const SUPABASE_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY || "";
+
+let supabaseClient = null;
+
+if(SUPABASE_URL && SUPABASE_KEY){
+
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   STATE
+   --------------------------------------------------------- */
+
+let allGroups = [];
+let filteredGroups = [];
+let groupMembers = [];
+let groupPosts = [];
+
+let activeTab = "all";
+let currentDetailId = null;
+
+
+/* ---------------------------------------------------------
+   DEMO DATA
+   --------------------------------------------------------- */
+
+const demoGroups = [
+
+  {
+    id:"demo-group-1",
+    name:"Tacoma Nights",
+    slug:"tacoma-nights",
+    description:
+      "Community for Tacoma Nights viewers, listeners and local conversation.",
+    visibility:"public",
+    status:"active",
+    featured:true,
+    member_count:486,
+    posts_count:172,
+    created_at:"2026-06-01T12:00:00Z"
+  },
+
+  {
+    id:"demo-group-2",
+    name:"CrowRules TV",
+    slug:"crowrules-tv",
+    description:
+      "Discuss CrowRules TV programming, originals, live events and upcoming shows.",
+    visibility:"public",
+    status:"active",
+    featured:true,
+    member_count:742,
+    posts_count:318,
+    created_at:"2026-05-15T12:00:00Z"
+  },
+
+  {
+    id:"demo-group-3",
+    name:"PNW Creators",
+    slug:"pnw-creators",
+    description:
+      "A community for independent creators throughout the Pacific Northwest.",
+    visibility:"public",
+    status:"active",
+    featured:false,
+    member_count:351,
+    posts_count:146,
+    created_at:"2026-07-04T12:00:00Z"
+  },
+
+  {
+    id:"demo-group-4",
+    name:"CrowRules Records",
+    slug:"crowrules-records",
+    description:
+      "Music discussion, releases, artists, producers and CrowRules Records news.",
+    visibility:"public",
+    status:"active",
+    featured:false,
+    member_count:218,
+    posts_count:84,
+    created_at:"2026-07-10T12:00:00Z"
+  },
+
+  {
+    id:"demo-group-5",
+    name:"Members Lounge",
+    slug:"members-lounge",
+    description:
+      "A private community for CrowRules members and supporters.",
+    visibility:"private",
+    status:"active",
+    featured:false,
+    member_count:126,
+    posts_count:57,
+    created_at:"2026-08-01T12:00:00Z"
+  },
+
+  {
+    id:"demo-group-6",
+    name:"New Creator Applications",
+    slug:"new-creator-applications",
+    description:
+      "Creator onboarding and application discussion.",
+    visibility:"restricted",
+    status:"pending",
+    featured:false,
+    member_count:23,
+    posts_count:11,
+    created_at:"2026-09-01T12:00:00Z"
+  }
+
+];
+
+
+/* ---------------------------------------------------------
+   INIT
+   --------------------------------------------------------- */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    document
+      .getElementById("menuBtn")
+      .addEventListener(
+        "click",
+        () => {
+          document
+            .getElementById("sidebar")
+            .classList.toggle("open");
+        }
+      );
+
+    updateClock();
+
+    setInterval(
+      updateClock,
+      1000
+    );
+
+    loadGroups();
+
+  }
+);
+
+
+/* ---------------------------------------------------------
+   CLOCK
+   --------------------------------------------------------- */
+
+function updateClock(){
+
+  document.getElementById("clock").textContent =
+    new Date().toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   LOAD GROUPS
+   --------------------------------------------------------- */
+
+async function loadGroups(){
+
+  showGroupLoading();
+
+  if(!supabaseClient){
+
+    allGroups =
+      demoGroups.map(
+        group => normalizeGroup(group)
+      );
+
+    renderEverything();
+
+    return;
+  }
+
+  try{
+
+    const [
+      groupsResult,
+      membersResult,
+      postsResult
+    ] = await Promise.all([
+
+      supabaseClient
+        .from("community_spaces")
+        .select("*")
+        .order("created_at",{ascending:false}),
+
+      supabaseClient
+        .from("community_members")
+        .select("*"),
+
+      supabaseClient
+        .from("community_posts")
+        .select("*")
+
+    ]);
+
+
+    if(groupsResult.error){
+      throw groupsResult.error;
+    }
+
+
+    groupMembers =
+      membersResult.error
+      ? []
+      : (membersResult.data || []);
+
+
+    groupPosts =
+      postsResult.error
+      ? []
+      : (postsResult.data || []);
+
+
+    allGroups =
+      (groupsResult.data || [])
+        .map(group =>
+          normalizeGroup(group)
+        );
+
+
+    enrichCounts();
+
+    renderEverything();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Could not load groups. Showing demo data."
+    );
+
+    allGroups =
+      demoGroups.map(
+        group => normalizeGroup(group)
+      );
+
+    groupMembers = [];
+    groupPosts = [];
+
+    renderEverything();
+
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   NORMALIZE
+   --------------------------------------------------------- */
+
+function normalizeGroup(group){
+
+  return {
+
+    ...group,
+
+    id:
+      group.id ||
+      "group-" + Math.random(),
+
+    name:
+      group.name ||
+      group.title ||
+      "Unnamed Group",
+
+    slug:
+      group.slug ||
+      slugify(
+        group.name ||
+        group.title ||
+        "group"
+      ),
+
+    description:
+      group.description ||
+      group.bio ||
+      "",
+
+    visibility:
+      normalizeVisibility(
+        group.visibility ||
+        group.privacy ||
+        group.type
+      ),
+
+    status:
+      normalizeStatus(
+        group.status
+      ),
+
+    featured:
+      Boolean(
+        group.featured ||
+        group.is_featured
+      ),
+
+    member_count:
+      Number(
+        group.member_count ??
+        group.members_count ??
+        group.members ??
+        0
+      ),
+
+    posts_count:
+      Number(
+        group.posts_count ??
+        group.post_count ??
+        group.posts ??
+        0
+      ),
+
+    created_at:
+      group.created_at ||
+      new Date().toISOString()
+
+  };
+
+}
+
+
+function enrichCounts(){
+
+  if(!allGroups.length){
+    return;
+  }
+
+  allGroups =
+    allGroups.map(group => {
+
+      const members =
+        groupMembers.filter(member =>
+          String(
+            member.space_id ||
+            member.community_id ||
+            member.group_id
+          ) === String(group.id)
+        ).length;
+
+      const posts =
+        groupPosts.filter(post =>
+          String(
+            post.space_id ||
+            post.community_id ||
+            post.group_id
+          ) === String(group.id)
+        ).length;
+
+      return {
+
+        ...group,
+
+        member_count:
+          members || group.member_count,
+
+        posts_count:
+          posts || group.posts_count
+
+      };
+
+    });
+
+}
+
+
+function normalizeVisibility(value){
+
+  const v =
+    String(value || "public")
+      .toLowerCase();
+
+  if(
+    ["public","private","restricted"]
+      .includes(v)
+  ){
+    return v;
+  }
+
+  if(
+    ["closed","members"].includes(v)
+  ){
+    return "private";
+  }
+
+  return "public";
+}
+
+
+function normalizeStatus(value){
+
+  const v =
+    String(value || "active")
+      .toLowerCase();
+
+  if(
+    ["active","pending","archived"]
+      .includes(v)
+  ){
+    return v;
+  }
+
+  if(v === "draft"){
+    return "pending";
+  }
+
+  return "active";
+}
+
+
+/* ---------------------------------------------------------
+   RENDER
+   --------------------------------------------------------- */
+
+function renderEverything(){
+
+  updateStats();
+
+  applyFilters();
+
+  renderTopGroups();
+
+  renderActivity();
+
+}
+
+
+/* ---------------------------------------------------------
+   STATS
+   --------------------------------------------------------- */
+
+function updateStats(){
+
+  const total =
+    allGroups.length;
+
+  const active =
+    allGroups.filter(
+      g => g.status === "active"
+    ).length;
+
+  const members =
+    allGroups.reduce(
+      (sum,g) =>
+        sum + Number(g.member_count || 0),
+      0
+    );
+
+  const posts =
+    allGroups.reduce(
+      (sum,g) =>
+        sum + Number(g.posts_count || 0),
+      0
+    );
+
+  const privateGroups =
+    allGroups.filter(
+      g => g.visibility === "private"
+    ).length;
+
+  const pending =
+    allGroups.filter(
+      g => g.status === "pending"
+    ).length;
+
+
+  document.getElementById("statTotal").textContent =
+    formatNumber(total);
+
+  document.getElementById("statActive").textContent =
+    formatNumber(active);
+
+  document.getElementById("statMembers").textContent =
+    formatNumber(members);
+
+  document.getElementById("statPosts").textContent =
+    formatNumber(posts);
+
+  document.getElementById("statPrivate").textContent =
+    formatNumber(privateGroups);
+
+  document.getElementById("statPending").textContent =
+    formatNumber(pending);
+
+}
+
+
+/* ---------------------------------------------------------
+   FILTER
+   --------------------------------------------------------- */
+
+function setTab(tab,button){
+
+  activeTab = tab;
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(t =>
+      t.classList.remove("active")
+    );
+
+  button.classList.add("active");
+
+  applyFilters();
+
+}
+
+
+function applyFilters(){
+
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase()
+      .trim();
+
+  const visibility =
+    document
+      .getElementById("visibilityFilter")
+      .value;
+
+  const status =
+    document
+      .getElementById("statusFilter")
+      .value;
+
+  const sort =
+    document
+      .getElementById("sortFilter")
+      .value;
+
+
+  filteredGroups =
+    allGroups.filter(group => {
+
+      const searchable =
+        [
+          group.name,
+          group.slug,
+          group.description
+        ]
+        .join(" ")
+        .toLowerCase();
+
+      if(
+        search &&
+        !searchable.includes(search)
+      ){
+        return false;
+      }
+
+      if(
+        visibility !== "all" &&
+        group.visibility !== visibility
+      ){
+        return false;
+      }
+
+      if(
+        status !== "all" &&
+        group.status !== status
+      ){
+        return false;
+      }
+
+
+      if(activeTab !== "all"){
+
+        if(
+          ["public","private"].includes(activeTab) &&
+          group.visibility !== activeTab
+        ){
+          return false;
+        }
+
+        if(
+          ["active","pending","archived"].includes(activeTab) &&
+          group.status !== activeTab
+        ){
+          return false;
+        }
+
+      }
+
+      return true;
+
+    });
+
+
+  filteredGroups.sort(
+    (a,b) => {
+
+      if(sort === "members"){
+        return Number(b.member_count) -
+               Number(a.member_count);
+      }
+
+      if(sort === "posts"){
+        return Number(b.posts_count) -
+               Number(a.posts_count);
+      }
+
+      if(sort === "name"){
+        return String(a.name)
+          .localeCompare(String(b.name));
+      }
+
+      if(sort === "oldest"){
+        return new Date(a.created_at) -
+               new Date(b.created_at);
+      }
+
+      return new Date(b.created_at) -
+             new Date(a.created_at);
+
+    }
+  );
+
+
+  renderGroups();
+
+}
+
+
+/* ---------------------------------------------------------
+   GROUP CARDS
+   --------------------------------------------------------- */
+
+function renderGroups(){
+
+  const grid =
+    document.getElementById("groupsGrid");
+
+  document.getElementById("resultLabel").textContent =
+    `${formatNumber(filteredGroups.length)} groups shown`;
+
+
+  if(!filteredGroups.length){
+
+    grid.innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        No groups match the current filters.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  grid.innerHTML =
+    filteredGroups
+      .map(group => {
+
+        const initials =
+          getInitials(group.name);
+
+        return `
+
+          <article class="group-card">
+
+            <div class="group-cover">
+
+              <div class="group-mark">
+                ${escapeHTML(initials)}
+              </div>
+
+            </div>
+
+
+            <div class="group-name">
+
+              ${escapeHTML(group.name)}
+
+              ${
+                group.featured
+                ? `<span style="color:var(--yellow);margin-left:5px">★</span>`
+                : ""
+              }
+
+            </div>
+
+
+            <div class="group-description">
+              ${escapeHTML(
+                group.description ||
+                "No group description has been added."
+              )}
+            </div>
+
+
+            <div class="group-meta">
+
+              <span>
+                ♙ ${formatNumber(group.member_count)} members
+              </span>
+
+              <span>
+                ✦ ${formatNumber(group.posts_count)} posts
+              </span>
+
+            </div>
+
+
+            <div class="group-footer">
+
+              <span class="status ${escapeAttr(
+                group.status === "active"
+                ? "active"
+                : group.status === "pending"
+                  ? "pending"
+                  : "archived"
+              )}">
+
+                ${escapeHTML(group.status)}
+
+              </span>
+
+
+              <span style="
+                color:#777783;
+                font-size:9px;
+                text-transform:uppercase;
+              ">
+
+                ${escapeHTML(group.visibility)}
+
+              </span>
+
+
+              <div style="
+                display:flex;
+                gap:5px;
+              ">
+
+                <button
+                  class="btn small"
+                  onclick="viewGroup('${escapeJS(group.id)}')"
+                >
+                  View
+                </button>
+
+                <button
+                  class="btn small"
+                  onclick="editGroup('${escapeJS(group.id)}')"
+                >
+                  Edit
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        `;
+
+      })
+      .join("");
+
+}
+
+
+/* ---------------------------------------------------------
+   TOP GROUPS
+   --------------------------------------------------------- */
+
+function renderTopGroups(){
+
+  const container =
+    document.getElementById("topGroups");
+
+  const list =
+    [...allGroups]
+      .sort(
+        (a,b) =>
+          Number(b.member_count) -
+          Number(a.member_count)
+      )
+      .slice(0,6);
+
+
+  if(!list.length){
+
+    container.innerHTML =
+      `<div class="empty">No groups found.</div>`;
+
+    return;
+
+  }
+
+
+  const max =
+    Number(list[0].member_count || 1);
+
+
+  container.innerHTML =
+    list
+      .map(group => {
+
+        const width =
+          Math.max(
+            5,
+            Math.round(
+              Number(group.member_count || 0) /
+              max *
+              100
+            )
+          );
+
+
+        return `
+
+          <div class="side-item">
+
+            <div class="side-row">
+
+              <div class="side-name">
+                ${escapeHTML(group.name)}
+              </div>
+
+              <div class="side-count">
+                ${formatNumber(group.member_count)}
+              </div>
+
+            </div>
+
+            <div class="side-meta">
+              members
+            </div>
+
+            <div class="progress">
+              <span style="width:${width}%"></span>
+            </div>
+
+          </div>
+
+        `;
+
+      })
+      .join("");
+
+}
+
+
+/* ---------------------------------------------------------
+   ACTIVITY
+   --------------------------------------------------------- */
+
+function renderActivity(){
+
+  const container =
+    document.getElementById("activityList");
+
+  const recent =
+    [...allGroups]
+      .sort(
+        (a,b) =>
+          new Date(b.created_at) -
+          new Date(a.created_at)
+      )
+      .slice(0,5);
+
+
+  if(!recent.length){
+
+    container.innerHTML =
+      `<div class="empty">No activity available.</div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    recent
+      .map(group => `
+
+        <div class="activity-item">
+
+          <div class="activity-icon">
+            ♧
+          </div>
+
+          <div>
+
+            <div class="activity-text">
+
+              <strong>
+                ${escapeHTML(group.name)}
+              </strong>
+              is a ${escapeHTML(group.visibility)}
+              CrowSpace group.
+
+            </div>
+
+            <div class="activity-time">
+              Created ${formatDate(group.created_at)}
+            </div>
+
+          </div>
+
+        </div>
+
+      `)
+      .join("");
+
+}
+
+
+/* ---------------------------------------------------------
+   CREATE GROUP
+   --------------------------------------------------------- */
+
+function openCreateGroup(){
+
+  document.getElementById("groupId").value =
+    "";
+
+  document.getElementById("modalTitle").textContent =
+    "CREATE GROUP";
+
+  document.getElementById("groupName").value =
+    "";
+
+  document.getElementById("groupSlug").value =
+    "";
+
+  document.getElementById("groupDescription").value =
+    "";
+
+  document.getElementById("groupVisibility").value =
+    "public";
+
+  document.getElementById("groupStatus").value =
+    "active";
+
+  document.getElementById("groupFeatured").value =
+    "false";
+
+  document.getElementById("groupMaxMembers").value =
+    "";
+
+
+  document
+    .getElementById("groupModal")
+    .classList.add("show");
+
+}
+
+
+/* ---------------------------------------------------------
+   EDIT GROUP
+   --------------------------------------------------------- */
+
+function editGroup(id){
+
+  const group =
+    allGroups.find(
+      g => String(g.id) === String(id)
+    );
+
+  if(!group){
+
+    showToast("Group not found.");
+
+    return;
+
+  }
+
+
+  document.getElementById("groupId").value =
+    group.id;
+
+  document.getElementById("modalTitle").textContent =
+    "EDIT GROUP";
+
+  document.getElementById("groupName").value =
+    group.name || "";
+
+  document.getElementById("groupSlug").value =
+    group.slug || "";
+
+  document.getElementById("groupDescription").value =
+    group.description || "";
+
+  document.getElementById("groupVisibility").value =
+    group.visibility || "public";
+
+  document.getElementById("groupStatus").value =
+    group.status || "active";
+
+  document.getElementById("groupFeatured").value =
+    String(Boolean(group.featured));
+
+  document.getElementById("groupMaxMembers").value =
+    group.max_members || "";
+
+
+  document
+    .getElementById("groupModal")
+    .classList.add("show");
+
+}
+
+
+/* ---------------------------------------------------------
+   SAVE GROUP
+   --------------------------------------------------------- */
+
+async function saveGroup(){
+
+  const id =
+    document.getElementById("groupId").value;
+
+  const name =
+    document.getElementById("groupName")
+      .value
+      .trim();
+
+  let slug =
+    document.getElementById("groupSlug")
+      .value
+      .trim();
+
+  const description =
+    document.getElementById("groupDescription")
+      .value
+      .trim();
+
+  const visibility =
+    document.getElementById("groupVisibility")
+      .value;
+
+  const status =
+    document.getElementById("groupStatus")
+      .value;
+
+  const featured =
+    document.getElementById("groupFeatured")
+      .value === "true";
+
+  const maxMembersRaw =
+    document.getElementById("groupMaxMembers")
+      .value;
+
+  if(!name){
+
+    showToast(
+      "Group name is required."
+    );
+
+    return;
+
+  }
+
+
+  if(!slug){
+    slug = slugify(name);
+  }
+
+
+  /*
+    The existing community_spaces schema can vary slightly
+    between installations. We use the core fields and avoid
+    requiring optional columns.
+  */
+
+  const payload = {
+
+    name:name,
+
+    slug:slug,
+
+    description:description,
+
+    visibility:visibility,
+
+    status:status,
+
+    featured:featured
+
+  };
+
+
+  if(maxMembersRaw !== ""){
+
+    payload.max_members =
+      Number(maxMembersRaw);
+
+  }
+
+
+  /* DEMO MODE */
+
+  if(!supabaseClient){
+
+    if(id){
+
+      const index =
+        allGroups.findIndex(
+          g => String(g.id) === String(id)
+        );
+
+      if(index >= 0){
+
+        allGroups[index] = normalizeGroup({
+          ...allGroups[index],
+          ...payload
+        });
+
+      }
+
+      showToast(
+        "Group updated in demo mode."
+      );
+
+    }else{
+
+      allGroups.unshift(
+        normalizeGroup({
+
+          id:
+            "demo-group-" +
+            Date.now(),
+
+          ...payload,
+
+          member_count:0,
+
+          posts_count:0,
+
+          created_at:
+            new Date().toISOString()
+
+        })
+      );
+
+      showToast(
+        "Group created in demo mode."
+      );
+
+    }
+
+
+    closeGroupModal();
+
+    renderEverything();
+
+    return;
+
+  }
+
+
+  /* SUPABASE */
+
+  try{
+
+    if(id){
+
+      const result =
+        await supabaseClient
+          .from("community_spaces")
+          .update(payload)
+          .eq("id",id);
+
+      if(result.error){
+        throw result.error;
+      }
+
+      showToast(
+        "Group updated."
+      );
+
+    }else{
+
+      const userResult =
+        await supabaseClient.auth.getUser();
+
+      const user =
+        userResult.data?.user;
+
+
+      const insertPayload = {
+        ...payload,
+        created_by:
+          user?.id || null
+      };
+
+
+      const result =
+        await supabaseClient
+          .from("community_spaces")
+          .insert(insertPayload);
+
+
+      if(result.error){
+
+        /*
+          Retry without optional created_by/max_members
+          if the deployed schema does not contain those
+          optional columns.
+        */
+
+        if(
+          result.error.message &&
+          (
+            result.error.message.includes("created_by") ||
+            result.error.message.includes("max_members")
+          )
+        ){
+
+          const fallbackPayload = {
+            name:name,
+            slug:slug,
+            description:description,
+            visibility:visibility,
+            status:status,
+            featured:featured
+          };
+
+          const retry =
+            await supabaseClient
+              .from("community_spaces")
+              .insert(fallbackPayload);
+
+          if(retry.error){
+            throw retry.error;
+          }
+
+        }else{
+
+          throw result.error;
+
+        }
+
+      }
+
+      showToast(
+        "Group created."
+      );
+
+    }
+
+
+    closeGroupModal();
+
+    await loadGroups();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Could not save group: " +
+      (error.message || "Unknown error")
+    );
+
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   VIEW GROUP
+   --------------------------------------------------------- */
+
+function viewGroup(id){
+
+  const group =
+    allGroups.find(
+      g => String(g.id) === String(id)
+    );
+
+  if(!group){
+
+    showToast("Group not found.");
+
+    return;
+
+  }
+
+
+  currentDetailId =
+    group.id;
+
+
+  document.getElementById("detailBody").innerHTML = `
+
+    <div style="
+      display:grid;
+      gap:16px;
+    ">
+
+      <div>
+
+        <div style="
+          color:var(--accent);
+          font-family:Orbitron;
+          font-size:10px;
+          letter-spacing:1.5px;
+          text-transform:uppercase;
+          margin-bottom:8px;
+        ">
+          CrowSpace Community
+        </div>
+
+        <h2 style="
+          font-family:Orbitron;
+          font-size:22px;
+          margin:0 0 7px;
+        ">
+          ${escapeHTML(group.name)}
+        </h2>
+
+        <div style="
+          color:#6f6f79;
+          font-size:10px;
+        ">
+          /${escapeHTML(group.slug)}
+        </div>
+
+      </div>
+
+
+      <div style="
+        background:#08080c;
+        border:1px solid var(--line);
+        border-radius:10px;
+        padding:15px;
+        color:#aaaab4;
+        font-size:12px;
+        line-height:1.6;
+      ">
+
+        ${escapeHTML(
+          group.description ||
+          "No description available."
+        )}
+
+      </div>
+
+
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:8px;
+      ">
+
+        <div class="stat">
+          <div class="stat-label">Members</div>
+          <div class="stat-value" style="font-size:18px">
+            ${formatNumber(group.member_count)}
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Posts</div>
+          <div class="stat-value" style="font-size:18px">
+            ${formatNumber(group.posts_count)}
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Visibility</div>
+          <div style="
+            margin-top:10px;
+            color:var(--accent);
+            font-size:11px;
+            font-weight:800;
+            text-transform:uppercase;
+          ">
+            ${escapeHTML(group.visibility)}
+          </div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Status</div>
+          <div style="
+            margin-top:10px;
+          ">
+            <span class="status ${escapeAttr(
+              group.status === "active"
+              ? "active"
+              : group.status === "pending"
+                ? "pending"
+                : "archived"
+            )}">
+              ${escapeHTML(group.status)}
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        color:#666671;
+        font-size:10px;
+      ">
+
+        <span>
+          Created ${formatDate(group.created_at)}
+        </span>
+
+        ${
+          group.featured
+          ? `<span style="color:var(--yellow)">★ Featured Group</span>`
+          : ""
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.getElementById("editFromDetail").onclick =
+    () => {
+
+      closeDetailModal();
+
+      editGroup(group.id);
+
+    };
+
+
+  document.getElementById("archiveButton").onclick =
+    () => {
+
+      archiveGroup(group.id);
+
+    };
+
+
+  document
+    .getElementById("detailModal")
+    .classList.add("show");
+
+}
+
+
+/* ---------------------------------------------------------
+   ARCHIVE
+   --------------------------------------------------------- */
+
+async function archiveGroup(id){
+
+  const group =
+    allGroups.find(
+      g => String(g.id) === String(id)
+    );
+
+  if(!group){
+    return;
+  }
+
+
+  if(!confirm(
+    `Archive "${group.name}"?`
+  )){
+    return;
+  }
+
+
+  if(!supabaseClient){
+
+    group.status =
+      "archived";
+
+    closeDetailModal();
+
+    renderEverything();
+
+    showToast(
+      "Group archived in demo mode."
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const result =
+      await supabaseClient
+        .from("community_spaces")
+        .update({
+          status:"archived"
+        })
+        .eq("id",id);
+
+
+    if(result.error){
+      throw result.error;
+    }
+
+
+    closeDetailModal();
+
+    showToast(
+      "Group archived."
+    );
+
+    await loadGroups();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Could not archive group: " +
+      (error.message || "Unknown error")
+    );
+
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   CLEAR FILTERS
+   --------------------------------------------------------- */
+
+function clearFilters(){
+
+  document.getElementById("search").value =
+    "";
+
+  document.getElementById("visibilityFilter").value =
+    "all";
+
+  document.getElementById("statusFilter").value =
+    "all";
+
+  document.getElementById("sortFilter").value =
+    "members";
+
+
+  activeTab =
+    "all";
+
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(
+      tab => tab.classList.remove("active")
+    );
+
+
+  document
+    .querySelector(
+      '[data-tab="all"]'
+    )
+    .classList.add("active");
+
+
+  applyFilters();
+
+}
+
+
+/* ---------------------------------------------------------
+   EXPORT
+   --------------------------------------------------------- */
+
+function exportGroups(){
+
+  if(!filteredGroups.length){
+
+    showToast(
+      "There are no groups to export."
+    );
+
+    return;
+
+  }
+
+
+  const headers = [
+    "ID",
+    "Name",
+    "Slug",
+    "Description",
+    "Visibility",
+    "Status",
+    "Featured",
+    "Members",
+    "Posts",
+    "Created"
+  ];
+
+
+  const rows =
+    filteredGroups.map(
+      group => [
+
+        group.id,
+        group.name,
+        group.slug,
+        group.description,
+        group.visibility,
+        group.status,
+        group.featured,
+        group.member_count,
+        group.posts_count,
+        group.created_at
+
+      ]
+    );
+
+
+  const csv =
+    [
+      headers,
+      ...rows
+    ]
+    .map(
+      row =>
+        row
+          .map(csvEscape)
+          .join(",")
+    )
+    .join("\n");
+
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement("a");
+
+
+  a.href = url;
+
+  a.download =
+    `crowspace-groups-${new Date()
+      .toISOString()
+      .slice(0,10)}.csv`;
+
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+
+  showToast(
+    "CSV export created."
+  );
+
+}
+
+
+function csvEscape(value){
+
+  const string =
+    String(value ?? "");
+
+  if(
+    string.includes(",") ||
+    string.includes('"') ||
+    string.includes("\n")
+  ){
+
+    return `"${string.replace(/"/g,'""')}"`;
+
+  }
+
+  return string;
+
+}
+
+
+/* ---------------------------------------------------------
+   MODALS
+   --------------------------------------------------------- */
+
+function closeGroupModal(){
+
+  document
+    .getElementById("groupModal")
+    .classList.remove("show");
+
+}
+
+
+function closeDetailModal(){
+
+  document
+    .getElementById("detailModal")
+    .classList.remove("show");
+
+  currentDetailId =
+    null;
+
+}
+
+
+/* ---------------------------------------------------------
+   LOADING
+   --------------------------------------------------------- */
+
+function showGroupLoading(){
+
+  document.getElementById("groupsGrid").innerHTML = `
+
+    <div class="loading" style="grid-column:1/-1">
+
+      <div class="spinner"></div>
+
+      Loading CrowSpace groups...
+
+    </div>
+
+  `;
+
+}
+
+
+/* ---------------------------------------------------------
+   TOAST
+   --------------------------------------------------------- */
+
+let toastTimer = null;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent =
+    message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      () => {
+        toast.classList.remove("show");
+      },
+      3500
+    );
+
+}
+
+
+/* ---------------------------------------------------------
+   HELPERS
+   --------------------------------------------------------- */
+
+function formatNumber(value){
+
+  return Number(value || 0)
+    .toLocaleString();
+
+}
+
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+    return "—";
+  }
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
+
+}
+
+
+function getInitials(name){
+
+  return String(name || "CR")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0,2)
+    .map(
+      word =>
+        word.charAt(0).toUpperCase()
+    )
+    .join("");
+
+}
+
+
+function slugify(value){
+
+  return String(value || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-+|-+$/g,"");
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttr(value){
+
+  return escapeHTML(value);
+
+}
+
+
+function escapeJS(value){
+
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/\n/g,"\\n")
+    .replace(/\r/g,"\\r");
+
+}
+
+
+/* ---------------------------------------------------------
+   BACKDROP CLOSE
+   --------------------------------------------------------- */
+
+document
+  .getElementById("groupModal")
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        event.currentTarget
+      ){
+        closeGroupModal();
+      }
+
+    }
+  );
+
+
+document
+  .getElementById("detailModal")
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        event.currentTarget
+      ){
+        closeDetailModal();
+      }
+
+    }
+  );
+
+
+/* ---------------------------------------------------------
+   ESCAPE
+   --------------------------------------------------------- */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key !== "Escape"){
+      return;
+    }
+
+    closeGroupModal();
+
+    closeDetailModal();
+
+  }
+);
+</script>
+
+</body>
+</html>

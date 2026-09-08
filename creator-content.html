@@ -1,0 +1,3111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Creator Content — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Creator Content Management">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --radius:16px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 85% 0%,rgba(182,108,255,.09),transparent 28%),
+    radial-gradient(circle at 15% 25%,rgba(55,215,255,.035),transparent 28%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   SHELL
+========================= */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:255px;
+  background:rgba(7,7,9,.98);
+  border-right:1px solid var(--line);
+  z-index:100;
+  overflow-y:auto;
+}
+
+.brand{
+  height:76px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  border:1px solid rgba(182,108,255,.55);
+  background:linear-gradient(
+    135deg,
+    rgba(182,108,255,.2),
+    rgba(55,215,255,.05)
+  );
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+}
+
+.brand-text strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  letter-spacing:1.2px;
+}
+
+.brand-text span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+
+.nav{
+  padding:14px 10px 30px;
+}
+
+.nav-label{
+  padding:14px 11px 7px;
+  color:#666671;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.8px;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 11px;
+  margin:2px 0;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#aaaab4;
+  font-size:12px;
+  transition:.18s ease;
+}
+
+.nav a:hover{
+  background:var(--panel2);
+  border-color:var(--line);
+  color:#fff;
+}
+
+.nav a.active{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(182,108,255,.16),
+      rgba(108,92,255,.04)
+    );
+  border-color:rgba(182,108,255,.3);
+  color:#fff;
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+  color:#777782;
+}
+
+.nav a.active .nav-icon{
+  color:var(--accent);
+}
+
+.main{
+  margin-left:255px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:76px;
+  position:sticky;
+  top:0;
+  z-index:80;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(5,5,5,.87);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.menu-btn{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:var(--panel);
+  color:#fff;
+}
+
+.breadcrumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.system-status{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  color:#a8a8b1;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px rgba(69,230,154,.7);
+}
+
+.clock{
+  color:#aaa;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  max-width:1750px;
+  margin:auto;
+  padding:30px;
+}
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  gap:25px;
+  padding:30px;
+  margin-bottom:20px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:
+    radial-gradient(
+      circle at 85% 10%,
+      rgba(182,108,255,.13),
+      transparent 32%
+    ),
+    linear-gradient(145deg,#111117,#09090c);
+  box-shadow:var(--shadow);
+}
+
+.hero-copy{
+  max-width:800px;
+}
+
+.eyebrow{
+  margin-bottom:10px;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+
+.hero h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(27px,3vw,42px);
+  line-height:1.08;
+}
+
+.hero p{
+  margin:14px 0 0;
+  max-width:760px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.hero-actions{
+  display:flex;
+  align-items:flex-start;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:10px 14px;
+  border:1px solid var(--line2);
+  border-radius:10px;
+  background:var(--panel2);
+  color:#eee;
+  font-size:11px;
+  font-weight:700;
+  transition:.18s ease;
+}
+
+.btn:hover{
+  border-color:#555563;
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  border-color:transparent;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:#fff;
+}
+
+.btn.small{
+  padding:7px 10px;
+  font-size:9px;
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.3);
+  color:#ff8092;
+}
+
+/* =========================
+   CREATOR STRIP
+========================= */
+
+.creator-strip{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:16px 18px;
+  margin-bottom:18px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--panel);
+}
+
+.creator-avatar{
+  width:54px;
+  height:54px;
+  display:grid;
+  place-items:center;
+  flex:0 0 54px;
+  border-radius:14px;
+  border:1px solid rgba(182,108,255,.4);
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #49365c,
+      transparent 35%
+    ),
+    #111117;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.creator-name{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.creator-handle{
+  margin-top:4px;
+  color:var(--accent);
+  font-size:10px;
+}
+
+.creator-meta{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-left:auto;
+}
+
+.pill{
+  padding:6px 9px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#0b0b0f;
+  color:#9999a4;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+.pill.green{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+}
+
+.pill.purple{
+  color:var(--accent);
+  border-color:rgba(182,108,255,.28);
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:11px;
+  margin-bottom:18px;
+}
+
+.stat{
+  position:relative;
+  overflow:hidden;
+  padding:17px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+}
+
+.stat::after{
+  content:"";
+  position:absolute;
+  width:80px;
+  height:80px;
+  right:-35px;
+  bottom:-35px;
+  border-radius:50%;
+  background:rgba(182,108,255,.055);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1.1px;
+}
+
+.stat-value{
+  margin-top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:21px;
+}
+
+.stat-note{
+  margin-top:4px;
+  color:#64646f;
+  font-size:8px;
+}
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters{
+  display:grid;
+  grid-template-columns:2fr repeat(5,1fr) auto;
+  gap:9px;
+  padding:13px;
+  margin-bottom:18px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+}
+
+input,
+select{
+  width:100%;
+  min-width:0;
+  padding:10px 11px;
+  border:1px solid var(--line2);
+  border-radius:9px;
+  outline:none;
+  background:#09090d;
+  color:#eee;
+  font-size:10px;
+}
+
+input:focus,
+select:focus{
+  border-color:rgba(182,108,255,.6);
+  box-shadow:0 0 0 3px rgba(182,108,255,.06);
+}
+
+/* =========================
+   TABS
+========================= */
+
+.tabs{
+  display:flex;
+  gap:6px;
+  overflow:auto;
+  padding:5px;
+  margin-bottom:18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#09090c;
+}
+
+.tab{
+  flex:0 0 auto;
+  padding:9px 13px;
+  border:1px solid transparent;
+  border-radius:8px;
+  background:transparent;
+  color:#777782;
+  font-size:9px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.tab.active{
+  border-color:rgba(182,108,255,.3);
+  background:rgba(182,108,255,.1);
+  color:#fff;
+}
+
+/* =========================
+   MAIN GRID
+========================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,2.2fr) minmax(300px,1fr);
+  gap:18px;
+}
+
+.panel{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--panel);
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:17px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.panel-sub{
+  margin-top:4px;
+  color:#656570;
+  font-size:9px;
+}
+
+.panel-body{
+  padding:18px;
+}
+
+/* =========================
+   CONTENT TABLE
+========================= */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  min-width:850px;
+  border-collapse:collapse;
+}
+
+th{
+  padding:11px 13px;
+  text-align:left;
+  background:#0b0b0f;
+  color:#666671;
+  border-bottom:1px solid var(--line);
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+td{
+  padding:12px 13px;
+  border-bottom:1px solid rgba(39,39,47,.72);
+  color:#c6c6ce;
+  font-size:9px;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.012);
+}
+
+.content-title{
+  color:#f1f1f4;
+  font-weight:700;
+  font-size:10px;
+}
+
+.content-meta{
+  margin-top:4px;
+  color:#666671;
+  font-size:8px;
+}
+
+.type{
+  display:inline-flex;
+  padding:5px 7px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:#aaa;
+  font-size:8px;
+  text-transform:uppercase;
+}
+
+.type.video{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.25);
+}
+
+.type.audio{
+  color:var(--accent);
+  border-color:rgba(182,108,255,.25);
+}
+
+.type.article{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.25);
+}
+
+.type.movie{
+  color:var(--orange);
+  border-color:rgba(255,138,76,.25);
+}
+
+.status{
+  display:inline-flex;
+  padding:5px 7px;
+  border-radius:999px;
+  font-size:8px;
+  text-transform:uppercase;
+}
+
+.status.published{
+  color:var(--green);
+  border:1px solid rgba(69,230,154,.23);
+}
+
+.status.draft{
+  color:var(--yellow);
+  border:1px solid rgba(243,201,105,.23);
+}
+
+.status.review{
+  color:var(--cyan);
+  border:1px solid rgba(55,215,255,.23);
+}
+
+.status.archived{
+  color:#777;
+  border:1px solid #333;
+}
+
+/* =========================
+   CONTENT CARDS
+========================= */
+
+.card-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.content-card{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#0a0a0e;
+}
+
+.card-art{
+  height:95px;
+  display:grid;
+  place-items:center;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(182,108,255,.15),
+      rgba(55,215,255,.035)
+    ),
+    #121219;
+  border-bottom:1px solid var(--line);
+  color:#aaa;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.card-body{
+  padding:11px;
+}
+
+.card-title{
+  font-size:10px;
+  font-weight:800;
+}
+
+.card-meta{
+  margin-top:5px;
+  color:#686873;
+  font-size:8px;
+  line-height:1.5;
+}
+
+.card-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding-top:9px;
+}
+
+/* =========================
+   METRICS
+========================= */
+
+.metric{
+  margin-bottom:17px;
+}
+
+.metric:last-child{
+  margin-bottom:0;
+}
+
+.metric-top{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:7px;
+  color:#aaaab3;
+  font-size:9px;
+}
+
+.metric-top strong{
+  color:#fff;
+}
+
+.progress{
+  height:7px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#1a1a20;
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+
+/* =========================
+   ACTIVITY
+========================= */
+
+.activity-list{
+  display:grid;
+}
+
+.activity{
+  display:grid;
+  grid-template-columns:30px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:11px 0;
+  border-bottom:1px solid rgba(39,39,47,.72);
+}
+
+.activity:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#121219;
+  color:var(--cyan);
+  font-size:10px;
+}
+
+.activity-text{
+  color:#bbb;
+  font-size:9px;
+  line-height:1.45;
+}
+
+.activity-time{
+  color:#60606b;
+  font-size:8px;
+  white-space:nowrap;
+}
+
+/* =========================
+   DISTRIBUTION
+========================= */
+
+.distribution{
+  display:grid;
+  gap:9px;
+}
+
+.distribution-row{
+  display:grid;
+  grid-template-columns:90px 1fr 35px;
+  gap:8px;
+  align-items:center;
+}
+
+.distribution-name{
+  color:#9999a3;
+  font-size:9px;
+}
+
+.distribution-bar{
+  height:8px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#1a1a20;
+}
+
+.distribution-bar span{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  border-radius:999px;
+}
+
+.distribution-value{
+  text-align:right;
+  color:#ccc;
+  font-size:8px;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+  display:none;
+  padding:45px 20px;
+  text-align:center;
+  color:#686872;
+  font-size:10px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  right:25px;
+  bottom:25px;
+  z-index:500;
+  min-width:240px;
+  max-width:380px;
+  padding:13px 15px;
+  border:1px solid var(--line2);
+  border-radius:11px;
+  background:#101015;
+  color:#ddd;
+  box-shadow:var(--shadow);
+  font-size:10px;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(15px);
+  transition:.25s ease;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+  padding:25px 0 10px;
+  color:#55555f;
+  font-size:9px;
+  text-align:center;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1250px){
+
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .filters{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .filters input{
+    grid-column:1/-1;
+  }
+
+}
+
+@media(max-width:1050px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:850px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s ease;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+    box-shadow:20px 0 60px rgba(0,0,0,.5);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .topbar{
+    padding:0 16px;
+  }
+
+  .system-status{
+    display:none;
+  }
+
+  .hero{
+    flex-direction:column;
+    padding:22px;
+  }
+
+  .hero-actions{
+    justify-content:flex-start;
+  }
+
+  .creator-strip{
+    flex-wrap:wrap;
+  }
+
+  .creator-meta{
+    margin-left:0;
+    width:100%;
+  }
+
+}
+
+@media(max-width:620px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .filters{
+    grid-template-columns:1fr;
+  }
+
+  .filters input{
+    grid-column:auto;
+  }
+
+  .card-grid{
+    grid-template-columns:1fr;
+  }
+
+  .clock{
+    display:none;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =========================
+     SIDEBAR
+========================== -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+
+    <div class="brand-text">
+      <strong>CROWRULES</strong>
+      <span>Main Admin</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-label">Core</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a href="content.html">
+      <span class="nav-icon">▦</span>
+      Content
+    </a>
+
+    <a href="pages.html">
+      <span class="nav-icon">□</span>
+      Pages
+    </a>
+
+    <a href="categories.html">
+      <span class="nav-icon">◫</span>
+      Categories
+    </a>
+
+    <a href="tags.html">
+      <span class="nav-icon">#</span>
+      Tags
+    </a>
+
+    <a href="shows.html">
+      <span class="nav-icon">▶</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">◉</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">▣</span>
+      Movies
+    </a>
+
+    <a href="audio.html">
+      <span class="nav-icon">♫</span>
+      Audio
+    </a>
+
+    <a href="articles.html">
+      <span class="nav-icon">≡</span>
+      Articles
+    </a>
+
+    <div class="nav-label">Broadcast</div>
+
+    <a href="channels.html">
+      <span class="nav-icon">◉</span>
+      Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">☷</span>
+      TV Guide
+    </a>
+
+    <div class="nav-label">People</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♟</span>
+      Members
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">☵</span>
+      Community
+    </a>
+
+    <a href="creators.html">
+      <span class="nav-icon">✦</span>
+      Creators
+    </a>
+
+    <a href="creator.html">
+      <span class="nav-icon">◆</span>
+      Creator
+    </a>
+
+    <a href="creator-content.html" class="active">
+      <span class="nav-icon">▤</span>
+      Creator Content
+    </a>
+
+    <div class="nav-label">CrowRules Network</div>
+
+    <a href="artists.html">
+      <span class="nav-icon">♪</span>
+      Artists
+    </a>
+
+    <a href="albums.html">
+      <span class="nav-icon">▤</span>
+      Albums
+    </a>
+
+    <a href="records.html">
+      <span class="nav-icon">◈</span>
+      Records
+    </a>
+
+    <a href="sports.html">
+      <span class="nav-icon">⚡</span>
+      Sports
+    </a>
+
+    <a href="teams.html">
+      <span class="nav-icon">◇</span>
+      Teams
+    </a>
+
+    <a href="rankings.html">
+      <span class="nav-icon">↗</span>
+      Rankings
+    </a>
+
+    <a href="standings.html">
+      <span class="nav-icon">☰</span>
+      Standings
+    </a>
+
+    <a href="games.html">
+      <span class="nav-icon">◉</span>
+      Games
+    </a>
+
+    <a href="pickem.html">
+      <span class="nav-icon">✓</span>
+      Pick'em
+    </a>
+
+    <a href="memorials.html">
+      <span class="nav-icon">✝</span>
+      Memorials
+    </a>
+
+    <a href="awards.html">
+      <span class="nav-icon">★</span>
+      Awards
+    </a>
+
+    <div class="nav-label">System</div>
+
+    <a href="analytics.html">
+      <span class="nav-icon">◒</span>
+      Analytics
+    </a>
+
+    <a href="moderation.html">
+      <span class="nav-icon">!</span>
+      Moderation
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≋</span>
+      Logs
+    </a>
+
+    <a href="notifications.html">
+      <span class="nav-icon">♢</span>
+      Notifications
+    </a>
+
+    <a href="activity.html">
+      <span class="nav-icon">↻</span>
+      Activity
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+
+</aside>
+
+<!-- =========================
+     MAIN
+========================== -->
+
+<main class="main">
+
+<header class="topbar">
+
+  <div class="top-left">
+
+    <button class="menu-btn" id="menuBtn">
+      ☰
+    </button>
+
+    <div class="breadcrumb">
+      CrowRules Admin / People / Creator /
+      <strong>Content</strong>
+    </div>
+
+  </div>
+
+  <div class="top-right">
+
+    <div class="system-status">
+      <span class="status-dot"></span>
+      Systems Online
+    </div>
+
+    <div class="clock" id="clock">
+      00:00:00
+    </div>
+
+  </div>
+
+</header>
+
+<section class="content">
+
+<!-- =========================
+     HERO
+========================== -->
+
+<section class="hero">
+
+  <div class="hero-copy">
+
+    <div class="eyebrow">
+      Creator Network / Content Management
+    </div>
+
+    <h1>Creator Content Command Center</h1>
+
+    <p>
+      Manage every piece of CrowRules content connected to this creator.
+      Review shows, episodes, videos, audio, articles, movies, drafts,
+      scheduled releases and published work from one unified workspace.
+    </p>
+
+  </div>
+
+  <div class="hero-actions">
+
+    <button
+      class="btn"
+      onclick="location.href='creator.html'"
+    >
+      Creator Profile
+    </button>
+
+    <button
+      class="btn"
+      onclick="exportContent()"
+    >
+      Export
+    </button>
+
+    <button
+      class="btn primary"
+      onclick="addContent()"
+    >
+      + Add Content
+    </button>
+
+  </div>
+
+</section>
+
+<!-- =========================
+     CREATOR STRIP
+========================== -->
+
+<section class="creator-strip">
+
+  <div class="creator-avatar">
+    JR
+  </div>
+
+  <div>
+    <div class="creator-name">
+      Jonathan Riehle
+    </div>
+
+    <div class="creator-handle">
+      @jonathan-riehle
+    </div>
+  </div>
+
+  <div class="creator-meta">
+
+    <span class="pill green">
+      ● Published
+    </span>
+
+    <span class="pill purple">
+      ✦ Featured Creator
+    </span>
+
+    <span class="pill">
+      6 Shows
+    </span>
+
+    <span class="pill">
+      84 Episodes
+    </span>
+
+  </div>
+
+</section>
+
+<!-- =========================
+     STATS
+========================== -->
+
+<section class="stats">
+
+  <div class="stat">
+    <div class="stat-label">Total Content</div>
+    <div class="stat-value">146</div>
+    <div class="stat-note">All associated items</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Published</div>
+    <div class="stat-value">119</div>
+    <div class="stat-note">Live in catalog</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Drafts</div>
+    <div class="stat-value">14</div>
+    <div class="stat-note">Work in progress</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Review</div>
+    <div class="stat-value">8</div>
+    <div class="stat-note">Awaiting approval</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Views</div>
+    <div class="stat-value">184K</div>
+    <div class="stat-note">Creator catalog</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Watch Time</div>
+    <div class="stat-value">4.8K</div>
+    <div class="stat-note">Hours watched</div>
+  </div>
+
+</section>
+
+<!-- =========================
+     FILTERS
+========================== -->
+
+<section class="filters">
+
+  <input
+    id="search"
+    type="search"
+    placeholder="Search creator content..."
+  >
+
+  <select id="typeFilter">
+    <option value="">All Types</option>
+    <option value="video">Video</option>
+    <option value="audio">Audio</option>
+    <option value="article">Article</option>
+    <option value="movie">Movie</option>
+  </select>
+
+  <select id="showFilter">
+    <option value="">All Shows</option>
+    <option>Tacoma Nights</option>
+    <option>Back Deck Live</option>
+    <option>Bird Brains</option>
+    <option>D&amp;J Show</option>
+    <option>Voices From The Void</option>
+    <option>Echoes of Daniel</option>
+  </select>
+
+  <select id="statusFilter">
+    <option value="">All Statuses</option>
+    <option value="published">Published</option>
+    <option value="draft">Draft</option>
+    <option value="review">Review</option>
+    <option value="archived">Archived</option>
+  </select>
+
+  <select id="yearFilter">
+    <option value="">All Years</option>
+    <option>2026</option>
+    <option>2027</option>
+    <option>2025</option>
+  </select>
+
+  <select id="sortFilter">
+    <option value="newest">Newest</option>
+    <option value="oldest">Oldest</option>
+    <option value="views">Most Viewed</option>
+    <option value="title">Title A-Z</option>
+  </select>
+
+  <button
+    class="btn small"
+    onclick="resetFilters()"
+  >
+    Reset
+  </button>
+
+</section>
+
+<!-- =========================
+     TABS
+========================== -->
+
+<div class="tabs">
+
+  <button class="tab active" data-tab="all">
+    All Content
+  </button>
+
+  <button class="tab" data-tab="video">
+    Videos
+  </button>
+
+  <button class="tab" data-tab="audio">
+    Audio
+  </button>
+
+  <button class="tab" data-tab="article">
+    Articles
+  </button>
+
+  <button class="tab" data-tab="movie">
+    Movies
+  </button>
+
+  <button class="tab" data-tab="draft">
+    Drafts
+  </button>
+
+  <button class="tab" data-tab="scheduled">
+    Scheduled
+  </button>
+
+</div>
+
+<!-- =========================
+     GRID
+========================== -->
+
+<div class="grid">
+
+<div>
+
+<!-- CONTENT REGISTRY -->
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Creator Content Registry
+      </div>
+
+      <div class="panel-sub">
+        Every content item assigned to this creator
+      </div>
+    </div>
+
+    <button
+      class="btn small"
+      onclick="selectAll()"
+    >
+      Select All
+    </button>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>
+            <input
+              type="checkbox"
+              id="masterCheck"
+              onchange="toggleAll(this)"
+            >
+          </th>
+
+          <th>Content</th>
+          <th>Type</th>
+          <th>Show / Series</th>
+          <th>Status</th>
+          <th>Views</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="contentRows">
+
+        <tr
+          data-type="video"
+          data-show="Tacoma Nights"
+          data-status="published"
+          data-year="2026"
+          data-views="12482"
+        >
+
+          <td>
+            <input type="checkbox" class="rowCheck">
+          </td>
+
+          <td>
+            <div class="content-title">
+              Living in Tacoma
+            </div>
+            <div class="content-meta">
+              Episode 32 · Video
+            </div>
+          </td>
+
+          <td>
+            <span class="type video">
+              Video
+            </span>
+          </td>
+
+          <td>Tacoma Nights</td>
+
+          <td>
+            <span class="status published">
+              Published
+            </span>
+          </td>
+
+          <td>12,482</td>
+
+          <td>Sep 04, 2026</td>
+
+          <td>
+            <button
+              class="btn small"
+              onclick="editContent('Living in Tacoma')"
+            >
+              Edit
+            </button>
+          </td>
+
+        </tr>
+
+        <tr
+          data-type="video"
+          data-show="Back Deck Live"
+          data-status="published"
+          data-year="2026"
+          data-views="8294"
+        >
+
+          <td>
+            <input type="checkbox" class="rowCheck">
+          </td>
+
+          <td>
+            <div class="content-title">
+              Saturday On The Deck
+            </div>
+            <div class="content-meta">
+              Episode 18 · Live Replay
+            </div>
+          </td>
+
+          <td>
+            <span class="type video">
+              Video
+            </span>
+          </td>
+
+          <td>Back Deck Live</td>
+
+          <td>
+            <span class="status published">
+              Published
+            </span>
+          </td>
+
+          <td>8,294</td>
+
+          <td>Aug 29, 2026</td>
+
+          <td>
+            <button
+              class="btn small"
+              onclick="editContent('Saturday On The Deck')"
+            >
+              Edit
+            </button>
+          </td>
+
+        </tr>
+
+        <tr
+          data-type="article"
+          data-show="Tacoma Nights"
+          data-status="published"
+          data-year="2026"
+          data-views="4912"
+        >
+
+          <td>
+            <input type="checkbox" class="rowCheck">
+          </td>
+
+          <td>
+            <div class="content-title">
+              The State of Tacoma Media
+            </div>
+            <div class="content-meta">
+              Editorial Feature
+            </div>
+          </td>
+
+          <td>
+            <span class="type article">
+              Article
+            </span>
+          </td>
+
+          <td>Tacoma Nights</td>
+
+          <td>
+            <span class="status published">
+              Published
+            </span>
+          </td>
+
+          <td>4,912</td>
+
+          <td>Aug 26, 2026</td>
+
+          <td>
+            <button
+              class="btn small"
+              onclick="editContent('The State of Tacoma Media')"
+            >
+              Edit
+            </button>
+          </td>
+
+        </tr>
+
+        <tr
+          data-type="audio"
+          data-show="Voices From The Void"
+          data-status="review"
+          data-year="2026"
+          data-views="0"
+        >
+
+          <td>
+            <input type="checkbox" class="rowCheck">
+          </td>
+
+          <td>
+            <div class="content-title">
+              Episode 05 — Signals
+            </div>
+            <div class="content-meta">
+              Audio Original
+            </div>
+          </td>
+
+          <td>
+            <span class="type audio">
+              Audio
+            </span>
+          </td>
+
+          <td>Voices From The Void</td>
+
+          <td>
+            <span class="status review">
+              Review
+            </span>
+          </td>
+
+          <td>—</td>
+
+          <td>Pending</td>
+
+          <td>
+            <button
+              class="btn small"
+              onclick="editContent('Episode 05 — Signals')"
+            >
+              Review
+            </button>
+          </td>
+
+        </tr>
+
+        <tr
+          data-type="video"
+          data-show="Bird Brains"
+          data-status="draft"
+          data-year="2026"
+          data-views="0"
+        >
+
+          <td>
+            <input type="checkbox" class="rowCheck">
+          </td>
+
+          <td>
+            <div class="content-title">
+              Bird Brains — Pilot
+            </div>
+            <div class="content-meta">
+              Episode 01
+            </div>
+          </td>
+
+          <td>
+            <span class="type video">
+              Video
+            </span>
+          </td>
+
+          <td>Bird Brains</td>
+
+          <td>
+            <span class="status draft">
+              Draft
+            </span>
+          </td>
+
+          <td>—</td>
+
+          <td>Draft</td>
+
+          <td>
+            <button
+              class="btn small"
+              onclick="editContent('Bird Brains — Pilot')"
+            >
+              Edit
+            </button>
+          </td>
+
+        </tr>
+
+        <tr
+          data-type="video"
+          data-show="D&J Show"
+          data-status="published"
+          data-year="2026"
+          data-views="7192"
+        >
+
+          <td>
+            <input type="checkbox" class="rowCheck">
+          </td>
+
+          <td>
+            <div class="content-title">
+              The Independent Media Conversation
+            </div>
+            <div class="content-meta">
+              Episode 10
+            </div>
+          </td>
+
+          <td>
+            <span class="type video">
+              Video
+            </span>
+          </td>
+
+          <td>D&amp;J Show</td>
+
+          <td>
+            <span class="status published">
+              Published
+            </span>
+          </td>
+
+          <td>7,192</td>
+
+          <td>Aug 15, 2026</td>
+
+          <td>
+            <button
+              class="btn small"
+              onclick="editContent('The Independent Media Conversation')"
+            >
+              Edit
+            </button>
+          </td>
+
+        </tr>
+
+        <tr
+          data-type="movie"
+          data-show=""
+          data-status="published"
+          data-year="2026"
+          data-views="18294"
+        >
+
+          <td>
+            <input type="checkbox" class="rowCheck">
+          </td>
+
+          <td>
+            <div class="content-title">
+              Echoes of Daniel
+            </div>
+            <div class="content-meta">
+              Original Documentary
+            </div>
+          </td>
+
+          <td>
+            <span class="type movie">
+              Movie
+            </span>
+          </td>
+
+          <td>CrowRules Originals</td>
+
+          <td>
+            <span class="status published">
+              Published
+            </span>
+          </td>
+
+          <td>18,294</td>
+
+          <td>Jul 31, 2026</td>
+
+          <td>
+            <button
+              class="btn small"
+              onclick="editContent('Echoes of Daniel')"
+            >
+              Edit
+            </button>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="empty" id="emptyState">
+    No creator content matches the current filters.
+  </div>
+
+</section>
+
+<br>
+
+<!-- FEATURED CONTENT -->
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Featured Creator Content
+      </div>
+
+      <div class="panel-sub">
+        Content currently highlighted across CrowRules
+      </div>
+    </div>
+
+    <button
+      class="btn small"
+      onclick="manageFeatured()"
+    >
+      Manage Featured
+    </button>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div class="card-grid">
+
+      <div class="content-card">
+
+        <div class="card-art">
+          TN
+        </div>
+
+        <div class="card-body">
+
+          <div class="card-title">
+            Living in Tacoma
+          </div>
+
+          <div class="card-meta">
+            Tacoma Nights · Episode 32
+          </div>
+
+          <div class="card-footer">
+
+            <span class="status published">
+              Featured
+            </span>
+
+            <button
+              class="btn small"
+              onclick="editContent('Living in Tacoma')"
+            >
+              Edit
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="content-card">
+
+        <div class="card-art">
+          EOD
+        </div>
+
+        <div class="card-body">
+
+          <div class="card-title">
+            Echoes of Daniel
+          </div>
+
+          <div class="card-meta">
+            CrowRules Original Documentary
+          </div>
+
+          <div class="card-footer">
+
+            <span class="status published">
+              Featured
+            </span>
+
+            <button
+              class="btn small"
+              onclick="editContent('Echoes of Daniel')"
+            >
+              Edit
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</div>
+
+<!-- =========================
+     RIGHT COLUMN
+========================== -->
+
+<div>
+
+<!-- CONTENT BREAKDOWN -->
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Content Breakdown
+      </div>
+
+      <div class="panel-sub">
+        Creator catalog by format
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div class="distribution">
+
+      <div class="distribution-row">
+
+        <div class="distribution-name">
+          Video
+        </div>
+
+        <div class="distribution-bar">
+          <span style="width:72%"></span>
+        </div>
+
+        <div class="distribution-value">
+          105
+        </div>
+
+      </div>
+
+      <div class="distribution-row">
+
+        <div class="distribution-name">
+          Audio
+        </div>
+
+        <div class="distribution-bar">
+          <span style="width:28%"></span>
+        </div>
+
+        <div class="distribution-value">
+          24
+        </div>
+
+      </div>
+
+      <div class="distribution-row">
+
+        <div class="distribution-name">
+          Articles
+        </div>
+
+        <div class="distribution-bar">
+          <span style="width:12%"></span>
+        </div>
+
+        <div class="distribution-value">
+          10
+        </div>
+
+      </div>
+
+      <div class="distribution-row">
+
+        <div class="distribution-name">
+          Movies
+        </div>
+
+        <div class="distribution-bar">
+          <span style="width:8%"></span>
+        </div>
+
+        <div class="distribution-value">
+          7
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<br>
+
+<!-- PUBLISHING -->
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Publishing Health
+      </div>
+
+      <div class="panel-sub">
+        Creator catalog readiness
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div class="metric">
+
+      <div class="metric-top">
+        <span>Published</span>
+        <strong>81%</strong>
+      </div>
+
+      <div class="progress">
+        <span style="width:81%"></span>
+      </div>
+
+    </div>
+
+    <div class="metric">
+
+      <div class="metric-top">
+        <span>Metadata Complete</span>
+        <strong>94%</strong>
+      </div>
+
+      <div class="progress">
+        <span style="width:94%"></span>
+      </div>
+
+    </div>
+
+    <div class="metric">
+
+      <div class="metric-top">
+        <span>Artwork Complete</span>
+        <strong>87%</strong>
+      </div>
+
+      <div class="progress">
+        <span style="width:87%"></span>
+      </div>
+
+    </div>
+
+    <div class="metric">
+
+      <div class="metric-top">
+        <span>Scheduling Ready</span>
+        <strong>76%</strong>
+      </div>
+
+      <div class="progress">
+        <span style="width:76%"></span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<br>
+
+<!-- QUICK ACTIONS -->
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Creator Content Tools
+      </div>
+
+      <div class="panel-sub">
+        Administrative shortcuts
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div style="display:grid;gap:8px">
+
+      <button
+        class="btn"
+        onclick="addEpisode()"
+      >
+        + Add Episode
+      </button>
+
+      <button
+        class="btn"
+        onclick="addVideo()"
+      >
+        + Add Video
+      </button>
+
+      <button
+        class="btn"
+        onclick="addAudio()"
+      >
+        + Add Audio
+      </button>
+
+      <button
+        class="btn"
+        onclick="addArticle()"
+      >
+        + Add Article
+      </button>
+
+      <button
+        class="btn"
+        onclick="scheduleContent()"
+      >
+        ◷ Schedule Content
+      </button>
+
+      <button
+        class="btn"
+        onclick="bulkPublish()"
+      >
+        ✓ Bulk Publish
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<br>
+
+<!-- ACTIVITY -->
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Content Activity
+      </div>
+
+      <div class="panel-sub">
+        Latest changes
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div class="activity-list">
+
+      <div class="activity">
+
+        <div class="activity-icon">
+          +
+        </div>
+
+        <div class="activity-text">
+          New Tacoma Nights episode added
+        </div>
+
+        <div class="activity-time">
+          2h
+        </div>
+
+      </div>
+
+      <div class="activity">
+
+        <div class="activity-icon">
+          ✓
+        </div>
+
+        <div class="activity-text">
+          Episode approved for publishing
+        </div>
+
+        <div class="activity-time">
+          5h
+        </div>
+
+      </div>
+
+      <div class="activity">
+
+        <div class="activity-icon">
+          ★
+        </div>
+
+        <div class="activity-text">
+          Echoes of Daniel marked featured
+        </div>
+
+        <div class="activity-time">
+          1d
+        </div>
+
+      </div>
+
+      <div class="activity">
+
+        <div class="activity-icon">
+          ↻
+        </div>
+
+        <div class="activity-text">
+          Creator metadata synchronized
+        </div>
+
+        <div class="activity-time">
+          2d
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</div>
+
+</div>
+
+<div class="footer">
+  CrowRules Entertainment Main Admin · Creator Content Command Center
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* ==========================================
+   CROWRULES CREATOR CONTENT
+   ========================================== */
+
+/*
+  Suggested database architecture:
+
+  creators
+  creator_content
+  creator_shows
+  creator_episodes
+  creator_activity
+
+  Existing CrowRules content tables should be
+  reused where possible.
+
+  Example relationship:
+
+  creator_content
+  ---------------------------------------------
+  id
+  creator_id
+  content_id
+  content_type
+  role
+  is_primary
+  featured
+  sort_order
+  created_at
+  updated_at
+
+  This allows one creator to be associated with
+  videos, episodes, audio, articles and movies
+  without duplicating the actual content records.
+
+  IMPORTANT:
+  Inspect the existing Supabase schema before
+  creating or querying these relationships.
+*/
+
+/* ==========================================
+   HELPERS
+========================================== */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+/* ==========================================
+   CLOCK
+========================================== */
+
+function updateClock(){
+
+  const now = new Date();
+
+  $('clock').textContent =
+    now.toLocaleTimeString([],{
+      hour:'2-digit',
+      minute:'2-digit',
+      second:'2-digit'
+    });
+
+}
+
+updateClock();
+
+setInterval(updateClock,1000);
+
+/* ==========================================
+   MOBILE NAV
+========================================== */
+
+$('menuBtn').addEventListener('click',()=>{
+
+  $('sidebar').classList.toggle('open');
+
+});
+
+/* ==========================================
+   TOAST
+========================================== */
+
+let toastTimer;
+
+function toast(message){
+
+  const el = $('toast');
+
+  el.textContent = message;
+
+  el.classList.add('show');
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(()=>{
+
+    el.classList.remove('show');
+
+  },2600);
+
+}
+
+/* ==========================================
+   FILTERS
+========================================== */
+
+const searchInput = $('search');
+const typeFilter = $('typeFilter');
+const showFilter = $('showFilter');
+const statusFilter = $('statusFilter');
+const yearFilter = $('yearFilter');
+const sortFilter = $('sortFilter');
+
+function applyFilters(){
+
+  const search =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+  const type =
+    typeFilter.value;
+
+  const show =
+    showFilter.value;
+
+  const status =
+    statusFilter.value;
+
+  const year =
+    yearFilter.value;
+
+  const activeTab =
+    document.querySelector('.tab.active')
+      ?.dataset.tab || 'all';
+
+  const rows =
+    [...document.querySelectorAll('#contentRows tr')];
+
+  let visible = 0;
+
+  rows.forEach(row=>{
+
+    const text =
+      row.innerText.toLowerCase();
+
+    const rowType =
+      row.dataset.type || '';
+
+    const rowShow =
+      row.dataset.show || '';
+
+    const rowStatus =
+      row.dataset.status || '';
+
+    const rowYear =
+      row.dataset.year || '';
+
+    let matches = true;
+
+    if(search && !text.includes(search)){
+      matches = false;
+    }
+
+    if(type && rowType !== type){
+      matches = false;
+    }
+
+    if(show && rowShow !== show){
+      matches = false;
+    }
+
+    if(status && rowStatus !== status){
+      matches = false;
+    }
+
+    if(year && rowYear !== year){
+      matches = false;
+    }
+
+    if(activeTab !== 'all'){
+
+      if(
+        activeTab === 'draft' &&
+        rowStatus !== 'draft'
+      ){
+        matches = false;
+      }
+      else if(
+        activeTab === 'scheduled'
+      ){
+
+        /*
+          Demo scheduled state.
+          Replace with actual scheduled_at
+          data from Supabase.
+        */
+
+        if(rowStatus !== 'scheduled'){
+          matches = false;
+        }
+
+      }
+      else if(
+        ['video','audio','article','movie']
+          .includes(activeTab) &&
+        rowType !== activeTab
+      ){
+        matches = false;
+      }
+
+    }
+
+    row.style.display =
+      matches ? '' : 'none';
+
+    if(matches){
+      visible++;
+    }
+
+  });
+
+  $('emptyState').style.display =
+    visible ? 'none' : 'block';
+
+  sortRows();
+
+}
+
+/* ==========================================
+   SORT
+========================================== */
+
+function sortRows(){
+
+  const tbody =
+    $('contentRows');
+
+  const rows =
+    [...tbody.querySelectorAll('tr')]
+      .filter(row =>
+        row.style.display !== 'none'
+      );
+
+  const mode =
+    sortFilter.value;
+
+  rows.sort((a,b)=>{
+
+    if(mode === 'views'){
+
+      return (
+        Number(b.dataset.views || 0) -
+        Number(a.dataset.views || 0)
+      );
+
+    }
+
+    if(mode === 'title'){
+
+      return a
+        .querySelector('.content-title')
+        .textContent
+        .localeCompare(
+          b.querySelector('.content-title').textContent
+        );
+
+    }
+
+    const dateA =
+      new Date(
+        a.querySelector('td:nth-child(7)')
+          ?.textContent || 0
+      );
+
+    const dateB =
+      new Date(
+        b.querySelector('td:nth-child(7)')
+          ?.textContent || 0
+      );
+
+    if(mode === 'oldest'){
+      return dateA - dateB;
+    }
+
+    return dateB - dateA;
+
+  });
+
+  rows.forEach(row=>{
+    tbody.appendChild(row);
+  });
+
+}
+
+/* ==========================================
+   FILTER EVENTS
+========================================== */
+
+[
+  searchInput,
+  typeFilter,
+  showFilter,
+  statusFilter,
+  yearFilter,
+  sortFilter
+].forEach(control=>{
+
+  control.addEventListener(
+    'input',
+    applyFilters
+  );
+
+  control.addEventListener(
+    'change',
+    applyFilters
+  );
+
+});
+
+/* ==========================================
+   TABS
+========================================== */
+
+document.querySelectorAll('.tab')
+.forEach(tab=>{
+
+  tab.addEventListener('click',()=>{
+
+    document
+      .querySelectorAll('.tab')
+      .forEach(item =>
+        item.classList.remove('active')
+      );
+
+    tab.classList.add('active');
+
+    applyFilters();
+
+  });
+
+});
+
+/* ==========================================
+   RESET
+========================================== */
+
+function resetFilters(){
+
+  searchInput.value = '';
+  typeFilter.value = '';
+  showFilter.value = '';
+  statusFilter.value = '';
+  yearFilter.value = '';
+  sortFilter.value = 'newest';
+
+  document
+    .querySelectorAll('.tab')
+    .forEach(tab =>
+      tab.classList.remove('active')
+    );
+
+  document
+    .querySelector('.tab[data-tab="all"]')
+    .classList.add('active');
+
+  applyFilters();
+
+  toast('Content filters reset.');
+
+}
+
+/* ==========================================
+   CHECKBOXES
+========================================== */
+
+function toggleAll(master){
+
+  document
+    .querySelectorAll('.rowCheck')
+    .forEach(check=>{
+      check.checked = master.checked;
+    });
+
+}
+
+function selectAll(){
+
+  const checks =
+    [...document.querySelectorAll('.rowCheck')];
+
+  const anyUnchecked =
+    checks.some(check => !check.checked);
+
+  checks.forEach(check=>{
+    check.checked = anyUnchecked;
+  });
+
+  $('masterCheck').checked = anyUnchecked;
+
+  toast(
+    anyUnchecked
+      ? 'All visible content selected.'
+      : 'Content selection cleared.'
+  );
+
+}
+
+/* ==========================================
+   CONTENT ACTIONS
+========================================== */
+
+function addContent(){
+
+  toast('Opening content creation workflow...');
+
+  /*
+    Future:
+
+    Open unified creator-content modal
+    with:
+
+    Content Type
+    Title
+    Show
+    Episode
+    Description
+    Media URL
+    Thumbnail
+    Status
+    Publish Date
+    Featured
+    Tags
+    Category
+  */
+
+}
+
+function addEpisode(){
+  toast('Opening new episode editor...');
+}
+
+function addVideo(){
+  toast('Opening video uploader...');
+}
+
+function addAudio(){
+  toast('Opening audio editor...');
+}
+
+function addArticle(){
+  toast('Opening article editor...');
+}
+
+function scheduleContent(){
+  toast('Opening content scheduler...');
+}
+
+function editContent(title){
+
+  toast('Opening editor for: ' + title);
+
+  /*
+    Future:
+
+    location.href =
+      'content-edit.html?id=' + contentId;
+  */
+
+}
+
+function manageFeatured(){
+
+  toast('Opening featured content manager...');
+
+}
+
+function bulkPublish(){
+
+  const selected =
+    document.querySelectorAll(
+      '.rowCheck:checked'
+    ).length;
+
+  if(!selected){
+
+    toast('Select content before bulk publishing.');
+
+    return;
+
+  }
+
+  const confirmed =
+    confirm(
+      `Publish ${selected} selected content item(s)?`
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  toast(
+    selected +
+    ' content item(s) queued for publishing.'
+  );
+
+}
+
+/* ==========================================
+   EXPORT
+========================================== */
+
+function exportContent(){
+
+  const rows =
+    [...document.querySelectorAll('#contentRows tr')]
+      .filter(row =>
+        row.style.display !== 'none'
+      );
+
+  const csv = [];
+
+  csv.push([
+    'Title',
+    'Type',
+    'Show',
+    'Status',
+    'Views',
+    'Date'
+  ].join(','));
+
+  rows.forEach(row=>{
+
+    const title =
+      row.querySelector('.content-title')
+        ?.textContent
+        .trim() || '';
+
+    const type =
+      row.dataset.type || '';
+
+    const show =
+      row.dataset.show || '';
+
+    const status =
+      row.dataset.status || '';
+
+    const views =
+      row.dataset.views || '';
+
+    const date =
+      row.querySelector('td:nth-child(7)')
+        ?.textContent
+        .trim() || '';
+
+    csv.push([
+      `"${title.replace(/"/g,'""')}"`,
+      type,
+      `"${show.replace(/"/g,'""')}"`,
+      status,
+      views,
+      `"${date.replace(/"/g,'""')}"`
+    ].join(','));
+
+  });
+
+  const blob =
+    new Blob(
+      [csv.join('\n')],
+      {type:'text/csv;charset=utf-8;'}
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement('a');
+
+  a.href = url;
+  a.download =
+    'crowrules-creator-content.csv';
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+  toast('Creator content exported.');
+
+}
+
+/* ==========================================
+   KEYBOARD
+========================================== */
+
+document.addEventListener('keydown',event=>{
+
+  if(event.key === 'Escape'){
+
+    $('sidebar')
+      .classList
+      .remove('open');
+
+  }
+
+});
+
+/* ==========================================
+   SUPABASE INTEGRATION HOOK
+========================================== */
+
+/*
+  Browser-safe configuration:
+
+  window.CROWRULES_SUPABASE_URL
+  window.CROWRULES_SUPABASE_ANON_KEY
+
+  Example:
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  const supabaseClient =
+    supabase.createClient(
+      window.CROWRULES_SUPABASE_URL,
+      window.CROWRULES_SUPABASE_ANON_KEY
+    );
+
+  NEVER put a Supabase service-role key
+  into this browser page.
+*/
+
+/*
+  Recommended query strategy:
+
+  1. Load creator by ID.
+  2. Load creator-content relationships.
+  3. Resolve existing content records.
+  4. Normalize them in JavaScript.
+  5. Render one unified content registry.
+
+  Example conceptual query:
+
+  const { data, error } =
+    await supabaseClient
+      .from('creator_content')
+      .select('*')
+      .eq('creator_id', creatorId)
+      .order('created_at',{
+        ascending:false
+      });
+
+  Do NOT assume exact column names until
+  the current Supabase schema is inspected.
+*/
+
+/* ==========================================
+   REALTIME HOOK
+========================================== */
+
+/*
+  Future realtime channel:
+
+  supabaseClient
+    .channel('creator-content-admin')
+    .on(
+      'postgres_changes',
+      {
+        event:'*',
+        schema:'public',
+        table:'creator_content'
+      },
+      payload => {
+
+        console.log(
+          'Creator content changed:',
+          payload
+        );
+
+        // Reload registry.
+
+      }
+    )
+    .subscribe();
+*/
+
+/* ==========================================
+   INITIALIZE
+========================================== */
+
+applyFilters();
+
+console.log(
+  'CrowRules Creator Content Command Center initialized.'
+);
+
+</script>
+
+</body>
+</html>

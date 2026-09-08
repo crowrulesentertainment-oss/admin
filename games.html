@@ -1,0 +1,2760 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Games — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Sports Game Command Center">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --sidebar:260px;
+  --topbar:72px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 80% -10%,rgba(182,108,255,.10),transparent 30%),
+    radial-gradient(circle at 15% 20%,rgba(55,215,255,.04),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+  min-height:100vh;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.025;
+  background-image:
+    linear-gradient(rgba(255,255,255,.8) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.8) 1px,transparent 1px);
+  background-size:45px 45px;
+  z-index:-1;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:var(--sidebar);
+  background:rgba(7,7,9,.96);
+  border-right:1px solid var(--line);
+  z-index:1000;
+  overflow-y:auto;
+  transition:.25s ease;
+}
+
+.brand{
+  height:var(--topbar);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--accent);
+  background:linear-gradient(135deg,rgba(182,108,255,.18),rgba(108,92,255,.08));
+  box-shadow:0 0 22px rgba(182,108,255,.12);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  color:var(--accent);
+}
+
+.brand-text strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:1.5px;
+}
+
+.brand-text span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:2px;
+  margin-top:2px;
+}
+
+.nav{
+  padding:15px 10px 30px;
+}
+
+.nav-label{
+  color:#555561;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  padding:13px 10px 7px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 11px;
+  margin:2px 0;
+  border:1px solid transparent;
+  color:#a9a9b2;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:600;
+  transition:.18s ease;
+}
+
+.nav a:hover{
+  color:var(--text);
+  background:rgba(255,255,255,.035);
+  border-color:var(--line);
+}
+
+.nav a.active{
+  color:#fff;
+  background:linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.05));
+  border-color:rgba(182,108,255,.35);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+  opacity:.9;
+  font-size:14px;
+}
+
+/* TOPBAR */
+
+.topbar{
+  position:fixed;
+  top:0;
+  left:var(--sidebar);
+  right:0;
+  height:var(--topbar);
+  background:rgba(7,7,9,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+  z-index:900;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 25px;
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.mobile-toggle{
+  display:none;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  width:38px;
+  height:38px;
+  border-radius:7px;
+}
+
+.breadcrumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  font-family:Orbitron,sans-serif;
+  color:var(--cyan);
+  font-size:10px;
+  letter-spacing:1px;
+  padding-right:10px;
+}
+
+.icon-btn{
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#bbb;
+  border-radius:7px;
+  display:grid;
+  place-items:center;
+}
+
+.icon-btn:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.admin-avatar{
+  width:38px;
+  height:38px;
+  border-radius:7px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  font-weight:800;
+}
+
+/* MAIN */
+
+.main{
+  margin-left:var(--sidebar);
+  padding-top:var(--topbar);
+}
+
+.content{
+  padding:30px;
+  max-width:1700px;
+  margin:auto;
+}
+
+/* HERO */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:
+    linear-gradient(120deg,rgba(182,108,255,.09),transparent 45%),
+    linear-gradient(300deg,rgba(55,215,255,.04),transparent 50%),
+    var(--panel);
+  padding:28px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+.hero:after{
+  content:"GAMES";
+  position:absolute;
+  right:25px;
+  top:18px;
+  font-family:Orbitron,sans-serif;
+  font-size:72px;
+  font-weight:800;
+  letter-spacing:5px;
+  color:rgba(255,255,255,.018);
+  pointer-events:none;
+}
+
+.eyebrow{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:2px;
+  margin-bottom:8px;
+}
+
+.hero h1{
+  font-family:Orbitron,sans-serif;
+  margin:0 0 9px;
+  font-size:28px;
+  letter-spacing:1px;
+}
+
+.hero p{
+  max-width:850px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+  margin:0;
+}
+
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:20px;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#ddd;
+  padding:10px 14px;
+  border-radius:7px;
+  font-size:11px;
+  font-weight:700;
+  transition:.18s ease;
+}
+
+.btn:hover{
+  border-color:#666;
+  color:#fff;
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  border-color:transparent;
+  color:#fff;
+}
+
+.btn.cyan{
+  border-color:rgba(55,215,255,.35);
+  color:var(--cyan);
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.3);
+  color:var(--red);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:17px;
+  position:relative;
+  overflow:hidden;
+}
+
+.stat:before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+  background:var(--accent);
+  opacity:.55;
+}
+
+.stat:nth-child(2):before{
+  background:var(--green);
+}
+
+.stat:nth-child(3):before{
+  background:var(--cyan);
+}
+
+.stat:nth-child(4):before{
+  background:var(--yellow);
+}
+
+.stat:nth-child(5):before{
+  background:var(--orange);
+}
+
+.stat:nth-child(6):before{
+  background:var(--red);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  font-weight:700;
+}
+
+.stat-value{
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+  margin-top:7px;
+}
+
+.stat-note{
+  color:#676772;
+  font-size:9px;
+  margin-top:5px;
+}
+
+/* FILTERS */
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+
+.filters{
+  padding:15px;
+  display:grid;
+  grid-template-columns:2fr repeat(5,1fr) auto;
+  gap:9px;
+  margin-bottom:20px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.field label{
+  color:#6e6e79;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  color:#eee;
+  background:#09090c;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:10px 11px;
+  outline:none;
+  font-size:11px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:rgba(182,108,255,.7);
+  box-shadow:0 0 0 2px rgba(182,108,255,.07);
+}
+
+select option{
+  background:#111117;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.filter-actions{
+  display:flex;
+  align-items:flex-end;
+}
+
+/* SECTION */
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:0 0 11px;
+}
+
+.section-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:.6px;
+}
+
+.section-meta{
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* LIVE GAMES */
+
+.live-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.game-card{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:10px;
+  overflow:hidden;
+  position:relative;
+}
+
+.game-card.live{
+  border-color:rgba(255,82,109,.38);
+}
+
+.game-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:11px 13px;
+  border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.015);
+}
+
+.league{
+  color:var(--cyan);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+.status{
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  padding:4px 7px;
+  border-radius:4px;
+}
+
+.status.live{
+  color:var(--red);
+  border:1px solid rgba(255,82,109,.35);
+  background:rgba(255,82,109,.08);
+}
+
+.status.scheduled{
+  color:var(--yellow);
+  border:1px solid rgba(243,201,105,.3);
+  background:rgba(243,201,105,.06);
+}
+
+.status.final{
+  color:var(--green);
+  border:1px solid rgba(69,230,154,.28);
+  background:rgba(69,230,154,.06);
+}
+
+.game-body{
+  padding:16px;
+}
+
+.match-date{
+  color:#777783;
+  font-size:9px;
+  text-align:center;
+  margin-bottom:12px;
+}
+
+.team{
+  display:grid;
+  grid-template-columns:42px 1fr auto;
+  align-items:center;
+  gap:11px;
+  padding:7px 0;
+}
+
+.team-logo{
+  width:42px;
+  height:42px;
+  border-radius:8px;
+  background:linear-gradient(135deg,#171720,#0a0a0d);
+  border:1px solid var(--line2);
+  display:grid;
+  place-items:center;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:800;
+  color:var(--accent);
+}
+
+.team-name{
+  font-size:11px;
+  font-weight:700;
+}
+
+.team-city{
+  color:#686873;
+  font-size:8px;
+  margin-top:3px;
+}
+
+.score{
+  font-family:Orbitron,sans-serif;
+  font-size:20px;
+  font-weight:700;
+}
+
+.game-divider{
+  height:1px;
+  background:var(--line);
+  margin:4px 0;
+}
+
+.game-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 13px;
+  border-top:1px solid var(--line);
+  color:#777783;
+  font-size:9px;
+}
+
+.game-footer a{
+  color:var(--accent);
+  font-weight:700;
+}
+
+/* REGISTRY */
+
+.registry{
+  overflow:hidden;
+  margin-bottom:22px;
+}
+
+.registry-head{
+  padding:15px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1050px;
+}
+
+th{
+  text-align:left;
+  padding:11px 14px;
+  background:#0a0a0d;
+  color:#696974;
+  font-size:8px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  border-bottom:1px solid var(--line);
+}
+
+td{
+  padding:12px 14px;
+  border-bottom:1px solid rgba(39,39,47,.7);
+  font-size:10px;
+  color:#c9c9d0;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.015);
+}
+
+.game-cell{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.mini-team{
+  width:30px;
+  height:30px;
+  border-radius:6px;
+  border:1px solid var(--line2);
+  display:grid;
+  place-items:center;
+  font-size:8px;
+  font-family:Orbitron,sans-serif;
+  color:var(--accent);
+  background:#0a0a0d;
+}
+
+.game-title{
+  font-weight:700;
+  color:#fff;
+}
+
+.game-sub{
+  color:#666671;
+  font-size:8px;
+  margin-top:2px;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 7px;
+  border:1px solid var(--line2);
+  border-radius:4px;
+  color:#aaaab3;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.pill.live{
+  color:var(--red);
+  border-color:rgba(255,82,109,.3);
+}
+
+.pill.final{
+  color:var(--green);
+  border-color:rgba(69,230,154,.3);
+}
+
+.pill.scheduled{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.3);
+}
+
+.action-group{
+  display:flex;
+  gap:5px;
+}
+
+.action{
+  border:1px solid var(--line);
+  background:#0b0b0e;
+  color:#9999a3;
+  border-radius:5px;
+  padding:6px 8px;
+  font-size:8px;
+}
+
+.action:hover{
+  color:#fff;
+  border-color:var(--accent);
+}
+
+/* LOWER */
+
+.lower-grid{
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+  gap:15px;
+}
+
+.activity,
+.distribution{
+  padding:16px;
+}
+
+.activity-list{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+
+.activity-item{
+  display:grid;
+  grid-template-columns:35px 1fr auto;
+  gap:10px;
+  padding:11px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.activity-item:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:31px;
+  height:31px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line2);
+  border-radius:6px;
+  color:var(--cyan);
+  font-size:11px;
+}
+
+.activity-text{
+  font-size:10px;
+  color:#c2c2ca;
+  line-height:1.45;
+}
+
+.activity-text strong{
+  color:#fff;
+}
+
+.activity-time{
+  color:#5f5f69;
+  font-size:8px;
+  white-space:nowrap;
+}
+
+.breakdown{
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+}
+
+.break-row{
+  display:grid;
+  grid-template-columns:90px 1fr 40px;
+  align-items:center;
+  gap:10px;
+}
+
+.break-label{
+  font-size:9px;
+  color:#aaaab3;
+}
+
+.bar{
+  height:7px;
+  background:#08080b;
+  border:1px solid var(--line);
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.bar span{
+  display:block;
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+
+.break-value{
+  text-align:right;
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+  color:#888892;
+}
+
+/* MODAL */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(7px);
+  z-index:2000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:min(850px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0b0b0f;
+  border:1px solid var(--line2);
+  border-radius:12px;
+  box-shadow:0 25px 80px rgba(0,0,0,.6);
+}
+
+.modal-head{
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.modal-head h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+}
+
+.modal-close{
+  width:32px;
+  height:32px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#aaa;
+  border-radius:6px;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
+}
+
+.form-grid .full{
+  grid-column:1/-1;
+}
+
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding-top:20px;
+}
+
+.check-row input{
+  width:auto;
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:15px 20px;
+  border-top:1px solid var(--line);
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  min-width:250px;
+  max-width:380px;
+  background:#111117;
+  border:1px solid var(--line2);
+  border-left:3px solid var(--accent);
+  padding:13px 15px;
+  border-radius:7px;
+  box-shadow:0 15px 40px rgba(0,0,0,.4);
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s ease;
+  z-index:3000;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.toast strong{
+  display:block;
+  font-size:10px;
+  margin-bottom:3px;
+}
+
+.toast span{
+  color:var(--muted);
+  font-size:9px;
+}
+
+/* MOBILE */
+
+@media(max-width:1250px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .filters{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .filter-actions{
+    align-items:stretch;
+  }
+
+  .filter-actions .btn{
+    width:100%;
+  }
+
+  .live-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:900px){
+  :root{
+    --sidebar:245px;
+  }
+
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+    box-shadow:20px 0 60px rgba(0,0,0,.5);
+  }
+
+  .topbar{
+    left:0;
+  }
+
+  .mobile-toggle{
+    display:grid;
+    place-items:center;
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .content{
+    padding:20px;
+  }
+
+  .lower-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:650px){
+  .content{
+    padding:14px;
+  }
+
+  .topbar{
+    padding:0 14px;
+  }
+
+  .breadcrumb{
+    display:none;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .hero{
+    padding:20px;
+  }
+
+  .hero h1{
+    font-size:21px;
+  }
+
+  .hero:after{
+    font-size:42px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .filters{
+    grid-template-columns:1fr;
+  }
+
+  .live-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid .full{
+    grid-column:auto;
+  }
+
+  .modal-backdrop{
+    padding:8px;
+  }
+
+  .modal{
+    max-height:95vh;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-mark">CR</div>
+      <div class="brand-text">
+        <strong>CROWRULES</strong>
+        <span>MAIN ADMIN</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+
+      <div class="nav-label">Core</div>
+
+      <a href="index.html">
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </a>
+
+      <a href="content.html">
+        <span class="nav-icon">◈</span>
+        Content
+      </a>
+
+      <a href="pages.html">
+        <span class="nav-icon">▤</span>
+        Pages
+      </a>
+
+      <a href="categories.html">
+        <span class="nav-icon">◫</span>
+        Categories
+      </a>
+
+      <a href="tags.html">
+        <span class="nav-icon">#</span>
+        Tags
+      </a>
+
+      <a href="shows.html">
+        <span class="nav-icon">▣</span>
+        Shows
+      </a>
+
+      <a href="episodes.html">
+        <span class="nav-icon">▶</span>
+        Episodes
+      </a>
+
+      <a href="movies.html">
+        <span class="nav-icon">▰</span>
+        Movies
+      </a>
+
+      <a href="audio.html">
+        <span class="nav-icon">♫</span>
+        Audio
+      </a>
+
+      <a href="articles.html">
+        <span class="nav-icon">✎</span>
+        Articles
+      </a>
+
+      <div class="nav-label">Broadcast</div>
+
+      <a href="channels.html">
+        <span class="nav-icon">◉</span>
+        Channels
+      </a>
+
+      <a href="schedule.html">
+        <span class="nav-icon">◷</span>
+        Schedule
+      </a>
+
+      <a href="live.html">
+        <span class="nav-icon">●</span>
+        Live
+      </a>
+
+      <a href="guide.html">
+        <span class="nav-icon">▥</span>
+        TV Guide
+      </a>
+
+      <div class="nav-label">People</div>
+
+      <a href="members.html">
+        <span class="nav-icon">♙</span>
+        Members
+      </a>
+
+      <a href="community.html">
+        <span class="nav-icon">♧</span>
+        Community
+      </a>
+
+      <a href="creators.html">
+        <span class="nav-icon">✦</span>
+        Creators
+      </a>
+
+      <div class="nav-label">CrowRules Network</div>
+
+      <a href="artists.html">
+        <span class="nav-icon">♬</span>
+        Artists
+      </a>
+
+      <a href="albums.html">
+        <span class="nav-icon">◩</span>
+        Albums
+      </a>
+
+      <a href="records.html">
+        <span class="nav-icon">◉</span>
+        Records
+      </a>
+
+      <a href="sports.html">
+        <span class="nav-icon">⚑</span>
+        Sports
+      </a>
+
+      <a href="teams.html">
+        <span class="nav-icon">♜</span>
+        Teams
+      </a>
+
+      <a href="games.html" class="active">
+        <span class="nav-icon">⚔</span>
+        Games
+      </a>
+
+      <a href="memorials.html">
+        <span class="nav-icon">✧</span>
+        Memorials
+      </a>
+
+      <a href="awards.html">
+        <span class="nav-icon">★</span>
+        Awards
+      </a>
+
+      <div class="nav-label">System</div>
+
+      <a href="analytics.html">
+        <span class="nav-icon">◒</span>
+        Analytics
+      </a>
+
+      <a href="moderation.html">
+        <span class="nav-icon">◈</span>
+        Moderation
+      </a>
+
+      <a href="logs.html">
+        <span class="nav-icon">≡</span>
+        Logs
+      </a>
+
+      <a href="notifications.html">
+        <span class="nav-icon">♢</span>
+        Notifications
+      </a>
+
+      <a href="activity.html">
+        <span class="nav-icon">⌁</span>
+        Activity
+      </a>
+
+      <a href="settings.html">
+        <span class="nav-icon">⚙</span>
+        Settings
+      </a>
+
+    </nav>
+  </aside>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+
+    <div class="top-left">
+
+      <button class="mobile-toggle" id="mobileToggle">☰</button>
+
+      <div class="breadcrumb">
+        CrowRules Network / Sports /
+        <strong>Games</strong>
+      </div>
+
+    </div>
+
+    <div class="top-actions">
+
+      <div class="clock" id="clock">
+        --:--:--
+      </div>
+
+      <button class="icon-btn" title="Refresh" onclick="refreshPage()">↻</button>
+
+      <button class="icon-btn" title="Notifications" onclick="toast('Notifications','No new critical alerts.')">
+        ♢
+      </button>
+
+      <div class="admin-avatar">CR</div>
+
+    </div>
+
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="content">
+
+      <!-- HERO -->
+      <section class="hero">
+
+        <div class="eyebrow">
+          CROWRULES SPORTS NETWORK / GAME MANAGEMENT
+        </div>
+
+        <h1>Game Command Center</h1>
+
+        <p>
+          Manage upcoming, live and completed sports games across the CrowRules
+          Sports Network. Track matchups, scores, venues, leagues, seasons,
+          broadcast information, game status and featured events from one
+          centralized administration console.
+        </p>
+
+        <div class="hero-actions">
+
+          <button class="btn primary" onclick="openGameModal()">
+            + Add Game
+          </button>
+
+          <button class="btn cyan" onclick="showLiveGames()">
+            ● Live Games
+          </button>
+
+          <button class="btn" onclick="showUpcoming()">
+            Upcoming
+          </button>
+
+          <button class="btn" onclick="exportGames()">
+            Export Games
+          </button>
+
+          <button class="btn" onclick="toast('Sports Dashboard','Opening Sports Command Center...')">
+            Sports Dashboard
+          </button>
+
+        </div>
+
+      </section>
+
+      <!-- STATS -->
+      <section class="stats">
+
+        <div class="stat">
+          <div class="stat-label">Total Games</div>
+          <div class="stat-value">1,284</div>
+          <div class="stat-note">Current sports database</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Live Now</div>
+          <div class="stat-value">6</div>
+          <div class="stat-note">Active events</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Today</div>
+          <div class="stat-value">24</div>
+          <div class="stat-note">Scheduled games</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">This Week</div>
+          <div class="stat-value">118</div>
+          <div class="stat-note">Upcoming games</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Completed</div>
+          <div class="stat-value">1,102</div>
+          <div class="stat-note">Final results</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Featured</div>
+          <div class="stat-value">18</div>
+          <div class="stat-note">Network spotlight</div>
+        </div>
+
+      </section>
+
+      <!-- FILTERS -->
+      <section class="panel filters">
+
+        <div class="field">
+          <label>Search</label>
+          <input
+            id="search"
+            type="search"
+            placeholder="Search teams, games, cities..."
+            oninput="filterGames()"
+          >
+        </div>
+
+        <div class="field">
+          <label>League</label>
+          <select id="leagueFilter" onchange="filterGames()">
+            <option value="">All Leagues</option>
+            <option>NFL</option>
+            <option>MLB</option>
+            <option>NBA</option>
+            <option>WNBA</option>
+            <option>NHL</option>
+            <option>MLS</option>
+            <option>NCAA</option>
+            <option>USL</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Sport</label>
+          <select id="sportFilter" onchange="filterGames()">
+            <option value="">All Sports</option>
+            <option>Football</option>
+            <option>Baseball</option>
+            <option>Basketball</option>
+            <option>Hockey</option>
+            <option>Soccer</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select id="statusFilter" onchange="filterGames()">
+            <option value="">All Status</option>
+            <option value="Live">Live</option>
+            <option value="Scheduled">Scheduled</option>
+            <option value="Final">Final</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Region</label>
+          <select id="regionFilter" onchange="filterGames()">
+            <option value="">All Regions</option>
+            <option>Pacific Northwest</option>
+            <option>West</option>
+            <option>National</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Season</label>
+          <select id="seasonFilter" onchange="filterGames()">
+            <option value="">All Seasons</option>
+            <option>2026</option>
+            <option>2027</option>
+            <option>2028</option>
+          </select>
+        </div>
+
+        <div class="filter-actions">
+          <button class="btn" onclick="resetFilters()">Reset</button>
+        </div>
+
+      </section>
+
+      <!-- LIVE GAMES -->
+      <section>
+
+        <div class="section-head">
+          <div class="section-title">Live Game Monitor</div>
+          <div class="section-meta">6 events currently active</div>
+        </div>
+
+        <div class="live-grid">
+
+          <article class="game-card live">
+
+            <div class="game-top">
+              <div class="league">NFL</div>
+              <div class="status live">● LIVE</div>
+            </div>
+
+            <div class="game-body">
+
+              <div class="match-date">
+                3rd Quarter · 08:42
+              </div>
+
+              <div class="team">
+                <div class="team-logo">SEA</div>
+                <div>
+                  <div class="team-name">Seattle Seahawks</div>
+                  <div class="team-city">Seattle, WA</div>
+                </div>
+                <div class="score">24</div>
+              </div>
+
+              <div class="game-divider"></div>
+
+              <div class="team">
+                <div class="team-logo">SF</div>
+                <div>
+                  <div class="team-name">San Francisco 49ers</div>
+                  <div class="team-city">San Francisco, CA</div>
+                </div>
+                <div class="score">17</div>
+              </div>
+
+            </div>
+
+            <div class="game-footer">
+              <span>Lumen Field</span>
+              <a href="#" onclick="viewGame('SEA-SF');return false;">Manage →</a>
+            </div>
+
+          </article>
+
+          <article class="game-card live">
+
+            <div class="game-top">
+              <div class="league">MLB</div>
+              <div class="status live">● LIVE</div>
+            </div>
+
+            <div class="game-body">
+
+              <div class="match-date">
+                7th Inning · 2 Outs
+              </div>
+
+              <div class="team">
+                <div class="team-logo">SEA</div>
+                <div>
+                  <div class="team-name">Seattle Mariners</div>
+                  <div class="team-city">Seattle, WA</div>
+                </div>
+                <div class="score">5</div>
+              </div>
+
+              <div class="game-divider"></div>
+
+              <div class="team">
+                <div class="team-logo">HOU</div>
+                <div>
+                  <div class="team-name">Houston Astros</div>
+                  <div class="team-city">Houston, TX</div>
+                </div>
+                <div class="score">3</div>
+              </div>
+
+            </div>
+
+            <div class="game-footer">
+              <span>T-Mobile Park</span>
+              <a href="#" onclick="viewGame('SEA-HOU');return false;">Manage →</a>
+            </div>
+
+          </article>
+
+          <article class="game-card live">
+
+            <div class="game-top">
+              <div class="league">WNBA</div>
+              <div class="status live">● LIVE</div>
+            </div>
+
+            <div class="game-body">
+
+              <div class="match-date">
+                4th Quarter · 04:16
+              </div>
+
+              <div class="team">
+                <div class="team-logo">STO</div>
+                <div>
+                  <div class="team-name">Seattle Storm</div>
+                  <div class="team-city">Seattle, WA</div>
+                </div>
+                <div class="score">81</div>
+              </div>
+
+              <div class="game-divider"></div>
+
+              <div class="team">
+                <div class="team-logo">PHX</div>
+                <div>
+                  <div class="team-name">Phoenix Mercury</div>
+                  <div class="team-city">Phoenix, AZ</div>
+                </div>
+                <div class="score">78</div>
+              </div>
+
+            </div>
+
+            <div class="game-footer">
+              <span>Climate Pledge Arena</span>
+              <a href="#" onclick="viewGame('STO-PHX');return false;">Manage →</a>
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+      <!-- REGISTRY -->
+      <section class="panel registry">
+
+        <div class="registry-head">
+
+          <div>
+            <div class="section-title">Game Registry</div>
+            <div class="section-meta" id="resultCount">
+              Showing 8 games
+            </div>
+          </div>
+
+          <button class="btn" onclick="openGameModal()">
+            + New Game
+          </button>
+
+        </div>
+
+        <div class="table-wrap">
+
+          <table id="gamesTable">
+
+            <thead>
+              <tr>
+                <th>Game</th>
+                <th>League</th>
+                <th>Sport</th>
+                <th>Date / Time</th>
+                <th>Venue</th>
+                <th>Status</th>
+                <th>Region</th>
+                <th>Season</th>
+                <th>Featured</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr
+                data-search="seattle seahawks san francisco 49ers seattle"
+                data-league="NFL"
+                data-sport="Football"
+                data-status="Live"
+                data-region="Pacific Northwest"
+                data-season="2026"
+              >
+                <td>
+                  <div class="game-cell">
+                    <div class="mini-team">SEA</div>
+                    <div>
+                      <div class="game-title">Seahawks vs 49ers</div>
+                      <div class="game-sub">Seattle vs San Francisco</div>
+                    </div>
+                  </div>
+                </td>
+                <td>NFL</td>
+                <td>Football</td>
+                <td>Sep 7 · 5:15 PM</td>
+                <td>Lumen Field</td>
+                <td><span class="pill live">Live</span></td>
+                <td>PNW</td>
+                <td>2026</td>
+                <td>Yes</td>
+                <td>
+                  <div class="action-group">
+                    <button class="action" onclick="viewGame('Seahawks vs 49ers')">View</button>
+                    <button class="action" onclick="editGame('Seahawks vs 49ers')">Edit</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr
+                data-search="seattle mariners houston astros seattle"
+                data-league="MLB"
+                data-sport="Baseball"
+                data-status="Live"
+                data-region="Pacific Northwest"
+                data-season="2026"
+              >
+                <td>
+                  <div class="game-cell">
+                    <div class="mini-team">SEA</div>
+                    <div>
+                      <div class="game-title">Mariners vs Astros</div>
+                      <div class="game-sub">Seattle vs Houston</div>
+                    </div>
+                  </div>
+                </td>
+                <td>MLB</td>
+                <td>Baseball</td>
+                <td>Sep 7 · 6:40 PM</td>
+                <td>T-Mobile Park</td>
+                <td><span class="pill live">Live</span></td>
+                <td>PNW</td>
+                <td>2026</td>
+                <td>Yes</td>
+                <td>
+                  <div class="action-group">
+                    <button class="action" onclick="viewGame('Mariners vs Astros')">View</button>
+                    <button class="action" onclick="editGame('Mariners vs Astros')">Edit</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr
+                data-search="seattle storm phoenix mercury basketball"
+                data-league="WNBA"
+                data-sport="Basketball"
+                data-status="Live"
+                data-region="Pacific Northwest"
+                data-season="2026"
+              >
+                <td>
+                  <div class="game-cell">
+                    <div class="mini-team">STO</div>
+                    <div>
+                      <div class="game-title">Storm vs Mercury</div>
+                      <div class="game-sub">Seattle vs Phoenix</div>
+                    </div>
+                  </div>
+                </td>
+                <td>WNBA</td>
+                <td>Basketball</td>
+                <td>Sep 7 · 7:00 PM</td>
+                <td>Climate Pledge Arena</td>
+                <td><span class="pill live">Live</span></td>
+                <td>PNW</td>
+                <td>2026</td>
+                <td>Yes</td>
+                <td>
+                  <div class="action-group">
+                    <button class="action" onclick="viewGame('Storm vs Mercury')">View</button>
+                    <button class="action" onclick="editGame('Storm vs Mercury')">Edit</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr
+                data-search="seattle kraken vancouver canucks hockey"
+                data-league="NHL"
+                data-sport="Hockey"
+                data-status="Scheduled"
+                data-region="Pacific Northwest"
+                data-season="2026"
+              >
+                <td>
+                  <div class="game-cell">
+                    <div class="mini-team">SEA</div>
+                    <div>
+                      <div class="game-title">Kraken vs Canucks</div>
+                      <div class="game-sub">Seattle vs Vancouver</div>
+                    </div>
+                  </div>
+                </td>
+                <td>NHL</td>
+                <td>Hockey</td>
+                <td>Sep 8 · 7:00 PM</td>
+                <td>Climate Pledge Arena</td>
+                <td><span class="pill scheduled">Scheduled</span></td>
+                <td>PNW</td>
+                <td>2026</td>
+                <td>Yes</td>
+                <td>
+                  <div class="action-group">
+                    <button class="action" onclick="viewGame('Kraken vs Canucks')">View</button>
+                    <button class="action" onclick="editGame('Kraken vs Canucks')">Edit</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr
+                data-search="seattle sounders la galaxy soccer"
+                data-league="MLS"
+                data-sport="Soccer"
+                data-status="Scheduled"
+                data-region="Pacific Northwest"
+                data-season="2026"
+              >
+                <td>
+                  <div class="game-cell">
+                    <div class="mini-team">SSFC</div>
+                    <div>
+                      <div class="game-title">Sounders vs Galaxy</div>
+                      <div class="game-sub">Seattle vs Los Angeles</div>
+                    </div>
+                  </div>
+                </td>
+                <td>MLS</td>
+                <td>Soccer</td>
+                <td>Sep 10 · 7:30 PM</td>
+                <td>Lumen Field</td>
+                <td><span class="pill scheduled">Scheduled</span></td>
+                <td>PNW</td>
+                <td>2026</td>
+                <td>Yes</td>
+                <td>
+                  <div class="action-group">
+                    <button class="action" onclick="viewGame('Sounders vs Galaxy')">View</button>
+                    <button class="action" onclick="editGame('Sounders vs Galaxy')">Edit</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr
+                data-search="washington huskies oregon ducks college football"
+                data-league="NCAA"
+                data-sport="Football"
+                data-status="Scheduled"
+                data-region="Pacific Northwest"
+                data-season="2026"
+              >
+                <td>
+                  <div class="game-cell">
+                    <div class="mini-team">UW</div>
+                    <div>
+                      <div class="game-title">Washington vs Oregon</div>
+                      <div class="game-sub">Huskies vs Ducks</div>
+                    </div>
+                  </div>
+                </td>
+                <td>NCAA</td>
+                <td>Football</td>
+                <td>Oct 17 · 12:30 PM</td>
+                <td>Husky Stadium</td>
+                <td><span class="pill scheduled">Scheduled</span></td>
+                <td>PNW</td>
+                <td>2026</td>
+                <td>Yes</td>
+                <td>
+                  <div class="action-group">
+                    <button class="action" onclick="viewGame('Washington vs Oregon')">View</button>
+                    <button class="action" onclick="editGame('Washington vs Oregon')">Edit</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr
+                data-search="tacoma defiance portland timbers soccer"
+                data-league="USL"
+                data-sport="Soccer"
+                data-status="Final"
+                data-region="Pacific Northwest"
+                data-season="2026"
+              >
+                <td>
+                  <div class="game-cell">
+                    <div class="mini-team">TAC</div>
+                    <div>
+                      <div class="game-title">Defiance vs Timbers 2</div>
+                      <div class="game-sub">Tacoma vs Portland</div>
+                    </div>
+                  </div>
+                </td>
+                <td>USL</td>
+                <td>Soccer</td>
+                <td>Sep 6 · 7:00 PM</td>
+                <td>Starfire Stadium</td>
+                <td><span class="pill final">Final</span></td>
+                <td>PNW</td>
+                <td>2026</td>
+                <td>No</td>
+                <td>
+                  <div class="action-group">
+                    <button class="action" onclick="viewGame('Defiance vs Timbers 2')">View</button>
+                    <button class="action" onclick="editGame('Defiance vs Timbers 2')">Edit</button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr
+                data-search="gonzaga bulldogs washington state cougars basketball"
+                data-league="NCAA"
+                data-sport="Basketball"
+                data-status="Final"
+                data-region="Pacific Northwest"
+                data-season="2026"
+              >
+                <td>
+                  <div class="game-cell">
+                    <div class="mini-team">GON</div>
+                    <div>
+                      <div class="game-title">Gonzaga vs Washington State</div>
+                      <div class="game-sub">Bulldogs vs Cougars</div>
+                    </div>
+                  </div>
+                </td>
+                <td>NCAA</td>
+                <td>Basketball</td>
+                <td>Mar 8 · 6:00 PM</td>
+                <td>McCarthey Athletic Center</td>
+                <td><span class="pill final">Final</span></td>
+                <td>PNW</td>
+                <td>2026</td>
+                <td>No</td>
+                <td>
+                  <div class="action-group">
+                    <button class="action" onclick="viewGame('Gonzaga vs Washington State')">View</button>
+                    <button class="action" onclick="editGame('Gonzaga vs Washington State')">Edit</button>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <!-- LOWER -->
+      <section class="lower-grid">
+
+        <div class="panel activity">
+
+          <div class="section-head">
+            <div class="section-title">Game Activity</div>
+            <div class="section-meta">Latest changes</div>
+          </div>
+
+          <div class="activity-list">
+
+            <div class="activity-item">
+              <div class="activity-icon">●</div>
+              <div class="activity-text">
+                <strong>Seahawks vs 49ers</strong> game status changed to Live.
+              </div>
+              <div class="activity-time">2m</div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon">+</div>
+              <div class="activity-text">
+                <strong>Kraken vs Canucks</strong> was added to the 2026 schedule.
+              </div>
+              <div class="activity-time">18m</div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon">✎</div>
+              <div class="activity-text">
+                <strong>Sounders vs Galaxy</strong> venue information was updated.
+              </div>
+              <div class="activity-time">43m</div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon">★</div>
+              <div class="activity-text">
+                <strong>Washington vs Oregon</strong> was marked as a featured game.
+              </div>
+              <div class="activity-time">1h</div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon">✓</div>
+              <div class="activity-text">
+                <strong>Defiance vs Timbers 2</strong> final result was published.
+              </div>
+              <div class="activity-time">3h</div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="panel distribution">
+
+          <div class="section-head">
+            <div class="section-title">Games by League</div>
+            <div class="section-meta">1,284 total</div>
+          </div>
+
+          <div class="breakdown">
+
+            <div class="break-row">
+              <div class="break-label">NFL</div>
+              <div class="bar"><span style="width:18%"></span></div>
+              <div class="break-value">231</div>
+            </div>
+
+            <div class="break-row">
+              <div class="break-label">MLB</div>
+              <div class="bar"><span style="width:25%"></span></div>
+              <div class="break-value">318</div>
+            </div>
+
+            <div class="break-row">
+              <div class="break-label">NBA</div>
+              <div class="bar"><span style="width:12%"></span></div>
+              <div class="break-value">154</div>
+            </div>
+
+            <div class="break-row">
+              <div class="break-label">WNBA</div>
+              <div class="bar"><span style="width:8%"></span></div>
+              <div class="break-value">96</div>
+            </div>
+
+            <div class="break-row">
+              <div class="break-label">NHL</div>
+              <div class="bar"><span style="width:14%"></span></div>
+              <div class="break-value">179</div>
+            </div>
+
+            <div class="break-row">
+              <div class="break-label">MLS</div>
+              <div class="bar"><span style="width:9%"></span></div>
+              <div class="break-value">112</div>
+            </div>
+
+            <div class="break-row">
+              <div class="break-label">NCAA</div>
+              <div class="bar"><span style="width:10%"></span></div>
+              <div class="break-value">128</div>
+            </div>
+
+            <div class="break-row">
+              <div class="break-label">Other</div>
+              <div class="bar"><span style="width:5%"></span></div>
+              <div class="break-value">66</div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal-backdrop" id="gameModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2 id="modalTitle">Add Game</h2>
+
+      <button class="modal-close" onclick="closeGameModal()">×</button>
+
+    </div>
+
+    <form id="gameForm">
+
+      <div class="modal-body">
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Game Title</label>
+            <input id="gameTitle" required placeholder="Seattle vs Portland">
+          </div>
+
+          <div class="field">
+            <label>League</label>
+            <select id="gameLeague">
+              <option>NFL</option>
+              <option>MLB</option>
+              <option>NBA</option>
+              <option>WNBA</option>
+              <option>NHL</option>
+              <option>MLS</option>
+              <option>NCAA</option>
+              <option>USL</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Sport</label>
+            <select id="gameSport">
+              <option>Football</option>
+              <option>Baseball</option>
+              <option>Basketball</option>
+              <option>Hockey</option>
+              <option>Soccer</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Status</label>
+            <select id="gameStatus">
+              <option>Scheduled</option>
+              <option>Live</option>
+              <option>Final</option>
+              <option>Postponed</option>
+              <option>Cancelled</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Home Team</label>
+            <input id="homeTeam" placeholder="Seattle Seahawks">
+          </div>
+
+          <div class="field">
+            <label>Away Team</label>
+            <input id="awayTeam" placeholder="San Francisco 49ers">
+          </div>
+
+          <div class="field">
+            <label>Game Date</label>
+            <input id="gameDate" type="date">
+          </div>
+
+          <div class="field">
+            <label>Game Time</label>
+            <input id="gameTime" type="time">
+          </div>
+
+          <div class="field">
+            <label>Venue</label>
+            <input id="venue" placeholder="Lumen Field">
+          </div>
+
+          <div class="field">
+            <label>City</label>
+            <input id="city" placeholder="Seattle">
+          </div>
+
+          <div class="field">
+            <label>Region</label>
+            <select id="region">
+              <option>Pacific Northwest</option>
+              <option>West</option>
+              <option>National</option>
+              <option>International</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Season</label>
+            <input id="season" value="2026">
+          </div>
+
+          <div class="field">
+            <label>Home Score</label>
+            <input id="homeScore" type="number" min="0" value="0">
+          </div>
+
+          <div class="field">
+            <label>Away Score</label>
+            <input id="awayScore" type="number" min="0" value="0">
+          </div>
+
+          <div class="field">
+            <label>Broadcast URL</label>
+            <input id="broadcastUrl" type="url" placeholder="https://...">
+          </div>
+
+          <div class="field">
+            <label>Game Page URL</label>
+            <input id="gameUrl" type="url" placeholder="https://...">
+          </div>
+
+          <div class="field full">
+            <label>Game Description</label>
+            <textarea id="gameDescription" placeholder="Game notes, storylines, broadcast information..."></textarea>
+          </div>
+
+          <div class="field">
+            <label>Home Team Logo URL</label>
+            <input id="homeLogo" type="url">
+          </div>
+
+          <div class="field">
+            <label>Away Team Logo URL</label>
+            <input id="awayLogo" type="url">
+          </div>
+
+          <div class="check-row">
+            <input id="featured" type="checkbox">
+            <label for="featured">Featured Game</label>
+          </div>
+
+          <div class="check-row">
+            <input id="broadcast" type="checkbox">
+            <label for="broadcast">Broadcast on CrowRules</label>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-foot">
+
+        <button type="button" class="btn" onclick="closeGameModal()">
+          Cancel
+        </button>
+
+        <button type="submit" class="btn primary">
+          Save Game
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- TOAST -->
+
+<div class="toast" id="toast">
+
+  <strong id="toastTitle">CrowRules</strong>
+  <span id="toastMessage">Action completed.</span>
+
+</div>
+
+<script>
+/*
+  ============================================================
+  CROWRULES GAMES ADMIN
+  ============================================================
+
+  Supabase integration hook.
+
+  Suggested canonical sports_games table:
+
+  sports_games
+  ------------------------------------------------------------
+  id
+  league_id
+  home_team_id
+  away_team_id
+  sport
+  league
+  season
+  title
+  slug
+  game_date
+  game_time
+  timezone
+  venue
+  city
+  state
+  region
+  status
+  home_score
+  away_score
+  period
+  clock
+  broadcast_url
+  game_url
+  description
+  featured
+  broadcast
+  created_at
+  updated_at
+
+  Related tables:
+
+  sports_leagues
+  sports_teams
+  sports_games
+  sports_standings
+  sports_rankings
+  sports_rosters
+  sports_news
+
+  IMPORTANT:
+  Inspect the existing Supabase schema before connecting this
+  page. Do not assume these columns already exist.
+
+  Never expose a Supabase service-role key in this browser page.
+  Use only a publishable/anon key with appropriate RLS policies.
+  ============================================================
+*/
+
+const state = {
+  editingId:null
+};
+
+/* CLOCK */
+
+function updateClock(){
+  const now = new Date();
+
+  const time = now.toLocaleTimeString([],{
+    hour:'2-digit',
+    minute:'2-digit',
+    second:'2-digit'
+  });
+
+  const clock = document.getElementById('clock');
+
+  if(clock){
+    clock.textContent = time;
+  }
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* MOBILE MENU */
+
+document.getElementById('mobileToggle').addEventListener('click',()=>{
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* MODAL */
+
+function openGameModal(game=null){
+
+  state.editingId = game;
+
+  document.getElementById('modalTitle').textContent =
+    game ? 'Edit Game' : 'Add Game';
+
+  document.getElementById('gameModal').classList.add('show');
+
+  if(!game){
+
+    document.getElementById('gameForm').reset();
+
+    document.getElementById('season').value = new Date().getFullYear();
+
+    document.getElementById('gameStatus').value = 'Scheduled';
+
+  }
+
+}
+
+function closeGameModal(){
+
+  document.getElementById('gameModal').classList.remove('show');
+
+}
+
+document.getElementById('gameModal').addEventListener('click',(e)=>{
+
+  if(e.target.id === 'gameModal'){
+    closeGameModal();
+  }
+
+});
+
+/* FORM */
+
+document.getElementById('gameForm').addEventListener('submit',(e)=>{
+
+  e.preventDefault();
+
+  const payload = {
+
+    id:state.editingId,
+
+    title:document.getElementById('gameTitle').value.trim(),
+
+    league:document.getElementById('gameLeague').value,
+
+    sport:document.getElementById('gameSport').value,
+
+    status:document.getElementById('gameStatus').value,
+
+    home_team:document.getElementById('homeTeam').value.trim(),
+
+    away_team:document.getElementById('awayTeam').value.trim(),
+
+    game_date:document.getElementById('gameDate').value,
+
+    game_time:document.getElementById('gameTime').value,
+
+    venue:document.getElementById('venue').value.trim(),
+
+    city:document.getElementById('city').value.trim(),
+
+    region:document.getElementById('region').value,
+
+    season:document.getElementById('season').value,
+
+    home_score:Number(document.getElementById('homeScore').value || 0),
+
+    away_score:Number(document.getElementById('awayScore').value || 0),
+
+    broadcast_url:document.getElementById('broadcastUrl').value.trim(),
+
+    game_url:document.getElementById('gameUrl').value.trim(),
+
+    description:document.getElementById('gameDescription').value.trim(),
+
+    home_logo:document.getElementById('homeLogo').value.trim(),
+
+    away_logo:document.getElementById('awayLogo').value.trim(),
+
+    featured:document.getElementById('featured').checked,
+
+    broadcast:document.getElementById('broadcast').checked
+
+  };
+
+  console.log('CrowRules game payload:',payload);
+
+  closeGameModal();
+
+  toast(
+    'Game Saved',
+    'The game payload is ready for Supabase integration.'
+  );
+
+});
+
+/* FILTERS */
+
+function filterGames(){
+
+  const search =
+    document.getElementById('search').value.toLowerCase().trim();
+
+  const league =
+    document.getElementById('leagueFilter').value;
+
+  const sport =
+    document.getElementById('sportFilter').value;
+
+  const status =
+    document.getElementById('statusFilter').value;
+
+  const region =
+    document.getElementById('regionFilter').value;
+
+  const season =
+    document.getElementById('seasonFilter').value;
+
+  const rows =
+    document.querySelectorAll('#gamesTable tbody tr');
+
+  let visible = 0;
+
+  rows.forEach(row=>{
+
+    const matchesSearch =
+      !search ||
+      row.dataset.search.includes(search);
+
+    const matchesLeague =
+      !league ||
+      row.dataset.league === league;
+
+    const matchesSport =
+      !sport ||
+      row.dataset.sport === sport;
+
+    const matchesStatus =
+      !status ||
+      row.dataset.status === status;
+
+    const matchesRegion =
+      !region ||
+      row.dataset.region === region;
+
+    const matchesSeason =
+      !season ||
+      row.dataset.season === season;
+
+    const show =
+      matchesSearch &&
+      matchesLeague &&
+      matchesSport &&
+      matchesStatus &&
+      matchesRegion &&
+      matchesSeason;
+
+    row.style.display = show ? '' : 'none';
+
+    if(show) visible++;
+
+  });
+
+  document.getElementById('resultCount').textContent =
+    `Showing ${visible} game${visible === 1 ? '' : 's'}`;
+
+}
+
+function resetFilters(){
+
+  document.getElementById('search').value = '';
+
+  document.getElementById('leagueFilter').value = '';
+
+  document.getElementById('sportFilter').value = '';
+
+  document.getElementById('statusFilter').value = '';
+
+  document.getElementById('regionFilter').value = '';
+
+  document.getElementById('seasonFilter').value = '';
+
+  filterGames();
+
+  toast(
+    'Filters Reset',
+    'Showing the full game registry.'
+  );
+
+}
+
+/* QUICK FILTERS */
+
+function showLiveGames(){
+
+  document.getElementById('statusFilter').value = 'Live';
+
+  filterGames();
+
+  window.scrollTo({
+    top:document.querySelector('.registry').offsetTop - 90,
+    behavior:'smooth'
+  });
+
+}
+
+function showUpcoming(){
+
+  document.getElementById('statusFilter').value = 'Scheduled';
+
+  filterGames();
+
+  window.scrollTo({
+    top:document.querySelector('.registry').offsetTop - 90,
+    behavior:'smooth'
+  });
+
+}
+
+/* ACTIONS */
+
+function viewGame(name){
+
+  toast(
+    'Game Details',
+    `${name} selected for detailed management.`
+  );
+
+}
+
+function editGame(name){
+
+  openGameModal(name);
+
+  document.getElementById('gameTitle').value = name;
+
+  toast(
+    'Edit Mode',
+    `Editing ${name}.`
+  );
+
+}
+
+function refreshPage(){
+
+  toast(
+    'Refreshing',
+    'Refreshing the CrowRules game dashboard...'
+  );
+
+  setTimeout(()=>{
+    location.reload();
+  },500);
+
+}
+
+function exportGames(){
+
+  const rows = [
+    [
+      'Game',
+      'League',
+      'Sport',
+      'Date',
+      'Venue',
+      'Status',
+      'Region',
+      'Season'
+    ]
+  ];
+
+  document.querySelectorAll('#gamesTable tbody tr').forEach(row=>{
+
+    if(row.style.display === 'none') return;
+
+    const cells = row.querySelectorAll('td');
+
+    rows.push([
+      cells[0].innerText.replace(/\n/g,' ').trim(),
+      cells[1].innerText.trim(),
+      cells[2].innerText.trim(),
+      cells[3].innerText.trim(),
+      cells[4].innerText.trim(),
+      cells[5].innerText.trim(),
+      cells[6].innerText.trim(),
+      cells[7].innerText.trim()
+    ]);
+
+  });
+
+  const csv = rows.map(row=>
+    row.map(value=>
+      `"${String(value).replace(/"/g,'""')}"`
+    ).join(',')
+  ).join('\n');
+
+  const blob =
+    new Blob([csv],{type:'text/csv;charset=utf-8;'});
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement('a');
+
+  a.href = url;
+  a.download = 'crowrules-games.csv';
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+  toast(
+    'Export Complete',
+    'Game registry CSV generated.'
+  );
+
+}
+
+/* TOAST */
+
+let toastTimer;
+
+function toast(title,message){
+
+  const box =
+    document.getElementById('toast');
+
+  document.getElementById('toastTitle').textContent =
+    title;
+
+  document.getElementById('toastMessage').textContent =
+    message;
+
+  box.classList.add('show');
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(()=>{
+      box.classList.remove('show');
+    },3200);
+
+}
+
+/* ESC */
+
+document.addEventListener('keydown',(e)=>{
+
+  if(e.key === 'Escape'){
+    closeGameModal();
+  }
+
+});
+
+/*
+  ============================================================
+  OPTIONAL SUPABASE CONNECTION
+  ============================================================
+
+  Example architecture:
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  const supabaseUrl =
+    window.CROWRULES_SUPABASE_URL || '';
+
+  const supabaseAnonKey =
+    window.CROWRULES_SUPABASE_ANON_KEY || '';
+
+  const supabase =
+    supabaseUrl && supabaseAnonKey
+      ? window.supabase.createClient(
+          supabaseUrl,
+          supabaseAnonKey
+        )
+      : null;
+
+  Before implementing database operations:
+
+  1. Inspect the existing sports schema.
+  2. Reuse existing sports_games tables if present.
+  3. Map actual column names instead of assuming them.
+  4. Verify RLS policies.
+  5. Use authenticated admin/member permissions.
+  6. Never place the service-role key in this HTML.
+  7. Add live score APIs/server-side ingestion separately.
+  ============================================================
+*/
+
+</script>
+
+</body>
+</html>

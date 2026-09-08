@@ -1,0 +1,3368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>CrowRules Entertainment — Top 10</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Top 10 Rankings Command Center">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 82% -10%,rgba(108,92,255,.13),transparent 30%),
+    radial-gradient(circle at 15% 20%,rgba(182,108,255,.06),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:250px;
+  background:rgba(7,7,9,.97);
+  border-right:1px solid var(--line);
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  transition:.25s ease;
+}
+
+.brand{
+  height:78px;
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:0 0 25px rgba(182,108,255,.25);
+}
+
+.brand-text strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:1.4px;
+}
+
+.brand-text span{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+
+.nav{
+  flex:1;
+  overflow:auto;
+  padding:14px 10px;
+}
+
+.nav-section{
+  color:#5e5e69;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.7px;
+  padding:15px 12px 7px;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 12px;
+  margin:2px 0;
+  border-radius:9px;
+  color:#9a9aa4;
+  font-size:12px;
+  font-weight:600;
+}
+
+.nav a:hover{
+  background:#111117;
+  color:#fff;
+}
+
+.nav a.active{
+  background:linear-gradient(
+    90deg,
+    rgba(182,108,255,.18),
+    rgba(108,92,255,.08)
+  );
+  color:#fff;
+  border:1px solid rgba(182,108,255,.25);
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+}
+
+.sidebar-footer{
+  border-top:1px solid var(--line);
+  padding:13px;
+}
+
+.system-mini{
+  background:#0d0d11;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:11px;
+}
+
+.system-mini-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.online-dot{
+  width:7px;
+  height:7px;
+  display:inline-block;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px rgba(69,230,154,.7);
+  margin-right:5px;
+}
+
+/* MAIN */
+
+.main{
+  margin-left:250px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:78px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  border-bottom:1px solid var(--line);
+  background:rgba(5,5,5,.84);
+  backdrop-filter:blur(16px);
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.menu-btn{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  border-radius:9px;
+}
+
+.breadcrumb{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.clock{
+  color:var(--muted);
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  margin-right:5px;
+}
+
+.icon-btn,
+.admin-chip{
+  height:38px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  border-radius:9px;
+}
+
+.icon-btn{
+  width:38px;
+}
+
+.icon-btn:hover{
+  background:var(--panel2);
+  border-color:var(--line2);
+}
+
+.admin-chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 12px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.admin-avatar{
+  width:24px;
+  height:24px;
+  border-radius:7px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  font-size:9px;
+}
+
+/* CONTENT */
+
+.content{
+  max-width:1800px;
+  margin:auto;
+  padding:28px;
+}
+
+.hero{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:24px;
+}
+
+.eyebrow{
+  margin-bottom:8px;
+  color:var(--accent);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:29px;
+  letter-spacing:.5px;
+}
+
+.hero p{
+  max-width:800px;
+  margin:9px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+
+.primary-btn{
+  border:0;
+  border-radius:9px;
+  padding:12px 17px;
+  color:#fff;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  font-size:11px;
+  font-weight:800;
+}
+
+.secondary-btn{
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:10px 14px;
+  color:#ddd;
+  background:var(--panel);
+  font-size:10px;
+  font-weight:700;
+}
+
+.secondary-btn:hover{
+  border-color:var(--line2);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:linear-gradient(145deg,var(--panel),#09090c);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  margin-top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+  font-weight:700;
+}
+
+.stat-meta{
+  margin-top:7px;
+  color:#676773;
+  font-size:9px;
+}
+
+.green{color:var(--green)}
+.cyan{color:var(--cyan)}
+.yellow{color:var(--yellow)}
+.accent{color:var(--accent)}
+.red{color:var(--red)}
+
+/* TOOLBAR */
+
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  padding:13px;
+  margin-bottom:17px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--panel);
+}
+
+.search{
+  position:relative;
+  flex:1 1 280px;
+}
+
+.search span{
+  position:absolute;
+  left:13px;
+  top:11px;
+  color:#666672;
+}
+
+.search input{
+  width:100%;
+  height:40px;
+  padding:0 13px 0 37px;
+  outline:none;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#09090c;
+  color:#fff;
+}
+
+select{
+  height:40px;
+  padding:0 32px 0 11px;
+  outline:none;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#09090c;
+  color:#ddd;
+}
+
+/* PANELS */
+
+.panel{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:linear-gradient(145deg,var(--panel),#09090c);
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:16px 17px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.panel-sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.panel-body{
+  padding:16px;
+}
+
+/* TOP 10 HERO LIST */
+
+.rank-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.rank-row{
+  display:grid;
+  grid-template-columns:60px 54px minmax(160px,1fr) 120px 110px 90px 130px;
+  align-items:center;
+  gap:12px;
+  min-height:76px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#0a0a0e;
+  transition:.2s;
+}
+
+.rank-row:hover{
+  border-color:var(--line2);
+  transform:translateX(2px);
+}
+
+.rank-number{
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+  font-weight:800;
+  text-align:center;
+}
+
+.rank-number.top{
+  color:var(--yellow);
+}
+
+.rank-art{
+  width:54px;
+  height:54px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line2);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(182,108,255,.35),
+      rgba(55,215,255,.12)
+    ),
+    #15151c;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:800;
+}
+
+.rank-title{
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+
+.rank-sub{
+  margin-top:4px;
+  color:#656570;
+  font-family:monospace;
+  font-size:8px;
+}
+
+.rank-value{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+.rank-label{
+  margin-bottom:3px;
+  color:#62626d;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.rank-status{
+  font-size:9px;
+}
+
+.rank-actions{
+  display:flex;
+  gap:5px;
+  justify-content:flex-end;
+}
+
+.action{
+  width:29px;
+  height:29px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#101016;
+  color:#aaa;
+}
+
+.action:hover{
+  color:#fff;
+  border-color:var(--line2);
+}
+
+/* GRID */
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:minmax(0,2fr) minmax(300px,1fr);
+  gap:17px;
+  margin-bottom:17px;
+}
+
+/* CATEGORY CARDS */
+
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.category-card{
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#0a0a0e;
+}
+
+.category-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.category-name{
+  font-size:10px;
+  font-weight:800;
+}
+
+.category-count{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+}
+
+.category-bar{
+  height:6px;
+  margin-top:12px;
+  overflow:hidden;
+  border-radius:20px;
+  background:#191920;
+}
+
+.category-bar span{
+  display:block;
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+
+/* TRENDING */
+
+.trending-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.trending-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#0a0a0e;
+}
+
+.trending-rank{
+  width:22px;
+  color:#666672;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  text-align:center;
+}
+
+.trending-art{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line2);
+  border-radius:7px;
+  background:#15151c;
+  font-size:9px;
+  font-weight:800;
+}
+
+.trending-info{
+  flex:1;
+}
+
+.trending-title{
+  font-size:9px;
+  font-weight:800;
+}
+
+.trending-meta{
+  margin-top:3px;
+  color:#666672;
+  font-size:8px;
+}
+
+.trend-up{
+  color:var(--green);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+.trend-down{
+  color:var(--red);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+/* TABLE */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  min-width:1000px;
+  border-collapse:collapse;
+}
+
+th{
+  padding:11px 13px;
+  color:#676772;
+  border-bottom:1px solid var(--line);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-align:left;
+  text-transform:uppercase;
+}
+
+td{
+  padding:12px 13px;
+  color:#c6c6ce;
+  border-bottom:1px solid #1d1d24;
+  font-size:10px;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.012);
+}
+
+/* BADGES */
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 7px;
+  border-radius:20px;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+
+.badge.published{
+  color:var(--green);
+  border:1px solid rgba(69,230,154,.18);
+  background:rgba(69,230,154,.08);
+}
+
+.badge.draft{
+  color:var(--yellow);
+  border:1px solid rgba(243,201,105,.18);
+  background:rgba(243,201,105,.08);
+}
+
+.badge.hidden{
+  color:#aaa;
+  border:1px solid rgba(170,170,170,.12);
+  background:rgba(170,170,170,.06);
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.76);
+  backdrop-filter:blur(7px);
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(720px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid var(--line2);
+  border-radius:15px;
+  background:#0b0b0f;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.close{
+  border:0;
+  background:none;
+  color:#777;
+  font-size:21px;
+}
+
+.modal-body{
+  padding:19px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-group label{
+  color:#888894;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.form-group input,
+.form-group select{
+  width:100%;
+  height:40px;
+  padding:0 10px;
+  outline:none;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#08080b;
+  color:#fff;
+}
+
+.checkbox-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:17px;
+}
+
+.check{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#bbb;
+  font-size:10px;
+}
+
+.check input{
+  accent-color:var(--accent);
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:14px 19px;
+  border-top:1px solid var(--line);
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:900;
+  padding:12px 15px;
+  border:1px solid var(--line2);
+  border-radius:9px;
+  background:#111117;
+  color:#fff;
+  font-size:10px;
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
+  opacity:0;
+  transform:translateY(20px);
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* MOBILE */
+
+@media(max-width:1300px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .rank-row{
+    grid-template-columns:50px 50px minmax(150px,1fr) 100px 100px;
+  }
+
+  .rank-row > .hide-md{
+    display:none;
+  }
+}
+
+@media(max-width:1000px){
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:900px){
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .hero{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .rank-row{
+    grid-template-columns:45px 45px minmax(150px,1fr) 90px;
+  }
+
+  .rank-row > .hide-sm{
+    display:none;
+  }
+}
+
+@media(max-width:600px){
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .category-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+
+  .admin-chip span{
+    display:none;
+  }
+
+  h1{
+    font-size:23px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div class="brand-text">
+      <strong>CROWRULES</strong>
+      <span>Main Admin</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-section">Dashboard</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <div class="nav-section">Content</div>
+
+    <a href="content.html">
+      <span class="nav-icon">▣</span>
+      Content
+    </a>
+
+    <a href="pages.html">
+      <span class="nav-icon">▤</span>
+      Pages
+    </a>
+
+    <a href="categories.html">
+      <span class="nav-icon">◈</span>
+      Categories
+    </a>
+
+    <a href="tags.html">
+      <span class="nav-icon">#</span>
+      Tags
+    </a>
+
+    <a href="shows.html">
+      <span class="nav-icon">▦</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">▶</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">▣</span>
+      Movies
+    </a>
+
+    <a href="playlists.html">
+      <span class="nav-icon">☷</span>
+      Playlists
+    </a>
+
+    <a href="top10.html" class="active">
+      <span class="nav-icon">⑩</span>
+      Top 10
+    </a>
+
+    <a href="videos.html">
+      <span class="nav-icon">▻</span>
+      Videos
+    </a>
+
+    <a href="audio.html">
+      <span class="nav-icon">♫</span>
+      Audio
+    </a>
+
+    <a href="articles.html">
+      <span class="nav-icon">✎</span>
+      Articles
+    </a>
+
+    <div class="nav-section">Television</div>
+
+    <a href="channels.html">
+      <span class="nav-icon">◉</span>
+      Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">☰</span>
+      TV Guide
+    </a>
+
+    <div class="nav-section">Community</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♙</span>
+      Members
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">☷</span>
+      Community
+    </a>
+
+    <a href="creator.html">
+      <span class="nav-icon">✦</span>
+      Creators
+    </a>
+
+    <div class="nav-section">System</div>
+
+    <a href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      Analytics
+    </a>
+
+    <a href="database.html">
+      <span class="nav-icon">▥</span>
+      Database
+    </a>
+
+    <a href="storage.html">
+      <span class="nav-icon">◫</span>
+      Storage
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span>
+      Logs
+    </a>
+
+    <a href="backups.html">
+      <span class="nav-icon">⟳</span>
+      Backups
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="system-mini">
+      <div class="system-mini-row">
+        <span>
+          <i class="online-dot"></i>
+          System Status
+        </span>
+        <strong class="green">ONLINE</strong>
+      </div>
+    </div>
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="top-left">
+
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+      <div class="breadcrumb">
+        Main Admin / <strong>Top 10</strong>
+      </div>
+
+    </div>
+
+    <div class="top-actions">
+
+      <div class="clock" id="clock">--:--:--</div>
+
+      <button
+        class="icon-btn"
+        title="Refresh"
+        onclick="loadTop10()"
+      >
+        ↻
+      </button>
+
+      <button
+        class="icon-btn"
+        title="Export"
+        onclick="exportCSV()"
+      >
+        ⇩
+      </button>
+
+      <button class="admin-chip">
+        <div class="admin-avatar">CR</div>
+        <span>Administrator</span>
+      </button>
+
+    </div>
+
+  </header>
+
+  <section class="content">
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+      <div>
+
+        <div class="eyebrow">
+          Rankings & Discovery
+        </div>
+
+        <h1>
+          Top 10 Command Center
+        </h1>
+
+        <p>
+          Control CrowRules Entertainment's Top 10 rankings,
+          trending content, most-watched programming and featured
+          discovery lists across CrowRules TV.
+        </p>
+
+      </div>
+
+      <button
+        class="primary-btn"
+        onclick="openCreateModal()"
+      >
+        + Add Ranking
+      </button>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Ranked Items</div>
+        <div class="stat-value" id="statRanked">10</div>
+        <div class="stat-meta">Current Top 10</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Total Views</div>
+        <div class="stat-value cyan" id="statViews">1.42M</div>
+        <div class="stat-meta">Ranking period</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Trending</div>
+        <div class="stat-value green" id="statTrending">6</div>
+        <div class="stat-meta">Items gaining momentum</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Featured</div>
+        <div class="stat-value accent" id="statFeatured">7</div>
+        <div class="stat-meta">Discovery enabled</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Categories</div>
+        <div class="stat-value yellow" id="statCategories">5</div>
+        <div class="stat-meta">Active ranking lists</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Engine</div>
+        <div class="stat-value green">ONLINE</div>
+        <div class="stat-meta">Ranking service active</div>
+      </div>
+
+    </div>
+
+    <!-- FILTERS -->
+
+    <div class="toolbar">
+
+      <div class="search">
+        <span>⌕</span>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search titles, shows, creators..."
+          oninput="render()"
+        >
+      </div>
+
+      <select id="listFilter" onchange="render()">
+        <option value="all">All Lists</option>
+        <option value="tv">CrowRules TV</option>
+        <option value="movies">Movies</option>
+        <option value="shows">Shows</option>
+        <option value="episodes">Episodes</option>
+        <option value="music">Music</option>
+        <option value="creators">Creators</option>
+      </select>
+
+      <select id="periodFilter" onchange="render()">
+        <option value="all">All Time</option>
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+      </select>
+
+      <select id="sortFilter" onchange="render()">
+        <option value="rank">Rank</option>
+        <option value="views">Views</option>
+        <option value="growth">Growth</option>
+        <option value="engagement">Engagement</option>
+      </select>
+
+    </div>
+
+    <!-- TOP 10 + SIDE -->
+
+    <div class="dashboard-grid">
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">
+              Current Top 10
+            </div>
+
+            <div class="panel-sub">
+              Most popular CrowRules programming
+            </div>
+          </div>
+
+          <button
+            class="secondary-btn"
+            onclick="resetRanking()"
+          >
+            Reset Ranking
+          </button>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="rank-list" id="rankList"></div>
+
+        </div>
+
+      </section>
+
+      <aside>
+
+        <section class="panel" style="margin-bottom:17px">
+
+          <div class="panel-head">
+
+            <div>
+              <div class="panel-title">
+                Ranking Categories
+              </div>
+
+              <div class="panel-sub">
+                Active discovery lists
+              </div>
+            </div>
+
+          </div>
+
+          <div class="panel-body">
+
+            <div class="category-grid">
+
+              <div class="category-card">
+                <div class="category-top">
+                  <div class="category-name">
+                    TV
+                  </div>
+                  <div class="category-count">10</div>
+                </div>
+                <div class="category-bar">
+                  <span style="width:100%"></span>
+                </div>
+              </div>
+
+              <div class="category-card">
+                <div class="category-top">
+                  <div class="category-name">
+                    Movies
+                  </div>
+                  <div class="category-count">10</div>
+                </div>
+                <div class="category-bar">
+                  <span style="width:88%"></span>
+                </div>
+              </div>
+
+              <div class="category-card">
+                <div class="category-top">
+                  <div class="category-name">
+                    Shows
+                  </div>
+                  <div class="category-count">10</div>
+                </div>
+                <div class="category-bar">
+                  <span style="width:79%"></span>
+                </div>
+              </div>
+
+              <div class="category-card">
+                <div class="category-top">
+                  <div class="category-name">
+                    Music
+                  </div>
+                  <div class="category-count">10</div>
+                </div>
+                <div class="category-bar">
+                  <span style="width:64%"></span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <section class="panel">
+
+          <div class="panel-head">
+
+            <div>
+              <div class="panel-title">
+                Trending Movers
+              </div>
+
+              <div class="panel-sub">
+                Biggest ranking changes
+              </div>
+            </div>
+
+          </div>
+
+          <div class="panel-body">
+
+            <div class="trending-list" id="trendingList"></div>
+
+          </div>
+
+        </section>
+
+      </aside>
+
+    </div>
+
+    <!-- OPERATIONS TABLE -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">
+            Ranking Operations
+          </div>
+
+          <div class="panel-sub">
+            Detailed Top 10 performance data
+          </div>
+        </div>
+
+        <button
+          class="secondary-btn"
+          onclick="exportCSV()"
+        >
+          Export CSV
+        </button>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Title</th>
+              <th>List</th>
+              <th>Views</th>
+              <th>Growth</th>
+              <th>Engagement</th>
+              <th>Status</th>
+              <th>Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="rankingTable"></tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
+
+<!-- CREATE / EDIT MODAL -->
+
+<div class="modal" id="rankingModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <div class="modal-title" id="modalTitle">
+        Add Top 10 Ranking
+      </div>
+
+      <button
+        class="close"
+        onclick="closeModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <form
+        id="rankingForm"
+        onsubmit="saveRanking(event)"
+      >
+
+        <input
+          type="hidden"
+          id="rankingId"
+        >
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Title</label>
+            <input
+              id="rankingTitle"
+              required
+              placeholder="Content title"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Rank</label>
+            <input
+              id="rankingPosition"
+              type="number"
+              min="1"
+              max="100"
+              value="10"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Ranking List</label>
+            <select id="rankingList">
+              <option value="tv">CrowRules TV</option>
+              <option value="movies">Movies</option>
+              <option value="shows">Shows</option>
+              <option value="episodes">Episodes</option>
+              <option value="music">Music</option>
+              <option value="creators">Creators</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Content Type</label>
+            <select id="rankingType">
+              <option value="show">Show</option>
+              <option value="episode">Episode</option>
+              <option value="movie">Movie</option>
+              <option value="video">Video</option>
+              <option value="track">Track</option>
+              <option value="creator">Creator</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Views</label>
+            <input
+              id="rankingViews"
+              type="number"
+              min="0"
+              value="0"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Growth %</label>
+            <input
+              id="rankingGrowth"
+              type="number"
+              step="0.1"
+              value="0"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Engagement %</label>
+            <input
+              id="rankingEngagement"
+              type="number"
+              step="0.1"
+              value="0"
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Status</label>
+            <select id="rankingStatus">
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+              <option value="hidden">Hidden</option>
+            </select>
+          </div>
+
+          <div class="form-group full">
+
+            <div class="checkbox-row">
+
+              <label class="check">
+                <input
+                  id="rankingFeatured"
+                  type="checkbox"
+                >
+                Featured
+              </label>
+
+              <label class="check">
+                <input
+                  id="rankingTrending"
+                  type="checkbox"
+                >
+                Trending
+              </label>
+
+              <label class="check">
+                <input
+                  id="rankingAuto"
+                  type="checkbox"
+                  checked
+                >
+                Include in automatic ranking
+              </label>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="secondary-btn"
+        onclick="closeModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="primary-btn"
+        onclick="document.getElementById('rankingForm').requestSubmit()"
+      >
+        Save Ranking
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- TOAST -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   CROWRULES TOP 10 ADMIN
+   ========================================================= */
+
+const CONFIG = {
+  supabaseUrl:
+    window.CROWRULES_SUPABASE_URL || "",
+
+  supabaseAnonKey:
+    window.CROWRULES_SUPABASE_ANON_KEY || "",
+
+  rankingsTable:
+    window.CROWRULES_TOP10_TABLE || "top10_rankings"
+};
+
+let supabaseClient = null;
+let rankings = [];
+
+const demoRankings = [
+
+  {
+    id:"top-001",
+    rank:1,
+    title:"Tacoma Nights",
+    slug:"tacoma-nights",
+    list:"tv",
+    type:"show",
+    views:284120,
+    growth:18.4,
+    engagement:92.1,
+    status:"published",
+    featured:true,
+    trending:true,
+    updated_at:"2026-09-08T12:20:00"
+  },
+
+  {
+    id:"top-002",
+    rank:2,
+    title:"CrowRules Originals",
+    slug:"crowrules-originals",
+    list:"tv",
+    type:"show",
+    views:241880,
+    growth:14.7,
+    engagement:88.4,
+    status:"published",
+    featured:true,
+    trending:true,
+    updated_at:"2026-09-08T11:42:00"
+  },
+
+  {
+    id:"top-003",
+    rank:3,
+    title:"Back Deck Live",
+    slug:"back-deck-live",
+    list:"tv",
+    type:"show",
+    views:198430,
+    growth:12.9,
+    engagement:86.2,
+    status:"published",
+    featured:true,
+    trending:true,
+    updated_at:"2026-09-08T11:20:00"
+  },
+
+  {
+    id:"top-004",
+    rank:4,
+    title:"Voices From The Void",
+    slug:"voices-from-the-void",
+    list:"shows",
+    type:"show",
+    views:174230,
+    growth:8.8,
+    engagement:83.5,
+    status:"published",
+    featured:true,
+    trending:true,
+    updated_at:"2026-09-07T22:10:00"
+  },
+
+  {
+    id:"top-005",
+    rank:5,
+    title:"Late Night Cinema",
+    slug:"late-night-cinema",
+    list:"movies",
+    type:"movie",
+    views:142860,
+    growth:6.2,
+    engagement:77.8,
+    status:"published",
+    featured:false,
+    trending:false,
+    updated_at:"2026-09-07T19:15:00"
+  },
+
+  {
+    id:"top-006",
+    rank:6,
+    title:"The Rookery",
+    slug:"the-rookery",
+    list:"shows",
+    type:"show",
+    views:121430,
+    growth:5.4,
+    engagement:75.1,
+    status:"published",
+    featured:true,
+    trending:false,
+    updated_at:"2026-09-07T17:20:00"
+  },
+
+  {
+    id:"top-007",
+    rank:7,
+    title:"Bird Brains",
+    slug:"bird-brains",
+    list:"tv",
+    type:"show",
+    views:102220,
+    growth:4.7,
+    engagement:72.9,
+    status:"published",
+    featured:false,
+    trending:false,
+    updated_at:"2026-09-07T15:08:00"
+  },
+
+  {
+    id:"top-008",
+    rank:8,
+    title:"Echoes of Daniel",
+    slug:"echoes-of-daniel",
+    list:"shows",
+    type:"show",
+    views:89410,
+    growth:3.9,
+    engagement:70.2,
+    status:"published",
+    featured:true,
+    trending:false,
+    updated_at:"2026-09-06T22:43:00"
+  },
+
+  {
+    id:"top-009",
+    rank:9,
+    title:"CrowRules Music Rotation",
+    slug:"music-rotation",
+    list:"music",
+    type:"track",
+    views:72840,
+    growth:3.1,
+    engagement:67.4,
+    status:"published",
+    featured:false,
+    trending:true,
+    updated_at:"2026-09-06T18:20:00"
+  },
+
+  {
+    id:"top-010",
+    rank:10,
+    title:"Creator Spotlight",
+    slug:"creator-spotlight",
+    list:"creators",
+    type:"creator",
+    views:64120,
+    growth:2.4,
+    engagement:63.8,
+    status:"published",
+    featured:false,
+    trending:false,
+    updated_at:"2026-09-06T14:31:00"
+  }
+
+];
+
+/* INIT */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    updateClock();
+
+    setInterval(
+      updateClock,
+      1000
+    );
+
+    if(
+      CONFIG.supabaseUrl &&
+      CONFIG.supabaseAnonKey
+    ){
+
+      try{
+
+        supabaseClient =
+          window.supabase.createClient(
+            CONFIG.supabaseUrl,
+            CONFIG.supabaseAnonKey
+          );
+
+      }catch(error){
+
+        console.warn(
+          "Supabase initialization failed:",
+          error
+        );
+
+      }
+
+    }
+
+    await loadTop10();
+
+  }
+);
+
+/* CLOCK */
+
+function updateClock(){
+
+  const now = new Date();
+
+  document.getElementById("clock")
+    .textContent =
+      now.toLocaleTimeString(
+        [],
+        {
+          hour:"2-digit",
+          minute:"2-digit",
+          second:"2-digit"
+        }
+      );
+
+}
+
+/* LOAD */
+
+async function loadTop10(){
+
+  if(!supabaseClient){
+
+    rankings =
+      [...demoRankings];
+
+    render();
+
+    return;
+
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.rankingsTable)
+        .select("*")
+        .limit(200);
+
+    if(error)
+      throw error;
+
+    if(
+      Array.isArray(data) &&
+      data.length
+    ){
+
+      rankings =
+        data.map(normalizeRanking);
+
+    }else{
+
+      rankings =
+        [...demoRankings];
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Top 10 table unavailable. Using demo data.",
+      error
+    );
+
+    rankings =
+      [...demoRankings];
+
+  }
+
+  render();
+
+}
+
+/* NORMALIZE */
+
+function normalizeRanking(row){
+
+  const title =
+    row.title ||
+    row.name ||
+    row.content_title ||
+    "Untitled";
+
+  return {
+
+    ...row,
+
+    id:
+      row.id ||
+      crypto.randomUUID(),
+
+    rank:
+      Number(
+        row.rank ??
+        row.position ??
+        row.rank_position ??
+        99
+      ),
+
+    title,
+
+    slug:
+      row.slug ||
+      slugify(title),
+
+    list:
+      String(
+        row.list ||
+        row.category ||
+        row.ranking_list ||
+        "tv"
+      ).toLowerCase(),
+
+    type:
+      String(
+        row.type ||
+        row.content_type ||
+        "video"
+      ).toLowerCase(),
+
+    views:
+      Number(
+        row.views ??
+        row.view_count ??
+        row.total_views ??
+        0
+      ),
+
+    growth:
+      Number(
+        row.growth ??
+        row.growth_percent ??
+        0
+      ),
+
+    engagement:
+      Number(
+        row.engagement ??
+        row.engagement_percent ??
+        0
+      ),
+
+    status:
+      String(
+        row.status ||
+        "published"
+      ).toLowerCase(),
+
+    featured:
+      Boolean(
+        row.featured ??
+        row.is_featured ??
+        false
+      ),
+
+    trending:
+      Boolean(
+        row.trending ??
+        row.is_trending ??
+        false
+      ),
+
+    updated_at:
+      row.updated_at ||
+      row.created_at ||
+      new Date().toISOString()
+
+  };
+
+}
+
+/* RENDER */
+
+function render(){
+
+  const search =
+    document.getElementById("searchInput")
+      .value
+      .toLowerCase()
+      .trim();
+
+  const list =
+    document.getElementById("listFilter").value;
+
+  const period =
+    document.getElementById("periodFilter").value;
+
+  const sort =
+    document.getElementById("sortFilter").value;
+
+  let filtered =
+    rankings.filter(item => {
+
+      const haystack =
+        [
+          item.title,
+          item.slug,
+          item.type,
+          item.list
+        ]
+        .join(" ")
+        .toLowerCase();
+
+      if(
+        search &&
+        !haystack.includes(search)
+      )
+        return false;
+
+      if(
+        list !== "all" &&
+        item.list !== list
+      )
+        return false;
+
+      /*
+        Period is retained as a UI control.
+        A production implementation can map this
+        to an analytics/ranking period column.
+      */
+
+      return true;
+
+    });
+
+  if(sort === "views"){
+
+    filtered.sort(
+      (a,b) =>
+        Number(b.views) -
+        Number(a.views)
+    );
+
+  }else if(sort === "growth"){
+
+    filtered.sort(
+      (a,b) =>
+        Number(b.growth) -
+        Number(a.growth)
+    );
+
+  }else if(sort === "engagement"){
+
+    filtered.sort(
+      (a,b) =>
+        Number(b.engagement) -
+        Number(a.engagement)
+    );
+
+  }else{
+
+    filtered.sort(
+      (a,b) =>
+        Number(a.rank) -
+        Number(b.rank)
+    );
+
+  }
+
+  renderRankings(filtered);
+  renderTable(filtered);
+  renderTrending();
+
+  updateStats();
+
+}
+
+/* RANKINGS */
+
+function renderRankings(items){
+
+  const container =
+    document.getElementById("rankList");
+
+  if(!items.length){
+
+    container.innerHTML =
+      `<div style="
+        text-align:center;
+        padding:35px;
+        color:#8d8d98;
+        font-size:11px;
+      ">
+        No rankings match the current filters.
+      </div>`;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    items.map(item => {
+
+      const initials =
+        item.title
+          .split(/\s+/)
+          .slice(0,2)
+          .map(x => x[0])
+          .join("")
+          .toUpperCase();
+
+      return `
+
+        <div class="rank-row">
+
+          <div class="
+            rank-number
+            ${Number(item.rank) <= 3 ? "top" : ""}
+          ">
+            #${escapeHTML(item.rank)}
+          </div>
+
+          <div class="rank-art">
+            ${escapeHTML(initials)}
+          </div>
+
+          <div>
+
+            <div class="rank-title">
+              ${escapeHTML(item.title)}
+            </div>
+
+            <div class="rank-sub">
+              ${escapeHTML(item.slug)}
+            </div>
+
+          </div>
+
+          <div class="rank-value">
+            <div class="rank-label">
+              Views
+            </div>
+            ${formatCompact(item.views)}
+          </div>
+
+          <div class="rank-value hide-md">
+            <div class="rank-label">
+              Growth
+            </div>
+            <span class="green">
+              +${Number(item.growth).toFixed(1)}%
+            </span>
+          </div>
+
+          <div class="rank-value hide-md">
+            <div class="rank-label">
+              Engagement
+            </div>
+            ${Number(item.engagement).toFixed(1)}%
+          </div>
+
+          <div class="rank-status hide-sm">
+            ${statusBadge(item.status)}
+          </div>
+
+          <div class="rank-actions hide-sm">
+
+            <button
+              class="action"
+              title="Edit"
+              onclick="editRanking('${escapeAttr(item.id)}')"
+            >
+              ✎
+            </button>
+
+            <button
+              class="action"
+              title="Move Up"
+              onclick="moveRank('${escapeAttr(item.id)}',-1)"
+            >
+              ↑
+            </button>
+
+            <button
+              class="action"
+              title="Move Down"
+              onclick="moveRank('${escapeAttr(item.id)}',1)"
+            >
+              ↓
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+/* TABLE */
+
+function renderTable(items){
+
+  const tbody =
+    document.getElementById("rankingTable");
+
+  if(!items.length){
+
+    tbody.innerHTML =
+      `<tr>
+        <td
+          colspan="9"
+          style="
+            text-align:center;
+            padding:35px;
+            color:#8d8d98;
+          "
+        >
+          No rankings found.
+        </td>
+      </tr>`;
+
+    return;
+
+  }
+
+  tbody.innerHTML =
+    items.map(item => {
+
+      return `
+
+        <tr>
+
+          <td>
+            <strong>
+              #${escapeHTML(item.rank)}
+            </strong>
+          </td>
+
+          <td>
+            <strong style="color:#fff">
+              ${escapeHTML(item.title)}
+            </strong>
+          </td>
+
+          <td>
+            ${escapeHTML(
+              listLabel(item.list)
+            )}
+          </td>
+
+          <td class="cyan">
+            ${formatCompact(item.views)}
+          </td>
+
+          <td class="green">
+            +${Number(item.growth).toFixed(1)}%
+          </td>
+
+          <td>
+            ${Number(item.engagement).toFixed(1)}%
+          </td>
+
+          <td>
+            ${statusBadge(item.status)}
+          </td>
+
+          <td>
+            ${relativeTime(item.updated_at)}
+          </td>
+
+          <td>
+
+            <div class="rank-actions">
+
+              <button
+                class="action"
+                onclick="editRanking('${escapeAttr(item.id)}')"
+                title="Edit"
+              >
+                ✎
+              </button>
+
+              <button
+                class="action"
+                onclick="showToast('Ranking preview opened.')"
+                title="Preview"
+              >
+                ◉
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join("");
+
+}
+
+/* TRENDING */
+
+function renderTrending(){
+
+  const container =
+    document.getElementById("trendingList");
+
+  const items =
+    rankings
+      .filter(item => item.trending)
+      .sort(
+        (a,b) =>
+          Number(b.growth) -
+          Number(a.growth)
+      )
+      .slice(0,5);
+
+  if(!items.length){
+
+    container.innerHTML =
+      `<div style="
+        padding:20px;
+        color:#777;
+        text-align:center;
+        font-size:10px;
+      ">
+        No trending movers.
+      </div>`;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    items.map((item,index) => {
+
+      const initials =
+        item.title
+          .split(/\s+/)
+          .slice(0,2)
+          .map(x => x[0])
+          .join("")
+          .toUpperCase();
+
+      return `
+
+        <div class="trending-item">
+
+          <div class="trending-rank">
+            ${index + 1}
+          </div>
+
+          <div class="trending-art">
+            ${escapeHTML(initials)}
+          </div>
+
+          <div class="trending-info">
+
+            <div class="trending-title">
+              ${escapeHTML(item.title)}
+            </div>
+
+            <div class="trending-meta">
+              Rank #${escapeHTML(item.rank)}
+            </div>
+
+          </div>
+
+          <div class="trend-up">
+            ↑ ${Number(item.growth).toFixed(1)}%
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+/* STATS */
+
+function updateStats(){
+
+  const total =
+    rankings.length;
+
+  const views =
+    rankings.reduce(
+      (sum,item) =>
+        sum + Number(item.views || 0),
+      0
+    );
+
+  const trending =
+    rankings.filter(
+      x => x.trending
+    ).length;
+
+  const featured =
+    rankings.filter(
+      x => x.featured
+    ).length;
+
+  const categories =
+    new Set(
+      rankings.map(x => x.list)
+    ).size;
+
+  document.getElementById("statRanked")
+    .textContent =
+      formatNumber(total);
+
+  document.getElementById("statViews")
+    .textContent =
+      formatCompact(views);
+
+  document.getElementById("statTrending")
+    .textContent =
+      formatNumber(trending);
+
+  document.getElementById("statFeatured")
+    .textContent =
+      formatNumber(featured);
+
+  document.getElementById("statCategories")
+    .textContent =
+      formatNumber(categories);
+
+}
+
+/* CREATE */
+
+function openCreateModal(){
+
+  document.getElementById("modalTitle")
+    .textContent =
+      "Add Top 10 Ranking";
+
+  document.getElementById("rankingForm")
+    .reset();
+
+  document.getElementById("rankingId")
+    .value = "";
+
+  document.getElementById("rankingPosition")
+    .value =
+      Math.min(
+        rankings.length + 1,
+        10
+      );
+
+  document.getElementById("rankingStatus")
+    .value =
+      "published";
+
+  document.getElementById("rankingAuto")
+    .checked = true;
+
+  document.getElementById("rankingModal")
+    .classList.add("open");
+
+}
+
+/* EDIT */
+
+function editRanking(id){
+
+  const item =
+    rankings.find(
+      x =>
+        String(x.id) ===
+        String(id)
+    );
+
+  if(!item)
+    return;
+
+  document.getElementById("modalTitle")
+    .textContent =
+      "Edit Top 10 Ranking";
+
+  document.getElementById("rankingId")
+    .value =
+      item.id;
+
+  document.getElementById("rankingTitle")
+    .value =
+      item.title || "";
+
+  document.getElementById("rankingPosition")
+    .value =
+      item.rank || 10;
+
+  document.getElementById("rankingList")
+    .value =
+      item.list || "tv";
+
+  document.getElementById("rankingType")
+    .value =
+      item.type || "video";
+
+  document.getElementById("rankingViews")
+    .value =
+      item.views || 0;
+
+  document.getElementById("rankingGrowth")
+    .value =
+      item.growth || 0;
+
+  document.getElementById("rankingEngagement")
+    .value =
+      item.engagement || 0;
+
+  document.getElementById("rankingStatus")
+    .value =
+      item.status || "published";
+
+  document.getElementById("rankingFeatured")
+    .checked =
+      Boolean(item.featured);
+
+  document.getElementById("rankingTrending")
+    .checked =
+      Boolean(item.trending);
+
+  document.getElementById("rankingAuto")
+    .checked = true;
+
+  document.getElementById("rankingModal")
+    .classList.add("open");
+
+}
+
+/* SAVE */
+
+async function saveRanking(event){
+
+  event.preventDefault();
+
+  const id =
+    document.getElementById("rankingId")
+      .value;
+
+  const title =
+    document.getElementById("rankingTitle")
+      .value
+      .trim();
+
+  const record = {
+
+    title,
+
+    slug:
+      slugify(title),
+
+    rank:
+      Number(
+        document.getElementById(
+          "rankingPosition"
+        ).value
+      ),
+
+    list:
+      document.getElementById(
+        "rankingList"
+      ).value,
+
+    type:
+      document.getElementById(
+        "rankingType"
+      ).value,
+
+    views:
+      Number(
+        document.getElementById(
+          "rankingViews"
+        ).value || 0
+      ),
+
+    growth:
+      Number(
+        document.getElementById(
+          "rankingGrowth"
+        ).value || 0
+      ),
+
+    engagement:
+      Number(
+        document.getElementById(
+          "rankingEngagement"
+        ).value || 0
+      ),
+
+    status:
+      document.getElementById(
+        "rankingStatus"
+      ).value,
+
+    featured:
+      document.getElementById(
+        "rankingFeatured"
+      ).checked,
+
+    trending:
+      document.getElementById(
+        "rankingTrending"
+      ).checked
+
+  };
+
+  if(supabaseClient){
+
+    try{
+
+      let result;
+
+      if(id){
+
+        result =
+          await supabaseClient
+            .from(CONFIG.rankingsTable)
+            .update(record)
+            .eq("id",id)
+            .select("*")
+            .single();
+
+      }else{
+
+        result =
+          await supabaseClient
+            .from(CONFIG.rankingsTable)
+            .insert(record)
+            .select("*")
+            .single();
+
+      }
+
+      if(result.error)
+        throw result.error;
+
+      closeModal();
+
+      showToast(
+        id
+          ? "Ranking updated."
+          : "Ranking created."
+      );
+
+      await loadTop10();
+
+      return;
+
+    }catch(error){
+
+      console.warn(
+        "Supabase save failed:",
+        error
+      );
+
+      showToast(
+        "Database save unavailable — using local mode."
+      );
+
+    }
+
+  }
+
+  if(id){
+
+    const index =
+      rankings.findIndex(
+        x =>
+          String(x.id) ===
+          String(id)
+      );
+
+    if(index >= 0){
+
+      rankings[index] = {
+
+        ...rankings[index],
+        ...record,
+
+        updated_at:
+          new Date().toISOString()
+
+      };
+
+    }
+
+  }else{
+
+    rankings.push({
+
+      ...record,
+
+      id:
+        "local-" +
+        Date.now(),
+
+      updated_at:
+        new Date().toISOString()
+
+    });
+
+  }
+
+  normalizeRanks();
+
+  closeModal();
+
+  render();
+
+  showToast(
+    id
+      ? "Ranking updated locally."
+      : "Ranking added locally."
+  );
+
+}
+
+/* MOVE */
+
+async function moveRank(id,direction){
+
+  const index =
+    rankings.findIndex(
+      x =>
+        String(x.id) ===
+        String(id)
+    );
+
+  if(index < 0)
+    return;
+
+  const newIndex =
+    index + direction;
+
+  if(
+    newIndex < 0 ||
+    newIndex >= rankings.length
+  ){
+
+    showToast(
+      "Ranking cannot move further."
+    );
+
+    return;
+
+  }
+
+  [
+    rankings[index],
+    rankings[newIndex]
+  ] =
+  [
+    rankings[newIndex],
+    rankings[index]
+  ];
+
+  normalizeRanks();
+
+  render();
+
+  showToast(
+    "Ranking position updated."
+  );
+
+}
+
+/* RESET */
+
+function resetRanking(){
+
+  rankings =
+    [...demoRankings];
+
+  render();
+
+  showToast(
+    "Demo ranking restored."
+  );
+
+}
+
+/* NORMALIZE RANKS */
+
+function normalizeRanks(){
+
+  rankings
+    .sort(
+      (a,b) =>
+        Number(a.rank) -
+        Number(b.rank)
+    )
+    .forEach(
+      (item,index) => {
+        item.rank =
+          index + 1;
+      }
+    );
+
+}
+
+/* EXPORT */
+
+function exportCSV(){
+
+  const rows = [
+
+    [
+      "Rank",
+      "Title",
+      "Slug",
+      "List",
+      "Type",
+      "Views",
+      "Growth",
+      "Engagement",
+      "Status",
+      "Featured",
+      "Trending",
+      "Updated"
+    ]
+
+  ];
+
+  rankings
+    .sort(
+      (a,b) =>
+        Number(a.rank) -
+        Number(b.rank)
+    )
+    .forEach(item => {
+
+      rows.push([
+
+        item.rank,
+        item.title,
+        item.slug,
+        item.list,
+        item.type,
+        item.views,
+        item.growth,
+        item.engagement,
+        item.status,
+        item.featured
+          ? "YES"
+          : "NO",
+        item.trending
+          ? "YES"
+          : "NO",
+        item.updated_at
+
+      ]);
+
+    });
+
+  const csv =
+    rows
+      .map(row =>
+        row
+          .map(csvCell)
+          .join(",")
+      )
+      .join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "crowrules-top10-" +
+    new Date()
+      .toISOString()
+      .slice(0,10) +
+    ".csv";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+  showToast(
+    "Top 10 CSV exported."
+  );
+
+}
+
+/* HELPERS */
+
+function statusBadge(status){
+
+  const normalized =
+    String(
+      status ||
+      "published"
+    ).toLowerCase();
+
+  return `
+    <span class="badge ${escapeAttr(normalized)}">
+      ${escapeHTML(
+        capitalize(normalized)
+      )}
+    </span>
+  `;
+
+}
+
+function listLabel(list){
+
+  const labels = {
+
+    tv:"CrowRules TV",
+    movies:"Movies",
+    shows:"Shows",
+    episodes:"Episodes",
+    music:"Music",
+    creators:"Creators"
+
+  };
+
+  return (
+    labels[list] ||
+    capitalize(list)
+  );
+
+}
+
+function capitalize(value){
+
+  if(!value)
+    return "";
+
+  return (
+    String(value)
+      .charAt(0)
+      .toUpperCase() +
+    String(value)
+      .slice(1)
+  );
+
+}
+
+function formatNumber(value){
+
+  return Number(
+    value || 0
+  ).toLocaleString();
+
+}
+
+function formatCompact(value){
+
+  const number =
+    Number(value || 0);
+
+  if(number >= 1000000){
+
+    return (
+      (number / 1000000)
+        .toFixed(
+          number >= 10000000
+            ? 0
+            : 2
+        ) +
+      "M"
+    );
+
+  }
+
+  if(number >= 1000){
+
+    return (
+      (number / 1000)
+        .toFixed(
+          number >= 100000
+            ? 0
+            : 1
+        ) +
+      "K"
+    );
+
+  }
+
+  return formatNumber(number);
+
+}
+
+function relativeTime(value){
+
+  if(!value)
+    return "—";
+
+  const date =
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  )
+    return "—";
+
+  const seconds =
+    Math.floor(
+      (
+        Date.now() -
+        date.getTime()
+      ) / 1000
+    );
+
+  if(seconds < 60)
+    return "Just now";
+
+  if(seconds < 3600)
+    return (
+      Math.floor(
+        seconds / 60
+      ) +
+      "m ago"
+    );
+
+  if(seconds < 86400)
+    return (
+      Math.floor(
+        seconds / 3600
+      ) +
+      "h ago"
+    );
+
+  return (
+    Math.floor(
+      seconds / 86400
+    ) +
+    "d ago"
+  );
+
+}
+
+function slugify(value){
+
+  return String(value || "")
+    .toLowerCase()
+    .trim()
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    );
+
+}
+
+function csvCell(value){
+
+  const string =
+    String(value ?? "");
+
+  return (
+    '"' +
+    string.replace(
+      /"/g,
+      '""'
+    ) +
+    '"'
+  );
+
+}
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+function escapeAttr(value){
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    );
+
+}
+
+/* MODAL */
+
+function closeModal(){
+
+  document
+    .getElementById(
+      "rankingModal"
+    )
+    .classList.remove(
+      "open"
+    );
+
+}
+
+/* TOAST */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent =
+    message;
+
+  toast.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    toastTimer
+  );
+
+  toastTimer =
+    setTimeout(
+      () =>
+        toast.classList.remove(
+          "show"
+        ),
+      2800
+    );
+
+}
+
+/* SIDEBAR */
+
+function toggleSidebar(){
+
+  document
+    .getElementById(
+      "sidebar"
+    )
+    .classList.toggle(
+      "open"
+    );
+
+}
+
+/* OUTSIDE CLICK */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    if(
+      event.target.id ===
+      "rankingModal"
+    ){
+
+      closeModal();
+
+    }
+
+  }
+);
+
+/* ESCAPE */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Escape"
+    ){
+
+      closeModal();
+
+    }
+
+  }
+);
+</script>
+
+</body>
+</html>

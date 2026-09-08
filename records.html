@@ -1,0 +1,3847 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>CrowRules Admin — Records</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Records Management">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --radius:16px;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at 78% 5%,rgba(108,92,255,.11),transparent 28%),
+    radial-gradient(circle at 18% 35%,rgba(182,108,255,.05),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+button,input,select,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:260px;
+  background:rgba(7,7,9,.97);
+  border-right:1px solid var(--line);
+  z-index:1000;
+  display:flex;
+  flex-direction:column;
+  transition:.25s ease;
+}
+
+.brand{
+  height:82px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:42px;
+  height:42px;
+  border:1px solid rgba(182,108,255,.7);
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:18px;
+  font-weight:800;
+  box-shadow:0 0 24px rgba(182,108,255,.15);
+}
+
+.brand-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:1.2px;
+  font-weight:800;
+}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.nav{
+  padding:14px 10px;
+  overflow:auto;
+  flex:1;
+}
+
+.nav-section{
+  color:#555561;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  padding:15px 11px 8px;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:42px;
+  padding:9px 12px;
+  border-radius:10px;
+  color:#9a9aa5;
+  font-size:12px;
+  font-weight:600;
+  margin-bottom:3px;
+  transition:.18s ease;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:#121218;
+}
+
+.nav a.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.17),rgba(108,92,255,.07));
+  border:1px solid rgba(182,108,255,.2);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:22px;
+  text-align:center;
+}
+
+.sidebar-footer{
+  border-top:1px solid var(--line);
+  padding:14px;
+}
+
+.system-mini{
+  padding:12px;
+  background:#0b0b0f;
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+
+.system-mini-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  display:inline-block;
+  box-shadow:0 0 10px rgba(69,230,154,.65);
+}
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.main{
+  margin-left:260px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:82px;
+  position:sticky;
+  top:0;
+  z-index:900;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:0 28px;
+  background:rgba(5,5,5,.86);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.mobile-menu{
+  display:none;
+  width:40px;
+  height:40px;
+  border:1px solid var(--line2);
+  background:var(--panel);
+  color:#fff;
+  border-radius:10px;
+}
+
+.page-kicker{
+  font-size:9px;
+  color:var(--accent);
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.page-title{
+  font-family:Orbitron,sans-serif;
+  font-size:20px;
+  font-weight:700;
+}
+
+.page-sub{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.icon-btn,
+.user-btn{
+  height:40px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#ddd;
+  border-radius:10px;
+}
+
+.icon-btn{
+  width:40px;
+}
+
+.user-btn{
+  padding:0 12px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.avatar{
+  width:27px;
+  height:27px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+
+.content{
+  padding:28px;
+  max-width:1800px;
+  margin:auto;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:flex-end;
+  margin-bottom:24px;
+}
+
+.hero h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:30px;
+}
+
+.hero p{
+  color:var(--muted);
+  margin:9px 0 0;
+  max-width:760px;
+  font-size:12px;
+  line-height:1.7;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#eee;
+  border-radius:10px;
+  min-height:40px;
+  padding:0 14px;
+  font-size:11px;
+  font-weight:700;
+  transition:.18s ease;
+}
+
+.btn:hover{
+  border-color:#565663;
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.55);
+  background:linear-gradient(135deg,#8e55d5,#5b4ccf);
+  color:white;
+}
+
+.btn.small{
+  min-height:32px;
+  padding:0 10px;
+  font-size:10px;
+}
+
+.btn.success{
+  color:var(--green);
+  border-color:rgba(69,230,154,.3);
+  background:rgba(69,230,154,.06);
+}
+
+.btn.danger{
+  color:var(--red);
+  border-color:rgba(255,82,109,.3);
+  background:rgba(255,82,109,.06);
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:13px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:17px;
+  box-shadow:var(--shadow);
+}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.stat-icon{
+  color:var(--accent);
+}
+
+.stat-value{
+  margin-top:12px;
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+  font-weight:700;
+}
+
+.stat-foot{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+.stat-foot.good{color:var(--green)}
+.stat-foot.warn{color:var(--yellow)}
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.toolbar{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:14px;
+  margin-bottom:18px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.search{
+  flex:1 1 300px;
+  position:relative;
+}
+
+.search span{
+  position:absolute;
+  left:13px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#666672;
+}
+
+.search input{
+  width:100%;
+  height:42px;
+  padding:0 13px 0 36px;
+  background:#09090c;
+  border:1px solid var(--line);
+  border-radius:10px;
+  color:#fff;
+  outline:none;
+}
+
+select{
+  height:42px;
+  min-width:145px;
+  padding:0 12px;
+  background:#09090c;
+  color:#ddd;
+  border:1px solid var(--line);
+  border-radius:10px;
+  outline:none;
+}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 350px;
+  gap:18px;
+}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+.panel + .panel{
+  margin-top:18px;
+}
+
+.panel-head{
+  min-height:65px;
+  padding:15px 17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.5px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  min-width:950px;
+  border-collapse:collapse;
+}
+
+th{
+  text-align:left;
+  padding:11px 14px;
+  color:#666672;
+  font-size:9px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  font-weight:800;
+  border-bottom:1px solid var(--line);
+  background:#0a0a0d;
+}
+
+td{
+  padding:13px 14px;
+  border-bottom:1px solid rgba(39,39,47,.7);
+  font-size:10px;
+  color:#c9c9d0;
+  vertical-align:middle;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.012);
+}
+
+.release{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-width:210px;
+}
+
+.cover{
+  width:44px;
+  height:44px;
+  border-radius:11px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  background:
+    linear-gradient(135deg,#161620,#6c5cff);
+  border:1px solid #454552;
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:800;
+}
+
+.release-name{
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+
+.release-meta{
+  color:#6e6e79;
+  font-size:9px;
+  margin-top:4px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  min-height:23px;
+  padding:0 8px;
+  border-radius:999px;
+  border:1px solid var(--line2);
+  background:#0b0b0f;
+  color:#aaa;
+  font-size:9px;
+  font-weight:700;
+}
+
+.badge.green{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+  background:rgba(69,230,154,.06);
+}
+
+.badge.purple{
+  color:var(--accent);
+  border-color:rgba(182,108,255,.25);
+  background:rgba(182,108,255,.06);
+}
+
+.badge.cyan{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.25);
+  background:rgba(55,215,255,.06);
+}
+
+.badge.yellow{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.25);
+  background:rgba(243,201,105,.06);
+}
+
+.badge.red{
+  color:var(--red);
+  border-color:rgba(255,82,109,.25);
+  background:rgba(255,82,109,.06);
+}
+
+.actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:5px;
+}
+
+.action{
+  width:30px;
+  height:30px;
+  border-radius:8px;
+  border:1px solid var(--line);
+  background:#0a0a0d;
+  color:#aaa;
+}
+
+.action:hover{
+  color:#fff;
+  border-color:#555560;
+}
+
+/* =========================================================
+   SIDE PANELS
+   ========================================================= */
+
+.release-card{
+  padding:15px;
+  border-bottom:1px solid var(--line);
+}
+
+.release-card:last-child{
+  border-bottom:0;
+}
+
+.release-card-top{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.release-card-cover{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#22222d,#8c54d8);
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  font-weight:800;
+}
+
+.release-card-info{
+  flex:1;
+}
+
+.release-card-name{
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+
+.release-card-meta{
+  color:#6f6f7a;
+  font-size:9px;
+  margin-top:4px;
+}
+
+.mini-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 15px;
+  border-bottom:1px solid rgba(39,39,47,.65);
+}
+
+.mini-row:last-child{
+  border-bottom:0;
+}
+
+.mini-label{
+  color:#8c8c96;
+  font-size:9px;
+}
+
+.mini-value{
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+.activity{
+  padding:3px 0;
+}
+
+.activity-item{
+  display:flex;
+  gap:10px;
+  padding:12px 15px;
+  border-bottom:1px solid rgba(39,39,47,.6);
+}
+
+.activity-item:last-child{
+  border-bottom:0;
+}
+
+.activity-dot{
+  width:8px;
+  height:8px;
+  margin-top:4px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 9px rgba(182,108,255,.45);
+  flex:none;
+}
+
+.activity-text{
+  color:#b8b8c0;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.activity-text strong{
+  color:#fff;
+}
+
+.activity-time{
+  display:block;
+  color:#5f5f69;
+  font-size:8px;
+  margin-top:4px;
+}
+
+.empty{
+  padding:42px 20px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.empty strong{
+  display:block;
+  color:#ddd;
+  margin-bottom:5px;
+  font-size:13px;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:min(720px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0c0c10;
+  border:1px solid var(--line2);
+  border-radius:18px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.modal-close{
+  width:34px;
+  height:34px;
+  border-radius:9px;
+  background:#121218;
+  border:1px solid var(--line);
+  color:#aaa;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  color:#858590;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  min-height:42px;
+  background:#08080b;
+  color:#fff;
+  border:1px solid var(--line);
+  border-radius:10px;
+  outline:none;
+  padding:10px 12px;
+}
+
+.field textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  padding:15px 20px;
+  border-top:1px solid var(--line);
+}
+
+.preview{
+  display:flex;
+  gap:15px;
+  align-items:center;
+  padding:15px;
+  background:#09090c;
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin-bottom:18px;
+}
+
+.preview-cover{
+  width:70px;
+  height:70px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+}
+
+.preview h3{
+  margin:0 0 5px;
+  font-size:15px;
+}
+
+.preview p{
+  margin:0;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:3000;
+  min-width:240px;
+  max-width:370px;
+  padding:13px 15px;
+  background:#101016;
+  border:1px solid var(--line2);
+  border-radius:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  color:#eee;
+  font-size:10px;
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.22s ease;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.toast strong{
+  display:block;
+  color:#fff;
+  margin-bottom:3px;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:950;
+  display:none;
+}
+
+.overlay.show{
+  display:block;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1250px){
+
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 16px;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .hero{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+}
+
+@media(max-width:650px){
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .page-sub{
+    display:none;
+  }
+
+  .top-actions .icon-btn{
+    display:none;
+  }
+}
+
+@media(max-width:430px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .user-btn{
+    padding:0 7px;
+  }
+
+  .user-btn span:last-child{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div>
+      <div class="brand-title">CROWRULES</div>
+      <div class="brand-sub">Main Admin</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-section">Overview</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <div class="nav-section">Content</div>
+
+    <a href="content.html">
+      <span class="nav-icon">▦</span>
+      Content
+    </a>
+
+    <a href="shows.html">
+      <span class="nav-icon">▶</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">▤</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">▣</span>
+      Movies
+    </a>
+
+    <a href="channels.html">
+      <span class="nav-icon">◉</span>
+      Live Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedules
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live Control
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">☷</span>
+      TV Guide
+    </a>
+
+    <div class="nav-section">People</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♙</span>
+      Members
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">☁</span>
+      Community
+    </a>
+
+    <a href="creators.html">
+      <span class="nav-icon">✦</span>
+      Creators
+    </a>
+
+    <div class="nav-section">Network</div>
+
+    <a href="records.html" class="active">
+      <span class="nav-icon">♫</span>
+      Records
+    </a>
+
+    <a href="sports.html">
+      <span class="nav-icon">◇</span>
+      Sports
+    </a>
+
+    <a href="memorials.html">
+      <span class="nav-icon">✚</span>
+      Memorials
+    </a>
+
+    <a href="awards.html">
+      <span class="nav-icon">★</span>
+      Awards
+    </a>
+
+    <div class="nav-section">System</div>
+
+    <a href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      Analytics
+    </a>
+
+    <a href="moderation.html">
+      <span class="nav-icon">⚑</span>
+      Moderation
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span>
+      System Logs
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="system-mini">
+      <div class="system-mini-row">
+        <span>Platform Status</span>
+        <span class="status-dot"></span>
+      </div>
+      <div style="font-size:9px;color:#62626d;margin-top:8px">
+        CrowRules systems operational
+      </div>
+    </div>
+  </div>
+
+</aside>
+
+<div class="overlay" id="overlay"></div>
+
+<main class="main">
+
+<header class="topbar">
+
+  <div class="topbar-left">
+
+    <button class="mobile-menu" id="mobileMenu">☰</button>
+
+    <div>
+      <div class="page-kicker">Network / Music</div>
+      <div class="page-title">CrowRules Records</div>
+      <div class="page-sub">
+        Manage artists, releases, tracks, labels and music publishing.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="top-actions">
+
+    <button class="icon-btn"
+      onclick="refreshRecords()"
+      title="Refresh">↻</button>
+
+    <button class="icon-btn"
+      onclick="openModal('announcementModal')"
+      title="Announcement">!</button>
+
+    <button class="user-btn">
+      <span class="avatar">CR</span>
+      <span>Administrator</span>
+    </button>
+
+  </div>
+
+</header>
+
+<section class="content">
+
+  <div class="hero">
+
+    <div>
+      <h1>Records</h1>
+
+      <p>
+        Central administration for the CrowRules music division.
+        Manage artists, releases, albums, singles, tracks, publishing
+        status, catalog activity and music programming.
+      </p>
+    </div>
+
+    <button class="btn primary"
+      onclick="openReleaseModal()">
+      + Add Release
+    </button>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-top">
+        <span>Artists</span>
+        <span class="stat-icon">♬</span>
+      </div>
+      <div class="stat-value" id="artistCount">—</div>
+      <div class="stat-foot good">Registered artists</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span>Releases</span>
+        <span class="stat-icon">▣</span>
+      </div>
+      <div class="stat-value" id="releaseCount">—</div>
+      <div class="stat-foot">Albums & singles</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span>Tracks</span>
+        <span class="stat-icon">♫</span>
+      </div>
+      <div class="stat-value" id="trackCount">—</div>
+      <div class="stat-foot">Catalog tracks</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span>Published</span>
+        <span class="stat-icon">●</span>
+      </div>
+      <div class="stat-value" id="publishedCount">—</div>
+      <div class="stat-foot good">Live catalog</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span>Pending</span>
+        <span class="stat-icon">!</span>
+      </div>
+      <div class="stat-value" id="pendingCount">—</div>
+      <div class="stat-foot warn">Awaiting review</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span>Plays</span>
+        <span class="stat-icon">⌁</span>
+      </div>
+      <div class="stat-value" id="playCount">—</div>
+      <div class="stat-foot">Catalog activity</div>
+    </div>
+
+  </div>
+
+  <div class="toolbar">
+
+    <div class="search">
+      <span>⌕</span>
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Search releases, artists, tracks..."
+        oninput="renderReleases()"
+      >
+    </div>
+
+    <select id="typeFilter" onchange="renderReleases()">
+      <option value="all">All Types</option>
+      <option value="album">Album</option>
+      <option value="single">Single</option>
+      <option value="ep">EP</option>
+      <option value="soundtrack">Soundtrack</option>
+    </select>
+
+    <select id="statusFilter" onchange="renderReleases()">
+      <option value="all">All Statuses</option>
+      <option value="published">Published</option>
+      <option value="draft">Draft</option>
+      <option value="pending">Pending</option>
+      <option value="archived">Archived</option>
+    </select>
+
+    <select id="sortFilter" onchange="renderReleases()">
+      <option value="newest">Newest</option>
+      <option value="title">Title</option>
+      <option value="plays">Most Plays</option>
+      <option value="tracks">Most Tracks</option>
+    </select>
+
+    <button class="btn" onclick="exportRecords()">
+      Export CSV
+    </button>
+
+  </div>
+
+  <div class="layout">
+
+    <div>
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">Music Catalog</div>
+            <div class="panel-sub">
+              Releases currently managed by CrowRules Records
+            </div>
+          </div>
+
+          <span class="badge purple">CATALOG</span>
+
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Release</th>
+                <th>Artist</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Tracks</th>
+                <th>Plays</th>
+                <th>Release Date</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody id="releaseTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">Records Activity</div>
+            <div class="panel-sub">
+              Recent catalog and publishing events
+            </div>
+          </div>
+
+          <span class="badge cyan">LIVE</span>
+
+        </div>
+
+        <div class="activity" id="activityFeed"></div>
+
+      </section>
+
+    </div>
+
+    <div>
+
+      <section class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Top Releases</div>
+            <div class="panel-sub">Highest catalog activity</div>
+          </div>
+        </div>
+
+        <div id="topReleases"></div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Catalog Breakdown</div>
+            <div class="panel-sub">Current release distribution</div>
+          </div>
+        </div>
+
+        <div id="breakdown"></div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Publishing Queue</div>
+            <div class="panel-sub">Releases requiring attention</div>
+          </div>
+
+          <span class="badge yellow" id="queueBadge">0</span>
+        </div>
+
+        <div id="publishingQueue"></div>
+
+      </section>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+</div>
+
+<!-- =======================================================
+     RELEASE MODAL
+     ======================================================= -->
+
+<div class="modal-backdrop" id="releaseModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title" id="releaseModalTitle">
+        Add Release
+      </div>
+
+      <button
+        class="modal-close"
+        onclick="closeModal('releaseModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="preview">
+
+        <div class="preview-cover" id="previewCover">
+          CR
+        </div>
+
+        <div>
+          <h3 id="previewTitle">New Release</h3>
+          <p id="previewArtist">
+            Configure a CrowRules Records release.
+          </p>
+        </div>
+
+      </div>
+
+      <form id="releaseForm">
+
+        <input type="hidden" id="releaseId">
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Release Title</label>
+            <input
+              id="releaseTitle"
+              required
+              placeholder="Release title">
+          </div>
+
+          <div class="field">
+            <label>Artist</label>
+            <input
+              id="releaseArtist"
+              required
+              placeholder="Artist name">
+          </div>
+
+          <div class="field">
+            <label>Release Type</label>
+            <select id="releaseType">
+              <option value="album">Album</option>
+              <option value="single">Single</option>
+              <option value="ep">EP</option>
+              <option value="soundtrack">Soundtrack</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Status</label>
+            <select id="releaseStatus">
+              <option value="draft">Draft</option>
+              <option value="pending">Pending</option>
+              <option value="published">Published</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Release Date</label>
+            <input
+              id="releaseDate"
+              type="date">
+          </div>
+
+          <div class="field">
+            <label>Track Count</label>
+            <input
+              id="releaseTracks"
+              type="number"
+              min="0"
+              value="1">
+          </div>
+
+          <div class="field">
+            <label>Label</label>
+            <input
+              id="releaseLabel"
+              placeholder="CrowRules Records">
+          </div>
+
+          <div class="field">
+            <label>Catalog Number</label>
+            <input
+              id="releaseCatalog"
+              placeholder="CRR-0001">
+          </div>
+
+          <div class="field full">
+            <label>Description</label>
+            <textarea
+              id="releaseDescription"
+              placeholder="Release description..."></textarea>
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        onclick="closeModal('releaseModal')">
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        onclick="saveRelease()">
+        Save Release
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     DETAIL MODAL
+     ======================================================= -->
+
+<div class="modal-backdrop" id="detailModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        Release Details
+      </div>
+
+      <button
+        class="modal-close"
+        onclick="closeModal('detailModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body" id="detailBody"></div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        onclick="closeModal('detailModal')">
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     ANNOUNCEMENT MODAL
+     ======================================================= -->
+
+<div class="modal-backdrop" id="announcementModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        Records Announcement
+      </div>
+
+      <button
+        class="modal-close"
+        onclick="closeModal('announcementModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+        <div class="field full">
+          <label>Announcement Title</label>
+          <input
+            id="announcementTitle"
+            placeholder="Announcement title">
+        </div>
+
+        <div class="field full">
+          <label>Message</label>
+          <textarea
+            id="announcementMessage"
+            placeholder="Write announcement..."></textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        onclick="closeModal('announcementModal')">
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        onclick="publishAnnouncement()">
+        Publish
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast">
+
+  <strong id="toastTitle">
+    CrowRules Records
+  </strong>
+
+  <span id="toastMessage">
+    Ready.
+  </span>
+
+</div>
+
+<script>
+/* =========================================================
+   CROWRULES RECORDS ADMIN
+   ========================================================= */
+
+const CONFIG = {
+  supabaseUrl:
+    window.CROWRULES_SUPABASE_URL || "",
+
+  supabaseKey:
+    window.CROWRULES_SUPABASE_ANON_KEY || "",
+
+  releaseTable:
+    window.CROWRULES_RECORDS_TABLE ||
+    "music_releases",
+
+  artistTable:
+    window.CROWRULES_ARTISTS_TABLE ||
+    "artists"
+};
+
+let supabase = null;
+let releases = [];
+let demoMode = false;
+let editingReleaseId = null;
+
+/* =========================================================
+   DEMO DATA
+   ========================================================= */
+
+const demoReleases = [
+
+  {
+    id:"release-001",
+    title:"Neon Rain",
+    artist:"CrowRules Records",
+    type:"single",
+    status:"published",
+    tracks:1,
+    plays:8240,
+    release_date:"2026-07-03",
+    label:"CrowRules Records",
+    catalog_number:"CRR-0001",
+    description:"A cinematic CrowRules Records single."
+  },
+
+  {
+    id:"release-002",
+    title:"Tacoma After Dark",
+    artist:"Tacoma Nights",
+    type:"album",
+    status:"published",
+    tracks:10,
+    plays:6920,
+    release_date:"2026-07-12",
+    label:"CrowRules Records",
+    catalog_number:"CRR-0002",
+    description:"Music inspired by Tacoma after dark."
+  },
+
+  {
+    id:"release-003",
+    title:"Void Signals",
+    artist:"Voices From The Void",
+    type:"ep",
+    status:"published",
+    tracks:6,
+    plays:5310,
+    release_date:"2026-08-01",
+    label:"CrowRules Records",
+    catalog_number:"CRR-0003",
+    description:"Atmospheric audio storytelling."
+  },
+
+  {
+    id:"release-004",
+    title:"Bird Brains Sessions",
+    artist:"Bird Brains",
+    type:"album",
+    status:"pending",
+    tracks:8,
+    plays:2470,
+    release_date:"2026-09-02",
+    label:"CrowRules Records",
+    catalog_number:"CRR-0004",
+    description:"A creator-driven music and comedy project."
+  },
+
+  {
+    id:"release-005",
+    title:"Back Deck Live Sessions",
+    artist:"Back Deck Live",
+    type:"soundtrack",
+    status:"draft",
+    tracks:12,
+    plays:1850,
+    release_date:"2026-09-05",
+    label:"CrowRules Records",
+    catalog_number:"CRR-0005",
+    description:"Live session recordings."
+  },
+
+  {
+    id:"release-006",
+    title:"The Rookery",
+    artist:"The Rookery",
+    type:"soundtrack",
+    status:"published",
+    tracks:14,
+    plays:4100,
+    release_date:"2026-06-20",
+    label:"CrowRules Records",
+    catalog_number:"CRR-0006",
+    description:"Original score and soundtrack."
+  },
+
+  {
+    id:"release-007",
+    title:"Midnight Tacoma",
+    artist:"CrowRules Studios",
+    type:"single",
+    status:"published",
+    tracks:1,
+    plays:3190,
+    release_date:"2026-08-15",
+    label:"CrowRules Records",
+    catalog_number:"CRR-0007",
+    description:"A late-night Tacoma inspired single."
+  },
+
+  {
+    id:"release-008",
+    title:"Signals In The Static",
+    artist:"CrowRules Records",
+    type:"ep",
+    status:"draft",
+    tracks:5,
+    plays:0,
+    release_date:"2026-10-01",
+    label:"CrowRules Records",
+    catalog_number:"CRR-0008",
+    description:"Upcoming electronic project."
+  }
+
+];
+
+const demoActivity = [
+
+  {
+    text:"<strong>Neon Rain</strong> reached 8,000 catalog plays.",
+    time:"12 minutes ago"
+  },
+
+  {
+    text:"<strong>Bird Brains Sessions</strong> submitted a release for review.",
+    time:"38 minutes ago"
+  },
+
+  {
+    text:"<strong>Void Signals</strong> was added to CrowRules TV music programming.",
+    time:"1 hour ago"
+  },
+
+  {
+    text:"<strong>Tacoma After Dark</strong> received new catalog activity.",
+    time:"2 hours ago"
+  },
+
+  {
+    text:"<strong>Signals In The Static</strong> was created as a draft.",
+    time:"4 hours ago"
+  }
+
+];
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  setupMobile();
+
+  setupPreview();
+
+  if(
+    CONFIG.supabaseUrl &&
+    CONFIG.supabaseKey &&
+    window.supabase
+  ){
+
+    try{
+
+      supabase =
+        window.supabase.createClient(
+          CONFIG.supabaseUrl,
+          CONFIG.supabaseKey,
+          {
+            auth:{
+              persistSession:true,
+              autoRefreshToken:true,
+              detectSessionInUrl:true
+            }
+          }
+        );
+
+    }catch(error){
+
+      console.warn(
+        "Supabase initialization failed:",
+        error
+      );
+
+      demoMode = true;
+    }
+
+  }else{
+
+    demoMode = true;
+  }
+
+  await loadReleases();
+
+});
+
+/* =========================================================
+   LOAD
+   ========================================================= */
+
+async function loadReleases(){
+
+  showLoading();
+
+  if(!supabase){
+
+    releases =
+      structuredClone(demoReleases);
+
+    finish();
+
+    return;
+  }
+
+  try{
+
+    const {data,error} =
+      await supabase
+        .from(CONFIG.releaseTable)
+        .select("*")
+        .limit(500);
+
+    if(error){
+
+      console.warn(
+        "Records query failed:",
+        error
+      );
+
+      releases =
+        structuredClone(demoReleases);
+
+      demoMode = true;
+
+      toast(
+        "Using demo data",
+        "The records table could not be queried."
+      );
+
+    }else{
+
+      releases =
+        (data || []).map(normalizeRelease);
+    }
+
+    finish();
+
+  }catch(error){
+
+    console.error(error);
+
+    releases =
+      structuredClone(demoReleases);
+
+    demoMode = true;
+
+    finish();
+
+  }
+}
+
+/* =========================================================
+   NORMALIZE
+   ========================================================= */
+
+function normalizeRelease(row){
+
+  return {
+
+    ...row,
+
+    id:
+      row.id ||
+      crypto.randomUUID(),
+
+    title:
+      row.title ||
+      row.name ||
+      row.release_title ||
+      "Untitled Release",
+
+    artist:
+      row.artist ||
+      row.artist_name ||
+      row.creator ||
+      "Unknown Artist",
+
+    type:
+      row.type ||
+      row.release_type ||
+      "album",
+
+    status:
+      row.status ||
+      row.release_status ||
+      "draft",
+
+    tracks:
+      Number(
+        row.track_count ??
+        row.tracks ??
+        row.number_of_tracks ??
+        0
+      ) || 0,
+
+    plays:
+      Number(
+        row.plays ??
+        row.play_count ??
+        row.streams ??
+        row.stream_count ??
+        0
+      ) || 0,
+
+    release_date:
+      row.release_date ||
+      row.released_at ||
+      row.created_at ||
+      "",
+
+    label:
+      row.label ||
+      row.label_name ||
+      "CrowRules Records",
+
+    catalog_number:
+      row.catalog_number ||
+      row.catalog_no ||
+      row.catalog_id ||
+      "",
+
+    description:
+      row.description ||
+      row.bio ||
+      ""
+
+  };
+}
+
+/* =========================================================
+   FINISH
+   ========================================================= */
+
+function finish(){
+
+  updateStats();
+
+  renderReleases();
+
+  renderTopReleases();
+
+  renderBreakdown();
+
+  renderQueue();
+
+  renderActivity();
+
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+function updateStats(){
+
+  const artists =
+    new Set(
+      releases.map(
+        r => String(r.artist || "").toLowerCase()
+      )
+    ).size;
+
+  const tracks =
+    releases.reduce(
+      (sum,r) =>
+        sum + Number(r.tracks || 0),
+      0
+    );
+
+  const published =
+    releases.filter(
+      r => r.status === "published"
+    ).length;
+
+  const pending =
+    releases.filter(
+      r =>
+        r.status === "pending" ||
+        r.status === "draft"
+    ).length;
+
+  const plays =
+    releases.reduce(
+      (sum,r) =>
+        sum + Number(r.plays || 0),
+      0
+    );
+
+  document.getElementById("artistCount").textContent =
+    formatNumber(artists);
+
+  document.getElementById("releaseCount").textContent =
+    formatNumber(releases.length);
+
+  document.getElementById("trackCount").textContent =
+    formatNumber(tracks);
+
+  document.getElementById("publishedCount").textContent =
+    formatNumber(published);
+
+  document.getElementById("pendingCount").textContent =
+    formatNumber(pending);
+
+  document.getElementById("playCount").textContent =
+    formatAudience(plays);
+
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+function renderReleases(){
+
+  const tbody =
+    document.getElementById("releaseTable");
+
+  const query =
+    document.getElementById("searchInput")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const type =
+    document.getElementById("typeFilter").value;
+
+  const status =
+    document.getElementById("statusFilter").value;
+
+  const sort =
+    document.getElementById("sortFilter").value;
+
+  let rows =
+    releases.filter(r => {
+
+      const searchable = [
+
+        r.title,
+        r.artist,
+        r.type,
+        r.label,
+        r.catalog_number
+
+      ].join(" ").toLowerCase();
+
+      if(
+        query &&
+        !searchable.includes(query)
+      ){
+        return false;
+      }
+
+      if(
+        type !== "all" &&
+        r.type !== type
+      ){
+        return false;
+      }
+
+      if(
+        status !== "all" &&
+        r.status !== status
+      ){
+        return false;
+      }
+
+      return true;
+    });
+
+  rows.sort((a,b) => {
+
+    if(sort === "title"){
+      return a.title.localeCompare(b.title);
+    }
+
+    if(sort === "plays"){
+      return b.plays - a.plays;
+    }
+
+    if(sort === "tracks"){
+      return b.tracks - a.tracks;
+    }
+
+    return String(
+      b.release_date
+    ).localeCompare(
+      String(a.release_date)
+    );
+
+  });
+
+  if(!rows.length){
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8">
+          <div class="empty">
+            <strong>No releases found</strong>
+            Try changing the search or filters.
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  tbody.innerHTML =
+    rows.map(r => {
+
+      return `
+
+        <tr>
+
+          <td>
+
+            <div class="release">
+
+              <div class="cover">
+                ${escapeHtml(
+                  getInitials(r.title)
+                )}
+              </div>
+
+              <div>
+
+                <div class="release-name">
+                  ${escapeHtml(r.title)}
+                </div>
+
+                <div class="release-meta">
+                  ${escapeHtml(
+                    r.catalog_number ||
+                    r.label ||
+                    "CrowRules Records"
+                  )}
+                </div>
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <td>
+            ${escapeHtml(r.artist)}
+          </td>
+
+          <td>
+            <span class="badge purple">
+              ${escapeHtml(
+                capitalize(r.type)
+              )}
+            </span>
+          </td>
+
+          <td>
+            ${statusBadge(r.status)}
+          </td>
+
+          <td>
+            ${formatNumber(r.tracks)}
+          </td>
+
+          <td>
+            ${formatAudience(r.plays)}
+          </td>
+
+          <td>
+            ${formatDate(r.release_date)}
+          </td>
+
+          <td>
+
+            <div class="actions">
+
+              <button
+                class="action"
+                title="View"
+                onclick="viewRelease('${safeId(r.id)}')">
+                ◉
+              </button>
+
+              <button
+                class="action"
+                title="Edit"
+                onclick="editRelease('${safeId(r.id)}')">
+                ✎
+              </button>
+
+              <button
+                class="action"
+                title="Toggle publish"
+                onclick="togglePublish('${safeId(r.id)}')">
+                ●
+              </button>
+
+              <button
+                class="action"
+                title="Delete"
+                onclick="deleteRelease('${safeId(r.id)}')">
+                ×
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join("");
+
+}
+
+/* =========================================================
+   TOP RELEASES
+   ========================================================= */
+
+function renderTopReleases(){
+
+  const el =
+    document.getElementById("topReleases");
+
+  const rows =
+    [...releases]
+      .sort(
+        (a,b) => b.plays - a.plays
+      )
+      .slice(0,5);
+
+  if(!rows.length){
+
+    el.innerHTML = `
+      <div class="empty">
+        <strong>No releases</strong>
+        Add music to populate this panel.
+      </div>
+    `;
+
+    return;
+  }
+
+  el.innerHTML =
+    rows.map(r => {
+
+      return `
+
+        <div class="release-card">
+
+          <div class="release-card-top">
+
+            <div class="release-card-cover">
+              ${escapeHtml(
+                getInitials(r.title)
+              )}
+            </div>
+
+            <div class="release-card-info">
+
+              <div class="release-card-name">
+                ${escapeHtml(r.title)}
+              </div>
+
+              <div class="release-card-meta">
+                ${escapeHtml(r.artist)}
+                · ${formatAudience(r.plays)} plays
+              </div>
+
+            </div>
+
+            ${statusBadge(r.status)}
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+/* =========================================================
+   BREAKDOWN
+   ========================================================= */
+
+function renderBreakdown(){
+
+  const el =
+    document.getElementById("breakdown");
+
+  const types = {
+
+    album:
+      releases.filter(
+        r => r.type === "album"
+      ).length,
+
+    single:
+      releases.filter(
+        r => r.type === "single"
+      ).length,
+
+    ep:
+      releases.filter(
+        r => r.type === "ep"
+      ).length,
+
+    soundtrack:
+      releases.filter(
+        r => r.type === "soundtrack"
+      ).length
+
+  };
+
+  el.innerHTML = Object.entries(types)
+    .map(([type,count]) => {
+
+      return `
+
+        <div class="mini-row">
+
+          <span class="mini-label">
+            ${escapeHtml(
+              capitalize(type)
+            )}
+          </span>
+
+          <span class="mini-value">
+            ${formatNumber(count)}
+          </span>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+/* =========================================================
+   QUEUE
+   ========================================================= */
+
+function renderQueue(){
+
+  const el =
+    document.getElementById("publishingQueue");
+
+  const rows =
+    releases
+      .filter(
+        r =>
+          r.status === "pending" ||
+          r.status === "draft"
+      )
+      .slice(0,5);
+
+  document.getElementById("queueBadge").textContent =
+    rows.length;
+
+  if(!rows.length){
+
+    el.innerHTML = `
+      <div class="empty">
+        <strong>Queue clear</strong>
+        No releases currently require attention.
+      </div>
+    `;
+
+    return;
+  }
+
+  el.innerHTML =
+    rows.map(r => {
+
+      return `
+
+        <div class="release-card">
+
+          <div class="release-card-top">
+
+            <div class="release-card-cover">
+              ${escapeHtml(
+                getInitials(r.title)
+              )}
+            </div>
+
+            <div class="release-card-info">
+
+              <div class="release-card-name">
+                ${escapeHtml(r.title)}
+              </div>
+
+              <div class="release-card-meta">
+                ${escapeHtml(r.artist)}
+              </div>
+
+            </div>
+
+          </div>
+
+          <div style="
+            display:flex;
+            gap:7px;
+            margin-top:11px
+          ">
+
+            <button
+              class="btn small success"
+              onclick="publishRelease('${safeId(r.id)}')">
+              Publish
+            </button>
+
+            <button
+              class="btn small"
+              onclick="viewRelease('${safeId(r.id)}')">
+              Review
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+/* =========================================================
+   ACTIVITY
+   ========================================================= */
+
+function renderActivity(){
+
+  const el =
+    document.getElementById("activityFeed");
+
+  el.innerHTML =
+    demoActivity.map(item => {
+
+      return `
+
+        <div class="activity-item">
+
+          <div class="activity-dot"></div>
+
+          <div class="activity-text">
+
+            ${item.text}
+
+            <span class="activity-time">
+              ${escapeHtml(item.time)}
+            </span>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
+function setupPreview(){
+
+  [
+    "releaseTitle",
+    "releaseArtist"
+  ].forEach(id => {
+
+    document
+      .getElementById(id)
+      .addEventListener(
+        "input",
+        updatePreview
+      );
+
+  });
+
+}
+
+function updatePreview(){
+
+  const title =
+    document.getElementById(
+      "releaseTitle"
+    ).value.trim() ||
+    "New Release";
+
+  const artist =
+    document.getElementById(
+      "releaseArtist"
+    ).value.trim() ||
+    "CrowRules Records";
+
+  document.getElementById(
+    "previewTitle"
+  ).textContent = title;
+
+  document.getElementById(
+    "previewArtist"
+  ).textContent = artist;
+
+  document.getElementById(
+    "previewCover"
+  ).textContent =
+    getInitials(title);
+
+}
+
+/* =========================================================
+   OPEN / EDIT
+   ========================================================= */
+
+function openReleaseModal(){
+
+  editingReleaseId = null;
+
+  document.getElementById(
+    "releaseModalTitle"
+  ).textContent =
+    "Add Release";
+
+  document.getElementById(
+    "releaseForm"
+  ).reset();
+
+  document.getElementById(
+    "releaseId"
+  ).value = "";
+
+  document.getElementById(
+    "releaseType"
+  ).value = "album";
+
+  document.getElementById(
+    "releaseStatus"
+  ).value = "draft";
+
+  document.getElementById(
+    "releaseTracks"
+  ).value = "1";
+
+  document.getElementById(
+    "releaseLabel"
+  ).value =
+    "CrowRules Records";
+
+  updatePreview();
+
+  openModal("releaseModal");
+
+}
+
+function editRelease(id){
+
+  const r =
+    releases.find(
+      x => String(x.id) === String(id)
+    );
+
+  if(!r){
+
+    toast(
+      "Release not found",
+      "Unable to locate the selected release."
+    );
+
+    return;
+  }
+
+  editingReleaseId = r.id;
+
+  document.getElementById(
+    "releaseModalTitle"
+  ).textContent =
+    "Edit Release";
+
+  document.getElementById(
+    "releaseId"
+  ).value = r.id;
+
+  document.getElementById(
+    "releaseTitle"
+  ).value = r.title || "";
+
+  document.getElementById(
+    "releaseArtist"
+  ).value = r.artist || "";
+
+  document.getElementById(
+    "releaseType"
+  ).value = r.type || "album";
+
+  document.getElementById(
+    "releaseStatus"
+  ).value = r.status || "draft";
+
+  document.getElementById(
+    "releaseDate"
+  ).value =
+    normalizeDateInput(
+      r.release_date
+    );
+
+  document.getElementById(
+    "releaseTracks"
+  ).value =
+    r.tracks || 0;
+
+  document.getElementById(
+    "releaseLabel"
+  ).value =
+    r.label || "CrowRules Records";
+
+  document.getElementById(
+    "releaseCatalog"
+  ).value =
+    r.catalog_number || "";
+
+  document.getElementById(
+    "releaseDescription"
+  ).value =
+    r.description || "";
+
+  updatePreview();
+
+  openModal("releaseModal");
+
+}
+
+/* =========================================================
+   SAVE
+   ========================================================= */
+
+async function saveRelease(){
+
+  const title =
+    document.getElementById(
+      "releaseTitle"
+    ).value.trim();
+
+  const artist =
+    document.getElementById(
+      "releaseArtist"
+    ).value.trim();
+
+  if(!title || !artist){
+
+    toast(
+      "Missing information",
+      "Release title and artist are required."
+    );
+
+    return;
+  }
+
+  const payload = {
+
+    title,
+
+    artist,
+
+    type:
+      document.getElementById(
+        "releaseType"
+      ).value,
+
+    status:
+      document.getElementById(
+        "releaseStatus"
+      ).value,
+
+    release_date:
+      document.getElementById(
+        "releaseDate"
+      ).value || null,
+
+    track_count:
+      Number(
+        document.getElementById(
+          "releaseTracks"
+        ).value || 0
+      ),
+
+    label:
+      document.getElementById(
+        "releaseLabel"
+      ).value.trim(),
+
+    catalog_number:
+      document.getElementById(
+        "releaseCatalog"
+      ).value.trim(),
+
+    description:
+      document.getElementById(
+        "releaseDescription"
+      ).value.trim()
+
+  };
+
+  if(!supabase){
+
+    if(editingReleaseId){
+
+      const index =
+        releases.findIndex(
+          r =>
+            String(r.id) ===
+            String(editingReleaseId)
+        );
+
+      if(index >= 0){
+
+        releases[index] = {
+
+          ...releases[index],
+
+          ...payload,
+
+          tracks:
+            payload.track_count
+
+        };
+
+      }
+
+    }else{
+
+      releases.unshift({
+
+        id:
+          "local-" +
+          Date.now(),
+
+        ...payload,
+
+        tracks:
+          payload.track_count,
+
+        plays:0,
+
+        created_at:
+          new Date().toISOString()
+
+      });
+
+    }
+
+    finish();
+
+    closeModal("releaseModal");
+
+    toast(
+      "Release saved",
+      "The release was updated locally."
+    );
+
+    return;
+  }
+
+  try{
+
+    let result;
+
+    if(editingReleaseId){
+
+      result =
+        await supabase
+          .from(CONFIG.releaseTable)
+          .update(payload)
+          .eq(
+            "id",
+            editingReleaseId
+          );
+
+    }else{
+
+      result =
+        await supabase
+          .from(CONFIG.releaseTable)
+          .insert(payload);
+
+    }
+
+    if(result.error){
+      throw result.error;
+    }
+
+    closeModal("releaseModal");
+
+    await loadReleases();
+
+    toast(
+      "Release saved",
+      "The catalog record was saved successfully."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Save failed",
+      error.message ||
+      "The release could not be saved. Check the table schema and RLS policies."
+    );
+
+  }
+
+}
+
+/* =========================================================
+   VIEW
+   ========================================================= */
+
+function viewRelease(id){
+
+  const r =
+    releases.find(
+      x => String(x.id) === String(id)
+    );
+
+  if(!r) return;
+
+  document.getElementById(
+    "detailBody"
+  ).innerHTML = `
+
+    <div class="preview">
+
+      <div class="preview-cover">
+        ${escapeHtml(
+          getInitials(r.title)
+        )}
+      </div>
+
+      <div>
+
+        <h3>
+          ${escapeHtml(r.title)}
+        </h3>
+
+        <p>
+          ${escapeHtml(r.artist)}
+        </p>
+
+        <div style="
+          display:flex;
+          gap:6px;
+          margin-top:9px;
+          flex-wrap:wrap
+        ">
+
+          ${statusBadge(r.status)}
+
+          <span class="badge purple">
+            ${escapeHtml(
+              capitalize(r.type)
+            )}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Artist</label>
+        <input
+          disabled
+          value="${escapeAttr(r.artist)}">
+      </div>
+
+      <div class="field">
+        <label>Label</label>
+        <input
+          disabled
+          value="${escapeAttr(r.label)}">
+      </div>
+
+      <div class="field">
+        <label>Catalog Number</label>
+        <input
+          disabled
+          value="${escapeAttr(r.catalog_number)}">
+      </div>
+
+      <div class="field">
+        <label>Release Date</label>
+        <input
+          disabled
+          value="${escapeAttr(
+            formatDate(r.release_date)
+          )}">
+      </div>
+
+      <div class="field">
+        <label>Tracks</label>
+        <input
+          disabled
+          value="${escapeAttr(
+            formatNumber(r.tracks)
+          )}">
+      </div>
+
+      <div class="field">
+        <label>Plays</label>
+        <input
+          disabled
+          value="${escapeAttr(
+            formatAudience(r.plays)
+          )}">
+      </div>
+
+      <div class="field full">
+        <label>Description</label>
+        <textarea disabled>${escapeHtml(
+          r.description ||
+          "No description provided."
+        )}</textarea>
+      </div>
+
+    </div>
+
+  `;
+
+  openModal("detailModal");
+
+}
+
+/* =========================================================
+   PUBLISH
+   ========================================================= */
+
+async function publishRelease(id){
+
+  const r =
+    releases.find(
+      x => String(x.id) === String(id)
+    );
+
+  if(!r) return;
+
+  if(!supabase){
+
+    r.status = "published";
+
+    finish();
+
+    toast(
+      "Release published",
+      `${r.title} is now published.`
+    );
+
+    return;
+  }
+
+  try{
+
+    const {error} =
+      await supabase
+        .from(CONFIG.releaseTable)
+        .update({
+          status:"published"
+        })
+        .eq("id",r.id);
+
+    if(error) throw error;
+
+    await loadReleases();
+
+    toast(
+      "Release published",
+      `${r.title} is now published.`
+    );
+
+  }catch(error){
+
+    toast(
+      "Publish failed",
+      error.message ||
+      "Unable to publish this release."
+    );
+
+  }
+
+}
+
+async function togglePublish(id){
+
+  const r =
+    releases.find(
+      x => String(x.id) === String(id)
+    );
+
+  if(!r) return;
+
+  const next =
+    r.status === "published"
+      ? "draft"
+      : "published";
+
+  if(!supabase){
+
+    r.status = next;
+
+    finish();
+
+    toast(
+      "Status updated",
+      `${r.title} is now ${next}.`
+    );
+
+    return;
+  }
+
+  try{
+
+    const {error} =
+      await supabase
+        .from(CONFIG.releaseTable)
+        .update({
+          status:next
+        })
+        .eq("id",r.id);
+
+    if(error) throw error;
+
+    await loadReleases();
+
+    toast(
+      "Status updated",
+      `${r.title} is now ${next}.`
+    );
+
+  }catch(error){
+
+    toast(
+      "Update failed",
+      error.message ||
+      "Unable to update release status."
+    );
+
+  }
+
+}
+
+/* =========================================================
+   DELETE
+   ========================================================= */
+
+async function deleteRelease(id){
+
+  const r =
+    releases.find(
+      x => String(x.id) === String(id)
+    );
+
+  if(!r) return;
+
+  if(!confirm(
+    `Delete "${r.title}"?\n\nThis may permanently remove the catalog record.`
+  )){
+    return;
+  }
+
+  if(!supabase){
+
+    releases =
+      releases.filter(
+        x =>
+          String(x.id) !==
+          String(id)
+      );
+
+    finish();
+
+    toast(
+      "Release removed",
+      "The demo release was removed locally."
+    );
+
+    return;
+  }
+
+  try{
+
+    const {error} =
+      await supabase
+        .from(CONFIG.releaseTable)
+        .delete()
+        .eq("id",r.id);
+
+    if(error) throw error;
+
+    await loadReleases();
+
+    toast(
+      "Release deleted",
+      `${r.title} was removed.`
+    );
+
+  }catch(error){
+
+    toast(
+      "Delete failed",
+      error.message ||
+      "Unable to delete release."
+    );
+
+  }
+
+}
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+
+function exportRecords(){
+
+  const headers = [
+
+    "Title",
+    "Artist",
+    "Type",
+    "Status",
+    "Tracks",
+    "Plays",
+    "Release Date",
+    "Label",
+    "Catalog Number"
+
+  ];
+
+  const rows =
+    releases.map(r => [
+
+      r.title,
+      r.artist,
+      r.type,
+      r.status,
+      r.tracks,
+      r.plays,
+      r.release_date,
+      r.label,
+      r.catalog_number
+
+    ].map(csvEscape).join(","));
+
+  const csv =
+    [
+      headers.join(","),
+      ...rows
+    ].join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "crowrules-records-" +
+    new Date()
+      .toISOString()
+      .slice(0,10) +
+    ".csv";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+  toast(
+    "Export complete",
+    "Records catalog CSV generated."
+  );
+
+}
+
+/* =========================================================
+   ANNOUNCEMENT
+   ========================================================= */
+
+function publishAnnouncement(){
+
+  const title =
+    document.getElementById(
+      "announcementTitle"
+    ).value.trim();
+
+  const message =
+    document.getElementById(
+      "announcementMessage"
+    ).value.trim();
+
+  if(!title || !message){
+
+    toast(
+      "Missing information",
+      "Enter an announcement title and message."
+    );
+
+    return;
+  }
+
+  closeModal(
+    "announcementModal"
+  );
+
+  document.getElementById(
+    "announcementTitle"
+  ).value = "";
+
+  document.getElementById(
+    "announcementMessage"
+  ).value = "";
+
+  toast(
+    "Announcement published",
+    "The Records announcement has been queued."
+  );
+
+}
+
+/* =========================================================
+   REFRESH
+   ========================================================= */
+
+async function refreshRecords(){
+
+  toast(
+    "Refreshing",
+    "Loading the latest Records catalog..."
+  );
+
+  await loadReleases();
+
+  toast(
+    "Catalog updated",
+    "The latest Records data is displayed."
+  );
+
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+function setupMobile(){
+
+  const menu =
+    document.getElementById(
+      "mobileMenu"
+    );
+
+  const sidebar =
+    document.getElementById(
+      "sidebar"
+    );
+
+  const overlay =
+    document.getElementById(
+      "overlay"
+    );
+
+  menu.addEventListener(
+    "click",
+    () => {
+
+      sidebar.classList.toggle(
+        "open"
+      );
+
+      overlay.classList.toggle(
+        "show"
+      );
+
+    }
+  );
+
+  overlay.addEventListener(
+    "click",
+    () => {
+
+      sidebar.classList.remove(
+        "open"
+      );
+
+      overlay.classList.remove(
+        "show"
+      );
+
+    }
+  );
+
+}
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+function openModal(id){
+
+  document
+    .getElementById(id)
+    .classList.add("show");
+
+}
+
+function closeModal(id){
+
+  document
+    .getElementById(id)
+    .classList.remove("show");
+
+}
+
+document
+  .querySelectorAll(".modal-backdrop")
+  .forEach(backdrop => {
+
+    backdrop.addEventListener(
+      "click",
+      event => {
+
+        if(
+          event.target === backdrop
+        ){
+
+          backdrop.classList.remove(
+            "show"
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Escape"){
+
+      document
+        .querySelectorAll(
+          ".modal-backdrop.show"
+        )
+        .forEach(
+          el =>
+            el.classList.remove(
+              "show"
+            )
+        );
+
+    }
+
+  }
+);
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer = null;
+
+function toast(title,message){
+
+  const el =
+    document.getElementById(
+      "toast"
+    );
+
+  document.getElementById(
+    "toastTitle"
+  ).textContent = title;
+
+  document.getElementById(
+    "toastMessage"
+  ).textContent = message;
+
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      () =>
+        el.classList.remove(
+          "show"
+        ),
+      4200
+    );
+
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function showLoading(){
+
+  document.getElementById(
+    "releaseTable"
+  ).innerHTML = `
+
+    <tr>
+      <td colspan="8">
+
+        <div class="empty">
+
+          <strong>
+            Loading Records catalog
+          </strong>
+
+          Connecting to CrowRules Records...
+
+        </div>
+
+      </td>
+    </tr>
+
+  `;
+
+}
+
+function getInitials(value){
+
+  return String(value || "CR")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0,2)
+    .map(
+      x => x[0]
+    )
+    .join("")
+    .toUpperCase();
+
+}
+
+function capitalize(value){
+
+  const s =
+    String(value || "");
+
+  return (
+    s.charAt(0).toUpperCase() +
+    s.slice(1)
+  );
+
+}
+
+function statusBadge(status){
+
+  const classes = {
+
+    published:"green",
+    pending:"yellow",
+    draft:"",
+    archived:"red"
+
+  };
+
+  return `
+
+    <span class="badge ${classes[status] || ""}">
+
+      ${escapeHtml(
+        capitalize(
+          status || "unknown"
+        )
+      )}
+
+    </span>
+
+  `;
+
+}
+
+function formatNumber(value){
+
+  return Number(
+    value || 0
+  ).toLocaleString();
+
+}
+
+function formatAudience(value){
+
+  const n =
+    Number(value || 0);
+
+  if(n >= 1000000){
+
+    return (
+      n / 1000000
+    ).toFixed(1) + "M";
+
+  }
+
+  if(n >= 1000){
+
+    return (
+      n / 1000
+    ).toFixed(
+      n >= 10000 ? 0 : 1
+    ) + "K";
+
+  }
+
+  return n.toLocaleString();
+
+}
+
+function formatDate(value){
+
+  if(!value) return "—";
+
+  const d =
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
+    return String(value);
+  }
+
+  return d.toLocaleDateString(
+    undefined,
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
+
+}
+
+function normalizeDateInput(value){
+
+  if(!value) return "";
+
+  const d =
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      d.getTime()
+    )
+  ){
+    return "";
+  }
+
+  return d
+    .toISOString()
+    .slice(0,10);
+
+}
+
+function safeId(value){
+
+  return String(value)
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    );
+
+}
+
+function escapeHtml(value){
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+function escapeAttr(value){
+
+  return escapeHtml(value);
+
+}
+
+function csvEscape(value){
+
+  const text =
+    String(value ?? "");
+
+  if(
+    text.includes(",") ||
+    text.includes('"') ||
+    text.includes("\n")
+  ){
+
+    return '"' +
+      text.replace(
+        /"/g,
+        '""'
+      ) +
+      '"';
+
+  }
+
+  return text;
+
+}
+
+window.CrowRulesRecords = {
+
+  reload:
+    loadReleases,
+
+  refresh:
+    refreshRecords,
+
+  addRelease:
+    openReleaseModal
+
+};
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3765 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Memorial Photos Manager — CrowRules Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Memorial Photos Administration">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(182,108,255,.09),transparent 30%),
+    radial-gradient(circle at 90% 10%,rgba(55,215,255,.05),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+  min-height:100vh;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+
+::-webkit-scrollbar-track{
+  background:#08080b;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#30303a;
+  border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:#4a4a57;
+}
+
+/* =========================
+   APP SHELL
+========================= */
+
+.app{
+  min-height:100vh;
+}
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:265px;
+  background:rgba(8,8,11,.96);
+  border-right:1px solid var(--line);
+  z-index:100;
+  overflow-y:auto;
+}
+
+.brand{
+  padding:24px 20px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.crow-icon{
+  width:40px;
+  height:40px;
+  border:1px solid rgba(182,108,255,.5);
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  color:var(--accent);
+  background:rgba(182,108,255,.08);
+  font-size:21px;
+  box-shadow:0 0 25px rgba(182,108,255,.08);
+}
+
+.brand-name{
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+
+.brand-sub{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+.nav{
+  padding:15px 12px 30px;
+}
+
+.nav-label{
+  padding:12px 10px 8px;
+  color:#5f5f69;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:42px;
+  padding:10px 12px;
+  margin:3px 0;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#a9a9b4;
+  font-size:12px;
+  font-weight:600;
+  transition:.2s ease;
+}
+
+.nav a:hover{
+  background:#111117;
+  border-color:#24242c;
+  color:#fff;
+}
+
+.nav a.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.15),rgba(108,92,255,.05));
+  border-color:rgba(182,108,255,.28);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:24px;
+  text-align:center;
+  font-size:15px;
+}
+
+.nav-count{
+  margin-left:auto;
+  padding:3px 7px;
+  border-radius:20px;
+  background:#1a1a22;
+  color:#777783;
+  font-size:9px;
+}
+
+.main{
+  margin-left:265px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:72px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(5,5,5,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.breadcrumb{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  color:#878793;
+  letter-spacing:.1em;
+}
+
+.icon-btn{
+  width:36px;
+  height:36px;
+  border:1px solid var(--line);
+  background:#0c0c10;
+  color:#b5b5bf;
+  border-radius:9px;
+}
+
+.icon-btn:hover{
+  color:#fff;
+  border-color:var(--line2);
+}
+
+.mobile-menu{
+  display:none;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding:28px;
+  max-width:1700px;
+  margin:auto;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:30px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:
+    linear-gradient(120deg,rgba(182,108,255,.08),transparent 42%),
+    linear-gradient(300deg,rgba(55,215,255,.035),transparent 45%),
+    var(--panel);
+  box-shadow:var(--shadow);
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  right:-100px;
+  top:-120px;
+  width:300px;
+  height:300px;
+  border:1px solid rgba(182,108,255,.09);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 30px rgba(182,108,255,.025),
+    0 0 0 60px rgba(182,108,255,.018);
+}
+
+.hero-kicker{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:9px 0 7px;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(24px,3vw,38px);
+  letter-spacing:.02em;
+}
+
+.hero p{
+  max-width:760px;
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.hero-status{
+  position:absolute;
+  right:28px;
+  bottom:28px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border:1px solid rgba(69,230,154,.2);
+  border-radius:30px;
+  background:rgba(69,230,154,.05);
+  color:#9af0c5;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px rgba(69,230,154,.8);
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:14px;
+  margin:18px 0;
+}
+
+.stat{
+  padding:20px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+}
+
+.stat-label{
+  color:#777782;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  margin-top:9px;
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+  font-weight:700;
+}
+
+.stat-meta{
+  margin-top:7px;
+  color:#696974;
+  font-size:10px;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:wrap;
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+  margin-bottom:18px;
+}
+
+.search{
+  flex:1 1 240px;
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  height:40px;
+  padding:0 14px 0 38px;
+  color:#fff;
+  background:#09090c;
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:none;
+}
+
+.search input:focus{
+  border-color:rgba(182,108,255,.5);
+  box-shadow:0 0 0 3px rgba(182,108,255,.07);
+}
+
+.search span{
+  position:absolute;
+  left:13px;
+  top:11px;
+  color:#666671;
+}
+
+select{
+  height:40px;
+  padding:0 34px 0 12px;
+  color:#bdbdc7;
+  background:#09090c;
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:none;
+}
+
+select:focus{
+  border-color:rgba(182,108,255,.5);
+}
+
+.btn{
+  min-height:40px;
+  padding:0 14px;
+  border-radius:9px;
+  border:1px solid var(--line);
+  color:#c9c9d1;
+  background:#101016;
+  font-size:11px;
+  font-weight:700;
+}
+
+.btn:hover{
+  border-color:var(--line2);
+  color:#fff;
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.5);
+  background:linear-gradient(135deg,#9b5be0,#6d5ce8);
+  color:#fff;
+  box-shadow:0 8px 25px rgba(108,92,255,.2);
+}
+
+.btn.primary:hover{
+  filter:brightness(1.08);
+}
+
+.btn.danger{
+  color:#ff8093;
+}
+
+.btn.small{
+  min-height:32px;
+  padding:0 9px;
+  font-size:9px;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.workspace{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 310px;
+  gap:18px;
+}
+
+.panel{
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--panel);
+  overflow:hidden;
+}
+
+.panel-head{
+  min-height:60px;
+  padding:15px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.08em;
+}
+
+.panel-sub{
+  margin-top:3px;
+  color:#666671;
+  font-size:9px;
+}
+
+/* =========================
+   PHOTO GRID
+========================= */
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  padding:16px;
+}
+
+.photo-card{
+  position:relative;
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:#09090c;
+  transition:.2s ease;
+}
+
+.photo-card:hover{
+  transform:translateY(-2px);
+  border-color:#3b3b46;
+  box-shadow:0 14px 40px rgba(0,0,0,.35);
+}
+
+.photo-thumb{
+  position:relative;
+  aspect-ratio:16/10;
+  overflow:hidden;
+  background:
+    linear-gradient(135deg,#14141a,#09090d);
+}
+
+.photo-thumb img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+.photo-thumb .placeholder{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  color:#4b4b57;
+  font-size:32px;
+}
+
+.photo-overlay{
+  position:absolute;
+  left:9px;
+  top:9px;
+  right:9px;
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 8px;
+  border-radius:20px;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.08);
+  color:#dddde5;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.badge.published{
+  color:#91efbd;
+  border-color:rgba(69,230,154,.2);
+}
+
+.badge.draft{
+  color:#f2ca76;
+  border-color:rgba(243,201,105,.2);
+}
+
+.badge.hidden{
+  color:#ff7e92;
+  border-color:rgba(255,82,109,.2);
+}
+
+.badge.featured{
+  color:#d5b1ff;
+  border-color:rgba(182,108,255,.25);
+}
+
+.photo-body{
+  padding:13px;
+}
+
+.photo-title{
+  font-size:12px;
+  font-weight:800;
+  line-height:1.4;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.photo-memorial{
+  margin-top:5px;
+  color:#888893;
+  font-size:9px;
+}
+
+.photo-meta{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:10px;
+  color:#62626d;
+  font-size:8px;
+}
+
+.photo-actions{
+  display:flex;
+  gap:6px;
+  margin-top:12px;
+}
+
+.photo-actions .btn{
+  flex:1;
+}
+
+/* =========================
+   SIDE PANEL
+========================= */
+
+.side-stack{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.health-card{
+  padding:17px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+}
+
+.health-title{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+.health-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #1b1b21;
+}
+
+.health-row:last-child{
+  border-bottom:0;
+  padding-bottom:0;
+}
+
+.health-label{
+  color:#858590;
+  font-size:9px;
+}
+
+.health-value{
+  font-size:10px;
+  font-weight:700;
+}
+
+.good{
+  color:var(--green);
+}
+
+.warn{
+  color:var(--yellow);
+}
+
+.bad{
+  color:var(--red);
+}
+
+.upload-box{
+  padding:18px;
+  border:1px dashed #343440;
+  border-radius:12px;
+  background:#0a0a0e;
+  text-align:center;
+}
+
+.upload-box .upload-icon{
+  font-size:28px;
+  color:var(--accent);
+}
+
+.upload-box h3{
+  margin:10px 0 5px;
+  font-size:12px;
+}
+
+.upload-box p{
+  margin:0 0 14px;
+  color:#696974;
+  font-size:9px;
+  line-height:1.6;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(10px);
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:min(720px,100%);
+  max-height:92vh;
+  overflow:auto;
+  border:1px solid #33333d;
+  border-radius:17px;
+  background:#0c0c11;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal.large{
+  width:min(1000px,100%);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:17px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-head h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#101016;
+  color:#aaaab4;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:15px 20px;
+  border-top:1px solid var(--line);
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field{
+  min-width:0;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  color:#888893;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  min-height:40px;
+  padding:10px 12px;
+  color:#fff;
+  background:#08080c;
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:none;
+}
+
+.field textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:rgba(182,108,255,.5);
+}
+
+.checkbox-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-height:40px;
+  padding:9px 12px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#08080c;
+}
+
+.checkbox-row input{
+  width:16px;
+  height:16px;
+  accent-color:#a966e8;
+}
+
+.checkbox-row label{
+  margin:0;
+  color:#bcbcc5;
+  font-size:10px;
+  letter-spacing:0;
+  text-transform:none;
+}
+
+.file-input{
+  padding:8px !important;
+}
+
+.helper{
+  margin-top:6px;
+  color:#5f5f69;
+  font-size:8px;
+  line-height:1.5;
+}
+
+.preview-image{
+  width:100%;
+  max-height:70vh;
+  object-fit:contain;
+  display:block;
+  background:#050507;
+  border-radius:10px;
+}
+
+.preview-caption{
+  padding-top:14px;
+}
+
+.preview-caption h3{
+  margin:0;
+  font-size:14px;
+}
+
+.preview-caption p{
+  margin:6px 0 0;
+  color:#777782;
+  font-size:10px;
+  line-height:1.6;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast-wrap{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:1000;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.toast{
+  min-width:260px;
+  max-width:380px;
+  padding:13px 15px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#111117;
+  box-shadow:0 20px 50px rgba(0,0,0,.45);
+  color:#dddde5;
+  font-size:10px;
+  animation:toastIn .2s ease;
+}
+
+.toast.success{
+  border-color:rgba(69,230,154,.3);
+}
+
+.toast.error{
+  border-color:rgba(255,82,109,.3);
+}
+
+@keyframes toastIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* =========================
+   EMPTY / LOADING
+========================= */
+
+.empty{
+  padding:60px 20px;
+  text-align:center;
+  color:#656570;
+}
+
+.empty-icon{
+  font-size:34px;
+  margin-bottom:12px;
+}
+
+.empty h3{
+  margin:0 0 6px;
+  color:#aaaab4;
+  font-size:13px;
+}
+
+.empty p{
+  margin:0;
+  font-size:9px;
+}
+
+.loading{
+  padding:60px;
+  text-align:center;
+  color:#6c6c77;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:.15em;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1200px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+
+  .side-stack{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:900px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s ease;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .content{
+    padding:15px;
+  }
+
+  .hero{
+    padding:23px;
+  }
+
+  .hero-status{
+    position:static;
+    display:inline-flex;
+    margin-top:18px;
+  }
+
+  .photo-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:620px){
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .photo-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .side-stack{
+    grid-template-columns:1fr;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .breadcrumb span:not(:last-child){
+    display:none;
+  }
+
+  .topbar{
+    height:62px;
+  }
+}
+
+@media(max-width:430px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .toolbar{
+    align-items:stretch;
+  }
+
+  .toolbar > *{
+    width:100%;
+  }
+
+  .search{
+    flex-basis:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- =========================
+       SIDEBAR
+  ========================== -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-mark">
+        <div class="crow-icon">♣</div>
+        <div>
+          <div class="brand-name">CROWRULES</div>
+          <div class="brand-sub">Entertainment Admin</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+
+      <div class="nav-label">Command</div>
+
+      <a href="index.html">
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </a>
+
+      <a href="content.html">
+        <span class="nav-icon">▦</span>
+        Content
+      </a>
+
+      <a href="shows.html">
+        <span class="nav-icon">◉</span>
+        Shows
+      </a>
+
+      <a href="episodes.html">
+        <span class="nav-icon">▶</span>
+        Episodes
+      </a>
+
+      <a href="movies.html">
+        <span class="nav-icon">▣</span>
+        Movies
+      </a>
+
+      <a href="channels.html">
+        <span class="nav-icon">◫</span>
+        Live Channels
+      </a>
+
+      <a href="schedule.html">
+        <span class="nav-icon">◷</span>
+        Schedules
+      </a>
+
+      <a href="live.html">
+        <span class="nav-icon">●</span>
+        Live Control
+      </a>
+
+      <a href="guide.html">
+        <span class="nav-icon">☷</span>
+        TV Guide
+      </a>
+
+      <div class="nav-label">Network</div>
+
+      <a href="members.html">
+        <span class="nav-icon">♙</span>
+        Members
+      </a>
+
+      <a href="community.html">
+        <span class="nav-icon">♧</span>
+        Community
+      </a>
+
+      <a href="creators.html">
+        <span class="nav-icon">✦</span>
+        Creators
+      </a>
+
+      <div class="nav-label">Memorials</div>
+
+      <a href="memorials.html">
+        <span class="nav-icon">✚</span>
+        Memorial Dashboard
+      </a>
+
+      <a href="memorials.html">
+        <span class="nav-icon">♜</span>
+        Memorials
+      </a>
+
+      <a href="candles.html">
+        <span class="nav-icon">♨</span>
+        Candles
+      </a>
+
+      <a href="photos.html" class="active">
+        <span class="nav-icon">▧</span>
+        Photos
+        <span class="nav-count" id="navPhotoCount">0</span>
+      </a>
+
+      <a href="videos.html">
+        <span class="nav-icon">▶</span>
+        Videos
+      </a>
+
+      <div class="nav-label">Administration</div>
+
+      <a href="records.html">
+        <span class="nav-icon">♫</span>
+        Records
+      </a>
+
+      <a href="sports.html">
+        <span class="nav-icon">⚽</span>
+        Sports
+      </a>
+
+      <a href="awards.html">
+        <span class="nav-icon">★</span>
+        Awards
+      </a>
+
+      <a href="analytics.html">
+        <span class="nav-icon">⌁</span>
+        Analytics
+      </a>
+
+      <a href="moderation.html">
+        <span class="nav-icon">!</span>
+        Moderation
+      </a>
+
+      <a href="logs.html">
+        <span class="nav-icon">≡</span>
+        System Logs
+      </a>
+
+      <a href="activity.html">
+        <span class="nav-icon">◌</span>
+        Activity
+      </a>
+
+      <a href="notifications.html">
+        <span class="nav-icon">♢</span>
+        Notifications
+      </a>
+
+      <a href="settings.html">
+        <span class="nav-icon">⚙</span>
+        Settings
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- =========================
+       MAIN
+  ========================== -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div class="breadcrumb">
+        <button class="icon-btn mobile-menu" id="mobileMenu">☰</button>
+        <span>CrowRules Admin</span>
+        <span>/</span>
+        <span>Memorials</span>
+        <span>/</span>
+        <strong>Photos</strong>
+      </div>
+
+      <div class="top-actions">
+        <div class="clock" id="clock">--:--:--</div>
+        <button class="icon-btn" id="refreshBtn" title="Refresh">↻</button>
+      </div>
+
+    </header>
+
+    <div class="content">
+
+      <!-- HERO -->
+
+      <section class="hero">
+
+        <div class="hero-kicker">
+          Memorial Media System
+        </div>
+
+        <h1>Photo Command Center</h1>
+
+        <p>
+          Upload, organize, feature, publish, and maintain tribute photography
+          across the CrowRules Memorials network.
+        </p>
+
+        <div class="hero-status">
+          <span class="status-dot"></span>
+          Memorial media system online
+        </div>
+
+      </section>
+
+      <!-- STATS -->
+
+      <section class="stats">
+
+        <div class="stat">
+          <div class="stat-label">Total Photos</div>
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-meta">Memorial photo library</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Published</div>
+          <div class="stat-value" id="statPublished">0</div>
+          <div class="stat-meta">Visible to visitors</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Featured</div>
+          <div class="stat-value" id="statFeatured">0</div>
+          <div class="stat-meta">Highlighted memories</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Drafts</div>
+          <div class="stat-value" id="statDrafts">0</div>
+          <div class="stat-meta">Awaiting publication</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Memorials</div>
+          <div class="stat-value" id="statMemorials">0</div>
+          <div class="stat-meta">With photo records</div>
+        </div>
+
+      </section>
+
+      <!-- TOOLBAR -->
+
+      <section class="toolbar">
+
+        <div class="search">
+          <span>⌕</span>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search photos, memorials, captions..."
+          >
+        </div>
+
+        <select id="memorialFilter">
+          <option value="">All Memorials</option>
+        </select>
+
+        <select id="statusFilter">
+          <option value="">All Statuses</option>
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+          <option value="hidden">Hidden</option>
+        </select>
+
+        <select id="featuredFilter">
+          <option value="">All Photos</option>
+          <option value="featured">Featured</option>
+          <option value="standard">Standard</option>
+        </select>
+
+        <select id="sortFilter">
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="title">Title A–Z</option>
+          <option value="memorial">Memorial</option>
+          <option value="order">Display Order</option>
+        </select>
+
+        <button class="btn" id="exportBtn">
+          Export CSV
+        </button>
+
+        <button class="btn primary" id="addBtn">
+          + Add Photo
+        </button>
+
+      </section>
+
+      <!-- WORKSPACE -->
+
+      <section class="workspace">
+
+        <div class="panel">
+
+          <div class="panel-head">
+
+            <div>
+              <div class="panel-title">PHOTO LIBRARY</div>
+              <div class="panel-sub" id="resultText">
+                Loading memorial photos...
+              </div>
+            </div>
+
+            <button class="btn small" id="clearFilters">
+              Clear Filters
+            </button>
+
+          </div>
+
+          <div id="photoGrid" class="photo-grid">
+            <div class="loading">
+              LOADING PHOTO LIBRARY
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="side-stack">
+
+          <div class="health-card">
+
+            <div class="health-title">
+              PHOTO LIBRARY HEALTH
+            </div>
+
+            <div class="health-row">
+              <div class="health-label">Database</div>
+              <div class="health-value good" id="dbHealth">
+                ONLINE
+              </div>
+            </div>
+
+            <div class="health-row">
+              <div class="health-label">Photo Records</div>
+              <div class="health-value" id="healthPhotos">
+                0
+              </div>
+            </div>
+
+            <div class="health-row">
+              <div class="health-label">Missing Images</div>
+              <div class="health-value warn" id="missingImages">
+                0
+              </div>
+            </div>
+
+            <div class="health-row">
+              <div class="health-label">Featured</div>
+              <div class="health-value" id="healthFeatured">
+                0
+              </div>
+            </div>
+
+          </div>
+
+          <div class="health-card">
+
+            <div class="health-title">
+              PUBLISHING
+            </div>
+
+            <div class="health-row">
+              <div class="health-label">Published</div>
+              <div class="health-value good" id="healthPublished">
+                0
+              </div>
+            </div>
+
+            <div class="health-row">
+              <div class="health-label">Draft</div>
+              <div class="health-value warn" id="healthDraft">
+                0
+              </div>
+            </div>
+
+            <div class="health-row">
+              <div class="health-label">Hidden</div>
+              <div class="health-value bad" id="healthHidden">
+                0
+              </div>
+            </div>
+
+          </div>
+
+          <div class="health-card">
+
+            <div class="upload-box">
+
+              <div class="upload-icon">▧</div>
+
+              <h3>PHOTO INGEST</h3>
+
+              <p>
+                Add memorial photography directly from the manager.
+                Images can also be linked from an existing CDN or storage location.
+              </p>
+
+              <button class="btn primary" id="uploadBtn">
+                Add New Photo
+              </button>
+
+            </div>
+
+          </div>
+
+        </aside>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</div>
+
+<!-- =========================
+     EDITOR MODAL
+========================= -->
+
+<div class="modal-backdrop" id="editorModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2 id="editorTitle">ADD MEMORIAL PHOTO</h2>
+
+      <button class="close" id="closeEditor">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <form id="photoForm">
+
+        <input type="hidden" id="photoId">
+
+        <div class="form-grid">
+
+          <div class="field full">
+
+            <label for="photoMemorial">
+              Memorial
+            </label>
+
+            <select id="photoMemorial" required>
+              <option value="">Select Memorial</option>
+            </select>
+
+          </div>
+
+          <div class="field">
+
+            <label for="photoTitle">
+              Photo Title
+            </label>
+
+            <input
+              id="photoTitle"
+              type="text"
+              placeholder="Memorial photo title"
+              required
+            >
+
+          </div>
+
+          <div class="field">
+
+            <label for="photoStatus">
+              Status
+            </label>
+
+            <select id="photoStatus">
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+              <option value="hidden">Hidden</option>
+            </select>
+
+          </div>
+
+          <div class="field full">
+
+            <label for="photoCaption">
+              Caption / Description
+            </label>
+
+            <textarea
+              id="photoCaption"
+              placeholder="Describe this memory..."
+            ></textarea>
+
+          </div>
+
+          <div class="field full">
+
+            <label for="photoUrl">
+              Image URL
+            </label>
+
+            <input
+              id="photoUrl"
+              type="url"
+              placeholder="https://..."
+            >
+
+            <div class="helper">
+              Direct HTTPS image URL. JPG, PNG, WEBP and compatible image sources are supported.
+            </div>
+
+          </div>
+
+          <div class="field full">
+
+            <label for="photoFile">
+              Upload Image
+            </label>
+
+            <input
+              id="photoFile"
+              class="file-input"
+              type="file"
+              accept="image/*"
+            >
+
+            <div class="helper">
+              Optional. Requires the configured Supabase Storage bucket and storage policies.
+            </div>
+
+          </div>
+
+          <div class="field">
+
+            <label for="photoThumbnail">
+              Thumbnail URL
+            </label>
+
+            <input
+              id="photoThumbnail"
+              type="url"
+              placeholder="Optional thumbnail URL"
+            >
+
+          </div>
+
+          <div class="field">
+
+            <label for="photoOrder">
+              Display Order
+            </label>
+
+            <input
+              id="photoOrder"
+              type="number"
+              value="0"
+              min="0"
+              step="1"
+            >
+
+          </div>
+
+          <div class="field full">
+
+            <div class="checkbox-row">
+
+              <input
+                id="photoFeatured"
+                type="checkbox"
+              >
+
+              <label for="photoFeatured">
+                Feature this photo in the memorial gallery
+              </label>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button class="btn" id="cancelEditor">
+        Cancel
+      </button>
+
+      <button class="btn primary" id="saveBtn">
+        Save Photo
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     PREVIEW MODAL
+========================= -->
+
+<div class="modal-backdrop" id="previewModal">
+
+  <div class="modal large">
+
+    <div class="modal-head">
+
+      <h2>PHOTO PREVIEW</h2>
+
+      <button class="close" id="closePreview">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <img
+        id="previewImage"
+        class="preview-image"
+        alt="Memorial photo preview"
+      >
+
+      <div class="preview-caption">
+
+        <h3 id="previewTitle">
+          —
+        </h3>
+
+        <p id="previewDescription">
+          —
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     TOASTS
+========================= -->
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+/* =========================================================
+   CROWRULES MEMORIAL PHOTOS MANAGER
+========================================================= */
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL || "";
+
+const SUPABASE_ANON_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY || "";
+
+const PHOTO_TABLE =
+  window.CROWRULES_MEMORIAL_PHOTOS_TABLE ||
+  "memorial_photos";
+
+const MEMORIAL_TABLE =
+  window.CROWRULES_MEMORIALS_TABLE ||
+  "memorials";
+
+const PHOTO_BUCKET =
+  window.CROWRULES_MEMORIAL_PHOTO_BUCKET ||
+  "memorial-photos";
+
+let supabaseClient = null;
+
+if (
+  SUPABASE_URL &&
+  SUPABASE_ANON_KEY &&
+  window.supabase
+) {
+  try {
+    supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+  } catch(error) {
+    console.error(error);
+  }
+}
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let memorials = [];
+let photos = [];
+let filteredPhotos = [];
+let editingId = null;
+
+/* =========================================================
+   DEMO DATA
+========================================================= */
+
+const demoMemorials = [
+  {
+    id:"demo-memorial-1",
+    name:"Daniel Meeker",
+    title:"Daniel Meeker"
+  },
+  {
+    id:"demo-memorial-2",
+    name:"CrowRules Memorial",
+    title:"CrowRules Memorial"
+  }
+];
+
+const demoPhotos = [
+  {
+    id:"demo-photo-1",
+    memorial_id:"demo-memorial-1",
+    title:"Daniel — A Lasting Memory",
+    description:"A memorial photograph celebrating a life and friendship remembered.",
+    image_url:"https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80",
+    thumbnail_url:"",
+    status:"published",
+    featured:true,
+    sort_order:1,
+    created_at:"2026-08-31T18:30:00Z"
+  },
+  {
+    id:"demo-photo-2",
+    memorial_id:"demo-memorial-1",
+    title:"Remembering Daniel",
+    description:"A quiet memorial image.",
+    image_url:"https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=80",
+    thumbnail_url:"",
+    status:"published",
+    featured:false,
+    sort_order:2,
+    created_at:"2026-08-28T18:30:00Z"
+  },
+  {
+    id:"demo-photo-3",
+    memorial_id:"demo-memorial-2",
+    title:"A Life Remembered",
+    description:"A tribute gallery photograph.",
+    image_url:"https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=1200&q=80",
+    thumbnail_url:"",
+    status:"draft",
+    featured:true,
+    sort_order:3,
+    created_at:"2026-08-20T18:30:00Z"
+  }
+];
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function pick(obj, keys, fallback="") {
+  for(const key of keys) {
+    if(
+      obj &&
+      obj[key] !== undefined &&
+      obj[key] !== null &&
+      obj[key] !== ""
+    ) {
+      return obj[key];
+    }
+  }
+
+  return fallback;
+}
+
+function normalizeMemorial(row) {
+
+  return {
+    id:pick(row,["id","uuid","memorial_id"],""),
+    name:pick(
+      row,
+      ["name","title","full_name","display_name"],
+      "Untitled Memorial"
+    ),
+    slug:pick(row,["slug"],"")
+  };
+
+}
+
+function normalizePhoto(row) {
+
+  return {
+    id:pick(row,["id","uuid","photo_id"],""),
+    memorial_id:pick(
+      row,
+      [
+        "memorial_id",
+        "memorialId",
+        "memorial_uuid"
+      ],
+      ""
+    ),
+    memorial_name:pick(
+      row,
+      [
+        "memorial_name",
+        "memorial_title"
+      ],
+      ""
+    ),
+    title:pick(
+      row,
+      ["title","name","caption"],
+      "Untitled Photo"
+    ),
+    description:pick(
+      row,
+      ["description","caption","body","notes"],
+      ""
+    ),
+    image_url:pick(
+      row,
+      [
+        "image_url",
+        "photo_url",
+        "url",
+        "image",
+        "media_url",
+        "source_url"
+      ],
+      ""
+    ),
+    thumbnail_url:pick(
+      row,
+      [
+        "thumbnail_url",
+        "thumb_url",
+        "poster_url",
+        "cover_url",
+        "thumbnail"
+      ],
+      ""
+    ),
+    status:normalizeStatus(
+      pick(
+        row,
+        [
+          "status",
+          "visibility"
+        ],
+        ""
+      ),
+      row
+    ),
+    featured:Boolean(
+      pick(
+        row,
+        [
+          "featured",
+          "is_featured"
+        ],
+        false
+      )
+    ),
+    sort_order:Number(
+      pick(
+        row,
+        [
+          "sort_order",
+          "position",
+          "display_order"
+        ],
+        0
+      )
+    ) || 0,
+    created_at:pick(
+      row,
+      [
+        "created_at",
+        "published_at",
+        "created"
+      ],
+      ""
+    ),
+    raw:row
+  };
+
+}
+
+function normalizeStatus(value,row) {
+
+  if(
+    row &&
+    (
+      row.published === true ||
+      row.is_published === true
+    )
+  ) {
+    return "published";
+  }
+
+  if(
+    row &&
+    (
+      row.published === false ||
+      row.is_published === false
+    ) &&
+    !value
+  ) {
+    return "draft";
+  }
+
+  const s = String(value || "")
+    .toLowerCase()
+    .trim();
+
+  if(
+    s === "hidden" ||
+    s === "private" ||
+    s === "unpublished"
+  ) {
+    return "hidden";
+  }
+
+  if(
+    s === "draft" ||
+    s === "pending"
+  ) {
+    return "draft";
+  }
+
+  return "published";
+
+}
+
+function memorialName(photo) {
+
+  if(photo.memorial_name) {
+    return photo.memorial_name;
+  }
+
+  const memorial =
+    memorials.find(
+      m => String(m.id) === String(photo.memorial_id)
+    );
+
+  return memorial
+    ? memorial.name
+    : "Unassigned Memorial";
+
+}
+
+function safeUrl(url) {
+
+  if(!url) return "";
+
+  try {
+
+    const parsed = new URL(url,window.location.href);
+
+    if(
+      parsed.protocol === "http:" ||
+      parsed.protocol === "https:" ||
+      parsed.protocol === "blob:"
+    ) {
+      return parsed.href;
+    }
+
+  } catch(error) {}
+
+  return "";
+
+}
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function formatDate(value) {
+
+  if(!value) return "—";
+
+  const d = new Date(value);
+
+  if(Number.isNaN(d.getTime())) {
+    return String(value);
+  }
+
+  return d.toLocaleDateString(
+    undefined,
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric"
+    }
+  );
+
+}
+
+function toast(message,type="") {
+
+  const wrap =
+    document.getElementById("toastWrap");
+
+  const el =
+    document.createElement("div");
+
+  el.className =
+    "toast " + type;
+
+  el.textContent = message;
+
+  wrap.appendChild(el);
+
+  setTimeout(() => {
+    el.remove();
+  },4200);
+
+}
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadData() {
+
+  setLoading(true);
+
+  if(!supabaseClient) {
+
+    memorials = demoMemorials.map(normalizeMemorial);
+    photos = demoPhotos.map(normalizePhoto);
+
+    document.getElementById("dbHealth")
+      .textContent = "DEMO MODE";
+
+    document.getElementById("dbHealth")
+      .className = "health-value warn";
+
+    setLoading(false);
+
+    populateMemorialSelects();
+    render();
+
+    return;
+
+  }
+
+  try {
+
+    const [
+      memorialResult,
+      photoResult
+    ] = await Promise.all([
+
+      supabaseClient
+        .from(MEMORIAL_TABLE)
+        .select("*"),
+
+      supabaseClient
+        .from(PHOTO_TABLE)
+        .select("*")
+
+    ]);
+
+    if(memorialResult.error) {
+      throw memorialResult.error;
+    }
+
+    if(photoResult.error) {
+      throw photoResult.error;
+    }
+
+    memorials =
+      (memorialResult.data || [])
+        .map(normalizeMemorial);
+
+    photos =
+      (photoResult.data || [])
+        .map(normalizePhoto);
+
+    document.getElementById("dbHealth")
+      .textContent = "ONLINE";
+
+    document.getElementById("dbHealth")
+      .className = "health-value good";
+
+  } catch(error) {
+
+    console.error(error);
+
+    document.getElementById("dbHealth")
+      .textContent = "ERROR";
+
+    document.getElementById("dbHealth")
+      .className = "health-value bad";
+
+    toast(
+      "Supabase load failed: " +
+      (error.message || "Unknown error"),
+      "error"
+    );
+
+    memorials =
+      demoMemorials.map(normalizeMemorial);
+
+    photos =
+      demoPhotos.map(normalizePhoto);
+
+  }
+
+  setLoading(false);
+
+  populateMemorialSelects();
+  render();
+
+}
+
+function setLoading(isLoading) {
+
+  const grid =
+    document.getElementById("photoGrid");
+
+  if(isLoading) {
+
+    grid.innerHTML =
+      '<div class="loading" style="grid-column:1/-1">LOADING PHOTO LIBRARY</div>';
+
+  }
+
+}
+
+/* =========================================================
+   SELECTS
+========================================================= */
+
+function populateMemorialSelects() {
+
+  const filter =
+    document.getElementById("memorialFilter");
+
+  const formSelect =
+    document.getElementById("photoMemorial");
+
+  const currentFilter =
+    filter.value;
+
+  filter.innerHTML =
+    '<option value="">All Memorials</option>';
+
+  formSelect.innerHTML =
+    '<option value="">Select Memorial</option>';
+
+  memorials
+    .slice()
+    .sort((a,b) =>
+      a.name.localeCompare(b.name)
+    )
+    .forEach(memorial => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = memorial.id;
+      option.textContent = memorial.name;
+
+      filter.appendChild(
+        option.cloneNode(true)
+      );
+
+      formSelect.appendChild(option);
+
+    });
+
+  filter.value = currentFilter;
+
+}
+
+/* =========================================================
+   FILTERING
+========================================================= */
+
+function applyFilters() {
+
+  const search =
+    document.getElementById("searchInput")
+      .value
+      .toLowerCase()
+      .trim();
+
+  const memorial =
+    document.getElementById("memorialFilter")
+      .value;
+
+  const status =
+    document.getElementById("statusFilter")
+      .value;
+
+  const featured =
+    document.getElementById("featuredFilter")
+      .value;
+
+  const sort =
+    document.getElementById("sortFilter")
+      .value;
+
+  filteredPhotos =
+    photos.filter(photo => {
+
+      const memorialLabel =
+        memorialName(photo).toLowerCase();
+
+      const haystack =
+        [
+          photo.title,
+          photo.description,
+          memorialLabel
+        ]
+        .join(" ")
+        .toLowerCase();
+
+      if(search && !haystack.includes(search)) {
+        return false;
+      }
+
+      if(
+        memorial &&
+        String(photo.memorial_id) !==
+        String(memorial)
+      ) {
+        return false;
+      }
+
+      if(
+        status &&
+        photo.status !== status
+      ) {
+        return false;
+      }
+
+      if(
+        featured === "featured" &&
+        !photo.featured
+      ) {
+        return false;
+      }
+
+      if(
+        featured === "standard" &&
+        photo.featured
+      ) {
+        return false;
+      }
+
+      return true;
+
+    });
+
+  filteredPhotos.sort((a,b) => {
+
+    if(sort === "title") {
+      return a.title.localeCompare(b.title);
+    }
+
+    if(sort === "memorial") {
+      return memorialName(a)
+        .localeCompare(memorialName(b));
+    }
+
+    if(sort === "order") {
+      return a.sort_order - b.sort_order;
+    }
+
+    const ad =
+      new Date(a.created_at || 0).getTime();
+
+    const bd =
+      new Date(b.created_at || 0).getTime();
+
+    return sort === "oldest"
+      ? ad - bd
+      : bd - ad;
+
+  });
+
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render() {
+
+  applyFilters();
+
+  updateStats();
+
+  const grid =
+    document.getElementById("photoGrid");
+
+  document.getElementById("resultText")
+    .textContent =
+      `${filteredPhotos.length} of ${photos.length} photos`;
+
+  if(!filteredPhotos.length) {
+
+    grid.innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        <div class="empty-icon">▧</div>
+        <h3>No Photos Found</h3>
+        <p>Try changing the current filters or add a new memorial photo.</p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  grid.innerHTML =
+    filteredPhotos
+      .map(photoCard)
+      .join("");
+
+}
+
+function photoCard(photo) {
+
+  const image =
+    safeUrl(
+      photo.thumbnail_url ||
+      photo.image_url
+    );
+
+  const statusClass =
+    photo.status === "published"
+      ? "published"
+      : photo.status === "draft"
+        ? "draft"
+        : "hidden";
+
+  const statusText =
+    photo.status.toUpperCase();
+
+  return `
+
+    <article class="photo-card">
+
+      <div class="photo-thumb">
+
+        ${
+          image
+          ?
+          `<img
+             src="${escapeHtml(image)}"
+             alt="${escapeHtml(photo.title)}"
+             loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"
+           >
+           <div class="placeholder" style="display:none">▧</div>`
+          :
+          `<div class="placeholder">▧</div>`
+        }
+
+        <div class="photo-overlay">
+
+          <span class="badge ${statusClass}">
+            ${statusText}
+          </span>
+
+          ${
+            photo.featured
+            ?
+            `<span class="badge featured">★ Featured</span>`
+            :
+            ""
+          }
+
+        </div>
+
+      </div>
+
+      <div class="photo-body">
+
+        <div class="photo-title">
+          ${escapeHtml(photo.title)}
+        </div>
+
+        <div class="photo-memorial">
+          ${escapeHtml(memorialName(photo))}
+        </div>
+
+        <div class="photo-meta">
+          <span>
+            Order ${photo.sort_order}
+          </span>
+
+          <span>
+            ${formatDate(photo.created_at)}
+          </span>
+        </div>
+
+        <div class="photo-actions">
+
+          <button
+            class="btn small"
+            onclick="previewPhoto('${escapeHtml(photo.id)}')"
+          >
+            Preview
+          </button>
+
+          <button
+            class="btn small"
+            onclick="editPhoto('${escapeHtml(photo.id)}')"
+          >
+            Edit
+          </button>
+
+          <button
+            class="btn small"
+            onclick="toggleFeatured('${escapeHtml(photo.id)}')"
+          >
+            ${photo.featured ? "Unfeature" : "Feature"}
+          </button>
+
+        </div>
+
+        <div class="photo-actions">
+
+          <button
+            class="btn small"
+            onclick="togglePublish('${escapeHtml(photo.id)}')"
+          >
+            ${
+              photo.status === "published"
+              ? "Unpublish"
+              : "Publish"
+            }
+          </button>
+
+          <button
+            class="btn small danger"
+            onclick="deletePhoto('${escapeHtml(photo.id)}')"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats() {
+
+  const total =
+    photos.length;
+
+  const published =
+    photos.filter(
+      p => p.status === "published"
+    ).length;
+
+  const featured =
+    photos.filter(
+      p => p.featured
+    ).length;
+
+  const drafts =
+    photos.filter(
+      p => p.status === "draft"
+    ).length;
+
+  const hidden =
+    photos.filter(
+      p => p.status === "hidden"
+    ).length;
+
+  const memorialSet =
+    new Set(
+      photos
+        .map(p => p.memorial_id)
+        .filter(Boolean)
+    );
+
+  const missing =
+    photos.filter(
+      p => !p.image_url
+    ).length;
+
+  document.getElementById("statTotal")
+    .textContent = total;
+
+  document.getElementById("statPublished")
+    .textContent = published;
+
+  document.getElementById("statFeatured")
+    .textContent = featured;
+
+  document.getElementById("statDrafts")
+    .textContent = drafts;
+
+  document.getElementById("statMemorials")
+    .textContent = memorialSet.size;
+
+  document.getElementById("navPhotoCount")
+    .textContent = total;
+
+  document.getElementById("healthPhotos")
+    .textContent = total;
+
+  document.getElementById("missingImages")
+    .textContent = missing;
+
+  document.getElementById("healthFeatured")
+    .textContent = featured;
+
+  document.getElementById("healthPublished")
+    .textContent = published;
+
+  document.getElementById("healthDraft")
+    .textContent = drafts;
+
+  document.getElementById("healthHidden")
+    .textContent = hidden;
+
+}
+
+/* =========================================================
+   EDITOR
+========================================================= */
+
+function openEditor(photo=null) {
+
+  editingId =
+    photo
+    ? photo.id
+    : null;
+
+  document.getElementById("editorTitle")
+    .textContent =
+      photo
+      ? "EDIT MEMORIAL PHOTO"
+      : "ADD MEMORIAL PHOTO";
+
+  document.getElementById("photoId")
+    .value =
+      photo
+      ? photo.id
+      : "";
+
+  document.getElementById("photoMemorial")
+    .value =
+      photo
+      ? photo.memorial_id
+      : "";
+
+  document.getElementById("photoTitle")
+    .value =
+      photo
+      ? photo.title
+      : "";
+
+  document.getElementById("photoCaption")
+    .value =
+      photo
+      ? photo.description
+      : "";
+
+  document.getElementById("photoUrl")
+    .value =
+      photo
+      ? photo.image_url
+      : "";
+
+  document.getElementById("photoThumbnail")
+    .value =
+      photo
+      ? photo.thumbnail_url
+      : "";
+
+  document.getElementById("photoStatus")
+    .value =
+      photo
+      ? photo.status
+      : "published";
+
+  document.getElementById("photoOrder")
+    .value =
+      photo
+      ? photo.sort_order
+      : 0;
+
+  document.getElementById("photoFeatured")
+    .checked =
+      photo
+      ? photo.featured
+      : false;
+
+  document.getElementById("photoFile")
+    .value = "";
+
+  document.getElementById("editorModal")
+    .classList.add("show");
+
+}
+
+function closeEditor() {
+
+  document.getElementById("editorModal")
+    .classList.remove("show");
+
+  editingId = null;
+
+}
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+async function savePhoto() {
+
+  const memorialId =
+    document.getElementById("photoMemorial")
+      .value;
+
+  const title =
+    document.getElementById("photoTitle")
+      .value
+      .trim();
+
+  const description =
+    document.getElementById("photoCaption")
+      .value
+      .trim();
+
+  let imageUrl =
+    document.getElementById("photoUrl")
+      .value
+      .trim();
+
+  const thumbnailUrl =
+    document.getElementById("photoThumbnail")
+      .value
+      .trim();
+
+  const status =
+    document.getElementById("photoStatus")
+      .value;
+
+  const sortOrder =
+    Number(
+      document.getElementById("photoOrder")
+        .value
+    ) || 0;
+
+  const featured =
+    document.getElementById("photoFeatured")
+      .checked;
+
+  const file =
+    document.getElementById("photoFile")
+      .files[0];
+
+  if(!memorialId) {
+    toast("Select a memorial.","error");
+    return;
+  }
+
+  if(!title) {
+    toast("Enter a photo title.","error");
+    return;
+  }
+
+  if(!imageUrl && !file) {
+    toast(
+      "Provide an image URL or upload an image.",
+      "error"
+    );
+    return;
+  }
+
+  const saveButton =
+    document.getElementById("saveBtn");
+
+  saveButton.disabled = true;
+  saveButton.textContent = "Saving...";
+
+  try {
+
+    if(file) {
+
+      if(!supabaseClient) {
+        throw new Error(
+          "Supabase is required for image uploads."
+        );
+      }
+
+      imageUrl =
+        await uploadPhotoFile(
+          file,
+          memorialId
+        );
+
+    }
+
+    const payload =
+      buildPhotoPayload({
+        memorialId,
+        title,
+        description,
+        imageUrl,
+        thumbnailUrl,
+        status,
+        featured,
+        sortOrder
+      });
+
+    if(!supabaseClient) {
+
+      if(editingId) {
+
+        const index =
+          photos.findIndex(
+            p =>
+              String(p.id) ===
+              String(editingId)
+          );
+
+        if(index >= 0) {
+
+          photos[index] =
+            normalizePhoto({
+              ...photos[index],
+              ...payload,
+              id:editingId
+            });
+
+        }
+
+      } else {
+
+        photos.unshift(
+          normalizePhoto({
+            ...payload,
+            id:
+              "demo-" +
+              Date.now(),
+            created_at:
+              new Date().toISOString()
+          })
+        );
+
+      }
+
+      toast(
+        editingId
+        ? "Photo updated in demo mode."
+        : "Photo added in demo mode.",
+        "success"
+      );
+
+    } else {
+
+      if(editingId) {
+
+        const result =
+          await supabaseClient
+            .from(PHOTO_TABLE)
+            .update(payload)
+            .eq("id",editingId);
+
+        if(result.error) {
+          throw result.error;
+        }
+
+        toast(
+          "Memorial photo updated.",
+          "success"
+        );
+
+      } else {
+
+        const result =
+          await supabaseClient
+            .from(PHOTO_TABLE)
+            .insert(payload);
+
+        if(result.error) {
+          throw result.error;
+        }
+
+        toast(
+          "Memorial photo added.",
+          "success"
+        );
+
+      }
+
+      await loadData();
+
+    }
+
+    closeEditor();
+
+    if(!supabaseClient) {
+      populateMemorialSelects();
+      render();
+    }
+
+  } catch(error) {
+
+    console.error(error);
+
+    toast(
+      "Save failed: " +
+      (error.message || "Unknown error"),
+      "error"
+    );
+
+  } finally {
+
+    saveButton.disabled = false;
+    saveButton.textContent = "Save Photo";
+
+  }
+
+}
+
+/* =========================================================
+   PAYLOAD
+========================================================= */
+
+function buildPhotoPayload(data) {
+
+  /*
+    Canonical CrowRules schema.
+
+    If your existing table uses different column names,
+    adjust this function rather than changing the entire UI.
+  */
+
+  return {
+    memorial_id:data.memorialId,
+    title:data.title,
+    description:data.description,
+    image_url:data.imageUrl,
+    thumbnail_url:data.thumbnailUrl || null,
+    status:data.status,
+    featured:data.featured,
+    sort_order:data.sortOrder
+  };
+
+}
+
+/* =========================================================
+   UPLOAD
+========================================================= */
+
+async function uploadPhotoFile(file,memorialId) {
+
+  if(!supabaseClient) {
+    throw new Error(
+      "Supabase client is not configured."
+    );
+  }
+
+  const safeName =
+    file.name
+      .replace(/[^a-zA-Z0-9._-]/g,"-")
+      .toLowerCase();
+
+  const path =
+    "memorials/" +
+    memorialId +
+    "/" +
+    Date.now() +
+    "-" +
+    safeName;
+
+  const result =
+    await supabaseClient
+      .storage
+      .from(PHOTO_BUCKET)
+      .upload(
+        path,
+        file,
+        {
+          cacheControl:"3600",
+          upsert:false,
+          contentType:file.type
+        }
+      );
+
+  if(result.error) {
+    throw result.error;
+  }
+
+  const publicResult =
+    supabaseClient
+      .storage
+      .from(PHOTO_BUCKET)
+      .getPublicUrl(path);
+
+  if(
+    !publicResult ||
+    !publicResult.data ||
+    !publicResult.data.publicUrl
+  ) {
+    throw new Error(
+      "Image uploaded but no public URL was returned."
+    );
+  }
+
+  return publicResult.data.publicUrl;
+
+}
+
+/* =========================================================
+   EDIT
+========================================================= */
+
+function editPhoto(id) {
+
+  const photo =
+    photos.find(
+      p =>
+        String(p.id) ===
+        String(id)
+    );
+
+  if(!photo) {
+    toast("Photo not found.","error");
+    return;
+  }
+
+  openEditor(photo);
+
+}
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function previewPhoto(id) {
+
+  const photo =
+    photos.find(
+      p =>
+        String(p.id) ===
+        String(id)
+    );
+
+  if(!photo) {
+    toast("Photo not found.","error");
+    return;
+  }
+
+  const image =
+    safeUrl(
+      photo.image_url ||
+      photo.thumbnail_url
+    );
+
+  if(!image) {
+    toast(
+      "This photo has no valid image URL.",
+      "error"
+    );
+    return;
+  }
+
+  document.getElementById("previewImage")
+    .src = image;
+
+  document.getElementById("previewImage")
+    .alt = photo.title;
+
+  document.getElementById("previewTitle")
+    .textContent = photo.title;
+
+  document.getElementById("previewDescription")
+    .textContent =
+      photo.description ||
+      memorialName(photo);
+
+  document.getElementById("previewModal")
+    .classList.add("show");
+
+}
+
+function closePreview() {
+
+  document.getElementById("previewModal")
+    .classList.remove("show");
+
+  document.getElementById("previewImage")
+    .src = "";
+
+}
+
+/* =========================================================
+   FEATURED
+========================================================= */
+
+async function toggleFeatured(id) {
+
+  const photo =
+    photos.find(
+      p =>
+        String(p.id) ===
+        String(id)
+    );
+
+  if(!photo) return;
+
+  const next =
+    !photo.featured;
+
+  try {
+
+    if(!supabaseClient) {
+
+      photo.featured = next;
+
+      toast(
+        next
+        ? "Photo featured in demo mode."
+        : "Photo removed from featured in demo mode.",
+        "success"
+      );
+
+    } else {
+
+      const payload =
+        buildPartialPayload(
+          photo.raw,
+          {
+            featured:next
+          }
+        );
+
+      const result =
+        await supabaseClient
+          .from(PHOTO_TABLE)
+          .update(payload)
+          .eq("id",photo.id);
+
+      if(result.error) {
+        throw result.error;
+      }
+
+      photo.featured = next;
+
+      toast(
+        next
+        ? "Photo featured."
+        : "Photo unfeatured.",
+        "success"
+      );
+
+    }
+
+    render();
+
+  } catch(error) {
+
+    toast(
+      "Feature update failed: " +
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   PUBLISH
+========================================================= */
+
+async function togglePublish(id) {
+
+  const photo =
+    photos.find(
+      p =>
+        String(p.id) ===
+        String(id)
+    );
+
+  if(!photo) return;
+
+  const next =
+    photo.status === "published"
+      ? "draft"
+      : "published";
+
+  try {
+
+    if(!supabaseClient) {
+
+      photo.status = next;
+
+      toast(
+        next === "published"
+        ? "Photo published in demo mode."
+        : "Photo moved to draft in demo mode.",
+        "success"
+      );
+
+    } else {
+
+      const payload =
+        buildPartialPayload(
+          photo.raw,
+          {
+            status:next
+          }
+        );
+
+      const result =
+        await supabaseClient
+          .from(PHOTO_TABLE)
+          .update(payload)
+          .eq("id",photo.id);
+
+      if(result.error) {
+        throw result.error;
+      }
+
+      photo.status = next;
+
+      toast(
+        next === "published"
+        ? "Photo published."
+        : "Photo unpublished.",
+        "success"
+      );
+
+    }
+
+    render();
+
+  } catch(error) {
+
+    toast(
+      "Publishing update failed: " +
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deletePhoto(id) {
+
+  const photo =
+    photos.find(
+      p =>
+        String(p.id) ===
+        String(id)
+    );
+
+  if(!photo) return;
+
+  const confirmed =
+    confirm(
+      `Delete "${photo.title}"?\n\nThis cannot be undone.`
+    );
+
+  if(!confirmed) {
+    return;
+  }
+
+  try {
+
+    if(!supabaseClient) {
+
+      photos =
+        photos.filter(
+          p =>
+            String(p.id) !==
+            String(id)
+        );
+
+      toast(
+        "Photo deleted in demo mode.",
+        "success"
+      );
+
+    } else {
+
+      const result =
+        await supabaseClient
+          .from(PHOTO_TABLE)
+          .delete()
+          .eq("id",id);
+
+      if(result.error) {
+        throw result.error;
+      }
+
+      photos =
+        photos.filter(
+          p =>
+            String(p.id) !==
+            String(id)
+        );
+
+      toast(
+        "Memorial photo deleted.",
+        "success"
+      );
+
+    }
+
+    render();
+
+  } catch(error) {
+
+    toast(
+      "Delete failed: " +
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   SCHEMA-AWARE PARTIAL PAYLOAD
+========================================================= */
+
+function buildPartialPayload(raw,values) {
+
+  const payload = {};
+
+  const fieldMap = {
+    featured:[
+      "featured",
+      "is_featured"
+    ],
+    status:[
+      "status",
+      "visibility"
+    ]
+  };
+
+  for(const [logical,value] of Object.entries(values)) {
+
+    const candidates =
+      fieldMap[logical] || [logical];
+
+    let found = false;
+
+    for(const candidate of candidates) {
+
+      if(
+        raw &&
+        Object.prototype.hasOwnProperty.call(
+          raw,
+          candidate
+        )
+      ) {
+        payload[candidate] = value;
+        found = true;
+        break;
+      }
+
+    }
+
+    if(!found) {
+
+      /*
+        Canonical fallback.
+        This keeps the manager straightforward when
+        the table follows the CrowRules schema.
+      */
+
+      payload[candidates[0]] = value;
+
+    }
+
+  }
+
+  return payload;
+
+}
+
+/* =========================================================
+   CSV EXPORT
+========================================================= */
+
+function exportCSV() {
+
+  applyFilters();
+
+  if(!filteredPhotos.length) {
+    toast(
+      "There are no photos to export.",
+      "error"
+    );
+    return;
+  }
+
+  const headers = [
+    "id",
+    "title",
+    "memorial",
+    "status",
+    "featured",
+    "image_url",
+    "thumbnail_url",
+    "sort_order",
+    "created_at"
+  ];
+
+  const rows =
+    filteredPhotos.map(photo => [
+
+      photo.id,
+      photo.title,
+      memorialName(photo),
+      photo.status,
+      photo.featured,
+      photo.image_url,
+      photo.thumbnail_url,
+      photo.sort_order,
+      photo.created_at
+
+    ]);
+
+  const csv = [
+    headers,
+    ...rows
+  ]
+  .map(row =>
+    row
+      .map(csvCell)
+      .join(",")
+  )
+  .join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:"text/csv;charset=utf-8;"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+
+  link.download =
+    "crowrules-memorial-photos-" +
+    new Date()
+      .toISOString()
+      .slice(0,10) +
+    ".csv";
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
+  URL.revokeObjectURL(url);
+
+  toast(
+    "Photo library exported.",
+    "success"
+  );
+
+}
+
+function csvCell(value) {
+
+  const text =
+    String(value ?? "");
+
+  return '"' +
+    text.replace(/"/g,'""') +
+    '"';
+
+}
+
+/* =========================================================
+   CLEAR FILTERS
+========================================================= */
+
+function clearFilters() {
+
+  document.getElementById("searchInput")
+    .value = "";
+
+  document.getElementById("memorialFilter")
+    .value = "";
+
+  document.getElementById("statusFilter")
+    .value = "";
+
+  document.getElementById("featuredFilter")
+    .value = "";
+
+  document.getElementById("sortFilter")
+    .value = "newest";
+
+  render();
+
+}
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock() {
+
+  const now =
+    new Date();
+
+  document.getElementById("clock")
+    .textContent =
+      now.toLocaleTimeString(
+        [],
+        {
+          hour:"2-digit",
+          minute:"2-digit",
+          second:"2-digit"
+        }
+      );
+
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+  .getElementById("addBtn")
+  .addEventListener(
+    "click",
+    () => openEditor()
+  );
+
+document
+  .getElementById("uploadBtn")
+  .addEventListener(
+    "click",
+    () => openEditor()
+  );
+
+document
+  .getElementById("closeEditor")
+  .addEventListener(
+    "click",
+    closeEditor
+  );
+
+document
+  .getElementById("cancelEditor")
+  .addEventListener(
+    "click",
+    closeEditor
+  );
+
+document
+  .getElementById("saveBtn")
+  .addEventListener(
+    "click",
+    savePhoto
+  );
+
+document
+  .getElementById("closePreview")
+  .addEventListener(
+    "click",
+    closePreview
+  );
+
+document
+  .getElementById("refreshBtn")
+  .addEventListener(
+    "click",
+    loadData
+  );
+
+document
+  .getElementById("exportBtn")
+  .addEventListener(
+    "click",
+    exportCSV
+  );
+
+document
+  .getElementById("clearFilters")
+  .addEventListener(
+    "click",
+    clearFilters
+  );
+
+[
+  "searchInput",
+  "memorialFilter",
+  "statusFilter",
+  "featuredFilter",
+  "sortFilter"
+].forEach(id => {
+
+  document
+    .getElementById(id)
+    .addEventListener(
+      "input",
+      render
+    );
+
+  document
+    .getElementById(id)
+    .addEventListener(
+      "change",
+      render
+    );
+
+});
+
+document
+  .getElementById("mobileMenu")
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    }
+  );
+
+/* Close modal when clicking outside */
+
+document
+  .getElementById("editorModal")
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        document.getElementById("editorModal")
+      ) {
+        closeEditor();
+      }
+
+    }
+  );
+
+document
+  .getElementById("previewModal")
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        document.getElementById("previewModal")
+      ) {
+        closePreview();
+      }
+
+    }
+  );
+
+/* Escape key */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key !== "Escape") {
+      return;
+    }
+
+    closeEditor();
+    closePreview();
+
+  }
+);
+
+/* =========================================================
+   GLOBAL ACTIONS
+========================================================= */
+
+window.editPhoto = editPhoto;
+window.previewPhoto = previewPhoto;
+window.toggleFeatured = toggleFeatured;
+window.togglePublish = togglePublish;
+window.deletePhoto = deletePhoto;
+
+/* =========================================================
+   START
+========================================================= */
+
+loadData();
+
+</script>
+
+</body>
+</html>

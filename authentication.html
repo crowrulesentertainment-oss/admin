@@ -1,0 +1,3253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Authentication — CrowRules Entertainment Main Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin Authentication and Security Command Center">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(108,92,255,.12),transparent 28%),
+    radial-gradient(circle at 20% 20%,rgba(182,108,255,.07),transparent 24%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   SHELL
+========================= */
+
+.app{
+  min-height:100vh;
+}
+
+.sidebar{
+  position:fixed;
+  z-index:50;
+  top:0;
+  left:0;
+  bottom:0;
+  width:260px;
+  background:
+    linear-gradient(180deg,rgba(17,17,23,.98),rgba(5,5,5,.99));
+  border-right:1px solid var(--line);
+  overflow-y:auto;
+  transition:.25s ease;
+}
+
+.brand{
+  padding:24px 20px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo{
+  width:42px;
+  height:42px;
+  border:1px solid var(--accent);
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle,rgba(182,108,255,.28),transparent 65%),
+    #09090c;
+  box-shadow:
+    0 0 24px rgba(182,108,255,.15),
+    inset 0 0 20px rgba(182,108,255,.06);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  color:var(--accent);
+}
+
+.brand-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.nav{
+  padding:14px 10px 30px;
+}
+
+.nav-section{
+  margin:18px 10px 8px;
+  color:#656570;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 12px;
+  margin:3px 0;
+  border:1px solid transparent;
+  border-radius:9px;
+  color:#aaaab4;
+  font-size:12px;
+  transition:.2s;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:#111117;
+  border-color:#24242d;
+}
+
+.nav a.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.07));
+  border-color:rgba(182,108,255,.34);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+  opacity:.9;
+}
+
+.main{
+  margin-left:260px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:0 28px;
+  border-bottom:1px solid var(--line);
+  background:rgba(5,5,5,.72);
+  backdrop-filter:blur(14px);
+  position:sticky;
+  top:0;
+  z-index:30;
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.mobile-menu{
+  display:none;
+  width:40px;
+  height:40px;
+  border:1px solid var(--line2);
+  border-radius:8px;
+  background:var(--panel);
+  color:#fff;
+}
+
+.breadcrumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  font-family:Orbitron,sans-serif;
+  color:var(--cyan);
+  font-size:10px;
+  letter-spacing:1px;
+  padding:9px 11px;
+  border:1px solid rgba(55,215,255,.18);
+  border-radius:7px;
+  background:rgba(55,215,255,.04);
+}
+
+.top-btn{
+  border:1px solid var(--line2);
+  background:var(--panel);
+  color:#ddd;
+  padding:9px 12px;
+  border-radius:7px;
+  font-size:11px;
+}
+
+.top-btn:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.profile-chip{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:5px 9px 5px 5px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:22px;
+}
+
+.avatar{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:
+    linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+
+.profile-name{
+  font-size:10px;
+  color:#ddd;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding:28px;
+  max-width:1800px;
+  margin:auto;
+}
+
+.hero{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:25px;
+  padding:26px;
+  margin-bottom:20px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:
+    linear-gradient(135deg,rgba(182,108,255,.09),transparent 40%),
+    linear-gradient(180deg,#111117,#0a0a0d);
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"AUTH";
+  position:absolute;
+  right:25px;
+  top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:100px;
+  font-weight:800;
+  color:rgba(255,255,255,.025);
+  pointer-events:none;
+}
+
+.eyebrow{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+h1{
+  font-family:Orbitron,sans-serif;
+  margin:0;
+  font-size:28px;
+  letter-spacing:.5px;
+}
+
+.hero p{
+  color:var(--muted);
+  font-size:12px;
+  max-width:760px;
+  line-height:1.7;
+  margin:10px 0 0;
+}
+
+.hero-actions{
+  display:flex;
+  gap:8px;
+  position:relative;
+  z-index:2;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:#101016;
+  color:#eee;
+  padding:10px 14px;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.btn:hover{
+  border-color:var(--accent);
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.55);
+  background:linear-gradient(135deg,#a85df1,#6555df);
+  color:white;
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.35);
+  color:#ff8093;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:17px;
+  min-width:0;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1.3px;
+  font-weight:700;
+}
+
+.stat-value{
+  margin-top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+}
+
+.stat-note{
+  color:#666673;
+  font-size:9px;
+  margin-top:5px;
+}
+
+.green{
+  color:var(--green);
+}
+
+.cyan{
+  color:var(--cyan);
+}
+
+.yellow{
+  color:var(--yellow);
+}
+
+.red{
+  color:var(--red);
+}
+
+.purple{
+  color:var(--accent);
+}
+
+/* =========================
+   GRID
+========================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:1.35fr .9fr;
+  gap:18px;
+  margin-bottom:18px;
+}
+
+.panel{
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);
+  border-radius:13px;
+  overflow:hidden;
+}
+
+.panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.5px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.panel-body{
+  padding:18px;
+}
+
+/* =========================
+   AUTH STATUS
+========================= */
+
+.auth-status{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.status-box{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:15px;
+  background:#0b0b0f;
+}
+
+.status-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.status-name{
+  font-size:11px;
+  font-weight:700;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  display:inline-block;
+  background:var(--green);
+  box-shadow:0 0 10px currentColor;
+}
+
+.status-description{
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.6;
+  margin-top:8px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid var(--line2);
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:9px;
+  font-weight:700;
+}
+
+.badge.green{
+  border-color:rgba(69,230,154,.25);
+  background:rgba(69,230,154,.06);
+}
+
+.badge.yellow{
+  border-color:rgba(243,201,105,.25);
+  background:rgba(243,201,105,.06);
+}
+
+.badge.red{
+  border-color:rgba(255,82,109,.25);
+  background:rgba(255,82,109,.06);
+}
+
+/* =========================
+   SECURITY
+========================= */
+
+.security-list{
+  display:grid;
+  gap:10px;
+}
+
+.security-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#0b0b0f;
+}
+
+.security-main{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.security-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:#15151c;
+  border:1px solid var(--line);
+}
+
+.security-name{
+  font-size:10px;
+  font-weight:700;
+}
+
+.security-meta{
+  font-size:8px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.toggle{
+  width:40px;
+  height:21px;
+  padding:2px;
+  border:1px solid var(--line2);
+  border-radius:20px;
+  background:#08080b;
+  transition:.2s;
+}
+
+.toggle span{
+  display:block;
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  background:#777;
+  transition:.2s;
+}
+
+.toggle.on{
+  border-color:rgba(69,230,154,.35);
+  background:rgba(69,230,154,.08);
+}
+
+.toggle.on span{
+  transform:translateX(17px);
+  background:var(--green);
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:780px;
+}
+
+th{
+  color:#6e6e79;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  text-align:left;
+  padding:11px 14px;
+  border-bottom:1px solid var(--line);
+  background:#0a0a0d;
+}
+
+td{
+  padding:13px 14px;
+  border-bottom:1px solid rgba(39,39,47,.65);
+  font-size:10px;
+  color:#ddd;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.015);
+}
+
+.user-cell{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.user-mini{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#1a1822;
+  border:1px solid #363044;
+  color:var(--accent);
+  font-size:9px;
+  font-weight:800;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+/* =========================
+   LOGIN PROVIDERS
+========================= */
+
+.providers{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.provider{
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#0b0b0f;
+}
+
+.provider-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.provider-icon{
+  width:35px;
+  height:35px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+}
+
+.provider-name{
+  margin-top:10px;
+  font-size:10px;
+  font-weight:700;
+}
+
+.provider-status{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* =========================
+   EVENTS
+========================= */
+
+.events{
+  display:grid;
+  gap:8px;
+}
+
+.event{
+  display:grid;
+  grid-template-columns:90px 1fr auto;
+  align-items:center;
+  gap:12px;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#0b0b0f;
+}
+
+.event-time{
+  font-family:Orbitron,sans-serif;
+  color:var(--cyan);
+  font-size:8px;
+}
+
+.event-title{
+  font-size:10px;
+  font-weight:600;
+}
+
+.event-meta{
+  color:var(--muted);
+  font-size:8px;
+  margin-top:3px;
+}
+
+.event-result{
+  font-size:8px;
+  color:var(--green);
+}
+
+/* =========================
+   CONFIG
+========================= */
+
+.config{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.field label{
+  color:#858591;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:700;
+}
+
+.field input,
+.field select{
+  width:100%;
+  padding:11px;
+  border-radius:8px;
+  border:1px solid var(--line2);
+  background:#08080b;
+  color:#eee;
+  outline:none;
+  font-size:10px;
+}
+
+.field input:focus,
+.field select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(182,108,255,.07);
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+/* =========================
+   NOTICE
+========================= */
+
+.notice{
+  padding:14px 16px;
+  border:1px solid rgba(243,201,105,.22);
+  border-radius:10px;
+  background:rgba(243,201,105,.045);
+  color:#cfc19a;
+  font-size:9px;
+  line-height:1.7;
+}
+
+.notice strong{
+  color:var(--yellow);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  place-items:center;
+  padding:20px;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+}
+
+.modal.show{
+  display:grid;
+}
+
+.modal-card{
+  width:min(520px,100%);
+  background:#0d0d11;
+  border:1px solid var(--line2);
+  border-radius:14px;
+  box-shadow:0 40px 100px rgba(0,0,0,.6);
+  overflow:hidden;
+}
+
+.modal-header{
+  padding:17px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.modal-close{
+  border:0;
+  background:transparent;
+  color:#aaa;
+  font-size:20px;
+}
+
+.modal-body{
+  padding:18px;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:18px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:200;
+  min-width:260px;
+  max-width:420px;
+  padding:13px 15px;
+  background:#101016;
+  border:1px solid var(--line2);
+  border-left:3px solid var(--accent);
+  border-radius:9px;
+  box-shadow:var(--shadow);
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  font-size:10px;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:1200px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:850px){
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .hero{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .providers{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:560px){
+  .topbar{
+    padding:0 14px;
+  }
+
+  .profile-name{
+    display:none;
+  }
+
+  .top-btn{
+    display:none;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .auth-status,
+  .config{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    padding:20px;
+  }
+
+  h1{
+    font-size:21px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-mark">
+        <div class="logo">CR</div>
+        <div>
+          <div class="brand-title">CrowRules</div>
+          <div class="brand-sub">Main Admin</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+
+      <div class="nav-section">Core</div>
+
+      <a href="index.html">
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </a>
+
+      <a href="content.html">
+        <span class="nav-icon">▣</span>
+        Content
+      </a>
+
+      <a href="pages.html">
+        <span class="nav-icon">▤</span>
+        Pages
+      </a>
+
+      <a href="categories.html">
+        <span class="nav-icon">◈</span>
+        Categories
+      </a>
+
+      <a href="tags.html">
+        <span class="nav-icon">#</span>
+        Tags
+      </a>
+
+      <div class="nav-section">Television</div>
+
+      <a href="shows.html">
+        <span class="nav-icon">▶</span>
+        Shows
+      </a>
+
+      <a href="episodes.html">
+        <span class="nav-icon">▻</span>
+        Episodes
+      </a>
+
+      <a href="movies.html">
+        <span class="nav-icon">●</span>
+        Movies
+      </a>
+
+      <a href="channels.html">
+        <span class="nav-icon">▥</span>
+        Channels
+      </a>
+
+      <a href="schedule.html">
+        <span class="nav-icon">◷</span>
+        Schedule
+      </a>
+
+      <a href="live.html">
+        <span class="nav-icon">●</span>
+        Live
+      </a>
+
+      <a href="guide.html">
+        <span class="nav-icon">☷</span>
+        TV Guide
+      </a>
+
+      <div class="nav-section">Members</div>
+
+      <a href="members.html">
+        <span class="nav-icon">♟</span>
+        Members
+      </a>
+
+      <a href="member.html">
+        <span class="nav-icon">◉</span>
+        Member Profile
+      </a>
+
+      <a href="membership.html">
+        <span class="nav-icon">◆</span>
+        Membership
+      </a>
+
+      <a href="subscriptions.html">
+        <span class="nav-icon">↻</span>
+        Subscriptions
+      </a>
+
+      <a href="friends.html">
+        <span class="nav-icon">♧</span>
+        Friends
+      </a>
+
+      <a href="points.html">
+        <span class="nav-icon">✦</span>
+        Points
+      </a>
+
+      <a href="leaderboard.html">
+        <span class="nav-icon">♛</span>
+        Leaderboard
+      </a>
+
+      <div class="nav-section">Community</div>
+
+      <a href="community.html">
+        <span class="nav-icon">☷</span>
+        Community
+      </a>
+
+      <a href="moderation.html">
+        <span class="nav-icon">⚠</span>
+        Moderation
+      </a>
+
+      <div class="nav-section">Creators</div>
+
+      <a href="creator.html">
+        <span class="nav-icon">✧</span>
+        Creators
+      </a>
+
+      <a href="creator-content.html">
+        <span class="nav-icon">◫</span>
+        Creator Content
+      </a>
+
+      <a href="creator-approvals.html">
+        <span class="nav-icon">✓</span>
+        Approvals
+      </a>
+
+      <div class="nav-section">Records</div>
+
+      <a href="artists.html">
+        <span class="nav-icon">♬</span>
+        Artists
+      </a>
+
+      <a href="albums.html">
+        <span class="nav-icon">▰</span>
+        Albums
+      </a>
+
+      <a href="tracks.html">
+        <span class="nav-icon">♪</span>
+        Tracks
+      </a>
+
+      <div class="nav-section">Sports</div>
+
+      <a href="sports.html">
+        <span class="nav-icon">◉</span>
+        Sports
+      </a>
+
+      <a href="teams.html">
+        <span class="nav-icon">♜</span>
+        Teams
+      </a>
+
+      <a href="rankings.html">
+        <span class="nav-icon">▲</span>
+        Rankings
+      </a>
+
+      <a href="standings.html">
+        <span class="nav-icon">☰</span>
+        Standings
+      </a>
+
+      <a href="games.html">
+        <span class="nav-icon">⚽</span>
+        Games
+      </a>
+
+      <a href="pickem.html">
+        <span class="nav-icon">✓</span>
+        Pick'em
+      </a>
+
+      <div class="nav-section">Memorials</div>
+
+      <a href="memorials.html">
+        <span class="nav-icon">✚</span>
+        Memorials
+      </a>
+
+      <a href="memorial-photos.html">
+        <span class="nav-icon">▧</span>
+        Memorial Photos
+      </a>
+
+      <div class="nav-section">Business</div>
+
+      <a href="business.html">
+        <span class="nav-icon">▦</span>
+        Business
+      </a>
+
+      <a href="donations.html">
+        <span class="nav-icon">♥</span>
+        Donations
+      </a>
+
+      <a href="shop.html">
+        <span class="nav-icon">▣</span>
+        Shop
+      </a>
+
+      <a href="orders.html">
+        <span class="nav-icon">▤</span>
+        Orders
+      </a>
+
+      <div class="nav-section">System</div>
+
+      <a href="authentication.html" class="active">
+        <span class="nav-icon">🔐</span>
+        Authentication
+      </a>
+
+      <a href="roles.html">
+        <span class="nav-icon">♜</span>
+        Roles
+      </a>
+
+      <a href="notifications.html">
+        <span class="nav-icon">♢</span>
+        Notifications
+      </a>
+
+      <a href="activity.html">
+        <span class="nav-icon">◌</span>
+        Activity
+      </a>
+
+      <a href="analytics.html">
+        <span class="nav-icon">◒</span>
+        Analytics
+      </a>
+
+      <a href="database.html">
+        <span class="nav-icon">▦</span>
+        Database
+      </a>
+
+      <a href="storage.html">
+        <span class="nav-icon">▱</span>
+        Storage
+      </a>
+
+      <a href="logs.html">
+        <span class="nav-icon">≡</span>
+        Logs
+      </a>
+
+      <a href="settings.html">
+        <span class="nav-icon">⚙</span>
+        Settings
+      </a>
+
+    </nav>
+  </aside>
+
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <header class="topbar">
+
+      <div class="top-left">
+
+        <button class="mobile-menu" id="mobileMenu">☰</button>
+
+        <div class="breadcrumb">
+          Main Admin / <strong>Authentication</strong>
+        </div>
+
+      </div>
+
+      <div class="top-actions">
+
+        <div class="clock" id="clock">
+          --:--:--
+        </div>
+
+        <button class="top-btn" onclick="refreshAuth()">
+          ↻ Refresh
+        </button>
+
+        <button class="top-btn" onclick="openSettings()">
+          Security
+        </button>
+
+        <div class="profile-chip">
+          <div class="avatar" id="avatar">
+            CR
+          </div>
+          <div class="profile-name" id="profileName">
+            Administrator
+          </div>
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <section class="content">
+
+      <!-- HERO -->
+      <div class="hero">
+
+        <div>
+          <div class="eyebrow">Security Infrastructure</div>
+
+          <h1>Authentication Command Center</h1>
+
+          <p>
+            Manage CrowRules Entertainment authentication, sessions,
+            identity providers, password security, account protection,
+            and Supabase Auth infrastructure from one centralized control panel.
+          </p>
+        </div>
+
+        <div class="hero-actions">
+
+          <button class="btn primary" onclick="openTestLogin()">
+            Test Authentication
+          </button>
+
+          <button class="btn" onclick="refreshAuth()">
+            Refresh Status
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- STATS -->
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-label">Auth Status</div>
+          <div class="stat-value green" id="authStatus">
+            ONLINE
+          </div>
+          <div class="stat-note">Supabase Auth</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Users</div>
+          <div class="stat-value purple" id="userCount">
+            2,418
+          </div>
+          <div class="stat-note">Registered accounts</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Active Sessions</div>
+          <div class="stat-value cyan" id="sessionCount">
+            186
+          </div>
+          <div class="stat-note">Current estimate</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Verified</div>
+          <div class="stat-value green">
+            92%
+          </div>
+          <div class="stat-note">Email verified</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">MFA Enabled</div>
+          <div class="stat-value yellow">
+            38%
+          </div>
+          <div class="stat-note">Protected accounts</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Threat Level</div>
+          <div class="stat-value green">
+            LOW
+          </div>
+          <div class="stat-note">No active incidents</div>
+        </div>
+
+      </div>
+
+
+      <!-- AUTH + SECURITY -->
+      <div class="grid">
+
+        <section class="panel">
+
+          <div class="panel-header">
+
+            <div>
+              <div class="panel-title">
+                Authentication Services
+              </div>
+
+              <div class="panel-sub">
+                Current authentication infrastructure
+              </div>
+            </div>
+
+            <span class="badge green">
+              <span class="dot"></span>
+              Operational
+            </span>
+
+          </div>
+
+          <div class="panel-body">
+
+            <div class="auth-status">
+
+              <div class="status-box">
+
+                <div class="status-head">
+                  <div class="status-name">
+                    Supabase Auth
+                  </div>
+
+                  <span class="badge green">
+                    Online
+                  </span>
+                </div>
+
+                <div class="status-description">
+                  Central identity provider for CrowRules member,
+                  creator, administrator, and community accounts.
+                </div>
+
+              </div>
+
+
+              <div class="status-box">
+
+                <div class="status-head">
+                  <div class="status-name">
+                    Email Authentication
+                  </div>
+
+                  <span class="badge green">
+                    Enabled
+                  </span>
+                </div>
+
+                <div class="status-description">
+                  Email/password authentication is available for
+                  registered CrowRules accounts.
+                </div>
+
+              </div>
+
+
+              <div class="status-box">
+
+                <div class="status-head">
+                  <div class="status-name">
+                    Session Management
+                  </div>
+
+                  <span class="badge green">
+                    Active
+                  </span>
+                </div>
+
+                <div class="status-description">
+                  Browser sessions are managed through Supabase Auth
+                  with automatic token refresh.
+                </div>
+
+              </div>
+
+
+              <div class="status-box">
+
+                <div class="status-head">
+                  <div class="status-name">
+                    Password Recovery
+                  </div>
+
+                  <span class="badge green">
+                    Enabled
+                  </span>
+                </div>
+
+                <div class="status-description">
+                  Password reset workflows can be routed through
+                  Supabase's secure recovery process.
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <section class="panel">
+
+          <div class="panel-header">
+
+            <div>
+              <div class="panel-title">
+                Security Controls
+              </div>
+
+              <div class="panel-sub">
+                Account protection settings
+              </div>
+            </div>
+
+          </div>
+
+          <div class="panel-body">
+
+            <div class="security-list">
+
+              <div class="security-row">
+
+                <div class="security-main">
+
+                  <div class="security-icon">✉</div>
+
+                  <div>
+                    <div class="security-name">
+                      Email Verification
+                    </div>
+                    <div class="security-meta">
+                      Require verified email addresses
+                    </div>
+                  </div>
+
+                </div>
+
+                <button class="toggle on"
+                        data-setting="emailVerification"
+                        onclick="toggleSecurity(this)">
+                  <span></span>
+                </button>
+
+              </div>
+
+
+              <div class="security-row">
+
+                <div class="security-main">
+
+                  <div class="security-icon">⌁</div>
+
+                  <div>
+                    <div class="security-name">
+                      Automatic Session Refresh
+                    </div>
+                    <div class="security-meta">
+                      Refresh active authentication tokens
+                    </div>
+                  </div>
+
+                </div>
+
+                <button class="toggle on"
+                        data-setting="sessionRefresh"
+                        onclick="toggleSecurity(this)">
+                  <span></span>
+                </button>
+
+              </div>
+
+
+              <div class="security-row">
+
+                <div class="security-main">
+
+                  <div class="security-icon">◆</div>
+
+                  <div>
+                    <div class="security-name">
+                      MFA Monitoring
+                    </div>
+                    <div class="security-meta">
+                      Track multi-factor enrollment
+                    </div>
+                  </div>
+
+                </div>
+
+                <button class="toggle on"
+                        data-setting="mfaMonitoring"
+                        onclick="toggleSecurity(this)">
+                  <span></span>
+                </button>
+
+              </div>
+
+
+              <div class="security-row">
+
+                <div class="security-main">
+
+                  <div class="security-icon">⚠</div>
+
+                  <div>
+                    <div class="security-name">
+                      Suspicious Login Detection
+                    </div>
+                    <div class="security-meta">
+                      Monitor abnormal login activity
+                    </div>
+                  </div>
+
+                </div>
+
+                <button class="toggle on"
+                        data-setting="threatMonitoring"
+                        onclick="toggleSecurity(this)">
+                  <span></span>
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- PROVIDERS -->
+      <section class="panel" style="margin-bottom:18px;">
+
+        <div class="panel-header">
+
+          <div>
+            <div class="panel-title">
+              Identity Providers
+            </div>
+
+            <div class="panel-sub">
+              Authentication methods available to members
+            </div>
+          </div>
+
+          <button class="btn" onclick="openProviderModal()">
+            + Configure Provider
+          </button>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="providers">
+
+            <div class="provider">
+
+              <div class="provider-top">
+
+                <div class="provider-icon">
+                  EM
+                </div>
+
+                <span class="badge green">
+                  Enabled
+                </span>
+
+              </div>
+
+              <div class="provider-name">
+                Email / Password
+              </div>
+
+              <div class="provider-status">
+                Primary authentication method
+              </div>
+
+            </div>
+
+
+            <div class="provider">
+
+              <div class="provider-top">
+
+                <div class="provider-icon">
+                  GO
+                </div>
+
+                <span class="badge yellow">
+                  Planned
+                </span>
+
+              </div>
+
+              <div class="provider-name">
+                Google
+              </div>
+
+              <div class="provider-status">
+                OAuth provider
+              </div>
+
+            </div>
+
+
+            <div class="provider">
+
+              <div class="provider-top">
+
+                <div class="provider-icon">
+                  GH
+                </div>
+
+                <span class="badge yellow">
+                  Planned
+                </span>
+
+              </div>
+
+              <div class="provider-name">
+                GitHub
+              </div>
+
+              <div class="provider-status">
+                OAuth provider
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- USERS + EVENTS -->
+      <div class="grid">
+
+        <section class="panel">
+
+          <div class="panel-header">
+
+            <div>
+              <div class="panel-title">
+                Recent Authentication Events
+              </div>
+
+              <div class="panel-sub">
+                Recent login and account activity
+              </div>
+            </div>
+
+            <button class="btn" onclick="loadAuthEvents()">
+              Refresh
+            </button>
+
+          </div>
+
+          <div class="panel-body">
+
+            <div class="events" id="events">
+
+              <div class="event">
+
+                <div class="event-time">
+                  11:42 AM
+                </div>
+
+                <div>
+                  <div class="event-title">
+                    Successful sign in
+                  </div>
+                  <div class="event-meta">
+                    Member account · Email authentication
+                  </div>
+                </div>
+
+                <div class="event-result">
+                  SUCCESS
+                </div>
+
+              </div>
+
+
+              <div class="event">
+
+                <div class="event-time">
+                  11:31 AM
+                </div>
+
+                <div>
+                  <div class="event-title">
+                    Session refreshed
+                  </div>
+                  <div class="event-meta">
+                    Active browser session
+                  </div>
+                </div>
+
+                <div class="event-result">
+                  SUCCESS
+                </div>
+
+              </div>
+
+
+              <div class="event">
+
+                <div class="event-time">
+                  11:17 AM
+                </div>
+
+                <div>
+                  <div class="event-title">
+                    Password recovery requested
+                  </div>
+                  <div class="event-meta">
+                    Recovery email workflow
+                  </div>
+                </div>
+
+                <div class="event-result">
+                  SENT
+                </div>
+
+              </div>
+
+
+              <div class="event">
+
+                <div class="event-time">
+                  10:56 AM
+                </div>
+
+                <div>
+                  <div class="event-title">
+                    New account registration
+                  </div>
+                  <div class="event-meta">
+                    Email verification pending
+                  </div>
+                </div>
+
+                <div class="event-result">
+                  CREATED
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <section class="panel">
+
+          <div class="panel-header">
+
+            <div>
+              <div class="panel-title">
+                Authentication Configuration
+              </div>
+
+              <div class="panel-sub">
+                Runtime configuration
+              </div>
+            </div>
+
+          </div>
+
+          <div class="panel-body">
+
+            <div class="config">
+
+              <div class="field full">
+
+                <label>
+                  Supabase Project URL
+                </label>
+
+                <input
+                  id="supabaseUrl"
+                  type="text"
+                  placeholder="https://your-project.supabase.co"
+                >
+
+              </div>
+
+
+              <div class="field full">
+
+                <label>
+                  Publishable / Anon Key
+                </label>
+
+                <input
+                  id="supabaseKey"
+                  type="password"
+                  placeholder="Enter browser-safe Supabase key"
+                >
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Auth Mode
+                </label>
+
+                <select id="authMode">
+                  <option value="email">Email / Password</option>
+                  <option value="oauth">OAuth</option>
+                  <option value="hybrid">Hybrid</option>
+                </select>
+
+              </div>
+
+
+              <div class="field">
+
+                <label>
+                  Session Persistence
+                </label>
+
+                <select id="sessionMode">
+                  <option value="local">Local Browser</option>
+                  <option value="session">Session Only</option>
+                </select>
+
+              </div>
+
+
+              <div class="full">
+
+                <button class="btn primary" onclick="saveConfiguration()">
+                  Save Configuration
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- ACCOUNT MANAGEMENT -->
+      <section class="panel" style="margin-bottom:18px;">
+
+        <div class="panel-header">
+
+          <div>
+            <div class="panel-title">
+              Authentication Accounts
+            </div>
+
+            <div class="panel-sub">
+              Administrative overview of member authentication state
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;">
+
+            <button class="btn" onclick="exportAccounts()">
+              Export
+            </button>
+
+            <button class="btn primary" onclick="openInviteModal()">
+              + Invite Member
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Email</th>
+                <th>Verification</th>
+                <th>MFA</th>
+                <th>Last Sign In</th>
+                <th>Provider</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody id="accountsTable">
+
+              <tr>
+
+                <td>
+                  <div class="user-cell">
+                    <div class="user-mini">JR</div>
+                    <div>
+                      Jonathan
+                      <div class="muted">Administrator</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td class="muted">
+                  admin@crowrules.com
+                </td>
+
+                <td>
+                  <span class="badge green">
+                    Verified
+                  </span>
+                </td>
+
+                <td>
+                  <span class="badge green">
+                    Enabled
+                  </span>
+                </td>
+
+                <td class="muted">
+                  Today
+                </td>
+
+                <td>
+                  Email
+                </td>
+
+                <td>
+                  <span class="badge green">
+                    Active
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <div class="user-cell">
+                    <div class="user-mini">CR</div>
+                    <div>
+                      CrowRules Creator
+                      <div class="muted">Creator</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td class="muted">
+                  creator@example.com
+                </td>
+
+                <td>
+                  <span class="badge green">
+                    Verified
+                  </span>
+                </td>
+
+                <td>
+                  <span class="badge yellow">
+                    Disabled
+                  </span>
+                </td>
+
+                <td class="muted">
+                  Yesterday
+                </td>
+
+                <td>
+                  Email
+                </td>
+
+                <td>
+                  <span class="badge green">
+                    Active
+                  </span>
+                </td>
+
+              </tr>
+
+
+              <tr>
+
+                <td>
+                  <div class="user-cell">
+                    <div class="user-mini">MB</div>
+                    <div>
+                      New Member
+                      <div class="muted">Member</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td class="muted">
+                  member@example.com
+                </td>
+
+                <td>
+                  <span class="badge yellow">
+                    Pending
+                  </span>
+                </td>
+
+                <td>
+                  <span class="badge yellow">
+                    Disabled
+                  </span>
+                </td>
+
+                <td class="muted">
+                  Never
+                </td>
+
+                <td>
+                  Email
+                </td>
+
+                <td>
+                  <span class="badge yellow">
+                    Pending
+                  </span>
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- SECURITY NOTICE -->
+      <div class="notice">
+
+        <strong>Security notice:</strong>
+        Never place a Supabase service-role key in this browser page.
+        The browser should only use the public/publishable/anon key.
+        Administrative user management, privileged authentication operations,
+        role assignment, and sensitive account actions should be enforced
+        server-side with appropriate authorization and Row Level Security.
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- PROVIDER MODAL -->
+<div class="modal" id="providerModal">
+
+  <div class="modal-card">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        Configure Identity Provider
+      </div>
+
+      <button class="modal-close" onclick="closeModal('providerModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="field">
+
+        <label>
+          Provider
+        </label>
+
+        <select id="providerSelect">
+
+          <option value="google">
+            Google
+          </option>
+
+          <option value="github">
+            GitHub
+          </option>
+
+          <option value="discord">
+            Discord
+          </option>
+
+          <option value="apple">
+            Apple
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="field" style="margin-top:12px;">
+
+        <label>
+          Provider Status
+        </label>
+
+        <select id="providerStatus">
+
+          <option value="planned">
+            Planned
+          </option>
+
+          <option value="enabled">
+            Enabled
+          </option>
+
+          <option value="disabled">
+            Disabled
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button class="btn" onclick="closeModal('providerModal')">
+          Cancel
+        </button>
+
+        <button class="btn primary" onclick="saveProvider()">
+          Save Provider
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- INVITE MODAL -->
+<div class="modal" id="inviteModal">
+
+  <div class="modal-card">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        Invite Member
+      </div>
+
+      <button class="modal-close" onclick="closeModal('inviteModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="field">
+
+        <label>
+          Email Address
+        </label>
+
+        <input
+          id="inviteEmail"
+          type="email"
+          placeholder="member@example.com"
+        >
+
+      </div>
+
+      <div class="field" style="margin-top:12px;">
+
+        <label>
+          Redirect URL
+        </label>
+
+        <input
+          id="inviteRedirect"
+          type="text"
+          placeholder="https://your-site.com/login.html"
+        >
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button class="btn" onclick="closeModal('inviteModal')">
+          Cancel
+        </button>
+
+        <button class="btn primary" onclick="sendInvite()">
+          Send Invitation
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- TEST LOGIN MODAL -->
+<div class="modal" id="testLoginModal">
+
+  <div class="modal-card">
+
+    <div class="modal-header">
+
+      <div class="modal-title">
+        Test Authentication
+      </div>
+
+      <button class="modal-close" onclick="closeModal('testLoginModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="field">
+
+        <label>
+          Email
+        </label>
+
+        <input
+          id="testEmail"
+          type="email"
+          placeholder="test@example.com"
+        >
+
+      </div>
+
+      <div class="field" style="margin-top:12px;">
+
+        <label>
+          Password
+        </label>
+
+        <input
+          id="testPassword"
+          type="password"
+          placeholder="Password"
+        >
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button class="btn" onclick="closeModal('testLoginModal')">
+          Cancel
+        </button>
+
+        <button class="btn primary" onclick="testLogin()">
+          Test Login
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast">
+  Authentication system ready.
+</div>
+
+
+<script>
+/* =========================================
+   CROWRULES AUTHENTICATION COMMAND CENTER
+========================================= */
+
+const CONFIG = {
+  url:
+    window.CROWRULES_SUPABASE_URL ||
+    localStorage.getItem("crowrules_supabase_url") ||
+    "",
+
+  key:
+    window.CROWRULES_SUPABASE_ANON_KEY ||
+    localStorage.getItem("crowrules_supabase_anon_key") ||
+    ""
+};
+
+let supabaseClient = null;
+
+
+/* =========================================
+   INIT
+========================================= */
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  updateClock();
+
+  setInterval(updateClock,1000);
+
+  document.getElementById("supabaseUrl").value =
+    CONFIG.url;
+
+  document.getElementById("supabaseKey").value =
+    CONFIG.key;
+
+  if(CONFIG.url && CONFIG.key){
+
+    initializeSupabase();
+
+  }else{
+
+    setAuthStatus(
+      "DEMO",
+      "yellow"
+    );
+
+  }
+
+});
+
+
+/* =========================================
+   SUPABASE
+========================================= */
+
+function initializeSupabase(){
+
+  try{
+
+    if(
+      !window.supabase ||
+      !window.supabase.createClient
+    ){
+
+      throw new Error(
+        "Supabase library unavailable."
+      );
+
+    }
+
+    supabaseClient =
+      window.supabase.createClient(
+        CONFIG.url,
+        CONFIG.key
+      );
+
+    setAuthStatus(
+      "ONLINE",
+      "green"
+    );
+
+    loadCurrentSession();
+
+  }catch(error){
+
+    console.error(error);
+
+    setAuthStatus(
+      "ERROR",
+      "red"
+    );
+
+    showToast(
+      "Unable to initialize Supabase."
+    );
+
+  }
+
+}
+
+
+async function loadCurrentSession(){
+
+  if(!supabaseClient) return;
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getSession();
+
+    if(error) throw error;
+
+    const session =
+      data?.session;
+
+    if(session?.user){
+
+      updateProfile(
+        session.user
+      );
+
+      showToast(
+        "Authenticated session detected."
+      );
+
+    }else{
+
+      showToast(
+        "No active browser session."
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =========================================
+   AUTH STATUS
+========================================= */
+
+function setAuthStatus(
+  text,
+  state
+){
+
+  const element =
+    document.getElementById(
+      "authStatus"
+    );
+
+  element.textContent =
+    text;
+
+  element.className =
+    "stat-value " +
+    (
+      state === "green"
+        ? "green"
+        : state === "red"
+          ? "red"
+          : "yellow"
+    );
+
+}
+
+
+function updateProfile(user){
+
+  const email =
+    user.email ||
+    "Administrator";
+
+  document.getElementById(
+    "profileName"
+  ).textContent =
+    email.split("@")[0];
+
+  const initials =
+    email
+      .split("@")[0]
+      .slice(0,2)
+      .toUpperCase();
+
+  document.getElementById(
+    "avatar"
+  ).textContent =
+    initials;
+}
+
+
+/* =========================================
+   CLOCK
+========================================= */
+
+function updateClock(){
+
+  const now =
+    new Date();
+
+  const time =
+    now.toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+  document.getElementById(
+    "clock"
+  ).textContent =
+    time;
+}
+
+
+/* =========================================
+   MOBILE MENU
+========================================= */
+
+document
+  .getElementById("mobileMenu")
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    }
+  );
+
+
+/* =========================================
+   REFRESH
+========================================= */
+
+async function refreshAuth(){
+
+  showToast(
+    "Refreshing authentication status..."
+  );
+
+  if(!supabaseClient){
+
+    showToast(
+      "Supabase is not configured."
+    );
+
+    return;
+
+  }
+
+  await loadCurrentSession();
+
+  setTimeout(
+    () => {
+
+      showToast(
+        "Authentication status refreshed."
+      );
+
+    },
+    350
+  );
+
+}
+
+
+/* =========================================
+   SECURITY TOGGLES
+========================================= */
+
+function toggleSecurity(button){
+
+  button.classList.toggle("on");
+
+  const enabled =
+    button.classList.contains("on");
+
+  const setting =
+    button.dataset.setting;
+
+  showToast(
+    setting +
+    ": " +
+    (enabled ? "enabled" : "disabled")
+  );
+
+}
+
+
+/* =========================================
+   MODALS
+========================================= */
+
+function openProviderModal(){
+
+  document
+    .getElementById("providerModal")
+    .classList.add("show");
+
+}
+
+
+function openInviteModal(){
+
+  document
+    .getElementById("inviteModal")
+    .classList.add("show");
+
+}
+
+
+function openTestLogin(){
+
+  document
+    .getElementById("testLoginModal")
+    .classList.add("show");
+
+}
+
+
+function openSettings(){
+
+  window.location.href =
+    "settings.html";
+
+}
+
+
+function closeModal(id){
+
+  document
+    .getElementById(id)
+    .classList.remove("show");
+
+}
+
+
+document
+  .querySelectorAll(".modal")
+  .forEach(modal => {
+
+    modal.addEventListener(
+      "click",
+      event => {
+
+        if(
+          event.target === modal
+        ){
+
+          modal.classList.remove(
+            "show"
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+
+/* =========================================
+   PROVIDER
+========================================= */
+
+function saveProvider(){
+
+  const provider =
+    document.getElementById(
+      "providerSelect"
+    ).value;
+
+  const status =
+    document.getElementById(
+      "providerStatus"
+    ).value;
+
+  closeModal(
+    "providerModal"
+  );
+
+  showToast(
+    provider.toUpperCase() +
+    " provider set to " +
+    status +
+    "."
+  );
+
+}
+
+
+/* =========================================
+   INVITATION
+========================================= */
+
+async function sendInvite(){
+
+  const email =
+    document.getElementById(
+      "inviteEmail"
+    ).value.trim();
+
+  const redirect =
+    document.getElementById(
+      "inviteRedirect"
+    ).value.trim();
+
+  if(!email){
+
+    showToast(
+      "Enter an email address."
+    );
+
+    return;
+
+  }
+
+  if(!supabaseClient){
+
+    showToast(
+      "Configure Supabase before sending invitations."
+    );
+
+    return;
+
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient.auth
+        .signInWithOtp({
+
+          email,
+
+          options:{
+            emailRedirectTo:
+              redirect ||
+              window.location.href
+          }
+
+        });
+
+    if(error) throw error;
+
+    closeModal(
+      "inviteModal"
+    );
+
+    document.getElementById(
+      "inviteEmail"
+    ).value = "";
+
+    showToast(
+      "Authentication invitation sent."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      error.message ||
+      "Invitation failed."
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   TEST LOGIN
+========================================= */
+
+async function testLogin(){
+
+  const email =
+    document.getElementById(
+      "testEmail"
+    ).value.trim();
+
+  const password =
+    document.getElementById(
+      "testPassword"
+    ).value;
+
+  if(!email || !password){
+
+    showToast(
+      "Enter both email and password."
+    );
+
+    return;
+
+  }
+
+  if(!supabaseClient){
+
+    showToast(
+      "Supabase is not configured."
+    );
+
+    return;
+
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .signInWithPassword({
+
+          email,
+          password
+
+        });
+
+    if(error) throw error;
+
+    if(data?.user){
+
+      updateProfile(
+        data.user
+      );
+
+    }
+
+    closeModal(
+      "testLoginModal"
+    );
+
+    showToast(
+      "Authentication test successful."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      error.message ||
+      "Authentication test failed."
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   CONFIGURATION
+========================================= */
+
+function saveConfiguration(){
+
+  const url =
+    document.getElementById(
+      "supabaseUrl"
+    ).value.trim();
+
+  const key =
+    document.getElementById(
+      "supabaseKey"
+    ).value.trim();
+
+  if(!url || !key){
+
+    showToast(
+      "Enter the Supabase URL and public key."
+    );
+
+    return;
+
+  }
+
+  localStorage.setItem(
+    "crowrules_supabase_url",
+    url
+  );
+
+  localStorage.setItem(
+    "crowrules_supabase_anon_key",
+    key
+  );
+
+  showToast(
+    "Configuration saved. Reinitializing..."
+  );
+
+  setTimeout(
+    () => {
+
+      window.location.reload();
+
+    },
+    700
+  );
+
+}
+
+
+/* =========================================
+   AUTH EVENTS
+========================================= */
+
+function loadAuthEvents(){
+
+  const events =
+    document.getElementById(
+      "events"
+    );
+
+  events.innerHTML = `
+
+    <div class="event">
+
+      <div class="event-time">
+        ${new Date().toLocaleTimeString(
+          [],
+          {
+            hour:"2-digit",
+            minute:"2-digit"
+          }
+        )}
+      </div>
+
+      <div>
+        <div class="event-title">
+          Authentication status refreshed
+        </div>
+
+        <div class="event-meta">
+          CrowRules Main Admin
+        </div>
+      </div>
+
+      <div class="event-result">
+        SUCCESS
+      </div>
+
+    </div>
+
+    <div class="event">
+
+      <div class="event-time">
+        SYSTEM
+      </div>
+
+      <div>
+        <div class="event-title">
+          Security monitoring active
+        </div>
+
+        <div class="event-meta">
+          Authentication Command Center
+        </div>
+      </div>
+
+      <div class="event-result">
+        ONLINE
+      </div>
+
+    </div>
+
+  `;
+
+  showToast(
+    "Authentication events refreshed."
+  );
+
+}
+
+
+/* =========================================
+   EXPORT
+========================================= */
+
+function exportAccounts(){
+
+  const rows = [
+    [
+      "Member",
+      "Email",
+      "Verification",
+      "MFA",
+      "Provider",
+      "Status"
+    ],
+    [
+      "Jonathan",
+      "admin@crowrules.com",
+      "Verified",
+      "Enabled",
+      "Email",
+      "Active"
+    ],
+    [
+      "CrowRules Creator",
+      "creator@example.com",
+      "Verified",
+      "Disabled",
+      "Email",
+      "Active"
+    ],
+    [
+      "New Member",
+      "member@example.com",
+      "Pending",
+      "Disabled",
+      "Email",
+      "Pending"
+    ]
+  ];
+
+  const csv =
+    rows
+      .map(row =>
+        row
+          .map(value =>
+            `"${String(value).replace(/"/g,'""')}"`
+          )
+          .join(",")
+      )
+      .join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:"text/csv"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+  const a =
+    document.createElement("a");
+
+  a.href =
+    url;
+
+  a.download =
+    "crowrules-authentication-accounts.csv";
+
+  a.click();
+
+  URL.revokeObjectURL(
+    url
+  );
+
+  showToast(
+    "Account export generated."
+  );
+
+}
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent =
+    message;
+
+  toast.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    toastTimer
+  );
+
+  toastTimer =
+    setTimeout(
+      () => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      3000
+    );
+
+}
+</script>
+
+</body>
+</html>

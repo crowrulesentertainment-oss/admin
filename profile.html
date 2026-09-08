@@ -1,0 +1,2467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>CrowRules Admin — Profile</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Administrator Profile">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 18px 55px rgba(0,0,0,.4);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 75% -10%,rgba(108,92,255,.13),transparent 30%),
+    radial-gradient(circle at 15% 20%,rgba(182,108,255,.07),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:258px;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+  background:rgba(8,8,11,.98);
+  border-right:1px solid var(--line);
+}
+
+.brand{
+  padding:24px 20px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.crow-logo{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(182,108,255,.55);
+  border-radius:12px;
+  background:
+    linear-gradient(145deg,rgba(182,108,255,.2),rgba(55,215,255,.06));
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  box-shadow:0 0 22px rgba(182,108,255,.12);
+}
+
+.brand-name{
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.brand-sub{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.nav-section{
+  padding:18px 12px 6px;
+}
+
+.nav-label{
+  padding:0 10px 8px;
+  color:#60606b;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin:2px 0;
+  padding:10px 11px;
+  border:1px solid transparent;
+  border-radius:11px;
+  color:#a8a8b2;
+  font-size:12px;
+  font-weight:600;
+  transition:.18s ease;
+}
+
+.nav-item:hover{
+  color:#fff;
+  background:#111117;
+  border-color:#202028;
+}
+
+.nav-item.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.06));
+  border-color:rgba(182,108,255,.28);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+  font-size:14px;
+}
+
+.sidebar-bottom{
+  margin-top:auto;
+  padding:14px;
+  border-top:1px solid var(--line);
+}
+
+.system-status{
+  padding:12px;
+  border:1px solid #24242c;
+  border-radius:13px;
+  background:#0d0d11;
+}
+
+.status-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px rgba(69,230,154,.65);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  margin-left:258px;
+  min-height:100vh;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(5,5,5,.84);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(39,39,47,.85);
+}
+
+.page-heading{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.mobile-menu{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#101016;
+  color:#fff;
+}
+
+.heading-kicker{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+h1{
+  margin:3px 0 0;
+  font-family:Orbitron,sans-serif;
+  font-size:19px;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.clock{
+  color:#777782;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.admin-chip{
+  padding:8px 11px;
+  border:1px solid #292932;
+  border-radius:10px;
+  background:#0d0d11;
+  color:#bbbcc4;
+  font-size:10px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  max-width:1500px;
+  margin:auto;
+  padding:28px;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:28px;
+  border:1px solid #2a2633;
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 85% 20%,rgba(108,92,255,.2),transparent 28%),
+    radial-gradient(circle at 55% 100%,rgba(55,215,255,.07),transparent 35%),
+    linear-gradient(135deg,#111018,#09090c);
+  box-shadow:var(--shadow);
+}
+
+.hero:after{
+  content:"ADMIN IDENTITY";
+  position:absolute;
+  right:-25px;
+  bottom:-35px;
+  font-family:Orbitron,sans-serif;
+  font-size:65px;
+  font-weight:800;
+  color:rgba(255,255,255,.018);
+  pointer-events:none;
+}
+
+.hero-kicker{
+  color:var(--cyan);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:2.3px;
+}
+
+.hero h2{
+  margin:8px 0;
+  font-family:Orbitron,sans-serif;
+  font-size:27px;
+}
+
+.hero p{
+  max-width:800px;
+  margin:0;
+  color:#92929d;
+  font-size:12px;
+  line-height:1.7;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.profile-grid{
+  display:grid;
+  grid-template-columns:330px minmax(0,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+
+.stack{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.panel{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:linear-gradient(145deg,#0e0e12,#0a0a0d);
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  letter-spacing:.7px;
+}
+
+.panel-sub{
+  margin-top:4px;
+  color:#666671;
+  font-size:9px;
+}
+
+.panel-body{
+  padding:18px;
+}
+
+/* =========================
+   PROFILE CARD
+========================= */
+
+.profile-card{
+  padding:24px 18px;
+  text-align:center;
+}
+
+.avatar-wrap{
+  position:relative;
+  width:100px;
+  height:100px;
+  margin:0 auto 15px;
+}
+
+.avatar{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border:1px solid rgba(182,108,255,.5);
+  border-radius:27px;
+  background:
+    linear-gradient(145deg,rgba(182,108,255,.25),rgba(55,215,255,.08)),
+    #15151c;
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+  font-weight:800;
+  box-shadow:
+    0 0 35px rgba(182,108,255,.1),
+    inset 0 0 25px rgba(182,108,255,.07);
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.online{
+  position:absolute;
+  right:4px;
+  bottom:4px;
+  width:16px;
+  height:16px;
+  border:3px solid #0d0d11;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px rgba(69,230,154,.6);
+}
+
+.profile-name{
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+  font-weight:700;
+}
+
+.profile-email{
+  margin-top:6px;
+  color:#6e6e79;
+  font-size:9px;
+  word-break:break-word;
+}
+
+.role-badge{
+  display:inline-flex;
+  margin-top:11px;
+  padding:6px 9px;
+  border:1px solid rgba(182,108,255,.25);
+  border-radius:20px;
+  color:var(--accent);
+  background:rgba(182,108,255,.07);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+
+.profile-meta{
+  margin-top:20px;
+  border-top:1px solid var(--line);
+}
+
+.meta-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 2px;
+  border-bottom:1px solid #1b1b21;
+  text-align:left;
+}
+
+.meta-row:last-child{
+  border-bottom:0;
+}
+
+.meta-label{
+  color:#666671;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+.meta-value{
+  color:#c8c8cf;
+  font-size:9px;
+  text-align:right;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn{
+  border:1px solid var(--line2);
+  border-radius:10px;
+  padding:9px 13px;
+  background:#111117;
+  color:#dddde3;
+  font-size:10px;
+  font-weight:700;
+  transition:.18s ease;
+}
+
+.btn:hover{
+  border-color:#555563;
+  color:#fff;
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.55);
+  color:#fff;
+  background:linear-gradient(135deg,#8d55c8,#5b4bd0);
+}
+
+.btn.cyan{
+  border-color:rgba(55,215,255,.4);
+  color:var(--cyan);
+}
+
+.btn.green{
+  border-color:rgba(69,230,154,.35);
+  color:var(--green);
+}
+
+.btn.red{
+  border-color:rgba(255,82,109,.35);
+  color:var(--red);
+}
+
+.btn.small{
+  padding:7px 9px;
+  font-size:9px;
+}
+
+.full-btn{
+  width:100%;
+  margin-top:9px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  display:block;
+  margin-bottom:6px;
+  color:#7b7b86;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  border:1px solid #292932;
+  border-radius:9px;
+  outline:none;
+  padding:10px;
+  background:#101015;
+  color:#eee;
+  font-size:10px;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:rgba(182,108,255,.5);
+  box-shadow:0 0 0 3px rgba(182,108,255,.06);
+}
+
+.field textarea{
+  min-height:105px;
+  resize:vertical;
+}
+
+.readonly{
+  opacity:.65;
+}
+
+/* =========================
+   SECURITY
+========================= */
+
+.security-list{
+  display:flex;
+  flex-direction:column;
+}
+
+.security-row{
+  display:grid;
+  grid-template-columns:40px 1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:13px 0;
+  border-bottom:1px solid #1b1b21;
+}
+
+.security-row:last-child{
+  border-bottom:0;
+}
+
+.security-icon{
+  width:35px;
+  height:35px;
+  display:grid;
+  place-items:center;
+  border:1px solid #2b2b34;
+  border-radius:10px;
+  background:#111117;
+  color:var(--cyan);
+}
+
+.security-name{
+  color:#e5e5e9;
+  font-size:10px;
+  font-weight:700;
+}
+
+.security-desc{
+  margin-top:4px;
+  color:#62626d;
+  font-size:8px;
+}
+
+.security-state{
+  color:var(--green);
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.stat{
+  padding:14px;
+  border:1px solid #25252d;
+  border-radius:12px;
+  background:#101015;
+}
+
+.stat-label{
+  color:#666671;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+.stat-value{
+  margin-top:7px;
+  font-family:Orbitron,sans-serif;
+  font-size:16px;
+}
+
+/* =========================
+   ALERT / TOAST
+========================= */
+
+.alert{
+  display:none;
+  margin-bottom:15px;
+  padding:11px 12px;
+  border-radius:9px;
+  font-size:9px;
+  line-height:1.5;
+}
+
+.alert.show{
+  display:block;
+}
+
+.alert.success{
+  color:var(--green);
+  border:1px solid rgba(69,230,154,.22);
+  background:rgba(69,230,154,.07);
+}
+
+.alert.error{
+  color:#ff8294;
+  border:1px solid rgba(255,82,109,.22);
+  background:rgba(255,82,109,.07);
+}
+
+.alert.info{
+  color:var(--cyan);
+  border:1px solid rgba(55,215,255,.22);
+  background:rgba(55,215,255,.07);
+}
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:500;
+  padding:12px 15px;
+  border:1px solid #383842;
+  border-radius:11px;
+  background:#111117;
+  color:#eee;
+  font-size:10px;
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s ease;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.toast.success{
+  border-color:rgba(69,230,154,.4);
+}
+
+.toast.error{
+  border-color:rgba(255,82,109,.4);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:400;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(9px);
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(520px,100%);
+  overflow:hidden;
+  border:1px solid #34343e;
+  border-radius:18px;
+  background:#0c0c10;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+}
+
+.close{
+  width:31px;
+  height:31px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#111117;
+  color:#aaa;
+}
+
+.modal-body{
+  padding:18px;
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:14px 18px;
+  border-top:1px solid var(--line);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+
+  .profile-grid{
+    grid-template-columns:1fr;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s ease;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .clock,
+  .admin-chip{
+    display:none;
+  }
+
+  .content{
+    padding:15px;
+  }
+}
+
+@media(max-width:650px){
+
+  .hero{
+    padding:21px;
+  }
+
+  .hero h2{
+    font-size:21px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ======================================================
+     SIDEBAR
+====================================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">
+      <div class="crow-logo">CR</div>
+
+      <div>
+        <div class="brand-name">CROWRULES</div>
+        <div class="brand-sub">Entertainment Admin</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">Command</div>
+
+    <a class="nav-item" href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a class="nav-item" href="content.html">
+      <span class="nav-icon">▣</span>
+      Content
+    </a>
+
+    <a class="nav-item" href="shows.html">
+      <span class="nav-icon">◉</span>
+      Shows
+    </a>
+
+    <a class="nav-item" href="episodes.html">
+      <span class="nav-icon">▶</span>
+      Episodes
+    </a>
+
+    <a class="nav-item" href="movies.html">
+      <span class="nav-icon">▰</span>
+      Movies
+    </a>
+
+    <a class="nav-item" href="channels.html">
+      <span class="nav-icon">◈</span>
+      Live Channels
+    </a>
+
+    <a class="nav-item" href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedules
+    </a>
+
+    <a class="nav-item" href="live.html">
+      <span class="nav-icon">●</span>
+      Live Control
+    </a>
+
+    <a class="nav-item" href="guide.html">
+      <span class="nav-icon">☷</span>
+      TV Guide
+    </a>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">Network</div>
+
+    <a class="nav-item" href="members.html">
+      <span class="nav-icon">♙</span>
+      Members
+    </a>
+
+    <a class="nav-item" href="community.html">
+      <span class="nav-icon">♧</span>
+      Community
+    </a>
+
+    <a class="nav-item" href="creators.html">
+      <span class="nav-icon">✦</span>
+      Creators
+    </a>
+
+    <a class="nav-item" href="records.html">
+      <span class="nav-icon">♫</span>
+      Records
+    </a>
+
+    <a class="nav-item" href="sports.html">
+      <span class="nav-icon">◆</span>
+      Sports
+    </a>
+
+    <a class="nav-item" href="memorials.html">
+      <span class="nav-icon">✝</span>
+      Memorials
+    </a>
+
+    <a class="nav-item" href="awards.html">
+      <span class="nav-icon">★</span>
+      Awards
+    </a>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">System</div>
+
+    <a class="nav-item" href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      Analytics
+    </a>
+
+    <a class="nav-item" href="moderation.html">
+      <span class="nav-icon">!</span>
+      Moderation
+    </a>
+
+    <a class="nav-item" href="logs.html">
+      <span class="nav-icon">≡</span>
+      System Logs
+    </a>
+
+    <a class="nav-item" href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </div>
+
+  <div class="sidebar-bottom">
+
+    <div class="system-status">
+      <div class="status-line">
+        <span class="dot"></span>
+        CrowRules systems operational
+      </div>
+    </div>
+
+  </div>
+
+</aside>
+
+<!-- ======================================================
+     MAIN
+====================================================== -->
+
+<main class="main">
+
+<header class="topbar">
+
+  <div class="page-heading">
+
+    <button class="mobile-menu" id="mobileMenu">☰</button>
+
+    <div>
+      <div class="heading-kicker">
+        CrowRules Entertainment
+      </div>
+
+      <h1>Administrator Profile</h1>
+    </div>
+
+  </div>
+
+  <div class="top-actions">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="admin-chip">ADMIN CONTROL</div>
+  </div>
+
+</header>
+
+<section class="content">
+
+  <!-- HERO -->
+
+  <div class="hero">
+
+    <div class="hero-kicker">
+      ADMIN IDENTITY / ACCOUNT CONTROL
+    </div>
+
+    <h2>Administrator Profile</h2>
+
+    <p>
+      Manage your CrowRules administrator identity, account information,
+      security settings and active authentication session.
+    </p>
+
+  </div>
+
+  <!-- PROFILE -->
+
+  <div class="profile-grid">
+
+    <!-- LEFT -->
+
+    <div class="stack">
+
+      <div class="panel">
+
+        <div class="profile-card">
+
+          <div class="avatar-wrap">
+
+            <div class="avatar" id="avatar">
+              CR
+            </div>
+
+            <div class="online"></div>
+
+          </div>
+
+          <div class="profile-name" id="profileName">
+            Administrator
+          </div>
+
+          <div class="profile-email" id="profileEmail">
+            Not signed in
+          </div>
+
+          <div class="role-badge">
+            Administrator
+          </div>
+
+          <div class="profile-meta">
+
+            <div class="meta-row">
+              <span class="meta-label">Account ID</span>
+              <span class="meta-value" id="accountId">—</span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Created</span>
+              <span class="meta-value" id="createdAt">—</span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Last Sign In</span>
+              <span class="meta-value" id="lastSignIn">—</span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Provider</span>
+              <span class="meta-value" id="provider">—</span>
+            </div>
+
+          </div>
+
+          <button
+            class="btn primary full-btn"
+            onclick="saveProfile()"
+          >
+            Save Profile
+          </button>
+
+          <button
+            class="btn red full-btn"
+            onclick="signOut()"
+          >
+            Sign Out
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- SECURITY -->
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">
+              Security
+            </div>
+
+            <div class="panel-sub">
+              Account protection
+            </div>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="security-list">
+
+            <div class="security-row">
+
+              <div class="security-icon">
+                ✓
+              </div>
+
+              <div>
+                <div class="security-name">
+                  Supabase Authentication
+                </div>
+
+                <div class="security-desc">
+                  Session authentication
+                </div>
+              </div>
+
+              <div class="security-state">
+                Active
+              </div>
+
+            </div>
+
+            <div class="security-row">
+
+              <div class="security-icon">
+                ◆
+              </div>
+
+              <div>
+                <div class="security-name">
+                  Password
+                </div>
+
+                <div class="security-desc">
+                  Change administrator password
+                </div>
+              </div>
+
+              <button
+                class="btn small"
+                onclick="openPasswordModal()"
+              >
+                Change
+              </button>
+
+            </div>
+
+            <div class="security-row">
+
+              <div class="security-icon">
+                ◉
+              </div>
+
+              <div>
+                <div class="security-name">
+                  Current Session
+                </div>
+
+                <div class="security-desc">
+                  Browser authentication session
+                </div>
+              </div>
+
+              <div class="security-state">
+                Active
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="stack">
+
+      <!-- ACCOUNT INFORMATION -->
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">
+              Account Information
+            </div>
+
+            <div class="panel-sub">
+              Administrator identity details
+            </div>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="alert" id="alert"></div>
+
+          <form id="profileForm">
+
+            <div class="form-grid">
+
+              <div class="field">
+
+                <label>Display Name</label>
+
+                <input
+                  id="displayName"
+                  placeholder="Administrator"
+                >
+
+              </div>
+
+              <div class="field">
+
+                <label>Username</label>
+
+                <input
+                  id="username"
+                  placeholder="admin"
+                >
+
+              </div>
+
+              <div class="field">
+
+                <label>Email Address</label>
+
+                <input
+                  id="email"
+                  class="readonly"
+                  type="email"
+                  readonly
+                >
+
+              </div>
+
+              <div class="field">
+
+                <label>Role</label>
+
+                <input
+                  value="Administrator"
+                  class="readonly"
+                  readonly
+                >
+
+              </div>
+
+              <div class="field">
+
+                <label>Avatar URL</label>
+
+                <input
+                  id="avatarUrl"
+                  type="url"
+                  placeholder="https://..."
+                >
+
+              </div>
+
+              <div class="field">
+
+                <label>Website</label>
+
+                <input
+                  id="website"
+                  type="url"
+                  placeholder="https://..."
+                >
+
+              </div>
+
+              <div class="field full">
+
+                <label>Bio</label>
+
+                <textarea
+                  id="bio"
+                  placeholder="Administrator biography..."
+                ></textarea>
+
+              </div>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- ACCOUNT STATS -->
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">
+              Admin Activity
+            </div>
+
+            <div class="panel-sub">
+              Current account statistics
+            </div>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="stats">
+
+            <div class="stat">
+              <div class="stat-label">
+                Sessions
+              </div>
+
+              <div class="stat-value" id="statSessions">
+                —
+              </div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-label">
+                Account Age
+              </div>
+
+              <div class="stat-value" id="statAge">
+                —
+              </div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-label">
+                Role
+              </div>
+
+              <div class="stat-value">
+                ADMIN
+              </div>
+            </div>
+
+            <div class="stat">
+              <div class="stat-label">
+                Status
+              </div>
+
+              <div class="stat-value" style="color:var(--green)">
+                ACTIVE
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ACCESS -->
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">
+              Administrator Access
+            </div>
+
+            <div class="panel-sub">
+              Current command permissions
+            </div>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="security-list">
+
+            <div class="security-row">
+              <div class="security-icon">▣</div>
+              <div>
+                <div class="security-name">Content Management</div>
+                <div class="security-desc">Shows, episodes and movies</div>
+              </div>
+              <div class="security-state">Granted</div>
+            </div>
+
+            <div class="security-row">
+              <div class="security-icon">●</div>
+              <div>
+                <div class="security-name">Live Operations</div>
+                <div class="security-desc">Channels and broadcasts</div>
+              </div>
+              <div class="security-state">Granted</div>
+            </div>
+
+            <div class="security-row">
+              <div class="security-icon">♙</div>
+              <div>
+                <div class="security-name">Member Management</div>
+                <div class="security-desc">Members and community</div>
+              </div>
+              <div class="security-state">Granted</div>
+            </div>
+
+            <div class="security-row">
+              <div class="security-icon">⚙</div>
+              <div>
+                <div class="security-name">System Administration</div>
+                <div class="security-desc">Settings and logs</div>
+              </div>
+              <div class="security-state">Granted</div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<!-- ======================================================
+     PASSWORD MODAL
+====================================================== -->
+
+<div class="modal" id="passwordModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        CHANGE PASSWORD
+      </div>
+
+      <button
+        class="close"
+        onclick="closePasswordModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="alert" id="passwordAlert"></div>
+
+      <div class="field">
+
+        <label>New Password</label>
+
+        <input
+          id="newPassword"
+          type="password"
+          minlength="8"
+          placeholder="Minimum 8 characters"
+        >
+
+      </div>
+
+      <div class="field" style="margin-top:13px">
+
+        <label>Confirm Password</label>
+
+        <input
+          id="confirmPassword"
+          type="password"
+          minlength="8"
+          placeholder="Repeat new password"
+        >
+
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        onclick="closePasswordModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        onclick="changePassword()"
+      >
+        Update Password
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==========================================================
+   CROWRULES ADMIN PROFILE
+========================================================== */
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL || "";
+
+const SUPABASE_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY || "";
+
+let supabaseClient = null;
+let currentUser = null;
+
+if(
+  SUPABASE_URL &&
+  SUPABASE_KEY &&
+  window.supabase
+){
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+}
+
+/* ==========================================================
+   ELEMENTS
+========================================================== */
+
+const sidebar =
+  document.getElementById("sidebar");
+
+const mobileMenu =
+  document.getElementById("mobileMenu");
+
+const profileName =
+  document.getElementById("profileName");
+
+const profileEmail =
+  document.getElementById("profileEmail");
+
+const avatar =
+  document.getElementById("avatar");
+
+const accountId =
+  document.getElementById("accountId");
+
+const createdAt =
+  document.getElementById("createdAt");
+
+const lastSignIn =
+  document.getElementById("lastSignIn");
+
+const provider =
+  document.getElementById("provider");
+
+const email =
+  document.getElementById("email");
+
+const displayName =
+  document.getElementById("displayName");
+
+const username =
+  document.getElementById("username");
+
+const avatarUrl =
+  document.getElementById("avatarUrl");
+
+const website =
+  document.getElementById("website");
+
+const bio =
+  document.getElementById("bio");
+
+const alertBox =
+  document.getElementById("alert");
+
+/* ==========================================================
+   MOBILE MENU
+========================================================== */
+
+mobileMenu.addEventListener(
+  "click",
+  () => {
+    sidebar.classList.toggle("open");
+  }
+);
+
+/* ==========================================================
+   CLOCK
+========================================================== */
+
+function updateClock(){
+
+  const now =
+    new Date();
+
+  document.getElementById("clock")
+    .textContent =
+      now.toLocaleTimeString(
+        undefined,
+        {
+          hour12:false
+        }
+      );
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* ==========================================================
+   ALERT
+========================================================== */
+
+function showAlert(
+  message,
+  type="info"
+){
+
+  alertBox.textContent =
+    message;
+
+  alertBox.className =
+    "alert show " + type;
+}
+
+function hideAlert(){
+
+  alertBox.className =
+    "alert";
+}
+
+/* ==========================================================
+   TOAST
+========================================================== */
+
+let toastTimer = null;
+
+function showToast(
+  message,
+  type="success"
+){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent =
+    message;
+
+  toast.className =
+    "toast show " + type;
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      () => {
+        toast.className =
+          "toast";
+      },
+      2800
+    );
+}
+
+/* ==========================================================
+   DATE
+========================================================== */
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric"
+    }
+  );
+}
+
+function formatDateTime(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
+
+  return date.toLocaleString(
+    undefined,
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric",
+      hour:"numeric",
+      minute:"2-digit"
+    }
+  );
+}
+
+/* ==========================================================
+   ACCOUNT AGE
+========================================================== */
+
+function accountAge(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const created =
+    new Date(value);
+
+  if(Number.isNaN(created.getTime())){
+    return "—";
+  }
+
+  const days =
+    Math.max(
+      0,
+      Math.floor(
+        (
+          Date.now() -
+          created.getTime()
+        ) /
+        86400000
+      )
+    );
+
+  if(days < 30){
+    return days + "d";
+  }
+
+  if(days < 365){
+    return Math.floor(days / 30) + "mo";
+  }
+
+  return (
+    Math.floor(days / 365) +
+    "yr"
+  );
+}
+
+/* ==========================================================
+   INITIALS
+========================================================== */
+
+function initials(name){
+
+  const value =
+    String(name || "CR")
+      .trim();
+
+  if(!value){
+    return "CR";
+  }
+
+  const parts =
+    value
+      .split(/\s+/)
+      .filter(Boolean);
+
+  if(parts.length === 1){
+    return parts[0]
+      .slice(0,2)
+      .toUpperCase();
+  }
+
+  return (
+    parts[0][0] +
+    parts[parts.length - 1][0]
+  ).toUpperCase();
+}
+
+/* ==========================================================
+   AVATAR
+========================================================== */
+
+function setAvatar(
+  name,
+  url
+){
+
+  avatar.innerHTML = "";
+
+  if(url){
+
+    const img =
+      document.createElement("img");
+
+    img.src = url;
+    img.alt = "";
+
+    img.onerror =
+      () => {
+        avatar.textContent =
+          initials(name);
+      };
+
+    avatar.appendChild(img);
+
+    return;
+  }
+
+  avatar.textContent =
+    initials(name);
+}
+
+/* ==========================================================
+   LOAD USER
+========================================================== */
+
+async function loadProfile(){
+
+  if(!supabaseClient){
+
+    showAlert(
+      "Supabase is not configured. Add CROWRULES_SUPABASE_URL and CROWRULES_SUPABASE_ANON_KEY.",
+      "error"
+    );
+
+    return;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getUser();
+
+    if(error){
+      throw error;
+    }
+
+    if(!data || !data.user){
+
+      window.location.href =
+        "login.html?redirect=profile.html";
+
+      return;
+    }
+
+    currentUser =
+      data.user;
+
+    renderUser(
+      currentUser
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "Profile load failed:",
+      error
+    );
+
+    showAlert(
+      error.message ||
+      "Unable to load administrator profile.",
+      "error"
+    );
+
+  }
+}
+
+/* ==========================================================
+   RENDER USER
+========================================================== */
+
+function renderUser(user){
+
+  const metadata =
+    user.user_metadata || {};
+
+  const name =
+    metadata.display_name ||
+    metadata.full_name ||
+    metadata.name ||
+    metadata.username ||
+    "Administrator";
+
+  const handle =
+    metadata.username ||
+    metadata.handle ||
+    "";
+
+  const avatarURL =
+    metadata.avatar_url ||
+    metadata.picture ||
+    "";
+
+  profileName.textContent =
+    name;
+
+  profileEmail.textContent =
+    user.email ||
+    "—";
+
+  accountId.textContent =
+    user.id
+      ? user.id.slice(0,8) + "…"
+      : "—";
+
+  createdAt.textContent =
+    formatDate(
+      user.created_at
+    );
+
+  lastSignIn.textContent =
+    formatDateTime(
+      user.last_sign_in_at
+    );
+
+  provider.textContent =
+    getProvider(user);
+
+  displayName.value =
+    name === "Administrator"
+      ? ""
+      : name;
+
+  username.value =
+    handle;
+
+  email.value =
+    user.email || "";
+
+  avatarUrl.value =
+    avatarURL;
+
+  website.value =
+    metadata.website ||
+    "";
+
+  bio.value =
+    metadata.bio ||
+    "";
+
+  setAvatar(
+    name,
+    avatarURL
+  );
+
+  document.getElementById(
+    "statAge"
+  ).textContent =
+    accountAge(
+      user.created_at
+    );
+
+  document.getElementById(
+    "statSessions"
+  ).textContent =
+    "ACTIVE";
+}
+
+/* ==========================================================
+   PROVIDER
+========================================================== */
+
+function getProvider(user){
+
+  const identities =
+    user.identities || [];
+
+  if(
+    identities.length &&
+    identities[0].provider
+  ){
+
+    return identities[0]
+      .provider
+      .toUpperCase();
+
+  }
+
+  return "EMAIL";
+}
+
+/* ==========================================================
+   SAVE PROFILE
+========================================================== */
+
+async function saveProfile(){
+
+  hideAlert();
+
+  if(!supabaseClient || !currentUser){
+
+    showAlert(
+      "No authenticated administrator session is available.",
+      "error"
+    );
+
+    return;
+  }
+
+  const name =
+    displayName.value.trim();
+
+  const handle =
+    username.value.trim();
+
+  const avatarValue =
+    avatarUrl.value.trim();
+
+  const websiteValue =
+    website.value.trim();
+
+  const bioValue =
+    bio.value.trim();
+
+  try{
+
+    const existing =
+      currentUser.user_metadata ||
+      {};
+
+    const updatedMetadata = {
+      ...existing,
+      display_name:
+        name || "Administrator",
+      username:
+        handle,
+      avatar_url:
+        avatarValue,
+      website:
+        websiteValue,
+      bio:
+        bioValue
+    };
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth
+        .updateUser({
+          data:
+            updatedMetadata
+        });
+
+    if(error){
+      throw error;
+    }
+
+    if(data && data.user){
+
+      currentUser =
+        data.user;
+
+      renderUser(
+        currentUser
+      );
+
+    }
+
+    showAlert(
+      "Administrator profile updated successfully.",
+      "success"
+    );
+
+    showToast(
+      "Profile saved",
+      "success"
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+    showAlert(
+      error.message ||
+      "Unable to update profile.",
+      "error"
+    );
+
+  }
+}
+
+/* ==========================================================
+   PASSWORD MODAL
+========================================================== */
+
+function openPasswordModal(){
+
+  document
+    .getElementById(
+      "passwordModal"
+    )
+    .classList.add("open");
+
+  document
+    .getElementById(
+      "newPassword"
+    )
+    .focus();
+
+}
+
+function closePasswordModal(){
+
+  document
+    .getElementById(
+      "passwordModal"
+    )
+    .classList.remove("open");
+
+  document
+    .getElementById(
+      "newPassword"
+    )
+    .value = "";
+
+  document
+    .getElementById(
+      "confirmPassword"
+    )
+    .value = "";
+
+  const alert =
+    document.getElementById(
+      "passwordAlert"
+    );
+
+  alert.className =
+    "alert";
+
+}
+
+/* ==========================================================
+   CHANGE PASSWORD
+========================================================== */
+
+async function changePassword(){
+
+  const newPassword =
+    document.getElementById(
+      "newPassword"
+    ).value;
+
+  const confirmPassword =
+    document.getElementById(
+      "confirmPassword"
+    ).value;
+
+  const alert =
+    document.getElementById(
+      "passwordAlert"
+    );
+
+  if(!supabaseClient){
+
+    alert.textContent =
+      "Supabase is not configured.";
+
+    alert.className =
+      "alert show error";
+
+    return;
+  }
+
+  if(newPassword.length < 8){
+
+    alert.textContent =
+      "Password must contain at least 8 characters.";
+
+    alert.className =
+      "alert show error";
+
+    return;
+  }
+
+  if(newPassword !== confirmPassword){
+
+    alert.textContent =
+      "The passwords do not match.";
+
+    alert.className =
+      "alert show error";
+
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient.auth
+        .updateUser({
+          password:
+            newPassword
+        });
+
+    if(error){
+      throw error;
+    }
+
+    alert.textContent =
+      "Password updated successfully.";
+
+    alert.className =
+      "alert show success";
+
+    showToast(
+      "Password updated",
+      "success"
+    );
+
+    setTimeout(
+      closePasswordModal,
+      900
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+    alert.textContent =
+      error.message ||
+      "Unable to update password.";
+
+    alert.className =
+      "alert show error";
+
+  }
+}
+
+/* ==========================================================
+   SIGN OUT
+========================================================== */
+
+async function signOut(){
+
+  if(!supabaseClient){
+
+    window.location.href =
+      "login.html";
+
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient.auth
+        .signOut();
+
+    if(error){
+      throw error;
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      "Sign out failed:",
+      error
+    );
+
+  }
+
+  window.location.href =
+    "login.html";
+}
+
+/* ==========================================================
+   AUTH STATE
+========================================================== */
+
+if(supabaseClient){
+
+  supabaseClient.auth
+    .onAuthStateChange(
+      (event, session) => {
+
+        if(
+          event === "SIGNED_OUT"
+        ){
+
+          window.location.href =
+            "login.html";
+
+        }
+
+      }
+    );
+
+}
+
+/* ==========================================================
+   MODAL CONTROLS
+========================================================== */
+
+document
+  .getElementById(
+    "passwordModal"
+  )
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target.id ===
+        "passwordModal"
+      ){
+
+        closePasswordModal();
+
+      }
+
+    }
+  );
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key === "Escape"
+    ){
+
+      closePasswordModal();
+
+    }
+
+  }
+);
+
+/* ==========================================================
+   START
+========================================================== */
+
+loadProfile();
+</script>
+
+</body>
+</html>

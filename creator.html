@@ -1,0 +1,2689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Creator — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Creator Management">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --radius:16px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(182,108,255,.08),transparent 30%),
+    radial-gradient(circle at 20% 20%,rgba(55,215,255,.035),transparent 28%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+  min-height:100vh;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   SHELL
+========================= */
+
+.app{
+  min-height:100vh;
+}
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:255px;
+  background:rgba(7,7,9,.97);
+  border-right:1px solid var(--line);
+  z-index:100;
+  overflow-y:auto;
+}
+
+.brand{
+  height:76px;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  border:1px solid rgba(182,108,255,.55);
+  background:
+    linear-gradient(135deg,rgba(182,108,255,.2),rgba(55,215,255,.06));
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  box-shadow:0 0 25px rgba(182,108,255,.08);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  color:var(--accent);
+}
+
+.brand-text strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  letter-spacing:1.2px;
+}
+
+.brand-text span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+
+.nav{
+  padding:14px 10px 30px;
+}
+
+.nav-label{
+  padding:14px 11px 7px;
+  color:#666671;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.8px;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 11px;
+  margin:2px 0;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#aaaab4;
+  font-size:12px;
+  transition:.18s ease;
+}
+
+.nav a:hover{
+  background:var(--panel2);
+  border-color:var(--line);
+  color:#fff;
+}
+
+.nav a.active{
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.15),rgba(108,92,255,.04));
+  border-color:rgba(182,108,255,.3);
+  color:#fff;
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+  color:#777782;
+  font-size:13px;
+}
+
+.nav a.active .nav-icon{
+  color:var(--accent);
+}
+
+.main{
+  margin-left:255px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:76px;
+  position:sticky;
+  top:0;
+  z-index:80;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(5,5,5,.86);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.menu-btn{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:var(--panel);
+  color:#fff;
+}
+
+.breadcrumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.system-status{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  color:#a8a8b1;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px rgba(69,230,154,.7);
+}
+
+.clock{
+  font-family:Orbitron,sans-serif;
+  color:#bbb;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding:30px;
+  max-width:1700px;
+  margin:auto;
+}
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  gap:24px;
+  padding:30px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 85% 15%,rgba(182,108,255,.12),transparent 32%),
+    linear-gradient(145deg,#111117,#09090c);
+  box-shadow:var(--shadow);
+  margin-bottom:22px;
+}
+
+.hero-copy{
+  max-width:800px;
+}
+
+.eyebrow{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+.hero h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(26px,3vw,42px);
+  line-height:1.08;
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:720px;
+  line-height:1.7;
+  font-size:13px;
+  margin:14px 0 0;
+}
+
+.hero-actions{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#eee;
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:11px;
+  font-weight:700;
+  transition:.18s ease;
+}
+
+.btn:hover{
+  border-color:#555563;
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  border-color:transparent;
+  color:#fff;
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.35);
+  color:#ff8092;
+}
+
+.btn.small{
+  padding:7px 10px;
+  font-size:10px;
+}
+
+/* =========================
+   PROFILE HEADER
+========================= */
+
+.creator-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--panel);
+  margin-bottom:22px;
+}
+
+.creator-cover{
+  height:190px;
+  background:
+    linear-gradient(90deg,rgba(5,5,5,.88),rgba(5,5,5,.28)),
+    radial-gradient(circle at 70% 30%,rgba(182,108,255,.35),transparent 28%),
+    linear-gradient(135deg,#17121e,#0a0a0d 55%,#11151a);
+  border-bottom:1px solid var(--line);
+  position:relative;
+}
+
+.cover-grid{
+  position:absolute;
+  inset:0;
+  opacity:.22;
+  background-image:
+    linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+
+.cover-label{
+  position:absolute;
+  top:20px;
+  right:22px;
+  padding:7px 10px;
+  border:1px solid rgba(182,108,255,.3);
+  background:rgba(5,5,5,.5);
+  border-radius:999px;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  color:var(--accent);
+  letter-spacing:1.4px;
+}
+
+.creator-main{
+  display:flex;
+  gap:20px;
+  padding:0 24px 24px;
+  position:relative;
+}
+
+.creator-avatar{
+  width:128px;
+  height:128px;
+  flex:0 0 128px;
+  margin-top:-54px;
+  border:5px solid var(--panel);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 35% 30%,#4b3c60,transparent 30%),
+    linear-gradient(145deg,#19131f,#09090b);
+  display:grid;
+  place-items:center;
+  box-shadow:0 18px 45px rgba(0,0,0,.5);
+  overflow:hidden;
+}
+
+.avatar-inner{
+  width:88px;
+  height:88px;
+  border-radius:50%;
+  border:1px solid rgba(182,108,255,.5);
+  display:grid;
+  place-items:center;
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+  color:var(--accent);
+  background:rgba(182,108,255,.07);
+}
+
+.creator-info{
+  padding-top:18px;
+  flex:1;
+}
+
+.creator-info h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+}
+
+.creator-handle{
+  color:var(--accent);
+  font-size:11px;
+  margin-top:5px;
+}
+
+.creator-bio{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  margin:11px 0 0;
+  max-width:760px;
+}
+
+.creator-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 9px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:#a9a9b2;
+  background:#0b0b0f;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.pill.green{
+  border-color:rgba(69,230,154,.25);
+  color:var(--green);
+}
+
+.pill.purple{
+  border-color:rgba(182,108,255,.28);
+  color:var(--accent);
+}
+
+.creator-actions{
+  padding-top:20px;
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+}
+
+/* =========================
+   STAT GRID
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.stat{
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+  padding:18px;
+  position:relative;
+  overflow:hidden;
+}
+
+.stat::after{
+  content:"";
+  position:absolute;
+  width:80px;
+  height:80px;
+  right:-35px;
+  bottom:-35px;
+  border-radius:50%;
+  background:rgba(182,108,255,.06);
+}
+
+.stat-label{
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  font-size:9px;
+}
+
+.stat-value{
+  margin-top:9px;
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+}
+
+.stat-note{
+  color:#6f6f79;
+  font-size:9px;
+  margin-top:5px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,2fr) minmax(310px,1fr);
+  gap:18px;
+}
+
+.panel{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:17px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.5px;
+}
+
+.panel-sub{
+  color:#666671;
+  font-size:9px;
+  margin-top:4px;
+}
+
+.panel-body{
+  padding:18px;
+}
+
+/* =========================
+   FORMS
+========================= */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+label{
+  color:#9d9da7;
+  font-size:9px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  border:1px solid var(--line2);
+  border-radius:9px;
+  background:#09090d;
+  color:#f5f5f7;
+  padding:11px 12px;
+  outline:none;
+  font-size:11px;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:rgba(182,108,255,.65);
+  box-shadow:0 0 0 3px rgba(182,108,255,.07);
+}
+
+textarea{
+  min-height:105px;
+  resize:vertical;
+}
+
+.form-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:16px;
+}
+
+/* =========================
+   SOCIAL LINKS
+========================= */
+
+.social-list{
+  display:grid;
+  gap:9px;
+}
+
+.social-row{
+  display:grid;
+  grid-template-columns:34px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:10px;
+  border:1px solid var(--line);
+  background:#0a0a0e;
+  border-radius:11px;
+}
+
+.social-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:#121219;
+  border:1px solid var(--line);
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+.social-name{
+  font-size:11px;
+  font-weight:700;
+}
+
+.social-url{
+  color:#686872;
+  font-size:9px;
+  margin-top:3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:300px;
+}
+
+.social-state{
+  font-size:9px;
+  color:var(--green);
+}
+
+/* =========================
+   SHOWS
+========================= */
+
+.show-list{
+  display:grid;
+  gap:9px;
+}
+
+.show-row{
+  display:grid;
+  grid-template-columns:58px 1fr auto;
+  gap:11px;
+  align-items:center;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#0a0a0e;
+}
+
+.show-art{
+  height:58px;
+  border-radius:9px;
+  background:
+    linear-gradient(135deg,rgba(182,108,255,.18),rgba(55,215,255,.06)),
+    #15151c;
+  border:1px solid var(--line);
+  display:grid;
+  place-items:center;
+  color:#aaa;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+.show-name{
+  font-size:11px;
+  font-weight:800;
+}
+
+.show-meta{
+  color:#666671;
+  font-size:9px;
+  margin-top:4px;
+}
+
+.show-status{
+  padding:5px 7px;
+  border-radius:999px;
+  border:1px solid rgba(69,230,154,.22);
+  color:var(--green);
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+/* =========================
+   ACTIVITY
+========================= */
+
+.activity-list{
+  display:grid;
+  gap:0;
+}
+
+.activity{
+  display:grid;
+  grid-template-columns:32px 1fr auto;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(39,39,47,.7);
+}
+
+.activity:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:#121219;
+  color:var(--cyan);
+  border:1px solid var(--line);
+  font-size:10px;
+}
+
+.activity-title{
+  font-size:10px;
+  line-height:1.5;
+}
+
+.activity-time{
+  color:#666671;
+  font-size:8px;
+  white-space:nowrap;
+}
+
+/* =========================
+   ANALYTICS
+========================= */
+
+.metric{
+  margin-bottom:16px;
+}
+
+.metric:last-child{
+  margin-bottom:0;
+}
+
+.metric-top{
+  display:flex;
+  justify-content:space-between;
+  color:#aaaab4;
+  font-size:9px;
+  margin-bottom:7px;
+}
+
+.progress{
+  height:7px;
+  border-radius:999px;
+  overflow:hidden;
+  background:#1a1a20;
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+th{
+  text-align:left;
+  padding:12px 14px;
+  background:#0b0b0f;
+  color:#666671;
+  border-bottom:1px solid var(--line);
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+td{
+  padding:13px 14px;
+  border-bottom:1px solid rgba(39,39,47,.7);
+  font-size:10px;
+  color:#c4c4cb;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.012);
+}
+
+.table-title{
+  font-weight:700;
+  color:#f0f0f3;
+}
+
+.mini{
+  color:#6c6c76;
+  font-size:8px;
+  margin-top:3px;
+}
+
+.badge{
+  display:inline-flex;
+  padding:5px 7px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.badge.published{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+}
+
+.badge.draft{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.25);
+}
+
+.badge.review{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.25);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+  padding:25px 0 10px;
+  color:#55555f;
+  font-size:9px;
+  text-align:center;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  right:25px;
+  bottom:25px;
+  z-index:500;
+  min-width:240px;
+  max-width:380px;
+  padding:13px 15px;
+  border:1px solid var(--line2);
+  border-radius:11px;
+  background:#101015;
+  box-shadow:var(--shadow);
+  color:#ddd;
+  font-size:10px;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(15px);
+  transition:.25s ease;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1180px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .creator-actions{
+    position:absolute;
+    right:24px;
+    top:100px;
+  }
+}
+
+@media(max-width:850px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s ease;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+    box-shadow:20px 0 60px rgba(0,0,0,.5);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .topbar{
+    padding:0 16px;
+  }
+
+  .system-status{
+    display:none;
+  }
+
+  .hero{
+    flex-direction:column;
+    padding:22px;
+  }
+
+  .hero-actions{
+    justify-content:flex-start;
+  }
+
+  .creator-main{
+    flex-direction:column;
+  }
+
+  .creator-avatar{
+    margin-top:-50px;
+  }
+
+  .creator-actions{
+    position:static;
+    padding-top:0;
+  }
+}
+
+@media(max-width:620px){
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+
+  .creator-cover{
+    height:145px;
+  }
+
+  .creator-avatar{
+    width:100px;
+    height:100px;
+    flex-basis:100px;
+  }
+
+  .avatar-inner{
+    width:70px;
+    height:70px;
+  }
+
+  .creator-main{
+    padding:0 17px 18px;
+  }
+
+  .creator-info h2{
+    font-size:18px;
+  }
+
+  .clock{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- =========================
+       SIDEBAR
+  ========================== -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-mark">CR</div>
+      <div class="brand-text">
+        <strong>CROWRULES</strong>
+        <span>Main Admin</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+
+      <div class="nav-label">Core</div>
+
+      <a href="index.html">
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </a>
+
+      <a href="content.html">
+        <span class="nav-icon">▦</span>
+        Content
+      </a>
+
+      <a href="pages.html">
+        <span class="nav-icon">□</span>
+        Pages
+      </a>
+
+      <a href="categories.html">
+        <span class="nav-icon">◫</span>
+        Categories
+      </a>
+
+      <a href="tags.html">
+        <span class="nav-icon">#</span>
+        Tags
+      </a>
+
+      <a href="shows.html">
+        <span class="nav-icon">▶</span>
+        Shows
+      </a>
+
+      <a href="episodes.html">
+        <span class="nav-icon">◉</span>
+        Episodes
+      </a>
+
+      <a href="movies.html">
+        <span class="nav-icon">▣</span>
+        Movies
+      </a>
+
+      <a href="audio.html">
+        <span class="nav-icon">♫</span>
+        Audio
+      </a>
+
+      <a href="articles.html">
+        <span class="nav-icon">≡</span>
+        Articles
+      </a>
+
+      <div class="nav-label">Broadcast</div>
+
+      <a href="channels.html">
+        <span class="nav-icon">◉</span>
+        Channels
+      </a>
+
+      <a href="schedule.html">
+        <span class="nav-icon">◷</span>
+        Schedule
+      </a>
+
+      <a href="live.html">
+        <span class="nav-icon">●</span>
+        Live
+      </a>
+
+      <a href="guide.html">
+        <span class="nav-icon">☷</span>
+        TV Guide
+      </a>
+
+      <div class="nav-label">People</div>
+
+      <a href="members.html">
+        <span class="nav-icon">♟</span>
+        Members
+      </a>
+
+      <a href="community.html">
+        <span class="nav-icon">☵</span>
+        Community
+      </a>
+
+      <a href="creators.html">
+        <span class="nav-icon">✦</span>
+        Creators
+      </a>
+
+      <a href="creator.html" class="active">
+        <span class="nav-icon">◆</span>
+        Creator
+      </a>
+
+      <div class="nav-label">CrowRules Network</div>
+
+      <a href="artists.html">
+        <span class="nav-icon">♪</span>
+        Artists
+      </a>
+
+      <a href="albums.html">
+        <span class="nav-icon">▤</span>
+        Albums
+      </a>
+
+      <a href="records.html">
+        <span class="nav-icon">◈</span>
+        Records
+      </a>
+
+      <a href="sports.html">
+        <span class="nav-icon">⚡</span>
+        Sports
+      </a>
+
+      <a href="teams.html">
+        <span class="nav-icon">◇</span>
+        Teams
+      </a>
+
+      <a href="rankings.html">
+        <span class="nav-icon">↗</span>
+        Rankings
+      </a>
+
+      <a href="standings.html">
+        <span class="nav-icon">☰</span>
+        Standings
+      </a>
+
+      <a href="games.html">
+        <span class="nav-icon">◉</span>
+        Games
+      </a>
+
+      <a href="pickem.html">
+        <span class="nav-icon">✓</span>
+        Pick'em
+      </a>
+
+      <a href="memorials.html">
+        <span class="nav-icon">✝</span>
+        Memorials
+      </a>
+
+      <a href="awards.html">
+        <span class="nav-icon">★</span>
+        Awards
+      </a>
+
+      <div class="nav-label">System</div>
+
+      <a href="analytics.html">
+        <span class="nav-icon">◒</span>
+        Analytics
+      </a>
+
+      <a href="moderation.html">
+        <span class="nav-icon">!</span>
+        Moderation
+      </a>
+
+      <a href="logs.html">
+        <span class="nav-icon">≋</span>
+        Logs
+      </a>
+
+      <a href="notifications.html">
+        <span class="nav-icon">♢</span>
+        Notifications
+      </a>
+
+      <a href="activity.html">
+        <span class="nav-icon">↻</span>
+        Activity
+      </a>
+
+      <a href="settings.html">
+        <span class="nav-icon">⚙</span>
+        Settings
+      </a>
+
+    </nav>
+  </aside>
+
+  <!-- =========================
+       MAIN
+  ========================== -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <div class="top-left">
+
+        <button class="menu-btn" id="menuBtn">☰</button>
+
+        <div class="breadcrumb">
+          CrowRules Admin / People / <strong>Creator</strong>
+        </div>
+
+      </div>
+
+      <div class="top-right">
+
+        <div class="system-status">
+          <span class="status-dot"></span>
+          Systems Online
+        </div>
+
+        <div class="clock" id="clock">
+          00:00:00
+        </div>
+
+      </div>
+
+    </header>
+
+    <section class="content">
+
+      <!-- HERO -->
+
+      <section class="hero">
+
+        <div class="hero-copy">
+
+          <div class="eyebrow">
+            CrowRules Creator Network / Creator Profile
+          </div>
+
+          <h1>Creator Command Center</h1>
+
+          <p>
+            Manage a creator's public identity, profile information,
+            branding, social presence, shows, episodes, publishing status,
+            performance and CrowRules network participation from one place.
+          </p>
+
+        </div>
+
+        <div class="hero-actions">
+
+          <button class="btn" onclick="previewCreator()">
+            Preview Profile
+          </button>
+
+          <button class="btn" onclick="duplicateCreator()">
+            Duplicate
+          </button>
+
+          <button class="btn primary" onclick="saveCreator()">
+            Save Creator
+          </button>
+
+        </div>
+
+      </section>
+
+      <!-- CREATOR PROFILE -->
+
+      <section class="creator-card">
+
+        <div class="creator-cover">
+
+          <div class="cover-grid"></div>
+
+          <div class="cover-label">
+            CREATOR PROFILE
+          </div>
+
+        </div>
+
+        <div class="creator-main">
+
+          <div class="creator-avatar">
+
+            <div class="avatar-inner">
+              JR
+            </div>
+
+          </div>
+
+          <div class="creator-info">
+
+            <h2>Jonathan Riehle</h2>
+
+            <div class="creator-handle">
+              @jonathan-riehle
+            </div>
+
+            <p class="creator-bio">
+              Creator, host and producer building original programming
+              across the CrowRules Entertainment network.
+            </p>
+
+            <div class="creator-meta">
+
+              <span class="pill green">
+                ● Published
+              </span>
+
+              <span class="pill purple">
+                ✦ Featured Creator
+              </span>
+
+              <span class="pill">
+                Tacoma / PNW
+              </span>
+
+              <span class="pill">
+                2026 Creator
+              </span>
+
+            </div>
+
+          </div>
+
+          <div class="creator-actions">
+
+            <button class="btn small" onclick="toggleFeatured()">
+              ★ Featured
+            </button>
+
+            <button class="btn small danger" onclick="archiveCreator()">
+              Archive
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- STATS -->
+
+      <section class="stats">
+
+        <div class="stat">
+          <div class="stat-label">Shows</div>
+          <div class="stat-value">6</div>
+          <div class="stat-note">4 active productions</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Episodes</div>
+          <div class="stat-value">84</div>
+          <div class="stat-note">Across creator catalog</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Views</div>
+          <div class="stat-value">184K</div>
+          <div class="stat-note">All-time creator views</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Watch Time</div>
+          <div class="stat-value">4.8K</div>
+          <div class="stat-note">Hours watched</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Followers</div>
+          <div class="stat-value">3.2K</div>
+          <div class="stat-note">Across network</div>
+        </div>
+
+      </section>
+
+      <!-- MAIN GRID -->
+
+      <div class="grid">
+
+        <!-- LEFT -->
+
+        <div>
+
+          <!-- CREATOR DETAILS -->
+
+          <section class="panel">
+
+            <div class="panel-head">
+
+              <div>
+                <div class="panel-title">Creator Details</div>
+                <div class="panel-sub">
+                  Public identity and profile configuration
+                </div>
+              </div>
+
+              <span class="badge published">
+                Published
+              </span>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="form-grid">
+
+                <div class="form-group">
+                  <label>Display Name</label>
+                  <input
+                    id="displayName"
+                    value="Jonathan Riehle"
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label>Username</label>
+                  <input
+                    id="username"
+                    value="jonathan-riehle"
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label>Creator Type</label>
+
+                  <select id="creatorType">
+                    <option>Creator</option>
+                    <option>Host</option>
+                    <option>Producer</option>
+                    <option>Director</option>
+                    <option>Artist</option>
+                    <option>Writer</option>
+                    <option>Multi-Creator</option>
+                  </select>
+
+                </div>
+
+                <div class="form-group">
+                  <label>Status</label>
+
+                  <select id="creatorStatus">
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                    <option value="review">Review</option>
+                    <option value="archived">Archived</option>
+                  </select>
+
+                </div>
+
+                <div class="form-group">
+                  <label>Location</label>
+                  <input
+                    id="location"
+                    value="Tacoma, Washington"
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label>Primary Category</label>
+
+                  <select id="category">
+                    <option>Entertainment</option>
+                    <option>Television</option>
+                    <option>Podcasting</option>
+                    <option>Talk Radio</option>
+                    <option>Music</option>
+                    <option>Sports</option>
+                    <option>Community</option>
+                    <option>Documentary</option>
+                  </select>
+
+                </div>
+
+                <div class="form-group full">
+                  <label>Short Bio</label>
+
+                  <textarea id="shortBio">Creator, host and producer building original programming across the CrowRules Entertainment network.</textarea>
+
+                </div>
+
+                <div class="form-group full">
+                  <label>Full Biography</label>
+
+                  <textarea id="biography">Jonathan Riehle is a CrowRules Entertainment creator, host and producer focused on original television, audio storytelling, community programming and independent media.</textarea>
+
+                </div>
+
+                <div class="form-group">
+                  <label>Profile Image URL</label>
+                  <input
+                    id="avatarUrl"
+                    placeholder="https://..."
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label>Cover Image URL</label>
+                  <input
+                    id="coverUrl"
+                    placeholder="https://..."
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label>Website</label>
+                  <input
+                    id="website"
+                    placeholder="https://..."
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label>Contact Email</label>
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="creator@example.com"
+                  >
+                </div>
+
+              </div>
+
+              <div class="form-actions">
+
+                <button class="btn" onclick="resetDetails()">
+                  Reset
+                </button>
+
+                <button class="btn primary" onclick="saveCreator()">
+                  Save Changes
+                </button>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <br>
+
+          <!-- CREATOR SHOWS -->
+
+          <section class="panel">
+
+            <div class="panel-head">
+
+              <div>
+                <div class="panel-title">Creator Shows</div>
+                <div class="panel-sub">
+                  Productions associated with this creator
+                </div>
+              </div>
+
+              <button class="btn small primary" onclick="addShow()">
+                + Add Show
+              </button>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="show-list">
+
+                <div class="show-row">
+
+                  <div class="show-art">
+                    TN
+                  </div>
+
+                  <div>
+                    <div class="show-name">
+                      Tacoma Nights
+                    </div>
+
+                    <div class="show-meta">
+                      Original Series · 32 Episodes · Weekly
+                    </div>
+                  </div>
+
+                  <span class="show-status">
+                    Active
+                  </span>
+
+                </div>
+
+                <div class="show-row">
+
+                  <div class="show-art">
+                    BD
+                  </div>
+
+                  <div>
+                    <div class="show-name">
+                      Back Deck Live
+                    </div>
+
+                    <div class="show-meta">
+                      Live Series · 18 Episodes · Weekly
+                    </div>
+                  </div>
+
+                  <span class="show-status">
+                    Active
+                  </span>
+
+                </div>
+
+                <div class="show-row">
+
+                  <div class="show-art">
+                    BB
+                  </div>
+
+                  <div>
+                    <div class="show-name">
+                      Bird Brains
+                    </div>
+
+                    <div class="show-meta">
+                      Comedy / Talk · 12 Episodes
+                    </div>
+                  </div>
+
+                  <span class="show-status">
+                    Active
+                  </span>
+
+                </div>
+
+                <div class="show-row">
+
+                  <div class="show-art">
+                    D&amp;J
+                  </div>
+
+                  <div>
+                    <div class="show-name">
+                      D&amp;J Show
+                    </div>
+
+                    <div class="show-meta">
+                      Talk / Entertainment · 14 Episodes
+                    </div>
+                  </div>
+
+                  <span class="show-status">
+                    Active
+                  </span>
+
+                </div>
+
+                <div class="show-row">
+
+                  <div class="show-art">
+                    VF
+                  </div>
+
+                  <div>
+                    <div class="show-name">
+                      Voices From The Void
+                    </div>
+
+                    <div class="show-meta">
+                      Audio Original · 5 Episodes
+                    </div>
+                  </div>
+
+                  <span class="badge review">
+                    Development
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <br>
+
+          <!-- EPISODES -->
+
+          <section class="panel">
+
+            <div class="panel-head">
+
+              <div>
+                <div class="panel-title">Recent Episodes</div>
+                <div class="panel-sub">
+                  Latest creator-associated content
+                </div>
+              </div>
+
+              <button
+                class="btn small"
+                onclick="location.href='episodes.html'"
+              >
+                View All
+              </button>
+
+            </div>
+
+            <div class="table-wrap">
+
+              <table>
+
+                <thead>
+
+                  <tr>
+                    <th>Episode</th>
+                    <th>Show</th>
+                    <th>Status</th>
+                    <th>Views</th>
+                    <th>Published</th>
+                    <th>Action</th>
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  <tr>
+
+                    <td>
+                      <div class="table-title">
+                        Living in Tacoma
+                      </div>
+                      <div class="mini">
+                        Episode 32
+                      </div>
+                    </td>
+
+                    <td>Tacoma Nights</td>
+
+                    <td>
+                      <span class="badge published">
+                        Published
+                      </span>
+                    </td>
+
+                    <td>12,482</td>
+
+                    <td>Sep 04, 2026</td>
+
+                    <td>
+                      <button
+                        class="btn small"
+                        onclick="editEpisode('Living in Tacoma')"
+                      >
+                        Edit
+                      </button>
+                    </td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>
+                      <div class="table-title">
+                        Saturday On The Deck
+                      </div>
+                      <div class="mini">
+                        Episode 18
+                      </div>
+                    </td>
+
+                    <td>Back Deck Live</td>
+
+                    <td>
+                      <span class="badge published">
+                        Published
+                      </span>
+                    </td>
+
+                    <td>8,294</td>
+
+                    <td>Aug 29, 2026</td>
+
+                    <td>
+                      <button
+                        class="btn small"
+                        onclick="editEpisode('Saturday On The Deck')"
+                      >
+                        Edit
+                      </button>
+                    </td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td>
+                      <div class="table-title">
+                        The State of Independent Media
+                      </div>
+                      <div class="mini">
+                        Episode 11
+                      </div>
+                    </td>
+
+                    <td>D&amp;J Show</td>
+
+                    <td>
+                      <span class="badge review">
+                        Review
+                      </span>
+                    </td>
+
+                    <td>—</td>
+
+                    <td>Pending</td>
+
+                    <td>
+                      <button
+                        class="btn small"
+                        onclick="editEpisode('The State of Independent Media')"
+                      >
+                        Review
+                      </button>
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </section>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div>
+
+          <!-- PROFILE STATUS -->
+
+          <section class="panel">
+
+            <div class="panel-head">
+
+              <div>
+                <div class="panel-title">Profile Status</div>
+                <div class="panel-sub">
+                  Publishing and discovery controls
+                </div>
+              </div>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="metric">
+
+                <div class="metric-top">
+                  <span>Profile Completeness</span>
+                  <strong>92%</strong>
+                </div>
+
+                <div class="progress">
+                  <span style="width:92%"></span>
+                </div>
+
+              </div>
+
+              <div class="metric">
+
+                <div class="metric-top">
+                  <span>Branding</span>
+                  <strong>88%</strong>
+                </div>
+
+                <div class="progress">
+                  <span style="width:88%"></span>
+                </div>
+
+              </div>
+
+              <div class="metric">
+
+                <div class="metric-top">
+                  <span>Social Connections</span>
+                  <strong>75%</strong>
+                </div>
+
+                <div class="progress">
+                  <span style="width:75%"></span>
+                </div>
+
+              </div>
+
+              <div class="metric">
+
+                <div class="metric-top">
+                  <span>Catalog</span>
+                  <strong>100%</strong>
+                </div>
+
+                <div class="progress">
+                  <span style="width:100%"></span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <br>
+
+          <!-- SOCIAL LINKS -->
+
+          <section class="panel">
+
+            <div class="panel-head">
+
+              <div>
+                <div class="panel-title">Social Presence</div>
+                <div class="panel-sub">
+                  Connected creator platforms
+                </div>
+              </div>
+
+              <button
+                class="btn small"
+                onclick="editSocials()"
+              >
+                Edit
+              </button>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="social-list">
+
+                <div class="social-row">
+
+                  <div class="social-icon">
+                    YT
+                  </div>
+
+                  <div>
+                    <div class="social-name">
+                      YouTube
+                    </div>
+
+                    <div class="social-url">
+                      youtube.com/@CrowRules_TV
+                    </div>
+                  </div>
+
+                  <div class="social-state">
+                    Connected
+                  </div>
+
+                </div>
+
+                <div class="social-row">
+
+                  <div class="social-icon">
+                    FB
+                  </div>
+
+                  <div>
+                    <div class="social-name">
+                      Facebook
+                    </div>
+
+                    <div class="social-url">
+                      facebook.com/crowrules
+                    </div>
+                  </div>
+
+                  <div class="social-state">
+                    Connected
+                  </div>
+
+                </div>
+
+                <div class="social-row">
+
+                  <div class="social-icon">
+                    IG
+                  </div>
+
+                  <div>
+                    <div class="social-name">
+                      Instagram
+                    </div>
+
+                    <div class="social-url">
+                      instagram.com/crowrules
+                    </div>
+                  </div>
+
+                  <div class="social-state">
+                    Connected
+                  </div>
+
+                </div>
+
+                <div class="social-row">
+
+                  <div class="social-icon">
+                    X
+                  </div>
+
+                  <div>
+                    <div class="social-name">
+                      X / Twitter
+                    </div>
+
+                    <div class="social-url">
+                      Not connected
+                    </div>
+                  </div>
+
+                  <div style="color:#777;font-size:9px">
+                    Offline
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <br>
+
+          <!-- CREATOR ANALYTICS -->
+
+          <section class="panel">
+
+            <div class="panel-head">
+
+              <div>
+                <div class="panel-title">Creator Analytics</div>
+                <div class="panel-sub">
+                  Performance overview
+                </div>
+              </div>
+
+              <button
+                class="btn small"
+                onclick="viewAnalytics()"
+              >
+                Analytics
+              </button>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="metric">
+
+                <div class="metric-top">
+                  <span>Video Engagement</span>
+                  <strong>74%</strong>
+                </div>
+
+                <div class="progress">
+                  <span style="width:74%"></span>
+                </div>
+
+              </div>
+
+              <div class="metric">
+
+                <div class="metric-top">
+                  <span>Audience Retention</span>
+                  <strong>68%</strong>
+                </div>
+
+                <div class="progress">
+                  <span style="width:68%"></span>
+                </div>
+
+              </div>
+
+              <div class="metric">
+
+                <div class="metric-top">
+                  <span>Returning Viewers</span>
+                  <strong>61%</strong>
+                </div>
+
+                <div class="progress">
+                  <span style="width:61%"></span>
+                </div>
+
+              </div>
+
+              <div class="metric">
+
+                <div class="metric-top">
+                  <span>Follower Conversion</span>
+                  <strong>43%</strong>
+                </div>
+
+                <div class="progress">
+                  <span style="width:43%"></span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <br>
+
+          <!-- ACTIVITY -->
+
+          <section class="panel">
+
+            <div class="panel-head">
+
+              <div>
+                <div class="panel-title">Creator Activity</div>
+                <div class="panel-sub">
+                  Recent administrative events
+                </div>
+              </div>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="activity-list">
+
+                <div class="activity">
+
+                  <div class="activity-icon">
+                    ✓
+                  </div>
+
+                  <div class="activity-title">
+                    Creator profile published
+                  </div>
+
+                  <div class="activity-time">
+                    2h
+                  </div>
+
+                </div>
+
+                <div class="activity">
+
+                  <div class="activity-icon">
+                    +
+                  </div>
+
+                  <div class="activity-title">
+                    New episode added to Tacoma Nights
+                  </div>
+
+                  <div class="activity-time">
+                    6h
+                  </div>
+
+                </div>
+
+                <div class="activity">
+
+                  <div class="activity-icon">
+                    ★
+                  </div>
+
+                  <div class="activity-title">
+                    Creator marked as featured
+                  </div>
+
+                  <div class="activity-time">
+                    1d
+                  </div>
+
+                </div>
+
+                <div class="activity">
+
+                  <div class="activity-icon">
+                    ↻
+                  </div>
+
+                  <div class="activity-title">
+                    Social profile information updated
+                  </div>
+
+                  <div class="activity-time">
+                    2d
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+
+      <div class="footer">
+        CrowRules Entertainment Main Admin · Creator Command Center
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==========================================
+   CROWRULES CREATOR ADMIN
+   ========================================== */
+
+/*
+  Supabase-ready architecture.
+
+  Suggested table:
+
+  creators
+  ---------------------------------------------
+  id uuid primary key
+  user_id uuid
+  display_name text
+  username text
+  slug text
+  creator_type text
+  status text
+  location text
+  category text
+  short_bio text
+  biography text
+  avatar_url text
+  cover_url text
+  website text
+  contact_email text
+  featured boolean
+  verified boolean
+  follower_count integer
+  view_count bigint
+  watch_hours numeric
+  created_at timestamptz
+  updated_at timestamptz
+
+  Related tables:
+
+  creator_social_links
+  creator_shows
+  creator_episodes
+  creator_activity
+  creator_analytics
+
+  IMPORTANT:
+  Inspect the existing Supabase schema before inserting.
+  Reuse existing member/profile/show/episode relationships
+  instead of creating duplicate identity columns.
+*/
+
+const creatorId = null;
+
+function $(id){
+  return document.getElementById(id);
+}
+
+/* ==========================================
+   CLOCK
+   ========================================== */
+
+function updateClock(){
+
+  const now = new Date();
+
+  const time = now.toLocaleTimeString([],{
+    hour:'2-digit',
+    minute:'2-digit',
+    second:'2-digit'
+  });
+
+  $('clock').textContent = time;
+
+}
+
+updateClock();
+
+setInterval(updateClock,1000);
+
+/* ==========================================
+   MOBILE SIDEBAR
+   ========================================== */
+
+$('menuBtn').addEventListener('click',()=>{
+
+  $('sidebar').classList.toggle('open');
+
+});
+
+/* ==========================================
+   TOAST
+   ========================================== */
+
+let toastTimer;
+
+function toast(message){
+
+  const el = $('toast');
+
+  el.textContent = message;
+
+  el.classList.add('show');
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(()=>{
+
+    el.classList.remove('show');
+
+  },2600);
+
+}
+
+/* ==========================================
+   COLLECT CREATOR PAYLOAD
+   ========================================== */
+
+function getCreatorPayload(){
+
+  return {
+
+    id:creatorId,
+
+    display_name:$('displayName').value.trim(),
+
+    username:$('username').value.trim(),
+
+    creator_type:$('creatorType').value,
+
+    status:$('creatorStatus').value,
+
+    location:$('location').value.trim(),
+
+    category:$('category').value,
+
+    short_bio:$('shortBio').value.trim(),
+
+    biography:$('biography').value.trim(),
+
+    avatar_url:$('avatarUrl').value.trim(),
+
+    cover_url:$('coverUrl').value.trim(),
+
+    website:$('website').value.trim(),
+
+    contact_email:$('email').value.trim(),
+
+    updated_at:new Date().toISOString()
+
+  };
+
+}
+
+/* ==========================================
+   SAVE
+   ========================================== */
+
+function saveCreator(){
+
+  const payload = getCreatorPayload();
+
+  console.log('CrowRules creator save payload:',payload);
+
+  /*
+    Example Supabase implementation:
+
+    const { data, error } = await supabase
+      .from('creators')
+      .upsert(payload)
+      .select()
+      .single();
+
+    if(error){
+      toast('Save failed: ' + error.message);
+      return;
+    }
+  */
+
+  toast('Creator profile saved successfully.');
+
+}
+
+/* ==========================================
+   RESET
+   ========================================== */
+
+function resetDetails(){
+
+  $('displayName').value = 'Jonathan Riehle';
+  $('username').value = 'jonathan-riehle';
+
+  $('creatorType').value = 'Creator';
+  $('creatorStatus').value = 'published';
+
+  $('location').value = 'Tacoma, Washington';
+  $('category').value = 'Entertainment';
+
+  $('shortBio').value =
+    'Creator, host and producer building original programming across the CrowRules Entertainment network.';
+
+  $('biography').value =
+    'Jonathan Riehle is a CrowRules Entertainment creator, host and producer focused on original television, audio storytelling, community programming and independent media.';
+
+  $('avatarUrl').value = '';
+  $('coverUrl').value = '';
+  $('website').value = '';
+  $('email').value = '';
+
+  toast('Creator details reset.');
+
+}
+
+/* ==========================================
+   CREATOR ACTIONS
+   ========================================== */
+
+function previewCreator(){
+
+  toast('Opening public creator preview...');
+
+  /*
+    Future:
+
+    location.href =
+      '../creator/' + username + '.html';
+
+    Or:
+
+    window.open(
+      '/creator/' + slug,
+      '_blank'
+    );
+  */
+
+}
+
+function duplicateCreator(){
+
+  const payload = getCreatorPayload();
+
+  console.log('Duplicate creator:',payload);
+
+  toast('Creator duplication prepared.');
+
+}
+
+function toggleFeatured(){
+
+  toast('Creator featured status updated.');
+
+}
+
+function archiveCreator(){
+
+  const confirmed =
+    confirm(
+      'Archive this creator? The public creator profile will be removed from active discovery.'
+    );
+
+  if(!confirmed) return;
+
+  $('creatorStatus').value = 'archived';
+
+  toast('Creator marked for archival.');
+
+}
+
+/* ==========================================
+   SHOW ACTIONS
+   ========================================== */
+
+function addShow(){
+
+  toast('Opening creator show assignment...');
+
+  /*
+    Future modal:
+
+    Search existing shows
+    Select creator role
+    Host / Producer / Director
+    Primary creator
+    Sort order
+  */
+
+}
+
+/* ==========================================
+   EPISODE ACTIONS
+   ========================================== */
+
+function editEpisode(title){
+
+  toast('Opening episode: ' + title);
+
+}
+
+function editSocials(){
+
+  toast('Opening social profile editor...');
+
+}
+
+function viewAnalytics(){
+
+  location.href = 'analytics.html';
+
+}
+
+/* ==========================================
+   KEYBOARD
+   ========================================== */
+
+document.addEventListener('keydown',(event)=>{
+
+  if(event.key === 'Escape'){
+
+    $('sidebar').classList.remove('open');
+
+  }
+
+});
+
+/* ==========================================
+   SUPABASE CONNECTION HOOK
+   ========================================== */
+
+/*
+  Configure these values from your secure deployment:
+
+  window.CROWRULES_SUPABASE_URL
+  window.CROWRULES_SUPABASE_ANON_KEY
+
+  Example:
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const supabaseClient = supabase.createClient(
+      window.CROWRULES_SUPABASE_URL,
+      window.CROWRULES_SUPABASE_ANON_KEY
+    );
+  </script>
+
+  NEVER place a Supabase service-role key in this HTML.
+*/
+
+/* ==========================================
+   FUTURE REALTIME SUPPORT
+   ========================================== */
+
+/*
+  Possible subscriptions:
+
+  creators
+  creator_activity
+  creator_analytics
+  creator_shows
+
+  Example:
+
+  supabaseClient
+    .channel('creator-admin')
+    .on(
+      'postgres_changes',
+      {
+        event:'*',
+        schema:'public',
+        table:'creators'
+      },
+      payload => {
+
+        console.log(
+          'Creator database update:',
+          payload
+        );
+
+      }
+    )
+    .subscribe();
+
+*/
+
+console.log(
+  'CrowRules Creator Command Center initialized.'
+);
+
+</script>
+
+</body>
+</html>

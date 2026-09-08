@@ -1,0 +1,2797 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Leaderboard — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Member Leaderboard and Rankings">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --sidebar:260px;
+  --topbar:72px;
+  --radius:16px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(108,92,255,.10),transparent 30%),
+    radial-gradient(circle at 15% 20%,rgba(182,108,255,.07),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+  min-height:100vh;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.035;
+  background-image:
+    linear-gradient(rgba(255,255,255,.7) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.7) 1px,transparent 1px);
+  background-size:50px 50px;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:var(--sidebar);
+  background:rgba(7,7,10,.97);
+  border-right:1px solid var(--line);
+  z-index:1000;
+  overflow-y:auto;
+}
+
+.brand{
+  height:var(--topbar);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:36px;
+  height:36px;
+  border:1px solid var(--accent);
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  box-shadow:0 0 20px rgba(182,108,255,.12);
+}
+
+.brand-text{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+.brand-sub{
+  display:block;
+  color:var(--muted);
+  font-family:Montserrat,sans-serif;
+  font-size:9px;
+  letter-spacing:1.5px;
+  margin-top:3px;
+}
+
+.nav-section{
+  padding:18px 12px 5px;
+  color:#5e5e68;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:40px;
+  margin:2px 8px;
+  padding:9px 11px;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#aaaab4;
+  font-size:12px;
+  transition:.2s;
+}
+
+.nav-item:hover{
+  color:#fff;
+  background:var(--panel2);
+  border-color:var(--line);
+}
+
+.nav-item.active{
+  color:#fff;
+  background:linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.07));
+  border-color:rgba(182,108,255,.30);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+  font-size:14px;
+  opacity:.85;
+}
+
+/* TOPBAR */
+
+.main{
+  margin-left:var(--sidebar);
+  min-height:100vh;
+}
+
+.topbar{
+  height:var(--topbar);
+  position:sticky;
+  top:0;
+  z-index:900;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 26px;
+  background:rgba(5,5,5,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.page-label{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  letter-spacing:1.5px;
+  color:#c7c7d0;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.clock{
+  color:var(--muted);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.admin-avatar{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  font-weight:800;
+}
+
+.mobile-menu{
+  display:none;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  width:38px;
+  height:38px;
+  border-radius:9px;
+}
+
+/* CONTENT */
+
+.content{
+  padding:28px;
+  max-width:1800px;
+  margin:auto;
+}
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  gap:25px;
+  align-items:flex-end;
+  margin-bottom:24px;
+}
+
+.eyebrow{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:9px;
+}
+
+h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(25px,3vw,40px);
+  letter-spacing:.5px;
+}
+
+.hero-copy{
+  max-width:760px;
+}
+
+.hero-description{
+  margin:12px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.hero-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#fff;
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:11px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.btn:hover{
+  border-color:var(--accent);
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  border-color:transparent;
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.35);
+  color:#ff8092;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:linear-gradient(145deg,var(--panel),#0a0a0e);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:17px;
+  position:relative;
+  overflow:hidden;
+}
+
+.stat:after{
+  content:"";
+  position:absolute;
+  right:-25px;
+  top:-25px;
+  width:75px;
+  height:75px;
+  border-radius:50%;
+  background:rgba(182,108,255,.06);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.stat-value{
+  margin-top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+  font-weight:700;
+}
+
+.stat-change{
+  margin-top:7px;
+  font-size:9px;
+  color:var(--green);
+}
+
+/* PANELS */
+
+.panel{
+  background:rgba(13,13,17,.92);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+
+.panel-header{
+  min-height:62px;
+  padding:15px 18px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.8px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.panel-tools{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+/* LEADERBOARD */
+
+.leaderboard-panel{
+  margin-bottom:20px;
+}
+
+.filters{
+  padding:14px 18px;
+  border-bottom:1px solid var(--line);
+  display:grid;
+  grid-template-columns:2fr repeat(5,1fr) auto;
+  gap:8px;
+}
+
+.field{
+  min-width:0;
+}
+
+.input,
+.select{
+  width:100%;
+  background:#09090c;
+  color:#eee;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:10px 11px;
+  outline:none;
+  font-size:11px;
+}
+
+.input:focus,
+.select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px rgba(182,108,255,.08);
+}
+
+.tabs{
+  display:flex;
+  gap:3px;
+  padding:10px 18px;
+  border-bottom:1px solid var(--line);
+  overflow-x:auto;
+}
+
+.tab{
+  white-space:nowrap;
+  padding:9px 12px;
+  border:1px solid transparent;
+  background:transparent;
+  color:var(--muted);
+  border-radius:8px;
+  font-size:10px;
+  font-weight:700;
+}
+
+.tab:hover{
+  color:#fff;
+  background:var(--panel2);
+}
+
+.tab.active{
+  color:#fff;
+  background:rgba(182,108,255,.12);
+  border-color:rgba(182,108,255,.25);
+}
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1050px;
+}
+
+th{
+  text-align:left;
+  color:#6f6f79;
+  background:#0a0a0d;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+}
+
+td{
+  padding:13px 14px;
+  border-bottom:1px solid #1c1c22;
+  font-size:11px;
+  color:#d5d5da;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.018);
+}
+
+.rank{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  font-size:13px;
+  border-radius:10px;
+  background:#15151b;
+  border:1px solid var(--line);
+}
+
+.rank.top1{
+  color:#fff;
+  border-color:rgba(243,201,105,.5);
+  box-shadow:0 0 18px rgba(243,201,105,.07);
+}
+
+.rank.top2{
+  color:#ddd;
+  border-color:#55555f;
+}
+
+.rank.top3{
+  color:#d99d73;
+  border-color:rgba(217,157,115,.35);
+}
+
+.member{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-width:210px;
+}
+
+.member-avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#1e1e27,#30303c);
+  border:1px solid var(--line2);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:800;
+}
+
+.member-name{
+  color:#fff;
+  font-weight:700;
+}
+
+.member-handle{
+  color:#696973;
+  font-size:9px;
+  margin-top:3px;
+}
+
+.points{
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  color:var(--accent);
+}
+
+.balance{
+  color:#dcdce3;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+.movement{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-weight:800;
+}
+
+.up{
+  color:var(--green);
+}
+
+.down{
+  color:var(--red);
+}
+
+.same{
+  color:var(--muted);
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid var(--line2);
+  border-radius:999px;
+  padding:5px 8px;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  font-weight:800;
+}
+
+.badge.active{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+  background:rgba(69,230,154,.05);
+}
+
+.badge.vip{
+  color:var(--accent);
+  border-color:rgba(182,108,255,.3);
+  background:rgba(182,108,255,.06);
+}
+
+.badge.creator{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.25);
+  background:rgba(55,215,255,.05);
+}
+
+.action-btn{
+  width:30px;
+  height:30px;
+  border-radius:8px;
+  background:#111117;
+  border:1px solid var(--line);
+  color:#bbb;
+}
+
+.action-btn:hover{
+  color:#fff;
+  border-color:var(--accent);
+}
+
+/* LOWER GRID */
+
+.lower-grid{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:20px;
+}
+
+.activity-list{
+  padding:8px 18px 15px;
+}
+
+.activity{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid #1d1d23;
+}
+
+.activity:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:9px;
+  color:var(--accent);
+  background:#101016;
+}
+
+.activity-main{
+  flex:1;
+}
+
+.activity-title{
+  font-size:10px;
+  font-weight:700;
+}
+
+.activity-meta{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+}
+
+.activity-points{
+  font-family:Orbitron,sans-serif;
+  color:var(--green);
+  font-size:10px;
+  font-weight:800;
+}
+
+.breakdown{
+  padding:18px;
+}
+
+.breakdown-row{
+  margin-bottom:17px;
+}
+
+.breakdown-head{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:7px;
+  font-size:10px;
+}
+
+.breakdown-head span:last-child{
+  color:var(--muted);
+}
+
+.bar{
+  height:7px;
+  border-radius:20px;
+  overflow:hidden;
+  background:#1a1a21;
+}
+
+.bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  border-radius:inherit;
+}
+
+/* EMPTY */
+
+.no-results{
+  display:none;
+  text-align:center;
+  padding:50px 20px;
+  color:var(--muted);
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:3000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(8px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(600px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0c0c10;
+  border:1px solid var(--line2);
+  border-radius:18px;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+
+.modal-header{
+  padding:18px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  background:#15151a;
+  color:#aaa;
+  border:1px solid var(--line);
+  border-radius:8px;
+}
+
+.modal-body{
+  padding:18px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-label{
+  color:#9b9ba5;
+  font-size:10px;
+  font-weight:700;
+}
+
+.textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.modal-footer{
+  padding:15px 18px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:5000;
+  min-width:250px;
+  padding:13px 15px;
+  background:#101015;
+  border:1px solid var(--line2);
+  border-left:3px solid var(--accent);
+  border-radius:10px;
+  box-shadow:0 15px 50px rgba(0,0,0,.5);
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  font-size:11px;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1250px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .filters{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .filters .field.search-field{
+    grid-column:1/-1;
+  }
+}
+
+@media(max-width:900px){
+  :root{
+    --sidebar:0px;
+  }
+
+  .sidebar{
+    transform:translateX(-100%);
+    width:270px;
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .content{
+    padding:18px 14px;
+  }
+
+  .hero{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .lower-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:600px){
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stat-value{
+    font-size:18px;
+  }
+
+  .filters{
+    grid-template-columns:1fr;
+  }
+
+  .filters .field.search-field{
+    grid-column:auto;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+
+  .clock{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-mark">CR</div>
+      <div>
+        <div class="brand-text">CROWRULES</div>
+        <span class="brand-sub">ENTERTAINMENT ADMIN</span>
+      </div>
+    </div>
+
+    <div class="nav-section">Core</div>
+
+    <a class="nav-item" href="index.html">
+      <span class="nav-icon">⌂</span> Dashboard
+    </a>
+
+    <a class="nav-item" href="content.html">
+      <span class="nav-icon">▦</span> Content
+    </a>
+
+    <a class="nav-item" href="pages.html">
+      <span class="nav-icon">▤</span> Pages
+    </a>
+
+    <a class="nav-item" href="categories.html">
+      <span class="nav-icon">◫</span> Categories
+    </a>
+
+    <a class="nav-item" href="tags.html">
+      <span class="nav-icon">#</span> Tags
+    </a>
+
+    <a class="nav-item" href="shows.html">
+      <span class="nav-icon">▶</span> Shows
+    </a>
+
+    <a class="nav-item" href="episodes.html">
+      <span class="nav-icon">▣</span> Episodes
+    </a>
+
+    <a class="nav-item" href="movies.html">
+      <span class="nav-icon">◆</span> Movies
+    </a>
+
+    <a class="nav-item" href="audio.html">
+      <span class="nav-icon">♫</span> Audio
+    </a>
+
+    <a class="nav-item" href="articles.html">
+      <span class="nav-icon">✎</span> Articles
+    </a>
+
+    <div class="nav-section">Broadcast</div>
+
+    <a class="nav-item" href="channels.html">
+      <span class="nav-icon">◉</span> Channels
+    </a>
+
+    <a class="nav-item" href="schedule.html">
+      <span class="nav-icon">◷</span> Schedule
+    </a>
+
+    <a class="nav-item" href="live.html">
+      <span class="nav-icon">●</span> Live
+    </a>
+
+    <a class="nav-item" href="guide.html">
+      <span class="nav-icon">☷</span> TV Guide
+    </a>
+
+    <div class="nav-section">People</div>
+
+    <a class="nav-item" href="members.html">
+      <span class="nav-icon">♙</span> Members
+    </a>
+
+    <a class="nav-item" href="member.html">
+      <span class="nav-icon">◎</span> Member
+    </a>
+
+    <a class="nav-item" href="membership.html">
+      <span class="nav-icon">◆</span> Membership
+    </a>
+
+    <a class="nav-item" href="points.html">
+      <span class="nav-icon">✦</span> Points
+    </a>
+
+    <a class="nav-item" href="leaderboard.html">
+      <span class="nav-icon">♛</span> Leaderboard
+    </a>
+
+    <a class="nav-item" href="roles.html">
+      <span class="nav-icon">♜</span> Roles
+    </a>
+
+    <a class="nav-item" href="community.html">
+      <span class="nav-icon">☷</span> Community
+    </a>
+
+    <a class="nav-item" href="creators.html">
+      <span class="nav-icon">✦</span> Creators
+    </a>
+
+    <a class="nav-item" href="creator.html">
+      <span class="nav-icon">✧</span> Creator
+    </a>
+
+    <a class="nav-item" href="creator-content.html">
+      <span class="nav-icon">▧</span> Creator Content
+    </a>
+
+    <a class="nav-item" href="creator-approvals.html">
+      <span class="nav-icon">✓</span> Creator Approvals
+    </a>
+
+    <div class="nav-section">CrowRules Network</div>
+
+    <a class="nav-item" href="artists.html">
+      <span class="nav-icon">♬</span> Artists
+    </a>
+
+    <a class="nav-item" href="albums.html">
+      <span class="nav-icon">▰</span> Albums
+    </a>
+
+    <a class="nav-item" href="tracks.html">
+      <span class="nav-icon">♫</span> Tracks
+    </a>
+
+    <a class="nav-item" href="records.html">
+      <span class="nav-icon">◉</span> Records
+    </a>
+
+    <a class="nav-item" href="sports.html">
+      <span class="nav-icon">◇</span> Sports
+    </a>
+
+    <a class="nav-item" href="teams.html">
+      <span class="nav-icon">♢</span> Teams
+    </a>
+
+    <a class="nav-item" href="rankings.html">
+      <span class="nav-icon">↗</span> Rankings
+    </a>
+
+    <a class="nav-item" href="standings.html">
+      <span class="nav-icon">☷</span> Standings
+    </a>
+
+    <a class="nav-item" href="games.html">
+      <span class="nav-icon">⚑</span> Games
+    </a>
+
+    <a class="nav-item" href="pickem.html">
+      <span class="nav-icon">✓</span> Pick'em
+    </a>
+
+    <a class="nav-item" href="memorials.html">
+      <span class="nav-icon">✚</span> Memorials
+    </a>
+
+    <a class="nav-item" href="memorial-photos.html">
+      <span class="nav-icon">▧</span> Memorial Photos
+    </a>
+
+    <a class="nav-item" href="awards.html">
+      <span class="nav-icon">★</span> Awards
+    </a>
+
+    <div class="nav-section">System</div>
+
+    <a class="nav-item" href="analytics.html">
+      <span class="nav-icon">◒</span> Analytics
+    </a>
+
+    <a class="nav-item" href="moderation.html">
+      <span class="nav-icon">⚠</span> Moderation
+    </a>
+
+    <a class="nav-item" href="logs.html">
+      <span class="nav-icon">≡</span> Logs
+    </a>
+
+    <a class="nav-item" href="notifications.html">
+      <span class="nav-icon">♢</span> Notifications
+    </a>
+
+    <a class="nav-item" href="activity.html">
+      <span class="nav-icon">◌</span> Activity
+    </a>
+
+    <a class="nav-item" href="settings.html">
+      <span class="nav-icon">⚙</span> Settings
+    </a>
+
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <header class="topbar">
+
+      <div class="top-left">
+        <button class="mobile-menu" id="mobileMenu">☰</button>
+        <span class="status-dot"></span>
+        <span class="page-label">MEMBER LEADERBOARD</span>
+      </div>
+
+      <div class="top-actions">
+        <div class="clock" id="clock">--:--:--</div>
+        <div class="admin-avatar">CR</div>
+      </div>
+
+    </header>
+
+    <section class="content">
+
+      <!-- HERO -->
+
+      <div class="hero">
+
+        <div class="hero-copy">
+          <div class="eyebrow">People / Engagement</div>
+          <h1>Leaderboard</h1>
+
+          <p class="hero-description">
+            Monitor CrowRules member rankings, points, engagement,
+            watch activity, community participation and seasonal
+            competition across the network.
+          </p>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn primary" id="refreshBtn">↻ Refresh</button>
+          <button class="btn" id="seasonBtn">Season Settings</button>
+          <button class="btn" id="exportBtn">⇩ Export</button>
+        </div>
+
+      </div>
+
+      <!-- STATS -->
+
+      <div class="stats">
+
+        <div class="stat">
+          <div class="stat-label">Ranked Members</div>
+          <div class="stat-value">1,824</div>
+          <div class="stat-change">+84 this month</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Points This Month</div>
+          <div class="stat-value">842K</div>
+          <div class="stat-change">+12.8%</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Top Member</div>
+          <div class="stat-value">48.2K</div>
+          <div class="stat-change">Alex Rivers</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Active Competitors</div>
+          <div class="stat-value">1,276</div>
+          <div class="stat-change">69.9% active</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Season</div>
+          <div class="stat-value">S26</div>
+          <div class="stat-change">2026 Season</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Last Updated</div>
+          <div class="stat-value">LIVE</div>
+          <div class="stat-change">Just now</div>
+        </div>
+
+      </div>
+
+      <!-- LEADERBOARD -->
+
+      <section class="panel leaderboard-panel">
+
+        <div class="panel-header">
+
+          <div>
+            <div class="panel-title">Member Rankings</div>
+            <div class="panel-sub">
+              Current CrowRules Entertainment engagement standings
+            </div>
+          </div>
+
+          <div class="panel-tools">
+            <button class="btn" id="resetBtn">Reset Filters</button>
+          </div>
+
+        </div>
+
+        <div class="filters">
+
+          <div class="field search-field">
+            <input
+              id="searchInput"
+              class="input"
+              type="search"
+              placeholder="Search members..."
+            >
+          </div>
+
+          <div class="field">
+            <select id="periodFilter" class="select">
+              <option value="monthly">This Month</option>
+              <option value="weekly">This Week</option>
+              <option value="season">Season</option>
+              <option value="alltime">All Time</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <select id="categoryFilter" class="select">
+              <option value="all">All Categories</option>
+              <option value="watch">Watch Time</option>
+              <option value="community">Community</option>
+              <option value="sports">Sports</option>
+              <option value="creator">Creator</option>
+              <option value="engagement">Engagement</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <select id="planFilter" class="select">
+              <option value="all">All Plans</option>
+              <option value="free">Free</option>
+              <option value="pro">Pro</option>
+              <option value="premium">Premium</option>
+              <option value="creator">Creator</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <select id="statusFilter" class="select">
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="new">New</option>
+              <option value="creator">Creator</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <select id="sortFilter" class="select">
+              <option value="rank">Rank</option>
+              <option value="points">Points</option>
+              <option value="watch">Watch Hours</option>
+              <option value="posts">Posts</option>
+              <option value="recent">Recent Activity</option>
+            </select>
+          </div>
+
+          <button class="btn" id="applyBtn">Apply</button>
+
+        </div>
+
+        <div class="tabs">
+
+          <button class="tab active" data-tab="all">All Members</button>
+          <button class="tab" data-tab="monthly">Monthly</button>
+          <button class="tab" data-tab="weekly">Weekly</button>
+          <button class="tab" data-tab="season">Season</button>
+          <button class="tab" data-tab="creators">Creators</button>
+          <button class="tab" data-tab="watch">Watch Time</button>
+          <button class="tab" data-tab="community">Community</button>
+
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Member</th>
+                <th>Movement</th>
+                <th>Points</th>
+                <th>Balance</th>
+                <th>Watch Hours</th>
+                <th>Community</th>
+                <th>Plan</th>
+                <th>Status</th>
+                <th>Updated</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="leaderboardBody">
+
+              <tr
+                data-name="Alex Rivers"
+                data-category="watch"
+                data-plan="premium"
+                data-status="active"
+                data-points="48200"
+                data-watch="326"
+                data-posts="184"
+              >
+                <td>
+                  <div class="rank top1">01</div>
+                </td>
+
+                <td>
+                  <div class="member">
+                    <div class="member-avatar">AR</div>
+                    <div>
+                      <div class="member-name">Alex Rivers</div>
+                      <div class="member-handle">@alexrivers</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="movement up">▲ 2</span>
+                </td>
+
+                <td>
+                  <span class="points">48,200</span>
+                </td>
+
+                <td>
+                  <span class="balance">18,450</span>
+                </td>
+
+                <td>326h</td>
+                <td>184 posts</td>
+
+                <td>
+                  <span class="badge vip">Premium</span>
+                </td>
+
+                <td>
+                  <span class="badge active">Active</span>
+                </td>
+
+                <td>2 min ago</td>
+
+                <td>
+                  <button class="action-btn" onclick="viewMember('Alex Rivers')">→</button>
+                </td>
+              </tr>
+
+              <tr
+                data-name="Jamie Parker"
+                data-category="community"
+                data-plan="creator"
+                data-status="creator"
+                data-points="45180"
+                data-watch="284"
+                data-posts="412"
+              >
+                <td>
+                  <div class="rank top2">02</div>
+                </td>
+
+                <td>
+                  <div class="member">
+                    <div class="member-avatar">JP</div>
+                    <div>
+                      <div class="member-name">Jamie Parker</div>
+                      <div class="member-handle">@jamieparker</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="movement up">▲ 1</span>
+                </td>
+
+                <td>
+                  <span class="points">45,180</span>
+                </td>
+
+                <td>
+                  <span class="balance">12,810</span>
+                </td>
+
+                <td>284h</td>
+                <td>412 posts</td>
+
+                <td>
+                  <span class="badge creator">Creator</span>
+                </td>
+
+                <td>
+                  <span class="badge creator">Creator</span>
+                </td>
+
+                <td>7 min ago</td>
+
+                <td>
+                  <button class="action-btn" onclick="viewMember('Jamie Parker')">→</button>
+                </td>
+              </tr>
+
+              <tr
+                data-name="Taylor Stone"
+                data-category="sports"
+                data-plan="pro"
+                data-status="active"
+                data-points="42860"
+                data-watch="301"
+                data-posts="228"
+              >
+                <td>
+                  <div class="rank top3">03</div>
+                </td>
+
+                <td>
+                  <div class="member">
+                    <div class="member-avatar">TS</div>
+                    <div>
+                      <div class="member-name">Taylor Stone</div>
+                      <div class="member-handle">@taylorstone</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="movement down">▼ 1</span>
+                </td>
+
+                <td>
+                  <span class="points">42,860</span>
+                </td>
+
+                <td>
+                  <span class="balance">10,940</span>
+                </td>
+
+                <td>301h</td>
+                <td>228 posts</td>
+
+                <td>
+                  <span class="badge">Pro</span>
+                </td>
+
+                <td>
+                  <span class="badge active">Active</span>
+                </td>
+
+                <td>12 min ago</td>
+
+                <td>
+                  <button class="action-btn" onclick="viewMember('Taylor Stone')">→</button>
+                </td>
+              </tr>
+
+              <tr
+                data-name="Morgan Lee"
+                data-category="engagement"
+                data-plan="premium"
+                data-status="active"
+                data-points="39840"
+                data-watch="251"
+                data-posts="356"
+              >
+                <td>
+                  <div class="rank">04</div>
+                </td>
+
+                <td>
+                  <div class="member">
+                    <div class="member-avatar">ML</div>
+                    <div>
+                      <div class="member-name">Morgan Lee</div>
+                      <div class="member-handle">@morganlee</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="movement up">▲ 3</span>
+                </td>
+
+                <td>
+                  <span class="points">39,840</span>
+                </td>
+
+                <td>
+                  <span class="balance">9,870</span>
+                </td>
+
+                <td>251h</td>
+                <td>356 posts</td>
+
+                <td>
+                  <span class="badge vip">Premium</span>
+                </td>
+
+                <td>
+                  <span class="badge active">Active</span>
+                </td>
+
+                <td>18 min ago</td>
+
+                <td>
+                  <button class="action-btn" onclick="viewMember('Morgan Lee')">→</button>
+                </td>
+              </tr>
+
+              <tr
+                data-name="Sam Walker"
+                data-category="watch"
+                data-plan="free"
+                data-status="new"
+                data-points="37420"
+                data-watch="412"
+                data-posts="92"
+              >
+                <td>
+                  <div class="rank">05</div>
+                </td>
+
+                <td>
+                  <div class="member">
+                    <div class="member-avatar">SW</div>
+                    <div>
+                      <div class="member-name">Sam Walker</div>
+                      <div class="member-handle">@samwalker</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="movement up">▲ 6</span>
+                </td>
+
+                <td>
+                  <span class="points">37,420</span>
+                </td>
+
+                <td>
+                  <span class="balance">7,540</span>
+                </td>
+
+                <td>412h</td>
+                <td>92 posts</td>
+
+                <td>
+                  <span class="badge">Free</span>
+                </td>
+
+                <td>
+                  <span class="badge active">New</span>
+                </td>
+
+                <td>25 min ago</td>
+
+                <td>
+                  <button class="action-btn" onclick="viewMember('Sam Walker')">→</button>
+                </td>
+              </tr>
+
+              <tr
+                data-name="Jordan Brooks"
+                data-category="community"
+                data-plan="pro"
+                data-status="active"
+                data-points="35110"
+                data-watch="224"
+                data-posts="491"
+              >
+                <td>
+                  <div class="rank">06</div>
+                </td>
+
+                <td>
+                  <div class="member">
+                    <div class="member-avatar">JB</div>
+                    <div>
+                      <div class="member-name">Jordan Brooks</div>
+                      <div class="member-handle">@jordanbrooks</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="movement same">—</span>
+                </td>
+
+                <td>
+                  <span class="points">35,110</span>
+                </td>
+
+                <td>
+                  <span class="balance">8,220</span>
+                </td>
+
+                <td>224h</td>
+                <td>491 posts</td>
+
+                <td>
+                  <span class="badge">Pro</span>
+                </td>
+
+                <td>
+                  <span class="badge active">Active</span>
+                </td>
+
+                <td>32 min ago</td>
+
+                <td>
+                  <button class="action-btn" onclick="viewMember('Jordan Brooks')">→</button>
+                </td>
+              </tr>
+
+              <tr
+                data-name="Casey Morgan"
+                data-category="creator"
+                data-plan="creator"
+                data-status="creator"
+                data-points="33840"
+                data-watch="198"
+                data-posts="274"
+              >
+                <td>
+                  <div class="rank">07</div>
+                </td>
+
+                <td>
+                  <div class="member">
+                    <div class="member-avatar">CM</div>
+                    <div>
+                      <div class="member-name">Casey Morgan</div>
+                      <div class="member-handle">@caseymorgan</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="movement down">▼ 2</span>
+                </td>
+
+                <td>
+                  <span class="points">33,840</span>
+                </td>
+
+                <td>
+                  <span class="balance">6,910</span>
+                </td>
+
+                <td>198h</td>
+                <td>274 posts</td>
+
+                <td>
+                  <span class="badge creator">Creator</span>
+                </td>
+
+                <td>
+                  <span class="badge creator">Creator</span>
+                </td>
+
+                <td>41 min ago</td>
+
+                <td>
+                  <button class="action-btn" onclick="viewMember('Casey Morgan')">→</button>
+                </td>
+              </tr>
+
+              <tr
+                data-name="Riley Adams"
+                data-category="engagement"
+                data-plan="premium"
+                data-status="active"
+                data-points="31790"
+                data-watch="176"
+                data-posts="321"
+              >
+                <td>
+                  <div class="rank">08</div>
+                </td>
+
+                <td>
+                  <div class="member">
+                    <div class="member-avatar">RA</div>
+                    <div>
+                      <div class="member-name">Riley Adams</div>
+                      <div class="member-handle">@rileyadams</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="movement up">▲ 4</span>
+                </td>
+
+                <td>
+                  <span class="points">31,790</span>
+                </td>
+
+                <td>
+                  <span class="balance">6,430</span>
+                </td>
+
+                <td>176h</td>
+                <td>321 posts</td>
+
+                <td>
+                  <span class="badge vip">Premium</span>
+                </td>
+
+                <td>
+                  <span class="badge active">Active</span>
+                </td>
+
+                <td>49 min ago</td>
+
+                <td>
+                  <button class="action-btn" onclick="viewMember('Riley Adams')">→</button>
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+          <div class="no-results" id="noResults">
+            No members match the current leaderboard filters.
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- LOWER GRID -->
+
+      <div class="lower-grid">
+
+        <section class="panel">
+
+          <div class="panel-header">
+
+            <div>
+              <div class="panel-title">Leaderboard Activity</div>
+              <div class="panel-sub">
+                Recent events affecting member rankings
+              </div>
+            </div>
+
+          </div>
+
+          <div class="activity-list">
+
+            <div class="activity">
+              <div class="activity-icon">▲</div>
+              <div class="activity-main">
+                <div class="activity-title">Alex Rivers moved into #1</div>
+                <div class="activity-meta">
+                  2 minutes ago · Watch Time Bonus
+                </div>
+              </div>
+              <div class="activity-points">+420</div>
+            </div>
+
+            <div class="activity">
+              <div class="activity-icon">✦</div>
+              <div class="activity-main">
+                <div class="activity-title">Jamie Parker earned Creator Bonus</div>
+                <div class="activity-meta">
+                  7 minutes ago · Creator activity
+                </div>
+              </div>
+              <div class="activity-points">+350</div>
+            </div>
+
+            <div class="activity">
+              <div class="activity-icon">✓</div>
+              <div class="activity-main">
+                <div class="activity-title">Taylor Stone completed Pick'em Week 12</div>
+                <div class="activity-meta">
+                  12 minutes ago · Sports
+                </div>
+              </div>
+              <div class="activity-points">+180</div>
+            </div>
+
+            <div class="activity">
+              <div class="activity-icon">☷</div>
+              <div class="activity-main">
+                <div class="activity-title">Morgan Lee reached Community Level 8</div>
+                <div class="activity-meta">
+                  18 minutes ago · Community
+                </div>
+              </div>
+              <div class="activity-points">+250</div>
+            </div>
+
+            <div class="activity">
+              <div class="activity-icon">▶</div>
+              <div class="activity-main">
+                <div class="activity-title">Sam Walker completed 400 watch hours</div>
+                <div class="activity-meta">
+                  25 minutes ago · CrowRules TV
+                </div>
+              </div>
+              <div class="activity-points">+500</div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <section class="panel">
+
+          <div class="panel-header">
+
+            <div>
+              <div class="panel-title">Ranking Breakdown</div>
+              <div class="panel-sub">
+                Where leaderboard points are coming from
+              </div>
+            </div>
+
+          </div>
+
+          <div class="breakdown">
+
+            <div class="breakdown-row">
+              <div class="breakdown-head">
+                <span>TV / Video</span>
+                <span>42%</span>
+              </div>
+              <div class="bar">
+                <div class="bar-fill" style="width:42%"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-row">
+              <div class="breakdown-head">
+                <span>Community</span>
+                <span>21%</span>
+              </div>
+              <div class="bar">
+                <div class="bar-fill" style="width:21%"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-row">
+              <div class="breakdown-head">
+                <span>Daily Engagement</span>
+                <span>17%</span>
+              </div>
+              <div class="bar">
+                <div class="bar-fill" style="width:17%"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-row">
+              <div class="breakdown-head">
+                <span>Sports / Pick'em</span>
+                <span>12%</span>
+              </div>
+              <div class="bar">
+                <div class="bar-fill" style="width:12%"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-row">
+              <div class="breakdown-head">
+                <span>Other</span>
+                <span>8%</span>
+              </div>
+              <div class="bar">
+                <div class="bar-fill" style="width:8%"></div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<!-- MEMBER MODAL -->
+
+<div class="modal" id="memberModal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <div class="modal-title">Member Leaderboard Profile</div>
+      <button class="close" onclick="closeModal('memberModal')">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">Member</label>
+          <input class="input" id="modalMemberName" readonly>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Current Rank</label>
+          <input class="input" value="#1" id="modalRank" readonly>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Points</label>
+          <input class="input" value="0" id="modalPoints" readonly>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Leaderboard Status</label>
+          <input class="input" value="Active" readonly>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Admin Note</label>
+          <textarea
+            class="input textarea"
+            id="modalNote"
+            placeholder="Add an internal leaderboard note..."
+          ></textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('memberModal')">Close</button>
+      <button class="btn primary" onclick="saveMemberNote()">Save Note</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- SEASON MODAL -->
+
+<div class="modal" id="seasonModal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <div class="modal-title">Leaderboard Season Settings</div>
+      <button class="close" onclick="closeModal('seasonModal')">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="form-label">Season Name</label>
+          <input
+            class="input"
+            id="seasonName"
+            value="CrowRules Season 2026"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Season Code</label>
+          <input
+            class="input"
+            id="seasonCode"
+            value="S26"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Start Date</label>
+          <input
+            class="input"
+            id="seasonStart"
+            type="date"
+            value="2026-01-01"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">End Date</label>
+          <input
+            class="input"
+            id="seasonEnd"
+            type="date"
+            value="2026-12-31"
+          >
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Season Description</label>
+          <textarea
+            class="input textarea"
+            id="seasonDescription"
+          >CrowRules Entertainment 2026 Member Leaderboard Season.</textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('seasonModal')">Cancel</button>
+      <button class="btn primary" id="saveSeasonBtn">Save Season</button>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/*
+===========================================================
+CROWRULES ENTERTAINMENT
+MAIN ADMIN — LEADERBOARD
+===========================================================
+
+PRODUCTION SUPABASE ARCHITECTURE
+
+Recommended tables:
+
+leaderboard_seasons
+-------------------
+id
+name
+slug
+description
+season_code
+start_date
+end_date
+status
+is_current
+created_at
+updated_at
+
+leaderboard_entries
+-------------------
+id
+season_id
+user_id
+period
+category
+rank
+previous_rank
+points
+watch_hours
+community_points
+sports_points
+creator_points
+engagement_points
+status
+updated_at
+created_at
+
+member_points
+-------------
+id
+user_id
+balance
+lifetime_earned
+lifetime_redeemed
+updated_at
+created_at
+
+point_transactions
+------------------
+id
+user_id
+transaction_type
+source
+points
+balance_after
+reason
+reference_type
+reference_id
+metadata
+created_by
+created_at
+
+leaderboard_events
+------------------
+id
+season_id
+user_id
+event_type
+points
+description
+reference_type
+reference_id
+metadata
+created_at
+
+IMPORTANT:
+Use RLS.
+Never expose a Supabase service-role key
+inside browser JavaScript.
+
+Leaderboard ranking should ideally be generated
+server-side or through secure database functions.
+
+===========================================================
+SUPABASE CONFIG
+===========================================================
+
+Set these before enabling production mode:
+
+window.CROWRULES_SUPABASE_URL = "";
+window.CROWRULES_SUPABASE_ANON_KEY = "";
+
+Optional:
+
+window.CROWRULES_LEADERBOARD_TABLE = "leaderboard_entries";
+window.CROWRULES_SEASONS_TABLE = "leaderboard_seasons";
+
+===========================================================
+*/
+
+const CONFIG = {
+  supabaseUrl:
+    window.CROWRULES_SUPABASE_URL || "",
+
+  supabaseAnonKey:
+    window.CROWRULES_SUPABASE_ANON_KEY || "",
+
+  leaderboardTable:
+    window.CROWRULES_LEADERBOARD_TABLE || "leaderboard_entries",
+
+  seasonsTable:
+    window.CROWRULES_SEASONS_TABLE || "leaderboard_seasons"
+};
+
+
+/* CLOCK */
+
+function updateClock(){
+
+  const now = new Date();
+
+  const text = now.toLocaleTimeString([],{
+    hour:"2-digit",
+    minute:"2-digit",
+    second:"2-digit"
+  });
+
+  const el = document.getElementById("clock");
+
+  if(el){
+    el.textContent = text;
+  }
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+
+/* MOBILE SIDEBAR */
+
+const mobileMenu =
+  document.getElementById("mobileMenu");
+
+const sidebar =
+  document.getElementById("sidebar");
+
+mobileMenu?.addEventListener("click",()=>{
+  sidebar.classList.toggle("open");
+});
+
+
+/* TOAST */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(()=>{
+      toast.classList.remove("show");
+    },2800);
+}
+
+
+/* MODALS */
+
+function openModal(id){
+  document.getElementById(id)?.classList.add("show");
+}
+
+function closeModal(id){
+  document.getElementById(id)?.classList.remove("show");
+}
+
+
+/* MEMBER PROFILE */
+
+function viewMember(name){
+
+  const rows =
+    [...document.querySelectorAll("#leaderboardBody tr")];
+
+  const row =
+    rows.find(
+      r => r.dataset.name === name
+    );
+
+  document.getElementById("modalMemberName").value =
+    name;
+
+  if(row){
+
+    const points =
+      row.dataset.points || "0";
+
+    document.getElementById("modalPoints").value =
+      Number(points).toLocaleString();
+
+    const rank =
+      row.querySelector(".rank")?.textContent.trim() || "—";
+
+    document.getElementById("modalRank").value =
+      "#" + parseInt(rank,10);
+
+  }
+
+  openModal("memberModal");
+}
+
+
+function saveMemberNote(){
+
+  const name =
+    document.getElementById("modalMemberName").value;
+
+  showToast(
+    `Leaderboard note saved for ${name}.`
+  );
+
+  closeModal("memberModal");
+}
+
+
+/* SEASON SETTINGS */
+
+document
+  .getElementById("seasonBtn")
+  ?.addEventListener("click",()=>{
+    openModal("seasonModal");
+  });
+
+
+document
+  .getElementById("saveSeasonBtn")
+  ?.addEventListener("click",()=>{
+
+    showToast(
+      "Leaderboard season settings saved."
+    );
+
+    closeModal("seasonModal");
+  });
+
+
+/* SEARCH + FILTERS */
+
+function applyFilters(){
+
+  const search =
+    document
+      .getElementById("searchInput")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const category =
+    document
+      .getElementById("categoryFilter")
+      .value;
+
+  const plan =
+    document
+      .getElementById("planFilter")
+      .value;
+
+  const status =
+    document
+      .getElementById("statusFilter")
+      .value;
+
+  const rows =
+    [...document.querySelectorAll("#leaderboardBody tr")];
+
+  let visible = 0;
+
+  rows.forEach(row=>{
+
+    const name =
+      (row.dataset.name || "").toLowerCase();
+
+    const rowCategory =
+      row.dataset.category || "";
+
+    const rowPlan =
+      row.dataset.plan || "";
+
+    const rowStatus =
+      row.dataset.status || "";
+
+    const searchMatch =
+      !search ||
+      name.includes(search);
+
+    const categoryMatch =
+      category === "all" ||
+      rowCategory === category;
+
+    const planMatch =
+      plan === "all" ||
+      rowPlan === plan;
+
+    const statusMatch =
+      status === "all" ||
+      rowStatus === status;
+
+    const show =
+      searchMatch &&
+      categoryMatch &&
+      planMatch &&
+      statusMatch;
+
+    row.style.display =
+      show ? "" : "none";
+
+    if(show){
+      visible++;
+    }
+
+  });
+
+  document
+    .getElementById("noResults")
+    .style.display =
+      visible ? "none" : "block";
+}
+
+
+document
+  .getElementById("applyBtn")
+  ?.addEventListener("click",()=>{
+
+    applyFilters();
+
+    showToast(
+      "Leaderboard filters applied."
+    );
+
+  });
+
+
+document
+  .getElementById("searchInput")
+  ?.addEventListener("input",applyFilters);
+
+
+/* RESET */
+
+document
+  .getElementById("resetBtn")
+  ?.addEventListener("click",()=>{
+
+    document.getElementById("searchInput").value = "";
+
+    document.getElementById("periodFilter").value =
+      "monthly";
+
+    document.getElementById("categoryFilter").value =
+      "all";
+
+    document.getElementById("planFilter").value =
+      "all";
+
+    document.getElementById("statusFilter").value =
+      "all";
+
+    document.getElementById("sortFilter").value =
+      "rank";
+
+    applyFilters();
+
+    showToast(
+      "Leaderboard filters reset."
+    );
+
+  });
+
+
+/* TABS */
+
+document
+  .querySelectorAll(".tab")
+  .forEach(tab=>{
+
+    tab.addEventListener("click",()=>{
+
+      document
+        .querySelectorAll(".tab")
+        .forEach(t=>
+          t.classList.remove("active")
+        );
+
+      tab.classList.add("active");
+
+      const type =
+        tab.dataset.tab;
+
+      if(type === "all"){
+
+        document
+          .getElementById("categoryFilter")
+          .value = "all";
+
+      }else if(
+        ["watch","community"].includes(type)
+      ){
+
+        document
+          .getElementById("categoryFilter")
+          .value = type;
+
+      }else if(type === "creators"){
+
+        document
+          .getElementById("statusFilter")
+          .value = "creator";
+
+      }else{
+
+        document
+          .getElementById("periodFilter")
+          .value = type;
+
+      }
+
+      applyFilters();
+
+    });
+
+  });
+
+
+/* REFRESH */
+
+document
+  .getElementById("refreshBtn")
+  ?.addEventListener("click",()=>{
+
+    const btn =
+      document.getElementById("refreshBtn");
+
+    btn.textContent = "↻ Updating...";
+
+    setTimeout(()=>{
+
+      btn.textContent = "↻ Refresh";
+
+      showToast(
+        "Leaderboard data refreshed."
+      );
+
+    },700);
+
+  });
+
+
+/* EXPORT CSV */
+
+document
+  .getElementById("exportBtn")
+  ?.addEventListener("click",()=>{
+
+    const rows =
+      [
+        ["Rank","Member","Points","Balance","Watch Hours","Community Posts","Plan","Status"]
+      ];
+
+    document
+      .querySelectorAll("#leaderboardBody tr")
+      .forEach(row=>{
+
+        if(row.style.display === "none"){
+          return;
+        }
+
+        const cells =
+          row.querySelectorAll("td");
+
+        if(cells.length < 9){
+          return;
+        }
+
+        const rank =
+          cells[0].innerText.trim();
+
+        const member =
+          row.dataset.name || "";
+
+        const points =
+          row.dataset.points || "0";
+
+        const balance =
+          cells[4].innerText.trim();
+
+        const watch =
+          row.dataset.watch || "0";
+
+        const posts =
+          row.dataset.posts || "0";
+
+        const plan =
+          cells[7].innerText.trim();
+
+        const status =
+          cells[8].innerText.trim();
+
+        rows.push([
+          rank,
+          member,
+          points,
+          balance,
+          watch,
+          posts,
+          plan,
+          status
+        ]);
+
+      });
+
+    const csv =
+      rows
+        .map(row=>
+          row.map(value=>
+            `"${String(value).replace(/"/g,'""')}"`
+          ).join(",")
+        )
+        .join("\n");
+
+    const blob =
+      new Blob([csv],{
+        type:"text/csv;charset=utf-8;"
+      });
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const a =
+      document.createElement("a");
+
+    a.href = url;
+    a.download =
+      "crowrules-leaderboard.csv";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+    URL.revokeObjectURL(url);
+
+    showToast(
+      "Leaderboard CSV exported."
+    );
+
+  });
+
+
+/* CLOSE MODALS BY BACKDROP */
+
+document
+  .querySelectorAll(".modal")
+  .forEach(modal=>{
+
+    modal.addEventListener("click",event=>{
+
+      if(event.target === modal){
+        modal.classList.remove("show");
+      }
+
+    });
+
+  });
+
+
+/* ESCAPE */
+
+document.addEventListener("keydown",event=>{
+
+  if(event.key !== "Escape"){
+    return;
+  }
+
+  document
+    .querySelectorAll(".modal.show")
+    .forEach(modal=>
+      modal.classList.remove("show")
+    );
+
+  sidebar?.classList.remove("open");
+
+});
+
+
+/* SUPABASE BOOTSTRAP */
+
+async function initSupabase(){
+
+  if(
+    !CONFIG.supabaseUrl ||
+    !CONFIG.supabaseAnonKey
+  ){
+    console.info(
+      "CrowRules Leaderboard: Demo mode. Add Supabase credentials to enable production data."
+    );
+
+    return null;
+  }
+
+  try{
+
+    if(
+      !window.supabase ||
+      !window.supabase.createClient
+    ){
+      console.warn(
+        "Supabase JS client is not loaded."
+      );
+
+      return null;
+    }
+
+    const client =
+      window.supabase.createClient(
+        CONFIG.supabaseUrl,
+        CONFIG.supabaseAnonKey
+      );
+
+    return client;
+
+  }catch(error){
+
+    console.error(
+      "Supabase initialization failed:",
+      error
+    );
+
+    return null;
+  }
+}
+
+
+/*
+Optional production loading pattern:
+
+async function loadLeaderboard(){
+
+  const supabase =
+    await initSupabase();
+
+  if(!supabase){
+    return;
+  }
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from(CONFIG.leaderboardTable)
+    .select("*")
+    .order("rank",{ascending:true});
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  // Normalize your actual database columns
+  // before rendering them into the table.
+
+}
+
+Do NOT assume your existing schema contains every
+column listed in the architecture comments.
+
+Adapt this page to the actual Supabase schema.
+*/
+
+
+/* INITIALIZE */
+
+initSupabase();
+
+</script>
+
+<!--
+Optional production CDN:
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+Place it before the application script if you want
+to initialize Supabase directly in this page.
+-->
+
+</body>
+</html>

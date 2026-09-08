@@ -1,0 +1,2821 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>API — CrowRules Entertainment Main Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin API Command Center">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --sidebar:255px;
+  --radius:16px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(182,108,255,.08),transparent 28%),
+    radial-gradient(circle at 20% 100%,rgba(55,215,255,.04),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+  min-height:100vh;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   SHELL
+========================= */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:var(--sidebar);
+  background:rgba(7,7,9,.97);
+  border-right:1px solid var(--line);
+  z-index:1000;
+  overflow-y:auto;
+}
+
+.brand{
+  height:76px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  border:1px solid var(--accent);
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  box-shadow:0 0 24px rgba(182,108,255,.18);
+}
+
+.brand-text{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:1px;
+  line-height:1.25;
+}
+
+.brand-text span{
+  display:block;
+  color:var(--muted);
+  font-family:Montserrat,sans-serif;
+  font-size:9px;
+  letter-spacing:2px;
+  margin-top:3px;
+}
+
+.nav{
+  padding:14px 10px 30px;
+}
+
+.nav-section{
+  color:#555560;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:2px;
+  padding:14px 11px 7px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:39px;
+  padding:9px 11px;
+  margin:2px 0;
+  border-radius:9px;
+  color:#9a9aa5;
+  font-size:12px;
+  font-weight:600;
+  transition:.2s ease;
+}
+
+.nav a:hover{
+  background:#111117;
+  color:#fff;
+}
+
+.nav a.active{
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.18),rgba(108,92,255,.07));
+  color:#fff;
+  border:1px solid rgba(182,108,255,.2);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+  font-size:14px;
+}
+
+.main{
+  margin-left:var(--sidebar);
+  min-height:100vh;
+}
+
+.topbar{
+  height:76px;
+  border-bottom:1px solid var(--line);
+  background:rgba(7,7,9,.84);
+  backdrop-filter:blur(14px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:900;
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.page-kicker{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  color:var(--accent);
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  color:var(--muted);
+  font-size:11px;
+  font-family:Orbitron,sans-serif;
+  letter-spacing:1px;
+}
+
+.icon-btn{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  background:#0e0e13;
+  color:#bbb;
+  border-radius:9px;
+}
+
+.icon-btn:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.profile-chip{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:6px 10px 6px 6px;
+  background:#101016;
+  border:1px solid var(--line);
+  border-radius:30px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.avatar{
+  width:27px;
+  height:27px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+.mobile-toggle{
+  display:none;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding:30px;
+  max-width:1700px;
+  margin:auto;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:
+    linear-gradient(120deg,rgba(182,108,255,.09),transparent 42%),
+    linear-gradient(180deg,#101017,#0b0b0f);
+  padding:30px;
+  margin-bottom:22px;
+}
+
+.hero:after{
+  content:"API";
+  position:absolute;
+  right:25px;
+  top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:110px;
+  font-weight:800;
+  color:rgba(255,255,255,.018);
+  pointer-events:none;
+}
+
+.hero h1{
+  margin:0 0 9px;
+  font-family:Orbitron,sans-serif;
+  font-size:30px;
+  letter-spacing:1px;
+}
+
+.hero p{
+  max-width:780px;
+  margin:0;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:13px;
+}
+
+.hero-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-top:22px;
+}
+
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border:1px solid rgba(69,230,154,.25);
+  background:rgba(69,230,154,.07);
+  color:var(--green);
+  border-radius:999px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:currentColor;
+  box-shadow:0 0 12px currentColor;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
+}
+
+.stat-label{
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  font-size:9px;
+  font-weight:800;
+}
+
+.stat-value{
+  margin-top:9px;
+  font-family:Orbitron,sans-serif;
+  font-size:21px;
+}
+
+.stat-sub{
+  color:#62626d;
+  font-size:9px;
+  margin-top:6px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:1.35fr .65fr;
+  gap:18px;
+  margin-bottom:18px;
+}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+
+.panel-head{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:1px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.panel-body{
+  padding:18px;
+}
+
+/* =========================
+   ENDPOINTS
+========================= */
+
+.endpoint{
+  display:grid;
+  grid-template-columns:70px 1fr auto;
+  gap:14px;
+  align-items:center;
+  padding:13px 0;
+  border-bottom:1px solid #1e1e25;
+}
+
+.endpoint:last-child{
+  border-bottom:0;
+}
+
+.method{
+  padding:6px 7px;
+  border-radius:6px;
+  text-align:center;
+  font-size:9px;
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+}
+
+.get{
+  background:rgba(55,215,255,.1);
+  color:var(--cyan);
+  border:1px solid rgba(55,215,255,.2);
+}
+
+.post{
+  background:rgba(69,230,154,.1);
+  color:var(--green);
+  border:1px solid rgba(69,230,154,.2);
+}
+
+.patch{
+  background:rgba(243,201,105,.1);
+  color:var(--yellow);
+  border:1px solid rgba(243,201,105,.2);
+}
+
+.delete{
+  background:rgba(255,82,109,.1);
+  color:var(--red);
+  border:1px solid rgba(255,82,109,.2);
+}
+
+.endpoint-path{
+  font-family:monospace;
+  font-size:12px;
+  color:#ddd;
+}
+
+.endpoint-desc{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.endpoint-version{
+  color:#6d6d78;
+  font-size:9px;
+}
+
+/* =========================
+   API KEY
+========================= */
+
+.key-box{
+  padding:15px;
+  background:#09090d;
+  border:1px solid var(--line);
+  border-radius:11px;
+}
+
+.key-row{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+
+.key-input{
+  flex:1;
+  min-width:0;
+  border:1px solid var(--line2);
+  background:#0c0c11;
+  color:#aaa;
+  border-radius:8px;
+  padding:10px;
+  font-family:monospace;
+  font-size:10px;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:#111117;
+  color:#ddd;
+  border-radius:8px;
+  padding:9px 13px;
+  font-size:10px;
+  font-weight:800;
+}
+
+.btn:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.45);
+  background:rgba(182,108,255,.12);
+  color:#dcbaff;
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.35);
+  background:rgba(255,82,109,.08);
+  color:#ff8da0;
+}
+
+.key-title{
+  font-size:10px;
+  font-weight:800;
+}
+
+.key-meta{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:4px;
+}
+
+.key-status{
+  display:flex;
+  justify-content:space-between;
+  margin-top:12px;
+  font-size:9px;
+  color:var(--muted);
+}
+
+.active-text{
+  color:var(--green);
+  font-weight:800;
+}
+
+/* =========================
+   SERVICES
+========================= */
+
+.service{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid #1e1e25;
+}
+
+.service:last-child{
+  border-bottom:0;
+}
+
+.service-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.service-icon{
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  background:#15151c;
+  border:1px solid var(--line);
+  display:grid;
+  place-items:center;
+  font-size:13px;
+}
+
+.service-name{
+  font-size:11px;
+  font-weight:700;
+}
+
+.service-meta{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+}
+
+.service-status{
+  color:var(--green);
+  font-size:9px;
+  font-weight:800;
+}
+
+/* =========================
+   REQUEST LOG
+========================= */
+
+.request-row{
+  display:grid;
+  grid-template-columns:120px 1fr 90px 100px;
+  gap:12px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid #1e1e25;
+}
+
+.request-row:last-child{
+  border-bottom:0;
+}
+
+.request-method{
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  color:var(--cyan);
+}
+
+.request-path{
+  font-family:monospace;
+  font-size:10px;
+}
+
+.request-time{
+  color:var(--muted);
+  font-size:9px;
+}
+
+.response{
+  font-size:9px;
+  font-weight:800;
+}
+
+.ok{
+  color:var(--green);
+}
+
+.warn{
+  color:var(--yellow);
+}
+
+.err{
+  color:var(--red);
+}
+
+/* =========================
+   WEBHOOKS
+========================= */
+
+.webhook{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:13px;
+  margin-bottom:9px;
+  border:1px solid var(--line);
+  background:#0b0b10;
+  border-radius:10px;
+}
+
+.webhook:last-child{
+  margin-bottom:0;
+}
+
+.webhook-name{
+  font-size:10px;
+  font-weight:800;
+}
+
+.webhook-url{
+  font-family:monospace;
+  color:#777783;
+  font-size:9px;
+  margin-top:4px;
+}
+
+.toggle{
+  width:40px;
+  height:22px;
+  border-radius:30px;
+  background:#25252d;
+  padding:3px;
+  transition:.2s;
+}
+
+.toggle span{
+  display:block;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:#888;
+  transition:.2s;
+}
+
+.toggle.on{
+  background:rgba(69,230,154,.25);
+}
+
+.toggle.on span{
+  margin-left:18px;
+  background:var(--green);
+}
+
+/* =========================
+   SECURITY
+========================= */
+
+.security{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.security-card{
+  padding:14px;
+  background:#0a0a0e;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+
+.security-label{
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.security-value{
+  margin-top:7px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.good{
+  color:var(--green);
+}
+
+.medium{
+  color:var(--yellow);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.76);
+  backdrop-filter:blur(8px);
+  display:none;
+  place-items:center;
+  z-index:2000;
+  padding:20px;
+}
+
+.modal.open{
+  display:grid;
+}
+
+.modal-card{
+  width:min(620px,100%);
+  background:#0c0c11;
+  border:1px solid var(--line2);
+  border-radius:16px;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+  overflow:hidden;
+}
+
+.modal-head{
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-group{
+  margin-bottom:14px;
+}
+
+.form-label{
+  display:block;
+  color:#a4a4ae;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+
+.form-control{
+  width:100%;
+  border:1px solid var(--line2);
+  background:#09090d;
+  color:#fff;
+  border-radius:8px;
+  padding:11px;
+  outline:none;
+}
+
+.form-control:focus{
+  border-color:var(--accent);
+}
+
+textarea.form-control{
+  min-height:90px;
+  resize:vertical;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:15px 20px;
+  border-top:1px solid var(--line);
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  background:#111117;
+  border:1px solid var(--line2);
+  border-left:3px solid var(--accent);
+  padding:13px 16px;
+  border-radius:9px;
+  color:#ddd;
+  font-size:11px;
+  box-shadow:0 15px 50px rgba(0,0,0,.5);
+  transform:translateY(30px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:3000;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1200px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .security{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:850px){
+  :root{
+    --sidebar:0px;
+  }
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+    width:255px;
+  }
+
+  body.menu-open .sidebar{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-toggle{
+    display:grid;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .request-row{
+    grid-template-columns:75px 1fr 70px;
+  }
+
+  .request-time{
+    display:none;
+  }
+}
+
+@media(max-width:560px){
+  .hero{
+    padding:22px;
+  }
+
+  .hero h1{
+    font-size:23px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat{
+    padding:14px;
+  }
+
+  .stat-value{
+    font-size:17px;
+  }
+
+  .endpoint{
+    grid-template-columns:58px 1fr;
+  }
+
+  .endpoint-version{
+    display:none;
+  }
+
+  .security{
+    grid-template-columns:1fr;
+  }
+
+  .profile-chip span{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div class="brand-text">
+      CROW RULES
+      <span>MAIN ADMIN</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-section">Dashboard</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <div class="nav-section">Content</div>
+
+    <a href="content.html">
+      <span class="nav-icon">▣</span>
+      Content
+    </a>
+
+    <a href="pages.html">
+      <span class="nav-icon">▤</span>
+      Pages
+    </a>
+
+    <a href="categories.html">
+      <span class="nav-icon">◈</span>
+      Categories
+    </a>
+
+    <a href="tags.html">
+      <span class="nav-icon">#</span>
+      Tags
+    </a>
+
+    <a href="shows.html">
+      <span class="nav-icon">▶</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">▹</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">◉</span>
+      Movies
+    </a>
+
+    <a href="audio.html">
+      <span class="nav-icon">♫</span>
+      Audio
+    </a>
+
+    <a href="articles.html">
+      <span class="nav-icon">✎</span>
+      Articles
+    </a>
+
+    <div class="nav-section">TV Network</div>
+
+    <a href="channels.html">
+      <span class="nav-icon">▥</span>
+      Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">☷</span>
+      TV Guide
+    </a>
+
+    <div class="nav-section">Members</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♟</span>
+      Members
+    </a>
+
+    <a href="membership.html">
+      <span class="nav-icon">◆</span>
+      Membership
+    </a>
+
+    <a href="subscriptions.html">
+      <span class="nav-icon">↻</span>
+      Subscriptions
+    </a>
+
+    <a href="friends.html">
+      <span class="nav-icon">♣</span>
+      Friends
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">☁</span>
+      Community
+    </a>
+
+    <div class="nav-section">Creators</div>
+
+    <a href="creator.html">
+      <span class="nav-icon">★</span>
+      Creators
+    </a>
+
+    <a href="creator-content.html">
+      <span class="nav-icon">◇</span>
+      Creator Content
+    </a>
+
+    <a href="creator-approvals.html">
+      <span class="nav-icon">✓</span>
+      Approvals
+    </a>
+
+    <div class="nav-section">Music</div>
+
+    <a href="artists.html">
+      <span class="nav-icon">♬</span>
+      Artists
+    </a>
+
+    <a href="albums.html">
+      <span class="nav-icon">▰</span>
+      Albums
+    </a>
+
+    <a href="tracks.html">
+      <span class="nav-icon">♫</span>
+      Tracks
+    </a>
+
+    <div class="nav-section">Sports</div>
+
+    <a href="sports.html">
+      <span class="nav-icon">◎</span>
+      Sports
+    </a>
+
+    <a href="teams.html">
+      <span class="nav-icon">⚑</span>
+      Teams
+    </a>
+
+    <a href="rankings.html">
+      <span class="nav-icon">↕</span>
+      Rankings
+    </a>
+
+    <a href="standings.html">
+      <span class="nav-icon">▥</span>
+      Standings
+    </a>
+
+    <a href="games.html">
+      <span class="nav-icon">◉</span>
+      Games
+    </a>
+
+    <a href="pickem.html">
+      <span class="nav-icon">?</span>
+      Pick'em
+    </a>
+
+    <div class="nav-section">Memorials</div>
+
+    <a href="memorials.html">
+      <span class="nav-icon">✦</span>
+      Memorials
+    </a>
+
+    <a href="memorial-photos.html">
+      <span class="nav-icon">▧</span>
+      Memorial Photos
+    </a>
+
+    <div class="nav-section">Commerce</div>
+
+    <a href="business.html">
+      <span class="nav-icon">⌘</span>
+      Business
+    </a>
+
+    <a href="donations.html">
+      <span class="nav-icon">$</span>
+      Donations
+    </a>
+
+    <a href="shop.html">
+      <span class="nav-icon">□</span>
+      Shop
+    </a>
+
+    <a href="orders.html">
+      <span class="nav-icon">▤</span>
+      Orders
+    </a>
+
+    <div class="nav-section">System</div>
+
+    <a href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      Analytics
+    </a>
+
+    <a href="database.html">
+      <span class="nav-icon">▦</span>
+      Database
+    </a>
+
+    <a href="storage.html">
+      <span class="nav-icon">▱</span>
+      Storage
+    </a>
+
+    <a href="authentication.html">
+      <span class="nav-icon">🔐</span>
+      Authentication
+    </a>
+
+    <a href="roles.html">
+      <span class="nav-icon">♙</span>
+      Roles
+    </a>
+
+    <a href="permissions.html">
+      <span class="nav-icon">⊞</span>
+      Permissions
+    </a>
+
+    <a href="api.html" class="active">
+      <span class="nav-icon">⌬</span>
+      API
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span>
+      Logs
+    </a>
+
+    <a href="moderation.html">
+      <span class="nav-icon">⚠</span>
+      Moderation
+    </a>
+
+    <a href="notifications.html">
+      <span class="nav-icon">♢</span>
+      Notifications
+    </a>
+
+    <a href="activity.html">
+      <span class="nav-icon">◌</span>
+      Activity
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+</aside>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <button class="icon-btn mobile-toggle" id="menuBtn" aria-label="Open menu">
+        ☰
+      </button>
+
+      <div class="page-kicker">
+        API / Developer Infrastructure
+      </div>
+
+    </div>
+
+    <div class="topbar-right">
+
+      <div class="clock" id="clock">
+        --
+      </div>
+
+      <button class="icon-btn" id="refreshBtn" title="Refresh">
+        ↻
+      </button>
+
+      <button class="icon-btn" id="docsBtn" title="API documentation">
+        ?
+      </button>
+
+      <div class="profile-chip">
+        <div class="avatar">CR</div>
+        <span>Administrator</span>
+      </div>
+
+    </div>
+
+  </header>
+
+  <section class="content">
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+      <div class="page-kicker">CrowRules Developer Core</div>
+
+      <h1>API Command Center</h1>
+
+      <p>
+        Manage CrowRules Entertainment API access, endpoints, API keys,
+        webhooks, service integrations, request activity and developer
+        infrastructure from one centralized control panel.
+      </p>
+
+      <div class="hero-row">
+
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          API SYSTEM OPERATIONAL
+        </div>
+
+        <button class="btn primary" id="newKeyBtn">
+          + Create API Key
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Endpoints</div>
+        <div class="stat-value" id="endpointCount">42</div>
+        <div class="stat-sub">Registered routes</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">API Keys</div>
+        <div class="stat-value" id="keyCount">18</div>
+        <div class="stat-sub">Active credentials</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Requests</div>
+        <div class="stat-value">184K</div>
+        <div class="stat-sub">Last 24 hours</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Webhooks</div>
+        <div class="stat-value">12</div>
+        <div class="stat-sub">Configured hooks</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Error Rate</div>
+        <div class="stat-value">0.18%</div>
+        <div class="stat-sub">Last 24 hours</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Version</div>
+        <div class="stat-value">v1</div>
+        <div class="stat-sub">Current API</div>
+      </div>
+
+    </div>
+
+    <!-- MAIN GRID -->
+
+    <div class="grid">
+
+      <!-- ENDPOINTS -->
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">API ENDPOINTS</div>
+            <div class="panel-sub">
+              Registered CrowRules API routes
+            </div>
+          </div>
+
+          <button class="btn" id="endpointBtn">
+            Manage
+          </button>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="endpoint">
+            <div class="method get">GET</div>
+            <div>
+              <div class="endpoint-path">/api/v1/content</div>
+              <div class="endpoint-desc">
+                Retrieve published content
+              </div>
+            </div>
+            <div class="endpoint-version">v1</div>
+          </div>
+
+          <div class="endpoint">
+            <div class="method get">GET</div>
+            <div>
+              <div class="endpoint-path">/api/v1/shows</div>
+              <div class="endpoint-desc">
+                Retrieve television shows
+              </div>
+            </div>
+            <div class="endpoint-version">v1</div>
+          </div>
+
+          <div class="endpoint">
+            <div class="method get">GET</div>
+            <div>
+              <div class="endpoint-path">/api/v1/episodes</div>
+              <div class="endpoint-desc">
+                Retrieve published episodes
+              </div>
+            </div>
+            <div class="endpoint-version">v1</div>
+          </div>
+
+          <div class="endpoint">
+            <div class="method get">GET</div>
+            <div>
+              <div class="endpoint-path">/api/v1/channels</div>
+              <div class="endpoint-desc">
+                Retrieve CrowRules TV channels
+              </div>
+            </div>
+            <div class="endpoint-version">v1</div>
+          </div>
+
+          <div class="endpoint">
+            <div class="method post">POST</div>
+            <div>
+              <div class="endpoint-path">/api/v1/community/posts</div>
+              <div class="endpoint-desc">
+                Create a community post
+              </div>
+            </div>
+            <div class="endpoint-version">v1</div>
+          </div>
+
+          <div class="endpoint">
+            <div class="method get">GET</div>
+            <div>
+              <div class="endpoint-path">/api/v1/members</div>
+              <div class="endpoint-desc">
+                Retrieve authorized member information
+              </div>
+            </div>
+            <div class="endpoint-version">v1</div>
+          </div>
+
+          <div class="endpoint">
+            <div class="method get">GET</div>
+            <div>
+              <div class="endpoint-path">/api/v1/sports/games</div>
+              <div class="endpoint-desc">
+                Retrieve sports game data
+              </div>
+            </div>
+            <div class="endpoint-version">v1</div>
+          </div>
+
+          <div class="endpoint">
+            <div class="method get">GET</div>
+            <div>
+              <div class="endpoint-path">/api/v1/memorials</div>
+              <div class="endpoint-desc">
+                Retrieve public memorial records
+              </div>
+            </div>
+            <div class="endpoint-version">v1</div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- API KEYS -->
+
+      <section class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">API KEYS</div>
+            <div class="panel-sub">
+              Credential management
+            </div>
+          </div>
+
+          <button class="btn primary" id="quickKeyBtn">
+            + Key
+          </button>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="key-box">
+
+            <div class="key-title">
+              CrowRules Admin Key
+            </div>
+
+            <div class="key-meta">
+              Created today · Full API access
+            </div>
+
+            <div class="key-row">
+
+              <input
+                class="key-input"
+                value="cr_live_••••••••••••••••••••"
+                readonly
+              >
+
+              <button class="btn" data-copy="cr_live_demo_key">
+                Copy
+              </button>
+
+            </div>
+
+            <div class="key-status">
+              <span>Last used 4 minutes ago</span>
+              <span class="active-text">ACTIVE</span>
+            </div>
+
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="key-box">
+
+            <div class="key-title">
+              CrowRules TV Public Key
+            </div>
+
+            <div class="key-meta">
+              Created Aug 2026 · Read-only
+            </div>
+
+            <div class="key-row">
+
+              <input
+                class="key-input"
+                value="cr_public_••••••••••••••••"
+                readonly
+              >
+
+              <button class="btn" data-copy="cr_public_demo_key">
+                Copy
+              </button>
+
+            </div>
+
+            <div class="key-status">
+              <span>Last used 11 minutes ago</span>
+              <span class="active-text">ACTIVE</span>
+            </div>
+
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="key-box">
+
+            <div class="key-title">
+              Creator Integration Key
+            </div>
+
+            <div class="key-meta">
+              Created Jul 2026 · Creator API
+            </div>
+
+            <div class="key-row">
+
+              <input
+                class="key-input"
+                value="cr_creator_••••••••••••"
+                readonly
+              >
+
+              <button class="btn" data-copy="cr_creator_demo_key">
+                Copy
+              </button>
+
+            </div>
+
+            <div class="key-status">
+              <span>Last used 1 hour ago</span>
+              <span class="active-text">ACTIVE</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- SERVICES -->
+
+    <section class="panel" style="margin-bottom:18px">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">API SERVICES</div>
+          <div class="panel-sub">
+            Connected infrastructure and service health
+          </div>
+        </div>
+
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          ALL SYSTEMS GO
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="service">
+
+          <div class="service-left">
+            <div class="service-icon">S</div>
+
+            <div>
+              <div class="service-name">
+                Supabase Database
+              </div>
+
+              <div class="service-meta">
+                PostgreSQL / API
+              </div>
+            </div>
+          </div>
+
+          <div class="service-status">
+            ONLINE
+          </div>
+
+        </div>
+
+        <div class="service">
+
+          <div class="service-left">
+            <div class="service-icon">A</div>
+
+            <div>
+              <div class="service-name">
+                Supabase Authentication
+              </div>
+
+              <div class="service-meta">
+                User identity / sessions
+              </div>
+            </div>
+          </div>
+
+          <div class="service-status">
+            ONLINE
+          </div>
+
+        </div>
+
+        <div class="service">
+
+          <div class="service-left">
+            <div class="service-icon">◫</div>
+
+            <div>
+              <div class="service-name">
+                Supabase Storage
+              </div>
+
+              <div class="service-meta">
+                Media / asset delivery
+              </div>
+            </div>
+          </div>
+
+          <div class="service-status">
+            ONLINE
+          </div>
+
+        </div>
+
+        <div class="service">
+
+          <div class="service-left">
+            <div class="service-icon">⚡</div>
+
+            <div>
+              <div class="service-name">
+                Edge Functions
+              </div>
+
+              <div class="service-meta">
+                Server-side API operations
+              </div>
+            </div>
+          </div>
+
+          <div class="service-status">
+            ONLINE
+          </div>
+
+        </div>
+
+        <div class="service">
+
+          <div class="service-left">
+            <div class="service-icon">↻</div>
+
+            <div>
+              <div class="service-name">
+                Webhook Dispatcher
+              </div>
+
+              <div class="service-meta">
+                Event delivery
+              </div>
+            </div>
+          </div>
+
+          <div class="service-status">
+            ONLINE
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- REQUEST LOG -->
+
+    <section class="panel" style="margin-bottom:18px">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">RECENT API REQUESTS</div>
+          <div class="panel-sub">
+            Latest request activity
+          </div>
+        </div>
+
+        <button class="btn" id="clearLogBtn">
+          Clear View
+        </button>
+
+      </div>
+
+      <div class="panel-body" id="requestLog">
+
+        <div class="request-row">
+          <div class="request-method">GET</div>
+          <div class="request-path">/api/v1/shows</div>
+          <div class="request-time">12:14:02</div>
+          <div class="response ok">200 OK</div>
+        </div>
+
+        <div class="request-row">
+          <div class="request-method">GET</div>
+          <div class="request-path">/api/v1/episodes</div>
+          <div class="request-time">12:13:48</div>
+          <div class="response ok">200 OK</div>
+        </div>
+
+        <div class="request-row">
+          <div class="request-method">POST</div>
+          <div class="request-path">/api/v1/community/posts</div>
+          <div class="request-time">12:12:37</div>
+          <div class="response ok">201 CREATED</div>
+        </div>
+
+        <div class="request-row">
+          <div class="request-method">GET</div>
+          <div class="request-path">/api/v1/members</div>
+          <div class="request-time">12:11:22</div>
+          <div class="response ok">200 OK</div>
+        </div>
+
+        <div class="request-row">
+          <div class="request-method">GET</div>
+          <div class="request-path">/api/v1/sports/games</div>
+          <div class="request-time">12:10:54</div>
+          <div class="response warn">429 RATE</div>
+        </div>
+
+        <div class="request-row">
+          <div class="request-method">GET</div>
+          <div class="request-path">/api/v1/content</div>
+          <div class="request-time">12:09:11</div>
+          <div class="response ok">200 OK</div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- WEBHOOKS -->
+
+    <section class="panel" style="margin-bottom:18px">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">WEBHOOKS</div>
+          <div class="panel-sub">
+            External event destinations
+          </div>
+        </div>
+
+        <button class="btn primary" id="webhookBtn">
+          + Add Webhook
+        </button>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="webhook">
+
+          <div>
+            <div class="webhook-name">
+              CrowRules TV Events
+            </div>
+
+            <div class="webhook-url">
+              https://example.com/hooks/tv
+            </div>
+          </div>
+
+          <div
+            class="toggle on"
+            data-toggle
+            title="Toggle webhook"
+          >
+            <span></span>
+          </div>
+
+        </div>
+
+        <div class="webhook">
+
+          <div>
+            <div class="webhook-name">
+              Membership Events
+            </div>
+
+            <div class="webhook-url">
+              https://example.com/hooks/members
+            </div>
+          </div>
+
+          <div
+            class="toggle on"
+            data-toggle
+            title="Toggle webhook"
+          >
+            <span></span>
+          </div>
+
+        </div>
+
+        <div class="webhook">
+
+          <div>
+            <div class="webhook-name">
+              Creator Publishing
+            </div>
+
+            <div class="webhook-url">
+              https://example.com/hooks/creators
+            </div>
+          </div>
+
+          <div
+            class="toggle"
+            data-toggle
+            title="Toggle webhook"
+          >
+            <span></span>
+          </div>
+
+        </div>
+
+        <div class="webhook">
+
+          <div>
+            <div class="webhook-name">
+              Sports Updates
+            </div>
+
+            <div class="webhook-url">
+              https://example.com/hooks/sports
+            </div>
+          </div>
+
+          <div
+            class="toggle on"
+            data-toggle
+            title="Toggle webhook"
+          >
+            <span></span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SECURITY -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">API SECURITY</div>
+          <div class="panel-sub">
+            Current API protection posture
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="security">
+
+          <div class="security-card">
+            <div class="security-label">
+              TLS
+            </div>
+            <div class="security-value good">
+              ENFORCED
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              Authentication
+            </div>
+            <div class="security-value good">
+              SUPABASE AUTH
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              Rate Limiting
+            </div>
+            <div class="security-value good">
+              ENABLED
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              RLS
+            </div>
+            <div class="security-value good">
+              ENABLED
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              Key Rotation
+            </div>
+            <div class="security-value medium">
+              2 DUE
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              CORS
+            </div>
+            <div class="security-value good">
+              RESTRICTED
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              Logging
+            </div>
+            <div class="security-value good">
+              ENABLED
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              Secret Exposure
+            </div>
+            <div class="security-value good">
+              NONE DETECTED
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
+
+<!-- =========================
+     API KEY MODAL
+========================= -->
+
+<div class="modal" id="keyModal">
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        CREATE API KEY
+      </div>
+
+      <button class="icon-btn" data-close>
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Key Name
+        </label>
+
+        <input
+          class="form-control"
+          id="keyName"
+          placeholder="Example: CrowRules TV Production"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Access Level
+        </label>
+
+        <select class="form-control" id="keyAccess">
+
+          <option value="read">Read Only</option>
+          <option value="creator">Creator API</option>
+          <option value="admin">Administrator</option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Description
+        </label>
+
+        <textarea
+          class="form-control"
+          id="keyDescription"
+          placeholder="Describe what this key will be used for..."
+        ></textarea>
+
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button class="btn" data-close>
+        Cancel
+      </button>
+
+      <button class="btn primary" id="createKeyBtn">
+        Generate Key
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     WEBHOOK MODAL
+========================= -->
+
+<div class="modal" id="webhookModal">
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        ADD WEBHOOK
+      </div>
+
+      <button class="icon-btn" data-close>
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Webhook Name
+        </label>
+
+        <input
+          class="form-control"
+          id="webhookName"
+          placeholder="Example: Membership Events"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Endpoint URL
+        </label>
+
+        <input
+          class="form-control"
+          id="webhookUrl"
+          placeholder="https://example.com/webhook"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Event Type
+        </label>
+
+        <select class="form-control" id="webhookEvent">
+
+          <option>All Events</option>
+          <option>Content Published</option>
+          <option>Member Created</option>
+          <option>Subscription Updated</option>
+          <option>Creator Submission</option>
+          <option>Sports Update</option>
+          <option>Memorial Updated</option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button class="btn" data-close>
+        Cancel
+      </button>
+
+      <button class="btn primary" id="createWebhookBtn">
+        Create Webhook
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================
+   CROWRULES API COMMAND CENTER
+========================================= */
+
+const CONFIG = {
+  supabaseUrl:
+    window.CROWRULES_SUPABASE_URL || "",
+
+  supabaseAnonKey:
+    window.CROWRULES_SUPABASE_ANON_KEY || "",
+
+  apiKeysTable:
+    window.CROWRULES_API_KEYS_TABLE || "api_keys",
+
+  webhooksTable:
+    window.CROWRULES_API_WEBHOOKS_TABLE || "api_webhooks"
+};
+
+let supabaseClient = null;
+
+/* =========================================
+   INIT
+========================================= */
+
+function initSupabase(){
+
+  if(
+    CONFIG.supabaseUrl &&
+    CONFIG.supabaseAnonKey &&
+    window.supabase
+  ){
+
+    supabaseClient =
+      window.supabase.createClient(
+        CONFIG.supabaseUrl,
+        CONFIG.supabaseAnonKey
+      );
+
+    return true;
+  }
+
+  return false;
+}
+
+/* =========================================
+   CLOCK
+========================================= */
+
+function updateClock(){
+
+  const el =
+    document.getElementById("clock");
+
+  if(!el) return;
+
+  const now = new Date();
+
+  el.textContent =
+    now.toLocaleString(
+      [],
+      {
+        month:"short",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* =========================================
+   TOAST
+========================================= */
+
+let toastTimer;
+
+function toast(message){
+
+  const el =
+    document.getElementById("toast");
+
+  el.textContent = message;
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      () => el.classList.remove("show"),
+      2600
+    );
+}
+
+/* =========================================
+   MOBILE MENU
+========================================= */
+
+document
+  .getElementById("menuBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+      document.body.classList.toggle("menu-open");
+    }
+  );
+
+/* =========================================
+   MODALS
+========================================= */
+
+function openModal(id){
+
+  document
+    .getElementById(id)
+    ?.classList.add("open");
+}
+
+function closeModals(){
+
+  document
+    .querySelectorAll(".modal")
+    .forEach(
+      modal => modal.classList.remove("open")
+    );
+}
+
+document
+  .querySelectorAll("[data-close]")
+  .forEach(
+    btn =>
+      btn.addEventListener(
+        "click",
+        closeModals
+      )
+  );
+
+document
+  .querySelectorAll(".modal")
+  .forEach(
+    modal =>
+      modal.addEventListener(
+        "click",
+        event => {
+          if(event.target === modal){
+            modal.classList.remove("open");
+          }
+        }
+      )
+  );
+
+document
+  .getElementById("newKeyBtn")
+  ?.addEventListener(
+    "click",
+    () => openModal("keyModal")
+  );
+
+document
+  .getElementById("quickKeyBtn")
+  ?.addEventListener(
+    "click",
+    () => openModal("keyModal")
+  );
+
+document
+  .getElementById("webhookBtn")
+  ?.addEventListener(
+    "click",
+    () => openModal("webhookModal")
+  );
+
+/* =========================================
+   COPY KEY
+========================================= */
+
+document
+  .querySelectorAll("[data-copy]")
+  .forEach(
+    btn =>
+      btn.addEventListener(
+        "click",
+        async () => {
+
+          const value =
+            btn.dataset.copy;
+
+          try{
+
+            await navigator.clipboard.writeText(value);
+
+            toast("API key copied to clipboard.");
+
+          }catch{
+
+            toast("Clipboard access unavailable.");
+
+          }
+
+        }
+      )
+  );
+
+/* =========================================
+   WEBHOOK TOGGLES
+========================================= */
+
+document
+  .querySelectorAll("[data-toggle]")
+  .forEach(
+    toggle =>
+      toggle.addEventListener(
+        "click",
+        () => {
+
+          toggle.classList.toggle("on");
+
+          toast(
+            toggle.classList.contains("on")
+              ? "Webhook enabled."
+              : "Webhook disabled."
+          );
+
+        }
+      )
+  );
+
+/* =========================================
+   CREATE API KEY
+========================================= */
+
+document
+  .getElementById("createKeyBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      const name =
+        document
+          .getElementById("keyName")
+          .value
+          .trim();
+
+      const access =
+        document
+          .getElementById("keyAccess")
+          .value;
+
+      const description =
+        document
+          .getElementById("keyDescription")
+          .value
+          .trim();
+
+      if(!name){
+
+        toast("Enter an API key name.");
+
+        return;
+      }
+
+      /*
+       * Never generate or store a real secret
+       * in client-side JavaScript.
+       *
+       * This insert is intentionally conservative.
+       * Your production Edge Function should generate
+       * and hash the secret server-side.
+       */
+
+      if(supabaseClient){
+
+        const payload = {
+          name,
+          access_level:access,
+          description:description || null,
+          is_active:true
+        };
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from(CONFIG.apiKeysTable)
+            .insert(payload);
+
+        if(error){
+
+          console.error(error);
+
+          toast(
+            "API key table/schema is not configured for this payload."
+          );
+
+          return;
+        }
+
+      }
+
+      document
+        .getElementById("keyName")
+        .value = "";
+
+      document
+        .getElementById("keyDescription")
+        .value = "";
+
+      closeModals();
+
+      toast(
+        supabaseClient
+          ? "API key record created."
+          : "Demo API key request created."
+      );
+
+    }
+  );
+
+/* =========================================
+   CREATE WEBHOOK
+========================================= */
+
+document
+  .getElementById("createWebhookBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      const name =
+        document
+          .getElementById("webhookName")
+          .value
+          .trim();
+
+      const url =
+        document
+          .getElementById("webhookUrl")
+          .value
+          .trim();
+
+      const eventType =
+        document
+          .getElementById("webhookEvent")
+          .value;
+
+      if(!name || !url){
+
+        toast(
+          "Webhook name and URL are required."
+        );
+
+        return;
+      }
+
+      try{
+
+        new URL(url);
+
+      }catch{
+
+        toast("Enter a valid webhook URL.");
+
+        return;
+      }
+
+      if(supabaseClient){
+
+        const payload = {
+          name,
+          endpoint_url:url,
+          event_type:eventType,
+          is_active:true
+        };
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from(CONFIG.webhooksTable)
+            .insert(payload);
+
+        if(error){
+
+          console.error(error);
+
+          toast(
+            "Webhook table/schema is not configured for this payload."
+          );
+
+          return;
+        }
+
+      }
+
+      document
+        .getElementById("webhookName")
+        .value = "";
+
+      document
+        .getElementById("webhookUrl")
+        .value = "";
+
+      closeModals();
+
+      toast(
+        supabaseClient
+          ? "Webhook created."
+          : "Demo webhook created."
+      );
+
+    }
+  );
+
+/* =========================================
+   CLEAR REQUEST LOG VIEW
+========================================= */
+
+document
+  .getElementById("clearLogBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById("requestLog")
+        .innerHTML =
+        `
+          <div style="
+            padding:25px 0;
+            color:#666671;
+            text-align:center;
+            font-size:10px;
+          ">
+            Request log view cleared.
+          </div>
+        `;
+
+      toast("Request log cleared from view.");
+
+    }
+  );
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+document
+  .getElementById("refreshBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      toast("Refreshing API command center...");
+
+      setTimeout(
+        () => location.reload(),
+        500
+      );
+
+    }
+  );
+
+document
+  .getElementById("docsBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      toast(
+        "API documentation portal is ready for integration."
+      );
+
+    }
+  );
+
+document
+  .getElementById("endpointBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      toast(
+        "Endpoint management module selected."
+      );
+
+    }
+  );
+
+/* =========================================
+   LOAD API DATA
+========================================= */
+
+async function loadApiData(){
+
+  if(!supabaseClient){
+
+    console.info(
+      "Supabase not configured. Running API dashboard in demo mode."
+    );
+
+    return;
+  }
+
+  /*
+   * Defensive reads:
+   * select("*") avoids assuming an exact schema.
+   */
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.apiKeysTable)
+        .select("*")
+        .limit(500);
+
+    if(!error && Array.isArray(data)){
+
+      const activeKeys =
+        data.filter(
+          row =>
+            row.is_active !== false
+        );
+
+      document
+        .getElementById("keyCount")
+        .textContent =
+        activeKeys.length.toLocaleString();
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "API key data unavailable:",
+      error
+    );
+
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.webhooksTable)
+        .select("*")
+        .limit(500);
+
+    if(!error && Array.isArray(data)){
+
+      const activeHooks =
+        data.filter(
+          row =>
+            row.is_active !== false
+        );
+
+      const statValues =
+        document.querySelectorAll(".stat-value");
+
+      /*
+       * Webhook stat is the fourth stat.
+       */
+
+      if(statValues[3]){
+
+        statValues[3].textContent =
+          activeHooks.length.toLocaleString();
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Webhook data unavailable:",
+      error
+    );
+
+  }
+
+}
+
+/* =========================================
+   START
+========================================= */
+
+initSupabase();
+loadApiData();
+
+</script>
+
+</body>
+</html>

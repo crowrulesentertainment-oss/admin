@@ -1,0 +1,2999 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Awards — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Awards Management">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at 85% 10%,rgba(182,108,255,.10),transparent 28%),
+    radial-gradient(circle at 20% 80%,rgba(55,215,255,.06),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* APP */
+
+.app{
+  min-height:100vh;
+  display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:270px;
+  position:fixed;
+  inset:0 auto 0 0;
+  background:rgba(7,7,9,.97);
+  border-right:1px solid var(--line);
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  transition:.25s ease;
+}
+
+.brand{
+  height:78px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  border:1px solid var(--accent);
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  box-shadow:0 0 24px rgba(182,108,255,.18);
+}
+
+.brand-name{
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  letter-spacing:.08em;
+  font-size:14px;
+}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+  letter-spacing:.14em;
+}
+
+.nav{
+  padding:16px 12px;
+  overflow:auto;
+  flex:1;
+}
+
+.nav-section{
+  margin:17px 10px 8px;
+  color:#666672;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 12px;
+  margin:3px 0;
+  border:1px solid transparent;
+  border-radius:9px;
+  color:#a9a9b4;
+  font-size:12px;
+  transition:.2s;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:#101016;
+  border-color:#25252e;
+}
+
+.nav a.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.15),rgba(108,92,255,.06));
+  border-color:rgba(182,108,255,.35);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:22px;
+  text-align:center;
+  font-size:15px;
+}
+
+.sidebar-footer{
+  padding:14px;
+  border-top:1px solid var(--line);
+}
+
+.system-status{
+  border:1px solid var(--line);
+  background:#0c0c10;
+  border-radius:10px;
+  padding:12px;
+}
+
+.system-status-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px rgba(69,230,154,.8);
+  display:inline-block;
+  margin-right:6px;
+}
+
+.status-text{
+  font-size:10px;
+  color:#a9a9b4;
+}
+
+.version{
+  color:#5e5e68;
+  font-size:9px;
+}
+
+/* MAIN */
+
+.main{
+  margin-left:270px;
+  width:calc(100% - 270px);
+  min-height:100vh;
+}
+
+/* TOPBAR */
+
+.topbar{
+  height:78px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:0 28px;
+  border-bottom:1px solid var(--line);
+  background:rgba(5,5,5,.75);
+  backdrop-filter:blur(16px);
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.menu-btn{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:#0d0d11;
+  color:#fff;
+  border-radius:9px;
+}
+
+.breadcrumb{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.clock{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  color:#8e8e9b;
+  padding-right:10px;
+}
+
+.top-btn{
+  border:1px solid var(--line);
+  background:#0d0d11;
+  color:#bbb;
+  border-radius:8px;
+  height:36px;
+  padding:0 12px;
+  font-size:11px;
+}
+
+.top-btn:hover{
+  border-color:var(--line2);
+  color:#fff;
+}
+
+.admin-chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:5px 10px 5px 5px;
+  background:#0d0d11;
+  font-size:10px;
+}
+
+.admin-avatar{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:grid;
+  place-items:center;
+  font-weight:800;
+  color:white;
+}
+
+/* CONTENT */
+
+.content{
+  padding:30px;
+  max-width:1700px;
+  margin:auto;
+}
+
+.hero{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:25px;
+}
+
+.eyebrow{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:28px;
+  letter-spacing:.02em;
+}
+
+.hero p{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  max-width:700px;
+  line-height:1.6;
+}
+
+.hero-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:#101016;
+  color:#ddd;
+  border-radius:8px;
+  height:38px;
+  padding:0 14px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.btn:hover{
+  color:#fff;
+  border-color:#555562;
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.55);
+  background:linear-gradient(135deg,#9a55e9,#654fd4);
+  color:#fff;
+  box-shadow:0 0 25px rgba(182,108,255,.12);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.stat{
+  min-height:108px;
+  border:1px solid var(--line);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.025),transparent),
+    var(--panel);
+  border-radius:12px;
+  padding:16px;
+  position:relative;
+  overflow:hidden;
+}
+
+.stat:after{
+  content:"";
+  position:absolute;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  right:-45px;
+  bottom:-55px;
+  background:rgba(182,108,255,.08);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-weight:700;
+}
+
+.stat-value{
+  margin-top:9px;
+  font-family:Orbitron,sans-serif;
+  font-size:24px;
+  font-weight:700;
+}
+
+.stat-meta{
+  margin-top:6px;
+  color:#70707b;
+  font-size:9px;
+}
+
+.stat-meta.up{
+  color:var(--green);
+}
+
+.stat-meta.warn{
+  color:var(--yellow);
+}
+
+/* FILTERS */
+
+.filters{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;
+  gap:9px;
+  margin-bottom:15px;
+}
+
+.field{
+  min-width:0;
+}
+
+.field label{
+  display:block;
+  color:#666672;
+  font-size:9px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  margin:0 0 6px 2px;
+}
+
+.input,
+.select,
+.textarea{
+  width:100%;
+  border:1px solid var(--line);
+  background:#0c0c10;
+  color:#eee;
+  border-radius:8px;
+  outline:none;
+  height:39px;
+  padding:0 11px;
+  font-size:11px;
+}
+
+.textarea{
+  height:90px;
+  padding:10px;
+  resize:vertical;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus{
+  border-color:rgba(182,108,255,.6);
+  box-shadow:0 0 0 2px rgba(182,108,255,.08);
+}
+
+.search-wrap{
+  position:relative;
+}
+
+.search-wrap span{
+  position:absolute;
+  left:11px;
+  top:11px;
+  color:#666672;
+}
+
+.search-wrap .input{
+  padding-left:32px;
+}
+
+/* PANEL */
+
+.panel{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.panel-head{
+  min-height:58px;
+  padding:14px 17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:700;
+}
+
+.panel-sub{
+  color:#6f6f7a;
+  font-size:9px;
+  margin-top:4px;
+}
+
+.panel-actions{
+  display:flex;
+  gap:7px;
+}
+
+.small-btn{
+  height:30px;
+  padding:0 10px;
+  border:1px solid var(--line);
+  background:#101016;
+  color:#aaa;
+  border-radius:7px;
+  font-size:9px;
+}
+
+.small-btn:hover{
+  color:#fff;
+  border-color:#44444e;
+}
+
+/* AWARDS TABLE */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1100px;
+}
+
+th{
+  text-align:left;
+  padding:11px 14px;
+  border-bottom:1px solid var(--line);
+  color:#666672;
+  font-size:9px;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+td{
+  padding:12px 14px;
+  border-bottom:1px solid rgba(39,39,47,.65);
+  font-size:10px;
+  color:#c8c8d0;
+  vertical-align:middle;
+}
+
+tbody tr:hover{
+  background:rgba(255,255,255,.015);
+}
+
+.award-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.award-icon{
+  width:39px;
+  height:39px;
+  border-radius:9px;
+  border:1px solid #3a3047;
+  background:
+    radial-gradient(circle at 35% 25%,rgba(182,108,255,.35),transparent 35%),
+    #15121a;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+}
+
+.title-main{
+  color:#fff;
+  font-weight:700;
+  font-size:11px;
+}
+
+.title-sub{
+  color:#696974;
+  font-size:9px;
+  margin-top:3px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:23px;
+  padding:0 8px;
+  border-radius:20px;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  border:1px solid var(--line);
+}
+
+.badge.published{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+  background:rgba(69,230,154,.07);
+}
+
+.badge.draft{
+  color:#aaa;
+  background:#121217;
+}
+
+.badge.pending{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.25);
+  background:rgba(243,201,105,.06);
+}
+
+.badge.private{
+  color:var(--red);
+  border-color:rgba(255,82,109,.25);
+  background:rgba(255,82,109,.06);
+}
+
+.badge.featured{
+  color:var(--accent);
+  border-color:rgba(182,108,255,.25);
+  background:rgba(182,108,255,.07);
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+}
+
+.icon-btn{
+  width:28px;
+  height:28px;
+  border:1px solid var(--line);
+  background:#101016;
+  color:#aaa;
+  border-radius:6px;
+}
+
+.icon-btn:hover{
+  color:#fff;
+  border-color:#494952;
+}
+
+.icon-btn.danger:hover{
+  color:var(--red);
+  border-color:rgba(255,82,109,.35);
+}
+
+/* LOWER GRID */
+
+.lower-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:20px;
+}
+
+.award-cards{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  padding:15px;
+}
+
+.award-card{
+  border:1px solid var(--line);
+  background:#101016;
+  border-radius:10px;
+  padding:14px;
+  position:relative;
+  overflow:hidden;
+}
+
+.award-card:hover{
+  border-color:#44444e;
+}
+
+.card-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.trophy{
+  font-size:24px;
+}
+
+.card-year{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+.card-name{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  margin-top:12px;
+}
+
+.card-desc{
+  color:#747480;
+  font-size:9px;
+  line-height:1.5;
+  margin-top:5px;
+}
+
+.card-stats{
+  display:flex;
+  gap:14px;
+  margin-top:12px;
+  color:#777783;
+  font-size:8px;
+}
+
+.card-stats strong{
+  display:block;
+  color:#d7d7de;
+  font-size:10px;
+  margin-top:3px;
+}
+
+/* CATEGORIES */
+
+.category-list{
+  padding:5px 15px 15px;
+}
+
+.category-row{
+  padding:13px 0;
+  border-bottom:1px solid rgba(39,39,47,.7);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.category-row:last-child{
+  border-bottom:0;
+}
+
+.category-name{
+  font-size:10px;
+  color:#ddd;
+  font-weight:700;
+}
+
+.category-meta{
+  color:#666672;
+  font-size:8px;
+  margin-top:4px;
+}
+
+.progress{
+  width:100px;
+  height:5px;
+  background:#1c1c23;
+  border-radius:5px;
+  overflow:hidden;
+}
+
+.progress span{
+  display:block;
+  height:100%;
+  border-radius:5px;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+}
+
+/* EMPTY */
+
+.empty{
+  text-align:center;
+  padding:40px 20px;
+  color:#777783;
+  font-size:11px;
+}
+
+/* MODAL */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(7px);
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal-backdrop.open{
+  display:flex;
+}
+
+.modal{
+  width:min(720px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid var(--line2);
+  background:#0b0b0f;
+  border-radius:14px;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+
+.modal-head{
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.modal-close{
+  width:32px;
+  height:32px;
+  border:1px solid var(--line);
+  background:#101016;
+  color:#aaa;
+  border-radius:7px;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-group label{
+  display:block;
+  color:#777783;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  margin-bottom:6px;
+}
+
+.modal-foot{
+  padding:15px 20px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:1000;
+  padding:12px 15px;
+  border:1px solid var(--line2);
+  background:#101016;
+  border-radius:9px;
+  box-shadow:0 15px 50px rgba(0,0,0,.45);
+  font-size:10px;
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* MOBILE */
+
+@media(max-width:1250px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .filters{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .filters .search-wrap{
+    grid-column:1/-1;
+  }
+}
+
+@media(max-width:900px){
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .lower-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+
+@media(max-width:650px){
+  .content{
+    padding:18px;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .admin-chip span{
+    display:none;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .filters{
+    grid-template-columns:1fr;
+  }
+
+  .filters .search-wrap{
+    grid-column:auto;
+  }
+
+  .award-cards{
+    grid-template-columns:1fr;
+  }
+
+  h1{
+    font-size:22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div>
+      <div class="brand-name">CROWRULES</div>
+      <div class="brand-sub">MAIN ADMIN</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-section">Core</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a href="content.html">
+      <span class="nav-icon">▣</span>
+      Content
+    </a>
+
+    <a href="pages.html">
+      <span class="nav-icon">▤</span>
+      Pages
+    </a>
+
+    <a href="categories.html">
+      <span class="nav-icon">◈</span>
+      Categories
+    </a>
+
+    <a href="tags.html">
+      <span class="nav-icon">#</span>
+      Tags
+    </a>
+
+    <div class="nav-section">Media</div>
+
+    <a href="shows.html">
+      <span class="nav-icon">▶</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">▤</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">▣</span>
+      Movies
+    </a>
+
+    <a href="playlists.html">
+      <span class="nav-icon">☷</span>
+      Playlists
+    </a>
+
+    <a href="top10.html">
+      <span class="nav-icon">⑩</span>
+      Top 10
+    </a>
+
+    <a href="audio.html">
+      <span class="nav-icon">♫</span>
+      Audio
+    </a>
+
+    <a href="articles.html">
+      <span class="nav-icon">✎</span>
+      Articles
+    </a>
+
+    <div class="nav-section">Broadcast</div>
+
+    <a href="channels.html">
+      <span class="nav-icon">◉</span>
+      Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">▦</span>
+      TV Guide
+    </a>
+
+    <div class="nav-section">Community</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♟</span>
+      Members
+    </a>
+
+    <a href="membership.html">
+      <span class="nav-icon">★</span>
+      Membership
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">☷</span>
+      Community
+    </a>
+
+    <a href="friends.html">
+      <span class="nav-icon">♧</span>
+      Friends
+    </a>
+
+    <div class="nav-section">Creators</div>
+
+    <a href="creator.html">
+      <span class="nav-icon">♟</span>
+      Creators
+    </a>
+
+    <a href="creator-content.html">
+      <span class="nav-icon">▣</span>
+      Creator Content
+    </a>
+
+    <a href="creator-approvals.html">
+      <span class="nav-icon">✓</span>
+      Approvals
+    </a>
+
+    <div class="nav-section">Recognition</div>
+
+    <a href="awards.html" class="active">
+      <span class="nav-icon">🏆</span>
+      Awards
+    </a>
+
+    <a href="leaderboard.html">
+      <span class="nav-icon">♛</span>
+      Leaderboard
+    </a>
+
+    <div class="nav-section">Memorials</div>
+
+    <a href="memorials.html">
+      <span class="nav-icon">✦</span>
+      Memorials
+    </a>
+
+    <a href="memorial-photos.html">
+      <span class="nav-icon">▧</span>
+      Memorial Photos
+    </a>
+
+    <div class="nav-section">Sports</div>
+
+    <a href="sports.html">
+      <span class="nav-icon">◉</span>
+      Sports
+    </a>
+
+    <a href="teams.html">
+      <span class="nav-icon">♟</span>
+      Teams
+    </a>
+
+    <a href="rankings.html">
+      <span class="nav-icon">↕</span>
+      Rankings
+    </a>
+
+    <a href="games.html">
+      <span class="nav-icon">⚡</span>
+      Games
+    </a>
+
+    <a href="pickem.html">
+      <span class="nav-icon">✓</span>
+      Pick'em
+    </a>
+
+    <div class="nav-section">Business</div>
+
+    <a href="business.html">
+      <span class="nav-icon">▣</span>
+      Business
+    </a>
+
+    <a href="subscriptions.html">
+      <span class="nav-icon">◉</span>
+      Subscriptions
+    </a>
+
+    <a href="donations.html">
+      <span class="nav-icon">♥</span>
+      Donations
+    </a>
+
+    <a href="shop.html">
+      <span class="nav-icon">◇</span>
+      Shop
+    </a>
+
+    <a href="orders.html">
+      <span class="nav-icon">▤</span>
+      Orders
+    </a>
+
+    <div class="nav-section">System</div>
+
+    <a href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      Analytics
+    </a>
+
+    <a href="database.html">
+      <span class="nav-icon">▦</span>
+      Database
+    </a>
+
+    <a href="storage.html">
+      <span class="nav-icon">▰</span>
+      Storage
+    </a>
+
+    <a href="authentication.html">
+      <span class="nav-icon">⌁</span>
+      Authentication
+    </a>
+
+    <a href="permissions.html">
+      <span class="nav-icon">⊙</span>
+      Permissions
+    </a>
+
+    <a href="api.html">
+      <span class="nav-icon">⌘</span>
+      API
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span>
+      Logs
+    </a>
+
+    <a href="backups.html">
+      <span class="nav-icon">↻</span>
+      Backups
+    </a>
+
+    <a href="system-health.html">
+      <span class="nav-icon">♥</span>
+      System Health
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="system-status">
+      <div class="system-status-row">
+        <div class="status-text">
+          <span class="status-dot"></span>
+          Systems Operational
+        </div>
+        <div class="version">v1.0</div>
+      </div>
+    </div>
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="breadcrumb">
+        CrowRules Entertainment / <strong>Awards</strong>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="clock" id="clock">--:--:--</div>
+
+      <button class="top-btn" id="refreshBtn">↻ Refresh</button>
+      <button class="top-btn" id="exportBtn">⇩ Export</button>
+
+      <div class="admin-chip">
+        <div class="admin-avatar">CR</div>
+        <span>Administrator</span>
+      </div>
+    </div>
+
+  </header>
+
+  <section class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+
+      <div>
+        <div class="eyebrow">Recognition Command Center</div>
+        <h1>Awards Management</h1>
+        <p>
+          Manage CrowRules Entertainment awards, ceremonies, categories,
+          nominees, winners, seasons and featured recognition.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn" onclick="openCategoryModal()">＋ Category</button>
+        <button class="btn primary" onclick="openAwardModal()">＋ New Award</button>
+      </div>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Total Awards</div>
+        <div class="stat-value" id="statAwards">12</div>
+        <div class="stat-meta up">+3 this year</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Published</div>
+        <div class="stat-value" id="statPublished">9</div>
+        <div class="stat-meta">Live recognition</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Categories</div>
+        <div class="stat-value" id="statCategories">18</div>
+        <div class="stat-meta">Active categories</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Nominees</div>
+        <div class="stat-value" id="statNominees">126</div>
+        <div class="stat-meta">Across all awards</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Winners</div>
+        <div class="stat-value" id="statWinners">54</div>
+        <div class="stat-meta up">+12 this season</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Featured</div>
+        <div class="stat-value" id="statFeatured">7</div>
+        <div class="stat-meta warn">Homepage rotation</div>
+      </div>
+
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters">
+
+      <div class="field search-wrap">
+        <label>Search</label>
+        <span>⌕</span>
+        <input
+          class="input"
+          id="searchInput"
+          placeholder="Search awards, ceremonies, categories..."
+        >
+      </div>
+
+      <div class="field">
+        <label>Season</label>
+        <select class="select" id="seasonFilter">
+          <option value="">All Seasons</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+          <option value="2028">2028</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Type</label>
+        <select class="select" id="typeFilter">
+          <option value="">All Types</option>
+          <option value="annual">Annual Awards</option>
+          <option value="special">Special Event</option>
+          <option value="creator">Creator Awards</option>
+          <option value="community">Community Awards</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Status</label>
+        <select class="select" id="statusFilter">
+          <option value="">All Statuses</option>
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Sort</label>
+        <select class="select" id="sortFilter">
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="title">Title A-Z</option>
+          <option value="nominees">Nominees</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>&nbsp;</label>
+        <button class="btn" style="width:100%" onclick="resetFilters()">Reset</button>
+      </div>
+
+    </div>
+
+    <!-- AWARDS TABLE -->
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">Award Programs</div>
+          <div class="panel-sub">
+            Manage ceremonies, seasons, categories and recognition programs
+          </div>
+        </div>
+
+        <div class="panel-actions">
+          <button class="small-btn" onclick="selectAll()">Select All</button>
+          <button class="small-btn" onclick="bulkPublish()">Publish Selected</button>
+        </div>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="masterCheck"></th>
+              <th>Award Program</th>
+              <th>Season</th>
+              <th>Type</th>
+              <th>Categories</th>
+              <th>Nominees</th>
+              <th>Winners</th>
+              <th>Status</th>
+              <th>Featured</th>
+              <th>Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="awardsBody"></tbody>
+
+        </table>
+
+      </div>
+
+      <div id="emptyState" class="empty" style="display:none">
+        No awards match your current filters.
+      </div>
+
+    </section>
+
+    <!-- LOWER -->
+    <div class="lower-grid">
+
+      <section class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Award Programs</div>
+            <div class="panel-sub">Current recognition properties</div>
+          </div>
+
+          <button class="small-btn" onclick="openAwardModal()">＋ Add</button>
+        </div>
+
+        <div class="award-cards" id="awardCards"></div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Categories</div>
+            <div class="panel-sub">Award category distribution</div>
+          </div>
+
+          <button class="small-btn" onclick="openCategoryModal()">Manage</button>
+        </div>
+
+        <div class="category-list">
+
+          <div class="category-row">
+            <div>
+              <div class="category-name">Television & Streaming</div>
+              <div class="category-meta">42 nominees · 12 winners</div>
+            </div>
+            <div class="progress"><span style="width:88%"></span></div>
+          </div>
+
+          <div class="category-row">
+            <div>
+              <div class="category-name">Creators</div>
+              <div class="category-meta">31 nominees · 10 winners</div>
+            </div>
+            <div class="progress"><span style="width:72%"></span></div>
+          </div>
+
+          <div class="category-row">
+            <div>
+              <div class="category-name">Music</div>
+              <div class="category-meta">22 nominees · 8 winners</div>
+            </div>
+            <div class="progress"><span style="width:61%"></span></div>
+          </div>
+
+          <div class="category-row">
+            <div>
+              <div class="category-name">Community</div>
+              <div class="category-meta">18 nominees · 7 winners</div>
+            </div>
+            <div class="progress"><span style="width:48%"></span></div>
+          </div>
+
+          <div class="category-row">
+            <div>
+              <div class="category-name">Special Recognition</div>
+              <div class="category-meta">13 nominees · 5 winners</div>
+            </div>
+            <div class="progress"><span style="width:37%"></span></div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </section>
+
+</main>
+
+</div>
+
+<!-- AWARD MODAL -->
+
+<div class="modal-backdrop" id="awardModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+      <div class="modal-title" id="awardModalTitle">Create Award Program</div>
+      <button class="modal-close" onclick="closeAwardModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <form id="awardForm">
+
+        <input type="hidden" id="awardId">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Award Name</label>
+            <input class="input" id="awardName" required placeholder="Example: Crow Awards">
+          </div>
+
+          <div class="form-group">
+            <label>Season / Year</label>
+            <input class="input" id="awardYear" type="number" value="2026">
+          </div>
+
+          <div class="form-group">
+            <label>Type</label>
+            <select class="select" id="awardType">
+              <option value="annual">Annual Awards</option>
+              <option value="special">Special Event</option>
+              <option value="creator">Creator Awards</option>
+              <option value="community">Community Awards</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Status</label>
+            <select class="select" id="awardStatus">
+              <option value="draft">Draft</option>
+              <option value="pending">Pending</option>
+              <option value="published">Published</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Categories</label>
+            <input class="input" id="awardCategories" type="number" value="0">
+          </div>
+
+          <div class="form-group">
+            <label>Nominees</label>
+            <input class="input" id="awardNominees" type="number" value="0">
+          </div>
+
+          <div class="form-group">
+            <label>Winners</label>
+            <input class="input" id="awardWinners" type="number" value="0">
+          </div>
+
+          <div class="form-group">
+            <label>Featured</label>
+            <select class="select" id="awardFeatured">
+              <option value="false">No</option>
+              <option value="true">Yes</option>
+            </select>
+          </div>
+
+          <div class="form-group full">
+            <label>Description</label>
+            <textarea
+              class="textarea"
+              id="awardDescription"
+              placeholder="Describe this award program..."
+            ></textarea>
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn" onclick="closeAwardModal()">Cancel</button>
+      <button class="btn primary" onclick="saveAward()">Save Award</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- CATEGORY MODAL -->
+
+<div class="modal-backdrop" id="categoryModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+      <div class="modal-title">Award Categories</div>
+      <button class="modal-close" onclick="closeCategoryModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Category Name</label>
+          <input class="input" id="categoryName" placeholder="Best Original Series">
+        </div>
+
+        <div class="form-group">
+          <label>Category Type</label>
+          <select class="select" id="categoryType">
+            <option>Television</option>
+            <option>Streaming</option>
+            <option>Creator</option>
+            <option>Music</option>
+            <option>Community</option>
+            <option>Special Recognition</option>
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <label>Description</label>
+          <textarea
+            class="textarea"
+            id="categoryDescription"
+            placeholder="Describe this category..."
+          ></textarea>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn" onclick="closeCategoryModal()">Cancel</button>
+      <button class="btn primary" onclick="saveCategory()">Create Category</button>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   CROWRULES AWARDS ADMIN
+   Defensive Supabase integration
+   ========================================================= */
+
+const CONFIG = {
+  supabaseUrl:
+    window.CROWRULES_SUPABASE_URL || "",
+
+  supabaseAnonKey:
+    window.CROWRULES_SUPABASE_ANON_KEY || "",
+
+  awardsTable:
+    window.CROWRULES_AWARDS_TABLE || "awards",
+
+  categoriesTable:
+    window.CROWRULES_AWARD_CATEGORIES_TABLE || "award_categories"
+};
+
+let supabaseClient = null;
+let usingSupabase = false;
+let editingId = null;
+
+const demoAwards = [
+  {
+    id: "award-001",
+    name: "Crow Awards",
+    year: 2026,
+    type: "annual",
+    categories: 8,
+    nominees: 48,
+    winners: 24,
+    status: "published",
+    featured: true,
+    updated: "Today"
+  },
+  {
+    id: "award-002",
+    name: "CrowRules Creator Awards",
+    year: 2026,
+    type: "creator",
+    categories: 5,
+    nominees: 31,
+    winners: 10,
+    status: "published",
+    featured: true,
+    updated: "Yesterday"
+  },
+  {
+    id: "award-003",
+    name: "CrowRules Community Honors",
+    year: 2026,
+    type: "community",
+    categories: 3,
+    nominees: 18,
+    winners: 7,
+    status: "published",
+    featured: false,
+    updated: "2 days ago"
+  },
+  {
+    id: "award-004",
+    name: "Independent Voice Awards",
+    year: 2027,
+    type: "special",
+    categories: 7,
+    nominees: 29,
+    winners: 0,
+    status: "pending",
+    featured: true,
+    updated: "3 days ago"
+  },
+  {
+    id: "award-005",
+    name: "CrowRules Music Awards",
+    year: 2027,
+    type: "annual",
+    categories: 6,
+    nominees: 22,
+    winners: 0,
+    status: "draft",
+    featured: false,
+    updated: "5 days ago"
+  },
+  {
+    id: "award-006",
+    name: "Legacy Recognition Awards",
+    year: 2026,
+    type: "special",
+    categories: 4,
+    nominees: 14,
+    winners: 13,
+    status: "published",
+    featured: true,
+    updated: "1 week ago"
+  }
+];
+
+let awards = [...demoAwards];
+
+/* INIT */
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  initClock();
+  initMobileMenu();
+  initFilters();
+  initMasterCheckbox();
+
+  await initSupabase();
+  await loadAwards();
+
+  render();
+});
+
+/* CLOCK */
+
+function initClock(){
+
+  const clock = document.getElementById("clock");
+
+  function update(){
+    const now = new Date();
+
+    clock.textContent =
+      now.toLocaleTimeString([], {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      });
+  }
+
+  update();
+  setInterval(update,1000);
+}
+
+/* MOBILE */
+
+function initMobileMenu(){
+
+  const btn = document.getElementById("menuBtn");
+  const sidebar = document.getElementById("sidebar");
+
+  btn.addEventListener("click", () => {
+    sidebar.classList.toggle("open");
+  });
+}
+
+/* SUPABASE */
+
+async function initSupabase(){
+
+  if(
+    !CONFIG.supabaseUrl ||
+    !CONFIG.supabaseAnonKey ||
+    !window.supabase
+  ){
+    usingSupabase = false;
+    return;
+  }
+
+  try{
+
+    supabaseClient =
+      window.supabase.createClient(
+        CONFIG.supabaseUrl,
+        CONFIG.supabaseAnonKey
+      );
+
+    usingSupabase = true;
+
+  }catch(error){
+
+    console.warn(
+      "CrowRules Supabase initialization failed:",
+      error
+    );
+
+    usingSupabase = false;
+  }
+}
+
+/* LOAD */
+
+async function loadAwards(){
+
+  if(!usingSupabase){
+    awards = [...demoAwards];
+    return;
+  }
+
+  try{
+
+    const { data, error } =
+      await supabaseClient
+        .from(CONFIG.awardsTable)
+        .select("*")
+        .limit(200);
+
+    if(error) throw error;
+
+    if(!data || !data.length){
+      awards = [...demoAwards];
+      return;
+    }
+
+    awards = data.map(normalizeAward);
+
+  }catch(error){
+
+    console.warn(
+      "Awards table unavailable. Using demo data.",
+      error
+    );
+
+    awards = [...demoAwards];
+  }
+}
+
+/* NORMALIZE */
+
+function normalizeAward(row){
+
+  return {
+    id:
+      row.id ??
+      row.award_id ??
+      crypto.randomUUID(),
+
+    name:
+      row.name ??
+      row.title ??
+      row.award_name ??
+      "Untitled Award",
+
+    year:
+      row.year ??
+      row.season ??
+      row.award_year ??
+      "",
+
+    type:
+      row.type ??
+      row.award_type ??
+      "annual",
+
+    categories:
+      Number(
+        row.categories_count ??
+        row.category_count ??
+        row.categories ??
+        0
+      ),
+
+    nominees:
+      Number(
+        row.nominees_count ??
+        row.nominee_count ??
+        row.nominees ??
+        0
+      ),
+
+    winners:
+      Number(
+        row.winners_count ??
+        row.winner_count ??
+        row.winners ??
+        0
+      ),
+
+    status:
+      row.status ??
+      (row.published === true ? "published" : "draft"),
+
+    featured:
+      Boolean(
+        row.featured ??
+        row.is_featured ??
+        false
+      ),
+
+    updated:
+      formatDate(
+        row.updated_at ??
+        row.updated ??
+        row.created_at
+      ),
+
+    description:
+      row.description ??
+      ""
+  };
+}
+
+function formatDate(value){
+
+  if(!value) return "—";
+
+  const d = new Date(value);
+
+  if(Number.isNaN(d.getTime())){
+    return String(value);
+  }
+
+  return d.toLocaleDateString([],{
+    month:"short",
+    day:"numeric",
+    year:"numeric"
+  });
+}
+
+/* FILTERS */
+
+function initFilters(){
+
+  [
+    "searchInput",
+    "seasonFilter",
+    "typeFilter",
+    "statusFilter",
+    "sortFilter"
+  ].forEach(id => {
+
+    document
+      .getElementById(id)
+      .addEventListener("input",render);
+
+  });
+}
+
+function getFilteredAwards(){
+
+  const search =
+    document
+      .getElementById("searchInput")
+      .value
+      .toLowerCase()
+      .trim();
+
+  const season =
+    document.getElementById("seasonFilter").value;
+
+  const type =
+    document.getElementById("typeFilter").value;
+
+  const status =
+    document.getElementById("statusFilter").value;
+
+  const sort =
+    document.getElementById("sortFilter").value;
+
+  let result = awards.filter(a => {
+
+    const matchesSearch =
+      !search ||
+      String(a.name).toLowerCase().includes(search) ||
+      String(a.type).toLowerCase().includes(search);
+
+    const matchesSeason =
+      !season ||
+      String(a.year) === season;
+
+    const matchesType =
+      !type ||
+      a.type === type;
+
+    const matchesStatus =
+      !status ||
+      a.status === status;
+
+    return (
+      matchesSearch &&
+      matchesSeason &&
+      matchesType &&
+      matchesStatus
+    );
+  });
+
+  if(sort === "title"){
+    result.sort((a,b) =>
+      String(a.name).localeCompare(String(b.name))
+    );
+  }
+
+  if(sort === "nominees"){
+    result.sort((a,b) =>
+      Number(b.nominees) - Number(a.nominees)
+    );
+  }
+
+  if(sort === "oldest"){
+    result.sort((a,b) =>
+      Number(a.year) - Number(b.year)
+    );
+  }
+
+  if(sort === "newest"){
+    result.sort((a,b) =>
+      Number(b.year) - Number(a.year)
+    );
+  }
+
+  return result;
+}
+
+/* RENDER */
+
+function render(){
+
+  const filtered =
+    getFilteredAwards();
+
+  const body =
+    document.getElementById("awardsBody");
+
+  const empty =
+    document.getElementById("emptyState");
+
+  body.innerHTML = "";
+
+  if(!filtered.length){
+
+    empty.style.display = "block";
+
+  }else{
+
+    empty.style.display = "none";
+
+    filtered.forEach(award => {
+
+      const tr =
+        document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>
+          <input
+            type="checkbox"
+            class="row-check"
+            data-id="${escapeAttr(award.id)}"
+          >
+        </td>
+
+        <td>
+          <div class="award-title">
+            <div class="award-icon">🏆</div>
+            <div>
+              <div class="title-main">
+                ${escapeHtml(award.name)}
+              </div>
+              <div class="title-sub">
+                ${escapeHtml(typeLabel(award.type))}
+              </div>
+            </div>
+          </div>
+        </td>
+
+        <td>${escapeHtml(award.year)}</td>
+
+        <td>
+          <span class="badge">
+            ${escapeHtml(typeLabel(award.type))}
+          </span>
+        </td>
+
+        <td>${number(award.categories)}</td>
+        <td>${number(award.nominees)}</td>
+        <td>${number(award.winners)}</td>
+
+        <td>
+          <span class="badge ${escapeAttr(award.status)}">
+            ${escapeHtml(award.status)}
+          </span>
+        </td>
+
+        <td>
+          ${
+            award.featured
+            ? `<span class="badge featured">Featured</span>`
+            : `<span style="color:#555560;font-size:9px">—</span>`
+          }
+        </td>
+
+        <td>${escapeHtml(award.updated)}</td>
+
+        <td>
+          <div class="actions">
+            <button
+              class="icon-btn"
+              title="Edit"
+              onclick="editAward('${escapeAttr(award.id)}')"
+            >✎</button>
+
+            <button
+              class="icon-btn"
+              title="Toggle featured"
+              onclick="toggleFeatured('${escapeAttr(award.id)}')"
+            >★</button>
+
+            <button
+              class="icon-btn danger"
+              title="Delete"
+              onclick="deleteAward('${escapeAttr(award.id)}')"
+            >×</button>
+          </div>
+        </td>
+      `;
+
+      body.appendChild(tr);
+
+    });
+  }
+
+  renderCards();
+  updateStats();
+}
+
+/* CARDS */
+
+function renderCards(){
+
+  const container =
+    document.getElementById("awardCards");
+
+  container.innerHTML = "";
+
+  awards
+    .slice(0,4)
+    .forEach(award => {
+
+      const card =
+        document.createElement("div");
+
+      card.className = "award-card";
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="trophy">🏆</div>
+          <div class="card-year">${escapeHtml(award.year)}</div>
+        </div>
+
+        <div class="card-name">
+          ${escapeHtml(award.name)}
+        </div>
+
+        <div class="card-desc">
+          ${escapeHtml(
+            award.description ||
+            "CrowRules Entertainment recognition program."
+          )}
+        </div>
+
+        <div class="card-stats">
+          <div>
+            Categories
+            <strong>${number(award.categories)}</strong>
+          </div>
+
+          <div>
+            Nominees
+            <strong>${number(award.nominees)}</strong>
+          </div>
+
+          <div>
+            Winners
+            <strong>${number(award.winners)}</strong>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+}
+
+/* STATS */
+
+function updateStats(){
+
+  document.getElementById("statAwards").textContent =
+    awards.length;
+
+  document.getElementById("statPublished").textContent =
+    awards.filter(a => a.status === "published").length;
+
+  document.getElementById("statCategories").textContent =
+    awards.reduce(
+      (sum,a) => sum + Number(a.categories || 0),
+      0
+    );
+
+  document.getElementById("statNominees").textContent =
+    awards.reduce(
+      (sum,a) => sum + Number(a.nominees || 0),
+      0
+    );
+
+  document.getElementById("statWinners").textContent =
+    awards.reduce(
+      (sum,a) => sum + Number(a.winners || 0),
+      0
+    );
+
+  document.getElementById("statFeatured").textContent =
+    awards.filter(a => a.featured).length;
+}
+
+/* MODAL */
+
+function openAwardModal(award = null){
+
+  editingId = award?.id || null;
+
+  document.getElementById("awardModalTitle").textContent =
+    award
+      ? "Edit Award Program"
+      : "Create Award Program";
+
+  document.getElementById("awardId").value =
+    award?.id || "";
+
+  document.getElementById("awardName").value =
+    award?.name || "";
+
+  document.getElementById("awardYear").value =
+    award?.year || 2026;
+
+  document.getElementById("awardType").value =
+    award?.type || "annual";
+
+  document.getElementById("awardStatus").value =
+    award?.status || "draft";
+
+  document.getElementById("awardCategories").value =
+    award?.categories || 0;
+
+  document.getElementById("awardNominees").value =
+    award?.nominees || 0;
+
+  document.getElementById("awardWinners").value =
+    award?.winners || 0;
+
+  document.getElementById("awardFeatured").value =
+    String(Boolean(award?.featured));
+
+  document.getElementById("awardDescription").value =
+    award?.description || "";
+
+  document
+    .getElementById("awardModal")
+    .classList.add("open");
+}
+
+function closeAwardModal(){
+
+  document
+    .getElementById("awardModal")
+    .classList.remove("open");
+
+  editingId = null;
+}
+
+function editAward(id){
+
+  const award =
+    awards.find(a => String(a.id) === String(id));
+
+  if(award){
+    openAwardModal(award);
+  }
+}
+
+/* SAVE */
+
+async function saveAward(){
+
+  const payload = {
+
+    name:
+      document.getElementById("awardName").value.trim(),
+
+    year:
+      Number(document.getElementById("awardYear").value),
+
+    type:
+      document.getElementById("awardType").value,
+
+    status:
+      document.getElementById("awardStatus").value,
+
+    categories_count:
+      Number(
+        document.getElementById("awardCategories").value || 0
+      ),
+
+    nominees_count:
+      Number(
+        document.getElementById("awardNominees").value || 0
+      ),
+
+    winners_count:
+      Number(
+        document.getElementById("awardWinners").value || 0
+      ),
+
+    featured:
+      document.getElementById("awardFeatured").value === "true",
+
+    description:
+      document.getElementById("awardDescription").value.trim()
+  };
+
+  if(!payload.name){
+
+    showToast("Award name is required.");
+    return;
+  }
+
+  if(usingSupabase){
+
+    try{
+
+      if(editingId){
+
+        const { error } =
+          await supabaseClient
+            .from(CONFIG.awardsTable)
+            .update(payload)
+            .eq("id",editingId);
+
+        if(error) throw error;
+
+        showToast("Award updated.");
+      }else{
+
+        const { error } =
+          await supabaseClient
+            .from(CONFIG.awardsTable)
+            .insert(payload);
+
+        if(error) throw error;
+
+        showToast("Award created.");
+      }
+
+      closeAwardModal();
+      await loadAwards();
+      render();
+
+      return;
+
+    }catch(error){
+
+      console.warn(
+        "Supabase award save failed:",
+        error
+      );
+
+      showToast(
+        "Database save failed — demo mode used."
+      );
+    }
+  }
+
+  if(editingId){
+
+    const index =
+      awards.findIndex(
+        a => String(a.id) === String(editingId)
+      );
+
+    if(index >= 0){
+
+      awards[index] = {
+        ...awards[index],
+        ...payload,
+        categories: payload.categories_count,
+        nominees: payload.nominees_count,
+        winners: payload.winners_count,
+        updated:"Just now"
+      };
+    }
+
+  }else{
+
+    awards.unshift({
+      id:"local-" + Date.now(),
+      name:payload.name,
+      year:payload.year,
+      type:payload.type,
+      categories:payload.categories_count,
+      nominees:payload.nominees_count,
+      winners:payload.winners_count,
+      status:payload.status,
+      featured:payload.featured,
+      description:payload.description,
+      updated:"Just now"
+    });
+  }
+
+  closeAwardModal();
+  render();
+
+  showToast(
+    editingId
+      ? "Award updated locally."
+      : "Award created locally."
+  );
+}
+
+/* FEATURED */
+
+async function toggleFeatured(id){
+
+  const award =
+    awards.find(
+      a => String(a.id) === String(id)
+    );
+
+  if(!award) return;
+
+  const next =
+    !Boolean(award.featured);
+
+  if(usingSupabase){
+
+    try{
+
+      const { error } =
+        await supabaseClient
+          .from(CONFIG.awardsTable)
+          .update({
+            featured:next
+          })
+          .eq("id",id);
+
+      if(error) throw error;
+
+      award.featured = next;
+
+      render();
+
+      showToast(
+        next
+          ? "Award featured."
+          : "Award removed from featured."
+      );
+
+      return;
+
+    }catch(error){
+
+      console.warn(error);
+    }
+  }
+
+  award.featured = next;
+
+  render();
+
+  showToast(
+    next
+      ? "Award featured locally."
+      : "Award unfeatured locally."
+  );
+}
+
+/* DELETE */
+
+async function deleteAward(id){
+
+  const award =
+    awards.find(
+      a => String(a.id) === String(id)
+    );
+
+  if(!award) return;
+
+  if(!confirm(
+    `Delete "${award.name}"?`
+  )){
+    return;
+  }
+
+  if(usingSupabase){
+
+    try{
+
+      const { error } =
+        await supabaseClient
+          .from(CONFIG.awardsTable)
+          .delete()
+          .eq("id",id);
+
+      if(error) throw error;
+
+      awards =
+        awards.filter(
+          a => String(a.id) !== String(id)
+        );
+
+      render();
+
+      showToast("Award deleted.");
+      return;
+
+    }catch(error){
+
+      console.warn(
+        "Supabase delete failed:",
+        error
+      );
+
+      showToast(
+        "Database delete failed."
+      );
+
+      return;
+    }
+  }
+
+  awards =
+    awards.filter(
+      a => String(a.id) !== String(id)
+    );
+
+  render();
+
+  showToast("Award deleted locally.");
+}
+
+/* CATEGORY */
+
+function openCategoryModal(){
+
+  document
+    .getElementById("categoryModal")
+    .classList.add("open");
+}
+
+function closeCategoryModal(){
+
+  document
+    .getElementById("categoryModal")
+    .classList.remove("open");
+}
+
+async function saveCategory(){
+
+  const name =
+    document.getElementById("categoryName")
+      .value
+      .trim();
+
+  const type =
+    document.getElementById("categoryType")
+      .value;
+
+  const description =
+    document.getElementById("categoryDescription")
+      .value
+      .trim();
+
+  if(!name){
+
+    showToast("Category name is required.");
+    return;
+  }
+
+  const payload = {
+    name,
+    type,
+    description
+  };
+
+  if(usingSupabase){
+
+    try{
+
+      const { error } =
+        await supabaseClient
+          .from(CONFIG.categoriesTable)
+          .insert(payload);
+
+      if(error) throw error;
+
+      showToast("Category created.");
+      closeCategoryModal();
+
+      return;
+
+    }catch(error){
+
+      console.warn(
+        "Category table unavailable:",
+        error
+      );
+    }
+  }
+
+  closeCategoryModal();
+
+  document.getElementById("categoryName").value = "";
+  document.getElementById("categoryDescription").value = "";
+
+  showToast("Category created locally.");
+}
+
+/* BULK */
+
+function initMasterCheckbox(){
+
+  const master =
+    document.getElementById("masterCheck");
+
+  master.addEventListener("change",() => {
+
+    document
+      .querySelectorAll(".row-check")
+      .forEach(check => {
+        check.checked = master.checked;
+      });
+
+  });
+}
+
+function selectAll(){
+
+  document
+    .querySelectorAll(".row-check")
+    .forEach(check => {
+      check.checked = true;
+    });
+
+  document.getElementById("masterCheck").checked = true;
+
+  showToast("All visible awards selected.");
+}
+
+function bulkPublish(){
+
+  const selected =
+    [...document.querySelectorAll(".row-check:checked")]
+      .map(el => el.dataset.id);
+
+  if(!selected.length){
+
+    showToast("Select at least one award.");
+    return;
+  }
+
+  awards.forEach(award => {
+
+    if(selected.includes(String(award.id))){
+      award.status = "published";
+    }
+
+  });
+
+  render();
+
+  showToast(
+    `${selected.length} award${selected.length === 1 ? "" : "s"} published locally.`
+  );
+}
+
+/* RESET */
+
+function resetFilters(){
+
+  document.getElementById("searchInput").value = "";
+  document.getElementById("seasonFilter").value = "";
+  document.getElementById("typeFilter").value = "";
+  document.getElementById("statusFilter").value = "";
+  document.getElementById("sortFilter").value = "newest";
+
+  render();
+
+  showToast("Filters reset.");
+}
+
+/* REFRESH */
+
+document
+  .getElementById("refreshBtn")
+  .addEventListener("click", async () => {
+
+    await loadAwards();
+    render();
+
+    showToast(
+      usingSupabase
+        ? "Awards refreshed from Supabase."
+        : "Awards refreshed."
+    );
+  });
+
+/* EXPORT */
+
+document
+  .getElementById("exportBtn")
+  .addEventListener("click", exportCSV);
+
+function exportCSV(){
+
+  const rows =
+    getFilteredAwards();
+
+  const header = [
+    "Name",
+    "Year",
+    "Type",
+    "Categories",
+    "Nominees",
+    "Winners",
+    "Status",
+    "Featured",
+    "Updated"
+  ];
+
+  const csv = [
+    header,
+    ...rows.map(a => [
+      a.name,
+      a.year,
+      a.type,
+      a.categories,
+      a.nominees,
+      a.winners,
+      a.status,
+      a.featured ? "Yes" : "No",
+      a.updated
+    ])
+  ]
+  .map(row =>
+    row.map(csvEscape).join(",")
+  )
+  .join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {type:"text/csv;charset=utf-8;"}
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+  link.download =
+    "crowrules-awards.csv";
+
+  link.click();
+
+  URL.revokeObjectURL(url);
+
+  showToast("Awards CSV exported.");
+}
+
+/* HELPERS */
+
+function typeLabel(type){
+
+  const labels = {
+    annual:"Annual",
+    special:"Special",
+    creator:"Creator",
+    community:"Community"
+  };
+
+  return labels[type] || type || "Award";
+}
+
+function number(value){
+
+  return Number(value || 0)
+    .toLocaleString();
+}
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function escapeAttr(value){
+
+  return escapeHtml(value);
+}
+
+function csvEscape(value){
+
+  const string =
+    String(value ?? "");
+
+  if(
+    string.includes(",") ||
+    string.includes('"') ||
+    string.includes("\n")
+  ){
+    return '"' +
+      string.replaceAll('"','""') +
+      '"';
+  }
+
+  return string;
+}
+
+/* TOAST */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(() => {
+      toast.classList.remove("show");
+    },2800);
+}
+
+/* CLOSE MODALS */
+
+document
+  .querySelectorAll(".modal-backdrop")
+  .forEach(backdrop => {
+
+    backdrop.addEventListener("click",event => {
+
+      if(event.target === backdrop){
+        backdrop.classList.remove("open");
+      }
+
+    });
+
+  });
+
+/* ESC */
+
+document.addEventListener("keydown",event => {
+
+  if(event.key === "Escape"){
+
+    document
+      .querySelectorAll(".modal-backdrop")
+      .forEach(modal =>
+        modal.classList.remove("open")
+      );
+
+  }
+
+});
+</script>
+
+</body>
+</html>

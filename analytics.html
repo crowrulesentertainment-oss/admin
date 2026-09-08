@@ -1,0 +1,2223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Analytics — CrowRules Entertainment</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin Analytics Dashboard.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 75% 10%,rgba(182,108,255,.08),transparent 28%),
+    radial-gradient(circle at 15% 85%,rgba(55,215,255,.05),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.025;
+  background-image:
+    linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:260px;
+  background:rgba(8,8,11,.96);
+  border-right:1px solid var(--line);
+  z-index:100;
+  overflow-y:auto;
+}
+
+.brand{
+  height:82px;
+  padding:20px 22px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  font-size:17px;
+  box-shadow:0 0 22px rgba(182,108,255,.18);
+}
+
+.brand-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+  letter-spacing:1.5px;
+}
+
+.nav{
+  padding:15px 11px 30px;
+}
+
+.nav-label{
+  color:#5f5f68;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  margin:17px 11px 8px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 11px;
+  margin:2px 0;
+  border:1px solid transparent;
+  border-radius:7px;
+  color:#a8a8b1;
+  font-size:12px;
+  transition:.2s;
+}
+
+.nav a:hover{
+  background:var(--panel2);
+  color:var(--text);
+  border-color:var(--line);
+}
+
+.nav a.active{
+  color:#fff;
+  background:linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.05));
+  border-color:rgba(182,108,255,.35);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+  opacity:.9;
+}
+
+/* MAIN */
+
+.main{
+  margin-left:260px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:70px;
+  border-bottom:1px solid var(--line);
+  background:rgba(5,5,5,.75);
+  backdrop-filter:blur(16px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.mobile-menu{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  border-radius:6px;
+}
+
+.system-status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:1px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px var(--green);
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  color:var(--muted);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.top-btn{
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#cfcfd5;
+  padding:8px 11px;
+  border-radius:6px;
+  font-size:11px;
+}
+
+.top-btn:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.page{
+  padding:30px;
+  max-width:1700px;
+  margin:auto;
+}
+
+/* HERO */
+
+.hero{
+  border:1px solid var(--line);
+  background:
+    linear-gradient(135deg,rgba(182,108,255,.10),transparent 45%),
+    linear-gradient(90deg,var(--panel),rgba(13,13,17,.7));
+  min-height:190px;
+  padding:30px;
+  position:relative;
+  overflow:hidden;
+  margin-bottom:22px;
+}
+
+.hero:after{
+  content:"ANALYTICS";
+  position:absolute;
+  right:-20px;
+  bottom:-25px;
+  font-family:Orbitron,sans-serif;
+  font-size:100px;
+  font-weight:800;
+  color:rgba(255,255,255,.025);
+  letter-spacing:6px;
+}
+
+.kicker{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:2px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.hero h1{
+  font-family:Orbitron,sans-serif;
+  font-size:31px;
+  letter-spacing:1px;
+  margin-bottom:10px;
+}
+
+.hero p{
+  max-width:760px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.hero-meta{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+.badge{
+  border:1px solid var(--line2);
+  background:rgba(0,0,0,.22);
+  padding:6px 9px;
+  border-radius:5px;
+  color:#aaaab3;
+  font-size:9px;
+  letter-spacing:.8px;
+}
+
+/* CONTROLS */
+
+.controls{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+
+.period-tabs{
+  display:flex;
+  border:1px solid var(--line);
+  background:var(--panel);
+  padding:4px;
+  border-radius:7px;
+}
+
+.period-tabs button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:8px 13px;
+  border-radius:4px;
+  font-size:10px;
+}
+
+.period-tabs button.active{
+  background:var(--panel3);
+  color:#fff;
+  box-shadow:0 0 0 1px var(--line2);
+}
+
+.control-right{
+  display:flex;
+  gap:8px;
+}
+
+.control-right select,
+.control-right button{
+  background:var(--panel);
+  color:#ccc;
+  border:1px solid var(--line);
+  padding:9px 11px;
+  border-radius:6px;
+  font-size:10px;
+}
+
+/* STAT CARDS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.stat{
+  min-height:125px;
+  padding:17px;
+  background:linear-gradient(145deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);
+  position:relative;
+  overflow:hidden;
+}
+
+.stat:after{
+  content:"";
+  position:absolute;
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  right:-25px;
+  bottom:-25px;
+  border:1px solid rgba(182,108,255,.15);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  font-weight:700;
+}
+
+.stat-value{
+  font-family:Orbitron,sans-serif;
+  font-size:24px;
+  margin-top:12px;
+}
+
+.stat-change{
+  margin-top:9px;
+  font-size:9px;
+}
+
+.up{
+  color:var(--green);
+}
+
+.down{
+  color:var(--red);
+}
+
+.neutral{
+  color:var(--muted);
+}
+
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:18px;
+  margin-bottom:18px;
+}
+
+.panel{
+  background:rgba(13,13,17,.94);
+  border:1px solid var(--line);
+  min-width:0;
+}
+
+.panel-head{
+  min-height:58px;
+  padding:14px 17px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.7px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:4px;
+}
+
+.panel-action{
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:#aaa;
+  padding:6px 9px;
+  font-size:9px;
+  border-radius:4px;
+}
+
+/* CHART */
+
+.chart-wrap{
+  padding:18px;
+}
+
+.chart{
+  height:290px;
+  position:relative;
+  border-left:1px solid var(--line2);
+  border-bottom:1px solid var(--line2);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 57px,
+      rgba(255,255,255,.045) 58px
+    );
+}
+
+.chart svg{
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+.chart-labels{
+  display:flex;
+  justify-content:space-between;
+  color:#64646e;
+  font-size:8px;
+  padding-top:9px;
+}
+
+.chart-legend{
+  display:flex;
+  gap:18px;
+  margin-bottom:12px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+.legend{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.legend-line{
+  width:18px;
+  height:2px;
+  background:var(--accent);
+}
+
+.legend-line.cyan{
+  background:var(--cyan);
+}
+
+/* MINI METRICS */
+
+.metric-list{
+  padding:4px 17px 15px;
+}
+
+.metric-row{
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.metric-row:last-child{
+  border-bottom:0;
+}
+
+.metric-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:10px;
+}
+
+.metric-name{
+  color:#c9c9d0;
+}
+
+.metric-number{
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+.bar{
+  height:4px;
+  background:#1c1c23;
+  margin-top:8px;
+  overflow:hidden;
+}
+
+.bar span{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+
+/* LOWER GRID */
+
+.lower-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:18px;
+  margin-bottom:18px;
+}
+
+/* TABLE */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+th{
+  text-align:left;
+  color:#666671;
+  font-size:8px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  padding:12px 15px;
+  border-bottom:1px solid var(--line);
+  font-weight:700;
+}
+
+td{
+  padding:13px 15px;
+  border-bottom:1px solid rgba(255,255,255,.055);
+  font-size:10px;
+  color:#bcbcc5;
+}
+
+td strong{
+  color:#f2f2f5;
+  font-weight:600;
+}
+
+.rank{
+  font-family:Orbitron,sans-serif;
+  color:var(--accent);
+}
+
+.percent{
+  color:var(--green);
+}
+
+.page-url{
+  color:var(--cyan);
+}
+
+/* DEVICE CARDS */
+
+.device-list{
+  padding:8px 17px 16px;
+}
+
+.device{
+  display:grid;
+  grid-template-columns:42px 1fr auto;
+  align-items:center;
+  gap:11px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.055);
+}
+
+.device:last-child{
+  border-bottom:0;
+}
+
+.device-icon{
+  width:40px;
+  height:40px;
+  border:1px solid var(--line2);
+  display:grid;
+  place-items:center;
+  background:#0a0a0e;
+  font-size:15px;
+}
+
+.device-name{
+  font-size:10px;
+  font-weight:700;
+}
+
+.device-count{
+  color:var(--muted);
+  font-size:8px;
+  margin-top:4px;
+}
+
+.device-percent{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+/* LIVE */
+
+.live-box{
+  padding:17px;
+}
+
+.live-number{
+  font-family:Orbitron,sans-serif;
+  font-size:38px;
+  margin:10px 0;
+}
+
+.live-label{
+  color:var(--muted);
+  font-size:9px;
+}
+
+.live-pulse{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--green);
+  font-size:9px;
+  margin-top:13px;
+}
+
+.pulse{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+  animation:pulse 1.4s infinite;
+}
+
+@keyframes pulse{
+  50%{opacity:.25;transform:scale(.65)}
+}
+
+/* INSIGHTS */
+
+.insight-list{
+  padding:8px 17px 17px;
+}
+
+.insight{
+  display:flex;
+  gap:11px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.055);
+}
+
+.insight:last-child{
+  border-bottom:0;
+}
+
+.insight-icon{
+  width:28px;
+  height:28px;
+  border:1px solid var(--line2);
+  display:grid;
+  place-items:center;
+  color:var(--accent);
+  font-size:11px;
+  flex:none;
+}
+
+.insight-title{
+  font-size:10px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.insight-text{
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.5;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  background:#101015;
+  border:1px solid var(--accent);
+  padding:12px 15px;
+  color:#ddd;
+  font-size:10px;
+  z-index:500;
+  transform:translateY(100px);
+  opacity:0;
+  transition:.25s;
+  box-shadow:0 10px 40px rgba(0,0,0,.4);
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* MOBILE */
+
+@media(max-width:1250px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .lower-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:900px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .lower-grid{
+    grid-template-columns:1fr;
+  }
+
+  .page{
+    padding:20px;
+  }
+
+  .hero{
+    padding:23px;
+  }
+
+  .hero h1{
+    font-size:24px;
+  }
+
+  .hero:after{
+    font-size:60px;
+  }
+}
+
+@media(max-width:600px){
+  .topbar{
+    padding:0 15px;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat-value{
+    font-size:19px;
+  }
+
+  .controls{
+    align-items:stretch;
+  }
+
+  .period-tabs{
+    width:100%;
+    overflow:auto;
+  }
+
+  .period-tabs button{
+    flex:1;
+    white-space:nowrap;
+  }
+
+  .control-right{
+    width:100%;
+  }
+
+  .control-right select,
+  .control-right button{
+    flex:1;
+  }
+
+  .page{
+    padding:15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div>
+      <div class="brand-title">CROWRULES</div>
+      <div class="brand-sub">MAIN ADMIN</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-label">Core</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span> Dashboard
+    </a>
+
+    <a href="content.html">
+      <span class="nav-icon">▦</span> Content
+    </a>
+
+    <a href="pages.html">
+      <span class="nav-icon">▤</span> Pages
+    </a>
+
+    <a href="categories.html">
+      <span class="nav-icon">◈</span> Categories
+    </a>
+
+    <a href="tags.html">
+      <span class="nav-icon">#</span> Tags
+    </a>
+
+    <div class="nav-label">Television</div>
+
+    <a href="shows.html">
+      <span class="nav-icon">▣</span> Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">▶</span> Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">▤</span> Movies
+    </a>
+
+    <a href="channels.html">
+      <span class="nav-icon">◉</span> Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span> Schedule
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span> Live
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">☷</span> TV Guide
+    </a>
+
+    <div class="nav-label">Members</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♙</span> Members
+    </a>
+
+    <a href="membership.html">
+      <span class="nav-icon">◆</span> Membership
+    </a>
+
+    <a href="subscriptions.html">
+      <span class="nav-icon">↻</span> Subscriptions
+    </a>
+
+    <a href="friends.html">
+      <span class="nav-icon">♧</span> Friends
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">☷</span> Community
+    </a>
+
+    <div class="nav-label">Commerce</div>
+
+    <a href="shop.html">
+      <span class="nav-icon">⌑</span> Shop
+    </a>
+
+    <a href="orders.html">
+      <span class="nav-icon">▣</span> Orders
+    </a>
+
+    <a href="donations.html">
+      <span class="nav-icon">♥</span> Donations
+    </a>
+
+    <div class="nav-label">Creators</div>
+
+    <a href="creator.html">
+      <span class="nav-icon">♟</span> Creators
+    </a>
+
+    <a href="creator-content.html">
+      <span class="nav-icon">◆</span> Creator Content
+    </a>
+
+    <a href="creator-approvals.html">
+      <span class="nav-icon">✓</span> Approvals
+    </a>
+
+    <div class="nav-label">Records</div>
+
+    <a href="artists.html">
+      <span class="nav-icon">♬</span> Artists
+    </a>
+
+    <a href="albums.html">
+      <span class="nav-icon">▤</span> Albums
+    </a>
+
+    <a href="tracks.html">
+      <span class="nav-icon">♫</span> Tracks
+    </a>
+
+    <div class="nav-label">Sports</div>
+
+    <a href="sports.html">
+      <span class="nav-icon">◆</span> Sports
+    </a>
+
+    <a href="teams.html">
+      <span class="nav-icon">♛</span> Teams
+    </a>
+
+    <a href="rankings.html">
+      <span class="nav-icon">↕</span> Rankings
+    </a>
+
+    <a href="standings.html">
+      <span class="nav-icon">☷</span> Standings
+    </a>
+
+    <a href="games.html">
+      <span class="nav-icon">●</span> Games
+    </a>
+
+    <a href="pickem.html">
+      <span class="nav-icon">✓</span> Pick'em
+    </a>
+
+    <div class="nav-label">Management</div>
+
+    <a href="points.html">
+      <span class="nav-icon">✦</span> Points
+    </a>
+
+    <a href="leaderboard.html">
+      <span class="nav-icon">♛</span> Leaderboard
+    </a>
+
+    <a href="roles.html">
+      <span class="nav-icon">⚿</span> Roles
+    </a>
+
+    <a href="analytics.html" class="active">
+      <span class="nav-icon">⌁</span> Analytics
+    </a>
+
+    <a href="moderation.html">
+      <span class="nav-icon">⚠</span> Moderation
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span> Logs
+    </a>
+
+    <a href="notifications.html">
+      <span class="nav-icon">♢</span> Notifications
+    </a>
+
+    <a href="activity.html">
+      <span class="nav-icon">◌</span> Activity
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span> Settings
+    </a>
+
+  </nav>
+</aside>
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="top-left">
+      <button class="mobile-menu" id="mobileMenu">☰</button>
+
+      <div class="system-status">
+        <span class="status-dot"></span>
+        ADMIN SYSTEM ONLINE
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <div class="clock" id="clock">--:--:--</div>
+      <button class="top-btn" id="refreshBtn">↻ Refresh</button>
+      <a class="top-btn" href="profile.html">Profile</a>
+    </div>
+
+  </header>
+
+  <div class="page">
+
+    <section class="hero">
+
+      <div class="kicker">CROWRULES / DATA CENTER</div>
+
+      <h1>Analytics Command Center</h1>
+
+      <p>
+        Monitor audience behavior, content performance, member activity,
+        streaming activity, commerce performance, traffic sources and
+        platform growth across the CrowRules Entertainment network.
+      </p>
+
+      <div class="hero-meta">
+        <span class="badge">REAL-TIME MONITORING</span>
+        <span class="badge">SUPABASE READY</span>
+        <span class="badge">AUDIENCE INTELLIGENCE</span>
+        <span class="badge">CONTENT PERFORMANCE</span>
+      </div>
+
+    </section>
+
+    <section class="controls">
+
+      <div class="period-tabs">
+        <button data-period="24h">24 Hours</button>
+        <button data-period="7d" class="active">7 Days</button>
+        <button data-period="30d">30 Days</button>
+        <button data-period="90d">90 Days</button>
+        <button data-period="1y">1 Year</button>
+      </div>
+
+      <div class="control-right">
+
+        <select id="propertySelect">
+          <option value="all">All Properties</option>
+          <option value="tv">CrowRules TV</option>
+          <option value="records">CrowRules Records</option>
+          <option value="community">CrowSpace / Community</option>
+          <option value="sports">CrowRules Sports</option>
+          <option value="memorials">CrowRules Memorials</option>
+          <option value="publishing">CrowRules Publishing</option>
+        </select>
+
+        <button id="exportBtn">Export CSV</button>
+
+      </div>
+
+    </section>
+
+    <section class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Total Visitors</div>
+        <div class="stat-value" id="visitors">184.6K</div>
+        <div class="stat-change up">▲ 18.4% vs previous</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Page Views</div>
+        <div class="stat-value" id="pageviews">692.8K</div>
+        <div class="stat-change up">▲ 22.7% vs previous</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Watch Hours</div>
+        <div class="stat-value" id="watchhours">14.8K</div>
+        <div class="stat-change up">▲ 31.2% vs previous</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">New Members</div>
+        <div class="stat-value" id="newmembers">1,284</div>
+        <div class="stat-change up">▲ 14.8% vs previous</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Revenue</div>
+        <div class="stat-value" id="revenue">$18.7K</div>
+        <div class="stat-change up">▲ 12.9% vs previous</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Engagement</div>
+        <div class="stat-value" id="engagement">68.4%</div>
+        <div class="stat-change up">▲ 5.6% vs previous</div>
+      </div>
+
+    </section>
+
+    <section class="grid">
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">Audience Overview</div>
+            <div class="panel-sub">Visitors and page views over selected period</div>
+          </div>
+
+          <button class="panel-action" id="chartRefresh">LIVE</button>
+
+        </div>
+
+        <div class="chart-wrap">
+
+          <div class="chart-legend">
+
+            <div class="legend">
+              <span class="legend-line"></span>
+              Visitors
+            </div>
+
+            <div class="legend">
+              <span class="legend-line cyan"></span>
+              Page Views
+            </div>
+
+          </div>
+
+          <div class="chart">
+
+            <svg viewBox="0 0 1000 290" preserveAspectRatio="none">
+
+              <defs>
+
+                <linearGradient id="areaPurple" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#b66cff" stop-opacity=".28"/>
+                  <stop offset="100%" stop-color="#b66cff" stop-opacity="0"/>
+                </linearGradient>
+
+                <linearGradient id="areaCyan" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#37d7ff" stop-opacity=".20"/>
+                  <stop offset="100%" stop-color="#37d7ff" stop-opacity="0"/>
+                </linearGradient>
+
+              </defs>
+
+              <path
+                d="M0 220
+                   C55 210 75 205 110 190
+                   S170 215 220 175
+                   S275 160 320 180
+                   S380 125 430 145
+                   S490 110 540 135
+                   S600 90 650 120
+                   S710 95 760 105
+                   S820 62 860 88
+                   S930 55 1000 68
+                   L1000 290 L0 290 Z"
+                fill="url(#areaPurple)"
+                stroke="none"/>
+
+              <path
+                d="M0 220
+                   C55 210 75 205 110 190
+                   S170 215 220 175
+                   S275 160 320 180
+                   S380 125 430 145
+                   S490 110 540 135
+                   S600 90 650 120
+                   S710 95 760 105
+                   S820 62 860 88
+                   S930 55 1000 68"
+                fill="none"
+                stroke="#b66cff"
+                stroke-width="3"
+                vector-effect="non-scaling-stroke"/>
+
+              <path
+                d="M0 245
+                   C55 232 85 238 125 225
+                   S190 240 235 210
+                   S295 225 340 200
+                   S400 170 450 185
+                   S505 155 555 175
+                   S620 145 665 158
+                   S725 132 770 150
+                   S825 112 875 130
+                   S940 98 1000 115
+                   L1000 290 L0 290 Z"
+                fill="url(#areaCyan)"
+                stroke="none"/>
+
+              <path
+                d="M0 245
+                   C55 232 85 238 125 225
+                   S190 240 235 210
+                   S295 225 340 200
+                   S400 170 450 185
+                   S505 155 555 175
+                   S620 145 665 158
+                   S725 132 770 150
+                   S825 112 875 130
+                   S940 98 1000 115"
+                fill="none"
+                stroke="#37d7ff"
+                stroke-width="2"
+                vector-effect="non-scaling-stroke"/>
+
+            </svg>
+
+          </div>
+
+          <div class="chart-labels">
+            <span>SEP 02</span>
+            <span>SEP 03</span>
+            <span>SEP 04</span>
+            <span>SEP 05</span>
+            <span>SEP 06</span>
+            <span>SEP 07</span>
+            <span>TODAY</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Traffic Sources</div>
+            <div class="panel-sub">Where visitors are coming from</div>
+          </div>
+        </div>
+
+        <div class="metric-list">
+
+          <div class="metric-row">
+            <div class="metric-top">
+              <span class="metric-name">Direct</span>
+              <span class="metric-number">34.8%</span>
+            </div>
+            <div class="bar"><span style="width:84%"></span></div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-top">
+              <span class="metric-name">YouTube</span>
+              <span class="metric-number">26.4%</span>
+            </div>
+            <div class="bar"><span style="width:68%"></span></div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-top">
+              <span class="metric-name">Google Search</span>
+              <span class="metric-number">17.9%</span>
+            </div>
+            <div class="bar"><span style="width:52%"></span></div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-top">
+              <span class="metric-name">Facebook</span>
+              <span class="metric-number">9.7%</span>
+            </div>
+            <div class="bar"><span style="width:36%"></span></div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-top">
+              <span class="metric-name">Instagram</span>
+              <span class="metric-number">6.8%</span>
+            </div>
+            <div class="bar"><span style="width:26%"></span></div>
+          </div>
+
+          <div class="metric-row">
+            <div class="metric-top">
+              <span class="metric-name">Other</span>
+              <span class="metric-number">4.4%</span>
+            </div>
+            <div class="bar"><span style="width:18%"></span></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="lower-grid">
+
+      <div class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Top Content</div>
+            <div class="panel-sub">Most viewed content</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Content</th>
+                <th>Views</th>
+                <th>Growth</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td class="rank">01</td>
+                <td><strong>Tacoma Nights</strong></td>
+                <td>28,421</td>
+                <td class="percent">+31%</td>
+              </tr>
+
+              <tr>
+                <td class="rank">02</td>
+                <td><strong>Voices From The Void</strong></td>
+                <td>22,804</td>
+                <td class="percent">+27%</td>
+              </tr>
+
+              <tr>
+                <td class="rank">03</td>
+                <td><strong>Back Deck Live</strong></td>
+                <td>18,642</td>
+                <td class="percent">+22%</td>
+              </tr>
+
+              <tr>
+                <td class="rank">04</td>
+                <td><strong>CrowRules TV Live</strong></td>
+                <td>16,309</td>
+                <td class="percent">+19%</td>
+              </tr>
+
+              <tr>
+                <td class="rank">05</td>
+                <td><strong>Memorials</strong></td>
+                <td>12,882</td>
+                <td class="percent">+14%</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <div class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Devices</div>
+            <div class="panel-sub">Audience device breakdown</div>
+          </div>
+        </div>
+
+        <div class="device-list">
+
+          <div class="device">
+            <div class="device-icon">▣</div>
+            <div>
+              <div class="device-name">Desktop</div>
+              <div class="device-count">86,432 sessions</div>
+            </div>
+            <div class="device-percent">46.8%</div>
+          </div>
+
+          <div class="device">
+            <div class="device-icon">▯</div>
+            <div>
+              <div class="device-name">Mobile</div>
+              <div class="device-count">72,841 sessions</div>
+            </div>
+            <div class="device-percent">39.5%</div>
+          </div>
+
+          <div class="device">
+            <div class="device-icon">▭</div>
+            <div>
+              <div class="device-name">Tablet</div>
+              <div class="device-count">13,908 sessions</div>
+            </div>
+            <div class="device-percent">7.5%</div>
+          </div>
+
+          <div class="device">
+            <div class="device-icon">▶</div>
+            <div>
+              <div class="device-name">TV / Streaming</div>
+              <div class="device-count">11,419 sessions</div>
+            </div>
+            <div class="device-percent">6.2%</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Live Activity</div>
+            <div class="panel-sub">Current platform activity</div>
+          </div>
+        </div>
+
+        <div class="live-box">
+
+          <div class="live-label">ACTIVE USERS RIGHT NOW</div>
+
+          <div class="live-number" id="liveUsers">247</div>
+
+          <div class="live-label">
+            users currently browsing or watching
+          </div>
+
+          <div class="live-pulse">
+            <span class="pulse"></span>
+            LIVE DATA STREAM
+          </div>
+
+          <div style="margin-top:22px">
+
+            <div class="metric-row">
+              <div class="metric-top">
+                <span class="metric-name">Watching Video</span>
+                <span class="metric-number">142</span>
+              </div>
+              <div class="bar">
+                <span style="width:58%"></span>
+              </div>
+            </div>
+
+            <div class="metric-row">
+              <div class="metric-top">
+                <span class="metric-name">Browsing</span>
+                <span class="metric-number">71</span>
+              </div>
+              <div class="bar">
+                <span style="width:29%"></span>
+              </div>
+            </div>
+
+            <div class="metric-row">
+              <div class="metric-top">
+                <span class="metric-name">Community</span>
+                <span class="metric-number">34</span>
+              </div>
+              <div class="bar">
+                <span style="width:14%"></span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="grid">
+
+      <div class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Top Pages</div>
+            <div class="panel-sub">Highest traffic pages during selected period</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Page</th>
+                <th>Views</th>
+                <th>Unique</th>
+                <th>Avg. Time</th>
+                <th>Bounce</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td class="page-url">/tacoma-nights.html</td>
+                <td>48,821</td>
+                <td>31,284</td>
+                <td>04:28</td>
+                <td>29.4%</td>
+              </tr>
+
+              <tr>
+                <td class="page-url">/index.html</td>
+                <td>42,615</td>
+                <td>27,903</td>
+                <td>03:12</td>
+                <td>31.7%</td>
+              </tr>
+
+              <tr>
+                <td class="page-url">/watch.html</td>
+                <td>38,442</td>
+                <td>24,816</td>
+                <td>12:41</td>
+                <td>18.2%</td>
+              </tr>
+
+              <tr>
+                <td class="page-url">/community.html</td>
+                <td>21,903</td>
+                <td>14,822</td>
+                <td>08:22</td>
+                <td>22.9%</td>
+              </tr>
+
+              <tr>
+                <td class="page-url">/memorials.html</td>
+                <td>17,284</td>
+                <td>12,601</td>
+                <td>05:31</td>
+                <td>27.1%</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <div class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Audience Insights</div>
+            <div class="panel-sub">Automated performance signals</div>
+          </div>
+        </div>
+
+        <div class="insight-list">
+
+          <div class="insight">
+            <div class="insight-icon">▲</div>
+            <div>
+              <div class="insight-title">Video engagement is rising</div>
+              <div class="insight-text">
+                Average watch time increased 18% during the selected period.
+              </div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <div class="insight-icon">◆</div>
+            <div>
+              <div class="insight-title">Tacoma Nights leads traffic</div>
+              <div class="insight-text">
+                The series is currently the strongest content acquisition source.
+              </div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <div class="insight-icon">●</div>
+            <div>
+              <div class="insight-title">Mobile audience expanding</div>
+              <div class="insight-text">
+                Mobile sessions increased 11.6% compared with the previous period.
+              </div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <div class="insight-icon">✦</div>
+            <div>
+              <div class="insight-title">Membership conversion improved</div>
+              <div class="insight-text">
+                Visitor-to-member conversion is currently tracking above baseline.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/*
+  CrowRules Entertainment
+  Main Admin Analytics
+
+  Supabase-ready architecture.
+
+  Suggested analytics tables:
+
+  analytics_events
+  analytics_sessions
+  analytics_page_views
+  analytics_video_views
+  analytics_watch_sessions
+  analytics_daily
+  analytics_realtime
+
+  Recommended analytics event structure:
+
+  id
+  user_id
+  session_id
+  event_name
+  property
+  page_url
+  content_id
+  content_type
+  metadata
+  created_at
+
+  IMPORTANT:
+  Never store passwords, payment-card numbers,
+  CVV codes, authentication secrets, or other
+  sensitive credentials in analytics tables.
+*/
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL || "";
+
+const SUPABASE_ANON_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY || "";
+
+const ANALYTICS_TABLE =
+  window.CROWRULES_ANALYTICS_TABLE || "analytics_events";
+
+let supabaseClient = null;
+
+if(
+  SUPABASE_URL &&
+  SUPABASE_ANON_KEY &&
+  window.supabase
+){
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+}
+
+/* CLOCK */
+
+function updateClock(){
+
+  const now = new Date();
+
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString([],{
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    });
+
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* MOBILE MENU */
+
+document
+  .getElementById("mobileMenu")
+  .addEventListener("click",()=>{
+
+    document
+      .getElementById("sidebar")
+      .classList.toggle("open");
+
+  });
+
+/* TOAST */
+
+let toastTimer;
+
+function toast(message){
+
+  const el =
+    document.getElementById("toast");
+
+  el.textContent = message;
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(()=>{
+      el.classList.remove("show");
+    },2600);
+
+}
+
+/* PERIOD */
+
+document
+  .querySelectorAll(".period-tabs button")
+  .forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+      document
+        .querySelectorAll(".period-tabs button")
+        .forEach(btn =>
+          btn.classList.remove("active")
+        );
+
+      button.classList.add("active");
+
+      const period =
+        button.dataset.period;
+
+      toast(
+        "Analytics period changed to " +
+        period.toUpperCase()
+      );
+
+      refreshAnalytics();
+
+    });
+
+  });
+
+/* PROPERTY */
+
+document
+  .getElementById("propertySelect")
+  .addEventListener("change",event=>{
+
+    toast(
+      "Property filter: " +
+      event.target.options[
+        event.target.selectedIndex
+      ].text
+    );
+
+    refreshAnalytics();
+
+  });
+
+/* SUPABASE ANALYTICS */
+
+async function refreshAnalytics(){
+
+  if(!supabaseClient){
+
+    return;
+  }
+
+  try{
+
+    const period =
+      document.querySelector(
+        ".period-tabs button.active"
+      )?.dataset.period || "7d";
+
+    const property =
+      document.getElementById(
+        "propertySelect"
+      ).value;
+
+    const days =
+      period === "24h" ? 1 :
+      period === "7d" ? 7 :
+      period === "30d" ? 30 :
+      period === "90d" ? 90 :
+      365;
+
+    const since =
+      new Date(
+        Date.now() -
+        days * 86400000
+      ).toISOString();
+
+    let query =
+      supabaseClient
+        .from(ANALYTICS_TABLE)
+        .select("*")
+        .gte("created_at",since)
+        .order("created_at",{
+          ascending:false
+        })
+        .limit(5000);
+
+    if(property !== "all"){
+
+      query =
+        query.eq("property",property);
+
+    }
+
+    const {data,error} =
+      await query;
+
+    if(error) throw error;
+
+    if(!data) return;
+
+    calculateAnalytics(data);
+
+  }catch(error){
+
+    console.warn(
+      "Analytics data unavailable:",
+      error.message
+    );
+
+  }
+
+}
+
+/* CALCULATE FROM EVENTS */
+
+function calculateAnalytics(events){
+
+  if(!Array.isArray(events)) return;
+
+  const visitors =
+    new Set(
+      events
+        .map(e =>
+          e.user_id ||
+          e.session_id
+        )
+        .filter(Boolean)
+    ).size;
+
+  const pageviews =
+    events.filter(e =>
+      [
+        "page_view",
+        "pageview"
+      ].includes(
+        String(
+          e.event_name || ""
+        ).toLowerCase()
+      )
+    ).length;
+
+  const videoEvents =
+    events.filter(e =>
+      [
+        "video_watch",
+        "video_play",
+        "watch"
+      ].includes(
+        String(
+          e.event_name || ""
+        ).toLowerCase()
+      )
+    );
+
+  const watchSeconds =
+    videoEvents.reduce(
+      (total,event)=>{
+
+        return total +
+          Number(
+            event.watch_seconds ||
+            event.duration_seconds ||
+            0
+          );
+
+      },
+      0
+    );
+
+  const watchHours =
+    watchSeconds / 3600;
+
+  const visitorEl =
+    document.getElementById("visitors");
+
+  const pageviewEl =
+    document.getElementById("pageviews");
+
+  const watchEl =
+    document.getElementById("watchhours");
+
+  if(visitorEl && visitors){
+    visitorEl.textContent =
+      formatNumber(visitors);
+  }
+
+  if(pageviewEl && pageviews){
+    pageviewEl.textContent =
+      formatNumber(pageviews);
+  }
+
+  if(watchEl && watchHours){
+    watchEl.textContent =
+      watchHours.toFixed(1) + "K";
+  }
+
+}
+
+/* FORMAT */
+
+function formatNumber(number){
+
+  if(number >= 1000000){
+
+    return (
+      number / 1000000
+    ).toFixed(1) + "M";
+
+  }
+
+  if(number >= 1000){
+
+    return (
+      number / 1000
+    ).toFixed(1) + "K";
+
+  }
+
+  return number.toLocaleString();
+
+}
+
+/* REFRESH */
+
+document
+  .getElementById("refreshBtn")
+  .addEventListener("click",()=>{
+
+    toast("Refreshing analytics…");
+
+    refreshAnalytics();
+
+    setTimeout(()=>{
+      toast("Analytics refreshed");
+    },700);
+
+  });
+
+document
+  .getElementById("chartRefresh")
+  .addEventListener("click",()=>{
+
+    toast("Live analytics refreshed");
+
+    refreshAnalytics();
+
+  });
+
+/* EXPORT */
+
+document
+  .getElementById("exportBtn")
+  .addEventListener("click",()=>{
+
+    const rows = [
+
+      [
+        "Metric",
+        "Value"
+      ],
+
+      [
+        "Total Visitors",
+        document.getElementById(
+          "visitors"
+        ).textContent
+      ],
+
+      [
+        "Page Views",
+        document.getElementById(
+          "pageviews"
+        ).textContent
+      ],
+
+      [
+        "Watch Hours",
+        document.getElementById(
+          "watchhours"
+        ).textContent
+      ],
+
+      [
+        "New Members",
+        document.getElementById(
+          "newmembers"
+        ).textContent
+      ],
+
+      [
+        "Revenue",
+        document.getElementById(
+          "revenue"
+        ).textContent
+      ],
+
+      [
+        "Engagement",
+        document.getElementById(
+          "engagement"
+        ).textContent
+      ]
+
+    ];
+
+    const csv =
+      rows
+        .map(row =>
+          row.map(value =>
+            '"' +
+            String(value)
+              .replace(/"/g,'""') +
+            '"'
+          ).join(",")
+        )
+        .join("\n");
+
+    const blob =
+      new Blob(
+        [csv],
+        {
+          type:"text/csv;charset=utf-8;"
+        }
+      );
+
+    const url =
+      URL.createObjectURL(blob);
+
+    const link =
+      document.createElement("a");
+
+    link.href = url;
+    link.download =
+      "crowrules-analytics-" +
+      new Date()
+        .toISOString()
+        .slice(0,10) +
+      ".csv";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+    toast("Analytics CSV exported");
+
+  });
+
+/* DEMO LIVE COUNTER */
+
+setInterval(()=>{
+
+  const el =
+    document.getElementById(
+      "liveUsers"
+    );
+
+  if(!el) return;
+
+  const current =
+    Number(
+      el.textContent
+        .replace(/,/g,"")
+    ) || 247;
+
+  const next =
+    Math.max(
+      1,
+      current +
+      Math.floor(
+        Math.random() * 13
+      ) - 6
+    );
+
+  el.textContent =
+    next.toLocaleString();
+
+},5000);
+
+/* INITIAL LOAD */
+
+refreshAnalytics();
+
+</script>
+
+</body>
+</html>

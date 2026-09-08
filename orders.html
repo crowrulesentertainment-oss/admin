@@ -1,0 +1,3543 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Orders — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Order Management">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 18px 60px rgba(0,0,0,.45);
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 80% -10%,rgba(182,108,255,.10),transparent 30%),
+    radial-gradient(circle at 15% 20%,rgba(55,215,255,.05),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,input,select,textarea{font:inherit}
+
+button{cursor:pointer}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   APP SHELL
+========================= */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:250px;
+  background:rgba(8,8,11,.97);
+  border-right:1px solid var(--line);
+  z-index:1000;
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+}
+
+.brand{
+  padding:24px 20px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  letter-spacing:2px;
+  font-size:21px;
+}
+
+.brand-mark span{color:var(--accent)}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-top:5px;
+}
+
+.nav{
+  padding:14px 12px 30px;
+}
+
+.nav-section{
+  color:#5e5e69;
+  font-size:9px;
+  letter-spacing:2px;
+  font-weight:800;
+  padding:16px 10px 7px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 11px;
+  margin:2px 0;
+  border:1px solid transparent;
+  border-radius:9px;
+  color:#a9a9b3;
+  font-size:12px;
+  transition:.2s;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:#121219;
+  border-color:#25252d;
+}
+
+.nav a.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.18),rgba(108,92,255,.07));
+  border-color:rgba(182,108,255,.34);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:19px;
+  text-align:center;
+  font-size:14px;
+}
+
+.sidebar-footer{
+  margin-top:auto;
+  padding:15px;
+  border-top:1px solid var(--line);
+}
+
+.admin-mini{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  font-weight:800;
+}
+
+.admin-mini strong{
+  display:block;
+  font-size:11px;
+}
+
+.admin-mini small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:2px;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  margin-left:250px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:66px;
+  border-bottom:1px solid var(--line);
+  background:rgba(7,7,9,.78);
+  backdrop-filter:blur(18px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 26px;
+  position:sticky;
+  top:0;
+  z-index:900;
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.menu-btn{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  border-radius:8px;
+}
+
+.breadcrumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb b{color:#fff}
+
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  color:var(--cyan);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+  padding:8px 10px;
+  border:1px solid rgba(55,215,255,.2);
+  background:rgba(55,215,255,.04);
+  border-radius:7px;
+}
+
+.icon-btn{
+  width:36px;
+  height:36px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#bbb;
+  border-radius:8px;
+}
+
+.icon-btn:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.content{
+  padding:27px;
+  max-width:1800px;
+  margin:auto;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:20px;
+  margin-bottom:24px;
+}
+
+.eyebrow{
+  font-family:Orbitron,sans-serif;
+  color:var(--accent);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:7px;
+}
+
+h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:30px;
+  letter-spacing:1px;
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:740px;
+  line-height:1.6;
+  font-size:12px;
+  margin:9px 0 0;
+}
+
+.hero-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#ddd;
+  border-radius:8px;
+  padding:10px 14px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.btn:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.55);
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:#fff;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.stat{
+  background:linear-gradient(145deg,var(--panel2),var(--panel));
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+
+.stat-label{
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1.3px;
+  font-size:9px;
+  font-weight:700;
+}
+
+.stat-value{
+  margin-top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+}
+
+.stat-meta{
+  margin-top:6px;
+  font-size:9px;
+  color:var(--green);
+}
+
+.stat-meta.warn{color:var(--yellow)}
+.stat-meta.red{color:var(--red)}
+.stat-meta.cyan{color:var(--cyan)}
+
+/* =========================
+   PANELS
+========================= */
+
+.panel{
+  background:linear-gradient(145deg,rgba(17,17,23,.97),rgba(11,11,15,.97));
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+.panel-head{
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.7px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.panel-body{padding:17px}
+
+/* =========================
+   FILTERS
+========================= */
+
+.filters{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr 1fr;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+.field{
+  width:100%;
+  background:#09090c;
+  border:1px solid var(--line);
+  color:#eee;
+  border-radius:7px;
+  padding:10px;
+  outline:none;
+  font-size:10px;
+}
+
+.field:focus{border-color:var(--accent)}
+
+.tabs{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.tab{
+  padding:8px 11px;
+  border:1px solid var(--line);
+  background:#0a0a0d;
+  color:#85858f;
+  border-radius:6px;
+  font-size:9px;
+}
+
+.tab.active,
+.tab:hover{
+  color:#fff;
+  border-color:rgba(182,108,255,.45);
+  background:rgba(182,108,255,.09);
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  min-width:1200px;
+  border-collapse:collapse;
+}
+
+th{
+  text-align:left;
+  color:#666672;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  padding:11px 12px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+}
+
+td{
+  padding:12px;
+  border-bottom:1px solid #1b1b21;
+  font-size:10px;
+  color:#ccc;
+  vertical-align:middle;
+}
+
+tr:hover td{
+  background:rgba(255,255,255,.015);
+}
+
+.order-cell{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.order-icon{
+  width:43px;
+  height:43px;
+  border-radius:7px;
+  border:1px solid var(--line2);
+  background:
+    radial-gradient(circle at center,rgba(182,108,255,.25),transparent 42%),
+    #08080b;
+  display:grid;
+  place-items:center;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  color:#aaa;
+}
+
+.order-id{
+  font-weight:800;
+  color:#eee;
+}
+
+.order-date{
+  color:#666672;
+  font-size:8px;
+  margin-top:3px;
+}
+
+.customer strong{
+  display:block;
+  font-size:10px;
+}
+
+.customer small{
+  display:block;
+  color:#666672;
+  font-size:8px;
+  margin-top:3px;
+}
+
+.amount{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  color:#fff;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 7px;
+  border-radius:5px;
+  border:1px solid var(--line);
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  white-space:nowrap;
+}
+
+.badge::before{
+  content:"";
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:currentColor;
+}
+
+.badge.completed{
+  color:var(--green);
+  border-color:rgba(69,230,154,.2);
+  background:rgba(69,230,154,.05);
+}
+
+.badge.processing{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.2);
+  background:rgba(55,215,255,.05);
+}
+
+.badge.pending{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.2);
+  background:rgba(243,201,105,.05);
+}
+
+.badge.cancelled,
+.badge.failed{
+  color:var(--red);
+  border-color:rgba(255,82,109,.2);
+  background:rgba(255,82,109,.05);
+}
+
+.badge.refunded{
+  color:var(--orange);
+  border-color:rgba(255,138,76,.2);
+  background:rgba(255,138,76,.05);
+}
+
+.badge.fulfilled{
+  color:var(--green);
+}
+
+.badge.unfulfilled{
+  color:var(--yellow);
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+}
+
+.action{
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  background:#0b0b0e;
+  color:#999;
+  border-radius:6px;
+  font-size:11px;
+}
+
+.action:hover{
+  color:#fff;
+  border-color:var(--accent);
+}
+
+/* =========================
+   LOWER PANELS
+========================= */
+
+.lower-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr;
+  gap:14px;
+  margin-top:14px;
+}
+
+.metric-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.metric-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  border:1px solid var(--line);
+  background:#0a0a0d;
+  border-radius:8px;
+}
+
+.metric-left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.metric-icon{
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  background:rgba(182,108,255,.07);
+  border:1px solid rgba(182,108,255,.16);
+  color:var(--accent);
+}
+
+.metric-row strong{
+  display:block;
+  font-size:10px;
+}
+
+.metric-row small{
+  display:block;
+  color:var(--muted);
+  font-size:8px;
+  margin-top:3px;
+}
+
+.metric-number{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+}
+
+/* STATUS DISTRIBUTION */
+
+.status-item{
+  margin-bottom:15px;
+}
+
+.status-top{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+
+.status-name{
+  font-size:10px;
+}
+
+.status-count{
+  font-size:9px;
+  color:var(--muted);
+}
+
+.bar{
+  height:6px;
+  background:#09090c;
+  border:1px solid var(--line);
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.bar span{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  border-radius:20px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(7px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+  padding:20px;
+}
+
+.modal-backdrop.open{display:flex}
+
+.modal{
+  width:min(820px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:#0c0c10;
+  border:1px solid var(--line2);
+  border-radius:12px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.modal-close{
+  width:31px;
+  height:31px;
+  border:1px solid var(--line);
+  background:#09090c;
+  color:#aaa;
+  border-radius:6px;
+}
+
+.modal-close:hover{
+  color:#fff;
+  border-color:var(--accent);
+}
+
+.form{
+  padding:19px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-label{
+  color:#888894;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+textarea.field{
+  min-height:90px;
+  resize:vertical;
+}
+
+.modal-foot{
+  padding:14px 19px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+/* =========================
+   ORDER DETAIL
+========================= */
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  padding:19px;
+}
+
+.detail-box{
+  border:1px solid var(--line);
+  background:#09090d;
+  border-radius:8px;
+  padding:13px;
+}
+
+.detail-box.full{
+  grid-column:1/-1;
+}
+
+.detail-label{
+  color:#666672;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.detail-value{
+  margin-top:5px;
+  color:#eee;
+  font-size:11px;
+}
+
+.items{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  margin-top:10px;
+}
+
+.item-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#0b0b0f;
+}
+
+.item-name{
+  font-weight:700;
+  font-size:10px;
+}
+
+.item-meta{
+  color:#666672;
+  font-size:8px;
+  margin-top:3px;
+}
+
+.item-price{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  background:#111117;
+  border:1px solid var(--line2);
+  color:#fff;
+  padding:12px 15px;
+  border-radius:8px;
+  font-size:10px;
+  box-shadow:var(--shadow);
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:3000;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1250px){
+
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .lower-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:1000px){
+
+  .filters{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .hero{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .lower-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:620px){
+
+  .content{
+    padding:17px;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  h1{
+    font-size:23px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .filters{
+    grid-template-columns:1fr;
+  }
+
+  .form{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+
+  .detail-grid{
+    grid-template-columns:1fr;
+  }
+
+  .detail-box.full{
+    grid-column:auto;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CROW<span>RULES</span></div>
+    <div class="brand-sub">Entertainment Admin</div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-section">Core</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a href="content.html">
+      <span class="nav-icon">▦</span>
+      Content
+    </a>
+
+    <a href="members.html">
+      <span class="nav-icon">♙</span>
+      Members
+    </a>
+
+    <div class="nav-section">Commerce</div>
+
+    <a href="membership.html">
+      <span class="nav-icon">◆</span>
+      Membership
+    </a>
+
+    <a href="subscriptions.html">
+      <span class="nav-icon">↻</span>
+      Subscriptions
+    </a>
+
+    <a href="donations.html">
+      <span class="nav-icon">♥</span>
+      Donations
+    </a>
+
+    <a href="shop.html">
+      <span class="nav-icon">▣</span>
+      Shop
+    </a>
+
+    <a href="orders.html" class="active">
+      <span class="nav-icon">▤</span>
+      Orders
+    </a>
+
+    <a href="points.html">
+      <span class="nav-icon">✦</span>
+      Points
+    </a>
+
+    <div class="nav-section">TV & Media</div>
+
+    <a href="shows.html">
+      <span class="nav-icon">▶</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">▤</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">◉</span>
+      Movies
+    </a>
+
+    <a href="channels.html">
+      <span class="nav-icon">▤</span>
+      Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <div class="nav-section">Community</div>
+
+    <a href="community.html">
+      <span class="nav-icon">☷</span>
+      Community
+    </a>
+
+    <a href="friends.html">
+      <span class="nav-icon">♧</span>
+      Friends
+    </a>
+
+    <a href="leaderboard.html">
+      <span class="nav-icon">♛</span>
+      Leaderboard
+    </a>
+
+    <div class="nav-section">System</div>
+
+    <a href="analytics.html">
+      <span class="nav-icon">◫</span>
+      Analytics
+    </a>
+
+    <a href="notifications.html">
+      <span class="nav-icon">◌</span>
+      Notifications
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+
+    <div class="admin-mini">
+      <div class="avatar">CR</div>
+
+      <div>
+        <strong>Administrator</strong>
+        <small>System Control</small>
+      </div>
+    </div>
+
+  </div>
+
+</aside>
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <button class="menu-btn" id="menuBtn">☰</button>
+
+      <div class="breadcrumb">
+        CrowRules Entertainment
+        <span> / </span>
+        <b>Orders</b>
+      </div>
+
+    </div>
+
+    <div class="topbar-right">
+
+      <div class="clock" id="clock">
+        --:--:--
+      </div>
+
+      <button
+        class="icon-btn"
+        id="refreshBtn"
+        title="Refresh">
+        ↻
+      </button>
+
+      <button
+        class="icon-btn"
+        onclick="location.href='profile.html'"
+        title="Profile">
+        ◉
+      </button>
+
+    </div>
+
+  </header>
+
+  <div class="content">
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+      <div>
+
+        <div class="eyebrow">
+          Commerce / Order Operations
+        </div>
+
+        <h1>ORDERS</h1>
+
+        <p>
+          Manage CrowRules storefront orders, customers, payments,
+          fulfillment, refunds, cancellations and order activity from
+          one centralized commerce command center.
+        </p>
+
+      </div>
+
+      <div class="hero-actions">
+
+        <button
+          class="btn"
+          onclick="exportOrders()">
+          Export Orders
+        </button>
+
+        <button
+          class="btn"
+          onclick="showToast('Order analytics opened')">
+          Analytics
+        </button>
+
+        <button
+          class="btn primary"
+          onclick="openOrderModal()">
+          + Create Order
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- STATS -->
+
+    <section class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-value" id="statOrders">3,842</div>
+        <div class="stat-meta">+14.8% this month</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Revenue</div>
+        <div class="stat-value">$62.8K</div>
+        <div class="stat-meta">+11.4% vs. last month</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Processing</div>
+        <div class="stat-value">84</div>
+        <div class="stat-meta cyan">Needs fulfillment</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Pending</div>
+        <div class="stat-value">31</div>
+        <div class="stat-meta warn">Payment/action required</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Refunded</div>
+        <div class="stat-value">27</div>
+        <div class="stat-meta red">$1,482.60 returned</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Avg. Order</div>
+        <div class="stat-value">$48.92</div>
+        <div class="stat-meta">+4.2% order value</div>
+      </div>
+
+    </section>
+
+    <!-- ORDER MANAGEMENT -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+
+          <div class="panel-title">
+            Order Management
+          </div>
+
+          <div class="panel-sub">
+            Search, filter and manage every CrowRules storefront order.
+          </div>
+
+        </div>
+
+        <button
+          class="btn"
+          onclick="loadOrders()">
+          Refresh Data
+        </button>
+
+      </div>
+
+      <div class="panel-body">
+
+        <!-- FILTERS -->
+
+        <div class="filters">
+
+          <input
+            id="searchInput"
+            class="field"
+            placeholder="Search order number, customer, email..."
+            oninput="renderOrders()">
+
+          <select
+            id="statusFilter"
+            class="field"
+            onchange="renderOrders()">
+
+            <option value="">All Statuses</option>
+            <option value="completed">Completed</option>
+            <option value="processing">Processing</option>
+            <option value="pending">Pending</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="refunded">Refunded</option>
+            <option value="failed">Failed</option>
+
+          </select>
+
+          <select
+            id="fulfillmentFilter"
+            class="field"
+            onchange="renderOrders()">
+
+            <option value="">All Fulfillment</option>
+            <option value="fulfilled">Fulfilled</option>
+            <option value="unfulfilled">Unfulfilled</option>
+
+          </select>
+
+          <select
+            id="paymentFilter"
+            class="field"
+            onchange="renderOrders()">
+
+            <option value="">All Payments</option>
+            <option value="paid">Paid</option>
+            <option value="pending">Pending</option>
+            <option value="refunded">Refunded</option>
+            <option value="failed">Failed</option>
+
+          </select>
+
+          <select
+            id="sortFilter"
+            class="field"
+            onchange="renderOrders()">
+
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="amount-high">Highest Value</option>
+            <option value="amount-low">Lowest Value</option>
+            <option value="customer">Customer</option>
+
+          </select>
+
+        </div>
+
+        <!-- TABS -->
+
+        <div class="tabs">
+
+          <button
+            class="tab active"
+            data-tab="all">
+            All Orders
+          </button>
+
+          <button
+            class="tab"
+            data-tab="processing">
+            Processing
+          </button>
+
+          <button
+            class="tab"
+            data-tab="pending">
+            Pending
+          </button>
+
+          <button
+            class="tab"
+            data-tab="unfulfilled">
+            Unfulfilled
+          </button>
+
+          <button
+            class="tab"
+            data-tab="completed">
+            Completed
+          </button>
+
+          <button
+            class="tab"
+            data-tab="refunded">
+            Refunded
+          </button>
+
+          <button
+            class="tab"
+            data-tab="cancelled">
+            Cancelled
+          </button>
+
+        </div>
+
+        <!-- TABLE -->
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Fulfillment</th>
+                <th>Channel</th>
+                <th>Actions</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="orderRows"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- LOWER PANELS -->
+
+    <section class="lower-grid">
+
+      <!-- RECENT ACTIVITY -->
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">
+              Order Activity
+            </div>
+
+            <div class="panel-sub">
+              Recent commerce events.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="metric-list">
+
+            <div class="metric-row">
+
+              <div class="metric-left">
+
+                <div class="metric-icon">✓</div>
+
+                <div>
+                  <strong>Order CR-10482 completed</strong>
+                  <small>4 minutes ago</small>
+                </div>
+
+              </div>
+
+              <div class="metric-number">
+                $84.97
+              </div>
+
+            </div>
+
+            <div class="metric-row">
+
+              <div class="metric-left">
+
+                <div class="metric-icon">↗</div>
+
+                <div>
+                  <strong>New order CR-10481</strong>
+                  <small>18 minutes ago</small>
+                </div>
+
+              </div>
+
+              <div class="metric-number">
+                $54.99
+              </div>
+
+            </div>
+
+            <div class="metric-row">
+
+              <div class="metric-left">
+
+                <div class="metric-icon">↻</div>
+
+                <div>
+                  <strong>Refund issued</strong>
+                  <small>31 minutes ago</small>
+                </div>
+
+              </div>
+
+              <div class="metric-number">
+                $29.99
+              </div>
+
+            </div>
+
+            <div class="metric-row">
+
+              <div class="metric-left">
+
+                <div class="metric-icon">●</div>
+
+                <div>
+                  <strong>Order CR-10479 fulfilled</strong>
+                  <small>42 minutes ago</small>
+                </div>
+
+              </div>
+
+              <div class="metric-number">
+                $19.99
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- STATUS -->
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">
+              Order Status
+            </div>
+
+            <div class="panel-sub">
+              Current order distribution.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="status-item">
+
+            <div class="status-top">
+              <div class="status-name">Completed</div>
+              <div class="status-count">2,904 · 75.6%</div>
+            </div>
+
+            <div class="bar">
+              <span style="width:75.6%"></span>
+            </div>
+
+          </div>
+
+          <div class="status-item">
+
+            <div class="status-top">
+              <div class="status-name">Processing</div>
+              <div class="status-count">84 · 2.2%</div>
+            </div>
+
+            <div class="bar">
+              <span style="width:12%"></span>
+            </div>
+
+          </div>
+
+          <div class="status-item">
+
+            <div class="status-top">
+              <div class="status-name">Pending</div>
+              <div class="status-count">31 · 0.8%</div>
+            </div>
+
+            <div class="bar">
+              <span style="width:7%"></span>
+            </div>
+
+          </div>
+
+          <div class="status-item">
+
+            <div class="status-top">
+              <div class="status-name">Refunded</div>
+              <div class="status-count">27 · 0.7%</div>
+            </div>
+
+            <div class="bar">
+              <span style="width:5%"></span>
+            </div>
+
+          </div>
+
+          <div class="status-item">
+
+            <div class="status-top">
+              <div class="status-name">Other</div>
+              <div class="status-count">796 · 20.7%</div>
+            </div>
+
+            <div class="bar">
+              <span style="width:20.7%"></span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- FULFILLMENT -->
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <div>
+            <div class="panel-title">
+              Fulfillment Queue
+            </div>
+
+            <div class="panel-sub">
+              Orders requiring attention.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="metric-list">
+
+            <div class="metric-row">
+
+              <div class="metric-left">
+
+                <div class="metric-icon">!</div>
+
+                <div>
+                  <strong>Unfulfilled</strong>
+                  <small>Physical orders</small>
+                </div>
+
+              </div>
+
+              <div class="metric-number">
+                84
+              </div>
+
+            </div>
+
+            <div class="metric-row">
+
+              <div class="metric-left">
+
+                <div class="metric-icon">◷</div>
+
+                <div>
+                  <strong>Awaiting Payment</strong>
+                  <small>Payment pending</small>
+                </div>
+
+              </div>
+
+              <div class="metric-number">
+                31
+              </div>
+
+            </div>
+
+            <div class="metric-row">
+
+              <div class="metric-left">
+
+                <div class="metric-icon">↻</div>
+
+                <div>
+                  <strong>Returns</strong>
+                  <small>Return requests</small>
+                </div>
+
+              </div>
+
+              <div class="metric-number">
+                12
+              </div>
+
+            </div>
+
+            <div class="metric-row">
+
+              <div class="metric-left">
+
+                <div class="metric-icon">!</div>
+
+                <div>
+                  <strong>Low Inventory</strong>
+                  <small>Related products</small>
+                </div>
+
+              </div>
+
+              <div class="metric-number">
+                17
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+<!-- =========================================================
+     ORDER DETAIL MODAL
+========================================================= -->
+
+<div
+  class="modal-backdrop"
+  id="orderDetailModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title" id="detailTitle">
+        ORDER DETAILS
+      </div>
+
+      <button
+        class="modal-close"
+        onclick="closeDetailModal()">
+        ×
+      </button>
+
+    </div>
+
+    <div class="detail-grid">
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Order Number
+        </div>
+
+        <div
+          class="detail-value"
+          id="detailOrder">
+          —
+        </div>
+
+      </div>
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Date
+        </div>
+
+        <div
+          class="detail-value"
+          id="detailDate">
+          —
+        </div>
+
+      </div>
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Customer
+        </div>
+
+        <div
+          class="detail-value"
+          id="detailCustomer">
+          —
+        </div>
+
+      </div>
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Email
+        </div>
+
+        <div
+          class="detail-value"
+          id="detailEmail">
+          —
+        </div>
+
+      </div>
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Payment
+        </div>
+
+        <div
+          class="detail-value"
+          id="detailPayment">
+          —
+        </div>
+
+      </div>
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Fulfillment
+        </div>
+
+        <div
+          class="detail-value"
+          id="detailFulfillment">
+          —
+        </div>
+
+      </div>
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Shipping Address
+        </div>
+
+        <div
+          class="detail-value"
+          id="detailAddress">
+          —
+        </div>
+
+      </div>
+
+      <div class="detail-box">
+
+        <div class="detail-label">
+          Order Total
+        </div>
+
+        <div
+          class="detail-value"
+          id="detailTotal">
+          —
+        </div>
+
+      </div>
+
+      <div class="detail-box full">
+
+        <div class="detail-label">
+          Items
+        </div>
+
+        <div
+          class="items"
+          id="detailItems">
+        </div>
+
+      </div>
+
+      <div class="detail-box full">
+
+        <div class="detail-label">
+          Customer Note
+        </div>
+
+        <div
+          class="detail-value"
+          id="detailNote">
+          —
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        onclick="closeDetailModal()">
+        Close
+      </button>
+
+      <button
+        class="btn"
+        onclick="showToast('Fulfillment workflow opened')">
+        Fulfill Order
+      </button>
+
+      <button
+        class="btn primary"
+        onclick="showToast('Order editor opened')">
+        Edit Order
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================================================
+     CREATE ORDER MODAL
+========================================================= -->
+
+<div
+  class="modal-backdrop"
+  id="orderModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        CREATE ORDER
+      </div>
+
+      <button
+        class="modal-close"
+        onclick="closeOrderModal()">
+        ×
+      </button>
+
+    </div>
+
+    <form
+      class="form"
+      id="orderForm">
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Customer Name
+        </label>
+
+        <input
+          id="customerName"
+          class="field"
+          placeholder="Customer name"
+          required>
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Customer Email
+        </label>
+
+        <input
+          id="customerEmail"
+          class="field"
+          type="email"
+          placeholder="customer@example.com">
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Product
+        </label>
+
+        <input
+          id="orderProduct"
+          class="field"
+          placeholder="CrowRules Classic Tee">
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Quantity
+        </label>
+
+        <input
+          id="orderQuantity"
+          class="field"
+          type="number"
+          min="1"
+          value="1">
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Total
+        </label>
+
+        <input
+          id="orderTotal"
+          class="field"
+          type="number"
+          step="0.01"
+          min="0"
+          placeholder="29.99">
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Payment Status
+        </label>
+
+        <select
+          id="orderPayment"
+          class="field">
+
+          <option value="paid">Paid</option>
+          <option value="pending">Pending</option>
+          <option value="failed">Failed</option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Order Status
+        </label>
+
+        <select
+          id="orderStatus"
+          class="field">
+
+          <option value="completed">Completed</option>
+          <option value="processing">Processing</option>
+          <option value="pending">Pending</option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label class="form-label">
+          Fulfillment
+        </label>
+
+        <select
+          id="orderFulfillment"
+          class="field">
+
+          <option value="unfulfilled">Unfulfilled</option>
+          <option value="fulfilled">Fulfilled</option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group full">
+
+        <label class="form-label">
+          Shipping Address
+        </label>
+
+        <textarea
+          id="shippingAddress"
+          class="field"
+          placeholder="Shipping address..."></textarea>
+
+      </div>
+
+      <div class="form-group full">
+
+        <label class="form-label">
+          Customer Note
+        </label>
+
+        <textarea
+          id="customerNote"
+          class="field"
+          placeholder="Internal/customer note..."></textarea>
+
+      </div>
+
+    </form>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        onclick="closeOrderModal()">
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        onclick="createOrder()">
+        Create Order
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div
+  class="toast"
+  id="toast">
+</div>
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/*
+============================================================
+CROWRULES ENTERTAINMENT
+MAIN ADMIN — ORDERS
+============================================================
+
+Configure before production:
+
+window.CROWRULES_SUPABASE_URL =
+  "https://YOUR_PROJECT.supabase.co";
+
+window.CROWRULES_SUPABASE_ANON_KEY =
+  "YOUR_PUBLISHABLE_OR_ANON_KEY";
+
+Optional:
+
+window.CROWRULES_SHOP_ORDERS_TABLE =
+  "shop_orders";
+
+Recommended commerce architecture:
+
+shop_products
+shop_categories
+shop_product_variants
+shop_orders
+shop_order_items
+shop_inventory_events
+shop_coupons
+shop_returns
+
+IMPORTANT:
+
+Never store:
+- credit card numbers
+- CVV
+- bank account credentials
+- payment secrets
+
+Use Stripe/PayPal/etc. provider-side IDs instead.
+============================================================
+*/
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL || "";
+
+const SUPABASE_ANON_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY || "";
+
+const ORDERS_TABLE =
+  window.CROWRULES_SHOP_ORDERS_TABLE ||
+  "shop_orders";
+
+let supabaseClient = null;
+
+if(
+  SUPABASE_URL &&
+  SUPABASE_ANON_KEY &&
+  window.supabase
+){
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+}
+
+/* =========================================================
+   DEMO ORDERS
+========================================================= */
+
+let orders = [
+
+  {
+    id:"CR-10482",
+    customer:"Alex Rivers",
+    email:"alex@example.com",
+    items:3,
+    total:84.97,
+    payment:"paid",
+    status:"completed",
+    fulfillment:"fulfilled",
+    channel:"Web Store",
+    date:"Sep 8, 2026 · 11:18 AM",
+    address:"Tacoma, WA",
+    note:"Please ship together."
+  },
+
+  {
+    id:"CR-10481",
+    customer:"Jamie Parker",
+    email:"jamie@example.com",
+    items:1,
+    total:54.99,
+    payment:"paid",
+    status:"processing",
+    fulfillment:"unfulfilled",
+    channel:"Web Store",
+    date:"Sep 8, 2026 · 11:04 AM",
+    address:"Seattle, WA",
+    note:""
+  },
+
+  {
+    id:"CR-10480",
+    customer:"Taylor Stone",
+    email:"taylor@example.com",
+    items:2,
+    total:49.98,
+    payment:"paid",
+    status:"completed",
+    fulfillment:"fulfilled",
+    channel:"Member Hub",
+    date:"Sep 8, 2026 · 10:51 AM",
+    address:"Lakewood, WA",
+    note:""
+  },
+
+  {
+    id:"CR-10479",
+    customer:"Morgan Lee",
+    email:"morgan@example.com",
+    items:1,
+    total:19.99,
+    payment:"paid",
+    status:"completed",
+    fulfillment:"fulfilled",
+    channel:"CrowRules TV",
+    date:"Sep 8, 2026 · 10:40 AM",
+    address:"Tacoma, WA",
+    note:"Digital delivery."
+  },
+
+  {
+    id:"CR-10478",
+    customer:"Sam Walker",
+    email:"sam@example.com",
+    items:4,
+    total:118.96,
+    payment:"pending",
+    status:"pending",
+    fulfillment:"unfulfilled",
+    channel:"Web Store",
+    date:"Sep 8, 2026 · 10:18 AM",
+    address:"Olympia, WA",
+    note:"Waiting for payment."
+  },
+
+  {
+    id:"CR-10477",
+    customer:"Jordan Brooks",
+    email:"jordan@example.com",
+    items:2,
+    total:64.98,
+    payment:"paid",
+    status:"processing",
+    fulfillment:"unfulfilled",
+    channel:"Web Store",
+    date:"Sep 8, 2026 · 9:57 AM",
+    address:"Puyallup, WA",
+    note:""
+  },
+
+  {
+    id:"CR-10476",
+    customer:"Casey Morgan",
+    email:"casey@example.com",
+    items:1,
+    total:29.99,
+    payment:"refunded",
+    status:"refunded",
+    fulfillment:"unfulfilled",
+    channel:"Web Store",
+    date:"Sep 8, 2026 · 9:34 AM",
+    address:"Tacoma, WA",
+    note:"Customer requested refund."
+  },
+
+  {
+    id:"CR-10475",
+    customer:"Riley Carter",
+    email:"riley@example.com",
+    items:2,
+    total:44.98,
+    payment:"paid",
+    status:"completed",
+    fulfillment:"fulfilled",
+    channel:"Member Hub",
+    date:"Sep 8, 2026 · 9:18 AM",
+    address:"Federal Way, WA",
+    note:""
+  },
+
+  {
+    id:"CR-10474",
+    customer:"Avery Wilson",
+    email:"avery@example.com",
+    items:1,
+    total:27.99,
+    payment:"failed",
+    status:"failed",
+    fulfillment:"unfulfilled",
+    channel:"Web Store",
+    date:"Sep 8, 2026 · 8:52 AM",
+    address:"Tacoma, WA",
+    note:"Payment failed."
+  },
+
+  {
+    id:"CR-10473",
+    customer:"Drew Bennett",
+    email:"drew@example.com",
+    items:5,
+    total:142.95,
+    payment:"paid",
+    status:"completed",
+    fulfillment:"fulfilled",
+    channel:"Web Store",
+    date:"Sep 8, 2026 · 8:31 AM",
+    address:"Seattle, WA",
+    note:""
+  },
+
+  {
+    id:"CR-10472",
+    customer:"Cameron Reed",
+    email:"cameron@example.com",
+    items:1,
+    total:24.99,
+    payment:"paid",
+    status:"processing",
+    fulfillment:"unfulfilled",
+    channel:"Tacoma Nights",
+    date:"Sep 8, 2026 · 8:10 AM",
+    address:"Tacoma, WA",
+    note:""
+  },
+
+  {
+    id:"CR-10471",
+    customer:"Anonymous Customer",
+    email:"",
+    items:2,
+    total:39.98,
+    payment:"paid",
+    status:"completed",
+    fulfillment:"fulfilled",
+    channel:"Web Store",
+    date:"Sep 8, 2026 · 7:52 AM",
+    address:"Washington, USA",
+    note:"Anonymous checkout."
+  }
+
+];
+
+let activeTab = "all";
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function money(value){
+
+  return "$" +
+    Number(value || 0).toFixed(2);
+
+}
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer =
+    setTimeout(
+      () => toast.classList.remove("show"),
+      2400
+    );
+
+}
+
+function normalizeOrder(row){
+
+  return {
+
+    id:
+      row.order_number ??
+      row.order_no ??
+      row.order_id ??
+      row.id ??
+      "ORDER",
+
+    customer:
+      row.customer_name ??
+      row.name ??
+      row.full_name ??
+      "Customer",
+
+    email:
+      row.customer_email ??
+      row.email ??
+      "",
+
+    items:
+      Number(
+        row.item_count ??
+        row.items_count ??
+        row.quantity ??
+        1
+      ),
+
+    total:
+      Number(
+        row.total ??
+        row.total_amount ??
+        row.amount ??
+        0
+      ),
+
+    payment:
+      row.payment_status ??
+      row.payment ??
+      "pending",
+
+    status:
+      row.status ??
+      "pending",
+
+    fulfillment:
+      row.fulfillment_status ??
+      row.fulfillment ??
+      "unfulfilled",
+
+    channel:
+      row.channel ??
+      row.source ??
+      "Web Store",
+
+    date:
+      row.created_at
+        ? new Date(row.created_at)
+            .toLocaleString()
+        : "Recently",
+
+    address:
+      row.shipping_address ??
+      row.address ??
+      "",
+
+    note:
+      row.note ??
+      row.customer_note ??
+      ""
+
+  };
+
+}
+
+/* =========================================================
+   SUPABASE LOAD
+========================================================= */
+
+async function loadOrders(){
+
+  if(!supabaseClient){
+
+    renderOrders();
+    return;
+
+  }
+
+  try{
+
+    const {data,error} =
+      await supabaseClient
+        .from(ORDERS_TABLE)
+        .select("*")
+        .order("created_at",{ascending:false});
+
+    if(error){
+
+      console.warn(
+        "Orders load failed:",
+        error
+      );
+
+      renderOrders();
+
+      return;
+
+    }
+
+    if(Array.isArray(data)){
+
+      orders =
+        data.map(normalizeOrder);
+
+    }
+
+    renderOrders();
+
+  }catch(error){
+
+    console.warn(error);
+
+    renderOrders();
+
+  }
+
+}
+
+/* =========================================================
+   STATUS LABEL
+========================================================= */
+
+function label(value){
+
+  const map = {
+
+    completed:"Completed",
+    processing:"Processing",
+    pending:"Pending",
+    cancelled:"Cancelled",
+    refunded:"Refunded",
+    failed:"Failed",
+    fulfilled:"Fulfilled",
+    unfulfilled:"Unfulfilled",
+    paid:"Paid"
+
+  };
+
+  return map[value] || value || "Unknown";
+
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderOrders(){
+
+  const tbody =
+    document.getElementById("orderRows");
+
+  const search =
+    document.getElementById("searchInput")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const status =
+    document.getElementById("statusFilter").value;
+
+  const fulfillment =
+    document.getElementById("fulfillmentFilter").value;
+
+  const payment =
+    document.getElementById("paymentFilter").value;
+
+  const sort =
+    document.getElementById("sortFilter").value;
+
+  let list =
+    orders.filter(order => {
+
+      const searchable =
+        [
+          order.id,
+          order.customer,
+          order.email,
+          order.channel
+        ]
+        .join(" ")
+        .toLowerCase();
+
+      if(
+        search &&
+        !searchable.includes(search)
+      ){
+        return false;
+      }
+
+      if(
+        status &&
+        order.status !== status
+      ){
+        return false;
+      }
+
+      if(
+        fulfillment &&
+        order.fulfillment !== fulfillment
+      ){
+        return false;
+      }
+
+      if(
+        payment &&
+        order.payment !== payment
+      ){
+        return false;
+      }
+
+      if(
+        activeTab === "processing" &&
+        order.status !== "processing"
+      ){
+        return false;
+      }
+
+      if(
+        activeTab === "pending" &&
+        order.status !== "pending"
+      ){
+        return false;
+      }
+
+      if(
+        activeTab === "unfulfilled" &&
+        order.fulfillment !== "unfulfilled"
+      ){
+        return false;
+      }
+
+      if(
+        activeTab === "completed" &&
+        order.status !== "completed"
+      ){
+        return false;
+      }
+
+      if(
+        activeTab === "refunded" &&
+        order.status !== "refunded"
+      ){
+        return false;
+      }
+
+      if(
+        activeTab === "cancelled" &&
+        order.status !== "cancelled"
+      ){
+        return false;
+      }
+
+      return true;
+
+    });
+
+  if(sort === "amount-high"){
+
+    list.sort(
+      (a,b) => b.total - a.total
+    );
+
+  }
+
+  if(sort === "amount-low"){
+
+    list.sort(
+      (a,b) => a.total - b.total
+    );
+
+  }
+
+  if(sort === "customer"){
+
+    list.sort(
+      (a,b) =>
+        a.customer.localeCompare(
+          b.customer
+        )
+    );
+
+  }
+
+  if(sort === "oldest"){
+
+    list.reverse();
+
+  }
+
+  tbody.innerHTML =
+    list.map(order => `
+
+      <tr>
+
+        <td>
+
+          <div class="order-cell">
+
+            <div class="order-icon">
+              CR
+            </div>
+
+            <div>
+
+              <div class="order-id">
+                #${escapeHtml(order.id)}
+              </div>
+
+              <div class="order-date">
+                ${escapeHtml(order.date)}
+              </div>
+
+            </div>
+
+          </div>
+
+        </td>
+
+        <td>
+
+          <div class="customer">
+
+            <strong>
+              ${escapeHtml(order.customer)}
+            </strong>
+
+            <small>
+              ${escapeHtml(order.email || "No email")}
+            </small>
+
+          </div>
+
+        </td>
+
+        <td>
+          ${Number(order.items || 0)}
+        </td>
+
+        <td>
+
+          <div class="amount">
+            ${money(order.total)}
+          </div>
+
+        </td>
+
+        <td>
+
+          <span class="badge ${escapeHtml(order.payment)}">
+            ${label(order.payment)}
+          </span>
+
+        </td>
+
+        <td>
+
+          <span class="badge ${escapeHtml(order.status)}">
+            ${label(order.status)}
+          </span>
+
+        </td>
+
+        <td>
+
+          <span class="badge ${escapeHtml(order.fulfillment)}">
+            ${label(order.fulfillment)}
+          </span>
+
+        </td>
+
+        <td>
+          ${escapeHtml(order.channel)}
+        </td>
+
+        <td>
+
+          <div class="actions">
+
+            <button
+              class="action"
+              title="View Order"
+              onclick="viewOrder('${escapeHtml(order.id)}')">
+              ◉
+            </button>
+
+            <button
+              class="action"
+              title="Fulfill"
+              onclick="fulfillOrder('${escapeHtml(order.id)}')">
+              ✓
+            </button>
+
+            <button
+              class="action"
+              title="More"
+              onclick="showToast('Order actions opened')">
+              ⋮
+            </button>
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `).join("");
+
+  if(!list.length){
+
+    tbody.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="9"
+          style="text-align:center;padding:38px;color:#666;">
+
+          No orders match the current filters.
+
+        </td>
+
+      </tr>
+
+    `;
+
+  }
+
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+
+document
+  .querySelectorAll(".tab")
+  .forEach(tab => {
+
+    tab.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(".tab")
+          .forEach(t =>
+            t.classList.remove("active")
+          );
+
+        tab.classList.add("active");
+
+        activeTab =
+          tab.dataset.tab;
+
+        renderOrders();
+
+      }
+    );
+
+  });
+
+/* =========================================================
+   VIEW ORDER
+========================================================= */
+
+function viewOrder(id){
+
+  const order =
+    orders.find(
+      o => String(o.id) === String(id)
+    );
+
+  if(!order){
+
+    showToast("Order not found");
+
+    return;
+
+  }
+
+  document.getElementById("detailTitle")
+    .textContent =
+      "ORDER #" + order.id;
+
+  document.getElementById("detailOrder")
+    .textContent =
+      "#" + order.id;
+
+  document.getElementById("detailDate")
+    .textContent =
+      order.date;
+
+  document.getElementById("detailCustomer")
+    .textContent =
+      order.customer;
+
+  document.getElementById("detailEmail")
+    .textContent =
+      order.email || "No email";
+
+  document.getElementById("detailPayment")
+    .textContent =
+      label(order.payment);
+
+  document.getElementById("detailFulfillment")
+    .textContent =
+      label(order.fulfillment);
+
+  document.getElementById("detailAddress")
+    .textContent =
+      order.address || "No shipping address";
+
+  document.getElementById("detailTotal")
+    .textContent =
+      money(order.total);
+
+  document.getElementById("detailNote")
+    .textContent =
+      order.note || "No customer note.";
+
+  document.getElementById("detailItems")
+    .innerHTML = `
+
+      <div class="item-row">
+
+        <div>
+
+          <div class="item-name">
+            CrowRules Store Product
+          </div>
+
+          <div class="item-meta">
+            ${order.items} item(s)
+          </div>
+
+        </div>
+
+        <div class="item-price">
+          ${money(order.total)}
+        </div>
+
+      </div>
+
+    `;
+
+  document
+    .getElementById("orderDetailModal")
+    .classList.add("open");
+
+}
+
+function closeDetailModal(){
+
+  document
+    .getElementById("orderDetailModal")
+    .classList.remove("open");
+
+}
+
+/* =========================================================
+   FULFILL ORDER
+========================================================= */
+
+async function fulfillOrder(id){
+
+  const index =
+    orders.findIndex(
+      o => String(o.id) === String(id)
+    );
+
+  if(index < 0){
+
+    showToast("Order not found");
+
+    return;
+
+  }
+
+  if(
+    !confirm(
+      "Mark order #" +
+      id +
+      " as fulfilled?"
+    )
+  ){
+
+    return;
+
+  }
+
+  if(supabaseClient){
+
+    try{
+
+      const {error} =
+        await supabaseClient
+          .from(ORDERS_TABLE)
+          .update({
+            fulfillment_status:"fulfilled",
+            fulfillment:"fulfilled"
+          })
+          .eq("id",id);
+
+      if(error){
+        console.warn(error);
+      }
+
+    }catch(error){
+
+      console.warn(error);
+
+    }
+
+  }
+
+  orders[index].fulfillment =
+    "fulfilled";
+
+  renderOrders();
+
+  showToast(
+    "Order #" +
+    id +
+    " marked fulfilled"
+  );
+
+}
+
+/* =========================================================
+   CREATE ORDER
+========================================================= */
+
+function openOrderModal(){
+
+  document
+    .getElementById("orderModal")
+    .classList.add("open");
+
+}
+
+function closeOrderModal(){
+
+  document
+    .getElementById("orderModal")
+    .classList.remove("open");
+
+}
+
+async function createOrder(){
+
+  const customer =
+    document
+      .getElementById("customerName")
+      .value
+      .trim();
+
+  const email =
+    document
+      .getElementById("customerEmail")
+      .value
+      .trim();
+
+  const product =
+    document
+      .getElementById("orderProduct")
+      .value
+      .trim();
+
+  const quantity =
+    Number(
+      document
+        .getElementById("orderQuantity")
+        .value || 1
+    );
+
+  const total =
+    Number(
+      document
+        .getElementById("orderTotal")
+        .value || 0
+    );
+
+  const payment =
+    document
+      .getElementById("orderPayment")
+      .value;
+
+  const status =
+    document
+      .getElementById("orderStatus")
+      .value;
+
+  const fulfillment =
+    document
+      .getElementById("orderFulfillment")
+      .value;
+
+  const address =
+    document
+      .getElementById("shippingAddress")
+      .value
+      .trim();
+
+  const note =
+    document
+      .getElementById("customerNote")
+      .value
+      .trim();
+
+  if(!customer){
+
+    showToast(
+      "Customer name is required"
+    );
+
+    return;
+
+  }
+
+  const orderNumber =
+    "CR-" +
+    Math.floor(
+      10000 +
+      Math.random() * 89999
+    );
+
+  const newOrder = {
+
+    id:orderNumber,
+
+    customer,
+
+    email,
+
+    items:quantity,
+
+    total,
+
+    payment,
+
+    status,
+
+    fulfillment,
+
+    channel:"Admin",
+
+    date:
+      new Date().toLocaleString(),
+
+    address,
+
+    note
+
+  };
+
+  if(supabaseClient){
+
+    try{
+
+      const payload = {
+
+        order_number:orderNumber,
+
+        customer_name:customer,
+
+        customer_email:email,
+
+        item_count:quantity,
+
+        total_amount:total,
+
+        payment_status:payment,
+
+        status,
+
+        fulfillment_status:fulfillment,
+
+        channel:"Admin",
+
+        shipping_address:address,
+
+        customer_note:note
+
+      };
+
+      const {error} =
+        await supabaseClient
+          .from(ORDERS_TABLE)
+          .insert(payload);
+
+      if(error){
+
+        console.warn(
+          "Order insert failed:",
+          error
+        );
+
+        showToast(
+          "Order could not be saved to Supabase"
+        );
+
+        return;
+
+      }
+
+    }catch(error){
+
+      console.warn(error);
+
+      showToast(
+        "Order save failed"
+      );
+
+      return;
+
+    }
+
+  }
+
+  orders.unshift(newOrder);
+
+  renderOrders();
+
+  closeOrderModal();
+
+  document
+    .getElementById("orderForm")
+    .reset();
+
+  showToast(
+    "Order #" +
+    orderNumber +
+    " created"
+  );
+
+}
+
+/* =========================================================
+   EXPORT
+========================================================= */
+
+function exportOrders(){
+
+  const rows = [
+
+    [
+      "Order",
+      "Customer",
+      "Email",
+      "Items",
+      "Total",
+      "Payment",
+      "Status",
+      "Fulfillment",
+      "Channel",
+      "Date"
+    ]
+
+  ];
+
+  orders.forEach(order => {
+
+    rows.push([
+
+      order.id,
+      order.customer,
+      order.email,
+      order.items,
+      order.total,
+      order.payment,
+      order.status,
+      order.fulfillment,
+      order.channel,
+      order.date
+
+    ]);
+
+  });
+
+  const csv =
+    rows
+      .map(row =>
+        row
+          .map(value =>
+            `"${String(value ?? "")
+              .replace(/"/g,'""')}"`
+          )
+          .join(",")
+      )
+      .join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:"text/csv;charset=utf-8;"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "crowrules-orders.csv";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+  showToast(
+    "Orders exported"
+  );
+
+}
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+  document.getElementById("clock")
+    .textContent =
+      new Date().toLocaleTimeString(
+        [],
+        {
+          hour:"2-digit",
+          minute:"2-digit",
+          second:"2-digit"
+        }
+      );
+
+}
+
+setInterval(
+  updateClock,
+  1000
+);
+
+updateClock();
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+document
+  .getElementById("menuBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    }
+  );
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+document
+  .getElementById("refreshBtn")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const button =
+        document.getElementById("refreshBtn");
+
+      button.textContent = "…";
+
+      await loadOrders();
+
+      button.textContent = "↻";
+
+      showToast(
+        "Order data refreshed"
+      );
+
+    }
+  );
+
+/* =========================================================
+   MODAL BACKDROPS
+========================================================= */
+
+document
+  .getElementById("orderDetailModal")
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        document.getElementById(
+          "orderDetailModal"
+        )
+      ){
+
+        closeDetailModal();
+
+      }
+
+    }
+  );
+
+document
+  .getElementById("orderModal")
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        document.getElementById(
+          "orderModal"
+        )
+      ){
+
+        closeOrderModal();
+
+      }
+
+    }
+  );
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Escape"){
+
+      closeDetailModal();
+      closeOrderModal();
+
+    }
+
+  }
+);
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+renderOrders();
+loadOrders();
+
+</script>
+
+</body>
+</html>

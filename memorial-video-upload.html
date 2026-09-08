@@ -1,0 +1,2846 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Memorial Video Upload — CrowRules Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Memorial Video Upload Center">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+}
+
+body{
+  background:
+    radial-gradient(circle at 15% 0%,rgba(182,108,255,.09),transparent 30%),
+    radial-gradient(circle at 90% 10%,rgba(55,215,255,.05),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+
+::-webkit-scrollbar-track{
+  background:#08080b;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#30303a;
+  border-radius:20px;
+}
+
+/* =========================================================
+   SHELL
+========================================================= */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:265px;
+  background:rgba(8,8,11,.97);
+  border-right:1px solid var(--line);
+  overflow-y:auto;
+  z-index:100;
+}
+
+.brand{
+  padding:24px 20px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.crow-icon{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(182,108,255,.45);
+  border-radius:12px;
+  color:var(--accent);
+  background:rgba(182,108,255,.08);
+  font-size:21px;
+}
+
+.brand-name{
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+
+.brand-sub{
+  margin-top:3px;
+  color:#6d6d78;
+  font-size:9px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+.nav{
+  padding:15px 12px 30px;
+}
+
+.nav-label{
+  padding:12px 10px 8px;
+  color:#5f5f69;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:42px;
+  padding:10px 12px;
+  margin:3px 0;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#a9a9b4;
+  font-size:12px;
+  font-weight:600;
+}
+
+.nav a:hover{
+  background:#111117;
+  border-color:#24242c;
+  color:#fff;
+}
+
+.nav a.active{
+  color:#fff;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(182,108,255,.15),
+      rgba(108,92,255,.04)
+    );
+  border-color:rgba(182,108,255,.28);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:24px;
+  text-align:center;
+  font-size:15px;
+}
+
+.main{
+  margin-left:265px;
+  min-height:100vh;
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(5,5,5,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.breadcrumb{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#777782;
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  color:#777782;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+.icon-btn{
+  width:36px;
+  height:36px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#0c0c10;
+  color:#aaaab5;
+}
+
+.mobile-menu{
+  display:none;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content{
+  width:min(1500px,100%);
+  margin:auto;
+  padding:28px;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:32px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(182,108,255,.09),
+      transparent 42%
+    ),
+    linear-gradient(
+      300deg,
+      rgba(55,215,255,.035),
+      transparent 45%
+    ),
+    var(--panel);
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  right:-100px;
+  top:-130px;
+  width:320px;
+  height:320px;
+  border:1px solid rgba(182,108,255,.08);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 35px rgba(182,108,255,.025),
+    0 0 0 70px rgba(182,108,255,.015);
+}
+
+.kicker{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:9px 0 8px;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(25px,3vw,39px);
+}
+
+.hero p{
+  max-width:760px;
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.status-pill{
+  position:absolute;
+  right:28px;
+  bottom:28px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border:1px solid rgba(69,230,154,.2);
+  border-radius:30px;
+  background:rgba(69,230,154,.05);
+  color:#9af0c5;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px rgba(69,230,154,.8);
+}
+
+/* =========================================================
+   WORKSPACE
+========================================================= */
+
+.workspace{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 350px;
+  gap:18px;
+  margin-top:18px;
+}
+
+.panel{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:var(--panel);
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:61px;
+  padding:15px 19px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.08em;
+}
+
+.panel-sub{
+  margin-top:4px;
+  color:#656570;
+  font-size:9px;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form{
+  padding:22px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  color:#8a8a95;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  color:#fff;
+  background:#08080c;
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:none;
+}
+
+.field input,
+.field select{
+  min-height:42px;
+  padding:10px 12px;
+}
+
+.field textarea{
+  min-height:105px;
+  padding:11px 12px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:rgba(182,108,255,.55);
+  box-shadow:0 0 0 3px rgba(182,108,255,.07);
+}
+
+.helper{
+  margin-top:6px;
+  color:#5e5e69;
+  font-size:8px;
+  line-height:1.55;
+}
+
+.file-zone{
+  position:relative;
+  min-height:190px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+  border:1px dashed #383843;
+  border-radius:13px;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(182,108,255,.06),
+      transparent 60%
+    ),
+    #08080c;
+  text-align:center;
+  transition:.2s ease;
+}
+
+.file-zone.dragover{
+  border-color:var(--accent);
+  background:rgba(182,108,255,.07);
+}
+
+.file-zone-icon{
+  color:var(--accent);
+  font-size:38px;
+}
+
+.file-zone h3{
+  margin:11px 0 5px;
+  font-size:13px;
+}
+
+.file-zone p{
+  max-width:440px;
+  margin:0;
+  color:#686873;
+  font-size:9px;
+  line-height:1.6;
+}
+
+.file-zone input{
+  display:none;
+}
+
+.file-name{
+  margin-top:13px;
+  color:#c9c9d2;
+  font-size:10px;
+  font-weight:700;
+  word-break:break-all;
+}
+
+.video-preview{
+  width:100%;
+  max-height:390px;
+  margin-top:15px;
+  display:none;
+  background:#000;
+  border:1px solid var(--line);
+  border-radius:11px;
+}
+
+.url-or{
+  position:relative;
+  margin:19px 0;
+  text-align:center;
+}
+
+.url-or:before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  height:1px;
+  background:var(--line);
+}
+
+.url-or span{
+  position:relative;
+  z-index:1;
+  padding:0 12px;
+  background:var(--panel);
+  color:#5e5e69;
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+  letter-spacing:.12em;
+}
+
+/* =========================================================
+   CHECKBOX
+========================================================= */
+
+.checkbox-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:43px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#08080c;
+}
+
+.checkbox-row input{
+  width:16px;
+  height:16px;
+  accent-color:#a866e7;
+}
+
+.checkbox-row label{
+  margin:0;
+  color:#bdbdc6;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0;
+  text-transform:none;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:21px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+}
+
+.btn{
+  min-height:41px;
+  padding:0 15px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#101016;
+  color:#c6c6ce;
+  font-size:10px;
+  font-weight:800;
+}
+
+.btn:hover{
+  border-color:var(--line2);
+  color:#fff;
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.5);
+  background:linear-gradient(135deg,#9b5be0,#6d5ce8);
+  color:#fff;
+  box-shadow:0 10px 28px rgba(108,92,255,.18);
+}
+
+.btn.primary:hover{
+  filter:brightness(1.08);
+}
+
+.btn:disabled{
+  cursor:not-allowed;
+  opacity:.45;
+}
+
+/* =========================================================
+   SIDE CARDS
+========================================================= */
+
+.side{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.side-card{
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+}
+
+.side-title{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
+.health-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid #1b1b21;
+}
+
+.health-row:last-child{
+  border-bottom:0;
+  padding-bottom:0;
+}
+
+.health-label{
+  color:#7e7e89;
+  font-size:9px;
+}
+
+.health-value{
+  font-size:9px;
+  font-weight:800;
+}
+
+.good{
+  color:var(--green);
+}
+
+.warn{
+  color:var(--yellow);
+}
+
+.bad{
+  color:var(--red);
+}
+
+.info-box{
+  margin-top:14px;
+  padding:12px;
+  border:1px solid rgba(55,215,255,.13);
+  border-radius:10px;
+  background:rgba(55,215,255,.035);
+  color:#7d9fa9;
+  font-size:9px;
+  line-height:1.65;
+}
+
+.requirements{
+  margin:13px 0 0;
+  padding:0;
+  list-style:none;
+}
+
+.requirements li{
+  position:relative;
+  padding:7px 0 7px 20px;
+  border-bottom:1px solid #1b1b21;
+  color:#777782;
+  font-size:9px;
+}
+
+.requirements li:last-child{
+  border-bottom:0;
+}
+
+.requirements li:before{
+  content:"✓";
+  position:absolute;
+  left:0;
+  color:var(--green);
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+.progress-wrap{
+  display:none;
+  margin-top:18px;
+}
+
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:7px;
+  color:#858590;
+  font-size:9px;
+}
+
+.progress-track{
+  height:8px;
+  overflow:hidden;
+  border-radius:20px;
+  background:#191920;
+}
+
+.progress-bar{
+  width:0%;
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  transition:width .2s ease;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast-wrap{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:1000;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.toast{
+  min-width:260px;
+  max-width:390px;
+  padding:13px 15px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#111117;
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
+  color:#dddde5;
+  font-size:10px;
+}
+
+.toast.success{
+  border-color:rgba(69,230,154,.3);
+}
+
+.toast.error{
+  border-color:rgba(255,82,109,.3);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px){
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+
+  .side{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s ease;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .content{
+    padding:15px;
+  }
+
+  .hero{
+    padding:24px;
+  }
+
+  .status-pill{
+    position:static;
+    display:inline-flex;
+    margin-top:18px;
+  }
+
+}
+
+@media(max-width:650px){
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .side{
+    grid-template-columns:1fr;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .actions{
+    flex-direction:column-reverse;
+  }
+
+  .actions .btn{
+    width:100%;
+  }
+
+}
+
+@media(max-width:430px){
+
+  .breadcrumb span:not(:last-child){
+    display:none;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+
+    <div class="brand-mark">
+
+      <div class="crow-icon">♣</div>
+
+      <div>
+        <div class="brand-name">CROWRULES</div>
+        <div class="brand-sub">Entertainment Admin</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-label">Command</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a href="content.html">
+      <span class="nav-icon">▦</span>
+      Content
+    </a>
+
+    <a href="shows.html">
+      <span class="nav-icon">◉</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">▶</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">▣</span>
+      Movies
+    </a>
+
+    <a href="channels.html">
+      <span class="nav-icon">◫</span>
+      Live Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedules
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live Control
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">☷</span>
+      TV Guide
+    </a>
+
+    <div class="nav-label">Network</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♙</span>
+      Members
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">♧</span>
+      Community
+    </a>
+
+    <a href="creators.html">
+      <span class="nav-icon">✦</span>
+      Creators
+    </a>
+
+    <div class="nav-label">Memorials</div>
+
+    <a href="memorials.html">
+      <span class="nav-icon">✚</span>
+      Memorial Dashboard
+    </a>
+
+    <a href="memorials.html">
+      <span class="nav-icon">♜</span>
+      Memorials
+    </a>
+
+    <a href="candles.html">
+      <span class="nav-icon">♨</span>
+      Candles
+    </a>
+
+    <a href="photos.html">
+      <span class="nav-icon">▧</span>
+      Photos
+    </a>
+
+    <a href="videos.html" class="active">
+      <span class="nav-icon">▶</span>
+      Videos
+    </a>
+
+    <a href="memorial-video-upload.html" class="active">
+      <span class="nav-icon">↑</span>
+      Upload Video
+    </a>
+
+    <div class="nav-label">Administration</div>
+
+    <a href="records.html">
+      <span class="nav-icon">♫</span>
+      Records
+    </a>
+
+    <a href="sports.html">
+      <span class="nav-icon">⚽</span>
+      Sports
+    </a>
+
+    <a href="awards.html">
+      <span class="nav-icon">★</span>
+      Awards
+    </a>
+
+    <a href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      Analytics
+    </a>
+
+    <a href="moderation.html">
+      <span class="nav-icon">!</span>
+      Moderation
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span>
+      System Logs
+    </a>
+
+    <a href="activity.html">
+      <span class="nav-icon">◌</span>
+      Activity
+    </a>
+
+    <a href="notifications.html">
+      <span class="nav-icon">♢</span>
+      Notifications
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+
+</aside>
+
+<!-- =======================================================
+     MAIN
+======================================================= -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="breadcrumb">
+
+      <button
+        class="icon-btn mobile-menu"
+        id="mobileMenu"
+      >
+        ☰
+      </button>
+
+      <span>CrowRules Admin</span>
+      <span>/</span>
+      <span>Memorials</span>
+      <span>/</span>
+      <strong>Video Upload</strong>
+
+    </div>
+
+    <div class="top-actions">
+
+      <div class="clock" id="clock">
+        --:--:--
+      </div>
+
+      <button
+        class="icon-btn"
+        onclick="location.href='videos.html'"
+        title="Back to Videos"
+      >
+        ←
+      </button>
+
+    </div>
+
+  </header>
+
+  <div class="content">
+
+    <!-- =================================================
+         HERO
+    ================================================== -->
+
+    <section class="hero">
+
+      <div class="kicker">
+        Memorial Media System
+      </div>
+
+      <h1>Video Upload Center</h1>
+
+      <p>
+        Add tribute videos to CrowRules Memorials.
+        Upload a video directly to Supabase Storage or
+        connect an existing video URL, then publish it
+        to the appropriate memorial.
+      </p>
+
+      <div class="status-pill">
+
+        <span class="dot"></span>
+
+        Upload system ready
+
+      </div>
+
+    </section>
+
+    <!-- =================================================
+         WORKSPACE
+    ================================================== -->
+
+    <section class="workspace">
+
+      <div class="panel">
+
+        <div class="panel-head">
+
+          <div>
+
+            <div class="panel-title">
+              CREATE MEMORIAL VIDEO
+            </div>
+
+            <div class="panel-sub">
+              Configure the tribute video before publishing
+            </div>
+
+          </div>
+
+        </div>
+
+        <form
+          class="form"
+          id="videoForm"
+        >
+
+          <div class="form-grid">
+
+            <!-- MEMORIAL -->
+
+            <div class="field full">
+
+              <label for="memorial">
+                Memorial
+              </label>
+
+              <select
+                id="memorial"
+                required
+              >
+
+                <option value="">
+                  Select Memorial
+                </option>
+
+              </select>
+
+              <div class="helper">
+                The memorial where this tribute video will appear.
+              </div>
+
+            </div>
+
+            <!-- TITLE -->
+
+            <div class="field">
+
+              <label for="title">
+                Video Title
+              </label>
+
+              <input
+                id="title"
+                type="text"
+                placeholder="Remembering Daniel"
+                maxlength="200"
+                required
+              >
+
+            </div>
+
+            <!-- STATUS -->
+
+            <div class="field">
+
+              <label for="status">
+                Publication Status
+              </label>
+
+              <select id="status">
+
+                <option value="draft">
+                  Draft
+                </option>
+
+                <option value="published">
+                  Published
+                </option>
+
+                <option value="hidden">
+                  Hidden
+                </option>
+
+              </select>
+
+            </div>
+
+            <!-- DESCRIPTION -->
+
+            <div class="field full">
+
+              <label for="description">
+                Description
+              </label>
+
+              <textarea
+                id="description"
+                placeholder="Write a description or tribute for this video..."
+                maxlength="5000"
+              ></textarea>
+
+            </div>
+
+            <!-- FILE -->
+
+            <div class="field full">
+
+              <label>
+                Video File
+              </label>
+
+              <div
+                class="file-zone"
+                id="fileZone"
+              >
+
+                <div class="file-zone-icon">
+                  ▶
+                </div>
+
+                <h3>
+                  Drop video here
+                </h3>
+
+                <p>
+                  Or choose a video file from your computer.
+                  MP4, WebM and compatible browser video formats
+                  are recommended.
+                </p>
+
+                <button
+                  type="button"
+                  class="btn"
+                  id="chooseFile"
+                  style="margin-top:14px"
+                >
+                  Choose Video
+                </button>
+
+                <input
+                  type="file"
+                  id="videoFile"
+                  accept="video/*"
+                >
+
+                <div
+                  class="file-name"
+                  id="fileName"
+                ></div>
+
+              </div>
+
+              <video
+                id="videoPreview"
+                class="video-preview"
+                controls
+                playsinline
+              ></video>
+
+            </div>
+
+            <!-- URL -->
+
+            <div class="field full">
+
+              <div class="url-or">
+                <span>OR USE EXISTING VIDEO URL</span>
+              </div>
+
+              <label for="videoUrl">
+                Video URL
+              </label>
+
+              <input
+                id="videoUrl"
+                type="url"
+                placeholder="https://example.com/video.mp4"
+              >
+
+              <div class="helper">
+                Use this instead of uploading a file when the video already
+                exists on an approved CDN, website, or storage location.
+              </div>
+
+            </div>
+
+            <!-- THUMBNAIL -->
+
+            <div class="field">
+
+              <label for="thumbnailUrl">
+                Thumbnail URL
+              </label>
+
+              <input
+                id="thumbnailUrl"
+                type="url"
+                placeholder="https://..."
+              >
+
+            </div>
+
+            <!-- ORDER -->
+
+            <div class="field">
+
+              <label for="sortOrder">
+                Display Order
+              </label>
+
+              <input
+                id="sortOrder"
+                type="number"
+                value="0"
+                min="0"
+                step="1"
+              >
+
+            </div>
+
+            <!-- FEATURED -->
+
+            <div class="field full">
+
+              <div class="checkbox-row">
+
+                <input
+                  id="featured"
+                  type="checkbox"
+                >
+
+                <label for="featured">
+                  Feature this video in the memorial video gallery
+                </label>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- PROGRESS -->
+
+          <div
+            class="progress-wrap"
+            id="progressWrap"
+          >
+
+            <div class="progress-label">
+
+              <span id="progressLabel">
+                Uploading...
+              </span>
+
+              <span id="progressPercent">
+                0%
+              </span>
+
+            </div>
+
+            <div class="progress-track">
+
+              <div
+                class="progress-bar"
+                id="progressBar"
+              ></div>
+
+            </div>
+
+          </div>
+
+          <!-- ACTIONS -->
+
+          <div class="actions">
+
+            <button
+              type="button"
+              class="btn"
+              id="cancelBtn"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              class="btn"
+              id="resetBtn"
+            >
+              Reset
+            </button>
+
+            <button
+              type="submit"
+              class="btn primary"
+              id="uploadSubmit"
+            >
+              Upload Memorial Video
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- =================================================
+           SIDEBAR INFO
+      ================================================== -->
+
+      <aside class="side">
+
+        <div class="side-card">
+
+          <div class="side-title">
+            SYSTEM STATUS
+          </div>
+
+          <div class="health-row">
+
+            <div class="health-label">
+              Supabase
+            </div>
+
+            <div
+              class="health-value good"
+              id="supabaseStatus"
+            >
+              READY
+            </div>
+
+          </div>
+
+          <div class="health-row">
+
+            <div class="health-label">
+              Memorial Database
+            </div>
+
+            <div
+              class="health-value"
+              id="memorialStatus"
+            >
+              —
+            </div>
+
+          </div>
+
+          <div class="health-row">
+
+            <div class="health-label">
+              Video Storage
+            </div>
+
+            <div
+              class="health-value"
+              id="storageStatus"
+            >
+              —
+            </div>
+
+          </div>
+
+          <div class="health-row">
+
+            <div class="health-label">
+              Video Records
+            </div>
+
+            <div
+              class="health-value"
+              id="videoCount"
+            >
+              0
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="side-card">
+
+          <div class="side-title">
+            UPLOAD REQUIREMENTS
+          </div>
+
+          <ul class="requirements">
+
+            <li>
+              Select a memorial
+            </li>
+
+            <li>
+              Enter a video title
+            </li>
+
+            <li>
+              Upload a file or provide a video URL
+            </li>
+
+            <li>
+              Use a supported video format
+            </li>
+
+            <li>
+              Keep large files within your Storage limits
+            </li>
+
+          </ul>
+
+          <div class="info-box">
+
+            <strong>Storage note:</strong><br>
+            File uploads use the configured Supabase Storage
+            bucket. Storage policies must permit the signed-in
+            administrator to upload files.
+
+          </div>
+
+        </div>
+
+        <div class="side-card">
+
+          <div class="side-title">
+            MEMORIAL WORKFLOW
+          </div>
+
+          <div class="info-box">
+
+            <strong>01</strong> Select the memorial.<br><br>
+
+            <strong>02</strong> Add the tribute information.<br><br>
+
+            <strong>03</strong> Upload the video or enter an existing URL.<br><br>
+
+            <strong>04</strong> Choose Draft or Published.<br><br>
+
+            <strong>05</strong> The video record is created in
+            <code>memorial_videos</code>.
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </section>
+
+  </div>
+
+</main>
+
+<!-- =======================================================
+     TOASTS
+======================================================= -->
+
+<div
+  class="toast-wrap"
+  id="toastWrap"
+></div>
+
+<script>
+/* =========================================================
+   CROWRULES MEMORIAL VIDEO UPLOAD
+========================================================= */
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL || "";
+
+const SUPABASE_ANON_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY || "";
+
+const VIDEO_TABLE =
+  window.CROWRULES_MEMORIAL_VIDEOS_TABLE ||
+  "memorial_videos";
+
+const MEMORIAL_TABLE =
+  window.CROWRULES_MEMORIALS_TABLE ||
+  "memorials";
+
+const VIDEO_BUCKET =
+  window.CROWRULES_MEMORIAL_VIDEO_BUCKET ||
+  "memorial-videos";
+
+let supabaseClient = null;
+
+if(
+  SUPABASE_URL &&
+  SUPABASE_ANON_KEY &&
+  window.supabase
+){
+
+  try{
+
+    supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let memorials = [];
+
+let selectedFile = null;
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const form =
+  document.getElementById("videoForm");
+
+const memorialSelect =
+  document.getElementById("memorial");
+
+const titleInput =
+  document.getElementById("title");
+
+const descriptionInput =
+  document.getElementById("description");
+
+const statusSelect =
+  document.getElementById("status");
+
+const videoUrlInput =
+  document.getElementById("videoUrl");
+
+const thumbnailUrlInput =
+  document.getElementById("thumbnailUrl");
+
+const sortOrderInput =
+  document.getElementById("sortOrder");
+
+const featuredInput =
+  document.getElementById("featured");
+
+const videoFileInput =
+  document.getElementById("videoFile");
+
+const fileZone =
+  document.getElementById("fileZone");
+
+const fileName =
+  document.getElementById("fileName");
+
+const videoPreview =
+  document.getElementById("videoPreview");
+
+const uploadSubmit =
+  document.getElementById("uploadSubmit");
+
+const progressWrap =
+  document.getElementById("progressWrap");
+
+const progressBar =
+  document.getElementById("progressBar");
+
+const progressLabel =
+  document.getElementById("progressLabel");
+
+const progressPercent =
+  document.getElementById("progressPercent");
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function pick(
+  obj,
+  keys,
+  fallback=""
+){
+
+  for(const key of keys){
+
+    if(
+      obj &&
+      obj[key] !== undefined &&
+      obj[key] !== null &&
+      obj[key] !== ""
+    ){
+
+      return obj[key];
+
+    }
+
+  }
+
+  return fallback;
+
+}
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function safeUrl(url){
+
+  if(!url){
+    return "";
+  }
+
+  try{
+
+    const parsed =
+      new URL(
+        url,
+        window.location.href
+      );
+
+    if(
+      parsed.protocol === "http:" ||
+      parsed.protocol === "https:"
+    ){
+
+      return parsed.href;
+
+    }
+
+  }catch(error){}
+
+  return "";
+
+}
+
+function toast(
+  message,
+  type=""
+){
+
+  const wrap =
+    document.getElementById("toastWrap");
+
+  const item =
+    document.createElement("div");
+
+  item.className =
+    "toast " + type;
+
+  item.textContent =
+    message;
+
+  wrap.appendChild(item);
+
+  setTimeout(
+    () => item.remove(),
+    5000
+  );
+
+}
+
+function setProgress(
+  percent,
+  label
+){
+
+  progressWrap.style.display =
+    "block";
+
+  const safePercent =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Number(percent) || 0
+      )
+    );
+
+  progressBar.style.width =
+    safePercent + "%";
+
+  progressPercent.textContent =
+    Math.round(safePercent) + "%";
+
+  progressLabel.textContent =
+    label || "Uploading...";
+
+}
+
+/* =========================================================
+   LOAD MEMORIALS
+========================================================= */
+
+async function loadMemorials(){
+
+  if(!supabaseClient){
+
+    memorials = [
+      {
+        id:"demo-memorial-1",
+        name:"Daniel Meeker"
+      },
+      {
+        id:"demo-memorial-2",
+        name:"CrowRules Memorial"
+      }
+    ];
+
+    document.getElementById(
+      "supabaseStatus"
+    ).textContent =
+      "DEMO MODE";
+
+    document.getElementById(
+      "supabaseStatus"
+    ).className =
+      "health-value warn";
+
+    document.getElementById(
+      "memorialStatus"
+    ).textContent =
+      "DEMO";
+
+    document.getElementById(
+      "storageStatus"
+    ).textContent =
+      "DEMO";
+
+    populateMemorials();
+
+    return;
+
+  }
+
+  try{
+
+    const result =
+      await supabaseClient
+        .from(MEMORIAL_TABLE)
+        .select("*");
+
+    if(result.error){
+      throw result.error;
+    }
+
+    memorials =
+      (result.data || [])
+        .map(row => ({
+          id:pick(
+            row,
+            [
+              "id",
+              "uuid",
+              "memorial_id"
+            ]
+          ),
+          name:pick(
+            row,
+            [
+              "name",
+              "title",
+              "full_name",
+              "display_name"
+            ],
+            "Untitled Memorial"
+          )
+        }))
+        .filter(
+          row => row.id
+        );
+
+    document.getElementById(
+      "supabaseStatus"
+    ).textContent =
+      "ONLINE";
+
+    document.getElementById(
+      "supabaseStatus"
+    ).className =
+      "health-value good";
+
+    document.getElementById(
+      "memorialStatus"
+    ).textContent =
+      "ONLINE";
+
+    populateMemorials();
+
+    await updateVideoCount();
+
+  }catch(error){
+
+    console.error(error);
+
+    document.getElementById(
+      "supabaseStatus"
+    ).textContent =
+      "ERROR";
+
+    document.getElementById(
+      "supabaseStatus"
+    ).className =
+      "health-value bad";
+
+    document.getElementById(
+      "memorialStatus"
+    ).textContent =
+      "ERROR";
+
+    document.getElementById(
+      "memorialStatus"
+    ).className =
+      "health-value bad";
+
+    toast(
+      "Could not load memorials: " +
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+function populateMemorials(){
+
+  memorialSelect.innerHTML =
+    '<option value="">Select Memorial</option>';
+
+  memorials
+    .slice()
+    .sort(
+      (a,b) =>
+        a.name.localeCompare(b.name)
+    )
+    .forEach(
+      memorial => {
+
+        const option =
+          document.createElement("option");
+
+        option.value =
+          memorial.id;
+
+        option.textContent =
+          memorial.name;
+
+        memorialSelect.appendChild(
+          option
+        );
+
+      }
+    );
+
+}
+
+/* =========================================================
+   VIDEO COUNT
+========================================================= */
+
+async function updateVideoCount(){
+
+  if(!supabaseClient){
+
+    document.getElementById(
+      "videoCount"
+    ).textContent =
+      "DEMO";
+
+    return;
+
+  }
+
+  try{
+
+    const result =
+      await supabaseClient
+        .from(VIDEO_TABLE)
+        .select("*");
+
+    if(result.error){
+      throw result.error;
+    }
+
+    document.getElementById(
+      "videoCount"
+    ).textContent =
+      (result.data || []).length;
+
+  }catch(error){
+
+    document.getElementById(
+      "videoCount"
+    ).textContent =
+      "—";
+
+  }
+
+}
+
+/* =========================================================
+   FILE VALIDATION
+========================================================= */
+
+function validateVideoFile(file){
+
+  if(!file){
+    return true;
+  }
+
+  if(
+    !file.type ||
+    !file.type.startsWith("video/")
+  ){
+
+    toast(
+      "Please choose a valid video file.",
+      "error"
+    );
+
+    return false;
+
+  }
+
+  /*
+    2 GB browser-side guard.
+    Actual Supabase limits and project configuration
+    may be lower or higher.
+  */
+
+  const maxBytes =
+    2 * 1024 * 1024 * 1024;
+
+  if(file.size > maxBytes){
+
+    toast(
+      "This video exceeds the 2 GB upload limit configured by this page.",
+      "error"
+    );
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+/* =========================================================
+   FILE SELECTION
+========================================================= */
+
+function handleFile(file){
+
+  if(!file){
+    return;
+  }
+
+  if(!validateVideoFile(file)){
+    return;
+  }
+
+  selectedFile =
+    file;
+
+  fileName.textContent =
+    file.name +
+    " • " +
+    formatBytes(file.size);
+
+  videoUrlInput.value =
+    "";
+
+  const objectUrl =
+    URL.createObjectURL(file);
+
+  videoPreview.src =
+    objectUrl;
+
+  videoPreview.style.display =
+    "block";
+
+  videoPreview.onloadedmetadata =
+    () => {
+
+      /*
+        Metadata is read from the browser only.
+        The duration can be stored in the DB after upload.
+      */
+
+      videoPreview.dataset.duration =
+        Math.round(
+          videoPreview.duration || 0
+        );
+
+    };
+
+}
+
+function formatBytes(bytes){
+
+  if(!bytes){
+    return "0 B";
+  }
+
+  const units = [
+    "B",
+    "KB",
+    "MB",
+    "GB"
+  ];
+
+  const index =
+    Math.floor(
+      Math.log(bytes) /
+      Math.log(1024)
+    );
+
+  return (
+    bytes /
+    Math.pow(1024,index)
+  ).toFixed(
+    index > 1 ? 2 : 0
+  ) +
+  " " +
+  units[index];
+
+}
+
+/* =========================================================
+   STORAGE UPLOAD
+========================================================= */
+
+async function uploadFile(
+  file,
+  memorialId
+){
+
+  if(!supabaseClient){
+
+    throw new Error(
+      "Supabase is not configured. File uploads require Supabase."
+    );
+
+  }
+
+  const safeName =
+    file.name
+      .replace(
+        /[^a-zA-Z0-9._-]/g,
+        "-"
+      )
+      .toLowerCase();
+
+  const path =
+    "memorials/" +
+    memorialId +
+    "/" +
+    Date.now() +
+    "-" +
+    safeName;
+
+  setProgress(
+    5,
+    "Uploading video..."
+  );
+
+  /*
+    Supabase Storage's standard browser upload does not
+    expose a native upload-progress callback through the
+    simple JS API. The UI therefore shows staged progress.
+  */
+
+  const result =
+    await supabaseClient
+      .storage
+      .from(VIDEO_BUCKET)
+      .upload(
+        path,
+        file,
+        {
+          cacheControl:"3600",
+          upsert:false,
+          contentType:file.type
+        }
+      );
+
+  if(result.error){
+    throw result.error;
+  }
+
+  setProgress(
+    90,
+    "Finalizing video..."
+  );
+
+  const publicResult =
+    supabaseClient
+      .storage
+      .from(VIDEO_BUCKET)
+      .getPublicUrl(path);
+
+  if(
+    !publicResult ||
+    !publicResult.data ||
+    !publicResult.data.publicUrl
+  ){
+
+    throw new Error(
+      "The video uploaded, but no public URL was returned."
+    );
+
+  }
+
+  setProgress(
+    100,
+    "Upload complete"
+  );
+
+  return {
+    url:
+      publicResult.data.publicUrl,
+    path
+  };
+
+}
+
+/* =========================================================
+   BUILD PAYLOAD
+========================================================= */
+
+function buildVideoPayload(data){
+
+  return {
+
+    memorial_id:
+      data.memorialId,
+
+    title:
+      data.title,
+
+    description:
+      data.description || null,
+
+    video_url:
+      data.videoUrl,
+
+    thumbnail_url:
+      data.thumbnailUrl || null,
+
+    duration_seconds:
+      data.durationSeconds || null,
+
+    status:
+      data.status,
+
+    featured:
+      data.featured,
+
+    sort_order:
+      data.sortOrder
+
+  };
+
+}
+
+/* =========================================================
+   CREATE RECORD
+========================================================= */
+
+async function createVideoRecord(
+  payload
+){
+
+  if(!supabaseClient){
+
+    return {
+      demo:true
+    };
+
+  }
+
+  const result =
+    await supabaseClient
+      .from(VIDEO_TABLE)
+      .insert(payload)
+      .select("*")
+      .single();
+
+  if(result.error){
+    throw result.error;
+  }
+
+  return result.data;
+
+}
+
+/* =========================================================
+   FORM SUBMISSION
+========================================================= */
+
+form.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    const memorialId =
+      memorialSelect.value;
+
+    const title =
+      titleInput.value.trim();
+
+    const description =
+      descriptionInput.value.trim();
+
+    const status =
+      statusSelect.value;
+
+    const directUrl =
+      videoUrlInput.value.trim();
+
+    const thumbnailUrl =
+      thumbnailUrlInput.value.trim();
+
+    const sortOrder =
+      Number(
+        sortOrderInput.value
+      ) || 0;
+
+    const featured =
+      featuredInput.checked;
+
+    if(!memorialId){
+
+      toast(
+        "Select a memorial.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    if(!title){
+
+      toast(
+        "Enter a video title.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    if(
+      !selectedFile &&
+      !directUrl
+    ){
+
+      toast(
+        "Upload a video file or provide a video URL.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    if(directUrl){
+
+      const safe =
+        safeUrl(directUrl);
+
+      if(!safe){
+
+        toast(
+          "The video URL must use HTTP or HTTPS.",
+          "error"
+        );
+
+        return;
+
+      }
+
+    }
+
+    if(
+      thumbnailUrl &&
+      !safeUrl(thumbnailUrl)
+    ){
+
+      toast(
+        "The thumbnail URL must use HTTP or HTTPS.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    uploadSubmit.disabled =
+      true;
+
+    uploadSubmit.textContent =
+      "Processing...";
+
+    try{
+
+      let videoUrl =
+        directUrl;
+
+      let durationSeconds =
+        null;
+
+      /*
+        Get browser metadata before upload.
+      */
+
+      if(selectedFile){
+
+        const objectUrl =
+          URL.createObjectURL(
+            selectedFile
+          );
+
+        const tempVideo =
+          document.createElement("video");
+
+        tempVideo.preload =
+          "metadata";
+
+        tempVideo.src =
+          objectUrl;
+
+        await new Promise(resolve => {
+
+          tempVideo.onloadedmetadata =
+            () => {
+
+              durationSeconds =
+                Math.round(
+                  tempVideo.duration || 0
+                );
+
+              URL.revokeObjectURL(
+                objectUrl
+              );
+
+              resolve();
+
+            };
+
+          tempVideo.onerror =
+            () => {
+
+              URL.revokeObjectURL(
+                objectUrl
+              );
+
+              resolve();
+
+            };
+
+        });
+
+      }
+
+      /*
+        Upload physical video.
+      */
+
+      if(selectedFile){
+
+        if(!supabaseClient){
+
+          throw new Error(
+            "Supabase is required for file uploads."
+          );
+
+        }
+
+        const uploaded =
+          await uploadFile(
+            selectedFile,
+            memorialId
+          );
+
+        videoUrl =
+          uploaded.url;
+
+      }
+
+      const payload =
+        buildVideoPayload({
+
+          memorialId,
+          title,
+          description,
+          videoUrl,
+          thumbnailUrl,
+          durationSeconds,
+          status,
+          featured,
+          sortOrder
+
+        });
+
+      setProgress(
+        96,
+        "Creating memorial record..."
+      );
+
+      /*
+        DEMO MODE
+      */
+
+      if(!supabaseClient){
+
+        setProgress(
+          100,
+          "Demo record created"
+        );
+
+        toast(
+          "Video prepared in demo mode. Configure Supabase to save it permanently.",
+          "success"
+        );
+
+        resetForm();
+
+        return;
+
+      }
+
+      /*
+        DATABASE RECORD
+      */
+
+      await createVideoRecord(
+        payload
+      );
+
+      setProgress(
+        100,
+        "Memorial video published to database"
+      );
+
+      toast(
+        status === "published"
+          ? "Memorial video uploaded and published."
+          : "Memorial video uploaded as " + status + ".",
+        "success"
+      );
+
+      await updateVideoCount();
+
+      setTimeout(
+        resetForm,
+        900
+      );
+
+    }catch(error){
+
+      console.error(error);
+
+      setProgress(
+        0,
+        "Upload failed"
+      );
+
+      toast(
+        "Upload failed: " +
+        (
+          error.message ||
+          "Unknown Supabase error"
+        ),
+        "error"
+      );
+
+    }finally{
+
+      uploadSubmit.disabled =
+        false;
+
+      uploadSubmit.textContent =
+        "Upload Memorial Video";
+
+    }
+
+  }
+);
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetForm(){
+
+  form.reset();
+
+  selectedFile =
+    null;
+
+  fileName.textContent =
+    "";
+
+  videoPreview.pause();
+
+  videoPreview.removeAttribute(
+    "src"
+  );
+
+  videoPreview.load();
+
+  videoPreview.style.display =
+    "none";
+
+  progressWrap.style.display =
+    "none";
+
+  progressBar.style.width =
+    "0%";
+
+  progressPercent.textContent =
+    "0%";
+
+  progressLabel.textContent =
+    "Uploading...";
+
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+  .getElementById("chooseFile")
+  .addEventListener(
+    "click",
+    () => videoFileInput.click()
+  );
+
+videoFileInput.addEventListener(
+  "change",
+  event => {
+
+    const file =
+      event.target.files[0];
+
+    handleFile(file);
+
+  }
+);
+
+/*
+  Drag and drop.
+*/
+
+fileZone.addEventListener(
+  "dragover",
+  event => {
+
+    event.preventDefault();
+
+    fileZone.classList.add(
+      "dragover"
+    );
+
+  }
+);
+
+fileZone.addEventListener(
+  "dragleave",
+  () => {
+
+    fileZone.classList.remove(
+      "dragover"
+    );
+
+  }
+);
+
+fileZone.addEventListener(
+  "drop",
+  event => {
+
+    event.preventDefault();
+
+    fileZone.classList.remove(
+      "dragover"
+    );
+
+    const file =
+      event.dataTransfer.files[0];
+
+    if(file){
+
+      /*
+        Assigning files programmatically is
+        intentionally avoided for compatibility.
+      */
+
+      handleFile(file);
+
+    }
+
+  }
+);
+
+/*
+  Entering a direct URL removes the selected
+  local upload to prevent accidentally saving
+  the wrong source.
+*/
+
+videoUrlInput.addEventListener(
+  "input",
+  () => {
+
+    if(videoUrlInput.value.trim()){
+
+      selectedFile =
+        null;
+
+      videoFileInput.value =
+        "";
+
+      fileName.textContent =
+        "";
+
+      videoPreview.pause();
+
+      videoPreview.removeAttribute(
+        "src"
+      );
+
+      videoPreview.load();
+
+      videoPreview.style.display =
+        "none";
+
+    }
+
+  }
+);
+
+document
+  .getElementById("resetBtn")
+  .addEventListener(
+    "click",
+    resetForm
+  );
+
+document
+  .getElementById("cancelBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      window.location.href =
+        "videos.html";
+
+    }
+  );
+
+document
+  .getElementById("mobileMenu")
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    }
+  );
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+  document.getElementById("clock")
+    .textContent =
+      new Date()
+        .toLocaleTimeString(
+          [],
+          {
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit"
+          }
+        );
+
+}
+
+updateClock();
+
+setInterval(
+  updateClock,
+  1000
+);
+
+/* =========================================================
+   START
+========================================================= */
+
+loadMemorials();
+
+</script>
+
+</body>
+</html>

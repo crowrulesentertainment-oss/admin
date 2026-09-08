@@ -4,817 +4,1338 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<meta name="theme-color" content="#05060a">
-<meta name="description"
-      content="CrowRules Entertainment Admin Pro — Supabase-powered administration platform.">
+<title>CrowRules Entertainment — Main Admin</title>
 
-<title>CrowRules Entertainment — Admin Pro</title>
+<meta name="theme-color" content="#050505">
+<meta name="color-scheme" content="dark">
+<meta name="description"
+      content="CrowRules Entertainment Main Administration Dashboard">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap');
+:root{
+  --bg:#050505;
+  --bg2:#080808;
+  --panel:#0c0c0f;
+  --panel2:#101014;
+  --panel3:#15151a;
 
-:root {
-  --bg:#05060a;
-  --bg2:#090c13;
-  --panel:#0d111a;
-  --panel2:#111722;
-  --panel3:#151c29;
-  --border:#202a3a;
-  --text:#eef5ff;
-  --muted:#7f8da5;
-  --accent:#00eaff;
-  --accent2:#9d5cff;
-  --success:#48ff91;
-  --warning:#ffd166;
-  --danger:#ff4f70;
-  --shadow:0 20px 70px rgba(0,0,0,.45);
-  --radius:16px;
+  --line:rgba(255,255,255,.08);
+  --line2:rgba(255,255,255,.13);
+
+  --text:#f5f5f5;
+  --muted:#8c8c96;
+  --muted2:#62626c;
+
+  --accent:#e51b23;
+  --accent2:#ff3942;
+  --accent-soft:rgba(229,27,35,.13);
+
+  --green:#38d996;
+  --green-soft:rgba(56,217,150,.11);
+
+  --yellow:#f4c95d;
+  --yellow-soft:rgba(244,201,93,.10);
+
+  --blue:#5c9dff;
+  --blue-soft:rgba(92,157,255,.10);
+
+  --purple:#9a72ff;
+  --purple-soft:rgba(154,114,255,.10);
+
+  --sidebar:270px;
+  --topbar:72px;
+
+  --radius:14px;
+  --radius-sm:9px;
+
+  --shadow:0 18px 60px rgba(0,0,0,.38);
 }
 
-* {
+*{
   box-sizing:border-box;
 }
 
-html,
-body {
+html{
+  scroll-behavior:smooth;
+}
+
+body{
   margin:0;
-  min-height:100%;
+  min-height:100vh;
   background:
-    radial-gradient(circle at 15% 10%, rgba(0,234,255,.08), transparent 28%),
-    radial-gradient(circle at 90% 20%, rgba(157,92,255,.09), transparent 30%),
+    radial-gradient(circle at 85% -10%,rgba(229,27,35,.12),transparent 34%),
+    radial-gradient(circle at 10% 20%,rgba(255,255,255,.025),transparent 28%),
     var(--bg);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
-}
-
-body {
   overflow-x:hidden;
 }
 
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:linear-gradient(to bottom,black,transparent 90%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
 button,
-input,
-select,
-textarea {
+input{
   font:inherit;
 }
 
-button {
+button{
   cursor:pointer;
 }
 
-.app {
-  display:grid;
-  grid-template-columns:280px minmax(0,1fr);
+.app{
   min-height:100vh;
 }
 
-.sidebar {
-  position:sticky;
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+  position:fixed;
+  left:0;
   top:0;
-  height:100vh;
-  overflow:auto;
+  bottom:0;
+  width:var(--sidebar);
+  z-index:100;
   background:
-    linear-gradient(180deg,rgba(13,17,26,.98),rgba(5,6,10,.98));
-  border-right:1px solid var(--border);
-  padding:18px 14px;
-  z-index:30;
+    linear-gradient(180deg,#080808 0%,#070709 55%,#050505 100%);
+  border-right:1px solid var(--line);
+  display:flex;
+  flex-direction:column;
+  transition:transform .28s ease,width .28s ease;
 }
 
-.brand {
+.brand{
+  height:var(--topbar);
   display:flex;
   align-items:center;
   gap:12px;
-  padding:10px 8px 18px;
-  border-bottom:1px solid var(--border);
-  margin-bottom:12px;
+  padding:0 22px;
+  border-bottom:1px solid var(--line);
 }
 
-.logo {
-  width:44px;
-  height:44px;
+.brand-mark{
+  width:37px;
+  height:37px;
+  border-radius:10px;
   display:grid;
   place-items:center;
-  border:1px solid var(--accent);
-  border-radius:12px;
-  color:var(--accent);
-  background:rgba(0,234,255,.06);
-  box-shadow:0 0 25px rgba(0,234,255,.12);
-  font-size:23px;
+  background:
+    linear-gradient(145deg,#1b1b1e,#090909);
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:
+    inset 0 0 18px rgba(229,27,35,.13),
+    0 0 22px rgba(229,27,35,.08);
+  position:relative;
+  overflow:hidden;
 }
 
-.brand-title {
+.brand-mark:after{
+  content:"";
+  width:11px;
+  height:20px;
+  background:var(--accent);
+  clip-path:polygon(
+    50% 0,
+    85% 32%,
+    100% 100%,
+    50% 76%,
+    0 100%,
+    15% 32%
+  );
+}
+
+.brand-name{
+  min-width:0;
+}
+
+.brand-name strong{
+  display:block;
   font-family:Orbitron,sans-serif;
-  font-weight:800;
-  font-size:14px;
-  letter-spacing:1px;
+  font-size:13px;
+  letter-spacing:1.2px;
 }
 
-.brand-sub {
+.brand-name span{
+  display:block;
+  margin-top:2px;
   color:var(--muted);
-  font-size:10px;
-  margin-top:3px;
-  letter-spacing:1px;
-}
-
-.nav-section {
-  margin:18px 7px 7px;
-  color:#53617a;
   font-size:9px;
+  letter-spacing:1.8px;
   text-transform:uppercase;
-  letter-spacing:2px;
-  font-weight:800;
 }
 
-.nav {
-  display:grid;
-  gap:4px;
+.nav{
+  flex:1;
+  overflow:auto;
+  padding:17px 11px 20px;
 }
 
-.nav button {
-  border:1px solid transparent;
-  background:transparent;
-  color:#aebbd0;
-  text-align:left;
-  padding:10px 11px;
-  border-radius:10px;
-  transition:.18s ease;
+.nav-section{
+  margin:18px 10px 8px;
+  color:#55555e;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.7px;
+  text-transform:uppercase;
+}
+
+.nav-item{
+  width:100%;
+  min-height:43px;
   display:flex;
   align-items:center;
-  gap:10px;
-  width:100%;
+  gap:12px;
+  padding:10px 13px;
+  margin:3px 0;
+  border-radius:10px;
+  color:#a5a5ad;
+  border:1px solid transparent;
+  transition:.18s ease;
 }
 
-.nav button:hover {
-  background:rgba(255,255,255,.035);
-  border-color:var(--border);
-  color:white;
+.nav-item:hover{
+  color:#fff;
+  background:rgba(255,255,255,.045);
+  border-color:var(--line);
 }
 
-.nav button.active {
-  color:white;
+.nav-item.active{
+  color:#fff;
   background:
-    linear-gradient(90deg,rgba(0,234,255,.09),rgba(157,92,255,.08));
-  border-color:rgba(0,234,255,.25);
+    linear-gradient(90deg,rgba(229,27,35,.17),rgba(229,27,35,.035));
+  border-color:rgba(229,27,35,.25);
   box-shadow:inset 3px 0 0 var(--accent);
 }
 
-.nav-icon {
+.nav-icon{
   width:20px;
   text-align:center;
+  font-size:15px;
+  opacity:.9;
 }
 
-.main {
-  min-width:0;
-  padding:18px;
+.nav-label{
+  flex:1;
+  font-size:12px;
+  font-weight:600;
 }
 
-.topbar {
+.nav-badge{
+  min-width:20px;
+  height:20px;
+  display:grid;
+  place-items:center;
+  padding:0 6px;
+  border-radius:20px;
+  background:var(--accent);
+  color:white;
+  font-size:9px;
+  font-weight:800;
+}
+
+.sidebar-footer{
+  border-top:1px solid var(--line);
+  padding:14px;
+}
+
+.system-mini{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:10px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  border-radius:10px;
+}
+
+.status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px rgba(56,217,150,.8);
+}
+
+.system-mini strong{
+  display:block;
+  font-size:10px;
+}
+
+.system-mini span{
+  display:block;
+  margin-top:2px;
+  font-size:8px;
+  color:var(--muted);
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+  margin-left:var(--sidebar);
+  min-height:100vh;
+  transition:margin-left .28s ease;
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar{
+  height:var(--topbar);
   position:sticky;
-  top:12px;
-  z-index:20;
+  top:0;
+  z-index:80;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:0 24px;
+  background:rgba(5,5,5,.86);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.menu-btn{
+  display:none;
+  width:40px;
+  height:40px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  border-radius:9px;
+}
+
+.page-context{
+  flex:1;
+}
+
+.page-context .eyebrow{
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+  letter-spacing:2px;
+  color:var(--accent2);
+  text-transform:uppercase;
+}
+
+.page-context h1{
+  margin:3px 0 0;
+  font-family:Orbitron,sans-serif;
+  font-size:16px;
+  letter-spacing:.6px;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.icon-btn{
+  position:relative;
+  width:40px;
+  height:40px;
+  border-radius:9px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  color:#ddd;
+  display:grid;
+  place-items:center;
+}
+
+.icon-btn:hover{
+  background:rgba(255,255,255,.06);
+  border-color:var(--line2);
+}
+
+.notification-count{
+  position:absolute;
+  top:5px;
+  right:5px;
+  min-width:14px;
+  height:14px;
+  padding:0 4px;
+  border-radius:20px;
+  background:var(--accent);
+  color:white;
+  font-size:7px;
+  font-weight:800;
+  display:grid;
+  place-items:center;
+}
+
+.admin-user{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:5px 8px 5px 5px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  border-radius:10px;
+}
+
+.avatar{
+  width:31px;
+  height:31px;
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  background:
+    linear-gradient(145deg,#252529,#0e0e0f);
+  border:1px solid var(--line2);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:700;
+}
+
+.admin-user-text strong{
+  display:block;
+  font-size:10px;
+}
+
+.admin-user-text span{
+  display:block;
+  margin-top:2px;
+  font-size:8px;
+  color:var(--muted);
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content{
+  padding:26px;
+  max-width:1900px;
+  margin:0 auto;
+}
+
+.welcome{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:20px;
+  margin-bottom:22px;
+}
+
+.welcome h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+  letter-spacing:.5px;
+}
+
+.welcome p{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.quick-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  min-height:38px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:0 13px;
+  border-radius:9px;
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#eee;
+  font-size:10px;
+  font-weight:700;
+  transition:.18s ease;
+}
+
+.btn:hover{
+  background:var(--panel3);
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.btn-primary:hover{
+  background:var(--accent2);
+}
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:15px;
+}
+
+.stat-card{
+  position:relative;
+  min-height:130px;
+  padding:17px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.012));
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.stat-card:after{
+  content:"";
+  position:absolute;
+  right:-30px;
+  bottom:-45px;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.035);
+}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.stat-icon{
+  width:31px;
+  height:31px;
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  font-size:13px;
+  background:var(--accent-soft);
+  color:var(--accent2);
+}
+
+.stat-change{
+  font-size:8px;
+  font-weight:700;
+  color:var(--green);
+}
+
+.stat-label{
+  margin-top:18px;
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.stat-value{
+  margin-top:4px;
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+  font-weight:700;
+}
+
+.stat-sub{
+  margin-top:4px;
+  color:var(--muted2);
+  font-size:8px;
+}
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:minmax(0,2fr) minmax(320px,1fr);
+  gap:15px;
+}
+
+.panel{
+  border:1px solid var(--line);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.028),rgba(255,255,255,.012));
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.panel-header{
+  min-height:58px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:15px;
-  padding:12px 14px;
-  margin-bottom:18px;
-  border:1px solid var(--border);
-  background:rgba(10,13,20,.82);
-  backdrop-filter:blur(20px);
-  border-radius:14px;
+  padding:0 17px;
+  border-bottom:1px solid var(--line);
 }
 
-.top-left,
-.top-right {
+.panel-title{
   display:flex;
   align-items:center;
-  gap:10px;
-  min-width:0;
+  gap:9px;
 }
 
-.page-title {
+.panel-title h3{
+  margin:0;
   font-family:Orbitron,sans-serif;
-  font-size:15px;
-  font-weight:800;
+  font-size:11px;
+  letter-spacing:.7px;
+}
+
+.panel-title span{
+  color:var(--muted);
+  font-size:9px;
+}
+
+.panel-action{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:700;
+}
+
+.panel-action:hover{
+  color:#fff;
+}
+
+.panel-body{
+  padding:16px;
+}
+
+/* =========================================================
+   SYSTEM HEALTH
+========================================================= */
+
+.health-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+}
+
+.health-item{
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:rgba(255,255,255,.018);
+}
+
+.health-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.health-item strong{
+  font-size:10px;
+}
+
+.health-status{
+  margin-top:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.health-status span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+.online{
+  color:var(--green)!important;
+}
+
+.warning{
+  color:var(--yellow)!important;
+}
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+.activity-list{
+  display:flex;
+  flex-direction:column;
+}
+
+.activity{
+  display:grid;
+  grid-template-columns:35px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.activity:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:rgba(255,255,255,.04);
+  font-size:11px;
+}
+
+.activity strong{
+  display:block;
+  font-size:9px;
+}
+
+.activity p{
+  margin:3px 0 0;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.activity time{
+  color:var(--muted2);
+  font-size:7px;
   white-space:nowrap;
 }
 
-.connection {
+/* =========================================================
+   TV STATUS
+========================================================= */
+
+.broadcast{
   display:flex;
   align-items:center;
-  gap:7px;
-  color:var(--muted);
-  font-size:11px;
-}
-
-.dot {
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--danger);
-  box-shadow:0 0 10px currentColor;
-}
-
-.dot.online {
-  background:var(--success);
-}
-
-.admin-pill {
-  padding:7px 10px;
-  border:1px solid rgba(72,255,145,.25);
-  background:rgba(72,255,145,.06);
-  color:var(--success);
-  border-radius:999px;
-  font-size:10px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.btn {
-  border:1px solid var(--border);
-  background:#111722;
-  color:#dce8f7;
-  border-radius:10px;
-  padding:9px 12px;
-  transition:.18s ease;
-}
-
-.btn:hover {
-  border-color:#34445c;
-  transform:translateY(-1px);
-}
-
-.btn.primary {
-  background:linear-gradient(135deg,rgba(0,234,255,.16),rgba(157,92,255,.15));
-  border-color:rgba(0,234,255,.35);
-  color:white;
-}
-
-.btn.danger {
-  border-color:rgba(255,79,112,.35);
-  color:#ff91a6;
-}
-
-.btn.success {
-  border-color:rgba(72,255,145,.3);
-  color:var(--success);
-}
-
-.mobile-menu {
-  display:none;
-}
-
-.view {
-  display:none;
-}
-
-.view.active {
-  display:block;
-}
-
-.hero {
-  padding:24px;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  background:
-    linear-gradient(135deg,rgba(0,234,255,.08),transparent 38%),
-    linear-gradient(315deg,rgba(157,92,255,.08),transparent 38%),
-    var(--panel);
-  box-shadow:var(--shadow);
-  margin-bottom:18px;
-}
-
-.hero h1 {
-  font-family:Orbitron,sans-serif;
-  margin:0 0 8px;
-  font-size:26px;
-}
-
-.hero p {
-  color:var(--muted);
-  margin:0;
-  max-width:850px;
-  line-height:1.65;
-}
-
-.grid {
-  display:grid;
-  gap:14px;
-}
-
-.stats {
-  grid-template-columns:repeat(4,minmax(0,1fr));
-}
-
-.card {
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  background:
-    linear-gradient(145deg,rgba(255,255,255,.025),transparent),
-    var(--panel);
-  box-shadow:var(--shadow);
-}
-
-.stat {
-  padding:18px;
-}
-
-.stat-label {
-  color:var(--muted);
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1.5px;
-  font-weight:800;
-}
-
-.stat-value {
-  margin-top:8px;
-  font-family:Orbitron,sans-serif;
-  font-size:26px;
-}
-
-.stat-detail {
-  margin-top:7px;
-  color:#63718a;
-  font-size:11px;
-}
-
-.section {
-  margin-top:18px;
-}
-
-.section-head {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.section-head h2 {
-  font-family:Orbitron,sans-serif;
-  font-size:15px;
-  margin:0;
-}
-
-.section-head span {
-  color:var(--muted);
-  font-size:11px;
-}
-
-.category-grid {
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:12px;
+  padding:13px;
+  border:1px solid rgba(56,217,150,.18);
+  background:var(--green-soft);
+  border-radius:10px;
 }
 
-.category-card {
-  padding:16px;
-  cursor:pointer;
+.broadcast-dot{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 16px rgba(56,217,150,.8);
+}
+
+.broadcast strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+.broadcast span{
+  display:block;
+  margin-top:3px;
+  color:#91cbb4;
+  font-size:8px;
+}
+
+.channel-list{
+  margin-top:12px;
+}
+
+.channel{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.channel:last-child{
+  border-bottom:0;
+}
+
+.channel-logo{
+  width:33px;
+  height:33px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:#17171a;
+  border:1px solid var(--line);
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+  font-weight:700;
+}
+
+.channel-info{
+  flex:1;
+}
+
+.channel-info strong{
+  display:block;
+  font-size:9px;
+}
+
+.channel-info span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.live-pill{
+  padding:4px 6px;
+  border-radius:5px;
+  background:var(--accent-soft);
+  color:#ff747b;
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+/* =========================================================
+   CONTENT OVERVIEW
+========================================================= */
+
+.content-list{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+}
+
+.content-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.017);
+  border-radius:9px;
+}
+
+.content-symbol{
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:var(--accent-soft);
+  color:#ff5e65;
+  font-size:11px;
+}
+
+.content-item strong{
+  display:block;
+  font-size:9px;
+}
+
+.content-item span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* =========================================================
+   MEMBERS
+========================================================= */
+
+.member-metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.member-metric{
+  padding:13px 10px;
+  text-align:center;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:rgba(255,255,255,.017);
+}
+
+.member-metric strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:16px;
+}
+
+.member-metric span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:7px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+/* =========================================================
+   SCHEDULE
+========================================================= */
+
+.schedule-row{
+  display:grid;
+  grid-template-columns:68px 1fr auto;
+  align-items:center;
+  gap:12px;
+  padding:11px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.schedule-row:last-child{
+  border-bottom:0;
+}
+
+.schedule-time{
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  color:var(--accent2);
+}
+
+.schedule-show strong{
+  display:block;
+  font-size:9px;
+}
+
+.schedule-show span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.schedule-type{
+  color:var(--muted);
+  font-size:7px;
+  text-transform:uppercase;
+}
+
+/* =========================================================
+   REVENUE
+========================================================= */
+
+.revenue{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:15px;
+}
+
+.revenue-value{
+  font-family:Orbitron,sans-serif;
+  font-size:28px;
+}
+
+.revenue-label{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:8px;
+}
+
+.revenue-change{
+  color:var(--green);
+  font-size:9px;
+  font-weight:700;
+}
+
+.bar-chart{
+  height:100px;
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  margin-top:20px;
+}
+
+.bar{
+  flex:1;
+  min-width:0;
+  height:var(--height);
+  border-radius:4px 4px 2px 2px;
+  background:linear-gradient(
+    to top,
+    rgba(229,27,35,.18),
+    rgba(229,27,35,.75)
+  );
+  border:1px solid rgba(229,27,35,.2);
+}
+
+/* =========================================================
+   QUICK LINKS
+========================================================= */
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
+
+.quick-card{
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:rgba(255,255,255,.017);
   transition:.18s ease;
-  border:1px solid var(--border);
-  border-radius:14px;
-  background:var(--panel);
 }
 
-.category-card:hover {
+.quick-card:hover{
   transform:translateY(-2px);
-  border-color:rgba(0,234,255,.35);
-  box-shadow:0 15px 45px rgba(0,0,0,.35);
+  border-color:rgba(229,27,35,.3);
+  background:rgba(229,27,35,.04);
 }
 
-.category-card h3 {
-  margin:0 0 5px;
+.quick-card-icon{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  background:var(--accent-soft);
+  color:#ff636a;
+  font-size:11px;
+}
+
+.quick-card strong{
+  display:block;
+  margin-top:9px;
+  font-size:9px;
+}
+
+.quick-card span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:7px;
+}
+
+/* =========================================================
+   SEARCH OVERLAY
+========================================================= */
+
+.search-overlay{
+  position:fixed;
+  inset:0;
+  z-index:300;
+  display:none;
+  align-items:flex-start;
+  justify-content:center;
+  padding-top:12vh;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(12px);
+}
+
+.search-overlay.open{
+  display:flex;
+}
+
+.search-box{
+  width:min(680px,calc(100% - 30px));
+  background:#0c0c0f;
+  border:1px solid var(--line2);
+  border-radius:16px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+  overflow:hidden;
+}
+
+.search-input-wrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:15px;
+  border-bottom:1px solid var(--line);
+}
+
+.search-input-wrap span{
+  color:var(--accent2);
+}
+
+.search-input{
+  flex:1;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#fff;
   font-size:13px;
 }
 
-.category-card p {
-  margin:0;
-  color:var(--muted);
-  font-size:10px;
+.search-input::placeholder{
+  color:#5c5c65;
 }
 
-.category-count {
-  margin-top:13px;
-  color:var(--accent);
+.search-results{
+  padding:8px;
+}
+
+.search-result{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  border-radius:8px;
+  color:#bbb;
+}
+
+.search-result:hover{
+  background:rgba(255,255,255,.05);
+  color:#fff;
+}
+
+.search-result small{
+  margin-left:auto;
+  color:#555;
+  font-size:7px;
+}
+
+/* =========================================================
+   NOTIFICATION DRAWER
+========================================================= */
+
+.drawer{
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  width:min(390px,92vw);
+  z-index:250;
+  transform:translateX(100%);
+  transition:transform .25s ease;
+  background:#09090b;
+  border-left:1px solid var(--line);
+  box-shadow:-20px 0 80px rgba(0,0,0,.5);
+}
+
+.drawer.open{
+  transform:translateX(0);
+}
+
+.drawer-header{
+  height:var(--topbar);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.drawer-header h3{
+  margin:0;
   font-family:Orbitron,sans-serif;
   font-size:12px;
 }
 
-.category-tables {
-  margin-top:10px;
-  color:#65738b;
-  font-size:9px;
-  line-height:1.6;
+.drawer-body{
+  padding:15px;
 }
 
-.toolbar {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  align-items:center;
-  padding:12px;
-  border:1px solid var(--border);
-  border-radius:14px;
-  background:var(--panel);
-  margin-bottom:12px;
-}
-
-.search {
-  flex:1;
-  min-width:220px;
-}
-
-input,
-select,
-textarea {
-  width:100%;
-  border:1px solid var(--border);
-  background:#080b11;
-  color:#edf4ff;
-  border-radius:9px;
-  padding:10px 11px;
-  outline:none;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color:rgba(0,234,255,.5);
-  box-shadow:0 0 0 3px rgba(0,234,255,.05);
-}
-
-.table-wrap {
-  overflow:auto;
-  border:1px solid var(--border);
-  border-radius:14px;
-  background:var(--panel);
-}
-
-table {
-  width:100%;
-  border-collapse:collapse;
-  min-width:780px;
-}
-
-th,
-td {
-  padding:10px 11px;
-  border-bottom:1px solid #182131;
-  text-align:left;
-  font-size:10px;
-  vertical-align:top;
-}
-
-th {
-  color:#7f8da5;
-  font-size:9px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  background:#0a0e15;
-  position:sticky;
-  top:0;
-  z-index:2;
-}
-
-td {
-  color:#d6dfed;
-}
-
-tr:hover td {
+.notice{
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  margin-bottom:9px;
   background:rgba(255,255,255,.018);
 }
 
-.actions {
-  display:flex;
-  gap:5px;
-  flex-wrap:wrap;
-}
-
-.mini-btn {
-  border:1px solid var(--border);
-  background:#0d131d;
-  color:#b7c5d8;
-  border-radius:7px;
-  padding:6px 8px;
-  font-size:9px;
-}
-
-.mini-btn:hover {
-  border-color:#3b4d67;
-  color:white;
-}
-
-.json {
-  white-space:pre-wrap;
-  word-break:break-word;
-  max-width:400px;
-  max-height:130px;
-  overflow:auto;
-  font-family:monospace;
-  color:#91a4c0;
-}
-
-.status {
-  padding:12px 14px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#090d14;
-  color:var(--muted);
-  font-size:11px;
-}
-
-.status.success {
-  border-color:rgba(72,255,145,.25);
-  color:var(--success);
-}
-
-.status.error {
-  border-color:rgba(255,79,112,.3);
-  color:#ff91a6;
-}
-
-.status.warning {
-  border-color:rgba(255,209,102,.3);
-  color:var(--warning);
-}
-
-.empty {
-  padding:40px;
-  text-align:center;
-  color:var(--muted);
-}
-
-.modal-backdrop {
-  position:fixed;
-  inset:0;
-  display:none;
-  place-items:center;
-  padding:20px;
-  background:rgba(0,0,0,.76);
-  backdrop-filter:blur(10px);
-  z-index:100;
-}
-
-.modal-backdrop.open {
-  display:grid;
-}
-
-.modal {
-  width:min(920px,100%);
-  max-height:90vh;
-  overflow:auto;
-  border:1px solid var(--border);
-  border-radius:18px;
-  background:#0a0e15;
-  box-shadow:0 30px 100px rgba(0,0,0,.7);
-}
-
-.modal-head {
-  position:sticky;
-  top:0;
-  z-index:2;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 17px;
-  border-bottom:1px solid var(--border);
-  background:#0a0e15;
-}
-
-.modal-title {
-  font-family:Orbitron,sans-serif;
-  font-size:14px;
-}
-
-.modal-body {
-  padding:17px;
-}
-
-.modal-foot {
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  padding:14px 17px;
-  border-top:1px solid var(--border);
-}
-
-.form-grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-
-.field label {
+.notice strong{
   display:block;
-  margin-bottom:5px;
-  color:#7d8ca4;
   font-size:9px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  font-weight:800;
 }
 
-.field.full {
-  grid-column:1/-1;
-}
-
-.theme-preview {
-  min-height:220px;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:22px;
-  overflow:hidden;
-  position:relative;
-  background:
-    radial-gradient(circle at 20% 20%,var(--preview-accent),transparent 35%),
-    radial-gradient(circle at 80% 80%,var(--preview-accent2),transparent 35%),
-    #05060a;
-}
-
-.theme-preview h3 {
-  font-family:Orbitron,sans-serif;
-  font-size:24px;
-  margin:0 0 8px;
-  position:relative;
-}
-
-.theme-preview p {
-  color:#b9c7da;
-  position:relative;
-}
-
-.theme-glow {
-  position:absolute;
-  inset:-100px;
-  background:
-    linear-gradient(90deg,transparent 0 40%,rgba(255,255,255,.04) 50%,transparent 60%);
-  transform:rotate(-20deg);
-  pointer-events:none;
-}
-
-.theme-table td {
-  vertical-align:middle;
-}
-
-.badge {
-  display:inline-flex;
-  align-items:center;
-  padding:4px 7px;
-  border-radius:999px;
-  font-size:8px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.7px;
-  border:1px solid var(--border);
-}
-
-.badge.live {
-  color:#ff718d;
-  border-color:rgba(255,79,112,.25);
-  background:rgba(255,79,112,.06);
-}
-
-.badge.enabled {
-  color:var(--success);
-  border-color:rgba(72,255,145,.25);
-  background:rgba(72,255,145,.06);
-}
-
-.badge.disabled {
-  color:#718098;
-}
-
-.login-screen {
-  position:fixed;
-  inset:0;
-  z-index:999;
-  display:grid;
-  place-items:center;
-  padding:20px;
-  background:
-    radial-gradient(circle at 30% 20%,rgba(0,234,255,.08),transparent 35%),
-    radial-gradient(circle at 80% 70%,rgba(157,92,255,.1),transparent 35%),
-    #030407;
-}
-
-.login-card {
-  width:min(460px,100%);
-  border:1px solid var(--border);
-  border-radius:20px;
-  background:#090d14;
-  padding:25px;
-  box-shadow:0 30px 100px rgba(0,0,0,.7);
-}
-
-.login-logo {
-  width:62px;
-  height:62px;
-  display:grid;
-  place-items:center;
-  border-radius:17px;
-  border:1px solid var(--accent);
-  color:var(--accent);
-  font-size:30px;
-  margin-bottom:18px;
-  box-shadow:0 0 35px rgba(0,234,255,.12);
-}
-
-.login-card h1 {
-  font-family:Orbitron,sans-serif;
-  font-size:22px;
-  margin:0 0 6px;
-}
-
-.login-card p {
+.notice p{
+  margin:5px 0 0;
   color:var(--muted);
-  font-size:11px;
-  line-height:1.6;
-  margin:0 0 20px;
+  font-size:8px;
+  line-height:1.5;
 }
 
-.login-form {
-  display:grid;
-  gap:11px;
+.notice time{
+  display:block;
+  margin-top:8px;
+  color:var(--muted2);
+  font-size:7px;
 }
 
-.login-error {
-  color:#ff91a6;
-  font-size:10px;
-  min-height:16px;
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast-container{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:500;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
-.loading {
-  display:inline-block;
-  width:12px;
-  height:12px;
-  border:2px solid #56647a;
-  border-top-color:var(--accent);
-  border-radius:50%;
-  animation:spin .7s linear infinite;
+.toast{
+  min-width:260px;
+  max-width:380px;
+  padding:12px 14px;
+  border:1px solid var(--line2);
+  background:#101014;
+  border-radius:10px;
+  box-shadow:0 15px 50px rgba(0,0,0,.5);
+  animation:toastIn .22s ease;
 }
 
-@keyframes spin {
-  to { transform:rotate(360deg); }
+.toast strong{
+  display:block;
+  font-size:9px;
 }
 
-.hidden {
-  display:none!important;
+.toast span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:8px;
 }
 
-@media(max-width:1100px) {
-  .stats {
-    grid-template-columns:repeat(2,minmax(0,1fr));
+@keyframes toastIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:1250px){
+  .stats-grid{
+    grid-template-columns:repeat(3,1fr);
   }
 
-  .category-grid {
-    grid-template-columns:repeat(2,minmax(0,1fr));
+  .quick-grid{
+    grid-template-columns:repeat(2,1fr);
   }
 }
 
-@media(max-width:800px) {
-  .app {
+@media(max-width:950px){
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .menu-btn{
     display:block;
   }
 
-  .sidebar {
-    position:fixed;
-    left:-290px;
-    transition:.22s ease;
-    width:280px;
-    z-index:80;
-  }
-
-  .sidebar.open {
-    left:0;
-  }
-
-  .mobile-menu {
-    display:block;
-  }
-
-  .main {
-    padding:10px;
-  }
-
-  .topbar {
-    top:5px;
-  }
-
-  .form-grid {
+  .dashboard-grid{
     grid-template-columns:1fr;
   }
 
-  .category-grid,
-  .stats {
-    grid-template-columns:1fr;
+  .welcome{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+
+@media(max-width:650px){
+  :root{
+    --topbar:64px;
   }
 
-  .page-title {
+  .topbar{
+    padding:0 12px;
+  }
+
+  .page-context h1{
+    font-size:13px;
+  }
+
+  .admin-user-text{
     display:none;
+  }
+
+  .content{
+    padding:16px 12px 30px;
+  }
+
+  .stats-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stat-card{
+    min-height:120px;
+    padding:14px;
+  }
+
+  .stat-value{
+    font-size:19px;
+  }
+
+  .health-grid,
+  .content-list{
+    grid-template-columns:1fr;
+  }
+
+  .member-metrics{
+    grid-template-columns:1fr;
+  }
+
+  .quick-grid{
+    grid-template-columns:1fr;
+  }
+
+  .welcome h2{
+    font-size:20px;
+  }
+
+  .top-actions .icon-btn:nth-child(2){
+    display:none;
+  }
+}
+
+@media(max-width:430px){
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+
+  .quick-actions{
+    width:100%;
+  }
+
+  .quick-actions .btn{
+    flex:1;
   }
 }
 </style>
@@ -822,341 +1343,1182 @@ tr:hover td {
 
 <body>
 
-<div id="loginScreen" class="login-screen">
-  <div class="login-card">
+<div class="app">
 
-    <div class="login-logo">🐦‍⬛</div>
+  <!-- =====================================================
+       SIDEBAR
+  ====================================================== -->
 
-    <h1>CROWRULES ADMIN PRO</h1>
-
-    <p>
-      Secure administration console for CrowRules Entertainment,
-      CrowRules TV, Members, Shows, Sports, Business, Community,
-      Themes and the complete Supabase ecosystem.
-    </p>
-
-    <form id="loginForm" class="login-form">
-
-      <div class="field">
-        <label>Email</label>
-        <input
-          id="loginEmail"
-          type="email"
-          autocomplete="username"
-          required>
-      </div>
-
-      <div class="field">
-        <label>Password</label>
-        <input
-          id="loginPassword"
-          type="password"
-          autocomplete="current-password"
-          required>
-      </div>
-
-      <button class="btn primary" type="submit">
-        SIGN IN TO ADMIN PRO
-      </button>
-
-      <div id="loginError" class="login-error"></div>
-
-    </form>
-
-  </div>
-</div>
-
-<div id="app" class="app hidden">
-
-  <aside id="sidebar" class="sidebar">
+  <aside class="sidebar" id="sidebar">
 
     <div class="brand">
-      <div class="logo">🐦‍⬛</div>
+      <div class="brand-mark"></div>
 
-      <div>
-        <div class="brand-title">CROWRULES</div>
-        <div class="brand-sub">ADMIN PRO</div>
+      <div class="brand-name">
+        <strong>CROWRULES</strong>
+        <span>Entertainment Admin</span>
       </div>
     </div>
 
-    <div class="nav-section">Core</div>
+    <nav class="nav">
 
-    <nav id="nav" class="nav"></nav>
+      <div class="nav-section">Command</div>
+
+      <a class="nav-item active" href="index.html">
+        <span class="nav-icon">⌂</span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+
+      <a class="nav-item" href="activity.html">
+        <span class="nav-icon">◷</span>
+        <span class="nav-label">Activity</span>
+      </a>
+
+      <a class="nav-item" href="notifications.html">
+        <span class="nav-icon">◉</span>
+        <span class="nav-label">Notifications</span>
+        <span class="nav-badge">4</span>
+      </a>
+
+      <div class="nav-section">Content</div>
+
+      <a class="nav-item" href="content.html">
+        <span class="nav-icon">▦</span>
+        <span class="nav-label">All Content</span>
+      </a>
+
+      <a class="nav-item" href="shows.html">
+        <span class="nav-icon">▣</span>
+        <span class="nav-label">Shows</span>
+      </a>
+
+      <a class="nav-item" href="episodes.html">
+        <span class="nav-icon">▶</span>
+        <span class="nav-label">Episodes</span>
+      </a>
+
+      <a class="nav-item" href="movies.html">
+        <span class="nav-icon">◇</span>
+        <span class="nav-label">Movies</span>
+      </a>
+
+      <a class="nav-item" href="videos.html">
+        <span class="nav-icon">▷</span>
+        <span class="nav-label">Videos</span>
+      </a>
+
+      <a class="nav-item" href="photos.html">
+        <span class="nav-icon">▧</span>
+        <span class="nav-label">Photos</span>
+      </a>
+
+      <a class="nav-item" href="audio.html">
+        <span class="nav-icon">♫</span>
+        <span class="nav-label">Audio</span>
+      </a>
+
+      <div class="nav-section">Networks</div>
+
+      <a class="nav-item" href="tv.html">
+        <span class="nav-icon">▤</span>
+        <span class="nav-label">CrowRules TV</span>
+      </a>
+
+      <a class="nav-item" href="channels.html">
+        <span class="nav-icon">◈</span>
+        <span class="nav-label">Channels</span>
+      </a>
+
+      <a class="nav-item" href="schedule.html">
+        <span class="nav-icon">◫</span>
+        <span class="nav-label">Schedule</span>
+      </a>
+
+      <a class="nav-item" href="live.html">
+        <span class="nav-icon">●</span>
+        <span class="nav-label">Live Control</span>
+      </a>
+
+      <div class="nav-section">People</div>
+
+      <a class="nav-item" href="members.html">
+        <span class="nav-icon">♙</span>
+        <span class="nav-label">Members</span>
+      </a>
+
+      <a class="nav-item" href="creators.html">
+        <span class="nav-icon">✦</span>
+        <span class="nav-label">Creators</span>
+      </a>
+
+      <a class="nav-item" href="memorials.html">
+        <span class="nav-icon">✧</span>
+        <span class="nav-label">Memorials</span>
+      </a>
+
+      <div class="nav-section">Brands</div>
+
+      <a class="nav-item" href="records.html">
+        <span class="nav-icon">♫</span>
+        <span class="nav-label">CrowRules Records</span>
+      </a>
+
+      <a class="nav-item" href="sports.html">
+        <span class="nav-icon">◇</span>
+        <span class="nav-label">Sports</span>
+      </a>
+
+      <a class="nav-item" href="awards.html">
+        <span class="nav-icon">★</span>
+        <span class="nav-label">Spectrum Awards</span>
+      </a>
+
+      <a class="nav-item" href="crowspace.html">
+        <span class="nav-icon">◎</span>
+        <span class="nav-label">CrowSpace</span>
+      </a>
+
+      <div class="nav-section">Business</div>
+
+      <a class="nav-item" href="subscriptions.html">
+        <span class="nav-icon">♢</span>
+        <span class="nav-label">Subscriptions</span>
+      </a>
+
+      <a class="nav-item" href="donations.html">
+        <span class="nav-icon">♥</span>
+        <span class="nav-label">Donations</span>
+      </a>
+
+      <a class="nav-item" href="orders.html">
+        <span class="nav-icon">▱</span>
+        <span class="nav-label">Orders</span>
+      </a>
+
+      <a class="nav-item" href="analytics.html">
+        <span class="nav-icon">⌁</span>
+        <span class="nav-label">Analytics</span>
+      </a>
+
+      <div class="nav-section">System</div>
+
+      <a class="nav-item" href="database.html">
+        <span class="nav-icon">▥</span>
+        <span class="nav-label">Database</span>
+      </a>
+
+      <a class="nav-item" href="storage.html">
+        <span class="nav-icon">□</span>
+        <span class="nav-label">Storage</span>
+      </a>
+
+      <a class="nav-item" href="permissions.html">
+        <span class="nav-icon">⌑</span>
+        <span class="nav-label">Permissions</span>
+      </a>
+
+      <a class="nav-item" href="system-health.html">
+        <span class="nav-icon">⌁</span>
+        <span class="nav-label">System Health</span>
+      </a>
+
+      <a class="nav-item" href="settings.html">
+        <span class="nav-icon">⚙</span>
+        <span class="nav-label">Settings</span>
+      </a>
+
+    </nav>
+
+    <div class="sidebar-footer">
+
+      <div class="system-mini">
+        <div class="status-dot"></div>
+
+        <div>
+          <strong>All Systems Operational</strong>
+          <span>CrowRules Core v1.0</span>
+        </div>
+      </div>
+
+    </div>
 
   </aside>
 
+
+  <!-- =====================================================
+       MAIN
+  ====================================================== -->
+
   <main class="main">
+
+    <!-- TOP BAR -->
 
     <header class="topbar">
 
-      <div class="top-left">
+      <button
+        class="menu-btn"
+        id="menuBtn"
+        aria-label="Open navigation">
+        ☰
+      </button>
 
-        <button
-          id="mobileMenu"
-          class="btn mobile-menu">
-          ☰
-        </button>
-
-        <div id="pageTitle" class="page-title">
-          ADMIN PRO
-        </div>
-
-        <div class="connection">
-          <span id="connectionDot" class="dot"></span>
-          <span id="connectionText">CONNECTING</span>
-        </div>
-
+      <div class="page-context">
+        <div class="eyebrow">CrowRules Entertainment</div>
+        <h1>Main Administration</h1>
       </div>
 
-      <div class="top-right">
-
-        <span id="adminPill" class="admin-pill">
-          CHECKING ADMIN
-        </span>
+      <div class="top-actions">
 
         <button
-          id="refreshBtn"
-          class="btn">
-          ↻ Refresh
+          class="icon-btn"
+          id="searchBtn"
+          title="Search">
+          ⌕
         </button>
 
         <button
-          id="signOutBtn"
-          class="btn danger">
-          Sign Out
-        </button>
+          class="icon-btn"
+          id="notificationBtn"
+          title="Notifications">
 
-      </div>
+          ◉
 
-    </header>
+          <span class="notification-count">4</span>
 
-    <!-- DASHBOARD -->
-    <section
-      id="view-dashboard"
-      class="view active">
-
-      <div class="hero">
-
-        <h1>CrowRules Admin Pro</h1>
-
-        <p>
-          Central control center for the CrowRules Entertainment
-          Supabase ecosystem. Manage content, television,
-          shows, members, watch time, CrowPoints, community,
-          creators, sports, business, donations, themes and more.
-        </p>
-
-      </div>
-
-      <div class="grid stats">
-
-        <div class="card stat">
-          <div class="stat-label">Categories</div>
-          <div id="statCategories" class="stat-value">—</div>
-          <div class="stat-detail">Registered Admin Pro modules</div>
-        </div>
-
-        <div class="card stat">
-          <div class="stat-label">Supabase Tables</div>
-          <div id="statTables" class="stat-value">—</div>
-          <div class="stat-detail">Connected tables</div>
-        </div>
-
-        <div class="card stat">
-          <div class="stat-label">Themes</div>
-          <div id="statThemes" class="stat-value">—</div>
-          <div class="stat-detail">Holiday and special events</div>
-        </div>
-
-        <div class="card stat">
-          <div class="stat-label">Active Themes</div>
-          <div id="statActiveThemes" class="stat-value">—</div>
-          <div class="stat-detail">Currently active</div>
-        </div>
-
-      </div>
-
-      <div class="section">
-
-        <div class="section-head">
-          <h2>Admin Categories</h2>
-          <span>LIVE SUPABASE REGISTRY</span>
-        </div>
-
-        <div id="dashboardCategories"
-             class="category-grid"></div>
-
-      </div>
-
-    </section>
-
-    <!-- CATEGORY -->
-    <section
-      id="view-category"
-      class="view">
-
-      <div class="hero">
-
-        <h1 id="categoryTitle">Category</h1>
-
-        <p id="categoryDescription">
-          Supabase data management.
-        </p>
-
-      </div>
-
-      <div id="categoryToolbar"
-           class="toolbar">
-
-        <input
-          id="tableSearch"
-          class="search"
-          placeholder="Search records...">
-
-        <select id="tableSelect"></select>
-
-        <button
-          id="loadTableBtn"
-          class="btn primary">
-          Load Table
         </button>
 
         <button
-          id="newRowBtn"
-          class="btn success">
-          + New Row
+          class="icon-btn"
+          id="fullscreenBtn"
+          title="Fullscreen">
+          ⛶
         </button>
 
-      </div>
+        <div class="admin-user">
 
-      <div id="categoryStatus"
-           class="status">
-        Select a table.
-      </div>
+          <div class="avatar" id="avatar">
+            CR
+          </div>
 
-      <div class="section">
-
-        <div id="tableContainer"
-             class="table-wrap">
-
-          <div class="empty">
-            Select a Supabase table to begin.
+          <div class="admin-user-text">
+            <strong id="adminName">Administrator</strong>
+            <span id="adminRole">System Admin</span>
           </div>
 
         </div>
 
       </div>
 
-      <div class="section">
+    </header>
 
-        <div class="section-head">
 
-          <h2>Tables in this category</h2>
+    <!-- =====================================================
+         CONTENT
+    ====================================================== -->
 
-          <span id="categoryTableCount">
-            0 tables
-          </span>
+    <section class="content">
 
+      <!-- WELCOME -->
+
+      <div class="welcome">
+
+        <div>
+          <h2>Command Center</h2>
+          <p id="dateText">
+            Loading current system date...
+          </p>
         </div>
 
-        <div id="categoryTables"
-             class="category-grid"></div>
+        <div class="quick-actions">
 
-      </div>
+          <button
+            class="btn btn-primary"
+            onclick="quickCreate('show')">
+            + New Show
+          </button>
 
-    </section>
+          <button
+            class="btn"
+            onclick="quickCreate('episode')">
+            + Episode
+          </button>
 
-    <!-- THEMES -->
-    <section
-      id="view-themes"
-      class="view">
+          <button
+            class="btn"
+            onclick="quickCreate('movie')">
+            + Movie
+          </button>
 
-      <div class="hero">
-
-        <h1>Themes & Special Events</h1>
-
-        <p>
-          Control show-specific themes, holiday layouts,
-          special-event appearances, seasonal effects,
-          hero messages and priority overrides.
-        </p>
-
-      </div>
-
-      <div class="toolbar">
-
-        <button
-          id="newThemeBtn"
-          class="btn primary">
-          + New Theme
-        </button>
-
-        <button
-          id="reloadThemesBtn"
-          class="btn">
-          ↻ Reload Themes
-        </button>
-
-        <button
-          id="activeThemeBtn"
-          class="btn success">
-          View Active
-        </button>
-
-      </div>
-
-      <div id="themeStatus"
-           class="status">
-        Loading themes...
-      </div>
-
-      <div class="section">
-
-        <div class="table-wrap">
-
-          <table class="theme-table">
-
-            <thead>
-
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Window</th>
-                <th>Priority</th>
-                <th>Shows</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-
-            </thead>
-
-            <tbody id="themeTableBody"></tbody>
-
-          </table>
+          <button
+            class="btn"
+            onclick="quickCreate('member')">
+            + Member
+          </button>
 
         </div>
 
       </div>
 
-    </section>
 
-    <!-- CONNECTION -->
-    <section
-      id="view-connection"
-      class="view">
+      <!-- ===================================================
+           STATISTICS
+      ==================================================== -->
 
-      <div class="hero">
+      <div class="stats-grid">
 
-        <h1>Supabase Connection</h1>
+        <article class="stat-card">
 
-        <p>
-          Live diagnostics for the CrowRules Admin Pro
-          database connection.
-        </p>
+          <div class="stat-top">
+
+            <div class="stat-icon">♙</div>
+
+            <div class="stat-change">
+              +12.4%
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            Total Members
+          </div>
+
+          <div class="stat-value"
+               id="statMembers">
+            0
+          </div>
+
+          <div class="stat-sub">
+            Registered accounts
+          </div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">▣</div>
+
+            <div class="stat-change">
+              +8.2%
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            Shows
+          </div>
+
+          <div class="stat-value"
+               id="statShows">
+            0
+          </div>
+
+          <div class="stat-sub">
+            Published programs
+          </div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">▶</div>
+
+            <div class="stat-change">
+              +18.7%
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            Episodes
+          </div>
+
+          <div class="stat-value"
+               id="statEpisodes">
+            0
+          </div>
+
+          <div class="stat-sub">
+            Available episodes
+          </div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">◇</div>
+
+            <div class="stat-change">
+              +6.1%
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            Movies
+          </div>
+
+          <div class="stat-value"
+               id="statMovies">
+            0
+          </div>
+
+          <div class="stat-sub">
+            Cinema catalog
+          </div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">●</div>
+
+            <div class="stat-change">
+              LIVE
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            Live Channels
+          </div>
+
+          <div class="stat-value"
+               id="statChannels">
+            0
+          </div>
+
+          <div class="stat-sub">
+            Currently configured
+          </div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-icon">♥</div>
+
+            <div class="stat-change">
+              +21.3%
+            </div>
+
+          </div>
+
+          <div class="stat-label">
+            Monthly Support
+          </div>
+
+          <div class="stat-value"
+               id="statRevenue">
+            $0
+          </div>
+
+          <div class="stat-sub">
+            Donations + memberships
+          </div>
+
+        </article>
 
       </div>
 
-      <div id="connectionDiagnostics"></div>
+
+      <!-- ===================================================
+           PRIMARY DASHBOARD GRID
+      ==================================================== -->
+
+      <div class="dashboard-grid">
+
+        <div class="left-column">
+
+          <!-- SYSTEM HEALTH -->
+
+          <section class="panel">
+
+            <div class="panel-header">
+
+              <div class="panel-title">
+                <h3>System Health</h3>
+                <span>Live services</span>
+              </div>
+
+              <a
+                class="panel-action"
+                href="system-health.html">
+                View System →
+              </a>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="health-grid">
+
+                <div class="health-item">
+
+                  <div class="health-head">
+                    <div class="status-dot"></div>
+                    <strong>Supabase</strong>
+                  </div>
+
+                  <div class="health-status">
+                    <span>Database</span>
+                    <span class="online">ONLINE</span>
+                  </div>
+
+                </div>
+
+
+                <div class="health-item">
+
+                  <div class="health-head">
+                    <div class="status-dot"></div>
+                    <strong>Authentication</strong>
+                  </div>
+
+                  <div class="health-status">
+                    <span>Auth service</span>
+                    <span class="online">ONLINE</span>
+                  </div>
+
+                </div>
+
+
+                <div class="health-item">
+
+                  <div class="health-head">
+                    <div class="status-dot"></div>
+                    <strong>Storage</strong>
+                  </div>
+
+                  <div class="health-status">
+                    <span>Media storage</span>
+                    <span class="online">ONLINE</span>
+                  </div>
+
+                </div>
+
+
+                <div class="health-item">
+
+                  <div class="health-head">
+                    <div class="status-dot"></div>
+                    <strong>TV Scheduler</strong>
+                  </div>
+
+                  <div class="health-status">
+                    <span>24/7 scheduler</span>
+                    <span class="online">RUNNING</span>
+                  </div>
+
+                </div>
+
+
+                <div class="health-item">
+
+                  <div class="health-head">
+                    <div class="status-dot"></div>
+                    <strong>Realtime</strong>
+                  </div>
+
+                  <div class="health-status">
+                    <span>Live events</span>
+                    <span class="online">ONLINE</span>
+                  </div>
+
+                </div>
+
+
+                <div class="health-item">
+
+                  <div class="health-head">
+                    <div class="status-dot"></div>
+                    <strong>Website</strong>
+                  </div>
+
+                  <div class="health-status">
+                    <span>Public network</span>
+                    <span class="online">ONLINE</span>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- CONTENT OVERVIEW -->
+
+          <section class="panel" style="margin-top:15px">
+
+            <div class="panel-header">
+
+              <div class="panel-title">
+                <h3>Content Overview</h3>
+                <span>Across CrowRules</span>
+              </div>
+
+              <a
+                class="panel-action"
+                href="content.html">
+                Manage Content →
+              </a>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="content-list">
+
+                <a class="content-item" href="shows.html">
+                  <div class="content-symbol">▣</div>
+                  <div>
+                    <strong>Television Shows</strong>
+                    <span id="overviewShows">0 published shows</span>
+                  </div>
+                </a>
+
+                <a class="content-item" href="episodes.html">
+                  <div class="content-symbol">▶</div>
+                  <div>
+                    <strong>Episodes</strong>
+                    <span id="overviewEpisodes">0 episodes</span>
+                  </div>
+                </a>
+
+                <a class="content-item" href="movies.html">
+                  <div class="content-symbol">◇</div>
+                  <div>
+                    <strong>Movies</strong>
+                    <span id="overviewMovies">0 movies</span>
+                  </div>
+                </a>
+
+                <a class="content-item" href="videos.html">
+                  <div class="content-symbol">▷</div>
+                  <div>
+                    <strong>Video Library</strong>
+                    <span>Manage uploaded video</span>
+                  </div>
+                </a>
+
+                <a class="content-item" href="audio.html">
+                  <div class="content-symbol">♫</div>
+                  <div>
+                    <strong>Audio Library</strong>
+                    <span>Podcasts &amp; audio shows</span>
+                  </div>
+                </a>
+
+                <a class="content-item" href="photos.html">
+                  <div class="content-symbol">▧</div>
+                  <div>
+                    <strong>Photo Library</strong>
+                    <span>Images &amp; galleries</span>
+                  </div>
+                </a>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- RECENT ACTIVITY -->
+
+          <section class="panel" style="margin-top:15px">
+
+            <div class="panel-header">
+
+              <div class="panel-title">
+                <h3>Recent Activity</h3>
+                <span>Latest administrative events</span>
+              </div>
+
+              <a
+                class="panel-action"
+                href="activity.html">
+                Full Log →
+              </a>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="activity-list">
+
+                <div class="activity">
+
+                  <div class="activity-icon">▶</div>
+
+                  <div>
+                    <strong>Episode published</strong>
+                    <p>Tacoma Nights — New episode added</p>
+                  </div>
+
+                  <time>2 min</time>
+
+                </div>
+
+
+                <div class="activity">
+
+                  <div class="activity-icon">♙</div>
+
+                  <div>
+                    <strong>New member registered</strong>
+                    <p>A new CrowRules member joined</p>
+                  </div>
+
+                  <time>18 min</time>
+
+                </div>
+
+
+                <div class="activity">
+
+                  <div class="activity-icon">▣</div>
+
+                  <div>
+                    <strong>Show updated</strong>
+                    <p>CrowRules TV program information changed</p>
+                  </div>
+
+                  <time>41 min</time>
+
+                </div>
+
+
+                <div class="activity">
+
+                  <div class="activity-icon">◫</div>
+
+                  <div>
+                    <strong>Schedule regenerated</strong>
+                    <p>24/7 programming clock updated</p>
+                  </div>
+
+                  <time>1 hr</time>
+
+                </div>
+
+
+                <div class="activity">
+
+                  <div class="activity-icon">♥</div>
+
+                  <div>
+                    <strong>Support received</strong>
+                    <p>A new contribution was recorded</p>
+                  </div>
+
+                  <time>2 hr</time>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+        ================================================== -->
+
+        <div class="right-column">
+
+          <!-- TV -->
+
+          <section class="panel">
+
+            <div class="panel-header">
+
+              <div class="panel-title">
+                <h3>CrowRules TV</h3>
+                <span>Broadcast control</span>
+              </div>
+
+              <a
+                class="panel-action"
+                href="tv.html">
+                Manage →
+              </a>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="broadcast">
+
+                <div class="broadcast-dot"></div>
+
+                <div>
+                  <strong>24/7 BROADCAST ACTIVE</strong>
+                  <span>Programming clock is running</span>
+                </div>
+
+              </div>
+
+
+              <div class="channel-list">
+
+                <div class="channel">
+
+                  <div class="channel-logo">
+                    CR
+                  </div>
+
+                  <div class="channel-info">
+                    <strong>CrowRules TV</strong>
+                    <span>Primary entertainment network</span>
+                  </div>
+
+                  <span class="live-pill">
+                    LIVE
+                  </span>
+
+                </div>
+
+
+                <div class="channel">
+
+                  <div class="channel-logo">
+                    TN
+                  </div>
+
+                  <div class="channel-info">
+                    <strong>Tacoma Nights</strong>
+                    <span>Original programming</span>
+                  </div>
+
+                  <span class="live-pill">
+                    LIVE
+                  </span>
+
+                </div>
+
+
+                <div class="channel">
+
+                  <div class="channel-logo">
+                    BD
+                  </div>
+
+                  <div class="channel-info">
+                    <strong>Back Deck Live</strong>
+                    <span>Live event programming</span>
+                  </div>
+
+                  <span class="live-pill">
+                    READY
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- MEMBERS -->
+
+          <section class="panel" style="margin-top:15px">
+
+            <div class="panel-header">
+
+              <div class="panel-title">
+                <h3>Members</h3>
+                <span>Community pulse</span>
+              </div>
+
+              <a
+                class="panel-action"
+                href="members.html">
+                View →
+              </a>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="member-metrics">
+
+                <div class="member-metric">
+                  <strong id="activeMembers">0</strong>
+                  <span>Active</span>
+                </div>
+
+                <div class="member-metric">
+                  <strong id="newMembers">0</strong>
+                  <span>New Today</span>
+                </div>
+
+                <div class="member-metric">
+                  <strong id="onlineMembers">0</strong>
+                  <span>Online</span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- SCHEDULE -->
+
+          <section class="panel" style="margin-top:15px">
+
+            <div class="panel-header">
+
+              <div class="panel-title">
+                <h3>Up Next</h3>
+                <span>Programming clock</span>
+              </div>
+
+              <a
+                class="panel-action"
+                href="schedule.html">
+                Schedule →
+              </a>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="schedule-row">
+
+                <div class="schedule-time">
+                  7:00 PM
+                </div>
+
+                <div class="schedule-show">
+                  <strong>Tacoma Nights</strong>
+                  <span>Season programming</span>
+                </div>
+
+                <div class="schedule-type">
+                  SHOW
+                </div>
+
+              </div>
+
+
+              <div class="schedule-row">
+
+                <div class="schedule-time">
+                  8:00 PM
+                </div>
+
+                <div class="schedule-show">
+                  <strong>Bird Brains</strong>
+                  <span>Original series</span>
+                </div>
+
+                <div class="schedule-type">
+                  SHOW
+                </div>
+
+              </div>
+
+
+              <div class="schedule-row">
+
+                <div class="schedule-time">
+                  9:00 PM
+                </div>
+
+                <div class="schedule-show">
+                  <strong>Back Deck Live</strong>
+                  <span>Featured programming</span>
+                </div>
+
+                <div class="schedule-type">
+                  LIVE
+                </div>
+
+              </div>
+
+
+              <div class="schedule-row">
+
+                <div class="schedule-time">
+                  10:00 PM
+                </div>
+
+                <div class="schedule-show">
+                  <strong>CrowRules Cinema</strong>
+                  <span>Feature presentation</span>
+                </div>
+
+                <div class="schedule-type">
+                  MOVIE
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          <!-- SUPPORT -->
+
+          <section class="panel" style="margin-top:15px">
+
+            <div class="panel-header">
+
+              <div class="panel-title">
+                <h3>Support</h3>
+                <span>Current month</span>
+              </div>
+
+              <a
+                class="panel-action"
+                href="donations.html">
+                Details →
+              </a>
+
+            </div>
+
+            <div class="panel-body">
+
+              <div class="revenue">
+
+                <div>
+                  <div
+                    class="revenue-value"
+                    id="revenueValue">
+                    $0
+                  </div>
+
+                  <div class="revenue-label">
+                    Donations &amp; memberships
+                  </div>
+                </div>
+
+                <div class="revenue-change">
+                  +21.3%
+                </div>
+
+              </div>
+
+              <div class="bar-chart">
+
+                <div class="bar" style="--height:35%"></div>
+                <div class="bar" style="--height:50%"></div>
+                <div class="bar" style="--height:43%"></div>
+                <div class="bar" style="--height:67%"></div>
+                <div class="bar" style="--height:54%"></div>
+                <div class="bar" style="--height:82%"></div>
+                <div class="bar" style="--height:74%"></div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================
+           QUICK ACCESS
+      ==================================================== -->
+
+      <section class="panel" style="margin-top:15px">
+
+        <div class="panel-header">
+
+          <div class="panel-title">
+            <h3>Quick Access</h3>
+            <span>Frequently used administration tools</span>
+          </div>
+
+        </div>
+
+        <div class="panel-body">
+
+          <div class="quick-grid">
+
+            <a class="quick-card" href="shows.html">
+              <div class="quick-card-icon">▣</div>
+              <strong>Manage Shows</strong>
+              <span>Create, edit and publish programs</span>
+            </a>
+
+            <a class="quick-card" href="schedule.html">
+              <div class="quick-card-icon">◫</div>
+              <strong>TV Schedule</strong>
+              <span>Control 24/7 programming</span>
+            </a>
+
+            <a class="quick-card" href="members.html">
+              <div class="quick-card-icon">♙</div>
+              <strong>Members</strong>
+              <span>Manage the CrowRules community</span>
+            </a>
+
+            <a class="quick-card" href="creators.html">
+              <div class="quick-card-icon">✦</div>
+              <strong>Creators</strong>
+              <span>Manage creator accounts</span>
+            </a>
+
+            <a class="quick-card" href="memorials.html">
+              <div class="quick-card-icon">✧</div>
+              <strong>Memorials</strong>
+              <span>Manage memorial pages</span>
+            </a>
+
+            <a class="quick-card" href="records.html">
+              <div class="quick-card-icon">♫</div>
+              <strong>Records</strong>
+              <span>Manage artists and releases</span>
+            </a>
+
+            <a class="quick-card" href="analytics.html">
+              <div class="quick-card-icon">⌁</div>
+              <strong>Analytics</strong>
+              <span>Review network performance</span>
+            </a>
+
+            <a class="quick-card" href="system-health.html">
+              <div class="quick-card-icon">⚙</div>
+              <strong>System Health</strong>
+              <span>Monitor CrowRules infrastructure</span>
+            </a>
+
+          </div>
+
+        </div>
+
+      </section>
 
     </section>
 
@@ -1164,59 +2526,62 @@ tr:hover td {
 
 </div>
 
-<!-- ROW MODAL -->
+
+<!-- =======================================================
+     SEARCH
+======================================================== -->
+
 <div
-  id="rowModal"
-  class="modal-backdrop">
+  class="search-overlay"
+  id="searchOverlay">
 
-  <div class="modal">
+  <div class="search-box">
 
-    <div class="modal-head">
+    <div class="search-input-wrap">
 
-      <div id="rowModalTitle"
-           class="modal-title">
-        Edit Row
-      </div>
+      <span>⌕</span>
 
-      <button
-        class="btn"
-        data-close="rowModal">
-        ✕
-      </button>
+      <input
+        class="search-input"
+        id="searchInput"
+        type="search"
+        placeholder="Search CrowRules administration...">
 
-    </div>
-
-    <div class="modal-body">
-
-      <div class="field">
-
-        <label>JSON Row</label>
-
-        <textarea
-          id="rowJson"
-          rows="20"
-          spellcheck="false"></textarea>
-
-      </div>
-
-      <div id="rowModalStatus"
-           class="status hidden"></div>
+      <span>ESC</span>
 
     </div>
 
-    <div class="modal-foot">
+    <div class="search-results">
 
-      <button
-        class="btn"
-        data-close="rowModal">
-        Cancel
-      </button>
+      <a class="search-result" href="content.html">
+        ▦
+        <span>Content Manager</span>
+        <small>CONTENT</small>
+      </a>
 
-      <button
-        id="saveRowBtn"
-        class="btn primary">
-        Save Row
-      </button>
+      <a class="search-result" href="shows.html">
+        ▣
+        <span>Shows</span>
+        <small>TV</small>
+      </a>
+
+      <a class="search-result" href="members.html">
+        ♙
+        <span>Members</span>
+        <small>PEOPLE</small>
+      </a>
+
+      <a class="search-result" href="schedule.html">
+        ◫
+        <span>TV Schedule</span>
+        <small>TV</small>
+      </a>
+
+      <a class="search-result" href="settings.html">
+        ⚙
+        <span>Settings</span>
+        <small>SYSTEM</small>
+      </a>
 
     </div>
 
@@ -1224,2735 +2589,763 @@ tr:hover td {
 
 </div>
 
-<!-- THEME MODAL -->
-<div
-  id="themeModal"
-  class="modal-backdrop">
 
-  <div class="modal">
+<!-- =======================================================
+     NOTIFICATION DRAWER
+======================================================== -->
 
-    <div class="modal-head">
+<aside
+  class="drawer"
+  id="notificationDrawer">
 
-      <div id="themeModalTitle"
-           class="modal-title">
-        New Theme
-      </div>
+  <div class="drawer-header">
 
-      <button
-        class="btn"
-        data-close="themeModal">
-        ✕
-      </button>
+    <h3>Notifications</h3>
 
-    </div>
+    <button
+      class="icon-btn"
+      id="closeNotifications">
+      ×
+    </button>
 
-    <div class="modal-body">
+  </div>
 
-      <div class="form-grid">
+  <div class="drawer-body">
 
-        <div class="field">
-          <label>Name</label>
-          <input id="themeName">
-        </div>
+    <div class="notice">
 
-        <div class="field">
-          <label>Slug</label>
-          <input id="themeSlug">
-        </div>
+      <strong>24/7 Schedule Running</strong>
 
-        <div class="field">
-          <label>Theme Type</label>
+      <p>
+        CrowRules TV programming clock is currently active.
+      </p>
 
-          <select id="themeType">
-
-            <option value="holiday">Holiday</option>
-            <option value="special_event">Special Event</option>
-            <option value="network">Network</option>
-            <option value="show_override">Show Override</option>
-
-          </select>
-
-        </div>
-
-        <div class="field">
-          <label>Priority</label>
-          <input
-            id="themePriority"
-            type="number"
-            value="100">
-        </div>
-
-        <div class="field">
-          <label>Start</label>
-          <input
-            id="themeStart"
-            type="datetime-local">
-        </div>
-
-        <div class="field">
-          <label>End</label>
-          <input
-            id="themeEnd"
-            type="datetime-local">
-        </div>
-
-        <div class="field">
-          <label>Accent</label>
-          <input
-            id="themeAccent"
-            value="#00eaff">
-        </div>
-
-        <div class="field">
-          <label>Accent 2</label>
-          <input
-            id="themeAccent2"
-            value="#9d5cff">
-        </div>
-
-        <div class="field full">
-
-          <label>Show IDs</label>
-
-          <input
-            id="themeShows"
-            placeholder="tacoma,backdeck,bird,dj">
-
-        </div>
-
-        <div class="field full">
-
-          <label>Banner Text</label>
-
-          <input id="themeBanner">
-
-        </div>
-
-        <div class="field full">
-
-          <label>Hero Title</label>
-
-          <input id="themeHeroTitle">
-
-        </div>
-
-        <div class="field full">
-
-          <label>Hero Description</label>
-
-          <textarea
-            id="themeHeroDescription"
-            rows="3"></textarea>
-
-        </div>
-
-        <div class="field full">
-
-          <label>Effects JSON</label>
-
-          <textarea
-            id="themeEffects"
-            rows="7">{
-  "glow": true,
-  "particles": false,
-  "fog": false,
-  "ghosts": false,
-  "bats": false,
-  "snow": false,
-  "hearts": false,
-  "confetti": false,
-  "rainbow": false,
-  "glitch": false
-}</textarea>
-
-        </div>
-
-        <div class="field full">
-
-          <label>Metadata JSON</label>
-
-          <textarea
-            id="themeMetadata"
-            rows="5">{}</textarea>
-
-        </div>
-
-        <div class="field full">
-
-          <div
-            id="themePreview"
-            class="theme-preview">
-
-            <div class="theme-glow"></div>
-
-            <h3 id="previewTitle">
-              CrowRules Theme
-            </h3>
-
-            <p id="previewDescription">
-              Theme preview
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div id="themeModalStatus"
-           class="status hidden"></div>
+      <time>Just now</time>
 
     </div>
 
-    <div class="modal-foot">
 
-      <button
-        class="btn"
-        data-close="themeModal">
-        Cancel
-      </button>
+    <div class="notice">
 
-      <button
-        id="saveThemeBtn"
-        class="btn primary">
-        Save Theme
-      </button>
+      <strong>New Member</strong>
+
+      <p>
+        A new member account has been registered.
+      </p>
+
+      <time>18 minutes ago</time>
+
+    </div>
+
+
+    <div class="notice">
+
+      <strong>Episode Published</strong>
+
+      <p>
+        A new episode has been published to CrowRules TV.
+      </p>
+
+      <time>41 minutes ago</time>
+
+    </div>
+
+
+    <div class="notice">
+
+      <strong>System Check Complete</strong>
+
+      <p>
+        Scheduled system health checks completed successfully.
+      </p>
+
+      <time>1 hour ago</time>
 
     </div>
 
   </div>
 
+</aside>
+
+
+<!-- =======================================================
+     TOAST CONTAINER
+======================================================== -->
+
+<div
+  class="toast-container"
+  id="toastContainer">
 </div>
+
 
 <script>
 /* =========================================================
-   CROWRULES ADMIN PRO
-   SUPABASE CONFIG
+   CROWRULES ADMIN CORE
 ========================================================= */
 
-const SUPABASE_URL =
-  "https://zauxdqyssratvzmomozf.supabase.co";
+const CrowRulesAdmin = {
 
-const SUPABASE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphdXhkcXlzc3JhdHZ6bW9tb3pmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MjE3MjYsImV4cCI6MjEwMjk5NzcyNn0.nPTPMgD8gHzL7qRmMuUNJxpjXaCJRVXmgxck15AKDDA";
+  /*
+   * IMPORTANT:
+   * Replace these with the project's PUBLIC Supabase URL
+   * and publishable/anon key.
+   *
+   * Never place the Supabase service_role/secret key here.
+   */
 
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-      auth:{
-        persistSession:true,
-        autoRefreshToken:true,
-        detectSessionInUrl:true
-      }
-    }
-  );
+  supabaseUrl: "",
+  supabaseKey: "",
 
-/* =========================================================
-   STATE
-========================================================= */
+  supabase: null,
 
-let currentUser = null;
-let currentCategory = null;
-let currentTable = null;
-let currentRows = [];
-let currentColumns = [];
-let currentPage = 0;
-let pageSize = 50;
-let editingRow = null;
-let editingRowMode = "edit";
+  demoData: {
+    members: 824,
+    shows: 17,
+    episodes: 126,
+    movies: 58,
+    channels: 4,
+    revenue: 1842
+  },
 
-let categories = [];
-let themes = [];
+  init(){
 
-/* =========================================================
-   CATEGORY ICONS
-========================================================= */
+    this.initializeSupabase();
 
-const ICONS = {
-  dashboard:"⌂",
-  content:"▣",
-  tv:"▣",
-  shows:"▶",
-  live:"●",
-  members:"♟",
-  watch:"◉",
-  community:"☁",
-  crowspace:"✦",
-  creators:"★",
-  podcasts:"◉",
-  sports:"◆",
-  business:"▤",
-  donations:"♥",
-  partnerships:"∞",
-  news:"▤",
-  analytics:"⌁",
-  celebrity:"✝",
-  themes:"✺",
-  navigation:"☰",
-  projects:"▦",
-  admin:"⚙",
-  contacts:"✉"
-};
+    this.initializeDate();
 
-/* =========================================================
-   CATEGORY DESCRIPTIONS
-========================================================= */
+    this.loadDashboard();
 
-const CATEGORY_DESCRIPTIONS = {
+    this.initializeNavigation();
 
-  dashboard:
-    "CrowRules Entertainment administrative overview.",
+    this.initializeSearch();
 
-  content:
-    "Central content, media and content-alias management.",
+    this.initializeNotifications();
 
-  tv:
-    "CrowRules TV channels, programming, shows, episodes and schedules.",
+    this.initializeFullscreen();
 
-  shows:
-    "Original productions and show-specific episode databases.",
+    this.initializeKeyboard();
 
-  live:
-    "Live programming, live events and special events.",
+  },
 
-  members:
-    "Member profiles, roles, favorites, notifications and rewards.",
 
-  watch:
-    "Watch history, viewing sessions, engagement and CrowPoints.",
-
-  community:
-    "Comments, chat, suggestions, votes and member relationships.",
-
-  crowspace:
-    "CrowSpace profiles, posts, groups, reactions and notifications.",
-
-  creators:
-    "Creator profiles, content, applications, earnings and analytics.",
-
-  podcasts:
-    "Podcast shows, episodes, podcasters and applications.",
-
-  sports:
-    "Sports leagues, teams, games, schedules, standings and statistics.",
-
-  business:
-    "CrowRules Entertainment Business Hub operations and management.",
-
-  donations:
-    "Donation campaigns, events, settings and statistics.",
-
-  partnerships:
-    "Partners, partnership inquiries and relationship management.",
-
-  news:
-    "News, sources, announcements and network updates.",
-
-  analytics:
-    "Platform and creator analytics data.",
-
-  celebrity:
-    "Celebrity memorial and death tracking.",
-
-  themes:
-    "Holiday, seasonal, show-specific and special-event themes.",
-
-  navigation:
-    "Site settings, navigation, social links, divisions and topics.",
-
-  projects:
-    "Projects and long-term CrowRules roadmap.",
-
-  admin:
-    "Administrators, permissions, roles and audit logs.",
-
-  contacts:
-    "Contacts, subscribers and creator/application submissions."
-
-};
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function $(id){
-  return document.getElementById(id);
-}
-
-function escapeHtml(value){
-
-  if(value === null || value === undefined)
-    return "";
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-function pretty(value){
-
-  if(value === null || value === undefined)
-    return "—";
-
-  if(typeof value === "object"){
-
-    try{
-      return JSON.stringify(value,null,2);
-    }catch{
-      return String(value);
-    }
-
-  }
-
-  return String(value);
-}
-
-function showStatus(el,message,type=""){
-
-  if(!el) return;
-
-  el.className =
-    "status" +
-    (type ? " " + type : "");
-
-  el.textContent = message;
-
-}
-
-function formatDate(value){
-
-  if(!value)
-    return "—";
-
-  const date = new Date(value);
-
-  if(Number.isNaN(date.getTime()))
-    return value;
-
-  return date.toLocaleString(
-    "en-US",
-    {
-      timeZone:"America/Los_Angeles",
-      dateStyle:"medium",
-      timeStyle:"short"
-    }
-  );
-}
-
-function isoFromLocalInput(value){
-
-  if(!value)
-    return null;
-
-  const date = new Date(value);
-
-  if(Number.isNaN(date.getTime()))
-    return null;
-
-  return date.toISOString();
-
-}
-
-function localInputFromIso(value){
-
-  if(!value)
-    return "";
-
-  const d = new Date(value);
-
-  if(Number.isNaN(d.getTime()))
-    return "";
-
-  const pad =
-    n => String(n).padStart(2,"0");
-
-  return (
-    d.getFullYear() +
-    "-" +
-    pad(d.getMonth()+1) +
-    "-" +
-    pad(d.getDate()) +
-    "T" +
-    pad(d.getHours()) +
-    ":" +
-    pad(d.getMinutes())
-  );
-
-}
-
-/* =========================================================
-   AUTH
-========================================================= */
-
-async function getSession(){
-
-  const {
-    data,
-    error
-  } = await supabaseClient.auth.getSession();
-
-  if(error)
-    throw error;
-
-  return data.session;
-}
-
-async function verifyAdmin(){
-
-  if(!currentUser)
-    return false;
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("cr_admins")
-      .select("*")
-      .eq("user_id",currentUser.id)
-      .eq("is_active",true)
-      .maybeSingle();
-
-  if(error){
-
-    console.error(
-      "Admin verification failed:",
-      error
-    );
-
-    return false;
-  }
-
-  return !!data;
-}
-
-async function handleSession(session){
-
-  currentUser =
-    session?.user || null;
-
-  if(!currentUser){
-
-    $("loginScreen")
-      .classList.remove("hidden");
-
-    $("app")
-      .classList.add("hidden");
-
-    return;
-  }
-
-  const isAdmin =
-    await verifyAdmin();
-
-  if(!isAdmin){
-
-    $("loginError").textContent =
-      "Your account is authenticated but is not an active CrowRules administrator.";
-
-    await supabaseClient.auth.signOut();
-
-    return;
-  }
-
-  $("loginScreen")
-    .classList.add("hidden");
-
-  $("app")
-    .classList.remove("hidden");
-
-  $("adminPill").textContent =
-    "ADMIN VERIFIED";
-
-  setConnection(true);
-
-  await bootAdmin();
-
-}
-
-async function signIn(event){
-
-  event.preventDefault();
-
-  const email =
-    $("loginEmail").value.trim();
-
-  const password =
-    $("loginPassword").value;
-
-  $("loginError").textContent =
-    "";
-
-  const {
-    error
-  } =
-    await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-
-  if(error){
-
-    $("loginError").textContent =
-      error.message;
-
-    return;
-  }
-
-}
-
-async function signOut(){
-
-  await supabaseClient.auth.signOut();
-
-}
-
-supabaseClient.auth.onAuthStateChange(
-  async (_event,session)=>{
-    setTimeout(
-      ()=>handleSession(session),
-      0
-    );
-  }
-);
-
-/* =========================================================
-   CONNECTION
-========================================================= */
-
-function setConnection(online){
-
-  const dot =
-    $("connectionDot");
-
-  const text =
-    $("connectionText");
-
-  if(online){
-
-    dot.classList.add("online");
-    text.textContent =
-      "SUPABASE ONLINE";
-
-  }else{
-
-    dot.classList.remove("online");
-    text.textContent =
-      "SUPABASE OFFLINE";
-
-  }
-
-}
-
-async function connectionTest(){
-
-  try{
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("cr_admin_category_registry")
-        .select("category_key")
-        .limit(1);
-
-    if(error)
-      throw error;
-
-    setConnection(true);
-
-    return true;
-
-  }catch(error){
-
-    console.error(error);
-
-    setConnection(false);
-
-    return false;
-
-  }
-
-}
-
-/* =========================================================
-   BOOT
-========================================================= */
-
-async function bootAdmin(){
-
-  await connectionTest();
-
-  await loadCategories();
-
-  await loadThemes();
-
-  renderNavigation();
-
-  await renderDashboard();
-
-}
-
-/* =========================================================
-   CATEGORY REGISTRY
-========================================================= */
-
-async function loadCategories(){
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("cr_admin_category_registry")
-      .select("*")
-      .eq("enabled",true)
-      .order("sort_order",{ascending:true});
-
-  if(error){
-
-    console.error(error);
-
-    showStatus(
-      $("categoryStatus"),
-      error.message,
-      "error"
-    );
-
-    return;
-  }
-
-  categories =
-    data || [];
-
-}
-
-function renderNavigation(){
-
-  const nav =
-    $("nav");
-
-  nav.innerHTML = "";
-
-  const core =
-    categories.filter(
-      c =>
-        [
-          "dashboard",
-          "content",
-          "tv",
-          "shows",
-          "live",
-          "members",
-          "watch",
-          "community",
-          "crowspace",
-          "creators",
-          "podcasts",
-          "sports",
-          "business",
-          "donations",
-          "partnerships",
-          "news",
-          "analytics",
-          "celebrity",
-          "themes",
-          "navigation",
-          "projects",
-          "admin",
-          "contacts"
-        ].includes(c.category_key)
-    );
-
-  core.forEach(category=>{
-
-    const button =
-      document.createElement("button");
-
-    button.dataset.route =
-      category.route ||
-      category.category_key;
-
-    button.innerHTML = `
-      <span class="nav-icon">
-        ${ICONS[category.category_key] || "•"}
-      </span>
-
-      <span>
-        ${escapeHtml(category.name)}
-      </span>
-    `;
-
-    button.addEventListener(
-      "click",
-      ()=>{
-        if(category.category_key === "themes"){
-          openView("themes");
-        }else{
-          openCategory(category.category_key);
-        }
-
-        $("sidebar").classList.remove("open");
-      }
-    );
-
-    nav.appendChild(button);
-
-  });
-
-}
-
-function updateNavActive(route){
-
-  document
-    .querySelectorAll("#nav button")
-    .forEach(button=>{
-      button.classList.toggle(
-        "active",
-        button.dataset.route === route
-      );
-    });
-
-}
-
-/* =========================================================
-   VIEWS
-========================================================= */
-
-function openView(name){
-
-  document
-    .querySelectorAll(".view")
-    .forEach(view=>{
-      view.classList.remove("active");
-    });
-
-  const view =
-    $("view-" + name);
-
-  if(view)
-    view.classList.add("active");
-
-  updateNavActive(name);
-
-  if(name === "dashboard"){
-    $("pageTitle").textContent =
-      "ADMIN PRO";
-  }
-
-  if(name === "themes"){
-    $("pageTitle").textContent =
-      "THEMES & SPECIAL EVENTS";
-  }
-
-  if(name === "connection"){
-    $("pageTitle").textContent =
-      "SUPABASE CONNECTION";
-
-    renderConnectionDiagnostics();
-  }
-
-}
-
-async function openCategory(key){
-
-  const category =
-    categories.find(
-      c => c.category_key === key
-    );
-
-  if(!category)
-    return;
-
-  currentCategory =
-    category;
-
-  currentTable =
-    null;
-
-  $("pageTitle").textContent =
-    category.name.toUpperCase();
-
-  $("categoryTitle").textContent =
-    category.name;
-
-  $("categoryDescription").textContent =
-    CATEGORY_DESCRIPTIONS[key] ||
-    category.description ||
-    "Supabase data management.";
-
-  renderCategoryTables();
-
-  populateTableSelect();
-
-  $("tableContainer").innerHTML =
-    `<div class="empty">
-      Select a table to load records.
-    </div>`;
-
-  showStatus(
-    $("categoryStatus"),
-    `${category.table_names?.length || 0} registered tables ready.`
-  );
-
-  openView("category");
-
-}
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-async function renderDashboard(){
-
-  openView("dashboard");
-
-  $("statCategories").textContent =
-    categories.length;
-
-  const totalTables =
-    categories.reduce(
-      (sum,c)=>
-        sum +
-        (c.table_names?.length || 0),
-      0
-    );
-
-  $("statTables").textContent =
-    totalTables;
-
-  $("statThemes").textContent =
-    themes.length;
-
-  const active =
-    getActiveThemes();
-
-  $("statActiveThemes").textContent =
-    active.length;
-
-  const container =
-    $("dashboardCategories");
-
-  container.innerHTML = "";
-
-  categories.forEach(category=>{
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "category-card";
-
-    card.innerHTML = `
-
-      <h3>
-        ${ICONS[category.category_key] || "•"}
-        ${escapeHtml(category.name)}
-      </h3>
-
-      <p>
-        ${escapeHtml(
-          CATEGORY_DESCRIPTIONS[
-            category.category_key
-          ] ||
-          category.description ||
-          ""
-        )}
-      </p>
-
-      <div class="category-count">
-        ${category.table_names?.length || 0}
-        SUPABASE TABLES
-      </div>
-
-      <div class="category-tables">
-        ${(category.table_names || [])
-          .slice(0,6)
-          .map(escapeHtml)
-          .join(" • ")}
-        ${(category.table_names || []).length > 6
-          ? " • ..."
-          : ""}
-      </div>
-    `;
-
-    card.addEventListener(
-      "click",
-      ()=>{
-        if(category.category_key === "themes"){
-          openView("themes");
-        }else{
-          openCategory(
-            category.category_key
-          );
-        }
-      }
-    );
-
-    container.appendChild(card);
-
-  });
-
-}
-
-/* =========================================================
-   CATEGORY TABLES
-========================================================= */
-
-function renderCategoryTables(){
-
-  const container =
-    $("categoryTables");
-
-  container.innerHTML = "";
-
-  const tables =
-    currentCategory?.table_names || [];
-
-  $("categoryTableCount").textContent =
-    `${tables.length} tables`;
-
-  tables.forEach(tableName=>{
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "category-card";
-
-    card.innerHTML = `
-
-      <h3>▣ ${escapeHtml(tableName)}</h3>
-
-      <p>
-        Supabase table
-      </p>
-
-      <div class="category-count">
-        OPEN TABLE →
-      </div>
-    `;
-
-    card.addEventListener(
-      "click",
-      ()=>{
-        $("tableSelect").value =
-          tableName;
-
-        loadTable();
-      }
-    );
-
-    container.appendChild(card);
-
-  });
-
-}
-
-function populateTableSelect(){
-
-  const select =
-    $("tableSelect");
-
-  select.innerHTML =
-    `<option value="">
-      Select Supabase table...
-    </option>`;
-
-  (
-    currentCategory?.table_names ||
-    []
-  ).forEach(tableName=>{
-
-    const option =
-      document.createElement("option");
-
-    option.value =
-      tableName;
-
-    option.textContent =
-      tableName;
-
-    select.appendChild(option);
-
-  });
-
-}
-
-/* =========================================================
-   TABLE ACCESS
-========================================================= */
-
-async function loadTable(){
-
-  const table =
-    $("tableSelect").value;
-
-  if(!table)
-    return;
-
-  currentTable =
-    table;
-
-  currentPage =
-    0;
-
-  await fetchTable();
-
-}
-
-async function fetchTable(){
-
-  if(!currentCategory || !currentTable)
-    return;
-
-  showStatus(
-    $("categoryStatus"),
-    `Loading ${currentTable}...`
-  );
-
-  $("tableContainer").innerHTML =
-    `<div class="empty">
-      <span class="loading"></span>
-      Loading records...
-    </div>`;
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from(currentTable)
-        .select("*")
-        .range(
-          currentPage * pageSize,
-          (currentPage + 1) * pageSize - 1
-        );
-
-    if(error)
-      throw error;
-
-    currentRows =
-      data || [];
-
-    currentColumns =
-      currentRows.length
-        ? Object.keys(currentRows[0])
-        : [];
-
-    renderTable();
-
-    showStatus(
-      $("categoryStatus"),
-      `${currentRows.length} records loaded from ${currentTable}.`,
-      "success"
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    currentRows = [];
-
-    $("tableContainer").innerHTML =
-      `<div class="empty">
-        Unable to load this table.<br><br>
-        ${escapeHtml(error.message)}
-      </div>`;
-
-    showStatus(
-      $("categoryStatus"),
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-/* =========================================================
-   TABLE RENDERING
-========================================================= */
-
-function renderTable(){
-
-  if(!currentRows.length){
-
-    $("tableContainer").innerHTML =
-      `<div class="empty">
-        No records found in ${escapeHtml(currentTable)}.
-      </div>`;
-
-    return;
-  }
-
-  const columns =
-    Object.keys(
-      currentRows[0]
-    );
-
-  currentColumns =
-    columns;
-
-  let html =
-    `<table>
-      <thead>
-        <tr>`;
-
-  columns.forEach(column=>{
-    html +=
-      `<th>${escapeHtml(column)}</th>`;
-  });
-
-  html +=
-    `<th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>`;
-
-  currentRows.forEach((row,index)=>{
-
-    html += `<tr>`;
-
-    columns.forEach(column=>{
-
-      const value =
-        row[column];
-
-      let display;
-
-      if(
-        value !== null &&
-        typeof value === "object"
-      ){
-
-        display =
-          `<div class="json">
-            ${escapeHtml(
-              pretty(value)
-            )}
-          </div>`;
-
-      }else{
-
-        const stringValue =
-          value === null ||
-          value === undefined
-            ? "—"
-            : String(value);
-
-        display =
-          escapeHtml(
-            stringValue.length > 240
-              ? stringValue.slice(0,240) + "…"
-              : stringValue
-          );
-
-      }
-
-      html +=
-        `<td>${display}</td>`;
-
-    });
-
-    html += `
-
-      <td>
-
-        <div class="actions">
-
-          <button
-            class="mini-btn"
-            data-edit="${index}">
-            Edit
-          </button>
-
-          <button
-            class="mini-btn"
-            data-duplicate="${index}">
-            Duplicate
-          </button>
-
-          <button
-            class="mini-btn"
-            data-delete="${index}">
-            Delete
-          </button>
-
-        </div>
-
-      </td>
-
-    </tr>`;
-
-  });
-
-  html +=
-    `</tbody></table>`;
-
-  $("tableContainer").innerHTML =
-    html;
-
-  $("tableContainer")
-    .querySelectorAll("[data-edit]")
-    .forEach(button=>{
-      button.addEventListener(
-        "click",
-        ()=>{
-          editRow(
-            Number(button.dataset.edit)
-          );
-        }
-      );
-    });
-
-  $("tableContainer")
-    .querySelectorAll("[data-delete]")
-    .forEach(button=>{
-      button.addEventListener(
-        "click",
-        ()=>{
-          deleteRow(
-            Number(button.dataset.delete)
-          );
-        }
-      );
-    });
-
-  $("tableContainer")
-    .querySelectorAll("[data-duplicate]")
-    .forEach(button=>{
-      button.addEventListener(
-        "click",
-        ()=>{
-          duplicateRow(
-            Number(button.dataset.duplicate)
-          );
-        }
-      );
-    });
-
-}
-
-/* =========================================================
-   ROW EDITING
-========================================================= */
-
-function editRow(index){
-
-  editingRow =
-    currentRows[index];
-
-  editingRowMode =
-    "edit";
-
-  $("rowModalTitle").textContent =
-    `Edit ${currentTable}`;
-
-  $("rowJson").value =
-    JSON.stringify(
-      editingRow,
-      null,
-      2
-    );
-
-  $("rowModalStatus")
-    .classList.add("hidden");
-
-  openModal("rowModal");
-
-}
-
-function newRow(){
-
-  editingRow =
-    null;
-
-  editingRowMode =
-    "insert";
-
-  $("rowModalTitle").textContent =
-    `New Row — ${currentTable}`;
-
-  $("rowJson").value =
-    "{\n  \n}";
-
-  $("rowModalStatus")
-    .classList.add("hidden");
-
-  openModal("rowModal");
-
-}
-
-async function saveRow(){
-
-  if(!currentTable)
-    return;
-
-  let payload;
-
-  try{
-
-    payload =
-      JSON.parse(
-        $("rowJson").value
-      );
-
-  }catch(error){
-
-    showStatus(
-      $("rowModalStatus"),
-      "Invalid JSON: " + error.message,
-      "error"
-    );
-
-    return;
-  }
-
-  showStatus(
-    $("rowModalStatus"),
-    "Saving..."
-  );
-
-  try{
-
-    if(editingRowMode === "insert"){
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from(currentTable)
-          .insert(payload);
-
-      if(error)
-        throw error;
-
-    }else{
-
-      const primaryKey =
-        findPrimaryKey(
-          editingRow,
-          payload
-        );
-
-      if(!primaryKey){
-
-        throw new Error(
-          "Unable to determine a primary key for this row. Use the table's UUID/id column."
-        );
-
-      }
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from(currentTable)
-          .update(payload)
-          .eq(
-            primaryKey.column,
-            primaryKey.value
-          );
-
-      if(error)
-        throw error;
-
-    }
-
-    showStatus(
-      $("rowModalStatus"),
-      "Saved successfully.",
-      "success"
-    );
-
-    await fetchTable();
-
-    setTimeout(
-      ()=>closeModal("rowModal"),
-      500
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    showStatus(
-      $("rowModalStatus"),
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-function findPrimaryKey(original,payload){
-
-  const candidates =
-    ["id","uuid","user_id","slug"];
-
-  for(const column of candidates){
+  initializeSupabase(){
 
     if(
-      original &&
-      original[column] !== undefined &&
-      original[column] !== null
+      this.supabaseUrl &&
+      this.supabaseKey &&
+      window.supabase
     ){
-
-      return {
-        column,
-        value:original[column]
-      };
-
-    }
-
-  }
-
-  return null;
-
-}
-
-/* =========================================================
-   DUPLICATE
-========================================================= */
-
-function duplicateRow(index){
-
-  const row =
-    structuredClone(
-      currentRows[index]
-    );
-
-  delete row.id;
-
-  $("rowModalTitle").textContent =
-    `Duplicate ${currentTable}`;
-
-  $("rowJson").value =
-    JSON.stringify(
-      row,
-      null,
-      2
-    );
-
-  editingRow =
-    null;
-
-  editingRowMode =
-    "insert";
-
-  openModal("rowModal");
-
-}
-
-/* =========================================================
-   DELETE
-========================================================= */
-
-async function deleteRow(index){
-
-  const row =
-    currentRows[index];
-
-  const primaryKey =
-    findPrimaryKey(
-      row,
-      row
-    );
-
-  if(!primaryKey){
-
-    alert(
-      "Unable to determine the primary key for this record."
-    );
-
-    return;
-  }
-
-  const confirmed =
-    confirm(
-      `Delete this ${currentTable} record?\n\n${primaryKey.column}: ${primaryKey.value}`
-    );
-
-  if(!confirmed)
-    return;
-
-  try{
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from(currentTable)
-        .delete()
-        .eq(
-          primaryKey.column,
-          primaryKey.value
-        );
-
-    if(error)
-      throw error;
-
-    await fetchTable();
-
-  }catch(error){
-
-    console.error(error);
-
-    showStatus(
-      $("categoryStatus"),
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-/* =========================================================
-   THEMES
-========================================================= */
-
-async function loadThemes(){
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("cr_admin_theme_events")
-        .select("*")
-        .order(
-          "priority",
-          {ascending:false}
-        )
-        .order(
-          "start_at",
-          {ascending:false}
-        );
-
-    if(error)
-      throw error;
-
-    themes =
-      data || [];
-
-    renderThemeTable();
-
-  }catch(error){
-
-    console.error(error);
-
-    themes = [];
-
-    showStatus(
-      $("themeStatus"),
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-function getActiveThemes(){
-
-  const now =
-    Date.now();
-
-  return themes.filter(theme=>{
-
-    if(!theme.enabled)
-      return false;
-
-    const start =
-      theme.start_at
-        ? new Date(
-            theme.start_at
-          ).getTime()
-        : -Infinity;
-
-    const end =
-      theme.end_at
-        ? new Date(
-            theme.end_at
-          ).getTime()
-        : Infinity;
-
-    return now >= start &&
-           now <= end;
-
-  });
-
-}
-
-function renderThemeTable(){
-
-  const body =
-    $("themeTableBody");
-
-  body.innerHTML = "";
-
-  if(!themes.length){
-
-    body.innerHTML =
-      `<tr>
-        <td colspan="7">
-          <div class="empty">
-            No themes configured.
-          </div>
-        </td>
-      </tr>`;
-
-    return;
-  }
-
-  themes.forEach(theme=>{
-
-    const active =
-      getActiveThemes()
-        .some(
-          t => t.id === theme.id
-        );
-
-    const tr =
-      document.createElement("tr");
-
-    const shows =
-      Array.isArray(
-        theme.show_ids
-      )
-        ? theme.show_ids.join(", ")
-        : "All shows";
-
-    tr.innerHTML = `
-
-      <td>
-        <strong>
-          ${escapeHtml(theme.name)}
-        </strong>
-
-        <div style="color:#64728a;font-size:8px;margin-top:4px">
-          ${escapeHtml(theme.slug || "")}
-        </div>
-      </td>
-
-      <td>
-        ${escapeHtml(
-          theme.theme_type || ""
-        )}
-      </td>
-
-      <td>
-        ${formatDate(theme.start_at)}
-        →
-        ${formatDate(theme.end_at)}
-      </td>
-
-      <td>
-        ${escapeHtml(
-          theme.priority ?? 0
-        )}
-      </td>
-
-      <td>
-        ${escapeHtml(shows)}
-      </td>
-
-      <td>
-
-        ${
-          active
-            ? `<span class="badge live">
-                 ACTIVE NOW
-               </span>`
-            : theme.enabled
-              ? `<span class="badge enabled">
-                   ENABLED
-                 </span>`
-              : `<span class="badge disabled">
-                   DISABLED
-                 </span>`
-        }
-
-      </td>
-
-      <td>
-
-        <div class="actions">
-
-          <button
-            class="mini-btn"
-            data-theme-edit="${theme.id}">
-            Edit
-          </button>
-
-          <button
-            class="mini-btn"
-            data-theme-toggle="${theme.id}">
-            ${theme.enabled
-              ? "Disable"
-              : "Enable"}
-          </button>
-
-          <button
-            class="mini-btn"
-            data-theme-delete="${theme.id}">
-            Delete
-          </button>
-
-        </div>
-
-      </td>
-
-    `;
-
-    body.appendChild(tr);
-
-  });
-
-  body
-    .querySelectorAll("[data-theme-edit]")
-    .forEach(button=>{
-      button.addEventListener(
-        "click",
-        ()=>{
-          const theme =
-            themes.find(
-              t =>
-                String(t.id) ===
-                button.dataset.themeEdit
-            );
-
-          if(theme)
-            editTheme(theme);
-        }
-      );
-    });
-
-  body
-    .querySelectorAll("[data-theme-toggle]")
-    .forEach(button=>{
-      button.addEventListener(
-        "click",
-        ()=>{
-          toggleTheme(
-            button.dataset.themeToggle
-          );
-        }
-      );
-    });
-
-  body
-    .querySelectorAll("[data-theme-delete]")
-    .forEach(button=>{
-      button.addEventListener(
-        "click",
-        ()=>{
-          deleteTheme(
-            button.dataset.themeDelete
-          );
-        }
-      );
-    });
-
-  showStatus(
-    $("themeStatus"),
-    `${themes.length} themes loaded. ${getActiveThemes().length} active now.`,
-    "success"
-  );
-
-}
-
-/* =========================================================
-   THEME FORM
-========================================================= */
-
-function clearThemeForm(){
-
-  $("themeName").value = "";
-  $("themeSlug").value = "";
-  $("themeType").value = "holiday";
-  $("themePriority").value = "100";
-  $("themeStart").value = "";
-  $("themeEnd").value = "";
-  $("themeAccent").value = "#00eaff";
-  $("themeAccent2").value = "#9d5cff";
-  $("themeShows").value = "";
-  $("themeBanner").value = "";
-  $("themeHeroTitle").value = "";
-  $("themeHeroDescription").value = "";
-
-  $("themeEffects").value =
-`{
-  "glow": true,
-  "particles": false,
-  "fog": false,
-  "ghosts": false,
-  "bats": false,
-  "snow": false,
-  "hearts": false,
-  "confetti": false,
-  "rainbow": false,
-  "glitch": false
-}`;
-
-  $("themeMetadata").value =
-    "{}";
-
-  updateThemePreview();
-
-}
-
-function editTheme(theme){
-
-  $("themeModalTitle").textContent =
-    "Edit Theme";
-
-  $("themeName").value =
-    theme.name || "";
-
-  $("themeSlug").value =
-    theme.slug || "";
-
-  $("themeType").value =
-    theme.theme_type || "special_event";
-
-  $("themePriority").value =
-    theme.priority ?? 100;
-
-  $("themeStart").value =
-    localInputFromIso(
-      theme.start_at
-    );
-
-  $("themeEnd").value =
-    localInputFromIso(
-      theme.end_at
-    );
-
-  $("themeAccent").value =
-    theme.accent || "#00eaff";
-
-  $("themeAccent2").value =
-    theme.accent_2 || "#9d5cff";
-
-  $("themeShows").value =
-    Array.isArray(theme.show_ids)
-      ? theme.show_ids.join(",")
-      : "";
-
-  $("themeBanner").value =
-    theme.banner_text || "";
-
-  $("themeHeroTitle").value =
-    theme.hero_title || "";
-
-  $("themeHeroDescription").value =
-    theme.hero_description || "";
-
-  $("themeEffects").value =
-    JSON.stringify(
-      theme.effects || {},
-      null,
-      2
-    );
-
-  $("themeMetadata").value =
-    JSON.stringify(
-      theme.metadata || {},
-      null,
-      2
-    );
-
-  $("themeModal").dataset.editId =
-    theme.id;
-
-  updateThemePreview();
-
-  openModal("themeModal");
-
-}
-
-async function saveTheme(){
-
-  let effects;
-  let metadata;
-
-  try{
-
-    effects =
-      JSON.parse(
-        $("themeEffects").value ||
-        "{}"
-      );
-
-    metadata =
-      JSON.parse(
-        $("themeMetadata").value ||
-        "{}"
-      );
-
-  }catch(error){
-
-    showStatus(
-      $("themeModalStatus"),
-      "Effects or metadata contains invalid JSON.",
-      "error"
-    );
-
-    return;
-
-  }
-
-  const name =
-    $("themeName").value.trim();
-
-  const slug =
-    $("themeSlug").value.trim() ||
-    name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g,"-")
-      .replace(/^-|-$/g,"");
-
-  if(!name){
-
-    showStatus(
-      $("themeModalStatus"),
-      "Theme name is required.",
-      "error"
-    );
-
-    return;
-
-  }
-
-  const showIds =
-    $("themeShows")
-      .value
-      .split(",")
-      .map(v=>v.trim())
-      .filter(Boolean);
-
-  const payload = {
-
-    slug,
-
-    name,
-
-    theme_type:
-      $("themeType").value,
-
-    start_at:
-      isoFromLocalInput(
-        $("themeStart").value
-      ),
-
-    end_at:
-      isoFromLocalInput(
-        $("themeEnd").value
-      ),
-
-    enabled:true,
-
-    priority:
-      Number(
-        $("themePriority").value || 100
-      ),
-
-    show_ids:
-      showIds.length
-        ? showIds
-        : null,
-
-    background:null,
-
-    accent:
-      $("themeAccent").value.trim(),
-
-    accent_2:
-      $("themeAccent2").value.trim(),
-
-    banner_text:
-      $("themeBanner").value.trim(),
-
-    hero_title:
-      $("themeHeroTitle").value.trim(),
-
-    hero_description:
-      $("themeHeroDescription")
-        .value
-        .trim(),
-
-    effects,
-
-    metadata,
-
-    updated_at:
-      new Date().toISOString()
-
-  };
-
-  showStatus(
-    $("themeModalStatus"),
-    "Saving..."
-  );
-
-  try{
-
-    const editId =
-      $("themeModal").dataset.editId;
-
-    if(editId){
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("cr_admin_theme_events")
-          .update(payload)
-          .eq("id",editId);
-
-      if(error)
-        throw error;
-
-    }else{
-
-      payload.created_by =
-        currentUser?.id || null;
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("cr_admin_theme_events")
-          .insert(payload);
-
-      if(error)
-        throw error;
-
-    }
-
-    showStatus(
-      $("themeModalStatus"),
-      "Theme saved.",
-      "success"
-    );
-
-    await loadThemes();
-
-    setTimeout(
-      ()=>{
-        closeModal("themeModal");
-        delete $("themeModal").dataset.editId;
-      },
-      500
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    showStatus(
-      $("themeModalStatus"),
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-async function toggleTheme(id){
-
-  const theme =
-    themes.find(
-      t => String(t.id) === String(id)
-    );
-
-  if(!theme)
-    return;
-
-  try{
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("cr_admin_theme_events")
-        .update({
-          enabled:!theme.enabled,
-          updated_at:
-            new Date().toISOString()
-        })
-        .eq("id",id);
-
-    if(error)
-      throw error;
-
-    await loadThemes();
-
-  }catch(error){
-
-    showStatus(
-      $("themeStatus"),
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-async function deleteTheme(id){
-
-  const theme =
-    themes.find(
-      t => String(t.id) === String(id)
-    );
-
-  if(!theme)
-    return;
-
-  if(
-    !confirm(
-      `Delete theme "${theme.name}"?`
-    )
-  )
-    return;
-
-  try{
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("cr_admin_theme_events")
-        .delete()
-        .eq("id",id);
-
-    if(error)
-      throw error;
-
-    await loadThemes();
-
-  }catch(error){
-
-    showStatus(
-      $("themeStatus"),
-      error.message,
-      "error"
-    );
-
-  }
-
-}
-
-/* =========================================================
-   THEME PREVIEW
-========================================================= */
-
-function updateThemePreview(){
-
-  const accent =
-    $("themeAccent").value ||
-    "#00eaff";
-
-  const accent2 =
-    $("themeAccent2").value ||
-    "#9d5cff";
-
-  const preview =
-    $("themePreview");
-
-  preview.style.setProperty(
-    "--preview-accent",
-    accent
-  );
-
-  preview.style.setProperty(
-    "--preview-accent2",
-    accent2
-  );
-
-  $("previewTitle").textContent =
-    $("themeHeroTitle").value ||
-    $("themeName").value ||
-    "CrowRules Theme";
-
-  $("previewDescription").textContent =
-    $("themeHeroDescription").value ||
-    $("themeBanner").value ||
-    "Holiday and special-event preview.";
-
-}
-
-/* =========================================================
-   CONNECTION DIAGNOSTICS
-========================================================= */
-
-async function renderConnectionDiagnostics(){
-
-  const container =
-    $("connectionDiagnostics");
-
-  container.innerHTML =
-    `<div class="card" style="padding:18px">
-      <div class="loading"></div>
-      Running diagnostics...
-    </div>`;
-
-  const registry =
-    await connectionTest();
-
-  const themeResult =
-    await testTable(
-      "cr_admin_theme_events"
-    );
-
-  const adminResult =
-    await testTable(
-      "cr_admins"
-    );
-
-  container.innerHTML = `
-
-    <div class="grid stats">
-
-      <div class="card stat">
-
-        <div class="stat-label">
-          Supabase
-        </div>
-
-        <div class="stat-value">
-          ${registry ? "ONLINE" : "ERROR"}
-        </div>
-
-        <div class="stat-detail">
-          ${SUPABASE_URL}
-        </div>
-
-      </div>
-
-      <div class="card stat">
-
-        <div class="stat-label">
-          Admin Registry
-        </div>
-
-        <div class="stat-value">
-          ${adminResult ? "OK" : "ERROR"}
-        </div>
-
-        <div class="stat-detail">
-          cr_admins
-        </div>
-
-      </div>
-
-      <div class="card stat">
-
-        <div class="stat-label">
-          Theme Engine
-        </div>
-
-        <div class="stat-value">
-          ${themeResult ? "OK" : "ERROR"}
-        </div>
-
-        <div class="stat-detail">
-          cr_admin_theme_events
-        </div>
-
-      </div>
-
-      <div class="card stat">
-
-        <div class="stat-label">
-          Current User
-        </div>
-
-        <div class="stat-value"
-             style="font-size:12px">
-          ${escapeHtml(
-            currentUser?.email || "—"
-          )}
-        </div>
-
-        <div class="stat-detail">
-          Authenticated administrator
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="section">
-
-      <div class="card"
-           style="padding:18px">
-
-        <h2 style="
-          font-family:Orbitron;
-          font-size:14px;
-          margin-top:0">
-          Supabase Configuration
-        </h2>
-
-        <div class="status success">
-          Publishable browser key configured.
-          Service-role key is not exposed.
-        </div>
-
-        <br>
-
-        <div class="status">
-          Project:
-          ${escapeHtml(
-            SUPABASE_URL
-          )}
-        </div>
-
-      </div>
-
-    </div>
-  `;
-
-}
-
-async function testTable(table){
-
-  try{
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from(table)
-        .select("*")
-        .limit(1);
-
-    return !error;
-
-  }catch{
-
-    return false;
-
-  }
-
-}
-
-/* =========================================================
-   MODALS
-========================================================= */
-
-function openModal(id){
-
-  $(id)
-    .classList.add("open");
-
-}
-
-function closeModal(id){
-
-  $(id)
-    .classList.remove("open");
-
-}
-
-document
-  .querySelectorAll("[data-close]")
-  .forEach(button=>{
-
-    button.addEventListener(
-      "click",
-      ()=>{
-        closeModal(
-          button.dataset.close
-        );
-      }
-    );
-
-  });
-
-document
-  .querySelectorAll(".modal-backdrop")
-  .forEach(backdrop=>{
-
-    backdrop.addEventListener(
-      "click",
-      event=>{
-        if(
-          event.target === backdrop
-        ){
-          backdrop.classList.remove(
-            "open"
-          );
-        }
-      }
-    );
-
-  });
-
-/* =========================================================
-   EVENTS
-========================================================= */
-
-$("loginForm")
-  .addEventListener(
-    "submit",
-    signIn
-  );
-
-$("signOutBtn")
-  .addEventListener(
-    "click",
-    signOut
-  );
-
-$("refreshBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
-      await bootAdmin();
-
-      if(
-        currentCategory &&
-        currentTable
-      ){
-        await fetchTable();
-      }
-    }
-  );
-
-$("loadTableBtn")
-  .addEventListener(
-    "click",
-    loadTable
-  );
-
-$("newRowBtn")
-  .addEventListener(
-    "click",
-    newRow
-  );
-
-$("saveRowBtn")
-  .addEventListener(
-    "click",
-    saveRow
-  );
-
-$("newThemeBtn")
-  .addEventListener(
-    "click",
-    ()=>{
-      clearThemeForm();
-
-      delete $("themeModal")
-        .dataset.editId;
-
-      $("themeModalTitle")
-        .textContent =
-          "New Theme";
-
-      openModal("themeModal");
-    }
-  );
-
-$("saveThemeBtn")
-  .addEventListener(
-    "click",
-    saveTheme
-  );
-
-$("reloadThemesBtn")
-  .addEventListener(
-    "click",
-    loadThemes
-  );
-
-$("activeThemeBtn")
-  .addEventListener(
-    "click",
-    ()=>{
-      const active =
-        getActiveThemes();
-
-      if(!active.length){
-
-        showStatus(
-          $("themeStatus"),
-          "No themes are active right now.",
-          "warning"
-        );
-
-        return;
-
-      }
-
-      showStatus(
-        $("themeStatus"),
-        active
-          .map(
-            theme =>
-              `ACTIVE: ${theme.name}`
-          )
-          .join(" | "),
-        "success"
-      );
-
-    }
-  );
-
-$("tableSearch")
-  .addEventListener(
-    "input",
-    filterRenderedTable
-  );
-
-$("tableSelect")
-  .addEventListener(
-    "change",
-    loadTable
-  );
-
-$("mobileMenu")
-  .addEventListener(
-    "click",
-    ()=>{
-      $("sidebar")
-        .classList.toggle("open");
-    }
-  );
-
-[
-  "themeName",
-  "themeHeroTitle",
-  "themeHeroDescription",
-  "themeBanner",
-  "themeAccent",
-  "themeAccent2"
-].forEach(id=>{
-
-  $(id)
-    .addEventListener(
-      "input",
-      updateThemePreview
-    );
-
-});
-
-/* =========================================================
-   TABLE SEARCH
-========================================================= */
-
-function filterRenderedTable(){
-
-  const search =
-    $("tableSearch")
-      .value
-      .trim()
-      .toLowerCase();
-
-  if(!search){
-
-    renderTable();
-
-    return;
-
-  }
-
-  const filtered =
-    currentRows.filter(row=>{
 
       try{
 
-        return JSON.stringify(row)
-          .toLowerCase()
-          .includes(search);
+        this.supabase =
+          window.supabase.createClient(
+            this.supabaseUrl,
+            this.supabaseKey
+          );
 
-      }catch{
+        console.log(
+          "[CrowRules] Supabase initialized."
+        );
 
-        return false;
+      }catch(error){
+
+        console.warn(
+          "[CrowRules] Supabase initialization failed.",
+          error
+        );
 
       }
 
-    });
+    }else{
 
-  const original =
-    currentRows;
-
-  currentRows =
-    filtered;
-
-  renderTable();
-
-  currentRows =
-    original;
-
-}
-
-/* =========================================================
-   KEYBOARD
-========================================================= */
-
-document.addEventListener(
-  "keydown",
-  event=>{
-
-    if(
-      event.key === "Escape"
-    ){
-
-      document
-        .querySelectorAll(
-          ".modal-backdrop.open"
-        )
-        .forEach(modal=>{
-          modal.classList.remove(
-            "open"
-          );
-        });
+      console.info(
+        "[CrowRules] Running dashboard in demo/fallback mode."
+      );
 
     }
 
+  },
+
+
+  initializeDate(){
+
+    const element =
+      document.getElementById("dateText");
+
+    const now = new Date();
+
+    element.textContent =
+      now.toLocaleDateString(
+        undefined,
+        {
+          weekday:"long",
+          year:"numeric",
+          month:"long",
+          day:"numeric"
+        }
+      ) +
+      " • CrowRules administrative command center";
+
+  },
+
+
+  async loadDashboard(){
+
+    let data = this.demoData;
+
+    if(this.supabase){
+
+      try{
+
+        data = await this.fetchSupabaseStats();
+
+      }catch(error){
+
+        console.warn(
+          "[CrowRules] Dashboard query failed. Using fallback data.",
+          error
+        );
+
+        this.toast(
+          "Dashboard",
+          "Live database statistics unavailable. Showing fallback values."
+        );
+
+      }
+
+    }
+
+    this.renderStats(data);
+
+  },
+
+
+  async fetchSupabaseStats(){
+
+    /*
+     * These table names intentionally match the modular
+     * architecture used by the CrowRules administration system.
+     *
+     * Missing tables do not break the dashboard because
+     * individual queries are isolated.
+     */
+
+    const result = {
+      ...this.demoData
+    };
+
+
+    async function countTable(client,table){
+
+      try{
+
+        const response =
+          await client
+            .from(table)
+            .select("*",{count:"exact",head:true});
+
+        if(
+          !response.error &&
+          typeof response.count === "number"
+        ){
+
+          return response.count;
+
+        }
+
+      }catch(error){
+
+        console.warn(
+          "Count failed:",
+          table,
+          error
+        );
+
+      }
+
+      return null;
+
+    }
+
+
+    const members =
+      await countTable(
+        this.supabase,
+        "profiles"
+      );
+
+    if(members !== null){
+      result.members = members;
+    }
+
+
+    const shows =
+      await countTable(
+        this.supabase,
+        "shows"
+      );
+
+    if(shows !== null){
+      result.shows = shows;
+    }
+
+
+    const episodes =
+      await countTable(
+        this.supabase,
+        "episodes"
+      );
+
+    if(episodes !== null){
+      result.episodes = episodes;
+    }
+
+
+    const movies =
+      await countTable(
+        this.supabase,
+        "movies"
+      );
+
+    if(movies !== null){
+      result.movies = movies;
+    }
+
+
+    const channels =
+      await countTable(
+        this.supabase,
+        "channels"
+      );
+
+    if(channels !== null){
+      result.channels = channels;
+    }
+
+
+    return result;
+
+  },
+
+
+  renderStats(data){
+
+    this.setText(
+      "statMembers",
+      this.formatNumber(data.members)
+    );
+
+    this.setText(
+      "statShows",
+      this.formatNumber(data.shows)
+    );
+
+    this.setText(
+      "statEpisodes",
+      this.formatNumber(data.episodes)
+    );
+
+    this.setText(
+      "statMovies",
+      this.formatNumber(data.movies)
+    );
+
+    this.setText(
+      "statChannels",
+      this.formatNumber(data.channels)
+    );
+
+    this.setText(
+      "statRevenue",
+      this.formatCurrency(data.revenue)
+    );
+
+    this.setText(
+      "overviewShows",
+      `${this.formatNumber(data.shows)} published shows`
+    );
+
+    this.setText(
+      "overviewEpisodes",
+      `${this.formatNumber(data.episodes)} episodes`
+    );
+
+    this.setText(
+      "overviewMovies",
+      `${this.formatNumber(data.movies)} movies`
+    );
+
+    this.setText(
+      "revenueValue",
+      this.formatCurrency(data.revenue)
+    );
+
+
+    this.setText(
+      "activeMembers",
+      this.formatNumber(
+        Math.round(data.members * .31)
+      )
+    );
+
+    this.setText(
+      "newMembers",
+      "12"
+    );
+
+    this.setText(
+      "onlineMembers",
+      "7"
+    );
+
+  },
+
+
+  initializeNavigation(){
+
+    const menu =
+      document.getElementById("menuBtn");
+
+    const sidebar =
+      document.getElementById("sidebar");
+
+    if(menu){
+
+      menu.addEventListener(
+        "click",
+        () => {
+
+          sidebar.classList.toggle("open");
+
+        }
+      );
+
+    }
+
+
+    document.addEventListener(
+      "click",
+      event => {
+
+        if(
+          window.innerWidth <= 950 &&
+          sidebar.classList.contains("open") &&
+          !sidebar.contains(event.target) &&
+          !menu.contains(event.target)
+        ){
+
+          sidebar.classList.remove("open");
+
+        }
+
+      }
+    );
+
+  },
+
+
+  initializeSearch(){
+
+    const button =
+      document.getElementById("searchBtn");
+
+    const overlay =
+      document.getElementById("searchOverlay");
+
+    const input =
+      document.getElementById("searchInput");
+
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        overlay.classList.add("open");
+
+        setTimeout(
+          () => input.focus(),
+          50
+        );
+
+      }
+    );
+
+
+    overlay.addEventListener(
+      "click",
+      event => {
+
+        if(event.target === overlay){
+
+          overlay.classList.remove("open");
+
+        }
+
+      }
+    );
+
+
+    input.addEventListener(
+      "input",
+      () => {
+
+        const query =
+          input.value.trim().toLowerCase();
+
+        document
+          .querySelectorAll(".search-result")
+          .forEach(result => {
+
+            result.style.display =
+              !query ||
+              result.textContent
+                .toLowerCase()
+                .includes(query)
+                ? "flex"
+                : "none";
+
+          });
+
+      }
+    );
+
+  },
+
+
+  initializeNotifications(){
+
+    const button =
+      document.getElementById("notificationBtn");
+
+    const drawer =
+      document.getElementById("notificationDrawer");
+
+    const close =
+      document.getElementById("closeNotifications");
+
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        drawer.classList.add("open");
+
+      }
+    );
+
+
+    close.addEventListener(
+      "click",
+      () => {
+
+        drawer.classList.remove("open");
+
+      }
+    );
+
+  },
+
+
+  initializeFullscreen(){
+
+    const button =
+      document.getElementById("fullscreenBtn");
+
+    button.addEventListener(
+      "click",
+      async () => {
+
+        try{
+
+          if(!document.fullscreenElement){
+
+            await document.documentElement.requestFullscreen();
+
+          }else{
+
+            await document.exitFullscreen();
+
+          }
+
+        }catch(error){
+
+          console.warn(
+            "Fullscreen unavailable.",
+            error
+          );
+
+        }
+
+      }
+    );
+
+  },
+
+
+  initializeKeyboard(){
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if(
+          (event.ctrlKey || event.metaKey) &&
+          event.key.toLowerCase() === "k"
+        ){
+
+          event.preventDefault();
+
+          document
+            .getElementById("searchBtn")
+            .click();
+
+        }
+
+
+        if(event.key === "Escape"){
+
+          document
+            .getElementById("searchOverlay")
+            .classList.remove("open");
+
+          document
+            .getElementById("notificationDrawer")
+            .classList.remove("open");
+
+        }
+
+      }
+    );
+
+  },
+
+
+  setText(id,value){
+
+    const element =
+      document.getElementById(id);
+
+    if(element){
+
+      element.textContent = value;
+
+    }
+
+  },
+
+
+  formatNumber(value){
+
+    return Number(value || 0)
+      .toLocaleString();
+
+  },
+
+
+  formatCurrency(value){
+
+    return Number(value || 0)
+      .toLocaleString(
+        "en-US",
+        {
+          style:"currency",
+          currency:"USD",
+          maximumFractionDigits:0
+        }
+      );
+
+  },
+
+
+  toast(title,message){
+
+    const container =
+      document.getElementById(
+        "toastContainer"
+      );
+
+    const toast =
+      document.createElement("div");
+
+    toast.className = "toast";
+
+    toast.innerHTML = `
+      <strong>${this.escape(title)}</strong>
+      <span>${this.escape(message)}</span>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(
+      () => toast.remove(),
+      4000
+    );
+
+  },
+
+
+  escape(value){
+
+    return String(value)
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+
   }
-);
+
+};
+
 
 /* =========================================================
-   INITIAL SESSION
+   QUICK CREATE
 ========================================================= */
 
-(async function(){
+function quickCreate(type){
 
-  try{
+  const destinations = {
 
-    const session =
-      await getSession();
+    show:"shows.html",
+    episode:"episodes.html",
+    movie:"movies.html",
+    member:"members.html"
 
-    await handleSession(session);
+  };
 
-  }catch(error){
+  const labels = {
 
-    console.error(error);
+    show:"New Show",
+    episode:"New Episode",
+    movie:"New Movie",
+    member:"New Member"
 
-    setConnection(false);
+  };
+
+
+  if(destinations[type]){
+
+    window.location.href =
+      destinations[type];
 
   }
 
-})();
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    CrowRulesAdmin.init();
+
+  }
+);
 
 </script>
 

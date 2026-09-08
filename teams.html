@@ -1,0 +1,3475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>CrowRules Sports — Teams</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Sports Team Command Center">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(182,108,255,.08),transparent 30%),
+    radial-gradient(circle at 10% 40%,rgba(55,215,255,.04),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* ========================================
+   SIDEBAR
+======================================== */
+
+.sidebar{
+  position:fixed;
+  z-index:100;
+  top:0;
+  left:0;
+  bottom:0;
+  width:260px;
+  overflow-y:auto;
+  background:rgba(8,8,11,.98);
+  border-right:1px solid var(--line);
+  transition:.25s ease;
+}
+
+.brand{
+  padding:22px 20px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.crow-icon{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--accent);
+  border-radius:10px;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  box-shadow:0 0 22px rgba(182,108,255,.16);
+}
+
+.brand-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+  text-transform:uppercase;
+  letter-spacing:1.4px;
+}
+
+.nav-section{
+  padding:18px 12px 5px;
+}
+
+.nav-label{
+  color:#666673;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  padding:0 10px 8px;
+}
+
+.nav-link{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 11px;
+  margin:2px 0;
+  border:1px solid transparent;
+  border-radius:8px;
+  color:#aaaab4;
+  font-size:12px;
+  transition:.2s;
+}
+
+.nav-link:hover{
+  color:#fff;
+  background:#111116;
+  border-color:#24242d;
+}
+
+.nav-link.active{
+  color:#fff;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(182,108,255,.16),
+      rgba(108,92,255,.07)
+    );
+  border-color:rgba(182,108,255,.35);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+}
+
+/* ========================================
+   MAIN
+======================================== */
+
+.main{
+  margin-left:260px;
+  min-height:100vh;
+}
+
+.topbar{
+  position:sticky;
+  z-index:80;
+  top:0;
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(5,5,5,.86);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.menu-btn{
+  display:none;
+  width:38px;
+  height:38px;
+  background:#111116;
+  border:1px solid var(--line);
+  border-radius:8px;
+  color:#fff;
+}
+
+.breadcrumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.clock{
+  color:#888894;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.admin-pill{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#0d0d11;
+  font-size:10px;
+}
+
+.online-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px rgba(69,230,154,.6);
+}
+
+/* ========================================
+   CONTENT
+======================================== */
+
+.content{
+  max-width:1700px;
+  margin:auto;
+  padding:30px;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:30px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(182,108,255,.09),
+      transparent 42%
+    ),
+    linear-gradient(
+      300deg,
+      rgba(55,215,255,.04),
+      transparent 40%
+    ),
+    var(--panel);
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+.hero::after{
+  content:"TEAMS";
+  position:absolute;
+  right:28px;
+  bottom:-25px;
+  color:rgba(255,255,255,.025);
+  font-family:Orbitron,sans-serif;
+  font-size:105px;
+  font-weight:800;
+  pointer-events:none;
+}
+
+.eyebrow{
+  color:var(--cyan);
+  margin-bottom:10px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:32px;
+}
+
+.hero p{
+  max-width:800px;
+  margin:12px 0 22px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+/* ========================================
+   BUTTONS
+======================================== */
+
+.btn{
+  padding:10px 14px;
+  border:1px solid var(--line2);
+  border-radius:8px;
+  background:#111116;
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.btn:hover{
+  border-color:var(--accent);
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  border-color:transparent;
+  background:linear-gradient(
+    135deg,
+    var(--accent),
+    var(--accent2)
+  );
+}
+
+.btn.cyan{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.35);
+}
+
+.btn.danger{
+  color:var(--red);
+  border-color:rgba(255,82,109,.25);
+}
+
+/* ========================================
+   STATS
+======================================== */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin:18px 0;
+}
+
+.stat{
+  padding:17px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--panel);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  margin-top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+}
+
+.stat-meta{
+  margin-top:5px;
+  color:#696974;
+  font-size:9px;
+}
+
+.stat-meta.good{
+  color:var(--green);
+}
+
+/* ========================================
+   TOOLBAR
+======================================== */
+
+.toolbar{
+  display:grid;
+  grid-template-columns:1.8fr repeat(4,1fr) auto;
+  gap:10px;
+  margin:18px 0;
+}
+
+.field input,
+.field select{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  outline:none;
+  background:#0d0d11;
+  color:#fff;
+  font-size:11px;
+}
+
+.field input:focus,
+.field select:focus{
+  border-color:rgba(182,108,255,.6);
+  box-shadow:0 0 0 3px rgba(182,108,255,.08);
+}
+
+/* ========================================
+   SECTION HEADER
+======================================== */
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin:28px 0 12px;
+}
+
+.section-title{
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+}
+
+.section-sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* ========================================
+   TEAM GRID
+======================================== */
+
+.team-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+}
+
+.team-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--panel);
+  transition:.2s;
+}
+
+.team-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--line2);
+}
+
+.team-banner{
+  height:78px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(182,108,255,.16),
+      rgba(55,215,255,.05)
+    ),
+    #121218;
+  border-bottom:1px solid var(--line);
+}
+
+.team-content{
+  position:relative;
+  padding:0 16px 16px;
+}
+
+.team-logo{
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  margin-top:-29px;
+  border:2px solid #1e1e26;
+  border-radius:14px;
+  background:#18181e;
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:0 8px 25px rgba(0,0,0,.35);
+}
+
+.team-status{
+  position:absolute;
+  top:8px;
+  right:14px;
+  padding:4px 7px;
+  border-radius:999px;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.status-active{
+  color:var(--green);
+  border:1px solid rgba(69,230,154,.25);
+  background:rgba(69,230,154,.06);
+}
+
+.status-inactive{
+  color:var(--muted);
+  border:1px solid var(--line);
+  background:#111116;
+}
+
+.status-coming{
+  color:var(--cyan);
+  border:1px solid rgba(55,215,255,.25);
+  background:rgba(55,215,255,.05);
+}
+
+.team-name{
+  margin-top:12px;
+  font-size:14px;
+  font-weight:800;
+}
+
+.team-location{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.team-meta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+
+.meta-box{
+  padding:9px;
+  border:1px solid #22222a;
+  border-radius:8px;
+  background:#101015;
+}
+
+.meta-box span{
+  display:block;
+  color:#686872;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+.meta-box strong{
+  display:block;
+  margin-top:4px;
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+.team-actions{
+  display:flex;
+  gap:7px;
+  margin-top:13px;
+}
+
+.team-actions .btn{
+  flex:1;
+  padding:8px 7px;
+  font-size:9px;
+}
+
+/* ========================================
+   TABLE
+======================================== */
+
+.panel{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--panel);
+}
+
+.panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px 17px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  padding:10px 13px;
+  border-bottom:1px solid var(--line);
+  color:#6e6e78;
+  font-size:8px;
+  letter-spacing:1px;
+  text-align:left;
+  text-transform:uppercase;
+}
+
+td{
+  padding:11px 13px;
+  border-bottom:1px solid #1b1b21;
+  color:#b7b7c0;
+  font-size:10px;
+}
+
+tr:last-child td{
+  border-bottom:0;
+}
+
+.team-cell{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#fff;
+  font-weight:700;
+}
+
+.mini-logo{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line2);
+  border-radius:7px;
+  background:#18181e;
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 7px;
+  border-radius:999px;
+  font-size:8px;
+  font-weight:800;
+}
+
+.badge-active{
+  color:var(--green);
+  border:1px solid rgba(69,230,154,.25);
+  background:rgba(69,230,154,.06);
+}
+
+.badge-coming{
+  color:var(--cyan);
+  border:1px solid rgba(55,215,255,.25);
+  background:rgba(55,215,255,.05);
+}
+
+.badge-inactive{
+  color:var(--muted);
+  border:1px solid var(--line);
+  background:#111116;
+}
+
+.row-actions{
+  display:flex;
+  gap:6px;
+}
+
+.icon-btn{
+  width:29px;
+  height:29px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:#111116;
+  color:#aaaab4;
+  font-size:10px;
+}
+
+.icon-btn:hover{
+  color:#fff;
+  border-color:var(--accent);
+}
+
+/* ========================================
+   LOWER GRID
+======================================== */
+
+.lower-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:14px;
+}
+
+.activity-item{
+  display:grid;
+  grid-template-columns:34px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid #1c1c22;
+}
+
+.activity-item:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#111116;
+  color:var(--accent);
+}
+
+.activity-title{
+  color:#fff;
+  font-size:10px;
+  font-weight:700;
+}
+
+.activity-meta{
+  margin-top:3px;
+  color:#666672;
+  font-size:8px;
+}
+
+.activity-time{
+  color:#666672;
+  font-size:8px;
+}
+
+/* ========================================
+   MODAL
+======================================== */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:300;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:min(760px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid var(--line2);
+  border-radius:15px;
+  background:#0c0c10;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+
+.modal-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-header h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#121218;
+  color:#fff;
+}
+
+.modal-body{
+  padding:19px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-label{
+  display:block;
+  margin-bottom:6px;
+  color:#878792;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  outline:none;
+  background:#111116;
+  color:#fff;
+  font-size:11px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  border-color:rgba(182,108,255,.6);
+  box-shadow:0 0 0 3px rgba(182,108,255,.08);
+}
+
+.checkbox-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-height:42px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#111116;
+  color:#aaaab4;
+  font-size:10px;
+}
+
+.checkbox-row input{
+  width:auto;
+}
+
+.modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  padding:15px 19px;
+  border-top:1px solid var(--line);
+}
+
+/* ========================================
+   TOAST
+======================================== */
+
+.toast{
+  position:fixed;
+  z-index:500;
+  right:24px;
+  bottom:24px;
+  padding:12px 15px;
+  border:1px solid var(--line2);
+  border-left:3px solid var(--accent);
+  border-radius:8px;
+  background:#111117;
+  color:#fff;
+  font-size:10px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media(max-width:1300px){
+
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .team-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .toolbar{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .toolbar .search{
+    grid-column:1/-1;
+  }
+}
+
+@media(max-width:1000px){
+
+  .team-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .lower-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .content{
+    padding:20px;
+  }
+}
+
+@media(max-width:650px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .team-grid{
+    grid-template-columns:1fr;
+  }
+
+  .toolbar{
+    grid-template-columns:1fr;
+  }
+
+  .toolbar .search{
+    grid-column:auto;
+  }
+
+  .hero{
+    padding:22px;
+  }
+
+  .hero h1{
+    font-size:24px;
+  }
+
+  .hero::after{
+    font-size:60px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+
+  .clock{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ========================================
+     SIDEBAR
+======================================== -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">
+      <div class="crow-icon">CR</div>
+
+      <div>
+        <div class="brand-title">CROWRULES</div>
+        <div class="brand-sub">Main Administration</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">Core</div>
+
+    <a class="nav-link" href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a class="nav-link" href="content.html">
+      <span class="nav-icon">◈</span>
+      Content
+    </a>
+
+    <a class="nav-link" href="pages.html">
+      <span class="nav-icon">▤</span>
+      Pages
+    </a>
+
+    <a class="nav-link" href="categories.html">
+      <span class="nav-icon">◫</span>
+      Categories
+    </a>
+
+    <a class="nav-link" href="tags.html">
+      <span class="nav-icon">#</span>
+      Tags
+    </a>
+
+    <a class="nav-link" href="shows.html">
+      <span class="nav-icon">▣</span>
+      Shows
+    </a>
+
+    <a class="nav-link" href="episodes.html">
+      <span class="nav-icon">▶</span>
+      Episodes
+    </a>
+
+    <a class="nav-link" href="movies.html">
+      <span class="nav-icon">▰</span>
+      Movies
+    </a>
+
+    <a class="nav-link" href="audio.html">
+      <span class="nav-icon">♫</span>
+      Audio
+    </a>
+
+    <a class="nav-link" href="articles.html">
+      <span class="nav-icon">✎</span>
+      Articles
+    </a>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">Broadcast</div>
+
+    <a class="nav-link" href="channels.html">
+      <span class="nav-icon">◉</span>
+      Channels
+    </a>
+
+    <a class="nav-link" href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a class="nav-link" href="live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <a class="nav-link" href="guide.html">
+      <span class="nav-icon">▦</span>
+      TV Guide
+    </a>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">People</div>
+
+    <a class="nav-link" href="members.html">
+      <span class="nav-icon">♙</span>
+      Members
+    </a>
+
+    <a class="nav-link" href="community.html">
+      <span class="nav-icon">♣</span>
+      Community
+    </a>
+
+    <a class="nav-link" href="creators.html">
+      <span class="nav-icon">✦</span>
+      Creators
+    </a>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">CrowRules Network</div>
+
+    <a class="nav-link" href="artists.html">
+      <span class="nav-icon">♬</span>
+      Artists
+    </a>
+
+    <a class="nav-link" href="albums.html">
+      <span class="nav-icon">▰</span>
+      Albums
+    </a>
+
+    <a class="nav-link" href="records.html">
+      <span class="nav-icon">◉</span>
+      Records
+    </a>
+
+    <a class="nav-link" href="sports.html">
+      <span class="nav-icon">⚡</span>
+      Sports
+    </a>
+
+    <a class="nav-link active" href="teams.html">
+      <span class="nav-icon">♜</span>
+      Teams
+    </a>
+
+    <a class="nav-link" href="memorials.html">
+      <span class="nav-icon">✧</span>
+      Memorials
+    </a>
+
+    <a class="nav-link" href="awards.html">
+      <span class="nav-icon">★</span>
+      Awards
+    </a>
+
+  </div>
+
+  <div class="nav-section">
+
+    <div class="nav-label">System</div>
+
+    <a class="nav-link" href="analytics.html">
+      <span class="nav-icon">◒</span>
+      Analytics
+    </a>
+
+    <a class="nav-link" href="moderation.html">
+      <span class="nav-icon">✓</span>
+      Moderation
+    </a>
+
+    <a class="nav-link" href="logs.html">
+      <span class="nav-icon">≡</span>
+      Logs
+    </a>
+
+    <a class="nav-link" href="notifications.html">
+      <span class="nav-icon">♢</span>
+      Notifications
+    </a>
+
+    <a class="nav-link" href="activity.html">
+      <span class="nav-icon">↯</span>
+      Activity
+    </a>
+
+    <a class="nav-link" href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </div>
+
+</aside>
+
+<!-- ========================================
+     MAIN
+======================================== -->
+
+<main class="main">
+
+<header class="topbar">
+
+  <div class="top-left">
+
+    <button class="menu-btn" id="menuBtn">
+      ☰
+    </button>
+
+    <div class="breadcrumb">
+      CrowRules / Sports / <strong>Teams</strong>
+    </div>
+
+  </div>
+
+  <div class="top-actions">
+
+    <div class="clock" id="clock">
+      00:00:00
+    </div>
+
+    <div class="admin-pill">
+      <span class="online-dot"></span>
+      Admin Online
+    </div>
+
+  </div>
+
+</header>
+
+<div class="content">
+
+<!-- ========================================
+     HERO
+======================================== -->
+
+<section class="hero">
+
+  <div class="eyebrow">
+    CrowRules Sports Network / Team Management
+  </div>
+
+  <h1>Team Command Center</h1>
+
+  <p>
+    Create and manage professional, collegiate and regional sports teams
+    across the CrowRules Sports Network. Control team identities, leagues,
+    divisions, locations, logos, standings, rankings and publishing status.
+  </p>
+
+  <div class="hero-actions">
+
+    <button class="btn primary" onclick="openTeamModal()">
+      + Add Team
+    </button>
+
+    <button
+      class="btn cyan"
+      onclick="showToast('Team import workspace opened.')"
+    >
+      Import Teams
+    </button>
+
+    <button
+      class="btn"
+      onclick="window.location.href='sports.html'"
+    >
+      Sports Dashboard
+    </button>
+
+    <button
+      class="btn"
+      onclick="exportTeams()"
+    >
+      Export Teams
+    </button>
+
+  </div>
+
+</section>
+
+<!-- ========================================
+     STATS
+======================================== -->
+
+<section class="stats">
+
+  <div class="stat">
+    <div class="stat-label">Total Teams</div>
+    <div class="stat-value" id="totalTeams">148</div>
+    <div class="stat-meta good">+12 this season</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Active</div>
+    <div class="stat-value">132</div>
+    <div class="stat-meta">Currently published</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">PNW Teams</div>
+    <div class="stat-value">18</div>
+    <div class="stat-meta good">Regional priority</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Leagues</div>
+    <div class="stat-value">12</div>
+    <div class="stat-meta">Connected leagues</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Ranked</div>
+    <div class="stat-value">36</div>
+    <div class="stat-meta">Currently ranked</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Games</div>
+    <div class="stat-value">1,284</div>
+    <div class="stat-meta">Team-linked games</div>
+  </div>
+
+</section>
+
+<!-- ========================================
+     FILTERS
+======================================== -->
+
+<div class="toolbar">
+
+  <div class="field search">
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Search teams, cities, leagues..."
+    >
+  </div>
+
+  <div class="field">
+
+    <select id="leagueFilter">
+
+      <option value="">All Leagues</option>
+      <option>NFL</option>
+      <option>NBA</option>
+      <option>MLB</option>
+      <option>NHL</option>
+      <option>WNBA</option>
+      <option>MLS</option>
+      <option>College Football</option>
+      <option>College Basketball</option>
+
+    </select>
+
+  </div>
+
+  <div class="field">
+
+    <select id="regionFilter">
+
+      <option value="">All Regions</option>
+      <option>Pacific Northwest</option>
+      <option>Washington</option>
+      <option>National</option>
+      <option>International</option>
+
+    </select>
+
+  </div>
+
+  <div class="field">
+
+    <select id="statusFilter">
+
+      <option value="">All Status</option>
+      <option>Active</option>
+      <option>Coming Soon</option>
+      <option>Inactive</option>
+
+    </select>
+
+  </div>
+
+  <div class="field">
+
+    <select id="genderFilter">
+
+      <option value="">All Programs</option>
+      <option>Men's</option>
+      <option>Women's</option>
+      <option>Mixed</option>
+      <option>College</option>
+
+    </select>
+
+  </div>
+
+  <button class="btn" onclick="resetFilters()">
+    Reset
+  </button>
+
+</div>
+
+<!-- ========================================
+     FEATURED TEAMS
+======================================== -->
+
+<div class="section-head">
+
+  <div>
+    <div class="section-title">
+      Featured Teams
+    </div>
+
+    <div class="section-sub">
+      Priority teams displayed across CrowRules Sports
+    </div>
+  </div>
+
+  <button
+    class="btn"
+    onclick="showToast('Featured team manager opened.')"
+  >
+    Manage Featured
+  </button>
+
+</div>
+
+<div class="team-grid" id="teamGrid">
+
+  <!-- TEAM 1 -->
+
+  <article
+    class="team-card"
+    data-name="Seattle Seahawks"
+    data-league="NFL"
+    data-region="Pacific Northwest"
+    data-status="Active"
+    data-gender="Men's"
+  >
+
+    <div class="team-banner"></div>
+
+    <div class="team-content">
+
+      <div class="team-logo">
+        SEA
+      </div>
+
+      <div class="team-status status-active">
+        Active
+      </div>
+
+      <div class="team-name">
+        Seattle Seahawks
+      </div>
+
+      <div class="team-location">
+        Seattle, Washington · NFL
+      </div>
+
+      <div class="team-meta">
+
+        <div class="meta-box">
+          <span>Record</span>
+          <strong>10–3</strong>
+        </div>
+
+        <div class="meta-box">
+          <span>Rank</span>
+          <strong>#4</strong>
+        </div>
+
+      </div>
+
+      <div class="team-actions">
+
+        <button
+          class="btn"
+          onclick="viewTeam('Seattle Seahawks')"
+        >
+          View
+        </button>
+
+        <button
+          class="btn"
+          onclick="editTeam('Seattle Seahawks')"
+        >
+          Edit
+        </button>
+
+      </div>
+
+    </div>
+
+  </article>
+
+  <!-- TEAM 2 -->
+
+  <article
+    class="team-card"
+    data-name="Seattle Mariners"
+    data-league="MLB"
+    data-region="Pacific Northwest"
+    data-status="Active"
+    data-gender="Men's"
+  >
+
+    <div class="team-banner"></div>
+
+    <div class="team-content">
+
+      <div class="team-logo">
+        SEA
+      </div>
+
+      <div class="team-status status-active">
+        Active
+      </div>
+
+      <div class="team-name">
+        Seattle Mariners
+      </div>
+
+      <div class="team-location">
+        Seattle, Washington · MLB
+      </div>
+
+      <div class="team-meta">
+
+        <div class="meta-box">
+          <span>Record</span>
+          <strong>82–61</strong>
+        </div>
+
+        <div class="meta-box">
+          <span>Rank</span>
+          <strong>#7</strong>
+        </div>
+
+      </div>
+
+      <div class="team-actions">
+
+        <button
+          class="btn"
+          onclick="viewTeam('Seattle Mariners')"
+        >
+          View
+        </button>
+
+        <button
+          class="btn"
+          onclick="editTeam('Seattle Mariners')"
+        >
+          Edit
+        </button>
+
+      </div>
+
+    </div>
+
+  </article>
+
+  <!-- TEAM 3 -->
+
+  <article
+    class="team-card"
+    data-name="Seattle Kraken"
+    data-league="NHL"
+    data-region="Pacific Northwest"
+    data-status="Active"
+    data-gender="Men's"
+  >
+
+    <div class="team-banner"></div>
+
+    <div class="team-content">
+
+      <div class="team-logo">
+        SEA
+      </div>
+
+      <div class="team-status status-active">
+        Active
+      </div>
+
+      <div class="team-name">
+        Seattle Kraken
+      </div>
+
+      <div class="team-location">
+        Seattle, Washington · NHL
+      </div>
+
+      <div class="team-meta">
+
+        <div class="meta-box">
+          <span>Record</span>
+          <strong>31–19</strong>
+        </div>
+
+        <div class="meta-box">
+          <span>Rank</span>
+          <strong>#8</strong>
+        </div>
+
+      </div>
+
+      <div class="team-actions">
+
+        <button
+          class="btn"
+          onclick="viewTeam('Seattle Kraken')"
+        >
+          View
+        </button>
+
+        <button
+          class="btn"
+          onclick="editTeam('Seattle Kraken')"
+        >
+          Edit
+        </button>
+
+      </div>
+
+    </div>
+
+  </article>
+
+  <!-- TEAM 4 -->
+
+  <article
+    class="team-card"
+    data-name="Seattle Storm"
+    data-league="WNBA"
+    data-region="Pacific Northwest"
+    data-status="Active"
+    data-gender="Women's"
+  >
+
+    <div class="team-banner"></div>
+
+    <div class="team-content">
+
+      <div class="team-logo">
+        SEA
+      </div>
+
+      <div class="team-status status-active">
+        Active
+      </div>
+
+      <div class="team-name">
+        Seattle Storm
+      </div>
+
+      <div class="team-location">
+        Seattle, Washington · WNBA
+      </div>
+
+      <div class="team-meta">
+
+        <div class="meta-box">
+          <span>Record</span>
+          <strong>24–12</strong>
+        </div>
+
+        <div class="meta-box">
+          <span>Rank</span>
+          <strong>#5</strong>
+        </div>
+
+      </div>
+
+      <div class="team-actions">
+
+        <button
+          class="btn"
+          onclick="viewTeam('Seattle Storm')"
+        >
+          View
+        </button>
+
+        <button
+          class="btn"
+          onclick="editTeam('Seattle Storm')"
+        >
+          Edit
+        </button>
+
+      </div>
+
+    </div>
+
+  </article>
+
+  <!-- TEAM 5 -->
+
+  <article
+    class="team-card"
+    data-name="Seattle Sounders FC"
+    data-league="MLS"
+    data-region="Pacific Northwest"
+    data-status="Active"
+    data-gender="Men's"
+  >
+
+    <div class="team-banner"></div>
+
+    <div class="team-content">
+
+      <div class="team-logo">
+        SEA
+      </div>
+
+      <div class="team-status status-active">
+        Active
+      </div>
+
+      <div class="team-name">
+        Seattle Sounders FC
+      </div>
+
+      <div class="team-location">
+        Seattle, Washington · MLS
+      </div>
+
+      <div class="team-meta">
+
+        <div class="meta-box">
+          <span>Record</span>
+          <strong>15–7</strong>
+        </div>
+
+        <div class="meta-box">
+          <span>Rank</span>
+          <strong>#3</strong>
+        </div>
+
+      </div>
+
+      <div class="team-actions">
+
+        <button
+          class="btn"
+          onclick="viewTeam('Seattle Sounders FC')"
+        >
+          View
+        </button>
+
+        <button
+          class="btn"
+          onclick="editTeam('Seattle Sounders FC')"
+        >
+          Edit
+        </button>
+
+      </div>
+
+    </div>
+
+  </article>
+
+  <!-- TEAM 6 -->
+
+  <article
+    class="team-card"
+    data-name="Tacoma Defiance"
+    data-league="MLS"
+    data-region="Pacific Northwest"
+    data-status="Active"
+    data-gender="Men's"
+  >
+
+    <div class="team-banner"></div>
+
+    <div class="team-content">
+
+      <div class="team-logo">
+        TAC
+      </div>
+
+      <div class="team-status status-active">
+        Active
+      </div>
+
+      <div class="team-name">
+        Tacoma Defiance
+      </div>
+
+      <div class="team-location">
+        Tacoma, Washington · MLS Next Pro
+      </div>
+
+      <div class="team-meta">
+
+        <div class="meta-box">
+          <span>Record</span>
+          <strong>12–8</strong>
+        </div>
+
+        <div class="meta-box">
+          <span>Rank</span>
+          <strong>#6</strong>
+        </div>
+
+      </div>
+
+      <div class="team-actions">
+
+        <button
+          class="btn"
+          onclick="viewTeam('Tacoma Defiance')"
+        >
+          View
+        </button>
+
+        <button
+          class="btn"
+          onclick="editTeam('Tacoma Defiance')"
+        >
+          Edit
+        </button>
+
+      </div>
+
+    </div>
+
+  </article>
+
+  <!-- TEAM 7 -->
+
+  <article
+    class="team-card"
+    data-name="Washington Huskies"
+    data-league="College Football"
+    data-region="Washington"
+    data-status="Active"
+    data-gender="College"
+  >
+
+    <div class="team-banner"></div>
+
+    <div class="team-content">
+
+      <div class="team-logo">
+        UW
+      </div>
+
+      <div class="team-status status-active">
+        Active
+      </div>
+
+      <div class="team-name">
+        Washington Huskies
+      </div>
+
+      <div class="team-location">
+        Seattle, Washington · NCAA
+      </div>
+
+      <div class="team-meta">
+
+        <div class="meta-box">
+          <span>Record</span>
+          <strong>9–3</strong>
+        </div>
+
+        <div class="meta-box">
+          <span>Rank</span>
+          <strong>#12</strong>
+        </div>
+
+      </div>
+
+      <div class="team-actions">
+
+        <button
+          class="btn"
+          onclick="viewTeam('Washington Huskies')"
+        >
+          View
+        </button>
+
+        <button
+          class="btn"
+          onclick="editTeam('Washington Huskies')"
+        >
+          Edit
+        </button>
+
+      </div>
+
+    </div>
+
+  </article>
+
+  <!-- TEAM 8 -->
+
+  <article
+    class="team-card"
+    data-name="Gonzaga Bulldogs"
+    data-league="College Basketball"
+    data-region="Washington"
+    data-status="Active"
+    data-gender="College"
+  >
+
+    <div class="team-banner"></div>
+
+    <div class="team-content">
+
+      <div class="team-logo">
+        GU
+      </div>
+
+      <div class="team-status status-active">
+        Active
+      </div>
+
+      <div class="team-name">
+        Gonzaga Bulldogs
+      </div>
+
+      <div class="team-location">
+        Spokane, Washington · NCAA
+      </div>
+
+      <div class="team-meta">
+
+        <div class="meta-box">
+          <span>Record</span>
+          <strong>26–4</strong>
+        </div>
+
+        <div class="meta-box">
+          <span>Rank</span>
+          <strong>#9</strong>
+        </div>
+
+      </div>
+
+      <div class="team-actions">
+
+        <button
+          class="btn"
+          onclick="viewTeam('Gonzaga Bulldogs')"
+        >
+          View
+        </button>
+
+        <button
+          class="btn"
+          onclick="editTeam('Gonzaga Bulldogs')"
+        >
+          Edit
+        </button>
+
+      </div>
+
+    </div>
+
+  </article>
+
+</div>
+
+<!-- ========================================
+     TEAM REGISTRY
+======================================== -->
+
+<div class="section-head">
+
+  <div>
+    <div class="section-title">
+      Team Registry
+    </div>
+
+    <div class="section-sub">
+      Full CrowRules Sports team database
+    </div>
+  </div>
+
+  <button
+    class="btn primary"
+    onclick="openTeamModal()"
+  >
+    + New Team
+  </button>
+
+</div>
+
+<div class="panel">
+
+  <div class="panel-header">
+
+    <div class="panel-title">
+      All Teams
+    </div>
+
+    <div style="color:#686872;font-size:9px">
+      148 records
+    </div>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table id="teamsTable">
+
+      <thead>
+
+        <tr>
+          <th>Team</th>
+          <th>League</th>
+          <th>Region</th>
+          <th>Record</th>
+          <th>Rank</th>
+          <th>Status</th>
+          <th>Updated</th>
+          <th>Actions</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr data-row="Seattle Seahawks NFL Pacific Northwest">
+
+          <td>
+            <div class="team-cell">
+              <div class="mini-logo">SEA</div>
+              Seattle Seahawks
+            </div>
+          </td>
+
+          <td>NFL</td>
+          <td>Pacific Northwest</td>
+          <td>10–3</td>
+          <td>#4</td>
+
+          <td>
+            <span class="badge badge-active">
+              Active
+            </span>
+          </td>
+
+          <td>Today</td>
+
+          <td>
+            <div class="row-actions">
+              <button
+                class="icon-btn"
+                onclick="viewTeam('Seattle Seahawks')"
+              >↗</button>
+
+              <button
+                class="icon-btn"
+                onclick="editTeam('Seattle Seahawks')"
+              >✎</button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-row="Seattle Mariners MLB Pacific Northwest">
+
+          <td>
+            <div class="team-cell">
+              <div class="mini-logo">SEA</div>
+              Seattle Mariners
+            </div>
+          </td>
+
+          <td>MLB</td>
+          <td>Pacific Northwest</td>
+          <td>82–61</td>
+          <td>#7</td>
+
+          <td>
+            <span class="badge badge-active">
+              Active
+            </span>
+          </td>
+
+          <td>Today</td>
+
+          <td>
+            <div class="row-actions">
+              <button
+                class="icon-btn"
+                onclick="viewTeam('Seattle Mariners')"
+              >↗</button>
+
+              <button
+                class="icon-btn"
+                onclick="editTeam('Seattle Mariners')"
+              >✎</button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-row="Seattle Kraken NHL Pacific Northwest">
+
+          <td>
+            <div class="team-cell">
+              <div class="mini-logo">SEA</div>
+              Seattle Kraken
+            </div>
+          </td>
+
+          <td>NHL</td>
+          <td>Pacific Northwest</td>
+          <td>31–19</td>
+          <td>#8</td>
+
+          <td>
+            <span class="badge badge-active">
+              Active
+            </span>
+          </td>
+
+          <td>Yesterday</td>
+
+          <td>
+            <div class="row-actions">
+              <button
+                class="icon-btn"
+                onclick="viewTeam('Seattle Kraken')"
+              >↗</button>
+
+              <button
+                class="icon-btn"
+                onclick="editTeam('Seattle Kraken')"
+              >✎</button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-row="Seattle Storm WNBA Pacific Northwest">
+
+          <td>
+            <div class="team-cell">
+              <div class="mini-logo">SEA</div>
+              Seattle Storm
+            </div>
+          </td>
+
+          <td>WNBA</td>
+          <td>Pacific Northwest</td>
+          <td>24–12</td>
+          <td>#5</td>
+
+          <td>
+            <span class="badge badge-active">
+              Active
+            </span>
+          </td>
+
+          <td>Yesterday</td>
+
+          <td>
+            <div class="row-actions">
+              <button
+                class="icon-btn"
+                onclick="viewTeam('Seattle Storm')"
+              >↗</button>
+
+              <button
+                class="icon-btn"
+                onclick="editTeam('Seattle Storm')"
+              >✎</button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-row="Seattle Sounders MLS Pacific Northwest">
+
+          <td>
+            <div class="team-cell">
+              <div class="mini-logo">SEA</div>
+              Seattle Sounders FC
+            </div>
+          </td>
+
+          <td>MLS</td>
+          <td>Pacific Northwest</td>
+          <td>15–7</td>
+          <td>#3</td>
+
+          <td>
+            <span class="badge badge-active">
+              Active
+            </span>
+          </td>
+
+          <td>2 days ago</td>
+
+          <td>
+            <div class="row-actions">
+              <button
+                class="icon-btn"
+                onclick="viewTeam('Seattle Sounders FC')"
+              >↗</button>
+
+              <button
+                class="icon-btn"
+                onclick="editTeam('Seattle Sounders FC')"
+              >✎</button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-row="Tacoma Defiance MLS Pacific Northwest">
+
+          <td>
+            <div class="team-cell">
+              <div class="mini-logo">TAC</div>
+              Tacoma Defiance
+            </div>
+          </td>
+
+          <td>MLS Next Pro</td>
+          <td>Pacific Northwest</td>
+          <td>12–8</td>
+          <td>#6</td>
+
+          <td>
+            <span class="badge badge-active">
+              Active
+            </span>
+          </td>
+
+          <td>2 days ago</td>
+
+          <td>
+            <div class="row-actions">
+              <button
+                class="icon-btn"
+                onclick="viewTeam('Tacoma Defiance')"
+              >↗</button>
+
+              <button
+                class="icon-btn"
+                onclick="editTeam('Tacoma Defiance')"
+              >✎</button>
+            </div>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<!-- ========================================
+     ACTIVITY + TEAM TYPES
+======================================== -->
+
+<div class="lower-grid">
+
+  <div class="panel">
+
+    <div class="panel-header">
+      <div class="panel-title">
+        Team Activity
+      </div>
+    </div>
+
+    <div style="padding:16px">
+
+      <div class="activity-item">
+
+        <div class="activity-icon">
+          +
+        </div>
+
+        <div>
+          <div class="activity-title">
+            Tacoma Defiance profile updated
+          </div>
+
+          <div class="activity-meta">
+            Logo, location and roster metadata
+          </div>
+        </div>
+
+        <div class="activity-time">
+          12m
+        </div>
+
+      </div>
+
+      <div class="activity-item">
+
+        <div class="activity-icon">
+          ↗
+        </div>
+
+        <div>
+          <div class="activity-title">
+            Seattle Seahawks ranking updated
+          </div>
+
+          <div class="activity-meta">
+            National ranking synchronization
+          </div>
+        </div>
+
+        <div class="activity-time">
+          41m
+        </div>
+
+      </div>
+
+      <div class="activity-item">
+
+        <div class="activity-icon">
+          ♜
+        </div>
+
+        <div>
+          <div class="activity-title">
+            Washington Huskies added to featured teams
+          </div>
+
+          <div class="activity-meta">
+            Pacific Northwest collection
+          </div>
+        </div>
+
+        <div class="activity-time">
+          2h
+        </div>
+
+      </div>
+
+      <div class="activity-item">
+
+        <div class="activity-icon">
+          ✓
+        </div>
+
+        <div>
+          <div class="activity-title">
+            Seattle Storm season data synchronized
+          </div>
+
+          <div class="activity-meta">
+            Record and ranking information
+          </div>
+        </div>
+
+        <div class="activity-time">
+          4h
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-header">
+      <div class="panel-title">
+        Team Distribution
+      </div>
+    </div>
+
+    <div style="padding:16px">
+
+      <div style="margin-bottom:15px">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          margin-bottom:6px;
+          font-size:9px;
+        ">
+          <span>NFL</span>
+          <strong>32</strong>
+        </div>
+
+        <div style="
+          height:5px;
+          border-radius:99px;
+          background:#19191f;
+          overflow:hidden;
+        ">
+          <div style="
+            width:82%;
+            height:100%;
+            background:linear-gradient(
+              90deg,
+              var(--accent),
+              var(--accent2)
+            );
+          "></div>
+        </div>
+
+      </div>
+
+      <div style="margin-bottom:15px">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          margin-bottom:6px;
+          font-size:9px;
+        ">
+          <span>NBA</span>
+          <strong>30</strong>
+        </div>
+
+        <div style="
+          height:5px;
+          border-radius:99px;
+          background:#19191f;
+          overflow:hidden;
+        ">
+          <div style="
+            width:76%;
+            height:100%;
+            background:linear-gradient(
+              90deg,
+              var(--cyan),
+              var(--accent2)
+            );
+          "></div>
+        </div>
+
+      </div>
+
+      <div style="margin-bottom:15px">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          margin-bottom:6px;
+          font-size:9px;
+        ">
+          <span>MLB</span>
+          <strong>30</strong>
+        </div>
+
+        <div style="
+          height:5px;
+          border-radius:99px;
+          background:#19191f;
+          overflow:hidden;
+        ">
+          <div style="
+            width:76%;
+            height:100%;
+            background:linear-gradient(
+              90deg,
+              var(--accent),
+              var(--cyan)
+            );
+          "></div>
+        </div>
+
+      </div>
+
+      <div style="margin-bottom:15px">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          margin-bottom:6px;
+          font-size:9px;
+        ">
+          <span>NHL</span>
+          <strong>32</strong>
+        </div>
+
+        <div style="
+          height:5px;
+          border-radius:99px;
+          background:#19191f;
+          overflow:hidden;
+        ">
+          <div style="
+            width:82%;
+            height:100%;
+            background:linear-gradient(
+              90deg,
+              var(--cyan),
+              var(--accent)
+            );
+          "></div>
+        </div>
+
+      </div>
+
+      <div>
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          margin-bottom:6px;
+          font-size:9px;
+        ">
+          <span>Other Sports</span>
+          <strong>24</strong>
+        </div>
+
+        <div style="
+          height:5px;
+          border-radius:99px;
+          background:#19191f;
+          overflow:hidden;
+        ">
+          <div style="
+            width:60%;
+            height:100%;
+            background:linear-gradient(
+              90deg,
+              var(--accent2),
+              var(--cyan)
+            );
+          "></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+</main>
+
+<!-- ========================================
+     TEAM MODAL
+======================================== -->
+
+<div class="modal-backdrop" id="modalBackdrop">
+
+  <div class="modal">
+
+    <div class="modal-header">
+
+      <h2 id="modalTitle">
+        Add Team
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeTeamModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <form id="teamForm">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Team Name
+            </label>
+
+            <input
+              id="teamName"
+              required
+              placeholder="Example: Seattle Seahawks"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Short Name
+            </label>
+
+            <input
+              id="teamShortName"
+              maxlength="10"
+              placeholder="SEA"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              League
+            </label>
+
+            <select id="teamLeague">
+
+              <option>NFL</option>
+              <option>NBA</option>
+              <option>MLB</option>
+              <option>NHL</option>
+              <option>WNBA</option>
+              <option>MLS</option>
+              <option>MLS Next Pro</option>
+              <option>College Football</option>
+              <option>College Basketball</option>
+              <option>Other</option>
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Sport
+            </label>
+
+            <select id="teamSport">
+
+              <option>Football</option>
+              <option>Basketball</option>
+              <option>Baseball</option>
+              <option>Hockey</option>
+              <option>Soccer</option>
+              <option>Other</option>
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              City
+            </label>
+
+            <input
+              id="teamCity"
+              placeholder="Seattle"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              State / Region
+            </label>
+
+            <input
+              id="teamState"
+              placeholder="Washington"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Region
+            </label>
+
+            <select id="teamRegion">
+
+              <option>Pacific Northwest</option>
+              <option>Washington</option>
+              <option>National</option>
+              <option>International</option>
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Program Type
+            </label>
+
+            <select id="teamGender">
+
+              <option>Men's</option>
+              <option>Women's</option>
+              <option>Mixed</option>
+              <option>College</option>
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Status
+            </label>
+
+            <select id="teamStatus">
+
+              <option>Active</option>
+              <option>Coming Soon</option>
+              <option>Inactive</option>
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Season
+            </label>
+
+            <input
+              id="teamSeason"
+              type="number"
+              value="2026"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Logo URL
+            </label>
+
+            <input
+              id="teamLogo"
+              placeholder="https://..."
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Venue
+            </label>
+
+            <input
+              id="teamVenue"
+              placeholder="Stadium / Arena"
+            >
+
+          </div>
+
+          <div class="form-group full">
+
+            <label class="form-label">
+              Team Description
+            </label>
+
+            <textarea
+              id="teamDescription"
+              rows="4"
+              placeholder="Team description, history or editorial information..."
+            ></textarea>
+
+          </div>
+
+          <div class="form-group full">
+
+            <label class="form-label">
+              Publishing
+            </label>
+
+            <label class="checkbox-row">
+
+              <input
+                type="checkbox"
+                id="teamFeatured"
+              >
+
+              Feature this team throughout CrowRules Sports
+
+            </label>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="modal-footer">
+
+      <button
+        class="btn"
+        onclick="closeTeamModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        onclick="saveTeam()"
+      >
+        Save Team
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========================================
+     TOAST
+======================================== -->
+
+<div class="toast" id="toast">
+  Team saved successfully.
+</div>
+
+<script>
+
+/* ========================================
+   CLOCK
+======================================== */
+
+function updateClock(){
+
+  const now = new Date();
+
+  const text =
+    now.toLocaleDateString(undefined,{
+      weekday:"short",
+      month:"short",
+      day:"numeric"
+    }) +
+    "  " +
+    now.toLocaleTimeString(undefined,{
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    });
+
+  document.getElementById("clock").textContent = text;
+}
+
+updateClock();
+
+setInterval(updateClock,1000);
+
+
+/* ========================================
+   MOBILE SIDEBAR
+======================================== */
+
+document
+  .getElementById("menuBtn")
+  .addEventListener("click",()=>{
+
+    document
+      .getElementById("sidebar")
+      .classList.toggle("open");
+
+  });
+
+
+/* ========================================
+   MODAL
+======================================== */
+
+const modalBackdrop =
+  document.getElementById("modalBackdrop");
+
+const modalTitle =
+  document.getElementById("modalTitle");
+
+let editingTeam = null;
+
+function openTeamModal(team = null){
+
+  editingTeam = team;
+
+  modalTitle.textContent =
+    team
+      ? "Edit Team"
+      : "Add Team";
+
+  if(team){
+
+    document.getElementById("teamName").value =
+      team;
+
+    document.getElementById("teamShortName").value =
+      team.includes("Seattle")
+        ? "SEA"
+        : "";
+
+  }else{
+
+    document
+      .getElementById("teamForm")
+      .reset();
+
+    document.getElementById("teamSeason").value =
+      "2026";
+
+  }
+
+  modalBackdrop.classList.add("show");
+
+}
+
+function closeTeamModal(){
+
+  modalBackdrop.classList.remove("show");
+
+  editingTeam = null;
+
+}
+
+modalBackdrop.addEventListener("click",(event)=>{
+
+  if(event.target === modalBackdrop){
+
+    closeTeamModal();
+
+  }
+
+});
+
+document.addEventListener("keydown",(event)=>{
+
+  if(event.key === "Escape"){
+
+    closeTeamModal();
+
+  }
+
+});
+
+
+/* ========================================
+   SAVE TEAM
+======================================== */
+
+function saveTeam(){
+
+  const name =
+    document
+      .getElementById("teamName")
+      .value
+      .trim();
+
+  if(!name){
+
+    showToast("Team name is required.");
+
+    return;
+
+  }
+
+  const payload = {
+
+    id:null,
+
+    name:name,
+
+    short_name:
+      document
+        .getElementById("teamShortName")
+        .value
+        .trim(),
+
+    league:
+      document
+        .getElementById("teamLeague")
+        .value,
+
+    sport:
+      document
+        .getElementById("teamSport")
+        .value,
+
+    city:
+      document
+        .getElementById("teamCity")
+        .value
+        .trim(),
+
+    state:
+      document
+        .getElementById("teamState")
+        .value
+        .trim(),
+
+    region:
+      document
+        .getElementById("teamRegion")
+        .value,
+
+    program_type:
+      document
+        .getElementById("teamGender")
+        .value,
+
+    status:
+      document
+        .getElementById("teamStatus")
+        .value,
+
+    season:
+      Number(
+        document
+          .getElementById("teamSeason")
+          .value
+      ),
+
+    logo_url:
+      document
+        .getElementById("teamLogo")
+        .value
+        .trim(),
+
+    venue:
+      document
+        .getElementById("teamVenue")
+        .value
+        .trim(),
+
+    description:
+      document
+        .getElementById("teamDescription")
+        .value
+        .trim(),
+
+    featured:
+      document
+        .getElementById("teamFeatured")
+        .checked
+
+  };
+
+  console.log(
+    "CrowRules Sports Team Payload:",
+    payload
+  );
+
+  /*
+  ==========================================
+  SUPABASE CONNECTION HOOK
+  ==========================================
+
+  Recommended canonical structure:
+
+  sports_teams
+  ------------------------------------------
+  id
+  league_id
+  name
+  slug
+  short_name
+  sport
+  city
+  state
+  country
+  region
+  logo_url
+  banner_url
+  venue
+  conference
+  division
+  program_type
+  status
+  featured
+  season
+  description
+  created_at
+  updated_at
+
+  Related tables:
+
+  sports_leagues
+  sports_games
+  sports_standings
+  sports_rankings
+  sports_rosters
+  sports_news
+
+  IMPORTANT:
+
+  Inspect the existing Supabase schema before
+  adding or querying these columns.
+
+  Do not assume the above names exist.
+
+  Reuse existing tables where possible.
+
+  Never put a Supabase service-role key
+  inside browser JavaScript.
+
+  Use the public anon/publishable key and
+  protect mutations with authenticated
+  policies and RLS.
+
+  ==========================================
+  */
+
+  closeTeamModal();
+
+  showToast(
+    editingTeam
+      ? "Team update prepared."
+      : "Team created locally. Connect Supabase to persist it."
+  );
+
+}
+
+
+/* ========================================
+   VIEW / EDIT
+======================================== */
+
+function viewTeam(name){
+
+  showToast(
+    "Opening team profile: " + name
+  );
+
+}
+
+function editTeam(name){
+
+  openTeamModal(name);
+
+}
+
+
+/* ========================================
+   FILTERS
+======================================== */
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const leagueFilter =
+  document.getElementById("leagueFilter");
+
+const regionFilter =
+  document.getElementById("regionFilter");
+
+const statusFilter =
+  document.getElementById("statusFilter");
+
+const genderFilter =
+  document.getElementById("genderFilter");
+
+function applyFilters(){
+
+  const query =
+    searchInput.value
+      .toLowerCase()
+      .trim();
+
+  const league =
+    leagueFilter.value
+      .toLowerCase();
+
+  const region =
+    regionFilter.value
+      .toLowerCase();
+
+  const status =
+    statusFilter.value
+      .toLowerCase();
+
+  const gender =
+    genderFilter.value
+      .toLowerCase();
+
+
+  /* TEAM CARDS */
+
+  document
+    .querySelectorAll(".team-card")
+    .forEach(card=>{
+
+      const text =
+        card.dataset.name.toLowerCase();
+
+      const cardLeague =
+        card.dataset.league.toLowerCase();
+
+      const cardRegion =
+        card.dataset.region.toLowerCase();
+
+      const cardStatus =
+        card.dataset.status.toLowerCase();
+
+      const cardGender =
+        card.dataset.gender.toLowerCase();
+
+      const matchesSearch =
+        !query ||
+        text.includes(query);
+
+      const matchesLeague =
+        !league ||
+        cardLeague.includes(league);
+
+      const matchesRegion =
+        !region ||
+        cardRegion.includes(region);
+
+      const matchesStatus =
+        !status ||
+        cardStatus.includes(status);
+
+      const matchesGender =
+        !gender ||
+        cardGender.includes(gender);
+
+      card.style.display =
+        matchesSearch &&
+        matchesLeague &&
+        matchesRegion &&
+        matchesStatus &&
+        matchesGender
+          ? ""
+          : "none";
+
+    });
+
+
+  /* REGISTRY TABLE */
+
+  document
+    .querySelectorAll("#teamsTable tbody tr")
+    .forEach(row=>{
+
+      const text =
+        row.dataset.row
+          .toLowerCase();
+
+      const matchesSearch =
+        !query ||
+        text.includes(query);
+
+      const matchesLeague =
+        !league ||
+        text.includes(league);
+
+      const matchesRegion =
+        !region ||
+        text.includes(region);
+
+      row.style.display =
+        matchesSearch &&
+        matchesLeague &&
+        matchesRegion
+          ? ""
+          : "none";
+
+    });
+
+}
+
+[
+  searchInput,
+  leagueFilter,
+  regionFilter,
+  statusFilter,
+  genderFilter
+].forEach(element=>{
+
+  element.addEventListener(
+    "input",
+    applyFilters
+  );
+
+  element.addEventListener(
+    "change",
+    applyFilters
+  );
+
+});
+
+
+function resetFilters(){
+
+  searchInput.value = "";
+  leagueFilter.value = "";
+  regionFilter.value = "";
+  statusFilter.value = "";
+  genderFilter.value = "";
+
+  applyFilters();
+
+  showToast(
+    "Team filters reset."
+  );
+
+}
+
+
+/* ========================================
+   EXPORT
+======================================== */
+
+function exportTeams(){
+
+  const rows = [
+    [
+      "Team",
+      "League",
+      "Region",
+      "Status"
+    ],
+    [
+      "Seattle Seahawks",
+      "NFL",
+      "Pacific Northwest",
+      "Active"
+    ],
+    [
+      "Seattle Mariners",
+      "MLB",
+      "Pacific Northwest",
+      "Active"
+    ],
+    [
+      "Seattle Kraken",
+      "NHL",
+      "Pacific Northwest",
+      "Active"
+    ],
+    [
+      "Seattle Storm",
+      "WNBA",
+      "Pacific Northwest",
+      "Active"
+    ],
+    [
+      "Seattle Sounders FC",
+      "MLS",
+      "Pacific Northwest",
+      "Active"
+    ],
+    [
+      "Tacoma Defiance",
+      "MLS Next Pro",
+      "Pacific Northwest",
+      "Active"
+    ]
+  ];
+
+  const csv =
+    rows
+      .map(row =>
+        row
+          .map(value =>
+            '"' +
+            String(value)
+              .replace(/"/g,'""') +
+            '"'
+          )
+          .join(",")
+      )
+      .join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {type:"text/csv;charset=utf-8;"}
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+  a.download =
+    "crowrules-sports-teams.csv";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+  showToast(
+    "Team registry exported."
+  );
+
+}
+
+
+/* ========================================
+   TOAST
+======================================== */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent =
+    message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(()=>{
+
+      toast.classList.remove("show");
+
+    },2800);
+
+}
+
+</script>
+
+</body>
+</html>

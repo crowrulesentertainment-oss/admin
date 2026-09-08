@@ -1,0 +1,3274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Backups — CrowRules Entertainment Main Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin Backup and Recovery Command Center">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --sidebar:255px;
+  --radius:16px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(182,108,255,.08),transparent 28%),
+    radial-gradient(circle at 15% 100%,rgba(55,215,255,.04),transparent 26%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:var(--sidebar);
+  background:rgba(7,7,9,.97);
+  border-right:1px solid var(--line);
+  z-index:1000;
+  overflow-y:auto;
+}
+
+.brand{
+  height:76px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--accent);
+  border-radius:10px;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  box-shadow:0 0 24px rgba(182,108,255,.18);
+}
+
+.brand-text{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:1px;
+  line-height:1.25;
+}
+
+.brand-text span{
+  display:block;
+  color:var(--muted);
+  font-family:Montserrat,sans-serif;
+  font-size:9px;
+  letter-spacing:2px;
+  margin-top:3px;
+}
+
+.nav{
+  padding:14px 10px 30px;
+}
+
+.nav-section{
+  color:#555560;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:2px;
+  padding:14px 11px 7px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:39px;
+  padding:9px 11px;
+  margin:2px 0;
+  border-radius:9px;
+  color:#9a9aa5;
+  font-size:12px;
+  font-weight:600;
+  transition:.2s ease;
+}
+
+.nav a:hover{
+  background:#111117;
+  color:#fff;
+}
+
+.nav a.active{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(182,108,255,.18),
+      rgba(108,92,255,.07)
+    );
+  color:#fff;
+  border:1px solid rgba(182,108,255,.2);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+  font-size:14px;
+}
+
+/* MAIN */
+
+.main{
+  margin-left:var(--sidebar);
+  min-height:100vh;
+}
+
+.topbar{
+  height:76px;
+  position:sticky;
+  top:0;
+  z-index:900;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(7,7,9,.84);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.page-kicker{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  color:var(--muted);
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  letter-spacing:1px;
+}
+
+.icon-btn{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  background:#0e0e13;
+  color:#bbb;
+  border-radius:9px;
+}
+
+.icon-btn:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.mobile-toggle{
+  display:none;
+}
+
+.profile-chip{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:6px 10px 6px 6px;
+  background:#101016;
+  border:1px solid var(--line);
+  border-radius:30px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.avatar{
+  width:27px;
+  height:27px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+/* CONTENT */
+
+.content{
+  width:100%;
+  max-width:1750px;
+  margin:auto;
+  padding:30px;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  margin-bottom:22px;
+  padding:30px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:
+    linear-gradient(
+      120deg,
+      rgba(182,108,255,.09),
+      transparent 42%
+    ),
+    linear-gradient(180deg,#101017,#0b0b0f);
+}
+
+.hero:after{
+  content:"BACKUPS";
+  position:absolute;
+  top:8px;
+  right:20px;
+  color:rgba(255,255,255,.018);
+  font-family:Orbitron,sans-serif;
+  font-size:78px;
+  font-weight:800;
+  pointer-events:none;
+}
+
+.hero h1{
+  margin:0 0 9px;
+  font-family:Orbitron,sans-serif;
+  font-size:30px;
+  letter-spacing:1px;
+}
+
+.hero p{
+  max-width:850px;
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.hero-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-top:22px;
+}
+
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border:1px solid rgba(69,230,154,.25);
+  background:rgba(69,230,154,.07);
+  border-radius:999px;
+  color:var(--green);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:currentColor;
+  box-shadow:0 0 12px currentColor;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.stat{
+  padding:18px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  margin-top:9px;
+  font-family:Orbitron,sans-serif;
+  font-size:21px;
+}
+
+.stat-sub{
+  margin-top:6px;
+  color:#62626d;
+  font-size:9px;
+}
+
+/* BUTTONS */
+
+.btn{
+  min-height:40px;
+  padding:9px 14px;
+  border:1px solid var(--line2);
+  border-radius:8px;
+  background:#111117;
+  color:#ddd;
+  font-size:10px;
+  font-weight:800;
+}
+
+.btn:hover{
+  border-color:var(--accent);
+  color:#fff;
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.45);
+  background:rgba(182,108,255,.12);
+  color:#dcbaff;
+}
+
+.btn.success{
+  border-color:rgba(69,230,154,.35);
+  background:rgba(69,230,154,.08);
+  color:var(--green);
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.35);
+  background:rgba(255,82,109,.08);
+  color:#ff8da0;
+}
+
+/* PANELS */
+
+.panel{
+  overflow:hidden;
+  margin-bottom:18px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+}
+
+.panel-head{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:1px;
+}
+
+.panel-sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.panel-actions{
+  display:flex;
+  gap:8px;
+}
+
+.panel-body{
+  padding:18px;
+}
+
+/* BACKUP HEALTH */
+
+.health-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  gap:12px;
+}
+
+.health-main{
+  padding:22px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#09090d;
+}
+
+.health-title{
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+}
+
+.health-status{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-top:12px;
+  color:var(--green);
+  font-size:11px;
+  font-weight:800;
+}
+
+.progress{
+  height:9px;
+  overflow:hidden;
+  margin-top:20px;
+  border-radius:99px;
+  background:#19191f;
+}
+
+.progress-bar{
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+  border-radius:inherit;
+}
+
+.health-meta{
+  display:flex;
+  justify-content:space-between;
+  margin-top:9px;
+  color:#666671;
+  font-size:9px;
+}
+
+.health-card{
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#09090d;
+}
+
+.health-label{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.health-value{
+  margin-top:10px;
+  font-family:Orbitron,sans-serif;
+  font-size:19px;
+}
+
+.health-small{
+  margin-top:6px;
+  color:#666671;
+  font-size:9px;
+}
+
+/* BACKUP TYPES */
+
+.type-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.type-card{
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#0a0a0e;
+}
+
+.type-icon{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  margin-bottom:13px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#111117;
+  font-size:15px;
+}
+
+.type-name{
+  font-size:11px;
+  font-weight:800;
+}
+
+.type-description{
+  min-height:35px;
+  margin-top:6px;
+  color:#70707b;
+  font-size:9px;
+  line-height:1.5;
+}
+
+.type-status{
+  display:inline-flex;
+  margin-top:13px;
+  padding:5px 7px;
+  border-radius:6px;
+  color:var(--green);
+  background:rgba(69,230,154,.08);
+  border:1px solid rgba(69,230,154,.18);
+  font-size:8px;
+  font-weight:800;
+}
+
+/* TABLE */
+
+.backup-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.backup-table th{
+  padding:11px 9px;
+  border-bottom:1px solid var(--line2);
+  color:#666671;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-align:left;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+.backup-table td{
+  padding:13px 9px;
+  border-bottom:1px solid #1e1e25;
+  color:#c7c7ce;
+  font-size:10px;
+  vertical-align:middle;
+}
+
+.backup-table tr:last-child td{
+  border-bottom:0;
+}
+
+.backup-table tr:hover td{
+  background:rgba(255,255,255,.015);
+}
+
+.backup-name{
+  color:#eee;
+  font-weight:800;
+}
+
+.backup-id{
+  color:#666671;
+  font-family:monospace;
+  font-size:9px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 7px;
+  border-radius:6px;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.6px;
+}
+
+.badge.success{
+  color:var(--green);
+  background:rgba(69,230,154,.09);
+  border:1px solid rgba(69,230,154,.18);
+}
+
+.badge.info{
+  color:var(--cyan);
+  background:rgba(55,215,255,.09);
+  border:1px solid rgba(55,215,255,.18);
+}
+
+.badge.warning{
+  color:var(--yellow);
+  background:rgba(243,201,105,.09);
+  border:1px solid rgba(243,201,105,.18);
+}
+
+.badge.error{
+  color:var(--red);
+  background:rgba(255,82,109,.09);
+  border:1px solid rgba(255,82,109,.18);
+}
+
+/* SCHEDULE */
+
+.schedule-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.schedule-card{
+  padding:17px;
+  background:#0a0a0e;
+  border:1px solid var(--line);
+  border-radius:11px;
+}
+
+.schedule-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.schedule-name{
+  font-size:10px;
+  font-weight:800;
+}
+
+.schedule-toggle{
+  width:34px;
+  height:19px;
+  padding:2px;
+  border:1px solid var(--line2);
+  border-radius:30px;
+  background:#15151b;
+}
+
+.schedule-toggle span{
+  display:block;
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  background:#555;
+}
+
+.schedule-toggle.on{
+  border-color:rgba(69,230,154,.3);
+  background:rgba(69,230,154,.1);
+}
+
+.schedule-toggle.on span{
+  margin-left:15px;
+  background:var(--green);
+}
+
+.schedule-time{
+  margin-top:15px;
+  font-family:Orbitron,sans-serif;
+  font-size:16px;
+}
+
+.schedule-meta{
+  margin-top:5px;
+  color:#676771;
+  font-size:9px;
+}
+
+/* SECURITY */
+
+.security-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+}
+
+.security-card{
+  padding:15px;
+  background:#0a0a0e;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+
+.security-label{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.security-value{
+  margin-top:7px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.good{
+  color:var(--green);
+}
+
+.warn{
+  color:var(--yellow);
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  display:none;
+  place-items:center;
+  padding:20px;
+  background:rgba(0,0,0,.76);
+  backdrop-filter:blur(8px);
+}
+
+.modal.open{
+  display:grid;
+}
+
+.modal-card{
+  width:min(700px,100%);
+  overflow:hidden;
+  border:1px solid var(--line2);
+  border-radius:16px;
+  background:#0c0c11;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-group label{
+  color:#777783;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.form-control{
+  min-height:42px;
+  padding:10px 12px;
+  outline:none;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#09090d;
+  color:#eee;
+  font-size:10px;
+}
+
+.form-control:focus{
+  border-color:var(--accent);
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:15px 20px;
+  border-top:1px solid var(--line);
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:3000;
+  padding:13px 16px;
+  border:1px solid var(--line2);
+  border-left:3px solid var(--accent);
+  border-radius:9px;
+  background:#111117;
+  color:#ddd;
+  font-size:11px;
+  box-shadow:0 15px 50px rgba(0,0,0,.5);
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(30px);
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1250px){
+
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .health-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .health-main{
+    grid-column:1/-1;
+  }
+
+  .security-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+}
+
+@media(max-width:1000px){
+
+  .type-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .schedule-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:900px){
+
+  :root{
+    --sidebar:0px;
+  }
+
+  .sidebar{
+    width:255px;
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  body.menu-open .sidebar{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-toggle{
+    display:grid;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .security-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .panel-table{
+    overflow-x:auto;
+  }
+
+  .backup-table{
+    min-width:950px;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .hero{
+    padding:22px;
+  }
+
+  .hero h1{
+    font-size:23px;
+  }
+
+  .hero:after{
+    display:none;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .health-grid,
+  .type-grid,
+  .schedule-grid,
+  .security-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+
+  .profile-chip span{
+    display:none;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+
+    <div class="brand-text">
+      CROW RULES
+      <span>MAIN ADMIN</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-section">Dashboard</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <div class="nav-section">Content</div>
+
+    <a href="content.html"><span class="nav-icon">▣</span>Content</a>
+    <a href="pages.html"><span class="nav-icon">▤</span>Pages</a>
+    <a href="categories.html"><span class="nav-icon">◈</span>Categories</a>
+    <a href="tags.html"><span class="nav-icon">#</span>Tags</a>
+    <a href="shows.html"><span class="nav-icon">▶</span>Shows</a>
+    <a href="episodes.html"><span class="nav-icon">▹</span>Episodes</a>
+    <a href="movies.html"><span class="nav-icon">◉</span>Movies</a>
+    <a href="audio.html"><span class="nav-icon">♫</span>Audio</a>
+    <a href="articles.html"><span class="nav-icon">✎</span>Articles</a>
+
+    <div class="nav-section">TV Network</div>
+
+    <a href="channels.html"><span class="nav-icon">▥</span>Channels</a>
+    <a href="schedule.html"><span class="nav-icon">◷</span>Schedule</a>
+    <a href="live.html"><span class="nav-icon">●</span>Live</a>
+    <a href="guide.html"><span class="nav-icon">☷</span>TV Guide</a>
+
+    <div class="nav-section">Members</div>
+
+    <a href="members.html"><span class="nav-icon">♟</span>Members</a>
+    <a href="membership.html"><span class="nav-icon">◆</span>Membership</a>
+    <a href="subscriptions.html"><span class="nav-icon">↻</span>Subscriptions</a>
+    <a href="friends.html"><span class="nav-icon">♣</span>Friends</a>
+    <a href="community.html"><span class="nav-icon">☁</span>Community</a>
+
+    <div class="nav-section">Creators</div>
+
+    <a href="creator.html"><span class="nav-icon">★</span>Creators</a>
+    <a href="creator-content.html"><span class="nav-icon">◇</span>Creator Content</a>
+    <a href="creator-approvals.html"><span class="nav-icon">✓</span>Approvals</a>
+
+    <div class="nav-section">Music</div>
+
+    <a href="artists.html"><span class="nav-icon">♬</span>Artists</a>
+    <a href="albums.html"><span class="nav-icon">▰</span>Albums</a>
+    <a href="tracks.html"><span class="nav-icon">♫</span>Tracks</a>
+
+    <div class="nav-section">Sports</div>
+
+    <a href="sports.html"><span class="nav-icon">◎</span>Sports</a>
+    <a href="teams.html"><span class="nav-icon">⚑</span>Teams</a>
+    <a href="rankings.html"><span class="nav-icon">↕</span>Rankings</a>
+    <a href="standings.html"><span class="nav-icon">▥</span>Standings</a>
+    <a href="games.html"><span class="nav-icon">◉</span>Games</a>
+    <a href="pickem.html"><span class="nav-icon">?</span>Pick'em</a>
+
+    <div class="nav-section">Memorials</div>
+
+    <a href="memorials.html"><span class="nav-icon">✦</span>Memorials</a>
+    <a href="memorial-photos.html"><span class="nav-icon">▧</span>Memorial Photos</a>
+
+    <div class="nav-section">Commerce</div>
+
+    <a href="business.html"><span class="nav-icon">⌘</span>Business</a>
+    <a href="donations.html"><span class="nav-icon">$</span>Donations</a>
+    <a href="shop.html"><span class="nav-icon">□</span>Shop</a>
+    <a href="orders.html"><span class="nav-icon">▤</span>Orders</a>
+
+    <div class="nav-section">System</div>
+
+    <a href="analytics.html"><span class="nav-icon">⌁</span>Analytics</a>
+    <a href="database.html"><span class="nav-icon">▦</span>Database</a>
+    <a href="storage.html"><span class="nav-icon">▱</span>Storage</a>
+    <a href="authentication.html"><span class="nav-icon">🔐</span>Authentication</a>
+    <a href="roles.html"><span class="nav-icon">♙</span>Roles</a>
+    <a href="permissions.html"><span class="nav-icon">⊞</span>Permissions</a>
+    <a href="api.html"><span class="nav-icon">⌬</span>API</a>
+    <a href="logs.html"><span class="nav-icon">≡</span>Logs</a>
+
+    <a href="backups.html" class="active">
+      <span class="nav-icon">▣</span>
+      Backups
+    </a>
+
+    <a href="moderation.html"><span class="nav-icon">⚠</span>Moderation</a>
+    <a href="notifications.html"><span class="nav-icon">♢</span>Notifications</a>
+    <a href="activity.html"><span class="nav-icon">◌</span>Activity</a>
+    <a href="settings.html"><span class="nav-icon">⚙</span>Settings</a>
+
+  </nav>
+</aside>
+
+<!-- MAIN -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="topbar-left">
+
+      <button
+        class="icon-btn mobile-toggle"
+        id="menuBtn"
+      >
+        ☰
+      </button>
+
+      <div class="page-kicker">
+        System / Backups & Recovery
+      </div>
+
+    </div>
+
+    <div class="topbar-right">
+
+      <div class="clock" id="clock">
+        --
+      </div>
+
+      <button
+        class="icon-btn"
+        id="refreshBtn"
+        title="Refresh"
+      >
+        ↻
+      </button>
+
+      <button
+        class="icon-btn"
+        id="createQuickBtn"
+        title="Create backup"
+      >
+        +
+      </button>
+
+      <div class="profile-chip">
+        <div class="avatar">CR</div>
+        <span>Administrator</span>
+      </div>
+
+    </div>
+
+  </header>
+
+  <section class="content">
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+      <div class="page-kicker">
+        CrowRules Recovery Infrastructure
+      </div>
+
+      <h1>Backups Command Center</h1>
+
+      <p>
+        Manage backup plans, database snapshots, configuration exports,
+        content archives and recovery points for the CrowRules Entertainment
+        platform. This dashboard provides the operational layer for backup
+        visibility while keeping destructive restore operations protected.
+      </p>
+
+      <div class="hero-row">
+
+        <div class="status-pill">
+          <span class="status-dot"></span>
+          BACKUP SYSTEM HEALTHY
+        </div>
+
+        <button
+          class="btn primary"
+          id="createBackupBtn"
+        >
+          + Create Backup
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-label">
+          Total Backups
+        </div>
+
+        <div
+          class="stat-value"
+          id="totalBackups"
+        >
+          128
+        </div>
+
+        <div class="stat-sub">
+          Available recovery points
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">
+          Successful
+        </div>
+
+        <div class="stat-value">
+          124
+        </div>
+
+        <div class="stat-sub">
+          Completed successfully
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">
+          Failed
+        </div>
+
+        <div class="stat-value">
+          2
+        </div>
+
+        <div class="stat-sub">
+          Require review
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">
+          Storage Used
+        </div>
+
+        <div class="stat-value">
+          48.7 GB
+        </div>
+
+        <div class="stat-sub">
+          Backup storage
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">
+          Last Backup
+        </div>
+
+        <div class="stat-value">
+          12m
+        </div>
+
+        <div class="stat-sub">
+          Ago
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">
+          Retention
+        </div>
+
+        <div class="stat-value">
+          30D
+        </div>
+
+        <div class="stat-sub">
+          Current policy
+        </div>
+      </div>
+
+    </div>
+
+    <!-- HEALTH -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">
+            BACKUP HEALTH
+          </div>
+
+          <div class="panel-sub">
+            Current recovery infrastructure status
+          </div>
+        </div>
+
+        <span class="badge success">
+          HEALTHY
+        </span>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="health-grid">
+
+          <div class="health-main">
+
+            <div class="health-title">
+              CrowRules Recovery System
+            </div>
+
+            <div class="health-status">
+              <span class="status-dot"></span>
+              All scheduled backup jobs operational
+            </div>
+
+            <div class="progress">
+              <div class="progress-bar"></div>
+            </div>
+
+            <div class="health-meta">
+              <span>Backup health</span>
+              <span>100%</span>
+            </div>
+
+          </div>
+
+          <div class="health-card">
+
+            <div class="health-label">
+              Recovery Point
+            </div>
+
+            <div class="health-value">
+              12 MIN
+            </div>
+
+            <div class="health-small">
+              Latest successful backup
+            </div>
+
+          </div>
+
+          <div class="health-card">
+
+            <div class="health-label">
+              Recovery Status
+            </div>
+
+            <div class="health-value good">
+              READY
+            </div>
+
+            <div class="health-small">
+              Recovery points available
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- BACKUP TYPES -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">
+            BACKUP TYPES
+          </div>
+
+          <div class="panel-sub">
+            Configured protection layers
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="type-grid">
+
+          <div class="type-card">
+
+            <div class="type-icon">
+              ▦
+            </div>
+
+            <div class="type-name">
+              Database
+            </div>
+
+            <div class="type-description">
+              PostgreSQL database snapshots and structured data exports.
+            </div>
+
+            <span class="type-status">
+              ENABLED
+            </span>
+
+          </div>
+
+          <div class="type-card">
+
+            <div class="type-icon">
+              ▣
+            </div>
+
+            <div class="type-name">
+              Content
+            </div>
+
+            <div class="type-description">
+              Shows, episodes, articles, pages, metadata and publishing data.
+            </div>
+
+            <span class="type-status">
+              ENABLED
+            </span>
+
+          </div>
+
+          <div class="type-card">
+
+            <div class="type-icon">
+              ▱
+            </div>
+
+            <div class="type-name">
+              Storage
+            </div>
+
+            <div class="type-description">
+              Media inventory, storage manifests and protected asset metadata.
+            </div>
+
+            <span class="type-status">
+              ENABLED
+            </span>
+
+          </div>
+
+          <div class="type-card">
+
+            <div class="type-icon">
+              ⚙
+            </div>
+
+            <div class="type-name">
+              Configuration
+            </div>
+
+            <div class="type-description">
+              Application settings, system configuration and deployment metadata.
+            </div>
+
+            <span class="type-status">
+              ENABLED
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SCHEDULE -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">
+            BACKUP SCHEDULES
+          </div>
+
+          <div class="panel-sub">
+            Automated protection jobs
+          </div>
+        </div>
+
+        <button
+          class="btn"
+          id="scheduleBtn"
+        >
+          Manage Schedules
+        </button>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="schedule-grid">
+
+          <div class="schedule-card">
+
+            <div class="schedule-top">
+
+              <div class="schedule-name">
+                Database Snapshot
+              </div>
+
+              <div class="schedule-toggle on">
+                <span></span>
+              </div>
+
+            </div>
+
+            <div class="schedule-time">
+              Every 6 Hours
+            </div>
+
+            <div class="schedule-meta">
+              Next run: 18:00 UTC
+            </div>
+
+          </div>
+
+          <div class="schedule-card">
+
+            <div class="schedule-top">
+
+              <div class="schedule-name">
+                Content Backup
+              </div>
+
+              <div class="schedule-toggle on">
+                <span></span>
+              </div>
+
+            </div>
+
+            <div class="schedule-time">
+              Daily
+            </div>
+
+            <div class="schedule-meta">
+              Next run: 02:00 UTC
+            </div>
+
+          </div>
+
+          <div class="schedule-card">
+
+            <div class="schedule-top">
+
+              <div class="schedule-name">
+                Configuration
+              </div>
+
+              <div class="schedule-toggle on">
+                <span></span>
+              </div>
+
+            </div>
+
+            <div class="schedule-time">
+              Daily
+            </div>
+
+            <div class="schedule-meta">
+              Next run: 03:00 UTC
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- RECENT BACKUPS -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">
+            RECENT BACKUPS
+          </div>
+
+          <div class="panel-sub">
+            Latest recovery points
+          </div>
+        </div>
+
+        <div class="panel-actions">
+
+          <button
+            class="btn"
+            id="filterBtn"
+          >
+            Filter
+          </button>
+
+          <button
+            class="btn primary"
+            id="exportBtn"
+          >
+            Export
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="panel-body panel-table">
+
+        <table class="backup-table">
+
+          <thead>
+
+            <tr>
+              <th>Backup</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Size</th>
+              <th>Retention</th>
+              <th>Recovery</th>
+              <th></th>
+            </tr>
+
+          </thead>
+
+          <tbody id="backupBody">
+
+            <tr>
+
+              <td>
+                <div class="backup-name">
+                  Daily Database Snapshot
+                </div>
+
+                <div class="backup-id">
+                  bkp_db_20260908_1200
+                </div>
+              </td>
+
+              <td>
+                Database
+              </td>
+
+              <td>
+                <span class="badge success">
+                  SUCCESS
+                </span>
+              </td>
+
+              <td>
+                Sep 08, 2026 12:00
+              </td>
+
+              <td>
+                842 MB
+              </td>
+
+              <td>
+                30 days
+              </td>
+
+              <td>
+                <span class="badge info">
+                  READY
+                </span>
+              </td>
+
+              <td>
+                <button
+                  class="btn view-backup"
+                >
+                  View
+                </button>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td>
+                <div class="backup-name">
+                  Content Archive
+                </div>
+
+                <div class="backup-id">
+                  bkp_content_20260908_0200
+                </div>
+              </td>
+
+              <td>
+                Content
+              </td>
+
+              <td>
+                <span class="badge success">
+                  SUCCESS
+                </span>
+              </td>
+
+              <td>
+                Sep 08, 2026 02:00
+              </td>
+
+              <td>
+                1.84 GB
+              </td>
+
+              <td>
+                30 days
+              </td>
+
+              <td>
+                <span class="badge info">
+                  READY
+                </span>
+              </td>
+
+              <td>
+                <button
+                  class="btn view-backup"
+                >
+                  View
+                </button>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td>
+                <div class="backup-name">
+                  Configuration Export
+                </div>
+
+                <div class="backup-id">
+                  bkp_config_20260908_0300
+                </div>
+              </td>
+
+              <td>
+                Configuration
+              </td>
+
+              <td>
+                <span class="badge success">
+                  SUCCESS
+                </span>
+              </td>
+
+              <td>
+                Sep 08, 2026 03:00
+              </td>
+
+              <td>
+                18 MB
+              </td>
+
+              <td>
+                90 days
+              </td>
+
+              <td>
+                <span class="badge info">
+                  READY
+                </span>
+              </td>
+
+              <td>
+                <button
+                  class="btn view-backup"
+                >
+                  View
+                </button>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td>
+                <div class="backup-name">
+                  Storage Manifest
+                </div>
+
+                <div class="backup-id">
+                  bkp_storage_20260907_0200
+                </div>
+              </td>
+
+              <td>
+                Storage
+              </td>
+
+              <td>
+                <span class="badge success">
+                  SUCCESS
+                </span>
+              </td>
+
+              <td>
+                Sep 07, 2026 02:00
+              </td>
+
+              <td>
+                226 MB
+              </td>
+
+              <td>
+                30 days
+              </td>
+
+              <td>
+                <span class="badge info">
+                  READY
+                </span>
+              </td>
+
+              <td>
+                <button
+                  class="btn view-backup"
+                >
+                  View
+                </button>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td>
+                <div class="backup-name">
+                  Database Snapshot
+                </div>
+
+                <div class="backup-id">
+                  bkp_db_20260907_1800
+                </div>
+              </td>
+
+              <td>
+                Database
+              </td>
+
+              <td>
+                <span class="badge success">
+                  SUCCESS
+                </span>
+              </td>
+
+              <td>
+                Sep 07, 2026 18:00
+              </td>
+
+              <td>
+                839 MB
+              </td>
+
+              <td>
+                30 days
+              </td>
+
+              <td>
+                <span class="badge info">
+                  READY
+                </span>
+              </td>
+
+              <td>
+                <button
+                  class="btn view-backup"
+                >
+                  View
+                </button>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td>
+                <div class="backup-name">
+                  Database Snapshot
+                </div>
+
+                <div class="backup-id">
+                  bkp_db_20260907_1200
+                </div>
+              </td>
+
+              <td>
+                Database
+              </td>
+
+              <td>
+                <span class="badge error">
+                  FAILED
+                </span>
+              </td>
+
+              <td>
+                Sep 07, 2026 12:00
+              </td>
+
+              <td>
+                —
+              </td>
+
+              <td>
+                —
+              </td>
+
+              <td>
+                <span class="badge warning">
+                  REVIEW
+                </span>
+              </td>
+
+              <td>
+                <button
+                  class="btn view-backup"
+                >
+                  View
+                </button>
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+    <!-- SECURITY -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">
+            BACKUP SECURITY
+          </div>
+
+          <div class="panel-sub">
+            Protection and recovery controls
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="security-grid">
+
+          <div class="security-card">
+            <div class="security-label">
+              Encryption
+            </div>
+            <div class="security-value good">
+              ENABLED
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              Access Control
+            </div>
+            <div class="security-value good">
+              RESTRICTED
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              Restore Protection
+            </div>
+            <div class="security-value good">
+              ENABLED
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              Audit Logging
+            </div>
+            <div class="security-value good">
+              ENABLED
+            </div>
+          </div>
+
+          <div class="security-card">
+            <div class="security-label">
+              Retention
+            </div>
+            <div class="security-value warn">
+              30 DAYS
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
+
+<!-- CREATE BACKUP MODAL -->
+
+<div
+  class="modal"
+  id="backupModal"
+>
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        CREATE BACKUP
+      </div>
+
+      <button
+        class="icon-btn"
+        data-close
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+
+          <label>
+            Backup Type
+          </label>
+
+          <select
+            class="form-control"
+            id="backupType"
+          >
+            <option value="database">
+              Database
+            </option>
+
+            <option value="content">
+              Content
+            </option>
+
+            <option value="storage">
+              Storage Manifest
+            </option>
+
+            <option value="configuration">
+              Configuration
+            </option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Retention
+          </label>
+
+          <select
+            class="form-control"
+            id="backupRetention"
+          >
+            <option value="7">
+              7 Days
+            </option>
+
+            <option value="30" selected>
+              30 Days
+            </option>
+
+            <option value="90">
+              90 Days
+            </option>
+
+            <option value="365">
+              1 Year
+            </option>
+          </select>
+
+        </div>
+
+        <div class="form-group full">
+
+          <label>
+            Description
+          </label>
+
+          <input
+            class="form-control"
+            id="backupDescription"
+            placeholder="Optional backup description"
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn"
+        data-close
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        id="confirmBackupBtn"
+      >
+        Create Backup
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- DETAIL MODAL -->
+
+<div
+  class="modal"
+  id="detailModal"
+>
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        BACKUP DETAILS
+      </div>
+
+      <button
+        class="icon-btn"
+        data-detail-close
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+
+          <label>
+            Backup ID
+          </label>
+
+          <div
+            class="form-control"
+            id="detailId"
+          >
+            —
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Type
+          </label>
+
+          <div
+            class="form-control"
+            id="detailType"
+          >
+            —
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Status
+          </label>
+
+          <div
+            class="form-control"
+            id="detailStatus"
+          >
+            —
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Size
+          </label>
+
+          <div
+            class="form-control"
+            id="detailSize"
+          >
+            —
+          </div>
+
+        </div>
+
+        <div class="form-group full">
+
+          <label>
+            Backup Name
+          </label>
+
+          <div
+            class="form-control"
+            id="detailName"
+          >
+            —
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn"
+        data-detail-close
+      >
+        Close
+      </button>
+
+      <button
+        class="btn success"
+        id="restoreBtn"
+      >
+        Restore Point
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+<script>
+/* =========================================
+   CROWRULES BACKUP COMMAND CENTER
+========================================= */
+
+const CONFIG = {
+
+  supabaseUrl:
+    window.CROWRULES_SUPABASE_URL || "",
+
+  supabaseAnonKey:
+    window.CROWRULES_SUPABASE_ANON_KEY || "",
+
+  backupsTable:
+    window.CROWRULES_BACKUPS_TABLE || "system_backups"
+
+};
+
+let supabaseClient = null;
+let toastTimer = null;
+
+/* =========================================
+   SUPABASE
+========================================= */
+
+function initSupabase(){
+
+  if(
+    CONFIG.supabaseUrl &&
+    CONFIG.supabaseAnonKey &&
+    window.supabase
+  ){
+
+    supabaseClient =
+      window.supabase.createClient(
+        CONFIG.supabaseUrl,
+        CONFIG.supabaseAnonKey
+      );
+
+    return true;
+  }
+
+  return false;
+}
+
+/* =========================================
+   CLOCK
+========================================= */
+
+function updateClock(){
+
+  const clock =
+    document.getElementById("clock");
+
+  if(!clock) return;
+
+  clock.textContent =
+    new Date().toLocaleString(
+      [],
+      {
+        month:"short",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
+
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+/* =========================================
+   TOAST
+========================================= */
+
+function toast(message){
+
+  const element =
+    document.getElementById("toast");
+
+  element.textContent =
+    message;
+
+  element.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      () => {
+        element.classList.remove("show");
+      },
+      2800
+    );
+
+}
+
+/* =========================================
+   MOBILE MENU
+========================================= */
+
+document
+  .getElementById("menuBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      document.body.classList.toggle(
+        "menu-open"
+      );
+
+    }
+  );
+
+/* =========================================
+   MODALS
+========================================= */
+
+function openBackupModal(){
+
+  document
+    .getElementById("backupModal")
+    .classList.add("open");
+
+}
+
+function closeBackupModal(){
+
+  document
+    .getElementById("backupModal")
+    .classList.remove("open");
+
+}
+
+function closeDetailModal(){
+
+  document
+    .getElementById("detailModal")
+    .classList.remove("open");
+
+}
+
+document
+  .querySelectorAll("[data-close]")
+  .forEach(
+    button =>
+      button.addEventListener(
+        "click",
+        closeBackupModal
+      )
+  );
+
+document
+  .querySelectorAll("[data-detail-close]")
+  .forEach(
+    button =>
+      button.addEventListener(
+        "click",
+        closeDetailModal
+      )
+  );
+
+/* =========================================
+   CREATE BACKUP
+========================================= */
+
+document
+  .getElementById("createBackupBtn")
+  ?.addEventListener(
+    "click",
+    openBackupModal
+  );
+
+document
+  .getElementById("createQuickBtn")
+  ?.addEventListener(
+    "click",
+    openBackupModal
+  );
+
+document
+  .getElementById("confirmBackupBtn")
+  ?.addEventListener(
+    "click",
+    createBackup
+  );
+
+async function createBackup(){
+
+  const type =
+    document
+      .getElementById("backupType")
+      .value;
+
+  const retention =
+    Number(
+      document
+        .getElementById("backupRetention")
+        .value
+    );
+
+  const description =
+    document
+      .getElementById("backupDescription")
+      .value
+      .trim();
+
+  if(!supabaseClient){
+
+    closeBackupModal();
+
+    toast(
+      `Backup job queued in demo mode: ${type}`
+    );
+
+    return;
+
+  }
+
+  try{
+
+    const payload = {
+
+      backup_type:type,
+
+      status:"queued",
+
+      retention_days:retention,
+
+      description:
+        description || null,
+
+      created_at:
+        new Date().toISOString()
+
+    };
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.backupsTable)
+        .insert(payload);
+
+    if(error){
+
+      console.warn(
+        "Backup insert failed:",
+        error
+      );
+
+      toast(
+        "Backup table is unavailable or does not match this schema."
+      );
+
+      return;
+
+    }
+
+    closeBackupModal();
+
+    toast(
+      "Backup job queued successfully."
+    );
+
+    await loadBackups();
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to create backup."
+    );
+
+  }
+
+}
+
+/* =========================================
+   LOAD BACKUPS
+========================================= */
+
+async function loadBackups(){
+
+  if(!supabaseClient){
+
+    return;
+
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.backupsTable)
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(100);
+
+    if(error){
+
+      console.warn(
+        "Unable to load backups:",
+        error
+      );
+
+      return;
+
+    }
+
+    if(
+      Array.isArray(data) &&
+      data.length
+    ){
+
+      renderBackups(data);
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Backup loading failed:",
+      error
+    );
+
+  }
+
+}
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function firstValue(
+  row,
+  keys,
+  fallback=""
+){
+
+  for(
+    const key of keys
+  ){
+
+    if(
+      row[key] !== undefined &&
+      row[key] !== null &&
+      row[key] !== ""
+    ){
+
+      return row[key];
+
+    }
+
+  }
+
+  return fallback;
+
+}
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
+    return String(value);
+
+  }
+
+  return date.toLocaleString(
+    [],
+    {
+      month:"short",
+      day:"2-digit",
+      year:"numeric",
+      hour:"2-digit",
+      minute:"2-digit"
+    }
+  );
+
+}
+
+function statusClass(value){
+
+  const status =
+    String(value || "")
+      .toLowerCase();
+
+  if(
+    status === "success" ||
+    status === "completed" ||
+    status === "complete"
+  ){
+
+    return "success";
+
+  }
+
+  if(
+    status === "failed" ||
+    status === "error"
+  ){
+
+    return "error";
+
+  }
+
+  if(
+    status === "queued" ||
+    status === "running" ||
+    status === "pending"
+  ){
+
+    return "warning";
+
+  }
+
+  return "info";
+
+}
+
+/* =========================================
+   RENDER
+========================================= */
+
+function renderBackups(data){
+
+  const body =
+    document.getElementById(
+      "backupBody"
+    );
+
+  body.innerHTML = "";
+
+  data.forEach(
+    row => {
+
+      const id =
+        firstValue(
+          row,
+          [
+            "id",
+            "backup_id"
+          ],
+          "—"
+        );
+
+      const name =
+        firstValue(
+          row,
+          [
+            "name",
+            "backup_name",
+            "description"
+          ],
+          "System Backup"
+        );
+
+      const type =
+        firstValue(
+          row,
+          [
+            "backup_type",
+            "type",
+            "category"
+          ],
+          "Backup"
+        );
+
+      const status =
+        firstValue(
+          row,
+          [
+            "status",
+            "state"
+          ],
+          "queued"
+        );
+
+      const created =
+        firstValue(
+          row,
+          [
+            "created_at",
+            "started_at",
+            "timestamp"
+          ],
+          ""
+        );
+
+      const size =
+        firstValue(
+          row,
+          [
+            "size",
+            "size_bytes",
+            "file_size"
+          ],
+          "—"
+        );
+
+      const retention =
+        firstValue(
+          row,
+          [
+            "retention_days",
+            "retention"
+          ],
+          "—"
+        );
+
+      const tr =
+        document.createElement("tr");
+
+      tr.innerHTML =
+        `
+          <td>
+
+            <div class="backup-name">
+              ${escapeHtml(name)}
+            </div>
+
+            <div class="backup-id">
+              ${escapeHtml(id)}
+            </div>
+
+          </td>
+
+          <td>
+            ${escapeHtml(type)}
+          </td>
+
+          <td>
+
+            <span class="badge ${statusClass(status)}">
+              ${escapeHtml(String(status).toUpperCase())}
+            </span>
+
+          </td>
+
+          <td>
+            ${escapeHtml(formatDate(created))}
+          </td>
+
+          <td>
+            ${escapeHtml(formatSize(size))}
+          </td>
+
+          <td>
+            ${escapeHtml(String(retention))}${retention !== "—" ? " days" : ""}
+          </td>
+
+          <td>
+
+            <span class="badge info">
+              ${String(status).toLowerCase() === "success" ? "READY" : "PENDING"}
+            </span>
+
+          </td>
+
+          <td>
+
+            <button class="btn view-backup">
+              View
+            </button>
+
+          </td>
+        `;
+
+      tr
+        .querySelector(".view-backup")
+        .addEventListener(
+          "click",
+          () => {
+
+            openBackupDetail({
+              id,
+              name,
+              type,
+              status,
+              size
+            });
+
+          }
+        );
+
+      body.appendChild(tr);
+
+    }
+  );
+
+  document
+    .getElementById("totalBackups")
+    .textContent =
+    data.length;
+
+}
+
+function formatSize(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === "" ||
+    value === "—"
+  ){
+
+    return "—";
+
+  }
+
+  const number =
+    Number(value);
+
+  if(
+    Number.isNaN(number)
+  ){
+
+    return String(value);
+
+  }
+
+  if(number < 1024){
+
+    return `${number} B`;
+
+  }
+
+  if(number < 1024 * 1024){
+
+    return `${(number / 1024).toFixed(1)} KB`;
+
+  }
+
+  if(number < 1024 * 1024 * 1024){
+
+    return `${(number / 1024 / 1024).toFixed(1)} MB`;
+
+  }
+
+  return `${(
+    number /
+    1024 /
+    1024 /
+    1024
+  ).toFixed(2)} GB`;
+
+}
+
+/* =========================================
+   DETAIL
+========================================= */
+
+function openBackupDetail(data){
+
+  document
+    .getElementById("detailId")
+    .textContent =
+    data.id;
+
+  document
+    .getElementById("detailType")
+    .textContent =
+    data.type;
+
+  document
+    .getElementById("detailStatus")
+    .textContent =
+    String(data.status)
+      .toUpperCase();
+
+  document
+    .getElementById("detailSize")
+    .textContent =
+    formatSize(data.size);
+
+  document
+    .getElementById("detailName")
+    .textContent =
+    data.name;
+
+  document
+    .getElementById("detailModal")
+    .classList.add("open");
+
+}
+
+/* =========================================
+   RESTORE
+========================================= */
+
+document
+  .getElementById("restoreBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      const confirmed =
+        confirm(
+          "Restore operations can overwrite current data. Continue?"
+        );
+
+      if(!confirmed){
+
+        return;
+
+      }
+
+      toast(
+        "Restore request requires protected server-side execution."
+      );
+
+    }
+  );
+
+/* =========================================
+   REFRESH
+========================================= */
+
+document
+  .getElementById("refreshBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      toast(
+        "Refreshing backup status..."
+      );
+
+      await loadBackups();
+
+    }
+  );
+
+/* =========================================
+   EXPORT
+========================================= */
+
+document
+  .getElementById("exportBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      const rows =
+        [
+          [
+            "Backup",
+            "ID",
+            "Type",
+            "Status",
+            "Created",
+            "Size",
+            "Retention"
+          ]
+        ];
+
+      document
+        .querySelectorAll(
+          "#backupBody tr"
+        )
+        .forEach(
+          row => {
+
+            const cells =
+              row.querySelectorAll("td");
+
+            if(
+              cells.length < 7
+            ){
+
+              return;
+
+            }
+
+            rows.push([
+              cells[0]
+                ?.innerText
+                .trim()
+                .split("\n")[0] || "",
+
+              cells[0]
+                ?.innerText
+                .trim()
+                .split("\n")[1] || "",
+
+              cells[1]
+                ?.innerText
+                .trim() || "",
+
+              cells[2]
+                ?.innerText
+                .trim() || "",
+
+              cells[3]
+                ?.innerText
+                .trim() || "",
+
+              cells[4]
+                ?.innerText
+                .trim() || "",
+
+              cells[5]
+                ?.innerText
+                .trim() || ""
+            ]);
+
+          }
+        );
+
+      const csv =
+        rows
+          .map(
+            row =>
+              row
+                .map(
+                  value =>
+                    `"${String(value)
+                      .replaceAll('"','""')}"`
+                )
+                .join(",")
+          )
+          .join("\n");
+
+      const blob =
+        new Blob(
+          [csv],
+          {
+            type:
+              "text/csv;charset=utf-8;"
+          }
+        );
+
+      const url =
+        URL.createObjectURL(blob);
+
+      const link =
+        document.createElement("a");
+
+      link.href = url;
+      link.download =
+        "crowrules-backups.csv";
+
+      link.click();
+
+      URL.revokeObjectURL(url);
+
+      toast(
+        "Backup report exported."
+      );
+
+    }
+  );
+
+/* =========================================
+   FILTER
+========================================= */
+
+document
+  .getElementById("filterBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      toast(
+        "Backup filtering controls are ready for Supabase integration."
+      );
+
+    }
+  );
+
+/* =========================================
+   SCHEDULE
+========================================= */
+
+document
+  .getElementById("scheduleBtn")
+  ?.addEventListener(
+    "click",
+    () => {
+
+      toast(
+        "Backup schedule management opened."
+      );
+
+    }
+  );
+
+/* =========================================
+   MODAL BACKDROP
+========================================= */
+
+document
+  .getElementById("backupModal")
+  ?.addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target.id === "backupModal"
+      ){
+
+        closeBackupModal();
+
+      }
+
+    }
+  );
+
+document
+  .getElementById("detailModal")
+  ?.addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target.id === "detailModal"
+      ){
+
+        closeDetailModal();
+
+      }
+
+    }
+  );
+
+/* =========================================
+   START
+========================================= */
+
+initSupabase();
+loadBackups();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1932 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Audio — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Audio Administration">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --sidebar:260px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at 80% -10%,rgba(182,108,255,.10),transparent 30%),
+    radial-gradient(circle at 10% 30%,rgba(55,215,255,.05),transparent 28%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:var(--sidebar);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.025),transparent 20%),
+    #09090c;
+  border-right:1px solid var(--line);
+  z-index:100;
+  overflow-y:auto;
+}
+
+.brand{
+  height:82px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:0 22px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:39px;
+  height:39px;
+  border:1px solid rgba(182,108,255,.6);
+  display:grid;
+  place-items:center;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  box-shadow:0 0 22px rgba(182,108,255,.12);
+}
+
+.brand-text{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:1.5px;
+  font-weight:800;
+}
+
+.brand-sub{
+  font-size:8px;
+  color:var(--muted);
+  letter-spacing:2px;
+  margin-top:3px;
+}
+
+.nav{
+  padding:17px 12px 30px;
+}
+
+.nav-label{
+  color:#555560;
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:13px 11px 8px;
+  font-weight:700;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:42px;
+  padding:0 12px;
+  margin:2px 0;
+  border:1px solid transparent;
+  color:#aaaab4;
+  border-radius:7px;
+  transition:.18s ease;
+  font-size:12px;
+  font-weight:600;
+}
+
+.nav a:hover{
+  background:#111117;
+  border-color:var(--line);
+  color:#fff;
+}
+
+.nav a.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.13),rgba(108,92,255,.04));
+  border-color:rgba(182,108,255,.30);
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+  font-size:14px;
+}
+
+.nav-badge{
+  margin-left:auto;
+  font-size:9px;
+  min-width:22px;
+  height:20px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line2);
+  color:var(--muted);
+  border-radius:4px;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  margin-left:var(--sidebar);
+  min-height:100vh;
+}
+
+.topbar{
+  height:72px;
+  border-bottom:1px solid var(--line);
+  background:rgba(5,5,5,.78);
+  backdrop-filter:blur(14px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:80;
+}
+
+.crumb{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.crumb strong{
+  color:#fff;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.clock{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+  color:var(--cyan);
+  border:1px solid rgba(55,215,255,.18);
+  padding:8px 10px;
+  border-radius:5px;
+}
+
+.icon-btn{
+  width:35px;
+  height:35px;
+  border:1px solid var(--line);
+  background:#0c0c10;
+  color:#aaaab4;
+  border-radius:6px;
+}
+
+.icon-btn:hover{
+  color:#fff;
+  border-color:var(--line2);
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  padding:28px;
+  max-width:1800px;
+  margin:auto;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  background:
+    radial-gradient(circle at 85% 30%,rgba(182,108,255,.13),transparent 28%),
+    linear-gradient(135deg,#111117,#09090d);
+  min-height:190px;
+  padding:30px;
+  display:flex;
+  justify-content:space-between;
+  gap:25px;
+  align-items:flex-end;
+}
+
+.hero:before{
+  content:"AUDIO";
+  position:absolute;
+  right:-18px;
+  top:0;
+  font-family:Orbitron,sans-serif;
+  font-size:110px;
+  line-height:1;
+  color:rgba(255,255,255,.018);
+  font-weight:800;
+  pointer-events:none;
+}
+
+.eyebrow{
+  font-family:Orbitron,sans-serif;
+  color:var(--accent);
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:11px;
+}
+
+.hero h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(25px,3vw,40px);
+  letter-spacing:-1px;
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:720px;
+  line-height:1.7;
+  font-size:12px;
+  margin:12px 0 0;
+}
+
+.hero-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  position:relative;
+  z-index:2;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:#101015;
+  color:#ddd;
+  min-height:39px;
+  padding:0 14px;
+  border-radius:6px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.3px;
+}
+
+.btn:hover{
+  border-color:#555562;
+  color:#fff;
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.55);
+  background:linear-gradient(135deg,#9d58e9,#654fd7);
+  color:#fff;
+}
+
+.btn.primary:hover{
+  filter:brightness(1.08);
+}
+
+.btn.cyan{
+  border-color:rgba(55,215,255,.30);
+  color:var(--cyan);
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.25);
+  color:var(--red);
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  margin:16px 0;
+}
+
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:18px;
+  position:relative;
+  overflow:hidden;
+}
+
+.stat:after{
+  content:"";
+  position:absolute;
+  right:-30px;
+  bottom:-45px;
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:rgba(182,108,255,.035);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+
+.stat-value{
+  font-family:Orbitron,sans-serif;
+  font-size:27px;
+  margin-top:9px;
+}
+
+.stat-meta{
+  margin-top:6px;
+  color:#666672;
+  font-size:9px;
+}
+
+.stat.accent .stat-value{color:var(--accent)}
+.stat.cyan .stat-value{color:var(--cyan)}
+.stat.green .stat-value{color:var(--green)}
+.stat.yellow .stat-value{color:var(--yellow)}
+.stat.red .stat-value{color:var(--red)}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+  margin:22px 0 13px;
+  flex-wrap:wrap;
+}
+
+.toolbar-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:.5px;
+}
+
+.toolbar-right{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.search{
+  width:250px;
+  height:39px;
+  background:#0d0d11;
+  border:1px solid var(--line);
+  color:#fff;
+  padding:0 12px;
+  outline:none;
+  border-radius:6px;
+  font-size:11px;
+}
+
+.search:focus{
+  border-color:rgba(182,108,255,.45);
+}
+
+.select{
+  height:39px;
+  background:#0d0d11;
+  border:1px solid var(--line);
+  color:#bbb;
+  padding:0 10px;
+  border-radius:6px;
+  outline:none;
+  font-size:10px;
+}
+
+/* =========================
+   AUDIO GRID
+========================= */
+
+.audio-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.audio-card{
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.018),transparent 40%),
+    var(--panel);
+  border:1px solid var(--line);
+  overflow:hidden;
+  transition:.2s ease;
+}
+
+.audio-card:hover{
+  transform:translateY(-2px);
+  border-color:#3a3a45;
+  box-shadow:0 12px 30px rgba(0,0,0,.22);
+}
+
+.cover{
+  height:145px;
+  position:relative;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(55,215,255,.17),transparent 25%),
+    radial-gradient(circle at 80% 80%,rgba(182,108,255,.20),transparent 35%),
+    linear-gradient(135deg,#17171f,#09090c);
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.cover-art{
+  width:86px;
+  height:86px;
+  border:1px solid rgba(182,108,255,.5);
+  display:grid;
+  place-items:center;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:28px;
+  background:rgba(0,0,0,.24);
+  box-shadow:0 0 35px rgba(182,108,255,.10);
+}
+
+.status{
+  position:absolute;
+  top:11px;
+  left:11px;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  padding:5px 7px;
+  border:1px solid;
+  border-radius:4px;
+  background:#08080a;
+}
+
+.status.published{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+}
+
+.status.draft{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.25);
+}
+
+.status.archived{
+  color:#777783;
+  border-color:#303039;
+}
+
+.featured{
+  position:absolute;
+  right:11px;
+  top:11px;
+  color:var(--yellow);
+  font-size:13px;
+}
+
+.audio-info{
+  padding:16px;
+}
+
+.audio-type{
+  color:var(--accent);
+  font-size:8px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-bottom:7px;
+}
+
+.audio-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  margin-bottom:7px;
+}
+
+.audio-description{
+  color:#777783;
+  font-size:10px;
+  line-height:1.6;
+  min-height:34px;
+}
+
+.audio-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid #202027;
+  color:#676773;
+  font-size:9px;
+}
+
+.audio-meta strong{
+  color:#aaaab4;
+}
+
+.audio-actions{
+  display:flex;
+  gap:6px;
+  margin-top:12px;
+}
+
+.small-btn{
+  flex:1;
+  height:31px;
+  background:#101015;
+  border:1px solid var(--line);
+  color:#aaa;
+  border-radius:5px;
+  font-size:9px;
+  font-weight:700;
+}
+
+.small-btn:hover{
+  color:#fff;
+  border-color:var(--line2);
+}
+
+.small-btn.play{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.18);
+}
+
+/* =========================
+   LOWER PANELS
+========================= */
+
+.lower{
+  display:grid;
+  grid-template-columns:1.4fr .8fr;
+  gap:14px;
+  margin-top:16px;
+}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+}
+
+.panel-head{
+  padding:15px 17px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  letter-spacing:.7px;
+}
+
+.panel-sub{
+  color:#666672;
+  font-size:9px;
+}
+
+.episode-list{
+  padding:4px 16px 12px;
+}
+
+.episode{
+  min-height:62px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid #1c1c22;
+}
+
+.episode:last-child{
+  border-bottom:0;
+}
+
+.ep-play{
+  width:34px;
+  height:34px;
+  border:1px solid rgba(55,215,255,.22);
+  color:var(--cyan);
+  background:#0c1012;
+  border-radius:50%;
+}
+
+.ep-main{
+  flex:1;
+  min-width:0;
+}
+
+.ep-title{
+  font-size:10px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.ep-meta{
+  color:#666672;
+  font-size:8px;
+  margin-top:4px;
+}
+
+.ep-duration{
+  color:#777783;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+.programming{
+  padding:14px 16px;
+}
+
+.program{
+  padding:12px 0;
+  border-bottom:1px solid #1c1c22;
+}
+
+.program:last-child{
+  border-bottom:0;
+}
+
+.program-time{
+  font-family:Orbitron,sans-serif;
+  color:var(--cyan);
+  font-size:9px;
+}
+
+.program-title{
+  font-size:10px;
+  font-weight:700;
+  margin-top:4px;
+}
+
+.program-channel{
+  color:#666672;
+  font-size:8px;
+  margin-top:3px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:300;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(680px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0b0b0f;
+  border:1px solid var(--line2);
+  box-shadow:0 30px 80px rgba(0,0,0,.55);
+}
+
+.modal-head{
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:1px solid var(--line);
+  background:#111117;
+  color:#aaa;
+  border-radius:5px;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  display:block;
+  color:#777783;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:7px;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  background:#101015;
+  border:1px solid var(--line);
+  color:#fff;
+  border-radius:5px;
+  outline:none;
+  padding:10px;
+  font-size:10px;
+}
+
+.field textarea{
+  min-height:85px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:rgba(182,108,255,.5);
+}
+
+.modal-foot{
+  padding:14px 20px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  min-width:250px;
+  background:#111117;
+  border:1px solid var(--line2);
+  box-shadow:0 15px 45px rgba(0,0,0,.45);
+  padding:13px 15px;
+  transform:translateY(130px);
+  opacity:0;
+  transition:.25s ease;
+  z-index:500;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.toast-title{
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  color:var(--accent);
+  letter-spacing:1px;
+}
+
+.toast-text{
+  font-size:10px;
+  color:#aaaab4;
+  margin-top:5px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-menu{
+  display:none;
+}
+
+@media(max-width:1200px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .audio-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .lower{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:800px){
+  :root{
+    --sidebar:0px;
+  }
+
+  .sidebar{
+    width:270px;
+    transform:translateX(-100%);
+    transition:.25s ease;
+  }
+
+  body.menu-open .sidebar{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+    width:35px;
+    height:35px;
+    background:#0d0d11;
+    border:1px solid var(--line);
+    color:#fff;
+    border-radius:6px;
+  }
+
+  .topbar{
+    padding:0 14px;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .content{
+    padding:15px;
+  }
+
+  .hero{
+    padding:22px;
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .hero:before{
+    font-size:65px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .audio-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .search{
+    width:100%;
+  }
+
+  .toolbar-right{
+    width:100%;
+  }
+
+  .select{
+    flex:1;
+  }
+}
+
+@media(max-width:450px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:24px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div>
+      <div class="brand-text">CrowRules</div>
+      <div class="brand-sub">ENTERTAINMENT ADMIN</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-label">Main</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a href="content.html">
+      <span class="nav-icon">▦</span>
+      Content
+    </a>
+
+    <a href="shows.html">
+      <span class="nav-icon">▶</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">◉</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">▣</span>
+      Movies
+    </a>
+
+    <a href="audio.html" class="active">
+      <span class="nav-icon">♫</span>
+      Audio
+      <span class="nav-badge">24</span>
+    </a>
+
+    <a href="channels.html">
+      <span class="nav-icon">◈</span>
+      Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">☷</span>
+      TV Guide
+    </a>
+
+    <div class="nav-label">People</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♙</span>
+      Members
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">♧</span>
+      Community
+    </a>
+
+    <a href="creators.html">
+      <span class="nav-icon">✦</span>
+      Creators
+    </a>
+
+    <div class="nav-label">CrowRules Network</div>
+
+    <a href="records.html">
+      <span class="nav-icon">◒</span>
+      Records
+    </a>
+
+    <a href="sports.html">
+      <span class="nav-icon">◇</span>
+      Sports
+    </a>
+
+    <a href="memorials.html">
+      <span class="nav-icon">✧</span>
+      Memorials
+    </a>
+
+    <a href="awards.html">
+      <span class="nav-icon">★</span>
+      Awards
+    </a>
+
+    <div class="nav-label">System</div>
+
+    <a href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      Analytics
+    </a>
+
+    <a href="moderation.html">
+      <span class="nav-icon">!</span>
+      Moderation
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span>
+      Logs
+    </a>
+
+    <a href="notifications.html">
+      <span class="nav-icon">♢</span>
+      Notifications
+    </a>
+
+    <a href="activity.html">
+      <span class="nav-icon">↯</span>
+      Activity
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+
+</aside>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="crumb">
+      <button class="mobile-menu" onclick="toggleMenu()">☰</button>
+      <span>Admin</span>
+      <span>/</span>
+      <strong>Audio</strong>
+    </div>
+
+    <div class="top-actions">
+      <div class="clock" id="clock">--:--:--</div>
+      <button class="icon-btn" onclick="showToast('SYSTEM','Audio administration online.')">⌁</button>
+      <button class="icon-btn" onclick="location.href='settings.html'">⚙</button>
+    </div>
+
+  </header>
+
+  <section class="content">
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+      <div>
+        <div class="eyebrow">CrowRules Audio Network</div>
+
+        <h1>Audio Command Center</h1>
+
+        <p>
+          Manage CrowRules podcasts, talk radio, audio-first originals,
+          episodes, broadcasts, playlists and the audio library from one
+          centralized administration console.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn primary" onclick="openModal()">＋ Add Audio</button>
+        <button class="btn cyan" onclick="showToast('UPLOAD','Audio upload center opened.')">⇧ Upload Audio</button>
+      </div>
+
+    </div>
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div class="stat accent">
+        <div class="stat-label">Total Audio</div>
+        <div class="stat-value" id="totalAudio">24</div>
+        <div class="stat-meta">All audio assets</div>
+      </div>
+
+      <div class="stat green">
+        <div class="stat-label">Published</div>
+        <div class="stat-value" id="publishedAudio">19</div>
+        <div class="stat-meta">Available to listeners</div>
+      </div>
+
+      <div class="stat yellow">
+        <div class="stat-label">Drafts</div>
+        <div class="stat-value" id="draftAudio">3</div>
+        <div class="stat-meta">Awaiting publication</div>
+      </div>
+
+      <div class="stat cyan">
+        <div class="stat-label">Hours</div>
+        <div class="stat-value">84</div>
+        <div class="stat-meta">Total runtime</div>
+      </div>
+
+      <div class="stat red">
+        <div class="stat-label">Live</div>
+        <div class="stat-value">2</div>
+        <div class="stat-meta">Active broadcasts</div>
+      </div>
+
+    </div>
+
+    <!-- TOOLBAR -->
+
+    <div class="toolbar">
+
+      <div class="toolbar-title">
+        Audio Library
+      </div>
+
+      <div class="toolbar-right">
+
+        <input
+          class="search"
+          id="search"
+          type="search"
+          placeholder="Search audio..."
+          oninput="filterAudio()"
+        >
+
+        <select class="select" id="typeFilter" onchange="filterAudio()">
+          <option value="all">All Types</option>
+          <option value="podcast">Podcast</option>
+          <option value="talk-radio">Talk Radio</option>
+          <option value="original">Original</option>
+          <option value="music">Music</option>
+        </select>
+
+        <select class="select" id="statusFilter" onchange="filterAudio()">
+          <option value="all">All Status</option>
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+          <option value="archived">Archived</option>
+        </select>
+
+      </div>
+
+    </div>
+
+    <!-- AUDIO GRID -->
+
+    <div class="audio-grid" id="audioGrid">
+
+      <article
+        class="audio-card"
+        data-title="Tacoma Nights"
+        data-type="talk-radio"
+        data-status="published"
+      >
+
+        <div class="cover">
+          <span class="status published">Published</span>
+          <span class="featured">★</span>
+          <div class="cover-art">TN</div>
+        </div>
+
+        <div class="audio-info">
+          <div class="audio-type">Talk Radio</div>
+          <div class="audio-title">Tacoma Nights</div>
+
+          <div class="audio-description">
+            Weekly conversations, stories and commentary from Tacoma and beyond.
+          </div>
+
+          <div class="audio-meta">
+            <span>Episodes <strong>18</strong></span>
+            <span>Runtime <strong>12h</strong></span>
+          </div>
+
+          <div class="audio-actions">
+            <button class="small-btn play" onclick="playAudio('Tacoma Nights')">▶ Play</button>
+            <button class="small-btn" onclick="editAudio('Tacoma Nights')">Edit</button>
+            <button class="small-btn" onclick="showToast('OPEN','Opening Tacoma Nights.')">Open</button>
+          </div>
+        </div>
+
+      </article>
+
+      <article
+        class="audio-card"
+        data-title="Voices From The Void"
+        data-type="original"
+        data-status="published"
+      >
+
+        <div class="cover">
+          <span class="status published">Published</span>
+          <div class="cover-art">VV</div>
+        </div>
+
+        <div class="audio-info">
+          <div class="audio-type">Audio Original</div>
+          <div class="audio-title">Voices From The Void</div>
+
+          <div class="audio-description">
+            Dark audio storytelling from the CrowRules original universe.
+          </div>
+
+          <div class="audio-meta">
+            <span>Episodes <strong>8</strong></span>
+            <span>Runtime <strong>9h</strong></span>
+          </div>
+
+          <div class="audio-actions">
+            <button class="small-btn play" onclick="playAudio('Voices From The Void')">▶ Play</button>
+            <button class="small-btn" onclick="editAudio('Voices From The Void')">Edit</button>
+            <button class="small-btn" onclick="showToast('OPEN','Opening Voices From The Void.')">Open</button>
+          </div>
+        </div>
+
+      </article>
+
+      <article
+        class="audio-card"
+        data-title="Back Deck Live"
+        data-type="talk-radio"
+        data-status="published"
+      >
+
+        <div class="cover">
+          <span class="status published">Published</span>
+          <span class="featured">★</span>
+          <div class="cover-art">BD</div>
+        </div>
+
+        <div class="audio-info">
+          <div class="audio-type">Live Audio</div>
+          <div class="audio-title">Back Deck Live</div>
+
+          <div class="audio-description">
+            Live conversations, music, community updates and special events.
+          </div>
+
+          <div class="audio-meta">
+            <span>Episodes <strong>11</strong></span>
+            <span>Runtime <strong>14h</strong></span>
+          </div>
+
+          <div class="audio-actions">
+            <button class="small-btn play" onclick="playAudio('Back Deck Live')">▶ Play</button>
+            <button class="small-btn" onclick="editAudio('Back Deck Live')">Edit</button>
+            <button class="small-btn" onclick="showToast('OPEN','Opening Back Deck Live.')">Open</button>
+          </div>
+        </div>
+
+      </article>
+
+      <article
+        class="audio-card"
+        data-title="Echoes of Daniel"
+        data-type="original"
+        data-status="published"
+      >
+
+        <div class="cover">
+          <span class="status published">Published</span>
+          <div class="cover-art">ED</div>
+        </div>
+
+        <div class="audio-info">
+          <div class="audio-type">Audio Original</div>
+          <div class="audio-title">Echoes of Daniel</div>
+
+          <div class="audio-description">
+            A reflective CrowRules audio series exploring memory, friendship and legacy.
+          </div>
+
+          <div class="audio-meta">
+            <span>Episodes <strong>6</strong></span>
+            <span>Runtime <strong>7h</strong></span>
+          </div>
+
+          <div class="audio-actions">
+            <button class="small-btn play" onclick="playAudio('Echoes of Daniel')">▶ Play</button>
+            <button class="small-btn" onclick="editAudio('Echoes of Daniel')">Edit</button>
+            <button class="small-btn" onclick="showToast('OPEN','Opening Echoes of Daniel.')">Open</button>
+          </div>
+        </div>
+
+      </article>
+
+      <article
+        class="audio-card"
+        data-title="Bird Brains"
+        data-type="podcast"
+        data-status="draft"
+      >
+
+        <div class="cover">
+          <span class="status draft">Draft</span>
+          <div class="cover-art">BB</div>
+        </div>
+
+        <div class="audio-info">
+          <div class="audio-type">Podcast</div>
+          <div class="audio-title">Bird Brains</div>
+
+          <div class="audio-description">
+            A chaotic conversational audio series built around the CrowRules community.
+          </div>
+
+          <div class="audio-meta">
+            <span>Episodes <strong>4</strong></span>
+            <span>Runtime <strong>4h</strong></span>
+          </div>
+
+          <div class="audio-actions">
+            <button class="small-btn play" onclick="playAudio('Bird Brains')">▶ Preview</button>
+            <button class="small-btn" onclick="editAudio('Bird Brains')">Edit</button>
+            <button class="small-btn" onclick="showToast('DRAFT','Bird Brains is currently a draft.')">Open</button>
+          </div>
+        </div>
+
+      </article>
+
+      <article
+        class="audio-card"
+        data-title="D&J Show"
+        data-type="podcast"
+        data-status="published"
+      >
+
+        <div class="cover">
+          <span class="status published">Published</span>
+          <div class="cover-art">DJ</div>
+        </div>
+
+        <div class="audio-info">
+          <div class="audio-type">Podcast</div>
+          <div class="audio-title">D&amp;J Show</div>
+
+          <div class="audio-description">
+            Conversations, entertainment and personality-driven storytelling.
+          </div>
+
+          <div class="audio-meta">
+            <span>Episodes <strong>9</strong></span>
+            <span>Runtime <strong>10h</strong></span>
+          </div>
+
+          <div class="audio-actions">
+            <button class="small-btn play" onclick="playAudio('D&J Show')">▶ Play</button>
+            <button class="small-btn" onclick="editAudio('D&J Show')">Edit</button>
+            <button class="small-btn" onclick="showToast('OPEN','Opening D&J Show.')">Open</button>
+          </div>
+        </div>
+
+      </article>
+
+    </div>
+
+    <!-- LOWER -->
+
+    <div class="lower">
+
+      <section class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">RECENT AUDIO EPISODES</div>
+            <div class="panel-sub">Latest activity across the audio network</div>
+          </div>
+
+          <button class="btn" onclick="showToast('EPISODES','Episode manager opened.')">
+            View All
+          </button>
+        </div>
+
+        <div class="episode-list">
+
+          <div class="episode">
+            <button class="ep-play" onclick="playAudio('Tacoma Nights — Episode 18')">▶</button>
+
+            <div class="ep-main">
+              <div class="ep-title">Tacoma Nights — The Week In Tacoma</div>
+              <div class="ep-meta">Tacoma Nights · Published today</div>
+            </div>
+
+            <div class="ep-duration">58:21</div>
+          </div>
+
+          <div class="episode">
+            <button class="ep-play" onclick="playAudio('Voices From The Void — Episode 8')">▶</button>
+
+            <div class="ep-main">
+              <div class="ep-title">Voices From The Void — Episode 08</div>
+              <div class="ep-meta">Originals · Published yesterday</div>
+            </div>
+
+            <div class="ep-duration">42:18</div>
+          </div>
+
+          <div class="episode">
+            <button class="ep-play" onclick="playAudio('Back Deck Live — Saturday')">▶</button>
+
+            <div class="ep-main">
+              <div class="ep-title">Back Deck Live — Saturday Broadcast</div>
+              <div class="ep-meta">Back Deck Live · Published Sep 5</div>
+            </div>
+
+            <div class="ep-duration">1:21:43</div>
+          </div>
+
+          <div class="episode">
+            <button class="ep-play" onclick="playAudio('Echoes of Daniel — Episode 6')">▶</button>
+
+            <div class="ep-main">
+              <div class="ep-title">Echoes of Daniel — Episode 06</div>
+              <div class="ep-meta">Audio Originals · Published Sep 4</div>
+            </div>
+
+            <div class="ep-duration">51:06</div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="panel">
+
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">AUDIO PROGRAMMING</div>
+            <div class="panel-sub">Upcoming broadcasts</div>
+          </div>
+        </div>
+
+        <div class="programming">
+
+          <div class="program">
+            <div class="program-time">15:00 PST</div>
+            <div class="program-title">Back Deck Live</div>
+            <div class="program-channel">CrowRules Audio · Live</div>
+          </div>
+
+          <div class="program">
+            <div class="program-time">18:00 PST</div>
+            <div class="program-title">Tacoma Nights Replay</div>
+            <div class="program-channel">Talk Radio</div>
+          </div>
+
+          <div class="program">
+            <div class="program-time">21:00 PST</div>
+            <div class="program-title">Voices From The Void</div>
+            <div class="program-channel">Audio Originals</div>
+          </div>
+
+          <div class="program">
+            <div class="program-time">00:00 PST</div>
+            <div class="program-title">CrowRules After Dark</div>
+            <div class="program-channel">Overnight Audio</div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- =========================
+     ADD AUDIO MODAL
+========================= -->
+
+<div class="modal" id="audioModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <div class="modal-title">ADD AUDIO ASSET</div>
+      <button class="close" onclick="closeModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Title</label>
+          <input id="audioTitle" placeholder="Audio title">
+        </div>
+
+        <div class="field">
+          <label>Type</label>
+          <select id="audioType">
+            <option>Podcast</option>
+            <option>Talk Radio</option>
+            <option>Original</option>
+            <option>Music</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Series</label>
+          <input placeholder="Series / show name">
+        </div>
+
+        <div class="field">
+          <label>Status</label>
+          <select id="audioStatus">
+            <option>Published</option>
+            <option>Draft</option>
+            <option>Archived</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Audio URL</label>
+          <input placeholder="https://...">
+        </div>
+
+        <div class="field full">
+          <label>Description</label>
+          <textarea placeholder="Describe this audio asset..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Duration</label>
+          <input placeholder="00:00:00">
+        </div>
+
+        <div class="field">
+          <label>Publish Date</label>
+          <input type="date">
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveAudio()">Save Audio</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div class="toast" id="toast">
+
+  <div class="toast-title" id="toastTitle">
+    CROWRULES
+  </div>
+
+  <div class="toast-text" id="toastText">
+    System ready.
+  </div>
+
+</div>
+
+<script>
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock(){
+  const now = new Date();
+
+  const time = now.toLocaleTimeString([],{
+    hour:'2-digit',
+    minute:'2-digit',
+    second:'2-digit'
+  });
+
+  document.getElementById('clock').textContent = time;
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+function toggleMenu(){
+  document.body.classList.toggle('menu-open');
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(){
+  document.getElementById('audioModal').classList.add('show');
+}
+
+function closeModal(){
+  document.getElementById('audioModal').classList.remove('show');
+}
+
+document.getElementById('audioModal').addEventListener('click',function(e){
+  if(e.target === this){
+    closeModal();
+  }
+});
+
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer;
+
+function showToast(title,text){
+
+  const toast = document.getElementById('toast');
+
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastText').textContent = text;
+
+  toast.classList.add('show');
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(()=>{
+    toast.classList.remove('show');
+  },3000);
+}
+
+
+/* =========================
+   PLAY
+========================= */
+
+function playAudio(title){
+  showToast(
+    'AUDIO PLAYER',
+    'Preparing playback: ' + title
+  );
+}
+
+
+/* =========================
+   EDIT
+========================= */
+
+function editAudio(title){
+
+  document.getElementById('audioTitle').value = title;
+
+  openModal();
+
+  showToast(
+    'EDIT MODE',
+    'Editing ' + title
+  );
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+function saveAudio(){
+
+  const title =
+    document.getElementById('audioTitle').value.trim();
+
+  const type =
+    document.getElementById('audioType').value;
+
+  const status =
+    document.getElementById('audioStatus').value;
+
+  if(!title){
+
+    showToast(
+      'VALIDATION',
+      'Enter an audio title before saving.'
+    );
+
+    return;
+  }
+
+  closeModal();
+
+  showToast(
+    'AUDIO SAVED',
+    title + ' has been staged as ' + status + '.'
+  );
+
+  /*
+    SUPABASE INSERT HOOK
+
+    Recommended table:
+
+    audio_assets
+
+    Suggested columns:
+
+    id
+    title
+    description
+    audio_url
+    thumbnail_url
+    type
+    series_id
+    status
+    duration_seconds
+    featured
+    sort_order
+    published_at
+    created_at
+    updated_at
+
+    Example:
+
+    const { data, error } = await supabase
+      .from('audio_assets')
+      .insert({
+        title,
+        type,
+        status
+      });
+
+  */
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+function filterAudio(){
+
+  const search =
+    document.getElementById('search')
+      .value
+      .toLowerCase()
+      .trim();
+
+  const type =
+    document.getElementById('typeFilter').value;
+
+  const status =
+    document.getElementById('statusFilter').value;
+
+  const cards =
+    document.querySelectorAll('.audio-card');
+
+  cards.forEach(card=>{
+
+    const title =
+      card.dataset.title.toLowerCase();
+
+    const cardType =
+      card.dataset.type;
+
+    const cardStatus =
+      card.dataset.status;
+
+    const matchesSearch =
+      !search ||
+      title.includes(search);
+
+    const matchesType =
+      type === 'all' ||
+      cardType === type;
+
+    const matchesStatus =
+      status === 'all' ||
+      cardStatus === status;
+
+    card.style.display =
+      matchesSearch &&
+      matchesType &&
+      matchesStatus
+      ? ''
+      : 'none';
+
+  });
+
+}
+
+
+/* =========================
+   ESCAPE
+========================= */
+
+document.addEventListener('keydown',function(e){
+
+  if(e.key === 'Escape'){
+    closeModal();
+    document.body.classList.remove('menu-open');
+  }
+
+});
+
+
+/* =========================
+   DEMO READY
+========================= */
+
+console.log(
+  '%cCrowRules Audio Admin',
+  'color:#b66cff;font-weight:bold;font-size:16px'
+);
+
+console.log(
+  'Audio Command Center initialized.'
+);
+</script>
+
+</body>
+</html>

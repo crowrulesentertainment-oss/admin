@@ -1,0 +1,2112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Member — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Individual Member Management">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 75% -10%,rgba(182,108,255,.10),transparent 28%),
+    radial-gradient(circle at 5% 25%,rgba(55,215,255,.045),transparent 24%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.025;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:255px;
+  background:rgba(7,7,10,.97);
+  border-right:1px solid var(--line);
+  z-index:100;
+  overflow-y:auto;
+}
+
+.brand{
+  height:76px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--accent);
+  border-radius:10px;
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:0 0 24px rgba(182,108,255,.16);
+}
+
+.brand-text strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:1px;
+}
+
+.brand-text span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.nav{
+  padding:16px 12px 30px;
+}
+
+.nav-label{
+  color:#555560;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.7px;
+  text-transform:uppercase;
+  padding:12px 10px 7px;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 11px;
+  margin:2px 0;
+  border:1px solid transparent;
+  border-radius:8px;
+  color:#a8a8b3;
+  font-size:12px;
+  font-weight:600;
+  transition:.2s;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:var(--panel2);
+  border-color:var(--line);
+}
+
+.nav a.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(182,108,255,.15),rgba(108,92,255,.06));
+  border-color:rgba(182,108,255,.28);
+  box-shadow:inset 3px 0 var(--accent);
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+  color:#777784;
+}
+
+.nav a.active .nav-icon{
+  color:var(--accent);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  margin-left:255px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:76px;
+  position:sticky;
+  top:0;
+  z-index:80;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:0 28px;
+  background:rgba(5,5,5,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.mobile-menu{
+  display:none;
+  width:40px;
+  height:40px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--panel2);
+  color:#fff;
+}
+
+.breadcrumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:#fff;
+}
+
+.top-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.clock{
+  color:var(--muted);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.admin-user{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding-left:12px;
+  border-left:1px solid var(--line);
+}
+
+.admin-avatar{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:800;
+}
+
+.admin-user strong{
+  display:block;
+  font-size:11px;
+}
+
+.admin-user span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+  max-width:1700px;
+  margin:auto;
+  padding:30px;
+}
+
+.back-link{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  color:var(--muted);
+  font-size:10px;
+  margin-bottom:18px;
+}
+
+.back-link:hover{
+  color:#fff;
+}
+
+.member-hero{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:22px;
+  align-items:center;
+  padding:22px;
+  background:
+    linear-gradient(145deg,rgba(182,108,255,.08),rgba(13,13,17,.96) 42%);
+  border:1px solid var(--line);
+  border-radius:14px;
+  margin-bottom:18px;
+}
+
+.profile-avatar{
+  width:88px;
+  height:88px;
+  display:grid;
+  place-items:center;
+  border-radius:20px;
+  background:
+    linear-gradient(135deg,#30203d,#171720);
+  border:1px solid rgba(182,108,255,.4);
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+  font-weight:800;
+  box-shadow:0 0 40px rgba(182,108,255,.10);
+}
+
+.hero-label{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:7px;
+}
+
+.member-name{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:27px;
+}
+
+.username{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:6px;
+}
+
+.hero-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:12px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 8px;
+  border-radius:999px;
+  background:#09090c;
+  border:1px solid var(--line);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+}
+
+.badge:before{
+  content:"";
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#777;
+}
+
+.badge.active{
+  color:var(--green);
+  border-color:rgba(69,230,154,.2);
+}
+
+.badge.active:before{
+  background:var(--green);
+}
+
+.badge.premium{
+  color:var(--accent);
+  border-color:rgba(182,108,255,.25);
+}
+
+.badge.premium:before{
+  background:var(--accent);
+}
+
+.badge.creator{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.2);
+}
+
+.badge.creator:before{
+  background:var(--cyan);
+}
+
+.hero-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#ddd;
+  padding:10px 14px;
+  border-radius:8px;
+  font-size:10px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.btn:hover{
+  color:#fff;
+  border-color:#555563;
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  color:#fff;
+  border-color:rgba(182,108,255,.5);
+  background:linear-gradient(135deg,#8d54d6,#5d4ed2);
+}
+
+.btn.danger{
+  color:#ff7184;
+  border-color:rgba(255,82,109,.25);
+}
+
+/* =========================
+   GRID
+========================= */
+
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.7fr) minmax(300px,.75fr);
+  gap:18px;
+}
+
+.stack{
+  display:grid;
+  gap:18px;
+}
+
+.panel{
+  background:linear-gradient(145deg,rgba(17,17,23,.96),rgba(10,10,13,.96));
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:4px;
+}
+
+.panel-body{
+  padding:19px;
+}
+
+/* =========================
+   PROFILE INFO
+========================= */
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.info-card{
+  background:#09090c;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:14px;
+}
+
+.info-label{
+  color:#666672;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+.info-value{
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+  margin-top:6px;
+}
+
+.info-value.accent{
+  color:var(--accent);
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.stat{
+  padding:15px;
+  background:#09090c;
+  border:1px solid var(--line);
+  border-radius:9px;
+}
+
+.stat-label{
+  color:#6e6e79;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+.stat-value{
+  margin-top:7px;
+  font-family:Orbitron,sans-serif;
+  font-size:20px;
+}
+
+.stat-note{
+  color:var(--green);
+  font-size:8px;
+  margin-top:5px;
+}
+
+/* =========================
+   ACTIVITY
+========================= */
+
+.activity-list{
+  padding:4px 19px 12px;
+}
+
+.activity{
+  display:flex;
+  gap:11px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(39,39,47,.65);
+}
+
+.activity:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:29px;
+  height:29px;
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  border-radius:7px;
+  color:var(--accent);
+  background:rgba(182,108,255,.07);
+  border:1px solid rgba(182,108,255,.16);
+  font-size:10px;
+}
+
+.activity-text{
+  font-size:9px;
+  line-height:1.6;
+}
+
+.activity-text strong{
+  color:#fff;
+}
+
+.activity-time{
+  color:#62626d;
+  font-size:8px;
+  margin-top:2px;
+}
+
+/* =========================
+   WATCH HISTORY
+========================= */
+
+.history{
+  overflow-x:auto;
+}
+
+.history table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px;
+}
+
+.history th{
+  text-align:left;
+  color:#666672;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  padding:11px 15px;
+  border-bottom:1px solid var(--line);
+}
+
+.history td{
+  padding:12px 15px;
+  border-bottom:1px solid rgba(39,39,47,.6);
+  font-size:9px;
+}
+
+.content-name{
+  color:#fff;
+  font-weight:700;
+}
+
+.content-type{
+  color:var(--accent);
+  font-size:8px;
+  margin-top:3px;
+}
+
+/* =========================
+   SIDEBAR CARDS
+========================= */
+
+.side-section{
+  padding:17px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.side-section:last-child{
+  border-bottom:0;
+}
+
+.side-title{
+  color:#777783;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  font-weight:800;
+  margin-bottom:11px;
+}
+
+.side-value{
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+}
+
+.progress{
+  height:6px;
+  margin-top:9px;
+  background:#08080b;
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.progress span{
+  display:block;
+  width:68%;
+  height:100%;
+  border-radius:8px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+}
+
+.quick-list{
+  display:grid;
+  gap:7px;
+}
+
+.quick{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:9px 10px;
+  background:#09090c;
+  border:1px solid var(--line);
+  border-radius:7px;
+  color:#aaa;
+  font-size:9px;
+}
+
+.quick:hover{
+  color:#fff;
+  border-color:var(--line2);
+}
+
+.quick strong{
+  color:#fff;
+}
+
+/* =========================
+   EDIT FORM
+========================= */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.label{
+  color:#777783;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+.input,
+.select{
+  width:100%;
+  padding:10px 11px;
+  border-radius:7px;
+  border:1px solid var(--line);
+  background:#09090c;
+  color:#eee;
+  outline:none;
+  font-size:9px;
+}
+
+.input:focus,
+.select:focus{
+  border-color:rgba(182,108,255,.55);
+}
+
+textarea.input{
+  min-height:95px;
+  resize:vertical;
+}
+
+.form-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:15px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(8px);
+  z-index:500;
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:min(700px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0d0d11;
+  border:1px solid var(--line2);
+  border-radius:13px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.close{
+  width:31px;
+  height:31px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#111117;
+  color:#aaa;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:14px 19px;
+  border-top:1px solid var(--line);
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  padding:12px 15px;
+  background:#15151b;
+  border:1px solid var(--line2);
+  border-left:3px solid var(--accent);
+  border-radius:8px;
+  color:#fff;
+  font-size:9px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:1000;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1200px){
+
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .info-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:900px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .content{
+    padding:22px 16px;
+  }
+
+  .member-hero{
+    grid-template-columns:auto 1fr;
+  }
+
+  .hero-actions{
+    grid-column:1/-1;
+    justify-content:flex-start;
+  }
+}
+
+@media(max-width:650px){
+
+  .topbar{
+    padding:0 14px;
+  }
+
+  .clock,
+  .admin-user > div:last-child{
+    display:none;
+  }
+
+  .member-hero{
+    grid-template-columns:1fr;
+  }
+
+  .profile-avatar{
+    width:70px;
+    height:70px;
+  }
+
+  .member-name{
+    font-size:22px;
+  }
+
+  .info-grid,
+  .stat-grid,
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div class="brand-text">
+      <strong>CROWRULES</strong>
+      <span>Main Admin</span>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-label">Core</div>
+
+    <a href="index.html"><span class="nav-icon">⌂</span> Dashboard</a>
+    <a href="content.html"><span class="nav-icon">▦</span> Content</a>
+    <a href="pages.html"><span class="nav-icon">▤</span> Pages</a>
+    <a href="categories.html"><span class="nav-icon">◫</span> Categories</a>
+    <a href="tags.html"><span class="nav-icon">#</span> Tags</a>
+    <a href="shows.html"><span class="nav-icon">▶</span> Shows</a>
+    <a href="episodes.html"><span class="nav-icon">▹</span> Episodes</a>
+    <a href="movies.html"><span class="nav-icon">▣</span> Movies</a>
+    <a href="audio.html"><span class="nav-icon">♫</span> Audio</a>
+    <a href="articles.html"><span class="nav-icon">✎</span> Articles</a>
+
+    <div class="nav-label">Broadcast</div>
+
+    <a href="channels.html"><span class="nav-icon">◉</span> Channels</a>
+    <a href="schedule.html"><span class="nav-icon">◷</span> Schedule</a>
+    <a href="live.html"><span class="nav-icon">●</span> Live</a>
+    <a href="guide.html"><span class="nav-icon">☷</span> TV Guide</a>
+
+    <div class="nav-label">People</div>
+
+    <a class="active" href="members.html"><span class="nav-icon">♟</span> Members</a>
+    <a href="community.html"><span class="nav-icon">♧</span> Community</a>
+    <a href="creators.html"><span class="nav-icon">✦</span> Creators</a>
+    <a href="creator.html"><span class="nav-icon">◆</span> Creator</a>
+    <a href="creator-content.html"><span class="nav-icon">◇</span> Creator Content</a>
+    <a href="creator-approvals.html"><span class="nav-icon">✓</span> Creator Approvals</a>
+
+    <div class="nav-label">CrowRules Network</div>
+
+    <a href="artists.html"><span class="nav-icon">♬</span> Artists</a>
+    <a href="albums.html"><span class="nav-icon">▤</span> Albums</a>
+    <a href="tracks.html"><span class="nav-icon">♪</span> Tracks</a>
+    <a href="records.html"><span class="nav-icon">◉</span> Records</a>
+    <a href="sports.html"><span class="nav-icon">⚑</span> Sports</a>
+    <a href="teams.html"><span class="nav-icon">♜</span> Teams</a>
+    <a href="rankings.html"><span class="nav-icon">↗</span> Rankings</a>
+    <a href="standings.html"><span class="nav-icon">☷</span> Standings</a>
+    <a href="games.html"><span class="nav-icon">⚽</span> Games</a>
+    <a href="pickem.html"><span class="nav-icon">☑</span> Pick'em</a>
+    <a href="memorials.html"><span class="nav-icon">✝</span> Memorials</a>
+    <a href="memorial-photos.html"><span class="nav-icon">▧</span> Memorial Photos</a>
+    <a href="awards.html"><span class="nav-icon">★</span> Awards</a>
+
+    <div class="nav-label">System</div>
+
+    <a href="analytics.html"><span class="nav-icon">⌁</span> Analytics</a>
+    <a href="moderation.html"><span class="nav-icon">!</span> Moderation</a>
+    <a href="logs.html"><span class="nav-icon">≡</span> Logs</a>
+    <a href="notifications.html"><span class="nav-icon">♢</span> Notifications</a>
+    <a href="activity.html"><span class="nav-icon">◌</span> Activity</a>
+    <a href="settings.html"><span class="nav-icon">⚙</span> Settings</a>
+
+  </nav>
+
+</aside>
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+<header class="topbar">
+
+  <div class="top-left">
+
+    <button class="mobile-menu" id="mobileMenu">☰</button>
+
+    <div class="breadcrumb">
+      CrowRules Entertainment / Members /
+      <strong id="breadcrumbName">Alex Rivers</strong>
+    </div>
+
+  </div>
+
+  <div class="top-right">
+
+    <div class="clock" id="clock">--:--:--</div>
+
+    <div class="admin-user">
+      <div class="admin-avatar">CR</div>
+      <div>
+        <strong>Administrator</strong>
+        <span>System Admin</span>
+      </div>
+    </div>
+
+  </div>
+
+</header>
+
+<section class="content">
+
+<a href="members.html" class="back-link">
+  ← Back to Members
+</a>
+
+<!-- =========================
+     MEMBER HERO
+========================= -->
+
+<section class="member-hero">
+
+  <div class="profile-avatar" id="avatar">
+    AR
+  </div>
+
+  <div>
+
+    <div class="hero-label">Member Profile</div>
+
+    <h1 class="member-name" id="memberName">
+      Alex Rivers
+    </h1>
+
+    <div class="username" id="username">
+      @alexrivers
+    </div>
+
+    <div class="hero-meta">
+
+      <span class="badge active" id="statusBadge">
+        Active
+      </span>
+
+      <span class="badge premium" id="membershipBadge">
+        Pro Member
+      </span>
+
+      <span class="badge creator">
+        Community Member
+      </span>
+
+    </div>
+
+  </div>
+
+  <div class="hero-actions">
+
+    <button class="btn primary" onclick="openEdit()">
+      ✎ Edit Member
+    </button>
+
+    <button class="btn" onclick="messageMember()">
+      ✉ Message
+    </button>
+
+    <button class="btn danger" onclick="suspendMember()">
+      Suspend
+    </button>
+
+  </div>
+
+</section>
+
+<!-- =========================
+     MAIN LAYOUT
+========================= -->
+
+<div class="layout">
+
+<div class="stack">
+
+  <!-- PROFILE OVERVIEW -->
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <div>
+        <div class="panel-title">Profile Overview</div>
+        <div class="panel-sub">
+          Member identity and account information.
+        </div>
+      </div>
+
+      <button class="btn small" onclick="openEdit()">
+        Edit Profile
+      </button>
+
+    </div>
+
+    <div class="panel-body">
+
+      <div class="info-grid">
+
+        <div class="info-card">
+          <div class="info-label">Full Name</div>
+          <div class="info-value" id="infoName">Alex Rivers</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-label">Username</div>
+          <div class="info-value">@alexrivers</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-label">Email</div>
+          <div class="info-value">alex.rivers@example.com</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-label">Membership</div>
+          <div class="info-value accent">Pro</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-label">Role</div>
+          <div class="info-value">Member</div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-label">Joined</div>
+          <div class="info-value">August 12, 2026</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- MEMBER STATS -->
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <div>
+        <div class="panel-title">Member Statistics</div>
+        <div class="panel-sub">
+          Engagement across the CrowRules network.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel-body">
+
+      <div class="stat-grid">
+
+        <div class="stat">
+          <div class="stat-label">Watch Hours</div>
+          <div class="stat-value">184</div>
+          <div class="stat-note">+18 this month</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Points</div>
+          <div class="stat-value">12.8K</div>
+          <div class="stat-note">+1,240 this month</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Favorites</div>
+          <div class="stat-value">38</div>
+          <div class="stat-note">6 added recently</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Community Posts</div>
+          <div class="stat-value">27</div>
+          <div class="stat-note">Active contributor</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- WATCH HISTORY -->
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <div>
+        <div class="panel-title">Recent Watch History</div>
+        <div class="panel-sub">
+          Latest CrowRules TV viewing activity.
+        </div>
+      </div>
+
+      <a class="btn small" href="activity.html">
+        View Activity
+      </a>
+
+    </div>
+
+    <div class="history">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Content</th>
+            <th>Watched</th>
+            <th>Progress</th>
+            <th>Device</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>
+              <div class="content-name">Tacoma Nights</div>
+              <div class="content-type">Episode</div>
+            </td>
+            <td>Today, 10:14 AM</td>
+            <td>94%</td>
+            <td>Desktop</td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="content-name">Back Deck Live</div>
+              <div class="content-type">Live Replay</div>
+            </td>
+            <td>Yesterday</td>
+            <td>71%</td>
+            <td>Mobile</td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="content-name">Voices From The Void</div>
+              <div class="content-type">Episode</div>
+            </td>
+            <td>Sep 06</td>
+            <td>100%</td>
+            <td>Desktop</td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="content-name">CrowRules Originals</div>
+              <div class="content-type">Channel</div>
+            </td>
+            <td>Sep 05</td>
+            <td>42%</td>
+            <td>TV</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+  <!-- ACTIVITY -->
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <div>
+        <div class="panel-title">Recent Activity</div>
+        <div class="panel-sub">
+          Account and community events.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="activity-list">
+
+      <div class="activity">
+        <div class="activity-icon">▶</div>
+        <div class="activity-text">
+          Watched <strong>Tacoma Nights — Episode 12</strong>.
+          <div class="activity-time">8 minutes ago</div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-icon">★</div>
+        <div class="activity-text">
+          Earned the <strong>Night Owl</strong> badge.
+          <div class="activity-time">2 hours ago</div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-icon">♡</div>
+        <div class="activity-text">
+          Added <strong>Voices From The Void</strong> to favorites.
+          <div class="activity-time">Yesterday</div>
+        </div>
+      </div>
+
+      <div class="activity">
+        <div class="activity-icon">♧</div>
+        <div class="activity-text">
+          Posted in the <strong>Tacoma Nights Community</strong>.
+          <div class="activity-time">Yesterday</div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<!-- =========================
+     RIGHT COLUMN
+========================= -->
+
+<div class="stack">
+
+  <section class="panel">
+
+    <div class="side-section">
+
+      <div class="side-title">Membership Status</div>
+
+      <div class="side-value">
+        Pro Member
+      </div>
+
+      <div class="progress">
+        <span></span>
+      </div>
+
+      <div style="color:#666672;font-size:8px;margin-top:7px">
+        Membership renews automatically
+      </div>
+
+    </div>
+
+    <div class="side-section">
+
+      <div class="side-title">Account Security</div>
+
+      <div class="quick-list">
+
+        <div class="quick">
+          <span>Email Verified</span>
+          <strong style="color:var(--green)">YES</strong>
+        </div>
+
+        <div class="quick">
+          <span>2FA</span>
+          <strong style="color:var(--yellow)">OFF</strong>
+        </div>
+
+        <div class="quick">
+          <span>Last Login</span>
+          <strong>8 min ago</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="side-section">
+
+      <div class="side-title">Quick Actions</div>
+
+      <div class="quick-list">
+
+        <button class="quick" onclick="messageMember()">
+          <span>Send Message</span>
+          <strong>→</strong>
+        </button>
+
+        <button class="quick" onclick="resetPassword()">
+          <span>Reset Password</span>
+          <strong>→</strong>
+        </button>
+
+        <button class="quick" onclick="changeMembership()">
+          <span>Change Membership</span>
+          <strong>→</strong>
+        </button>
+
+        <button class="quick" onclick="viewCommunity()">
+          <span>View Community Activity</span>
+          <strong>→</strong>
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- BADGES -->
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <div>
+        <div class="panel-title">Member Badges</div>
+        <div class="panel-sub">Earned achievements.</div>
+      </div>
+
+    </div>
+
+    <div class="side-section">
+
+      <div class="quick-list">
+
+        <div class="quick">
+          <span>Night Owl</span>
+          <strong>★</strong>
+        </div>
+
+        <div class="quick">
+          <span>Community Voice</span>
+          <strong>★</strong>
+        </div>
+
+        <div class="quick">
+          <span>Early Supporter</span>
+          <strong>★</strong>
+        </div>
+
+        <div class="quick">
+          <span>100 Hour Club</span>
+          <strong>★</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FAVORITES -->
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <div>
+        <div class="panel-title">Favorites</div>
+        <div class="panel-sub">Member's saved content.</div>
+      </div>
+
+    </div>
+
+    <div class="side-section">
+
+      <div class="quick-list">
+
+        <a href="#" class="quick">
+          <span>Tacoma Nights</span>
+          <strong>▶</strong>
+        </a>
+
+        <a href="#" class="quick">
+          <span>Voices From The Void</span>
+          <strong>▶</strong>
+        </a>
+
+        <a href="#" class="quick">
+          <span>Back Deck Live</span>
+          <strong>▶</strong>
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+</div>
+
+<!-- =========================
+     EDIT PROFILE
+========================= -->
+
+<section class="panel" style="margin-top:18px">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">Administrative Profile Data</div>
+      <div class="panel-sub">
+        Manage member information and access controls.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel-body">
+
+    <form id="editForm">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label class="label">First Name</label>
+          <input class="input" id="firstName" value="Alex">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Last Name</label>
+          <input class="input" id="lastName" value="Rivers">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Username</label>
+          <input class="input" id="editUsername" value="alexrivers">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Email</label>
+          <input class="input" id="editEmail" value="alex.rivers@example.com">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Membership</label>
+
+          <select class="select" id="editMembership">
+            <option>Free</option>
+            <option selected>Pro</option>
+            <option>Premium</option>
+            <option>Creator</option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+          <label class="label">Role</label>
+
+          <select class="select" id="editRole">
+            <option selected>Member</option>
+            <option>Creator</option>
+            <option>Moderator</option>
+            <option>Admin</option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+          <label class="label">Account Status</label>
+
+          <select class="select" id="editStatus">
+            <option selected>Active</option>
+            <option>Pending</option>
+            <option>Suspended</option>
+            <option>Disabled</option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+          <label class="label">Points</label>
+          <input class="input" id="editPoints" type="number" value="12840">
+        </div>
+
+        <div class="form-group full">
+
+          <label class="label">Bio</label>
+
+          <textarea class="input" id="editBio">CrowRules Entertainment community member.</textarea>
+
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+
+        <button type="button" class="btn" onclick="resetForm()">
+          Reset
+        </button>
+
+        <button type="submit" class="btn primary">
+          Save Changes
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</section>
+
+</section>
+
+</main>
+
+</div>
+
+<!-- =========================
+     MESSAGE MODAL
+========================= -->
+
+<div class="modal-backdrop" id="messageModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        Message Member
+      </div>
+
+      <button class="close" onclick="closeMessage()">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-group">
+
+        <label class="label">
+          Message
+        </label>
+
+        <textarea
+          class="input"
+          id="messageText"
+          placeholder="Write a message to this member..."
+        ></textarea>
+
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button class="btn" onclick="closeMessage()">
+        Cancel
+      </button>
+
+      <button class="btn primary" onclick="sendMessage()">
+        Send Message
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* ==========================================
+   CROWRULES MEMBER ADMIN
+   ========================================== */
+
+const toast = document.getElementById("toast");
+const messageModal = document.getElementById("messageModal");
+
+/* =========================
+   CLOCK
+========================= */
+
+function updateClock(){
+
+  const now = new Date();
+
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString([],{
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    });
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer;
+
+function showToast(message){
+
+  clearTimeout(toastTimer);
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  toastTimer = setTimeout(()=>{
+    toast.classList.remove("show");
+  },2600);
+}
+
+/* =========================
+   MOBILE NAV
+========================= */
+
+document.getElementById("mobileMenu")
+  .addEventListener("click",()=>{
+
+    document.getElementById("sidebar")
+      .classList.toggle("open");
+
+  });
+
+/* =========================
+   MEMBER URL
+========================= */
+
+const params = new URLSearchParams(location.search);
+
+const memberId =
+  params.get("id") ||
+  params.get("member") ||
+  "demo-member";
+
+/*
+Example URLs:
+
+member.html?id=alex-rivers
+member.html?id=12345
+
+The production version should retrieve
+the profile using the authenticated
+Supabase user's admin permissions.
+*/
+
+/* =========================
+   EDIT FORM
+========================= */
+
+function openEdit(){
+
+  document.getElementById("editForm")
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+
+  showToast("Edit profile opened.");
+}
+
+function resetForm(){
+
+  document.getElementById("firstName").value = "Alex";
+  document.getElementById("lastName").value = "Rivers";
+  document.getElementById("editUsername").value = "alexrivers";
+  document.getElementById("editEmail").value =
+    "alex.rivers@example.com";
+  document.getElementById("editMembership").value = "Pro";
+  document.getElementById("editRole").value = "Member";
+  document.getElementById("editStatus").value = "Active";
+  document.getElementById("editPoints").value = "12840";
+  document.getElementById("editBio").value =
+    "CrowRules Entertainment community member.";
+
+  showToast("Form reset.");
+}
+
+document.getElementById("editForm")
+  .addEventListener("submit",event=>{
+
+    event.preventDefault();
+
+    const member = {
+
+      id:memberId,
+
+      first_name:
+        document.getElementById("firstName").value.trim(),
+
+      last_name:
+        document.getElementById("lastName").value.trim(),
+
+      username:
+        document.getElementById("editUsername").value.trim(),
+
+      email:
+        document.getElementById("editEmail").value.trim(),
+
+      membership_type:
+        document.getElementById("editMembership").value,
+
+      role:
+        document.getElementById("editRole").value,
+
+      status:
+        document.getElementById("editStatus").value,
+
+      points:
+        Number(document.getElementById("editPoints").value || 0),
+
+      bio:
+        document.getElementById("editBio").value.trim()
+    };
+
+    console.log("Member update payload:",member);
+
+    showToast("Member changes saved.");
+
+  });
+
+/* =========================
+   MESSAGE
+========================= */
+
+function messageMember(){
+
+  messageModal.classList.add("show");
+
+  document.getElementById("messageText").focus();
+}
+
+function closeMessage(){
+  messageModal.classList.remove("show");
+}
+
+function sendMessage(){
+
+  const message =
+    document.getElementById("messageText")
+      .value.trim();
+
+  if(!message){
+
+    showToast("Enter a message first.");
+
+    return;
+  }
+
+  console.log("Member message:",{
+    member_id:memberId,
+    message
+  });
+
+  document.getElementById("messageText").value = "";
+
+  closeMessage();
+
+  showToast("Message sent.");
+
+}
+
+/* =========================
+   ACCOUNT ACTIONS
+========================= */
+
+function suspendMember(){
+
+  const confirmed =
+    confirm(
+      "Suspend this member account?"
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  showToast("Member account suspended.");
+
+}
+
+function resetPassword(){
+
+  const confirmed =
+    confirm(
+      "Send a password reset request to this member?"
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  showToast("Password reset request sent.");
+
+}
+
+function changeMembership(){
+
+  openEdit();
+
+  setTimeout(()=>{
+    document.getElementById("editMembership").focus();
+  },350);
+
+}
+
+function viewCommunity(){
+
+  location.href =
+    "community.html?member=" +
+    encodeURIComponent(memberId);
+
+}
+
+/* =========================
+   MODAL
+========================= */
+
+messageModal.addEventListener("click",event=>{
+
+  if(event.target === messageModal){
+    closeMessage();
+  }
+
+});
+
+document.addEventListener("keydown",event=>{
+
+  if(event.key === "Escape"){
+    closeMessage();
+  }
+
+});
+
+/* =========================
+   FUTURE SUPABASE MODEL
+=========================
+
+Suggested relationship:
+
+auth.users
+    │
+    └── profiles
+          │
+          ├── memberships
+          ├── member_roles
+          ├── member_points
+          ├── member_badges
+          ├── watch_history
+          ├── favorites
+          ├── notifications
+          ├── community_posts
+          └── member_activity
+
+Recommended profile fields:
+
+id
+username
+display_name
+first_name
+last_name
+avatar_url
+bio
+role
+status
+membership_type
+points
+watch_hours
+created_at
+updated_at
+
+Recommended membership fields:
+
+id
+user_id
+plan_id
+status
+started_at
+expires_at
+renewed_at
+created_at
+updated_at
+
+Recommended watch history:
+
+id
+user_id
+content_type
+content_id
+progress_seconds
+duration_seconds
+completed
+last_watched_at
+created_at
+
+Recommended member activity:
+
+id
+user_id
+activity_type
+content_type
+content_id
+metadata
+created_at
+
+Recommended badges:
+
+id
+name
+slug
+description
+icon
+points_required
+active
+
+Recommended member_badges:
+
+id
+user_id
+badge_id
+earned_at
+
+IMPORTANT:
+
+Do not expose a Supabase service-role
+key in this HTML page.
+
+Use the public/anon key with RLS,
+and perform privileged administrative
+operations through secure server-side
+logic or Supabase Edge Functions.
+
+Example future read:
+
+const { data, error } = await supabase
+  .from("profiles")
+  .select("*")
+  .eq("id", memberId)
+  .single();
+
+The exact production query should be
+adapted to the existing CrowRules schema
+rather than assuming these columns already
+exist.
+
+*/
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1850 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Memorial Candles — CrowRules Memorials</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="Light a virtual candle, leave a message, and remember someone special through CrowRules Memorials.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --bg2:#09090c;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#92929d;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 10%,rgba(182,108,255,.09),transparent 28%),
+    radial-gradient(circle at 85% 20%,rgba(55,215,255,.06),transparent 25%),
+    linear-gradient(180deg,#050505 0%,#08080b 45%,#050505 100%);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.035;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,black,transparent 80%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:255px;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:100;
+  overflow-y:auto;
+  border-right:1px solid var(--line);
+  background:rgba(7,7,9,.96);
+  backdrop-filter:blur(20px);
+}
+
+.brand{
+  height:76px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(182,108,255,.55);
+  background:linear-gradient(135deg,rgba(182,108,255,.18),rgba(108,92,255,.08));
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:19px;
+  font-weight:800;
+  box-shadow:0 0 22px rgba(182,108,255,.12);
+}
+
+.brand-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.nav{
+  padding:16px 11px 30px;
+}
+
+.nav-section{
+  margin:17px 9px 7px;
+  color:#656570;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:10px 12px;
+  margin:2px 0;
+  color:#a8a8b1;
+  border:1px solid transparent;
+  border-radius:8px;
+  font-size:12px;
+  transition:.2s ease;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:#111116;
+  border-color:#202028;
+}
+
+.nav a.active{
+  color:#fff;
+  border-color:rgba(182,108,255,.3);
+  background:linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.05));
+  box-shadow:inset 3px 0 0 var(--accent);
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+  color:#777783;
+  font-size:13px;
+}
+
+.nav a.active .nav-icon{
+  color:var(--accent);
+}
+
+/* MAIN */
+
+.main{
+  width:calc(100% - 255px);
+  margin-left:255px;
+  min-width:0;
+}
+
+.topbar{
+  height:76px;
+  position:sticky;
+  top:0;
+  z-index:80;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:0 28px;
+  border-bottom:1px solid var(--line);
+  background:rgba(5,5,7,.84);
+  backdrop-filter:blur(20px);
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.menu-btn{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  border-radius:8px;
+}
+
+.crumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.crumb strong{
+  color:#fff;
+}
+
+.top-right{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.clock{
+  color:var(--muted);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  display:inline-block;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+  margin-right:7px;
+}
+
+.container{
+  max-width:1550px;
+  margin:auto;
+  padding:30px;
+}
+
+/* HERO */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  min-height:270px;
+  display:flex;
+  align-items:flex-end;
+  padding:32px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(182,108,255,.15),transparent 30%),
+    radial-gradient(circle at 20% 100%,rgba(55,215,255,.07),transparent 30%),
+    linear-gradient(135deg,#0d0d12,#09090d);
+  box-shadow:var(--shadow);
+}
+
+.hero:after{
+  content:"🕯";
+  position:absolute;
+  right:7%;
+  bottom:-50px;
+  font-size:210px;
+  opacity:.06;
+  filter:grayscale(1);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:780px;
+}
+
+.eyebrow{
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+.hero h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(28px,4vw,48px);
+  line-height:1.05;
+  letter-spacing:-1px;
+}
+
+.hero p{
+  max-width:700px;
+  margin:16px 0 0;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:13px;
+}
+
+.hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:22px;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#fff;
+  padding:11px 15px;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:700;
+  transition:.2s ease;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  border-color:#555562;
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.55);
+  background:linear-gradient(135deg,#9b55e9,#624ed6);
+  box-shadow:0 0 25px rgba(182,108,255,.15);
+}
+
+.btn.ghost{
+  background:transparent;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  margin:18px 0;
+}
+
+.stat{
+  padding:19px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(13,13,17,.9);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  margin-top:8px;
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+  font-weight:700;
+}
+
+.stat-meta{
+  margin-top:5px;
+  color:#6f6f7a;
+  font-size:9px;
+}
+
+/* CONTENT GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(300px,.75fr);
+  gap:18px;
+}
+
+.panel{
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:rgba(13,13,17,.92);
+  box-shadow:var(--shadow);
+}
+
+.panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:19px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.4px;
+}
+
+.panel-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:5px;
+}
+
+.panel-body{
+  padding:20px;
+}
+
+/* MEMORIAL SELECTOR */
+
+.memorial-selector{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.field{
+  min-width:0;
+}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  color:#8d8d98;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  border:1px solid var(--line);
+  outline:none;
+  border-radius:8px;
+  padding:11px 12px;
+  color:#fff;
+  background:#09090d;
+  font-size:11px;
+}
+
+.field textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:rgba(182,108,255,.6);
+  box-shadow:0 0 0 3px rgba(182,108,255,.07);
+}
+
+/* CANDLE DISPLAY */
+
+.candle-stage{
+  min-height:430px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #22222a;
+  border-radius:12px;
+  background:
+    radial-gradient(circle at 50% 48%,rgba(182,108,255,.12),transparent 15%),
+    radial-gradient(circle at 50% 50%,rgba(246,190,102,.06),transparent 35%),
+    linear-gradient(180deg,#08080b,#050507);
+}
+
+.candle-stage:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:.18;
+  background:
+    radial-gradient(circle at 30% 20%,rgba(255,255,255,.15) 0 1px,transparent 2px),
+    radial-gradient(circle at 70% 30%,rgba(255,255,255,.1) 0 1px,transparent 2px),
+    radial-gradient(circle at 20% 70%,rgba(255,255,255,.1) 0 1px,transparent 2px),
+    radial-gradient(circle at 80% 80%,rgba(255,255,255,.1) 0 1px,transparent 2px);
+  background-size:140px 140px;
+}
+
+.main-candle{
+  position:relative;
+  z-index:2;
+  width:100px;
+  height:185px;
+  border-radius:16px 16px 10px 10px;
+  background:
+    linear-gradient(90deg,#ddd0bd,#fff5dd 42%,#d7c4a9);
+  box-shadow:
+    inset 10px 0 18px rgba(0,0,0,.08),
+    inset -10px 0 15px rgba(0,0,0,.1),
+    0 0 50px rgba(246,190,102,.13);
+}
+
+.main-candle:before{
+  content:"";
+  position:absolute;
+  top:-47px;
+  left:50%;
+  width:25px;
+  height:53px;
+  transform:translateX(-50%);
+  border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;
+  background:linear-gradient(180deg,#fff6bd,#ffc75e 55%,#ff6d38);
+  box-shadow:
+    0 0 22px #ffbd57,
+    0 0 50px rgba(255,153,51,.7);
+  animation:flicker 1.8s infinite ease-in-out;
+}
+
+.main-candle:after{
+  content:"";
+  position:absolute;
+  top:-10px;
+  left:50%;
+  width:4px;
+  height:13px;
+  transform:translateX(-50%);
+  background:#26211b;
+}
+
+@keyframes flicker{
+  0%,100%{transform:translateX(-50%) scale(1) rotate(-2deg)}
+  30%{transform:translateX(-50%) scale(1.08,.92) rotate(2deg)}
+  55%{transform:translateX(-50%) scale(.94,1.08) rotate(-1deg)}
+  80%{transform:translateX(-50%) scale(1.05,.95) rotate(3deg)}
+}
+
+.candle-message{
+  position:absolute;
+  z-index:3;
+  bottom:25px;
+  left:20px;
+  right:20px;
+  text-align:center;
+}
+
+.candle-message strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.candle-message span{
+  display:block;
+  color:var(--muted);
+  margin-top:5px;
+  font-size:10px;
+}
+
+/* CANDLE WALL */
+
+.wall{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+}
+
+.candle-card{
+  position:relative;
+  min-height:160px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  padding:16px 10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(255,184,79,.055),transparent 40%),
+    #09090d;
+}
+
+.candle-card:before{
+  content:"";
+  position:absolute;
+  top:34px;
+  width:13px;
+  height:28px;
+  border-radius:50%;
+  background:#ffc96d;
+  box-shadow:0 0 18px #ffad46,0 0 34px rgba(255,145,50,.55);
+  animation:flicker 1.5s infinite ease-in-out;
+}
+
+.small-candle{
+  width:34px;
+  height:63px;
+  margin-top:32px;
+  border-radius:7px 7px 4px 4px;
+  background:linear-gradient(90deg,#d9c9b0,#fff3d6 50%,#c9b99d);
+  box-shadow:0 0 18px rgba(255,205,128,.06);
+}
+
+.candle-name{
+  width:100%;
+  margin-top:10px;
+  text-align:center;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  font-size:10px;
+  font-weight:700;
+}
+
+.candle-time{
+  color:#6d6d77;
+  margin-top:4px;
+  font-size:8px;
+}
+
+/* SIDE PANEL */
+
+.light-card{
+  text-align:center;
+  padding:25px 20px;
+  border:1px solid rgba(182,108,255,.22);
+  border-radius:12px;
+  background:
+    radial-gradient(circle at 50% 30%,rgba(182,108,255,.12),transparent 38%),
+    #0b0b10;
+}
+
+.light-icon{
+  font-size:52px;
+  filter:drop-shadow(0 0 20px rgba(255,187,80,.5));
+}
+
+.light-card h2{
+  margin:14px 0 8px;
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+}
+
+.light-card p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+}
+
+.big-count{
+  margin:18px 0;
+  font-family:Orbitron,sans-serif;
+  font-size:35px;
+  color:var(--accent);
+}
+
+.full{
+  width:100%;
+}
+
+/* ACTIVITY */
+
+.activity{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+
+.activity-item{
+  display:flex;
+  gap:11px;
+  padding:12px;
+  border:1px solid #202028;
+  border-radius:9px;
+  background:#0a0a0e;
+}
+
+.activity-icon{
+  width:31px;
+  height:31px;
+  flex:0 0 31px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:rgba(182,108,255,.1);
+  color:var(--accent);
+}
+
+.activity-text{
+  min-width:0;
+}
+
+.activity-text strong{
+  display:block;
+  font-size:10px;
+}
+
+.activity-text span{
+  display:block;
+  color:var(--muted);
+  margin-top:4px;
+  font-size:9px;
+  line-height:1.4;
+}
+
+.activity-time{
+  margin-left:auto;
+  color:#62626d;
+  white-space:nowrap;
+  font-size:8px;
+}
+
+/* FOOTER */
+
+.footer{
+  margin-top:24px;
+  padding:25px 5px 45px;
+  color:#55555f;
+  text-align:center;
+  font-size:9px;
+}
+
+.footer strong{
+  color:#777783;
+}
+
+/* MODAL */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.76);
+  backdrop-filter:blur(8px);
+}
+
+.modal-backdrop.open{
+  display:flex;
+}
+
+.modal{
+  width:min(620px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid var(--line2);
+  border-radius:14px;
+  background:#0c0c10;
+  box-shadow:0 35px 100px rgba(0,0,0,.65);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-head h3{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  color:#aaa;
+  background:#111116;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+.form-grid .wide{
+  grid-column:1/-1;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:20px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:900;
+  max-width:350px;
+  padding:13px 16px;
+  border:1px solid rgba(182,108,255,.4);
+  border-radius:9px;
+  background:#101016;
+  color:#fff;
+  box-shadow:0 15px 40px rgba(0,0,0,.45);
+  font-size:10px;
+  transform:translateY(25px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s ease;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1150px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:900px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s ease;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    width:100%;
+    margin-left:0;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .wall{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:650px){
+  .container{
+    padding:16px;
+  }
+
+  .topbar{
+    padding:0 16px;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .hero{
+    min-height:330px;
+    padding:24px;
+  }
+
+  .hero:after{
+    font-size:130px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .memorial-selector{
+    grid-template-columns:1fr;
+  }
+
+  .wall{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid .wide{
+    grid-column:auto;
+  }
+}
+
+@media(max-width:430px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .wall{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .hero-actions{
+    flex-direction:column;
+  }
+
+  .hero-actions .btn{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div>
+      <div class="brand-title">CROWRULES</div>
+      <div class="brand-sub">Memorials</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-section">Memorial</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Home
+    </a>
+
+    <a href="memorials.html">
+      <span class="nav-icon">✦</span>
+      Memorials
+    </a>
+
+    <a href="memorial.html">
+      <span class="nav-icon">◈</span>
+      Memorial Page
+    </a>
+
+    <a href="candles.html" class="active">
+      <span class="nav-icon">🕯</span>
+      Candles
+    </a>
+
+    <a href="photos.html">
+      <span class="nav-icon">▧</span>
+      Photos
+    </a>
+
+    <a href="videos.html">
+      <span class="nav-icon">▶</span>
+      Videos
+    </a>
+
+    <div class="nav-section">Remember</div>
+
+    <a href="tributes.html">
+      <span class="nav-icon">♡</span>
+      Tributes
+    </a>
+
+    <a href="stories.html">
+      <span class="nav-icon">☰</span>
+      Stories
+    </a>
+
+    <a href="timeline.html">
+      <span class="nav-icon">⌁</span>
+      Timeline
+    </a>
+
+    <a href="guestbook.html">
+      <span class="nav-icon">▤</span>
+      Guestbook
+    </a>
+
+    <div class="nav-section">CrowRules</div>
+
+    <a href="https://www.crowrules.com">
+      <span class="nav-icon">↗</span>
+      CrowRules Entertainment
+    </a>
+
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="top-left">
+      <button class="menu-btn" id="menuBtn">☰</button>
+
+      <div class="crumb">
+        CrowRules Memorials
+        <span> / </span>
+        <strong>Candles</strong>
+      </div>
+    </div>
+
+    <div class="top-right">
+      <div class="clock">
+        <span class="status-dot"></span>
+        <span id="clock">--:--:--</span>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+
+      <div class="hero-content">
+
+        <div class="eyebrow">A Light That Remains</div>
+
+        <h1>Memorial Candles</h1>
+
+        <p>
+          Light a virtual candle in memory of someone special.
+          Leave a message of love, remembrance, hope, or simply
+          let someone know that they are not forgotten.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn primary" id="lightBtn">
+            🕯 Light a Candle
+          </button>
+
+          <button class="btn ghost" onclick="scrollToWall()">
+            View Candle Wall
+          </button>
+
+          <a class="btn ghost" href="memorials.html">
+            Browse Memorials
+          </a>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Candles Today</div>
+        <div class="stat-value" id="todayCount">148</div>
+        <div class="stat-meta">Across all memorials</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">This Month</div>
+        <div class="stat-value">2,841</div>
+        <div class="stat-meta">Lights shared</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">All Time</div>
+        <div class="stat-value">38.7K</div>
+        <div class="stat-meta">Candles lit</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Memorials</div>
+        <div class="stat-value">84</div>
+        <div class="stat-meta">Remembered here</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Active Lights</div>
+        <div class="stat-value">913</div>
+        <div class="stat-meta">Burning in memory</div>
+      </div>
+
+    </section>
+
+    <!-- MAIN GRID -->
+    <section class="grid">
+
+      <!-- LEFT -->
+      <div>
+
+        <div class="panel">
+
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">Light A Candle</div>
+              <div class="panel-sub">
+                Choose a memorial and leave a message if you wish.
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="memorial-selector">
+
+              <div class="field">
+                <label for="memorialSelect">Memorial</label>
+
+                <select id="memorialSelect">
+                  <option value="daniel">Daniel Meeker</option>
+                  <option value="community">Community Memorial</option>
+                  <option value="legacy">CrowRules Legacy</option>
+                  <option value="archive">Archive Memorial</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label>&nbsp;</label>
+
+                <button class="btn primary full" id="openCandleModal">
+                  🕯 Light Candle
+                </button>
+              </div>
+
+            </div>
+
+            <div class="candle-stage">
+
+              <div class="main-candle"></div>
+
+              <div class="candle-message">
+                <strong id="featuredName">
+                  Daniel Meeker
+                </strong>
+
+                <span>
+                  A light of remembrance burns here.
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="panel" id="candleWall" style="margin-top:18px;">
+
+          <div class="panel-header">
+
+            <div>
+              <div class="panel-title">Candle Wall</div>
+              <div class="panel-sub">
+                Recent lights shared by visitors.
+              </div>
+            </div>
+
+            <button class="btn" id="refreshWall">
+              Refresh
+            </button>
+
+          </div>
+
+          <div class="panel-body">
+
+            <div class="wall" id="wall">
+
+              <div class="candle-card">
+                <div class="small-candle"></div>
+                <div class="candle-name">For Daniel</div>
+                <div class="candle-time">2 minutes ago</div>
+              </div>
+
+              <div class="candle-card">
+                <div class="small-candle"></div>
+                <div class="candle-name">Always remembered</div>
+                <div class="candle-time">8 minutes ago</div>
+              </div>
+
+              <div class="candle-card">
+                <div class="small-candle"></div>
+                <div class="candle-name">Until we meet again</div>
+                <div class="candle-time">17 minutes ago</div>
+              </div>
+
+              <div class="candle-card">
+                <div class="small-candle"></div>
+                <div class="candle-name">Never forgotten</div>
+                <div class="candle-time">24 minutes ago</div>
+              </div>
+
+              <div class="candle-card">
+                <div class="small-candle"></div>
+                <div class="candle-name">With love</div>
+                <div class="candle-time">31 minutes ago</div>
+              </div>
+
+              <div class="candle-card">
+                <div class="small-candle"></div>
+                <div class="candle-name">Rest peacefully</div>
+                <div class="candle-time">42 minutes ago</div>
+              </div>
+
+              <div class="candle-card">
+                <div class="small-candle"></div>
+                <div class="candle-name">Miss you always</div>
+                <div class="candle-time">1 hour ago</div>
+              </div>
+
+              <div class="candle-card">
+                <div class="small-candle"></div>
+                <div class="candle-name">Your light remains</div>
+                <div class="candle-time">1 hour ago</div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT -->
+      <aside>
+
+        <div class="panel">
+
+          <div class="panel-header">
+
+            <div>
+              <div class="panel-title">Remembered Today</div>
+              <div class="panel-sub">
+                The latest candles and messages.
+              </div>
+            </div>
+
+          </div>
+
+          <div class="panel-body">
+
+            <div class="activity">
+
+              <div class="activity-item">
+
+                <div class="activity-icon">🕯</div>
+
+                <div class="activity-text">
+                  <strong>A candle was lit</strong>
+                  <span>
+                    For Daniel Meeker
+                  </span>
+                </div>
+
+                <div class="activity-time">
+                  2m
+                </div>
+
+              </div>
+
+              <div class="activity-item">
+
+                <div class="activity-icon">♡</div>
+
+                <div class="activity-text">
+                  <strong>A message was left</strong>
+                  <span>
+                    "Always remembered."
+                  </span>
+                </div>
+
+                <div class="activity-time">
+                  8m
+                </div>
+
+              </div>
+
+              <div class="activity-item">
+
+                <div class="activity-icon">🕯</div>
+
+                <div class="activity-text">
+                  <strong>A candle was lit</strong>
+                  <span>
+                    "Until we meet again."
+                  </span>
+                </div>
+
+                <div class="activity-time">
+                  17m
+                </div>
+
+              </div>
+
+              <div class="activity-item">
+
+                <div class="activity-icon">🕯</div>
+
+                <div class="activity-text">
+                  <strong>A candle was lit</strong>
+                  <span>
+                    For CrowRules Legacy
+                  </span>
+                </div>
+
+                <div class="activity-time">
+                  26m
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="light-card" style="margin-top:18px;">
+
+          <div class="light-icon">🕯</div>
+
+          <h2>Keep Their Light Alive</h2>
+
+          <p>
+            A candle may be small, but the meaning behind it
+            can last forever. Leave a light for someone you
+            remember today.
+          </p>
+
+          <div class="big-count" id="bigCount">
+            38,742
+          </div>
+
+          <div style="color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:1px;">
+            Candles Lit Through CrowRules Memorials
+          </div>
+
+          <button class="btn primary full" style="margin-top:18px;" id="sideLightBtn">
+            Light a Candle
+          </button>
+
+        </div>
+
+      </aside>
+
+    </section>
+
+    <footer class="footer">
+      <strong>CrowRules Memorials</strong>
+      · A place to remember, honor, and keep their stories alive.
+      <br><br>
+      © 2026 CrowRules Entertainment
+    </footer>
+
+  </div>
+
+</main>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modalBackdrop">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div>
+        <h3>Light a Memorial Candle</h3>
+      </div>
+
+      <button class="close" id="closeModal">×</button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="form-grid">
+
+        <div class="field wide">
+
+          <label for="modalMemorial">
+            Memorial
+          </label>
+
+          <select id="modalMemorial">
+
+            <option value="daniel">
+              Daniel Meeker
+            </option>
+
+            <option value="community">
+              Community Memorial
+            </option>
+
+            <option value="legacy">
+              CrowRules Legacy
+            </option>
+
+            <option value="archive">
+              Archive Memorial
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="field">
+
+          <label for="visitorName">
+            Your Name
+          </label>
+
+          <input
+            id="visitorName"
+            type="text"
+            maxlength="100"
+            placeholder="Optional"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label for="candleType">
+            Candle
+          </label>
+
+          <select id="candleType">
+
+            <option value="standard">
+              Memorial Candle
+            </option>
+
+            <option value="white">
+              White Light
+            </option>
+
+            <option value="purple">
+              Purple Light
+            </option>
+
+            <option value="blue">
+              Blue Light
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="field wide">
+
+          <label for="message">
+            Message
+          </label>
+
+          <textarea
+            id="message"
+            maxlength="500"
+            placeholder="Leave a message of remembrance..."></textarea>
+
+        </div>
+
+        <div class="field wide">
+
+          <label>
+            Privacy
+          </label>
+
+          <select id="privacy">
+
+            <option value="public">
+              Public — show on candle wall
+            </option>
+
+            <option value="private">
+              Private — only count the candle
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button class="btn" id="cancelModal">
+          Cancel
+        </button>
+
+        <button class="btn primary" id="submitCandle">
+          🕯 Light Candle
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/*
+  ============================================================
+  CROWRULES MEMORIAL CANDLES
+  Supabase-ready frontend
+  ============================================================
+
+  Recommended production tables:
+
+  memorials
+  memorial_candles
+
+  Suggested memorial_candles columns:
+
+  id
+  memorial_id
+  visitor_name
+  message
+  candle_type
+  privacy
+  is_approved
+  created_at
+
+  Optional analytics table:
+
+  memorial_candle_views
+
+  IMPORTANT:
+  Do not place a Supabase service-role key in this file.
+
+  Example configuration:
+
+  window.CROWRULES_SUPABASE_URL = "https://YOURPROJECT.supabase.co";
+  window.CROWRULES_SUPABASE_ANON_KEY = "YOUR_ANON_OR_PUBLISHABLE_KEY";
+
+  Then initialize @supabase/supabase-js and replace
+  the demo functions below with your database calls.
+*/
+
+const state = {
+  selectedMemorial: "daniel",
+  totalCandles: 38742,
+  todayCandles: 148
+};
+
+const modalBackdrop = document.getElementById("modalBackdrop");
+const memorialSelect = document.getElementById("memorialSelect");
+const modalMemorial = document.getElementById("modalMemorial");
+const featuredName = document.getElementById("featuredName");
+const toast = document.getElementById("toast");
+
+const memorialNames = {
+  daniel: "Daniel Meeker",
+  community: "Community Memorial",
+  legacy: "CrowRules Legacy",
+  archive: "Archive Memorial"
+};
+
+function showToast(message){
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(()=>{
+    toast.classList.remove("show");
+  },3200);
+}
+
+function openModal(){
+
+  modalMemorial.value = memorialSelect.value;
+
+  modalBackdrop.classList.add("open");
+
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal(){
+
+  modalBackdrop.classList.remove("open");
+
+  document.body.style.overflow = "";
+
+}
+
+function updateMemorial(){
+
+  state.selectedMemorial = memorialSelect.value;
+
+  featuredName.textContent =
+    memorialNames[state.selectedMemorial] ||
+    "Memorial";
+
+  modalMemorial.value =
+    state.selectedMemorial;
+}
+
+function updateCounters(){
+
+  document.getElementById("todayCount").textContent =
+    state.todayCandles.toLocaleString();
+
+  document.getElementById("bigCount").textContent =
+    state.totalCandles.toLocaleString();
+}
+
+function createCandleCard(message, time){
+
+  const card =
+    document.createElement("div");
+
+  card.className = "candle-card";
+
+  card.innerHTML = `
+    <div class="small-candle"></div>
+    <div class="candle-name"></div>
+    <div class="candle-time"></div>
+  `;
+
+  card.querySelector(".candle-name")
+    .textContent = message || "A candle of remembrance";
+
+  card.querySelector(".candle-time")
+    .textContent = time || "Just now";
+
+  return card;
+}
+
+function submitCandle(){
+
+  const memorial = modalMemorial.value;
+
+  const name =
+    document.getElementById("visitorName")
+      .value.trim();
+
+  const message =
+    document.getElementById("message")
+      .value.trim();
+
+  const privacy =
+    document.getElementById("privacy").value;
+
+  /*
+    Production Supabase example:
+
+    const { data, error } =
+      await supabase
+        .from("memorial_candles")
+        .insert({
+          memorial_id: memorial,
+          visitor_name: name || null,
+          message: message || null,
+          candle_type:
+            document.getElementById("candleType").value,
+          privacy,
+          is_approved: true
+        })
+        .select()
+        .single();
+
+    Always enforce moderation/RLS rules
+    server-side as well.
+  */
+
+  state.totalCandles++;
+  state.todayCandles++;
+
+  updateCounters();
+
+  if(privacy === "public"){
+
+    const wall =
+      document.getElementById("wall");
+
+    const text =
+      message ||
+      (name
+        ? `A candle from ${name}`
+        : "A candle of remembrance");
+
+    wall.prepend(
+      createCandleCard(text,"Just now")
+    );
+
+    while(wall.children.length > 8){
+      wall.removeChild(wall.lastElementChild);
+    }
+  }
+
+  closeModal();
+
+  document.getElementById("visitorName").value = "";
+  document.getElementById("message").value = "";
+
+  showToast(
+    `Your candle has been lit for ${memorialNames[memorial]}.`
+  );
+}
+
+function scrollToWall(){
+
+  document
+    .getElementById("candleWall")
+    .scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+}
+
+function refreshWall(){
+
+  showToast(
+    "Candle wall refreshed."
+  );
+
+}
+
+function updateClock(){
+
+  const now = new Date();
+
+  document.getElementById("clock")
+    .textContent =
+    now.toLocaleTimeString([],{
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    });
+
+}
+
+document
+  .getElementById("lightBtn")
+  .addEventListener("click",openModal);
+
+document
+  .getElementById("sideLightBtn")
+  .addEventListener("click",openModal);
+
+document
+  .getElementById("openCandleModal")
+  .addEventListener("click",openModal);
+
+document
+  .getElementById("closeModal")
+  .addEventListener("click",closeModal);
+
+document
+  .getElementById("cancelModal")
+  .addEventListener("click",closeModal);
+
+document
+  .getElementById("submitCandle")
+  .addEventListener("click",submitCandle);
+
+document
+  .getElementById("refreshWall")
+  .addEventListener("click",refreshWall);
+
+memorialSelect
+  .addEventListener("change",updateMemorial);
+
+modalBackdrop
+  .addEventListener("click",(event)=>{
+
+    if(event.target === modalBackdrop){
+      closeModal();
+    }
+
+  });
+
+document.addEventListener("keydown",(event)=>{
+
+  if(event.key === "Escape"){
+    closeModal();
+  }
+
+});
+
+document
+  .getElementById("menuBtn")
+  .addEventListener("click",()=>{
+
+    document
+      .getElementById("sidebar")
+      .classList.toggle("open");
+
+  });
+
+setInterval(updateClock,1000);
+
+updateClock();
+updateCounters();
+</script>
+
+</body>
+</html>

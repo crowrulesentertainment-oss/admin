@@ -1,0 +1,3187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Subscriptions — CrowRules Entertainment Admin</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="CrowRules Entertainment Main Admin — Subscription Management">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 82% 0%,rgba(182,108,255,.09),transparent 28%),
+    radial-gradient(circle at 8% 92%,rgba(55,215,255,.045),transparent 26%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.shell{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  width:260px;
+  position:fixed;
+  inset:0 auto 0 0;
+  z-index:100;
+  display:flex;
+  flex-direction:column;
+  background:rgba(7,7,9,.98);
+  border-right:1px solid var(--line);
+}
+
+.brand{
+  height:78px;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  box-shadow:0 0 22px rgba(182,108,255,.2);
+}
+
+.brand-title{
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+  letter-spacing:1px;
+}
+
+.brand-sub{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.nav{
+  flex:1;
+  overflow:auto;
+  padding:16px 10px;
+}
+
+.nav-label{
+  padding:14px 12px 7px;
+  color:#5e5e68;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.nav a{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin:2px 0;
+  padding:10px 12px;
+  border:1px solid transparent;
+  border-radius:8px;
+  color:#aaaab4;
+  font-size:12px;
+  transition:.2s;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:#111117;
+  border-color:#24242c;
+}
+
+.nav a.active{
+  color:#fff;
+  background:linear-gradient(
+    90deg,
+    rgba(182,108,255,.16),
+    rgba(108,92,255,.06)
+  );
+  border-color:rgba(182,108,255,.35);
+}
+
+.nav-icon{
+  width:19px;
+  text-align:center;
+}
+
+.sidebar-footer{
+  padding:13px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.5;
+}
+
+/* MAIN */
+
+.main{
+  width:calc(100% - 260px);
+  min-width:0;
+  margin-left:260px;
+}
+
+.topbar{
+  height:78px;
+  position:sticky;
+  top:0;
+  z-index:80;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(5,5,5,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.page-label{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.clock{
+  color:var(--muted);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.icon-btn,
+.profile-btn{
+  height:38px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#0d0d11;
+  color:#ddd;
+}
+
+.icon-btn{
+  width:38px;
+}
+
+.profile-btn{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 13px;
+}
+
+.avatar{
+  width:23px;
+  height:23px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+
+/* CONTENT */
+
+.content{
+  padding:30px;
+}
+
+.hero{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:25px;
+}
+
+.eyebrow{
+  margin-bottom:9px;
+  color:var(--accent);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+h1{
+  margin:0 0 8px;
+  font-family:Orbitron,sans-serif;
+  font-size:30px;
+  letter-spacing:.5px;
+}
+
+.hero p{
+  max-width:760px;
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:10px 14px;
+  border:1px solid var(--line2);
+  border-radius:7px;
+  background:#101016;
+  color:#eee;
+  font-size:11px;
+  font-weight:700;
+}
+
+.btn:hover{
+  border-color:#555562;
+}
+
+.btn.primary{
+  border-color:rgba(182,108,255,.55);
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:#fff;
+}
+
+.btn.danger{
+  border-color:rgba(255,82,109,.4);
+  color:#ff8294;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.stat{
+  min-height:112px;
+  padding:17px;
+  background:linear-gradient(145deg,#101016,#0a0a0d);
+  border:1px solid var(--line);
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  margin-top:14px;
+  font-family:Orbitron,sans-serif;
+  font-size:23px;
+}
+
+.stat-meta{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.good{
+  color:var(--green)!important;
+}
+
+.warn{
+  color:var(--yellow)!important;
+}
+
+.bad{
+  color:var(--red)!important;
+}
+
+/* PANELS */
+
+.panel{
+  background:rgba(13,13,17,.94);
+  border:1px solid var(--line);
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:16px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:1px;
+}
+
+.panel-sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.panel-body{
+  padding:18px;
+}
+
+/* SUBSCRIPTION PLANS */
+
+.plan-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.plan{
+  position:relative;
+  padding:18px;
+  background:#0a0a0d;
+  border:1px solid var(--line);
+  overflow:hidden;
+}
+
+.plan:before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+  background:linear-gradient(
+    90deg,
+    var(--accent2),
+    var(--accent)
+  );
+}
+
+.plan.featured{
+  border-color:rgba(182,108,255,.42);
+  box-shadow:0 0 30px rgba(182,108,255,.07);
+}
+
+.plan-name{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.plan-price{
+  margin-top:13px;
+  font-family:Orbitron,sans-serif;
+  font-size:26px;
+}
+
+.plan-price small{
+  color:var(--muted);
+  font-family:Montserrat,sans-serif;
+  font-size:10px;
+}
+
+.plan-description{
+  min-height:35px;
+  margin-top:7px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.5;
+}
+
+.plan-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:16px;
+}
+
+.plan-stat{
+  padding:9px;
+  background:#101016;
+  border:1px solid #1d1d23;
+}
+
+.plan-stat label{
+  display:block;
+  color:#666671;
+  font-size:8px;
+  text-transform:uppercase;
+}
+
+.plan-stat strong{
+  display:block;
+  margin-top:4px;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.plan-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-top:15px;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+}
+
+.plan-status{
+  color:var(--green);
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+/* FILTERS */
+
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.filters input,
+.filters select{
+  padding:9px 10px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:#09090c;
+  color:#ddd;
+  outline:none;
+  font-size:10px;
+}
+
+.filters input:focus,
+.filters select:focus{
+  border-color:var(--accent);
+}
+
+/* TABS */
+
+.tabs{
+  display:flex;
+  gap:4px;
+  overflow:auto;
+  padding:12px 18px 0;
+}
+
+.tab{
+  white-space:nowrap;
+  padding:8px 12px;
+  border:1px solid transparent;
+  border-radius:6px 6px 0 0;
+  background:transparent;
+  color:#777782;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.tab:hover{
+  color:#ddd;
+}
+
+.tab.active{
+  color:#fff;
+  background:#101016;
+  border-color:var(--line);
+  border-bottom-color:#101016;
+}
+
+/* TABLE */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  min-width:1050px;
+  border-collapse:collapse;
+}
+
+th{
+  padding:11px 14px;
+  text-align:left;
+  background:#0b0b0f;
+  border-bottom:1px solid var(--line);
+  color:#6f6f79;
+  font-size:8px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+td{
+  padding:13px 14px;
+  border-bottom:1px solid #1d1d23;
+  color:#d5d5da;
+  font-size:10px;
+}
+
+tr:hover td{
+  background:#101016;
+}
+
+.member{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.member-avatar{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  flex:none;
+  border-radius:7px;
+  background:linear-gradient(135deg,#25252d,#15151b);
+  border:1px solid var(--line2);
+  color:#fff;
+  font-size:9px;
+  font-weight:800;
+}
+
+.member-name{
+  color:#fff;
+  font-weight:700;
+}
+
+.member-email{
+  margin-top:3px;
+  color:#686873;
+  font-size:8px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 7px;
+  border:1px solid var(--line2);
+  border-radius:5px;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+}
+
+.badge.active{
+  color:var(--green);
+  border-color:rgba(69,230,154,.3);
+}
+
+.badge.trial{
+  color:var(--cyan);
+  border-color:rgba(55,215,255,.3);
+}
+
+.badge.past{
+  color:var(--red);
+  border-color:rgba(255,82,109,.3);
+}
+
+.badge.cancelled{
+  color:var(--orange);
+  border-color:rgba(255,138,76,.3);
+}
+
+.badge.paused{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.3);
+}
+
+.badge.pending{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.3);
+}
+
+.action-group{
+  display:flex;
+  gap:5px;
+}
+
+.small-btn{
+  padding:6px 9px;
+  border:1px solid var(--line);
+  border-radius:5px;
+  background:#131319;
+  color:#ddd;
+  font-size:9px;
+}
+
+.small-btn:hover{
+  border-color:#555562;
+}
+
+/* TWO COLUMNS */
+
+.two-col{
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:16px;
+  margin-top:16px;
+}
+
+/* METRICS */
+
+.metric-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.metric{
+  padding-bottom:12px;
+  border-bottom:1px solid #1c1c22;
+}
+
+.metric:last-child{
+  border-bottom:0;
+  padding-bottom:0;
+}
+
+.metric-top{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+
+.metric-label{
+  color:#aaaab4;
+  font-size:10px;
+}
+
+.metric-value{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+.progress{
+  height:6px;
+  overflow:hidden;
+  background:#18181e;
+  border-radius:20px;
+}
+
+.progress-bar{
+  height:100%;
+  background:linear-gradient(
+    90deg,
+    var(--accent2),
+    var(--accent)
+  );
+  border-radius:20px;
+}
+
+/* ACTIVITY */
+
+.activity{
+  display:flex;
+  flex-direction:column;
+}
+
+.activity-item{
+  display:flex;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #1c1c22;
+}
+
+.activity-item:last-child{
+  border-bottom:0;
+}
+
+.activity-dot{
+  width:8px;
+  height:8px;
+  flex:none;
+  margin-top:4px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 9px rgba(182,108,255,.35);
+}
+
+.activity-text{
+  color:#ccc;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.activity-time{
+  margin-top:3px;
+  color:#666671;
+  font-size:8px;
+}
+
+/* MODAL */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(8px);
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:min(720px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0d0d11;
+  border:1px solid var(--line2);
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:17px 19px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.modal-close{
+  width:30px;
+  height:30px;
+  border:1px solid var(--line);
+  border-radius:5px;
+  background:#111117;
+  color:#aaa;
+}
+
+.modal-body{
+  padding:19px;
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:14px 19px;
+  border-top:1px solid var(--line);
+}
+
+/* FORM */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  color:#8b8b95;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.field input,
+.field select{
+  width:100%;
+  padding:10px 11px;
+  border:1px solid var(--line2);
+  border-radius:6px;
+  outline:none;
+  background:#09090c;
+  color:#eee;
+  font-size:11px;
+}
+
+.field input:focus,
+.field select:focus{
+  border-color:var(--accent);
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  z-index:1000;
+  padding:12px 15px;
+  border:1px solid var(--line2);
+  border-radius:7px;
+  background:#111117;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  color:#eee;
+  font-size:10px;
+  opacity:0;
+  transform:translateY(20px);
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* MOBILE */
+
+.mobile-menu{
+  display:none;
+  width:38px;
+  height:38px;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#0d0d11;
+  color:#fff;
+}
+
+@media(max-width:1250px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .plan-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .two-col{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:850px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    width:100%;
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:grid;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .content{
+    padding:20px;
+  }
+
+  .hero{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+}
+
+@media(max-width:600px){
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .plan-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  h1{
+    font-size:23px;
+  }
+
+  .profile-btn{
+    padding:0 8px;
+  }
+
+  .profile-btn span:last-child{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="shell">
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+
+    <div>
+      <div class="brand-title">CROWRULES</div>
+      <div class="brand-sub">Main Admin</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+
+    <div class="nav-label">Core</div>
+
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      Dashboard
+    </a>
+
+    <a href="content.html">
+      <span class="nav-icon">▣</span>
+      Content
+    </a>
+
+    <a href="pages.html">
+      <span class="nav-icon">▤</span>
+      Pages
+    </a>
+
+    <a href="business.html">
+      <span class="nav-icon">◈</span>
+      Business
+    </a>
+
+    <div class="nav-label">Media</div>
+
+    <a href="shows.html">
+      <span class="nav-icon">▶</span>
+      Shows
+    </a>
+
+    <a href="episodes.html">
+      <span class="nav-icon">◉</span>
+      Episodes
+    </a>
+
+    <a href="movies.html">
+      <span class="nav-icon">▰</span>
+      Movies
+    </a>
+
+    <a href="audio.html">
+      <span class="nav-icon">♫</span>
+      Audio
+    </a>
+
+    <a href="articles.html">
+      <span class="nav-icon">✎</span>
+      Articles
+    </a>
+
+    <div class="nav-label">TV Network</div>
+
+    <a href="channels.html">
+      <span class="nav-icon">▥</span>
+      Channels
+    </a>
+
+    <a href="schedule.html">
+      <span class="nav-icon">◷</span>
+      Schedule
+    </a>
+
+    <a href="live.html">
+      <span class="nav-icon">●</span>
+      Live
+    </a>
+
+    <a href="guide.html">
+      <span class="nav-icon">▦</span>
+      TV Guide
+    </a>
+
+    <div class="nav-label">Members</div>
+
+    <a href="members.html">
+      <span class="nav-icon">♙</span>
+      Members
+    </a>
+
+    <a href="member.html">
+      <span class="nav-icon">◎</span>
+      Member Profile
+    </a>
+
+    <a href="membership.html">
+      <span class="nav-icon">◆</span>
+      Membership
+    </a>
+
+    <a href="subscriptions.html" class="active">
+      <span class="nav-icon">◈</span>
+      Subscriptions
+    </a>
+
+    <a href="friends.html">
+      <span class="nav-icon">♧</span>
+      Friends
+    </a>
+
+    <a href="community.html">
+      <span class="nav-icon">☷</span>
+      Community
+    </a>
+
+    <a href="points.html">
+      <span class="nav-icon">✦</span>
+      Points
+    </a>
+
+    <a href="leaderboard.html">
+      <span class="nav-icon">♛</span>
+      Leaderboard
+    </a>
+
+    <div class="nav-label">Creators</div>
+
+    <a href="creator.html">
+      <span class="nav-icon">✧</span>
+      Creators
+    </a>
+
+    <a href="creator-content.html">
+      <span class="nav-icon">◇</span>
+      Creator Content
+    </a>
+
+    <a href="creator-approvals.html">
+      <span class="nav-icon">✓</span>
+      Approvals
+    </a>
+
+    <div class="nav-label">Music</div>
+
+    <a href="artists.html">
+      <span class="nav-icon">♬</span>
+      Artists
+    </a>
+
+    <a href="albums.html">
+      <span class="nav-icon">▤</span>
+      Albums
+    </a>
+
+    <a href="tracks.html">
+      <span class="nav-icon">♫</span>
+      Tracks
+    </a>
+
+    <div class="nav-label">Sports</div>
+
+    <a href="sports.html">
+      <span class="nav-icon">◉</span>
+      Sports
+    </a>
+
+    <a href="teams.html">
+      <span class="nav-icon">♟</span>
+      Teams
+    </a>
+
+    <a href="rankings.html">
+      <span class="nav-icon">▲</span>
+      Rankings
+    </a>
+
+    <a href="games.html">
+      <span class="nav-icon">◆</span>
+      Games
+    </a>
+
+    <a href="standings.html">
+      <span class="nav-icon">▦</span>
+      Standings
+    </a>
+
+    <a href="pickem.html">
+      <span class="nav-icon">✓</span>
+      Pick'em
+    </a>
+
+    <div class="nav-label">Memorials</div>
+
+    <a href="memorials.html">
+      <span class="nav-icon">✝</span>
+      Memorials
+    </a>
+
+    <a href="memorial-photos.html">
+      <span class="nav-icon">▧</span>
+      Memorial Photos
+    </a>
+
+    <div class="nav-label">System</div>
+
+    <a href="roles.html">
+      <span class="nav-icon">⚿</span>
+      Roles
+    </a>
+
+    <a href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      Analytics
+    </a>
+
+    <a href="logs.html">
+      <span class="nav-icon">≡</span>
+      Logs
+    </a>
+
+    <a href="notifications.html">
+      <span class="nav-icon">♢</span>
+      Notifications
+    </a>
+
+    <a href="settings.html">
+      <span class="nav-icon">⚙</span>
+      Settings
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    CROWRULES ENTERTAINMENT<br>
+    ADMIN SYSTEM • SUBSCRIPTIONS
+  </div>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+  <div class="topbar-left">
+
+    <button class="mobile-menu" id="mobileMenu">
+      ☰
+    </button>
+
+    <div class="status-dot"></div>
+
+    <div class="page-label">
+      Subscription Command Center
+    </div>
+
+  </div>
+
+  <div class="topbar-right">
+
+    <div class="clock" id="clock">
+      --:--:--
+    </div>
+
+    <button class="icon-btn" id="refreshBtn">
+      ↻
+    </button>
+
+    <button class="profile-btn">
+      <span class="avatar">CR</span>
+      <span>Administrator</span>
+    </button>
+
+  </div>
+
+</header>
+
+<section class="content">
+
+<!-- HERO -->
+
+<div class="hero">
+
+  <div>
+
+    <div class="eyebrow">
+      CrowRules Entertainment
+    </div>
+
+    <h1>Subscriptions</h1>
+
+    <p>
+      Manage member subscriptions, billing status, trials,
+      renewals, cancellations, subscription plans, and
+      recurring revenue across the CrowRules Entertainment
+      platform.
+    </p>
+
+  </div>
+
+  <div class="actions">
+
+    <button class="btn" id="exportBtn">
+      Export CSV
+    </button>
+
+    <button class="btn primary" id="addSubscriptionBtn">
+      + Add Subscription
+    </button>
+
+  </div>
+
+</div>
+
+<!-- STATS -->
+
+<div class="stats">
+
+  <div class="stat">
+    <div class="stat-label">Active Subscriptions</div>
+    <div class="stat-value" id="activeCount">2,418</div>
+    <div class="stat-meta good">+8.4% this month</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Monthly Revenue</div>
+    <div class="stat-value">$18.4K</div>
+    <div class="stat-meta good">+12.8% MRR</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Trials</div>
+    <div class="stat-value">184</div>
+    <div class="stat-meta">42 converting soon</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Renewals</div>
+    <div class="stat-value">327</div>
+    <div class="stat-meta good">Next 30 days</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Cancelled</div>
+    <div class="stat-value">38</div>
+    <div class="stat-meta bad">1.6% of subscribers</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Avg. Revenue</div>
+    <div class="stat-value">$7.61</div>
+    <div class="stat-meta">Revenue / subscriber</div>
+  </div>
+
+</div>
+
+<!-- PLANS -->
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Subscription Plans
+      </div>
+
+      <div class="panel-sub">
+        CrowRules membership products and recurring pricing
+      </div>
+    </div>
+
+    <button
+      class="small-btn"
+      onclick="showToast('Plan management opened.')"
+    >
+      Manage Plans
+    </button>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div class="plan-grid">
+
+      <article class="plan">
+
+        <div class="plan-name">
+          Free
+        </div>
+
+        <div class="plan-price">
+          $0
+          <small>/ month</small>
+        </div>
+
+        <div class="plan-description">
+          Basic access to CrowRules content and community features.
+        </div>
+
+        <div class="plan-stats">
+
+          <div class="plan-stat">
+            <label>Subscribers</label>
+            <strong>1,842</strong>
+          </div>
+
+          <div class="plan-stat">
+            <label>Share</label>
+            <strong>76%</strong>
+          </div>
+
+        </div>
+
+        <div class="plan-footer">
+          <span class="plan-status">Active</span>
+          <button class="small-btn">Edit</button>
+        </div>
+
+      </article>
+
+      <article class="plan">
+
+        <div class="plan-name">
+          Pro
+        </div>
+
+        <div class="plan-price">
+          $4.99
+          <small>/ month</small>
+        </div>
+
+        <div class="plan-description">
+          Expanded CrowRules TV access, member features, and perks.
+        </div>
+
+        <div class="plan-stats">
+
+          <div class="plan-stat">
+            <label>Subscribers</label>
+            <strong>426</strong>
+          </div>
+
+          <div class="plan-stat">
+            <label>MRR</label>
+            <strong>$2.1K</strong>
+          </div>
+
+        </div>
+
+        <div class="plan-footer">
+          <span class="plan-status">Active</span>
+          <button class="small-btn">Edit</button>
+        </div>
+
+      </article>
+
+      <article class="plan featured">
+
+        <div class="plan-name">
+          Premium
+        </div>
+
+        <div class="plan-price">
+          $9.99
+          <small>/ month</small>
+        </div>
+
+        <div class="plan-description">
+          Premium streaming, exclusive content, rewards, and events.
+        </div>
+
+        <div class="plan-stats">
+
+          <div class="plan-stat">
+            <label>Subscribers</label>
+            <strong>132</strong>
+          </div>
+
+          <div class="plan-stat">
+            <label>MRR</label>
+            <strong>$1.3K</strong>
+          </div>
+
+        </div>
+
+        <div class="plan-footer">
+          <span class="plan-status">Active</span>
+          <button class="small-btn">Edit</button>
+        </div>
+
+      </article>
+
+      <article class="plan">
+
+        <div class="plan-name">
+          Creator
+        </div>
+
+        <div class="plan-price">
+          $19.99
+          <small>/ month</small>
+        </div>
+
+        <div class="plan-description">
+          Creator tools, publishing capabilities, analytics, and profile upgrades.
+        </div>
+
+        <div class="plan-stats">
+
+          <div class="plan-stat">
+            <label>Subscribers</label>
+            <strong>18</strong>
+          </div>
+
+          <div class="plan-stat">
+            <label>MRR</label>
+            <strong>$360</strong>
+          </div>
+
+        </div>
+
+        <div class="plan-footer">
+          <span class="plan-status">Active</span>
+          <button class="small-btn">Edit</button>
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>
+
+<br>
+
+<!-- SUBSCRIBER TABLE -->
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Subscriber Management
+      </div>
+
+      <div class="panel-sub">
+        Search, filter, inspect, and manage member subscriptions
+      </div>
+    </div>
+
+    <div class="filters">
+
+      <input
+        type="search"
+        id="search"
+        placeholder="Search subscribers..."
+      >
+
+      <select id="planFilter">
+        <option value="">All Plans</option>
+        <option value="Free">Free</option>
+        <option value="Pro">Pro</option>
+        <option value="Premium">Premium</option>
+        <option value="Creator">Creator</option>
+      </select>
+
+      <select id="statusFilter">
+        <option value="">All Status</option>
+        <option value="Active">Active</option>
+        <option value="Trial">Trial</option>
+        <option value="Past Due">Past Due</option>
+        <option value="Paused">Paused</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+
+    </div>
+
+  </div>
+
+  <div class="tabs">
+
+    <button class="tab active" data-tab="all">
+      All
+    </button>
+
+    <button class="tab" data-tab="active">
+      Active
+    </button>
+
+    <button class="tab" data-tab="trial">
+      Trials
+    </button>
+
+    <button class="tab" data-tab="past">
+      Past Due
+    </button>
+
+    <button class="tab" data-tab="cancelled">
+      Cancelled
+    </button>
+
+    <button class="tab" data-tab="paused">
+      Paused
+    </button>
+
+  </div>
+
+  <div class="table-wrap">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Member</th>
+          <th>Plan</th>
+          <th>Status</th>
+          <th>Amount</th>
+          <th>Billing</th>
+          <th>Started</th>
+          <th>Next Billing</th>
+          <th>Updated</th>
+          <th>Action</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="subscriptionTable">
+
+        <tr data-status="active">
+
+          <td>
+            <div class="member">
+
+              <div class="member-avatar">
+                AR
+              </div>
+
+              <div>
+                <div class="member-name">
+                  Alex Rivers
+                </div>
+
+                <div class="member-email">
+                  alex@example.com
+                </div>
+              </div>
+
+            </div>
+          </td>
+
+          <td>Premium</td>
+
+          <td>
+            <span class="badge active">
+              Active
+            </span>
+          </td>
+
+          <td>$9.99</td>
+          <td>Monthly</td>
+          <td>Jan 12, 2026</td>
+          <td>Sep 12, 2026</td>
+          <td>Today</td>
+
+          <td>
+            <div class="action-group">
+              <button
+                class="small-btn"
+                onclick="viewSubscription('Alex Rivers')"
+              >
+                View
+              </button>
+
+              <button
+                class="small-btn"
+                onclick="manageSubscription('Alex Rivers')"
+              >
+                Manage
+              </button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-status="trial">
+
+          <td>
+            <div class="member">
+
+              <div class="member-avatar">
+                JP
+              </div>
+
+              <div>
+                <div class="member-name">
+                  Jamie Parker
+                </div>
+
+                <div class="member-email">
+                  jamie@example.com
+                </div>
+              </div>
+
+            </div>
+          </td>
+
+          <td>Pro</td>
+
+          <td>
+            <span class="badge trial">
+              Trial
+            </span>
+          </td>
+
+          <td>$4.99</td>
+          <td>Monthly</td>
+          <td>Sep 3, 2026</td>
+          <td>Sep 10, 2026</td>
+          <td>1 hour ago</td>
+
+          <td>
+            <div class="action-group">
+              <button
+                class="small-btn"
+                onclick="viewSubscription('Jamie Parker')"
+              >
+                View
+              </button>
+
+              <button
+                class="small-btn"
+                onclick="manageSubscription('Jamie Parker')"
+              >
+                Manage
+              </button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-status="active">
+
+          <td>
+            <div class="member">
+
+              <div class="member-avatar">
+                TS
+              </div>
+
+              <div>
+                <div class="member-name">
+                  Taylor Stone
+                </div>
+
+                <div class="member-email">
+                  taylor@example.com
+                </div>
+              </div>
+
+            </div>
+          </td>
+
+          <td>Creator</td>
+
+          <td>
+            <span class="badge active">
+              Active
+            </span>
+          </td>
+
+          <td>$19.99</td>
+          <td>Monthly</td>
+          <td>Aug 2, 2026</td>
+          <td>Sep 2, 2026</td>
+          <td>Yesterday</td>
+
+          <td>
+            <div class="action-group">
+              <button
+                class="small-btn"
+                onclick="viewSubscription('Taylor Stone')"
+              >
+                View
+              </button>
+
+              <button
+                class="small-btn"
+                onclick="manageSubscription('Taylor Stone')"
+              >
+                Manage
+              </button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-status="past due">
+
+          <td>
+            <div class="member">
+
+              <div class="member-avatar">
+                ML
+              </div>
+
+              <div>
+                <div class="member-name">
+                  Morgan Lee
+                </div>
+
+                <div class="member-email">
+                  morgan@example.com
+                </div>
+              </div>
+
+            </div>
+          </td>
+
+          <td>Premium</td>
+
+          <td>
+            <span class="badge past">
+              Past Due
+            </span>
+          </td>
+
+          <td>$9.99</td>
+          <td>Monthly</td>
+          <td>May 8, 2026</td>
+          <td>Sep 8, 2026</td>
+          <td>3 hours ago</td>
+
+          <td>
+            <div class="action-group">
+              <button
+                class="small-btn"
+                onclick="viewSubscription('Morgan Lee')"
+              >
+                View
+              </button>
+
+              <button
+                class="small-btn"
+                onclick="manageSubscription('Morgan Lee')"
+              >
+                Manage
+              </button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-status="cancelled">
+
+          <td>
+            <div class="member">
+
+              <div class="member-avatar">
+                SW
+              </div>
+
+              <div>
+                <div class="member-name">
+                  Sam Walker
+                </div>
+
+                <div class="member-email">
+                  sam@example.com
+                </div>
+              </div>
+
+            </div>
+          </td>
+
+          <td>Pro</td>
+
+          <td>
+            <span class="badge cancelled">
+              Cancelled
+            </span>
+          </td>
+
+          <td>$4.99</td>
+          <td>Monthly</td>
+          <td>Mar 19, 2026</td>
+          <td>Sep 19, 2026</td>
+          <td>Yesterday</td>
+
+          <td>
+            <div class="action-group">
+              <button
+                class="small-btn"
+                onclick="viewSubscription('Sam Walker')"
+              >
+                View
+              </button>
+
+              <button
+                class="small-btn"
+                onclick="manageSubscription('Sam Walker')"
+              >
+                Manage
+              </button>
+            </div>
+          </td>
+
+        </tr>
+
+        <tr data-status="paused">
+
+          <td>
+            <div class="member">
+
+              <div class="member-avatar">
+                CB
+              </div>
+
+              <div>
+                <div class="member-name">
+                  Casey Brooks
+                </div>
+
+                <div class="member-email">
+                  casey@example.com
+                </div>
+              </div>
+
+            </div>
+          </td>
+
+          <td>Premium</td>
+
+          <td>
+            <span class="badge paused">
+              Paused
+            </span>
+          </td>
+
+          <td>$9.99</td>
+          <td>Monthly</td>
+          <td>Jun 6, 2026</td>
+          <td>Oct 6, 2026</td>
+          <td>4 days ago</td>
+
+          <td>
+            <div class="action-group">
+              <button
+                class="small-btn"
+                onclick="viewSubscription('Casey Brooks')"
+              >
+                View
+              </button>
+
+              <button
+                class="small-btn"
+                onclick="manageSubscription('Casey Brooks')"
+              >
+                Manage
+              </button>
+            </div>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+<!-- LOWER PANELS -->
+
+<div class="two-col">
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <div>
+        <div class="panel-title">
+          Subscription Health
+        </div>
+
+        <div class="panel-sub">
+          Current recurring subscription indicators
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel-body">
+
+      <div class="metric-list">
+
+        <div class="metric">
+
+          <div class="metric-top">
+            <span class="metric-label">
+              Renewal Rate
+            </span>
+
+            <span class="metric-value">
+              91%
+            </span>
+          </div>
+
+          <div class="progress">
+            <div
+              class="progress-bar"
+              style="width:91%"
+            ></div>
+          </div>
+
+        </div>
+
+        <div class="metric">
+
+          <div class="metric-top">
+            <span class="metric-label">
+              Trial Conversion
+            </span>
+
+            <span class="metric-value">
+              64%
+            </span>
+          </div>
+
+          <div class="progress">
+            <div
+              class="progress-bar"
+              style="width:64%"
+            ></div>
+          </div>
+
+        </div>
+
+        <div class="metric">
+
+          <div class="metric-top">
+            <span class="metric-label">
+              Payment Success
+            </span>
+
+            <span class="metric-value">
+              97%
+            </span>
+          </div>
+
+          <div class="progress">
+            <div
+              class="progress-bar"
+              style="width:97%"
+            ></div>
+          </div>
+
+        </div>
+
+        <div class="metric">
+
+          <div class="metric-top">
+            <span class="metric-label">
+              Subscriber Retention
+            </span>
+
+            <span class="metric-value">
+              88%
+            </span>
+          </div>
+
+          <div class="progress">
+            <div
+              class="progress-bar"
+              style="width:88%"
+            ></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="panel">
+
+    <div class="panel-head">
+
+      <div>
+        <div class="panel-title">
+          Subscription Activity
+        </div>
+
+        <div class="panel-sub">
+          Latest subscription events
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel-body">
+
+      <div class="activity">
+
+        <div class="activity-item">
+          <div class="activity-dot"></div>
+
+          <div>
+            <div class="activity-text">
+              New Premium subscription started.
+            </div>
+
+            <div class="activity-time">
+              12 minutes ago
+            </div>
+          </div>
+        </div>
+
+        <div class="activity-item">
+          <div class="activity-dot"></div>
+
+          <div>
+            <div class="activity-text">
+              Trial member converted to Pro.
+            </div>
+
+            <div class="activity-time">
+              48 minutes ago
+            </div>
+          </div>
+        </div>
+
+        <div class="activity-item">
+          <div class="activity-dot"></div>
+
+          <div>
+            <div class="activity-text">
+              Payment retry succeeded.
+            </div>
+
+            <div class="activity-time">
+              2 hours ago
+            </div>
+          </div>
+        </div>
+
+        <div class="activity-item">
+          <div class="activity-dot"></div>
+
+          <div>
+            <div class="activity-text">
+              Subscription cancellation processed.
+            </div>
+
+            <div class="activity-time">
+              5 hours ago
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal-backdrop" id="subscriptionModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        Add Subscription
+      </div>
+
+      <button
+        class="modal-close"
+        onclick="closeModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <form id="subscriptionForm">
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Member ID</label>
+            <input
+              id="memberId"
+              placeholder="Member UUID"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Plan</label>
+
+            <select id="plan">
+              <option>Free</option>
+              <option>Pro</option>
+              <option>Premium</option>
+              <option>Creator</option>
+            </select>
+
+          </div>
+
+          <div class="field">
+            <label>Status</label>
+
+            <select id="status">
+              <option>Active</option>
+              <option>Trial</option>
+              <option>Past Due</option>
+              <option>Paused</option>
+              <option>Cancelled</option>
+            </select>
+
+          </div>
+
+          <div class="field">
+            <label>Billing Interval</label>
+
+            <select id="billingInterval">
+              <option>Monthly</option>
+              <option>Yearly</option>
+              <option>Lifetime</option>
+            </select>
+
+          </div>
+
+          <div class="field">
+            <label>Amount</label>
+
+            <input
+              id="amount"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="9.99"
+            >
+
+          </div>
+
+          <div class="field">
+            <label>Currency</label>
+
+            <select id="currency">
+              <option value="USD">USD</option>
+            </select>
+
+          </div>
+
+          <div class="field">
+            <label>Started At</label>
+
+            <input
+              id="startedAt"
+              type="date"
+            >
+
+          </div>
+
+          <div class="field">
+            <label>Next Billing Date</label>
+
+            <input
+              id="nextBilling"
+              type="date"
+            >
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        onclick="closeModal()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="btn primary"
+        id="saveSubscription"
+      >
+        Save Subscription
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* =========================================================
+   CROWRULES SUBSCRIPTIONS ADMIN
+   ========================================================= */
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL || "";
+
+const SUPABASE_ANON_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY || "";
+
+let supabaseClient = null;
+
+if(
+  SUPABASE_URL &&
+  SUPABASE_ANON_KEY &&
+  window.supabase
+){
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+}
+
+/*
+Recommended database architecture:
+
+membership_plans
+membership_profiles
+membership_subscriptions
+subscription_events
+
+The page intentionally uses select("*") so it can
+tolerate additional columns in an existing schema.
+*/
+
+const $ = id =>
+  document.getElementById(id);
+
+/* CLOCK */
+
+function updateClock(){
+
+  const now = new Date();
+
+  $("clock").textContent =
+    now.toLocaleTimeString([],{
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    });
+
+}
+
+updateClock();
+
+setInterval(
+  updateClock,
+  1000
+);
+
+/* MOBILE */
+
+$("mobileMenu").addEventListener(
+  "click",
+  ()=>{
+    $("sidebar").classList.toggle("open");
+  }
+);
+
+/* TOAST */
+
+function showToast(message){
+
+  const toast = $("toast");
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  clearTimeout(window.__toast);
+
+  window.__toast =
+    setTimeout(
+      ()=>{
+        toast.classList.remove("show");
+      },
+      2800
+    );
+
+}
+
+/* MODAL */
+
+function openModal(){
+
+  $("subscriptionModal")
+    .classList.add("show");
+
+}
+
+function closeModal(){
+
+  $("subscriptionModal")
+    .classList.remove("show");
+
+}
+
+$("addSubscriptionBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+      $("subscriptionForm").reset();
+      openModal();
+    }
+  );
+
+$("subscriptionModal")
+  .addEventListener(
+    "click",
+    event=>{
+      if(
+        event.target ===
+        $("subscriptionModal")
+      ){
+        closeModal();
+      }
+    }
+  );
+
+document.addEventListener(
+  "keydown",
+  event=>{
+    if(event.key === "Escape"){
+      closeModal();
+    }
+  }
+);
+
+/* SAVE */
+
+$("saveSubscription")
+  .addEventListener(
+    "click",
+    async()=>{
+
+      const form =
+        $("subscriptionForm");
+
+      if(!form.reportValidity()){
+        return;
+      }
+
+      const payload = {
+        member_id:
+          $("memberId").value.trim(),
+
+        plan:
+          $("plan").value,
+
+        status:
+          $("status").value,
+
+        billing_interval:
+          $("billingInterval").value,
+
+        amount:
+          $("amount").value
+            ? Number($("amount").value)
+            : null,
+
+        currency:
+          $("currency").value,
+
+        started_at:
+          $("startedAt").value || null,
+
+        next_billing_at:
+          $("nextBilling").value || null
+      };
+
+      if(!supabaseClient){
+
+        showToast(
+          "Demo mode — connect Supabase to save subscriptions."
+        );
+
+        closeModal();
+
+        return;
+      }
+
+      try{
+
+        const table =
+          window.CROWRULES_SUBSCRIPTIONS_TABLE ||
+          "membership_subscriptions";
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .from(table)
+            .insert(payload);
+
+        if(error){
+          throw error;
+        }
+
+        showToast(
+          "Subscription saved."
+        );
+
+        closeModal();
+
+        await loadSubscriptions();
+
+      }catch(error){
+
+        console.error(error);
+
+        showToast(
+          "Could not save subscription: " +
+          (error.message || "Unknown error")
+        );
+
+      }
+
+    }
+  );
+
+/* LOAD */
+
+async function loadSubscriptions(){
+
+  if(!supabaseClient){
+    return;
+  }
+
+  try{
+
+    const table =
+      window.CROWRULES_SUBSCRIPTIONS_TABLE ||
+      "membership_subscriptions";
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(table)
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(200);
+
+    if(error){
+      throw error;
+    }
+
+    if(!data){
+      return;
+    }
+
+    const active =
+      data.filter(row =>
+        String(
+          row.status || ""
+        ).toLowerCase()
+        === "active"
+      ).length;
+
+    $("activeCount").textContent =
+      active.toLocaleString();
+
+    if(data.length){
+      renderSubscriptions(data);
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Subscription data unavailable:",
+      error.message
+    );
+
+  }
+
+}
+
+/* RENDER */
+
+function renderSubscriptions(rows){
+
+  const table =
+    $("subscriptionTable");
+
+  table.innerHTML = "";
+
+  rows.forEach(row=>{
+
+    const memberName =
+      row.member_name ||
+      row.name ||
+      row.email ||
+      "Member";
+
+    const email =
+      row.email ||
+      "—";
+
+    const plan =
+      row.plan_name ||
+      row.plan ||
+      "Unknown";
+
+    const status =
+      row.status ||
+      "Active";
+
+    const normalizedStatus =
+      String(status)
+        .toLowerCase()
+        .replace(/\s+/g," ");
+
+    let badgeClass =
+      "active";
+
+    if(normalizedStatus === "trial"){
+      badgeClass = "trial";
+    }
+
+    if(normalizedStatus === "past due"){
+      badgeClass = "past";
+    }
+
+    if(normalizedStatus === "cancelled"){
+      badgeClass = "cancelled";
+    }
+
+    if(normalizedStatus === "paused"){
+      badgeClass = "paused";
+    }
+
+    const tr =
+      document.createElement("tr");
+
+    tr.dataset.status =
+      normalizedStatus;
+
+    tr.dataset.plan =
+      String(plan).toLowerCase();
+
+    tr.innerHTML = `
+
+      <td>
+        <div class="member">
+
+          <div class="member-avatar">
+            ${escapeHtml(
+              initials(memberName)
+            )}
+          </div>
+
+          <div>
+            <div class="member-name">
+              ${escapeHtml(memberName)}
+            </div>
+
+            <div class="member-email">
+              ${escapeHtml(email)}
+            </div>
+          </div>
+
+        </div>
+      </td>
+
+      <td>
+        ${escapeHtml(plan)}
+      </td>
+
+      <td>
+        <span class="badge ${badgeClass}">
+          ${escapeHtml(status)}
+        </span>
+      </td>
+
+      <td>
+        ${formatMoney(
+          row.amount
+        )}
+      </td>
+
+      <td>
+        ${escapeHtml(
+          row.billing_interval ||
+          row.interval ||
+          "Monthly"
+        )}
+      </td>
+
+      <td>
+        ${formatDate(
+          row.started_at ||
+          row.created_at
+        )}
+      </td>
+
+      <td>
+        ${formatDate(
+          row.next_billing_at ||
+          row.current_period_end
+        )}
+      </td>
+
+      <td>
+        ${formatDate(
+          row.updated_at ||
+          row.created_at
+        )}
+      </td>
+
+      <td>
+
+        <div class="action-group">
+
+          <button
+            class="small-btn"
+            onclick="viewSubscription('${escapeJs(memberName)}')"
+          >
+            View
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="manageSubscription('${escapeJs(memberName)}')"
+          >
+            Manage
+          </button>
+
+        </div>
+
+      </td>
+    `;
+
+    table.appendChild(tr);
+
+  });
+
+  filterSubscriptions();
+
+}
+
+/* FILTER */
+
+let currentTab = "all";
+
+function filterSubscriptions(){
+
+  const search =
+    $("search").value
+      .trim()
+      .toLowerCase();
+
+  const plan =
+    $("planFilter").value
+      .toLowerCase();
+
+  const status =
+    $("statusFilter").value
+      .toLowerCase();
+
+  document
+    .querySelectorAll(
+      "#subscriptionTable tr"
+    )
+    .forEach(row=>{
+
+      const text =
+        row.textContent
+          .toLowerCase();
+
+      const rowStatus =
+        row.dataset.status || "";
+
+      const rowPlan =
+        row.dataset.plan || "";
+
+      let matchesTab = true;
+
+      if(currentTab === "active"){
+        matchesTab =
+          rowStatus === "active";
+      }
+
+      if(currentTab === "trial"){
+        matchesTab =
+          rowStatus === "trial";
+      }
+
+      if(currentTab === "past"){
+        matchesTab =
+          rowStatus === "past due";
+      }
+
+      if(currentTab === "cancelled"){
+        matchesTab =
+          rowStatus === "cancelled";
+      }
+
+      if(currentTab === "paused"){
+        matchesTab =
+          rowStatus === "paused";
+      }
+
+      const matchesSearch =
+        !search ||
+        text.includes(search);
+
+      const matchesPlan =
+        !plan ||
+        rowPlan === plan;
+
+      const matchesStatus =
+        !status ||
+        rowStatus === status;
+
+      row.style.display =
+        matchesTab &&
+        matchesSearch &&
+        matchesPlan &&
+        matchesStatus
+          ? ""
+          : "none";
+
+    });
+
+}
+
+$("search").addEventListener(
+  "input",
+  filterSubscriptions
+);
+
+$("planFilter").addEventListener(
+  "change",
+  filterSubscriptions
+);
+
+$("statusFilter").addEventListener(
+  "change",
+  filterSubscriptions
+);
+
+/* TABS */
+
+document
+  .querySelectorAll(".tab")
+  .forEach(tab=>{
+
+    tab.addEventListener(
+      "click",
+      ()=>{
+
+        document
+          .querySelectorAll(".tab")
+          .forEach(item =>
+            item.classList.remove(
+              "active"
+            )
+          );
+
+        tab.classList.add("active");
+
+        currentTab =
+          tab.dataset.tab;
+
+        filterSubscriptions();
+
+      }
+    );
+
+  });
+
+/* VIEW */
+
+function viewSubscription(member){
+
+  showToast(
+    "Opening subscription for " +
+    member
+  );
+
+}
+
+function manageSubscription(member){
+
+  showToast(
+    "Subscription management opened for " +
+    member
+  );
+
+}
+
+/* REFRESH */
+
+$("refreshBtn")
+  .addEventListener(
+    "click",
+    async()=>{
+
+      showToast(
+        "Refreshing subscriptions..."
+      );
+
+      await loadSubscriptions();
+
+      setTimeout(
+        ()=>{
+          showToast(
+            "Subscription data refreshed."
+          );
+        },
+        500
+      );
+
+    }
+  );
+
+/* EXPORT */
+
+$("exportBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      const rows = [[
+        "Member",
+        "Email",
+        "Plan",
+        "Status",
+        "Amount",
+        "Billing",
+        "Started",
+        "Next Billing"
+      ]];
+
+      document
+        .querySelectorAll(
+          "#subscriptionTable tr"
+        )
+        .forEach(row=>{
+
+          if(
+            row.style.display === "none"
+          ){
+            return;
+          }
+
+          const cells =
+            row.children;
+
+          if(cells.length < 8){
+            return;
+          }
+
+          rows.push([
+            cells[0]
+              .innerText
+              .replace(/\s+/g," ")
+              .trim(),
+
+            cells[0]
+              .innerText
+              .replace(/\s+/g," ")
+              .trim(),
+
+            cells[1].innerText.trim(),
+            cells[2].innerText.trim(),
+            cells[3].innerText.trim(),
+            cells[4].innerText.trim(),
+            cells[5].innerText.trim(),
+            cells[6].innerText.trim()
+          ]);
+
+        });
+
+      const csv =
+        rows
+          .map(row =>
+            row.map(value =>
+              `"${String(value)
+                .replace(/"/g,'""')}"`
+            ).join(",")
+          )
+          .join("\n");
+
+      const blob =
+        new Blob(
+          [csv],
+          {
+            type:
+              "text/csv;charset=utf-8;"
+          }
+        );
+
+      const url =
+        URL.createObjectURL(blob);
+
+      const link =
+        document.createElement("a");
+
+      link.href = url;
+
+      link.download =
+        "crowrules-subscriptions.csv";
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+      URL.revokeObjectURL(url);
+
+      showToast(
+        "Subscription CSV exported."
+      );
+
+    }
+  );
+
+/* HELPERS */
+
+function initials(name){
+
+  return String(name)
+    .trim()
+    .split(/\s+/)
+    .slice(0,2)
+    .map(part =>
+      part.charAt(0)
+    )
+    .join("")
+    .toUpperCase();
+
+}
+
+function formatMoney(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ""
+  ){
+    return "—";
+  }
+
+  const number =
+    Number(value);
+
+  if(
+    Number.isNaN(number)
+  ){
+    return escapeHtml(value);
+  }
+
+  return "$" +
+    number.toFixed(2);
+
+}
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if(
+    Number.isNaN(date.getTime())
+  ){
+    return escapeHtml(value);
+  }
+
+  return date.toLocaleDateString(
+    [],
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
+
+}
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function escapeJs(value){
+
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/"/g,'\\"')
+    .replace(/\n/g,"\\n")
+    .replace(/\r/g,"\\r");
+
+}
+
+/* INITIAL LOAD */
+
+loadSubscriptions();
+
+</script>
+
+</body>
+</html>
