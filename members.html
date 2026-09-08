@@ -12,6 +12,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root{
   --bg:#050505;
@@ -42,13 +44,13 @@ html{
 
 body{
   margin:0;
+  min-height:100vh;
   background:
     radial-gradient(circle at 80% -10%,rgba(182,108,255,.10),transparent 30%),
     radial-gradient(circle at 10% 20%,rgba(55,215,255,.05),transparent 25%),
     var(--bg);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
-  min-height:100vh;
 }
 
 body:before{
@@ -61,6 +63,7 @@ body:before{
     linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
     linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
   background-size:40px 40px;
+  z-index:-1;
 }
 
 a{
@@ -79,11 +82,18 @@ button{
   cursor:pointer;
 }
 
+button:disabled{
+  cursor:not-allowed;
+  opacity:.45;
+}
+
 .app{
   min-height:100vh;
 }
 
-/* SIDEBAR */
+/* =========================================
+   SIDEBAR
+========================================= */
 
 .sidebar{
   position:fixed;
@@ -95,6 +105,7 @@ button{
   border-right:1px solid var(--line);
   z-index:100;
   overflow-y:auto;
+  scrollbar-width:thin;
 }
 
 .brand{
@@ -104,6 +115,10 @@ button{
   gap:12px;
   padding:0 20px;
   border-bottom:1px solid var(--line);
+  position:sticky;
+  top:0;
+  background:#07070a;
+  z-index:2;
 }
 
 .brand-mark{
@@ -178,6 +193,7 @@ button{
 
 .nav-icon{
   width:18px;
+  min-width:18px;
   text-align:center;
   color:#777784;
   font-size:13px;
@@ -187,7 +203,9 @@ button{
   color:var(--accent);
 }
 
-/* MAIN */
+/* =========================================
+   MAIN
+========================================= */
 
 .main{
   margin-left:255px;
@@ -284,7 +302,25 @@ button{
   margin-top:3px;
 }
 
-/* CONTENT */
+.logout-btn{
+  margin-left:4px;
+  border:1px solid var(--line);
+  background:#0d0d11;
+  color:#aaa;
+  border-radius:7px;
+  padding:8px 10px;
+  font-size:9px;
+  font-weight:800;
+}
+
+.logout-btn:hover{
+  color:#fff;
+  border-color:var(--line2);
+}
+
+/* =========================================
+   CONTENT
+========================================= */
 
 .content{
   padding:30px;
@@ -318,7 +354,7 @@ h1{
 }
 
 .hero p{
-  max-width:700px;
+  max-width:760px;
   color:var(--muted);
   line-height:1.7;
   font-size:12px;
@@ -330,6 +366,10 @@ h1{
   gap:9px;
   flex-wrap:wrap;
 }
+
+/* =========================================
+   BUTTONS
+========================================= */
 
 .btn{
   border:1px solid var(--line2);
@@ -364,7 +404,9 @@ h1{
   font-size:9px;
 }
 
-/* STATS */
+/* =========================================
+   STATS
+========================================= */
 
 .stats{
   display:grid;
@@ -421,7 +463,9 @@ h1{
   color:var(--cyan);
 }
 
-/* PANEL */
+/* =========================================
+   PANEL
+========================================= */
 
 .panel{
   background:linear-gradient(145deg,rgba(17,17,23,.96),rgba(10,10,13,.96));
@@ -451,7 +495,9 @@ h1{
   margin-top:4px;
 }
 
-/* FILTERS */
+/* =========================================
+   FILTERS
+========================================= */
 
 .filters{
   display:grid;
@@ -479,11 +525,17 @@ h1{
   box-shadow:0 0 0 2px rgba(182,108,255,.06);
 }
 
+textarea.input{
+  min-height:110px;
+  resize:vertical;
+}
+
 .tabs{
   display:flex;
   gap:4px;
   padding:12px 18px 0;
   border-bottom:1px solid var(--line);
+  overflow-x:auto;
 }
 
 .tab{
@@ -494,6 +546,7 @@ h1{
   font-size:10px;
   font-weight:700;
   border-bottom:2px solid transparent;
+  white-space:nowrap;
 }
 
 .tab.active{
@@ -501,7 +554,9 @@ h1{
   border-bottom-color:var(--accent);
 }
 
-/* TABLE */
+/* =========================================
+   TABLE
+========================================= */
 
 .table-wrap{
   overflow-x:auto;
@@ -509,7 +564,7 @@ h1{
 
 table{
   width:100%;
-  min-width:1100px;
+  min-width:1150px;
   border-collapse:collapse;
 }
 
@@ -559,6 +614,13 @@ tr:hover td{
   font-family:Orbitron,sans-serif;
   font-size:10px;
   font-weight:800;
+  overflow:hidden;
+}
+
+.member-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
 .member-name{
@@ -570,6 +632,12 @@ tr:hover td{
   color:#747480;
   font-size:9px;
   margin-top:3px;
+}
+
+.member-username{
+  color:#5f5f6b;
+  font-size:8px;
+  margin-top:2px;
 }
 
 .badge{
@@ -621,12 +689,16 @@ tr:hover td{
   background:var(--red);
 }
 
-.badge.pro{
+.badge.pro,
+.badge.premium,
+.badge.creator{
   color:var(--accent);
   border-color:rgba(182,108,255,.25);
 }
 
-.badge.pro:before{
+.badge.pro:before,
+.badge.premium:before,
+.badge.creator:before{
   background:var(--accent);
 }
 
@@ -666,7 +738,31 @@ tr:hover td{
   border-color:var(--line2);
 }
 
-/* LOWER GRID */
+.empty-state,
+.loading-state,
+.error-state{
+  padding:50px 20px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.empty-state strong,
+.loading-state strong,
+.error-state strong{
+  display:block;
+  color:#fff;
+  font-family:Orbitron,sans-serif;
+  margin-bottom:8px;
+}
+
+.error-state{
+  color:#ff7184;
+}
+
+/* =========================================
+   LOWER GRID
+========================================= */
 
 .lower-grid{
   display:grid;
@@ -748,7 +844,9 @@ tr:hover td{
   background:linear-gradient(90deg,var(--accent2),var(--accent));
 }
 
-/* MODAL */
+/* =========================================
+   MODAL
+========================================= */
 
 .modal-backdrop{
   position:fixed;
@@ -767,7 +865,7 @@ tr:hover td{
 }
 
 .modal{
-  width:min(720px,100%);
+  width:min(760px,100%);
   max-height:90vh;
   overflow:auto;
   background:#0d0d11;
@@ -796,6 +894,7 @@ tr:hover td{
   border:1px solid var(--line);
   color:#aaa;
   border-radius:7px;
+  font-size:18px;
 }
 
 .modal-body{
@@ -826,11 +925,6 @@ tr:hover td{
   font-weight:800;
 }
 
-textarea.input{
-  min-height:100px;
-  resize:vertical;
-}
-
 .modal-foot{
   display:flex;
   justify-content:flex-end;
@@ -839,12 +933,33 @@ textarea.input{
   border-top:1px solid var(--line);
 }
 
-/* TOAST */
+/* =========================================
+   CONFIRM
+========================================= */
+
+.confirm-box{
+  max-width:460px;
+}
+
+.confirm-message{
+  color:#aaa;
+  font-size:11px;
+  line-height:1.7;
+}
+
+.confirm-message strong{
+  color:#fff;
+}
+
+/* =========================================
+   TOAST
+========================================= */
 
 .toast{
   position:fixed;
   right:25px;
   bottom:25px;
+  max-width:420px;
   padding:12px 15px;
   background:#15151b;
   border:1px solid var(--line2);
@@ -865,13 +980,21 @@ textarea.input{
   opacity:1;
 }
 
-/* RESPONSIVE */
+.toast.error{
+  border-left-color:var(--red);
+}
 
-@media(max-width:1250px){
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:1400px){
   .stats{
     grid-template-columns:repeat(3,1fr);
   }
+}
 
+@media(max-width:1250px){
   .filters{
     grid-template-columns:2fr 1fr 1fr;
   }
@@ -938,6 +1061,14 @@ textarea.input{
   .form-group.full{
     grid-column:auto;
   }
+
+  .hero-actions{
+    width:100%;
+  }
+
+  .hero-actions .btn{
+    flex:1;
+  }
 }
 </style>
 </head>
@@ -946,7 +1077,10 @@ textarea.input{
 
 <div class="app">
 
-<!-- SIDEBAR -->
+<!-- =========================================
+     SIDEBAR
+========================================= -->
+
 <aside class="sidebar" id="sidebar">
 
   <div class="brand">
@@ -1099,6 +1233,24 @@ textarea.input{
       <span class="nav-icon">★</span> Awards
     </a>
 
+    <div class="nav-label">Publishing</div>
+
+    <a href="publishing.html">
+      <span class="nav-icon">▥</span> Publishing
+    </a>
+
+    <a href="podcasting.html">
+      <span class="nav-icon">◉</span> Podcasting
+    </a>
+
+    <a href="yearbooks.html">
+      <span class="nav-icon">▤</span> Yearbooks
+    </a>
+
+    <a href="holidays.html">
+      <span class="nav-icon">✦</span> Holidays
+    </a>
+
     <div class="nav-label">System</div>
 
     <a href="analytics.html">
@@ -1128,17 +1280,28 @@ textarea.input{
   </nav>
 </aside>
 
-<!-- MAIN -->
+<!-- =========================================
+     MAIN
+========================================= -->
+
 <main class="main">
 
   <header class="topbar">
 
     <div class="top-left">
-      <button class="mobile-menu" id="mobileMenu">☰</button>
+
+      <button
+        class="mobile-menu"
+        id="mobileMenu"
+        type="button"
+        aria-label="Open navigation">
+        ☰
+      </button>
 
       <div class="breadcrumb">
         CrowRules Entertainment / <strong>Members</strong>
       </div>
+
     </div>
 
     <div class="top-right">
@@ -1146,12 +1309,22 @@ textarea.input{
       <div class="clock" id="clock">--:--:--</div>
 
       <div class="admin-user">
-        <div class="avatar">CR</div>
+
+        <div class="avatar" id="adminAvatar">CR</div>
+
         <div>
-          <strong>Administrator</strong>
-          <span>System Admin</span>
+          <strong id="adminName">Administrator</strong>
+          <span id="adminRole">System Admin</span>
         </div>
+
       </div>
+
+      <button
+        class="logout-btn"
+        id="logoutBtn"
+        type="button">
+        Sign Out
+      </button>
 
     </div>
 
@@ -1164,20 +1337,44 @@ textarea.input{
     <div class="hero">
 
       <div>
-        <div class="eyebrow">People / Member Management</div>
+
+        <div class="eyebrow">
+          People / Member Management
+        </div>
 
         <h1>Members</h1>
 
         <p>
-          Manage CrowRules Entertainment members, accounts, membership levels,
-          activity, access status, profiles and community participation.
+          Manage CrowRules Entertainment members, accounts, membership
+          levels, profiles, access status, points, watch activity and
+          community participation.
         </p>
+
       </div>
 
       <div class="hero-actions">
-        <button class="btn primary" onclick="openMemberModal()">+ Add Member</button>
-        <button class="btn" onclick="refreshMembers()">↻ Refresh</button>
-        <button class="btn" onclick="exportMembers()">⇩ Export</button>
+
+        <button
+          class="btn primary"
+          type="button"
+          onclick="openMemberModal()">
+          + Add Member
+        </button>
+
+        <button
+          class="btn"
+          type="button"
+          onclick="refreshMembers()">
+          ↻ Refresh
+        </button>
+
+        <button
+          class="btn"
+          type="button"
+          onclick="exportMembers()">
+          ⇩ Export
+        </button>
+
       </div>
 
     </div>
@@ -1188,43 +1385,43 @@ textarea.input{
 
       <div class="stat">
         <div class="stat-label">Total Members</div>
-        <div class="stat-value" id="totalMembers">12,846</div>
-        <div class="stat-change">↑ 8.4% this month</div>
+        <div class="stat-value" id="totalMembers">0</div>
+        <div class="stat-change">Live database count</div>
       </div>
 
       <div class="stat">
         <div class="stat-label">Active</div>
-        <div class="stat-value">10,982</div>
-        <div class="stat-change">↑ 6.2%</div>
+        <div class="stat-value" id="activeMembers">0</div>
+        <div class="stat-change">Current active accounts</div>
       </div>
 
       <div class="stat">
         <div class="stat-label">New This Month</div>
-        <div class="stat-value">428</div>
-        <div class="stat-change">↑ 14.7%</div>
+        <div class="stat-value" id="newMembers">0</div>
+        <div class="stat-change">Created this month</div>
       </div>
 
       <div class="stat">
         <div class="stat-label">Premium</div>
-        <div class="stat-value">2,418</div>
-        <div class="stat-change cyan">18.8% of members</div>
+        <div class="stat-value" id="premiumMembers">0</div>
+        <div class="stat-change cyan">Pro + Premium + Creator</div>
       </div>
 
       <div class="stat">
         <div class="stat-label">Pending</div>
-        <div class="stat-value">67</div>
+        <div class="stat-value" id="pendingMembers">0</div>
         <div class="stat-change warning">Needs review</div>
       </div>
 
       <div class="stat">
         <div class="stat-label">Suspended</div>
-        <div class="stat-value">31</div>
-        <div class="stat-change warning">0.2% of members</div>
+        <div class="stat-value" id="suspendedMembers">0</div>
+        <div class="stat-change warning">Restricted accounts</div>
       </div>
 
     </div>
 
-    <!-- MEMBER TABLE -->
+    <!-- DIRECTORY -->
 
     <section class="panel">
 
@@ -1233,12 +1430,17 @@ textarea.input{
         <div>
           <div class="panel-title">Member Directory</div>
           <div class="panel-sub">
-            Manage accounts, roles, memberships and access.
+            Live records from public.members.
           </div>
         </div>
 
         <div>
-          <button class="btn small" onclick="bulkAction()">Bulk Actions</button>
+          <button
+            class="btn small"
+            type="button"
+            onclick="bulkAction()">
+            Bulk Actions
+          </button>
         </div>
 
       </div>
@@ -1249,8 +1451,7 @@ textarea.input{
           class="input"
           id="search"
           type="search"
-          placeholder="Search members, emails, usernames..."
-        >
+          placeholder="Search members, emails, usernames...">
 
         <select class="select" id="membership">
           <option value="">All Memberships</option>
@@ -1281,20 +1482,43 @@ textarea.input{
           <option value="name">Name</option>
           <option value="activity">Activity</option>
           <option value="watch">Watch Hours</option>
+          <option value="points">Points</option>
         </select>
 
-        <button class="btn small" onclick="resetFilters()">Reset</button>
+        <button
+          class="btn small"
+          type="button"
+          onclick="resetFilters()">
+          Reset
+        </button>
 
       </div>
 
       <div class="tabs">
 
-        <button class="tab active" data-tab="all">All Members</button>
-        <button class="tab" data-tab="active">Active</button>
-        <button class="tab" data-tab="premium">Premium</button>
-        <button class="tab" data-tab="pending">Pending</button>
-        <button class="tab" data-tab="suspended">Suspended</button>
-        <button class="tab" data-tab="creators">Creators</button>
+        <button class="tab active" data-tab="all">
+          All Members
+        </button>
+
+        <button class="tab" data-tab="active">
+          Active
+        </button>
+
+        <button class="tab" data-tab="premium">
+          Premium
+        </button>
+
+        <button class="tab" data-tab="pending">
+          Pending
+        </button>
+
+        <button class="tab" data-tab="suspended">
+          Suspended
+        </button>
+
+        <button class="tab" data-tab="creators">
+          Creators
+        </button>
 
       </div>
 
@@ -1303,10 +1527,16 @@ textarea.input{
         <table>
 
           <thead>
+
             <tr>
+
               <th>
-                <input type="checkbox" class="check" id="selectAll">
+                <input
+                  type="checkbox"
+                  class="check"
+                  id="selectAll">
               </th>
+
               <th>Member</th>
               <th>Membership</th>
               <th>Role</th>
@@ -1316,259 +1546,18 @@ textarea.input{
               <th>Last Active</th>
               <th>Joined</th>
               <th>Actions</th>
+
             </tr>
+
           </thead>
 
           <tbody id="memberRows">
 
-            <tr data-name="alex rivers"
-                data-email="alex.rivers@example.com"
-                data-membership="Pro"
-                data-status="Active"
-                data-role="Member"
-                data-watch="184">
-
-              <td><input type="checkbox" class="check member-check"></td>
-
-              <td>
-                <div class="member">
-                  <div class="member-avatar">AR</div>
-                  <div>
-                    <div class="member-name">Alex Rivers</div>
-                    <div class="member-email">alex.rivers@example.com</div>
-                  </div>
-                </div>
-              </td>
-
-              <td><span class="badge pro">Pro</span></td>
-              <td><span class="role">Member</span></td>
-              <td><span class="badge active">Active</span></td>
-              <td>184h 22m</td>
-              <td>12,840</td>
-              <td class="muted">8 min ago</td>
-              <td class="muted">Aug 12, 2026</td>
-
-              <td>
-                <div class="actions">
-                  <button class="icon-btn" onclick="viewMember('Alex Rivers')">◉</button>
-                  <button class="icon-btn" onclick="editMember('Alex Rivers')">✎</button>
-                  <button class="icon-btn" onclick="messageMember('Alex Rivers')">✉</button>
-                </div>
-              </td>
-            </tr>
-
-            <tr data-name="jamie parker"
-                data-email="jamie.parker@example.com"
-                data-membership="Premium"
-                data-status="Active"
-                data-role="Creator"
-                data-watch="426">
-
-              <td><input type="checkbox" class="check member-check"></td>
-
-              <td>
-                <div class="member">
-                  <div class="member-avatar">JP</div>
-                  <div>
-                    <div class="member-name">Jamie Parker</div>
-                    <div class="member-email">jamie.parker@example.com</div>
-                  </div>
-                </div>
-              </td>
-
-              <td><span class="badge pro">Premium</span></td>
-              <td><span class="role">Creator</span></td>
-              <td><span class="badge active">Active</span></td>
-              <td>426h 17m</td>
-              <td>38,420</td>
-              <td class="muted">21 min ago</td>
-              <td class="muted">Jul 03, 2026</td>
-
-              <td>
-                <div class="actions">
-                  <button class="icon-btn" onclick="viewMember('Jamie Parker')">◉</button>
-                  <button class="icon-btn" onclick="editMember('Jamie Parker')">✎</button>
-                  <button class="icon-btn" onclick="messageMember('Jamie Parker')">✉</button>
-                </div>
-              </td>
-            </tr>
-
-            <tr data-name="morgan lee"
-                data-email="morgan.lee@example.com"
-                data-membership="Free"
-                data-status="Active"
-                data-role="Member"
-                data-watch="74">
-
-              <td><input type="checkbox" class="check member-check"></td>
-
-              <td>
-                <div class="member">
-                  <div class="member-avatar">ML</div>
-                  <div>
-                    <div class="member-name">Morgan Lee</div>
-                    <div class="member-email">morgan.lee@example.com</div>
-                  </div>
-                </div>
-              </td>
-
-              <td><span class="badge free">Free</span></td>
-              <td><span class="role">Member</span></td>
-              <td><span class="badge active">Active</span></td>
-              <td>74h 08m</td>
-              <td>5,842</td>
-              <td class="muted">1 hr ago</td>
-              <td class="muted">Jun 21, 2026</td>
-
-              <td>
-                <div class="actions">
-                  <button class="icon-btn" onclick="viewMember('Morgan Lee')">◉</button>
-                  <button class="icon-btn" onclick="editMember('Morgan Lee')">✎</button>
-                  <button class="icon-btn" onclick="messageMember('Morgan Lee')">✉</button>
-                </div>
-              </td>
-            </tr>
-
-            <tr data-name="taylor stone"
-                data-email="taylor.stone@example.com"
-                data-membership="Creator"
-                data-status="Pending"
-                data-role="Creator"
-                data-watch="22">
-
-              <td><input type="checkbox" class="check member-check"></td>
-
-              <td>
-                <div class="member">
-                  <div class="member-avatar">TS</div>
-                  <div>
-                    <div class="member-name">Taylor Stone</div>
-                    <div class="member-email">taylor.stone@example.com</div>
-                  </div>
-                </div>
-              </td>
-
-              <td><span class="badge pro">Creator</span></td>
-              <td><span class="role">Creator</span></td>
-              <td><span class="badge pending">Pending</span></td>
-              <td>22h 41m</td>
-              <td>1,820</td>
-              <td class="muted">3 hrs ago</td>
-              <td class="muted">Sep 07, 2026</td>
-
-              <td>
-                <div class="actions">
-                  <button class="icon-btn" onclick="viewMember('Taylor Stone')">◉</button>
-                  <button class="icon-btn" onclick="editMember('Taylor Stone')">✎</button>
-                  <button class="icon-btn" onclick="approveMember('Taylor Stone')">✓</button>
-                </div>
-              </td>
-            </tr>
-
-            <tr data-name="sam walker"
-                data-email="sam.walker@example.com"
-                data-membership="Premium"
-                data-status="Active"
-                data-role="Moderator"
-                data-watch="512">
-
-              <td><input type="checkbox" class="check member-check"></td>
-
-              <td>
-                <div class="member">
-                  <div class="member-avatar">SW</div>
-                  <div>
-                    <div class="member-name">Sam Walker</div>
-                    <div class="member-email">sam.walker@example.com</div>
-                  </div>
-                </div>
-              </td>
-
-              <td><span class="badge pro">Premium</span></td>
-              <td><span class="role">Moderator</span></td>
-              <td><span class="badge active">Active</span></td>
-              <td>512h 09m</td>
-              <td>54,291</td>
-              <td class="muted">5 hrs ago</td>
-              <td class="muted">May 19, 2026</td>
-
-              <td>
-                <div class="actions">
-                  <button class="icon-btn" onclick="viewMember('Sam Walker')">◉</button>
-                  <button class="icon-btn" onclick="editMember('Sam Walker')">✎</button>
-                  <button class="icon-btn" onclick="messageMember('Sam Walker')">✉</button>
-                </div>
-              </td>
-            </tr>
-
-            <tr data-name="casey reed"
-                data-email="casey.reed@example.com"
-                data-membership="Free"
-                data-status="Suspended"
-                data-role="Member"
-                data-watch="9">
-
-              <td><input type="checkbox" class="check member-check"></td>
-
-              <td>
-                <div class="member">
-                  <div class="member-avatar">CR</div>
-                  <div>
-                    <div class="member-name">Casey Reed</div>
-                    <div class="member-email">casey.reed@example.com</div>
-                  </div>
-                </div>
-              </td>
-
-              <td><span class="badge free">Free</span></td>
-              <td><span class="role">Member</span></td>
-              <td><span class="badge suspended">Suspended</span></td>
-              <td>9h 12m</td>
-              <td>440</td>
-              <td class="muted">Sep 01, 2026</td>
-              <td class="muted">Apr 18, 2026</td>
-
-              <td>
-                <div class="actions">
-                  <button class="icon-btn" onclick="viewMember('Casey Reed')">◉</button>
-                  <button class="icon-btn" onclick="editMember('Casey Reed')">✎</button>
-                  <button class="icon-btn" onclick="restoreMember('Casey Reed')">↻</button>
-                </div>
-              </td>
-            </tr>
-
-            <tr data-name="riley james"
-                data-email="riley.james@example.com"
-                data-membership="Pro"
-                data-status="Active"
-                data-role="Member"
-                data-watch="263">
-
-              <td><input type="checkbox" class="check member-check"></td>
-
-              <td>
-                <div class="member">
-                  <div class="member-avatar">RJ</div>
-                  <div>
-                    <div class="member-name">Riley James</div>
-                    <div class="member-email">riley.james@example.com</div>
-                  </div>
-                </div>
-              </td>
-
-              <td><span class="badge pro">Pro</span></td>
-              <td><span class="role">Member</span></td>
-              <td><span class="badge active">Active</span></td>
-              <td>263h 53m</td>
-              <td>21,840</td>
-              <td class="muted">Yesterday</td>
-              <td class="muted">Mar 02, 2026</td>
-
-              <td>
-                <div class="actions">
-                  <button class="icon-btn" onclick="viewMember('Riley James')">◉</button>
-                  <button class="icon-btn" onclick="editMember('Riley James')">✎</button>
-                  <button class="icon-btn" onclick="messageMember('Riley James')">✉</button>
+            <tr>
+              <td colspan="10">
+                <div class="loading-state">
+                  <strong>Loading Members</strong>
+                  Connecting to Supabase...
                 </div>
               </td>
             </tr>
@@ -1588,44 +1577,35 @@ textarea.input{
       <section class="panel">
 
         <div class="panel-head">
+
           <div>
-            <div class="panel-title">Recent Member Activity</div>
-            <div class="panel-sub">Latest account and community events.</div>
+            <div class="panel-title">
+              Recent Member Activity
+            </div>
+
+            <div class="panel-sub">
+              Latest records from the current member directory.
+            </div>
           </div>
+
         </div>
 
-        <div class="activity-list">
+        <div
+          class="activity-list"
+          id="activityList">
 
           <div class="activity">
-            <div class="activity-dot">+</div>
-            <div class="activity-text">
-              <strong>Taylor Stone</strong> submitted a Creator membership request.
-              <div class="activity-time">12 minutes ago</div>
-            </div>
-          </div>
 
-          <div class="activity">
-            <div class="activity-dot">★</div>
-            <div class="activity-text">
-              <strong>Jamie Parker</strong> reached 400 watch hours.
-              <div class="activity-time">31 minutes ago</div>
-            </div>
-          </div>
+            <div class="activity-dot">◌</div>
 
-          <div class="activity">
-            <div class="activity-dot">♟</div>
             <div class="activity-text">
-              New member <strong>Jordan Brooks</strong> joined CrowRules.
-              <div class="activity-time">48 minutes ago</div>
+              <strong>Waiting for data</strong>
+              Member activity will appear here after records load.
+              <div class="activity-time">
+                System
+              </div>
             </div>
-          </div>
 
-          <div class="activity">
-            <div class="activity-dot">↗</div>
-            <div class="activity-text">
-              <strong>Sam Walker</strong> earned the Community Leader badge.
-              <div class="activity-time">1 hour ago</div>
-            </div>
           </div>
 
         </div>
@@ -1635,44 +1615,65 @@ textarea.input{
       <section class="panel">
 
         <div class="panel-head">
+
           <div>
-            <div class="panel-title">Membership Breakdown</div>
-            <div class="panel-sub">Current account distribution.</div>
+            <div class="panel-title">
+              Membership Breakdown
+            </div>
+
+            <div class="panel-sub">
+              Current account distribution.
+            </div>
           </div>
+
         </div>
 
-        <div class="breakdown">
+        <div
+          class="breakdown"
+          id="membershipBreakdown">
 
           <div class="bar-row">
             <div class="bar-top">
               <span>Free</span>
-              <strong>72%</strong>
+              <strong id="freePercent">0%</strong>
             </div>
-            <div class="bar"><span style="width:72%"></span></div>
+
+            <div class="bar">
+              <span id="freeBar" style="width:0%"></span>
+            </div>
           </div>
 
           <div class="bar-row">
             <div class="bar-top">
               <span>Pro</span>
-              <strong>12%</strong>
+              <strong id="proPercent">0%</strong>
             </div>
-            <div class="bar"><span style="width:12%"></span></div>
+
+            <div class="bar">
+              <span id="proBar" style="width:0%"></span>
+            </div>
           </div>
 
           <div class="bar-row">
             <div class="bar-top">
               <span>Premium</span>
-              <strong>9%</strong>
+              <strong id="premiumPercent">0%</strong>
             </div>
-            <div class="bar"><span style="width:9%"></span></div>
+
+            <div class="bar">
+              <span id="premiumBar" style="width:0%"></span>
+            </div>
           </div>
 
           <div class="bar-row">
             <div class="bar-top">
               <span>Creator</span>
-              <strong>7%</strong>
+              <strong id="creatorPercent">0%</strong>
             </div>
-            <div class="bar"><span style="width:7%"></span></div>
+
+            <div class="bar">
+              <span id="creatorBar" style="width:0%"></span>
+            </div>
           </div>
 
         </div>
@@ -1687,15 +1688,31 @@ textarea.input{
 
 </div>
 
-<!-- MEMBER MODAL -->
+<!-- =========================================
+     MEMBER MODAL
+========================================= -->
 
-<div class="modal-backdrop" id="memberModal">
+<div
+  class="modal-backdrop"
+  id="memberModal">
 
   <div class="modal">
 
     <div class="modal-head">
-      <div class="modal-title" id="modalTitle">Add Member</div>
-      <button class="close" onclick="closeMemberModal()">×</button>
+
+      <div
+        class="modal-title"
+        id="modalTitle">
+        Add Member
+      </div>
+
+      <button
+        class="close"
+        type="button"
+        onclick="closeMemberModal()">
+        ×
+      </button>
+
     </div>
 
     <form id="memberForm">
@@ -1705,62 +1722,173 @@ textarea.input{
         <div class="form-grid">
 
           <div class="form-group">
-            <label class="form-label">First Name</label>
-            <input class="input" id="firstName" required>
+
+            <label class="form-label">
+              First Name
+            </label>
+
+            <input
+              class="input"
+              id="firstName"
+              autocomplete="given-name"
+              required>
+
           </div>
 
           <div class="form-group">
-            <label class="form-label">Last Name</label>
-            <input class="input" id="lastName" required>
+
+            <label class="form-label">
+              Last Name
+            </label>
+
+            <input
+              class="input"
+              id="lastName"
+              autocomplete="family-name"
+              required>
+
           </div>
 
           <div class="form-group">
-            <label class="form-label">Username</label>
-            <input class="input" id="username">
+
+            <label class="form-label">
+              Username
+            </label>
+
+            <input
+              class="input"
+              id="username"
+              autocomplete="username"
+              placeholder="@username">
+
           </div>
 
           <div class="form-group">
-            <label class="form-label">Email</label>
-            <input class="input" id="email" type="email" required>
+
+            <label class="form-label">
+              Email
+            </label>
+
+            <input
+              class="input"
+              id="email"
+              type="email"
+              autocomplete="email"
+              required>
+
           </div>
 
           <div class="form-group">
-            <label class="form-label">Membership</label>
-            <select class="select" id="memberType">
-              <option>Free</option>
-              <option>Pro</option>
-              <option>Premium</option>
-              <option>Creator</option>
+
+            <label class="form-label">
+              Membership
+            </label>
+
+            <select
+              class="select"
+              id="memberType">
+
+              <option value="Free">Free</option>
+              <option value="Pro">Pro</option>
+              <option value="Premium">Premium</option>
+              <option value="Creator">Creator</option>
+
             </select>
+
           </div>
 
           <div class="form-group">
-            <label class="form-label">Role</label>
-            <select class="select" id="memberRole">
-              <option>Member</option>
-              <option>Creator</option>
-              <option>Moderator</option>
-              <option>Admin</option>
+
+            <label class="form-label">
+              Role
+            </label>
+
+            <select
+              class="select"
+              id="memberRole">
+
+              <option value="Member">Member</option>
+              <option value="Creator">Creator</option>
+              <option value="Moderator">Moderator</option>
+              <option value="Admin">Admin</option>
+
             </select>
+
           </div>
 
           <div class="form-group">
-            <label class="form-label">Status</label>
-            <select class="select" id="memberStatus">
-              <option>Active</option>
-              <option>Pending</option>
-              <option>Suspended</option>
+
+            <label class="form-label">
+              Status
+            </label>
+
+            <select
+              class="select"
+              id="memberStatus">
+
+              <option value="Active">Active</option>
+              <option value="Pending">Pending</option>
+              <option value="Suspended">Suspended</option>
+
             </select>
+
           </div>
 
           <div class="form-group">
-            <label class="form-label">Initial Points</label>
-            <input class="input" id="points" type="number" value="0">
+
+            <label class="form-label">
+              Initial Points
+            </label>
+
+            <input
+              class="input"
+              id="points"
+              type="number"
+              min="0"
+              value="0">
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Watch Minutes
+            </label>
+
+            <input
+              class="input"
+              id="watchMinutes"
+              type="number"
+              min="0"
+              value="0">
+
+          </div>
+
+          <div class="form-group">
+
+            <label class="form-label">
+              Avatar URL
+            </label>
+
+            <input
+              class="input"
+              id="avatarUrl"
+              type="url"
+              placeholder="https://...">
+
           </div>
 
           <div class="form-group full">
-            <label class="form-label">Bio</label>
-            <textarea class="input" id="bio" placeholder="Member biography..."></textarea>
+
+            <label class="form-label">
+              Bio
+            </label>
+
+            <textarea
+              class="input"
+              id="bio"
+              placeholder="Member biography..."></textarea>
+
           </div>
 
         </div>
@@ -1768,8 +1896,21 @@ textarea.input{
       </div>
 
       <div class="modal-foot">
-        <button type="button" class="btn" onclick="closeMemberModal()">Cancel</button>
-        <button type="submit" class="btn primary">Save Member</button>
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeMemberModal()">
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn primary"
+          id="saveMemberBtn">
+          Save Member
+        </button>
+
       </div>
 
     </form>
@@ -1778,187 +1919,645 @@ textarea.input{
 
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- =========================================
+     CONFIRM MODAL
+========================================= -->
+
+<div
+  class="modal-backdrop"
+  id="confirmModal">
+
+  <div class="modal confirm-box">
+
+    <div class="modal-head">
+
+      <div
+        class="modal-title"
+        id="confirmTitle">
+        Confirm Action
+      </div>
+
+      <button
+        class="close"
+        type="button"
+        onclick="closeConfirm()">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div
+        class="confirm-message"
+        id="confirmMessage">
+        Are you sure?
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        type="button"
+        onclick="closeConfirm()">
+        Cancel
+      </button>
+
+      <button
+        class="btn danger"
+        type="button"
+        id="confirmActionBtn">
+        Confirm
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================================
+     TOAST
+========================================= -->
+
+<div
+  class="toast"
+  id="toast"></div>
 
 <script>
+/* =========================================================
+   CROWRULES ENTERTAINMENT
+   MEMBERS ADMIN — SUPABASE PRODUCTION BUILD
 
-/* ==========================================
-   CROWRULES MEMBERS ADMIN
-   Supabase-ready frontend
-   ========================================== */
+   Database:
+     public.members
+
+   Expected columns:
+     id
+     user_id
+     first_name
+     last_name
+     username
+     email
+     membership_type
+     role
+     status
+     points
+     watch_minutes
+     bio
+     avatar_url
+     last_active_at
+     created_at
+     updated_at
+
+   IMPORTANT:
+   Never place a service-role key in this page.
+========================================================= */
+
+
+/* =========================================================
+   SUPABASE CONFIGURATION
+========================================================= */
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL || "";
+
+const SUPABASE_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY ||
+  window.CROWRULES_SUPABASE_PUBLISHABLE_KEY ||
+  "";
+
+let supabase = null;
+
+if(
+  SUPABASE_URL &&
+  SUPABASE_KEY &&
+  window.supabase
+){
+
+  supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
+
+}
+
+
+/* =========================================================
+   STATE
+========================================================= */
 
 const state = {
-  editing: null
+  user:null,
+  members:[],
+  filteredMembers:[],
+  editingId:null,
+  activeTab:"all",
+  confirmAction:null
 };
 
-const modal = document.getElementById("memberModal");
-const toast = document.getElementById("toast");
-const rows = [...document.querySelectorAll("#memberRows tr")];
 
-/* CLOCK */
+/* =========================================================
+   DOM
+========================================================= */
+
+const modal =
+  document.getElementById("memberModal");
+
+const confirmModal =
+  document.getElementById("confirmModal");
+
+const toast =
+  document.getElementById("toast");
+
+const memberRows =
+  document.getElementById("memberRows");
+
+const memberForm =
+  document.getElementById("memberForm");
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
 
 function updateClock(){
 
   const now = new Date();
 
-  const time = now.toLocaleTimeString([],{
-    hour:"2-digit",
-    minute:"2-digit",
-    second:"2-digit"
-  });
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString([],{
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    });
 
-  document.getElementById("clock").textContent = time;
 }
 
 updateClock();
+
 setInterval(updateClock,1000);
 
-/* TOAST */
+
+/* =========================================================
+   TOAST
+========================================================= */
 
 let toastTimer;
 
-function showToast(message){
+function showToast(message,type="success"){
 
   clearTimeout(toastTimer);
 
   toast.textContent = message;
-  toast.classList.add("show");
+
+  toast.className =
+    "toast show" +
+    (type === "error" ? " error" : "");
 
   toastTimer = setTimeout(()=>{
     toast.classList.remove("show");
-  },2600);
+  },3500);
+
 }
 
-/* MOBILE MENU */
 
-document.getElementById("mobileMenu").addEventListener("click",()=>{
-  document.getElementById("sidebar").classList.toggle("open");
-});
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
 
-/* MODAL */
+function escapeHtml(value){
 
-function openMemberModal(){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
-  state.editing = null;
-
-  document.getElementById("modalTitle").textContent = "Add Member";
-
-  document.getElementById("memberForm").reset();
-
-  modal.classList.add("show");
 }
 
-function closeMemberModal(){
-  modal.classList.remove("show");
+
+/* =========================================================
+   INITIALS
+========================================================= */
+
+function initials(member){
+
+  const first =
+    String(member.first_name || "")
+      .trim()
+      .charAt(0);
+
+  const last =
+    String(member.last_name || "")
+      .trim()
+      .charAt(0);
+
+  const result =
+    (first + last).toUpperCase();
+
+  return result || "CR";
+
 }
 
-function editMember(name){
 
-  state.editing = name;
+/* =========================================================
+   FORMAT NUMBER
+========================================================= */
 
-  document.getElementById("modalTitle").textContent = "Edit Member";
+function number(value){
 
-  const row = rows.find(r =>
-    r.dataset.name === name.toLowerCase()
-  );
+  return Number(value || 0)
+    .toLocaleString();
 
-  if(row){
+}
 
-    const parts = name.split(" ");
 
-    document.getElementById("firstName").value = parts[0] || "";
-    document.getElementById("lastName").value = parts.slice(1).join(" ") || "";
+/* =========================================================
+   WATCH HOURS
+========================================================= */
 
-    document.getElementById("email").value =
-      row.dataset.email || "";
+function watchHours(member){
 
-    document.getElementById("memberType").value =
-      row.dataset.membership || "Free";
+  const minutes =
+    Number(member.watch_minutes || 0);
 
-    document.getElementById("memberRole").value =
-      row.dataset.role || "Member";
+  const hours =
+    Math.floor(minutes / 60);
 
-    document.getElementById("memberStatus").value =
-      row.dataset.status || "Active";
+  const mins =
+    minutes % 60;
+
+  return `${hours}h ${String(mins).padStart(2,"0")}m`;
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
   }
 
-  modal.classList.add("show");
-}
+  const date = new Date(value);
 
-document.getElementById("memberForm").addEventListener("submit",(event)=>{
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
 
-  event.preventDefault();
-
-  const payload = {
-    first_name:document.getElementById("firstName").value.trim(),
-    last_name:document.getElementById("lastName").value.trim(),
-    username:document.getElementById("username").value.trim(),
-    email:document.getElementById("email").value.trim(),
-    membership_type:document.getElementById("memberType").value,
-    role:document.getElementById("memberRole").value,
-    status:document.getElementById("memberStatus").value,
-    points:Number(document.getElementById("points").value || 0),
-    bio:document.getElementById("bio").value.trim()
-  };
-
-  console.log("Member payload:",payload);
-
-  closeMemberModal();
-
-  showToast(
-    state.editing
-      ? "Member updated successfully."
-      : "Member created successfully."
+  return date.toLocaleDateString(
+    [],
+    {
+      month:"short",
+      day:"2-digit",
+      year:"numeric"
+    }
   );
-});
 
-/* MEMBER ACTIONS */
-
-function viewMember(name){
-  showToast("Opening member profile: " + name);
 }
 
-function messageMember(name){
-  showToast("Message composer opened for " + name);
+
+/* =========================================================
+   RELATIVE TIME
+========================================================= */
+
+function relativeTime(value){
+
+  if(!value){
+    return "Never";
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
+
+  const seconds =
+    Math.floor(
+      (Date.now() - date.getTime()) / 1000
+    );
+
+  if(seconds < 60){
+    return "Just now";
+  }
+
+  const minutes =
+    Math.floor(seconds / 60);
+
+  if(minutes < 60){
+    return `${minutes} min ago`;
+  }
+
+  const hours =
+    Math.floor(minutes / 60);
+
+  if(hours < 24){
+    return `${hours} hr ago`;
+  }
+
+  const days =
+    Math.floor(hours / 24);
+
+  if(days < 7){
+    return `${days} day${days === 1 ? "" : "s"} ago`;
+  }
+
+  return formatDate(value);
+
 }
 
-function approveMember(name){
-  showToast(name + " approved.");
+
+/* =========================================================
+   ROLE CHECK
+========================================================= */
+
+function getAdminRole(user){
+
+  if(!user){
+    return null;
+  }
+
+  const metadata =
+    user.app_metadata || {};
+
+  const role =
+    String(metadata.role || "")
+      .toLowerCase()
+      .trim();
+
+  return role || null;
+
 }
 
-function restoreMember(name){
-  showToast(name + " restored.");
+
+function isAdmin(user){
+
+  const role =
+    getAdminRole(user);
+
+  return [
+    "owner",
+    "super_admin",
+    "admin"
+  ].includes(role);
+
 }
 
-function bulkAction(){
 
-  const selected =
-    document.querySelectorAll(".member-check:checked").length;
+/* =========================================================
+   AUTH GUARD
+========================================================= */
 
-  if(!selected){
-    showToast("Select at least one member first.");
+async function requireAdmin(){
+
+  if(!supabase){
+
+    showFatalError(
+      "Supabase is not configured. Add CROWRULES_SUPABASE_URL and CROWRULES_SUPABASE_ANON_KEY."
+    );
+
+    return false;
+
+  }
+
+  const {
+    data,
+    error
+  } =
+    await supabase.auth.getUser();
+
+  if(error){
+
+    console.error(
+      "Supabase authentication error:",
+      error
+    );
+
+    window.location.href =
+      "login.html?redirect=" +
+      encodeURIComponent("members.html");
+
+    return false;
+
+  }
+
+  const user =
+    data?.user || null;
+
+  if(!user){
+
+    window.location.href =
+      "login.html?redirect=" +
+      encodeURIComponent("members.html");
+
+    return false;
+
+  }
+
+  if(!isAdmin(user)){
+
+    showFatalError(
+      "Access denied. Your account does not have a CrowRules administrator role."
+    );
+
+    return false;
+
+  }
+
+  state.user = user;
+
+  updateAdminDisplay(user);
+
+  return true;
+
+}
+
+
+/* =========================================================
+   ADMIN DISPLAY
+========================================================= */
+
+function updateAdminDisplay(user){
+
+  const metadata =
+    user.user_metadata || {};
+
+  const email =
+    user.email || "Administrator";
+
+  const displayName =
+    metadata.display_name ||
+    metadata.full_name ||
+    metadata.name ||
+    email.split("@")[0] ||
+    "Administrator";
+
+  const role =
+    getAdminRole(user) ||
+    "admin";
+
+  document.getElementById("adminName")
+    .textContent = displayName;
+
+  document.getElementById("adminRole")
+    .textContent =
+      role.replaceAll("_"," ").toUpperCase();
+
+  document.getElementById("adminAvatar")
+    .textContent =
+      String(displayName)
+        .split(/\s+/)
+        .map(x=>x.charAt(0))
+        .join("")
+        .slice(0,2)
+        .toUpperCase();
+
+}
+
+
+/* =========================================================
+   FATAL ERROR
+========================================================= */
+
+function showFatalError(message){
+
+  memberRows.innerHTML = `
+    <tr>
+      <td colspan="10">
+        <div class="error-state">
+          <strong>System Error</strong>
+          ${escapeHtml(message)}
+        </div>
+      </td>
+    </tr>
+  `;
+
+}
+
+
+/* =========================================================
+   LOAD MEMBERS
+========================================================= */
+
+async function loadMembers(){
+
+  if(!supabase){
     return;
   }
 
-  showToast(selected + " member(s) selected for bulk action.");
+  memberRows.innerHTML = `
+    <tr>
+      <td colspan="10">
+        <div class="loading-state">
+          <strong>Loading Members</strong>
+          Reading public.members...
+        </div>
+      </td>
+    </tr>
+  `;
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from("members")
+      .select(`
+        id,
+        user_id,
+        first_name,
+        last_name,
+        username,
+        email,
+        membership_type,
+        role,
+        status,
+        points,
+        watch_minutes,
+        bio,
+        avatar_url,
+        last_active_at,
+        created_at,
+        updated_at
+      `)
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+  if(error){
+
+    console.error(
+      "Member load error:",
+      error
+    );
+
+    memberRows.innerHTML = `
+      <tr>
+        <td colspan="10">
+          <div class="error-state">
+            <strong>Unable To Load Members</strong>
+            ${escapeHtml(error.message)}
+          </div>
+        </td>
+      </tr>
+    `;
+
+    showToast(
+      "Could not load members: " +
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+  state.members =
+    Array.isArray(data)
+      ? data
+      : [];
+
+  updateStats();
+
+  updateBreakdown();
+
+  renderMembers();
+
+  renderActivity();
+
 }
 
-/* SELECT ALL */
 
-document.getElementById("selectAll").addEventListener("change",event=>{
+/* =========================================================
+   RENDER MEMBERS
+========================================================= */
 
-  document.querySelectorAll(".member-check").forEach(box=>{
-    box.checked = event.target.checked;
-  });
-
-});
-
-/* SEARCH + FILTER */
-
-function filterMembers(){
+function renderMembers(){
 
   const query =
-    document.getElementById("search").value.toLowerCase().trim();
+    document.getElementById("search")
+      .value
+      .toLowerCase()
+      .trim();
 
   const membership =
     document.getElementById("membership").value;
@@ -1969,266 +2568,1529 @@ function filterMembers(){
   const role =
     document.getElementById("role").value;
 
-  rows.forEach(row=>{
+  const sort =
+    document.getElementById("sort").value;
 
-    const matchesQuery =
-      !query ||
-      row.dataset.name.includes(query) ||
-      row.dataset.email.includes(query);
+  let result =
+    [...state.members];
 
-    const matchesMembership =
-      !membership ||
-      row.dataset.membership === membership;
+  result =
+    result.filter(member=>{
 
-    const matchesStatus =
-      !status ||
-      row.dataset.status === status;
+      const name =
+        `${member.first_name || ""} ${member.last_name || ""}`
+          .toLowerCase();
 
-    const matchesRole =
-      !role ||
-      row.dataset.role === role;
+      const email =
+        String(member.email || "")
+          .toLowerCase();
 
-    row.style.display =
-      matchesQuery &&
-      matchesMembership &&
-      matchesStatus &&
-      matchesRole
-        ? ""
-        : "none";
-  });
-}
+      const username =
+        String(member.username || "")
+          .toLowerCase();
 
-document.getElementById("search")
-  .addEventListener("input",filterMembers);
+      const matchesQuery =
+        !query ||
+        name.includes(query) ||
+        email.includes(query) ||
+        username.includes(query);
 
-document.getElementById("membership")
-  .addEventListener("change",filterMembers);
+      const matchesMembership =
+        !membership ||
+        member.membership_type === membership;
 
-document.getElementById("status")
-  .addEventListener("change",filterMembers);
+      const matchesStatus =
+        !status ||
+        member.status === status;
 
-document.getElementById("role")
-  .addEventListener("change",filterMembers);
+      const matchesRole =
+        !role ||
+        member.role === role;
 
-/* TABS */
+      let matchesTab = true;
 
-document.querySelectorAll(".tab").forEach(tab=>{
-
-  tab.addEventListener("click",()=>{
-
-    document.querySelectorAll(".tab")
-      .forEach(t=>t.classList.remove("active"));
-
-    tab.classList.add("active");
-
-    const type = tab.dataset.tab;
-
-    rows.forEach(row=>{
-
-      let visible = true;
-
-      if(type === "active"){
-        visible = row.dataset.status === "Active";
+      if(state.activeTab === "active"){
+        matchesTab =
+          member.status === "Active";
       }
 
-      if(type === "premium"){
-        visible =
-          row.dataset.membership === "Premium" ||
-          row.dataset.membership === "Pro";
+      if(state.activeTab === "premium"){
+        matchesTab =
+          [
+            "Pro",
+            "Premium"
+          ].includes(member.membership_type);
       }
 
-      if(type === "pending"){
-        visible = row.dataset.status === "Pending";
+      if(state.activeTab === "pending"){
+        matchesTab =
+          member.status === "Pending";
       }
 
-      if(type === "suspended"){
-        visible = row.dataset.status === "Suspended";
+      if(state.activeTab === "suspended"){
+        matchesTab =
+          member.status === "Suspended";
       }
 
-      if(type === "creators"){
-        visible = row.dataset.role === "Creator";
+      if(state.activeTab === "creators"){
+        matchesTab =
+          member.role === "Creator" ||
+          member.membership_type === "Creator";
       }
 
-      row.style.display = visible ? "" : "none";
+      return (
+        matchesQuery &&
+        matchesMembership &&
+        matchesStatus &&
+        matchesRole &&
+        matchesTab
+      );
+
     });
 
+  result.sort((a,b)=>{
+
+    if(sort === "name"){
+
+      return `${a.first_name} ${a.last_name}`
+        .localeCompare(
+          `${b.first_name} ${b.last_name}`
+        );
+
+    }
+
+    if(sort === "oldest"){
+
+      return new Date(a.created_at) -
+        new Date(b.created_at);
+
+    }
+
+    if(sort === "activity"){
+
+      return new Date(b.last_active_at || 0) -
+        new Date(a.last_active_at || 0);
+
+    }
+
+    if(sort === "watch"){
+
+      return Number(b.watch_minutes || 0) -
+        Number(a.watch_minutes || 0);
+
+    }
+
+    if(sort === "points"){
+
+      return Number(b.points || 0) -
+        Number(a.points || 0);
+
+    }
+
+    return new Date(b.created_at || 0) -
+      new Date(a.created_at || 0);
+
   });
+
+  state.filteredMembers =
+    result;
+
+  if(!result.length){
+
+    memberRows.innerHTML = `
+      <tr>
+        <td colspan="10">
+          <div class="empty-state">
+            <strong>No Members Found</strong>
+            Try changing your filters or create a new member.
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+  memberRows.innerHTML =
+    result.map(member=>{
+
+      const name =
+        `${member.first_name || ""} ${member.last_name || ""}`
+          .trim() ||
+        "Unnamed Member";
+
+      const avatar =
+        member.avatar_url
+          ? `
+            <img
+              src="${escapeHtml(member.avatar_url)}"
+              alt="${escapeHtml(name)}">
+          `
+          : escapeHtml(initials(member));
+
+      const membership =
+        member.membership_type || "Free";
+
+      const status =
+        member.status || "Active";
+
+      const role =
+        member.role || "Member";
+
+      const email =
+        member.email || "No email";
+
+      const username =
+        member.username
+          ? `@${member.username.replace(/^@/,"")}`
+          : "";
+
+      return `
+        <tr data-id="${escapeHtml(member.id)}">
+
+          <td>
+            <input
+              type="checkbox"
+              class="check member-check"
+              value="${escapeHtml(member.id)}">
+          </td>
+
+          <td>
+
+            <div class="member">
+
+              <div class="member-avatar">
+                ${avatar}
+              </div>
+
+              <div>
+
+                <div class="member-name">
+                  ${escapeHtml(name)}
+                </div>
+
+                <div class="member-email">
+                  ${escapeHtml(email)}
+                </div>
+
+                ${
+                  username
+                    ? `
+                      <div class="member-username">
+                        ${escapeHtml(username)}
+                      </div>
+                    `
+                    : ""
+                }
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <td>
+            <span class="badge ${membership.toLowerCase()}">
+              ${escapeHtml(membership)}
+            </span>
+          </td>
+
+          <td>
+            <span class="role">
+              ${escapeHtml(role)}
+            </span>
+          </td>
+
+          <td>
+            <span class="badge ${status.toLowerCase()}">
+              ${escapeHtml(status)}
+            </span>
+          </td>
+
+          <td>
+            ${escapeHtml(watchHours(member))}
+          </td>
+
+          <td>
+            ${number(member.points)}
+          </td>
+
+          <td class="muted">
+            ${escapeHtml(
+              relativeTime(member.last_active_at)
+            )}
+          </td>
+
+          <td class="muted">
+            ${escapeHtml(
+              formatDate(member.created_at)
+            )}
+          </td>
+
+          <td>
+
+            <div class="actions">
+
+              <button
+                class="icon-btn"
+                type="button"
+                title="View"
+                onclick="viewMember('${escapeHtml(member.id)}')">
+                ◉
+              </button>
+
+              <button
+                class="icon-btn"
+                type="button"
+                title="Edit"
+                onclick="editMember('${escapeHtml(member.id)}')">
+                ✎
+              </button>
+
+              <button
+                class="icon-btn"
+                type="button"
+                title="Delete"
+                onclick="deleteMember('${escapeHtml(member.id)}')">
+                ×
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+      `;
+
+    }).join("");
+
+  updateSelectAll();
+
+}
+
+
+/* =========================================================
+   UPDATE STATS
+========================================================= */
+
+function updateStats(){
+
+  const members =
+    state.members;
+
+  const total =
+    members.length;
+
+  const active =
+    members.filter(
+      m=>m.status === "Active"
+    ).length;
+
+  const pending =
+    members.filter(
+      m=>m.status === "Pending"
+    ).length;
+
+  const suspended =
+    members.filter(
+      m=>m.status === "Suspended"
+    ).length;
+
+  const premium =
+    members.filter(
+      m=>[
+        "Pro",
+        "Premium",
+        "Creator"
+      ].includes(m.membership_type)
+    ).length;
+
+  const now =
+    new Date();
+
+  const monthStart =
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1
+    );
+
+  const newThisMonth =
+    members.filter(member=>{
+      if(!member.created_at){
+        return false;
+      }
+
+      return new Date(member.created_at) >=
+        monthStart;
+    }).length;
+
+  document.getElementById("totalMembers")
+    .textContent = number(total);
+
+  document.getElementById("activeMembers")
+    .textContent = number(active);
+
+  document.getElementById("newMembers")
+    .textContent = number(newThisMonth);
+
+  document.getElementById("premiumMembers")
+    .textContent = number(premium);
+
+  document.getElementById("pendingMembers")
+    .textContent = number(pending);
+
+  document.getElementById("suspendedMembers")
+    .textContent = number(suspended);
+
+}
+
+
+/* =========================================================
+   MEMBERSHIP BREAKDOWN
+========================================================= */
+
+function updateBreakdown(){
+
+  const total =
+    state.members.length;
+
+  const types = {
+    Free:0,
+    Pro:0,
+    Premium:0,
+    Creator:0
+  };
+
+  state.members.forEach(member=>{
+
+    const type =
+      member.membership_type;
+
+    if(types[type] !== undefined){
+      types[type]++;
+    }
+
+  });
+
+  Object.keys(types).forEach(type=>{
+
+    const percentage =
+      total
+        ? Math.round(
+            (types[type] / total) * 100
+          )
+        : 0;
+
+    const key =
+      type.toLowerCase();
+
+    const percentElement =
+      document.getElementById(
+        key + "Percent"
+      );
+
+    const barElement =
+      document.getElementById(
+        key + "Bar"
+      );
+
+    if(percentElement){
+      percentElement.textContent =
+        percentage + "%";
+    }
+
+    if(barElement){
+      barElement.style.width =
+        percentage + "%";
+    }
+
+  });
+
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+function renderActivity(){
+
+  const list =
+    document.getElementById("activityList");
+
+  const recent =
+    [...state.members]
+      .sort((a,b)=>
+        new Date(
+          b.created_at || 0
+        ) -
+        new Date(
+          a.created_at || 0
+        )
+      )
+      .slice(0,5);
+
+  if(!recent.length){
+
+    list.innerHTML = `
+      <div class="activity">
+        <div class="activity-dot">◌</div>
+        <div class="activity-text">
+          <strong>No activity yet</strong>
+          Create or import members to begin.
+          <div class="activity-time">
+            System
+          </div>
+        </div>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  list.innerHTML =
+    recent.map(member=>{
+
+      const name =
+        `${member.first_name || ""} ${member.last_name || ""}`
+          .trim() ||
+        "Unnamed Member";
+
+      return `
+        <div class="activity">
+
+          <div class="activity-dot">
+            +
+          </div>
+
+          <div class="activity-text">
+
+            <strong>
+              ${escapeHtml(name)}
+            </strong>
+
+            joined the CrowRules member directory.
+
+            <div class="activity-time">
+              ${escapeHtml(
+                relativeTime(member.created_at)
+              )}
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   OPEN MODAL
+========================================================= */
+
+function openMemberModal(){
+
+  state.editingId = null;
+
+  document.getElementById("modalTitle")
+    .textContent = "Add Member";
+
+  memberForm.reset();
+
+  document.getElementById("points")
+    .value = "0";
+
+  document.getElementById("watchMinutes")
+    .value = "0";
+
+  document.getElementById("memberType")
+    .value = "Free";
+
+  document.getElementById("memberRole")
+    .value = "Member";
+
+  document.getElementById("memberStatus")
+    .value = "Active";
+
+  modal.classList.add("show");
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeMemberModal(){
+
+  modal.classList.remove("show");
+
+  state.editingId = null;
+
+}
+
+
+/* =========================================================
+   EDIT MEMBER
+========================================================= */
+
+function editMember(id){
+
+  const member =
+    state.members.find(
+      item=>item.id === id
+    );
+
+  if(!member){
+
+    showToast(
+      "Member record not found.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  state.editingId =
+    member.id;
+
+  document.getElementById("modalTitle")
+    .textContent = "Edit Member";
+
+  document.getElementById("firstName")
+    .value = member.first_name || "";
+
+  document.getElementById("lastName")
+    .value = member.last_name || "";
+
+  document.getElementById("username")
+    .value = member.username || "";
+
+  document.getElementById("email")
+    .value = member.email || "";
+
+  document.getElementById("memberType")
+    .value =
+      member.membership_type || "Free";
+
+  document.getElementById("memberRole")
+    .value =
+      member.role || "Member";
+
+  document.getElementById("memberStatus")
+    .value =
+      member.status || "Active";
+
+  document.getElementById("points")
+    .value =
+      Number(member.points || 0);
+
+  document.getElementById("watchMinutes")
+    .value =
+      Number(member.watch_minutes || 0);
+
+  document.getElementById("avatarUrl")
+    .value =
+      member.avatar_url || "";
+
+  document.getElementById("bio")
+    .value =
+      member.bio || "";
+
+  modal.classList.add("show");
+
+}
+
+
+/* =========================================================
+   SAVE MEMBER
+========================================================= */
+
+memberForm.addEventListener(
+  "submit",
+  async event=>{
+
+    event.preventDefault();
+
+    if(!supabase || !state.user){
+
+      showToast(
+        "Your session is not available.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    const saveButton =
+      document.getElementById(
+        "saveMemberBtn"
+      );
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+
+    const payload = {
+
+      first_name:
+        document.getElementById("firstName")
+          .value
+          .trim(),
+
+      last_name:
+        document.getElementById("lastName")
+          .value
+          .trim(),
+
+      username:
+        document.getElementById("username")
+          .value
+          .trim()
+          .replace(/^@/,"") || null,
+
+      email:
+        document.getElementById("email")
+          .value
+          .trim(),
+
+      membership_type:
+        document.getElementById("memberType")
+          .value,
+
+      role:
+        document.getElementById("memberRole")
+          .value,
+
+      status:
+        document.getElementById("memberStatus")
+          .value,
+
+      points:
+        Math.max(
+          0,
+          Number(
+            document.getElementById("points")
+              .value || 0
+          )
+        ),
+
+      watch_minutes:
+        Math.max(
+          0,
+          Number(
+            document.getElementById("watchMinutes")
+              .value || 0
+          )
+        ),
+
+      avatar_url:
+        document.getElementById("avatarUrl")
+          .value
+          .trim() || null,
+
+      bio:
+        document.getElementById("bio")
+          .value
+          .trim() || null
+
+    };
+
+    if(
+      !payload.first_name ||
+      !payload.last_name ||
+      !payload.email
+    ){
+
+      showToast(
+        "First name, last name and email are required.",
+        "error"
+      );
+
+      saveButton.disabled = false;
+      saveButton.textContent = "Save Member";
+
+      return;
+
+    }
+
+    let result;
+
+    if(state.editingId){
+
+      result =
+        await supabase
+          .from("members")
+          .update(payload)
+          .eq(
+            "id",
+            state.editingId
+          )
+          .select()
+          .single();
+
+    }else{
+
+      payload.user_id = null;
+
+      result =
+        await supabase
+          .from("members")
+          .insert(payload)
+          .select()
+          .single();
+
+    }
+
+    saveButton.disabled = false;
+    saveButton.textContent =
+      "Save Member";
+
+    if(result.error){
+
+      console.error(
+        "Member save error:",
+        result.error
+      );
+
+      let message =
+        result.error.message;
+
+      if(
+        message
+          .toLowerCase()
+          .includes("duplicate")
+      ){
+
+        message =
+          "Username or another unique value already exists.";
+
+      }
+
+      showToast(
+        "Save failed: " + message,
+        "error"
+      );
+
+      return;
+
+    }
+
+    closeMemberModal();
+
+    showToast(
+      state.editingId
+        ? "Member updated successfully."
+        : "Member created successfully."
+    );
+
+    await loadMembers();
+
+  }
+);
+
+
+/* =========================================================
+   VIEW MEMBER
+========================================================= */
+
+function viewMember(id){
+
+  const member =
+    state.members.find(
+      item=>item.id === id
+    );
+
+  if(!member){
+    showToast(
+      "Member not found.",
+      "error"
+    );
+    return;
+  }
+
+  const name =
+    `${member.first_name || ""} ${member.last_name || ""}`
+      .trim();
+
+  showToast(
+    `${name || "Member"} — ${member.email || "No email"}`
+  );
+
+}
+
+
+/* =========================================================
+   DELETE MEMBER
+========================================================= */
+
+function deleteMember(id){
+
+  const member =
+    state.members.find(
+      item=>item.id === id
+    );
+
+  if(!member){
+    return;
+  }
+
+  const name =
+    `${member.first_name || ""} ${member.last_name || ""}`
+      .trim() ||
+    "this member";
+
+  openConfirm(
+    "Delete Member",
+    `Delete <strong>${escapeHtml(name)}</strong> from the member directory? This removes the public.members record but does not delete the Supabase Auth account.`,
+    async()=>{
+      await performDeleteMember(id);
+    }
+  );
+
+}
+
+
+/* =========================================================
+   PERFORM DELETE
+========================================================= */
+
+async function performDeleteMember(id){
+
+  const {
+    error
+  } =
+    await supabase
+      .from("members")
+      .delete()
+      .eq("id",id);
+
+  if(error){
+
+    console.error(
+      "Delete member error:",
+      error
+    );
+
+    showToast(
+      "Delete failed: " +
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+  closeConfirm();
+
+  showToast(
+    "Member deleted successfully."
+  );
+
+  await loadMembers();
+
+}
+
+
+/* =========================================================
+   CONFIRM
+========================================================= */
+
+function openConfirm(
+  title,
+  message,
+  action
+){
+
+  document.getElementById("confirmTitle")
+    .textContent = title;
+
+  document.getElementById("confirmMessage")
+    .innerHTML = message;
+
+  state.confirmAction =
+    action;
+
+  confirmModal.classList.add("show");
+
+}
+
+function closeConfirm(){
+
+  confirmModal.classList.remove("show");
+
+  state.confirmAction =
+    null;
+
+}
+
+document.getElementById(
+  "confirmActionBtn"
+).addEventListener(
+  "click",
+  async()=>{
+
+    if(
+      typeof state.confirmAction ===
+      "function"
+    ){
+
+      const action =
+        state.confirmAction;
+
+      state.confirmAction =
+        null;
+
+      await action();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   BULK ACTIONS
+========================================================= */
+
+function bulkAction(){
+
+  const selected =
+    [...document.querySelectorAll(
+      ".member-check:checked"
+    )]
+      .map(input=>input.value);
+
+  if(!selected.length){
+
+    showToast(
+      "Select at least one member first.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  openConfirm(
+    "Bulk Suspend",
+    `Suspend <strong>${selected.length}</strong> selected member(s)?`,
+    async()=>{
+
+      const {
+        error
+      } =
+        await supabase
+          .from("members")
+          .update({
+            status:"Suspended"
+          })
+          .in("id",selected);
+
+      if(error){
+
+        showToast(
+          "Bulk update failed: " +
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+      closeConfirm();
+
+      showToast(
+        `${selected.length} member(s) suspended.`
+      );
+
+      await loadMembers();
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SELECT ALL
+========================================================= */
+
+document.getElementById(
+  "selectAll"
+).addEventListener(
+  "change",
+  event=>{
+
+    document.querySelectorAll(
+      ".member-check"
+    ).forEach(box=>{
+
+      box.checked =
+        event.target.checked;
+
+    });
+
+  }
+);
+
+
+function updateSelectAll(){
+
+  const boxes =
+    [
+      ...document.querySelectorAll(
+        ".member-check"
+      )
+    ];
+
+  const selected =
+    boxes.filter(
+      box=>box.checked
+    ).length;
+
+  const selectAll =
+    document.getElementById(
+      "selectAll"
+    );
+
+  selectAll.checked =
+    boxes.length > 0 &&
+    selected === boxes.length;
+
+  selectAll.indeterminate =
+    selected > 0 &&
+    selected < boxes.length;
+
+}
+
+
+/* =========================================================
+   FILTER EVENTS
+========================================================= */
+
+document.getElementById(
+  "search"
+).addEventListener(
+  "input",
+  renderMembers
+);
+
+document.getElementById(
+  "membership"
+).addEventListener(
+  "change",
+  renderMembers
+);
+
+document.getElementById(
+  "status"
+).addEventListener(
+  "change",
+  renderMembers
+);
+
+document.getElementById(
+  "role"
+).addEventListener(
+  "change",
+  renderMembers
+);
+
+document.getElementById(
+  "sort"
+).addEventListener(
+  "change",
+  renderMembers
+);
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+document.querySelectorAll(
+  ".tab"
+).forEach(tab=>{
+
+  tab.addEventListener(
+    "click",
+    ()=>{
+
+      document.querySelectorAll(
+        ".tab"
+      ).forEach(item=>{
+        item.classList.remove(
+          "active"
+        );
+      });
+
+      tab.classList.add("active");
+
+      state.activeTab =
+        tab.dataset.tab ||
+        "all";
+
+      renderMembers();
+
+    }
+  );
 
 });
 
-/* RESET */
+
+/* =========================================================
+   RESET FILTERS
+========================================================= */
 
 function resetFilters(){
 
-  document.getElementById("search").value = "";
-  document.getElementById("membership").value = "";
-  document.getElementById("status").value = "";
-  document.getElementById("role").value = "";
-  document.getElementById("sort").value = "newest";
+  document.getElementById(
+    "search"
+  ).value = "";
 
-  document.querySelectorAll(".tab")
-    .forEach(t=>t.classList.remove("active"));
+  document.getElementById(
+    "membership"
+  ).value = "";
 
-  document.querySelector('[data-tab="all"]')
-    .classList.add("active");
+  document.getElementById(
+    "status"
+  ).value = "";
 
-  rows.forEach(row=>{
-    row.style.display = "";
+  document.getElementById(
+    "role"
+  ).value = "";
+
+  document.getElementById(
+    "sort"
+  ).value = "newest";
+
+  state.activeTab =
+    "all";
+
+  document.querySelectorAll(
+    ".tab"
+  ).forEach(tab=>{
+    tab.classList.remove(
+      "active"
+    );
   });
 
-  showToast("Filters reset.");
+  document.querySelector(
+    '[data-tab="all"]'
+  ).classList.add(
+    "active"
+  );
+
+  renderMembers();
+
+  showToast(
+    "Filters reset."
+  );
+
 }
 
-/* REFRESH */
 
-function refreshMembers(){
+/* =========================================================
+   REFRESH
+========================================================= */
 
-  showToast("Refreshing member directory...");
+async function refreshMembers(){
 
-  setTimeout(()=>{
-    showToast("Member directory refreshed.");
-  },900);
+  showToast(
+    "Refreshing member directory..."
+  );
+
+  await loadMembers();
+
+  showToast(
+    "Member directory refreshed."
+  );
+
 }
 
-/* EXPORT */
+
+/* =========================================================
+   CSV EXPORT
+========================================================= */
 
 function exportMembers(){
+
+  const data =
+    state.filteredMembers.length
+      ? state.filteredMembers
+      : state.members;
+
+  if(!data.length){
+
+    showToast(
+      "There are no members to export.",
+      "error"
+    );
+
+    return;
+
+  }
 
   const headers = [
     "Name",
     "Email",
+    "Username",
     "Membership",
     "Role",
     "Status",
-    "Watch Hours"
+    "Watch Minutes",
+    "Watch Hours",
+    "Points",
+    "Last Active",
+    "Joined"
   ];
 
-  const data = rows.map(row=>{
+  const rows = data.map(member=>{
 
-    const cells = row.querySelectorAll("td");
+    const name =
+      `${member.first_name || ""} ${member.last_name || ""}`
+        .trim();
 
     return [
-      row.dataset.name,
-      row.dataset.email,
-      row.dataset.membership,
-      row.dataset.role,
-      row.dataset.status,
-      cells[5]?.innerText || ""
+      name,
+      member.email || "",
+      member.username || "",
+      member.membership_type || "",
+      member.role || "",
+      member.status || "",
+      member.watch_minutes || 0,
+      watchHours(member),
+      member.points || 0,
+      member.last_active_at || "",
+      member.created_at || ""
     ];
+
   });
 
   const csv = [
     headers,
-    ...data
-  ].map(row =>
-    row.map(value =>
-      `"${String(value).replaceAll('"','""')}"`
-    ).join(",")
-  ).join("\n");
+    ...rows
+  ]
+    .map(row=>
+      row.map(value=>
+        `"${String(value ?? "")
+          .replaceAll('"','""')}"`
+      ).join(",")
+    )
+    .join("\n");
 
   const blob =
-    new Blob([csv],{type:"text/csv;charset=utf-8;"});
+    new Blob(
+      [csv],
+      {
+        type:"text/csv;charset=utf-8;"
+      }
+    );
 
-  const url = URL.createObjectURL(blob);
+  const url =
+    URL.createObjectURL(blob);
 
-  const link = document.createElement("a");
+  const link =
+    document.createElement("a");
 
   link.href = url;
-  link.download = "crowrules-members.csv";
+
+  link.download =
+    "crowrules-members-" +
+    new Date()
+      .toISOString()
+      .slice(0,10) +
+    ".csv";
 
   document.body.appendChild(link);
+
   link.click();
+
   link.remove();
 
   URL.revokeObjectURL(url);
 
-  showToast("Member CSV exported.");
+  showToast(
+    "Member CSV exported."
+  );
+
 }
 
-/* ESCAPE */
 
-document.addEventListener("keydown",event=>{
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-  if(event.key === "Escape"){
-    closeMemberModal();
+document.getElementById(
+  "mobileMenu"
+).addEventListener(
+  "click",
+  ()=>{
+    document.getElementById(
+      "sidebar"
+    ).classList.toggle(
+      "open"
+    );
   }
+);
+
+
+/* =========================================================
+   CLOSE MOBILE MENU AFTER NAV
+========================================================= */
+
+document.querySelectorAll(
+  ".nav a"
+).forEach(link=>{
+
+  link.addEventListener(
+    "click",
+    ()=>{
+      document.getElementById(
+        "sidebar"
+      ).classList.remove(
+        "open"
+      );
+    }
+  );
 
 });
 
-/* BACKDROP */
 
-modal.addEventListener("click",event=>{
+/* =========================================================
+   MODAL BACKDROPS
+========================================================= */
 
-  if(event.target === modal){
+modal.addEventListener(
+  "click",
+  event=>{
+    if(event.target === modal){
+      closeMemberModal();
+    }
+  }
+);
+
+confirmModal.addEventListener(
+  "click",
+  event=>{
+    if(event.target === confirmModal){
+      closeConfirm();
+    }
+  }
+);
+
+
+/* =========================================================
+   ESC KEY
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(event.key !== "Escape"){
+      return;
+    }
+
     closeMemberModal();
+    closeConfirm();
+
+  }
+);
+
+
+/* =========================================================
+   SIGN OUT
+========================================================= */
+
+document.getElementById(
+  "logoutBtn"
+).addEventListener(
+  "click",
+  async()=>{
+
+    if(!supabase){
+      return;
+    }
+
+    const {
+      error
+    } =
+      await supabase.auth.signOut();
+
+    if(error){
+
+      showToast(
+        "Sign out failed: " +
+        error.message,
+        "error"
+      );
+
+      return;
+
+    }
+
+    window.location.href =
+      "login.html";
+
+  }
+);
+
+
+/* =========================================================
+   AUTH STATE LISTENER
+========================================================= */
+
+if(supabase){
+
+  supabase.auth.onAuthStateChange(
+    (event,session)=>{
+
+      if(
+        event === "SIGNED_OUT" ||
+        !session?.user
+      ){
+
+        window.location.href =
+          "login.html?redirect=" +
+          encodeURIComponent(
+            "members.html"
+          );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+(async function init(){
+
+  const allowed =
+    await requireAdmin();
+
+  if(!allowed){
+    return;
   }
 
-});
+  await loadMembers();
 
-/*
-==========================================
-SUPABASE PRODUCTION CONNECTION
-==========================================
-
-Recommended architecture:
-
-Supabase Auth
-    ↓
-profiles / members
-    ↓
-membership records
-    ↓
-watch history
-    ↓
-points / badges
-    ↓
-community activity
-
-Recommended tables:
-
-profiles
-memberships
-member_roles
-member_points
-member_badges
-watch_history
-member_favorites
-member_notifications
-member_activity
-
-Example profiles fields:
-
-id
-username
-display_name
-first_name
-last_name
-avatar_url
-bio
-role
-status
-membership_type
-points
-watch_hours
-created_at
-updated_at
-
-Important:
-
-Do NOT place a Supabase service-role key in this browser page.
-
-Use the publishable/anon key with Row Level Security enabled.
-Administrative operations should use protected server-side
-logic or Supabase Edge Functions.
-
-Example future query:
-
-const { data, error } = await supabase
-  .from("profiles")
-  .select("*")
-  .order("created_at", { ascending:false });
-
-*/
+})();
 
 </script>
 
