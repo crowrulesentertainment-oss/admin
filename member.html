@@ -12,6 +12,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root{
   --bg:#050505;
@@ -78,15 +80,19 @@ a{
   text-decoration:none;
 }
 
-/* =========================
+.hidden{
+  display:none!important;
+}
+
+/* =========================================================
    SIDEBAR
-========================= */
+========================================================= */
 
 .sidebar{
   position:fixed;
   inset:0 auto 0 0;
   width:255px;
-  background:rgba(7,7,10,.97);
+  background:rgba(7,7,10,.98);
   border-right:1px solid var(--line);
   z-index:100;
   overflow-y:auto;
@@ -167,7 +173,11 @@ a{
 .nav a.active{
   color:#fff;
   background:
-    linear-gradient(90deg,rgba(182,108,255,.15),rgba(108,92,255,.06));
+    linear-gradient(
+      90deg,
+      rgba(182,108,255,.15),
+      rgba(108,92,255,.06)
+    );
   border-color:rgba(182,108,255,.28);
   box-shadow:inset 3px 0 var(--accent);
 }
@@ -182,9 +192,9 @@ a{
   color:var(--accent);
 }
 
-/* =========================
+/* =========================================================
    MAIN
-========================= */
+========================================================= */
 
 .main{
   margin-left:255px;
@@ -210,6 +220,7 @@ a{
   display:flex;
   align-items:center;
   gap:14px;
+  min-width:0;
 }
 
 .mobile-menu{
@@ -225,6 +236,9 @@ a{
 .breadcrumb{
   color:var(--muted);
   font-size:11px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .breadcrumb strong{
@@ -277,9 +291,9 @@ a{
   margin-top:3px;
 }
 
-/* =========================
+/* =========================================================
    CONTENT
-========================= */
+========================================================= */
 
 .content{
   max-width:1700px;
@@ -300,6 +314,68 @@ a{
   color:#fff;
 }
 
+/* =========================================================
+   LOADING / ERROR
+========================================================= */
+
+.page-state{
+  min-height:55vh;
+  display:grid;
+  place-items:center;
+}
+
+.state-card{
+  width:min(560px,100%);
+  padding:35px;
+  text-align:center;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.loader{
+  width:40px;
+  height:40px;
+  margin:0 auto 18px;
+  border:3px solid #22222a;
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.state-title{
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.state-text{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+}
+
+.error-code{
+  margin-top:15px;
+  padding:12px;
+  background:#08080b;
+  border:1px solid rgba(255,82,109,.2);
+  border-radius:8px;
+  color:#ff788a;
+  font-size:9px;
+  word-break:break-word;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
 .member-hero{
   display:grid;
   grid-template-columns:auto 1fr auto;
@@ -307,7 +383,11 @@ a{
   align-items:center;
   padding:22px;
   background:
-    linear-gradient(145deg,rgba(182,108,255,.08),rgba(13,13,17,.96) 42%);
+    linear-gradient(
+      145deg,
+      rgba(182,108,255,.08),
+      rgba(13,13,17,.96) 42%
+    );
   border:1px solid var(--line);
   border-radius:14px;
   margin-bottom:18px;
@@ -327,6 +407,13 @@ a{
   font-size:25px;
   font-weight:800;
   box-shadow:0 0 40px rgba(182,108,255,.10);
+  overflow:hidden;
+}
+
+.profile-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
 .hero-label{
@@ -388,12 +475,34 @@ a{
   background:var(--green);
 }
 
-.badge.premium{
+.badge.pending{
+  color:var(--yellow);
+  border-color:rgba(243,201,105,.2);
+}
+
+.badge.pending:before{
+  background:var(--yellow);
+}
+
+.badge.suspended,
+.badge.disabled{
+  color:var(--red);
+  border-color:rgba(255,82,109,.2);
+}
+
+.badge.suspended:before,
+.badge.disabled:before{
+  background:var(--red);
+}
+
+.badge.premium,
+.badge.owner{
   color:var(--accent);
   border-color:rgba(182,108,255,.25);
 }
 
-.badge.premium:before{
+.badge.premium:before,
+.badge.owner:before{
   background:var(--accent);
 }
 
@@ -412,6 +521,10 @@ a{
   gap:8px;
   flex-wrap:wrap;
 }
+
+/* =========================================================
+   BUTTONS
+========================================================= */
 
 .btn{
   border:1px solid var(--line2);
@@ -441,9 +554,19 @@ a{
   border-color:rgba(255,82,109,.25);
 }
 
-/* =========================
+.btn.success{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+}
+
+.btn.small{
+  padding:8px 11px;
+  font-size:9px;
+}
+
+/* =========================================================
    GRID
-========================= */
+========================================================= */
 
 .layout{
   display:grid;
@@ -457,7 +580,12 @@ a{
 }
 
 .panel{
-  background:linear-gradient(145deg,rgba(17,17,23,.96),rgba(10,10,13,.96));
+  background:
+    linear-gradient(
+      145deg,
+      rgba(17,17,23,.96),
+      rgba(10,10,13,.96)
+    );
   border:1px solid var(--line);
   border-radius:12px;
   overflow:hidden;
@@ -487,9 +615,9 @@ a{
   padding:19px;
 }
 
-/* =========================
-   PROFILE INFO
-========================= */
+/* =========================================================
+   INFO
+========================================================= */
 
 .info-grid{
   display:grid;
@@ -502,6 +630,7 @@ a{
   border:1px solid var(--line);
   border-radius:9px;
   padding:14px;
+  min-width:0;
 }
 
 .info-label{
@@ -517,15 +646,16 @@ a{
   font-size:11px;
   font-weight:700;
   margin-top:6px;
+  word-break:break-word;
 }
 
 .info-value.accent{
   color:var(--accent);
 }
 
-/* =========================
+/* =========================================================
    STATS
-========================= */
+========================================================= */
 
 .stat-grid{
   display:grid;
@@ -560,9 +690,9 @@ a{
   margin-top:5px;
 }
 
-/* =========================
+/* =========================================================
    ACTIVITY
-========================= */
+========================================================= */
 
 .activity-list{
   padding:4px 19px 12px;
@@ -607,50 +737,9 @@ a{
   margin-top:2px;
 }
 
-/* =========================
-   WATCH HISTORY
-========================= */
-
-.history{
-  overflow-x:auto;
-}
-
-.history table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:650px;
-}
-
-.history th{
-  text-align:left;
-  color:#666672;
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  padding:11px 15px;
-  border-bottom:1px solid var(--line);
-}
-
-.history td{
-  padding:12px 15px;
-  border-bottom:1px solid rgba(39,39,47,.6);
-  font-size:9px;
-}
-
-.content-name{
-  color:#fff;
-  font-weight:700;
-}
-
-.content-type{
-  color:var(--accent);
-  font-size:8px;
-  margin-top:3px;
-}
-
-/* =========================
+/* =========================================================
    SIDEBAR CARDS
-========================= */
+========================================================= */
 
 .side-section{
   padding:17px 18px;
@@ -686,10 +775,11 @@ a{
 
 .progress span{
   display:block;
-  width:68%;
+  width:0;
   height:100%;
   border-radius:8px;
   background:linear-gradient(90deg,var(--accent2),var(--accent));
+  transition:width .4s ease;
 }
 
 .quick-list{
@@ -708,6 +798,11 @@ a{
   border-radius:7px;
   color:#aaa;
   font-size:9px;
+  text-align:left;
+}
+
+button.quick{
+  color:#aaa;
 }
 
 .quick:hover{
@@ -719,9 +814,9 @@ a{
   color:#fff;
 }
 
-/* =========================
-   EDIT FORM
-========================= */
+/* =========================================================
+   FORM
+========================================================= */
 
 .form-grid{
   display:grid;
@@ -765,7 +860,7 @@ a{
 }
 
 textarea.input{
-  min-height:95px;
+  min-height:100px;
   resize:vertical;
 }
 
@@ -776,9 +871,20 @@ textarea.input{
   margin-top:15px;
 }
 
-/* =========================
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty{
+  padding:30px 20px;
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* =========================================================
    MODAL
-========================= */
+========================================================= */
 
 .modal-backdrop{
   position:fixed;
@@ -840,14 +946,15 @@ textarea.input{
   border-top:1px solid var(--line);
 }
 
-/* =========================
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
 .toast{
   position:fixed;
   right:24px;
   bottom:24px;
+  max-width:min(420px,calc(100vw - 48px));
   padding:12px 15px;
   background:#15151b;
   border:1px solid var(--line2);
@@ -868,9 +975,17 @@ textarea.input{
   opacity:1;
 }
 
-/* =========================
+.toast.error{
+  border-left-color:var(--red);
+}
+
+.toast.success{
+  border-left-color:var(--green);
+}
+
+/* =========================================================
    RESPONSIVE
-========================= */
+========================================================= */
 
 @media(max-width:1200px){
 
@@ -949,17 +1064,25 @@ textarea.input{
   .form-group.full{
     grid-column:auto;
   }
+
+  .hero-actions{
+    display:grid;
+    grid-template-columns:1fr;
+    width:100%;
+  }
+
+  .hero-actions .btn{
+    width:100%;
+  }
+
+  .content{
+    padding:18px 12px;
+  }
 }
 </style>
 </head>
 
 <body>
-
-<div class="app">
-
-<!-- =========================
-     SIDEBAR
-========================= -->
 
 <aside class="sidebar" id="sidebar">
 
@@ -980,14 +1103,14 @@ textarea.input{
     <a href="pages.html"><span class="nav-icon">▤</span> Pages</a>
     <a href="categories.html"><span class="nav-icon">◫</span> Categories</a>
     <a href="tags.html"><span class="nav-icon">#</span> Tags</a>
+
+    <div class="nav-label">Broadcast</div>
+
     <a href="shows.html"><span class="nav-icon">▶</span> Shows</a>
     <a href="episodes.html"><span class="nav-icon">▹</span> Episodes</a>
     <a href="movies.html"><span class="nav-icon">▣</span> Movies</a>
     <a href="audio.html"><span class="nav-icon">♫</span> Audio</a>
     <a href="articles.html"><span class="nav-icon">✎</span> Articles</a>
-
-    <div class="nav-label">Broadcast</div>
-
     <a href="channels.html"><span class="nav-icon">◉</span> Channels</a>
     <a href="schedule.html"><span class="nav-icon">◷</span> Schedule</a>
     <a href="live.html"><span class="nav-icon">●</span> Live</a>
@@ -1008,12 +1131,14 @@ textarea.input{
     <a href="albums.html"><span class="nav-icon">▤</span> Albums</a>
     <a href="tracks.html"><span class="nav-icon">♪</span> Tracks</a>
     <a href="records.html"><span class="nav-icon">◉</span> Records</a>
+
     <a href="sports.html"><span class="nav-icon">⚑</span> Sports</a>
     <a href="teams.html"><span class="nav-icon">♜</span> Teams</a>
     <a href="rankings.html"><span class="nav-icon">↗</span> Rankings</a>
     <a href="standings.html"><span class="nav-icon">☷</span> Standings</a>
     <a href="games.html"><span class="nav-icon">⚽</span> Games</a>
     <a href="pickem.html"><span class="nav-icon">☑</span> Pick'em</a>
+
     <a href="memorials.html"><span class="nav-icon">✝</span> Memorials</a>
     <a href="memorial-photos.html"><span class="nav-icon">▧</span> Memorial Photos</a>
     <a href="awards.html"><span class="nav-icon">★</span> Awards</a>
@@ -1028,12 +1153,7 @@ textarea.input{
     <a href="settings.html"><span class="nav-icon">⚙</span> Settings</a>
 
   </nav>
-
 </aside>
-
-<!-- =========================
-     MAIN
-========================= -->
 
 <main class="main">
 
@@ -1041,11 +1161,16 @@ textarea.input{
 
   <div class="top-left">
 
-    <button class="mobile-menu" id="mobileMenu">☰</button>
+    <button
+      type="button"
+      class="mobile-menu"
+      id="mobileMenu"
+      aria-label="Open menu"
+    >☰</button>
 
     <div class="breadcrumb">
       CrowRules Entertainment / Members /
-      <strong id="breadcrumbName">Alex Rivers</strong>
+      <strong id="breadcrumbName">Loading…</strong>
     </div>
 
   </div>
@@ -1055,11 +1180,14 @@ textarea.input{
     <div class="clock" id="clock">--:--:--</div>
 
     <div class="admin-user">
-      <div class="admin-avatar">CR</div>
+
+      <div class="admin-avatar" id="adminAvatar">CR</div>
+
       <div>
-        <strong>Administrator</strong>
-        <span>System Admin</span>
+        <strong id="adminName">Administrator</strong>
+        <span id="adminRole">Checking access…</span>
       </div>
+
     </div>
 
   </div>
@@ -1072,40 +1200,98 @@ textarea.input{
   ← Back to Members
 </a>
 
-<!-- =========================
-     MEMBER HERO
-========================= -->
+<!-- LOADING -->
+
+<div id="loadingState" class="page-state">
+
+  <div class="state-card">
+
+    <div class="loader"></div>
+
+    <div class="state-title">
+      Loading Member
+    </div>
+
+    <div class="state-text">
+      Verifying administrator access and loading the member profile…
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ERROR -->
+
+<div id="errorState" class="page-state hidden">
+
+  <div class="state-card">
+
+    <div class="state-title">
+      Unable to Load Member
+    </div>
+
+    <div class="state-text" id="errorText">
+      An unexpected error occurred.
+    </div>
+
+    <div class="error-code" id="errorCode"></div>
+
+    <div style="margin-top:18px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
+
+      <button
+        type="button"
+        class="btn primary"
+        onclick="loadMember()"
+      >
+        Retry
+      </button>
+
+      <a href="members.html" class="btn">
+        Back to Members
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MEMBER CONTENT -->
+
+<div id="memberContent" class="hidden">
 
 <section class="member-hero">
 
   <div class="profile-avatar" id="avatar">
-    AR
+    --
   </div>
 
   <div>
 
-    <div class="hero-label">Member Profile</div>
+    <div class="hero-label">
+      Member Profile
+    </div>
 
     <h1 class="member-name" id="memberName">
-      Alex Rivers
+      Member
     </h1>
 
     <div class="username" id="username">
-      @alexrivers
+      —
     </div>
 
     <div class="hero-meta">
 
-      <span class="badge active" id="statusBadge">
-        Active
+      <span class="badge" id="statusBadge">
+        —
       </span>
 
-      <span class="badge premium" id="membershipBadge">
-        Pro Member
+      <span class="badge" id="membershipBadge">
+        —
       </span>
 
-      <span class="badge creator">
-        Community Member
+      <span class="badge" id="roleBadge">
+        —
       </span>
 
     </div>
@@ -1114,15 +1300,28 @@ textarea.input{
 
   <div class="hero-actions">
 
-    <button class="btn primary" onclick="openEdit()">
+    <button
+      type="button"
+      class="btn primary"
+      onclick="scrollToEditor()"
+    >
       ✎ Edit Member
     </button>
 
-    <button class="btn" onclick="messageMember()">
+    <button
+      type="button"
+      class="btn"
+      onclick="messageMember()"
+    >
       ✉ Message
     </button>
 
-    <button class="btn danger" onclick="suspendMember()">
+    <button
+      type="button"
+      class="btn"
+      id="statusAction"
+      onclick="toggleMemberStatus()"
+    >
       Suspend
     </button>
 
@@ -1130,437 +1329,190 @@ textarea.input{
 
 </section>
 
-<!-- =========================
-     MAIN LAYOUT
-========================= -->
-
 <div class="layout">
 
 <div class="stack">
 
-  <!-- PROFILE OVERVIEW -->
-
-  <section class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <div class="panel-title">Profile Overview</div>
-        <div class="panel-sub">
-          Member identity and account information.
-        </div>
-      </div>
-
-      <button class="btn small" onclick="openEdit()">
-        Edit Profile
-      </button>
-
-    </div>
-
-    <div class="panel-body">
-
-      <div class="info-grid">
-
-        <div class="info-card">
-          <div class="info-label">Full Name</div>
-          <div class="info-value" id="infoName">Alex Rivers</div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-label">Username</div>
-          <div class="info-value">@alexrivers</div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-label">Email</div>
-          <div class="info-value">alex.rivers@example.com</div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-label">Membership</div>
-          <div class="info-value accent">Pro</div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-label">Role</div>
-          <div class="info-value">Member</div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-label">Joined</div>
-          <div class="info-value">August 12, 2026</div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- MEMBER STATS -->
-
-  <section class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <div class="panel-title">Member Statistics</div>
-        <div class="panel-sub">
-          Engagement across the CrowRules network.
-        </div>
-      </div>
-
-    </div>
-
-    <div class="panel-body">
-
-      <div class="stat-grid">
-
-        <div class="stat">
-          <div class="stat-label">Watch Hours</div>
-          <div class="stat-value">184</div>
-          <div class="stat-note">+18 this month</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Points</div>
-          <div class="stat-value">12.8K</div>
-          <div class="stat-note">+1,240 this month</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Favorites</div>
-          <div class="stat-value">38</div>
-          <div class="stat-note">6 added recently</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Community Posts</div>
-          <div class="stat-value">27</div>
-          <div class="stat-note">Active contributor</div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- WATCH HISTORY -->
-
-  <section class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <div class="panel-title">Recent Watch History</div>
-        <div class="panel-sub">
-          Latest CrowRules TV viewing activity.
-        </div>
-      </div>
-
-      <a class="btn small" href="activity.html">
-        View Activity
-      </a>
-
-    </div>
-
-    <div class="history">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Content</th>
-            <th>Watched</th>
-            <th>Progress</th>
-            <th>Device</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          <tr>
-            <td>
-              <div class="content-name">Tacoma Nights</div>
-              <div class="content-type">Episode</div>
-            </td>
-            <td>Today, 10:14 AM</td>
-            <td>94%</td>
-            <td>Desktop</td>
-          </tr>
-
-          <tr>
-            <td>
-              <div class="content-name">Back Deck Live</div>
-              <div class="content-type">Live Replay</div>
-            </td>
-            <td>Yesterday</td>
-            <td>71%</td>
-            <td>Mobile</td>
-          </tr>
-
-          <tr>
-            <td>
-              <div class="content-name">Voices From The Void</div>
-              <div class="content-type">Episode</div>
-            </td>
-            <td>Sep 06</td>
-            <td>100%</td>
-            <td>Desktop</td>
-          </tr>
-
-          <tr>
-            <td>
-              <div class="content-name">CrowRules Originals</div>
-              <div class="content-type">Channel</div>
-            </td>
-            <td>Sep 05</td>
-            <td>42%</td>
-            <td>TV</td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </section>
-
-  <!-- ACTIVITY -->
-
-  <section class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <div class="panel-title">Recent Activity</div>
-        <div class="panel-sub">
-          Account and community events.
-        </div>
-      </div>
-
-    </div>
-
-    <div class="activity-list">
-
-      <div class="activity">
-        <div class="activity-icon">▶</div>
-        <div class="activity-text">
-          Watched <strong>Tacoma Nights — Episode 12</strong>.
-          <div class="activity-time">8 minutes ago</div>
-        </div>
-      </div>
-
-      <div class="activity">
-        <div class="activity-icon">★</div>
-        <div class="activity-text">
-          Earned the <strong>Night Owl</strong> badge.
-          <div class="activity-time">2 hours ago</div>
-        </div>
-      </div>
-
-      <div class="activity">
-        <div class="activity-icon">♡</div>
-        <div class="activity-text">
-          Added <strong>Voices From The Void</strong> to favorites.
-          <div class="activity-time">Yesterday</div>
-        </div>
-      </div>
-
-      <div class="activity">
-        <div class="activity-icon">♧</div>
-        <div class="activity-text">
-          Posted in the <strong>Tacoma Nights Community</strong>.
-          <div class="activity-time">Yesterday</div>
-        </div>
-      </div>
-
-    </div>
-
-  </section>
-
-</div>
-
-<!-- =========================
-     RIGHT COLUMN
-========================= -->
-
-<div class="stack">
-
-  <section class="panel">
-
-    <div class="side-section">
-
-      <div class="side-title">Membership Status</div>
-
-      <div class="side-value">
-        Pro Member
-      </div>
-
-      <div class="progress">
-        <span></span>
-      </div>
-
-      <div style="color:#666672;font-size:8px;margin-top:7px">
-        Membership renews automatically
-      </div>
-
-    </div>
-
-    <div class="side-section">
-
-      <div class="side-title">Account Security</div>
-
-      <div class="quick-list">
-
-        <div class="quick">
-          <span>Email Verified</span>
-          <strong style="color:var(--green)">YES</strong>
-        </div>
-
-        <div class="quick">
-          <span>2FA</span>
-          <strong style="color:var(--yellow)">OFF</strong>
-        </div>
-
-        <div class="quick">
-          <span>Last Login</span>
-          <strong>8 min ago</strong>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="side-section">
-
-      <div class="side-title">Quick Actions</div>
-
-      <div class="quick-list">
-
-        <button class="quick" onclick="messageMember()">
-          <span>Send Message</span>
-          <strong>→</strong>
-        </button>
-
-        <button class="quick" onclick="resetPassword()">
-          <span>Reset Password</span>
-          <strong>→</strong>
-        </button>
-
-        <button class="quick" onclick="changeMembership()">
-          <span>Change Membership</span>
-          <strong>→</strong>
-        </button>
-
-        <button class="quick" onclick="viewCommunity()">
-          <span>View Community Activity</span>
-          <strong>→</strong>
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- BADGES -->
-
-  <section class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <div class="panel-title">Member Badges</div>
-        <div class="panel-sub">Earned achievements.</div>
-      </div>
-
-    </div>
-
-    <div class="side-section">
-
-      <div class="quick-list">
-
-        <div class="quick">
-          <span>Night Owl</span>
-          <strong>★</strong>
-        </div>
-
-        <div class="quick">
-          <span>Community Voice</span>
-          <strong>★</strong>
-        </div>
-
-        <div class="quick">
-          <span>Early Supporter</span>
-          <strong>★</strong>
-        </div>
-
-        <div class="quick">
-          <span>100 Hour Club</span>
-          <strong>★</strong>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- FAVORITES -->
-
-  <section class="panel">
-
-    <div class="panel-head">
-
-      <div>
-        <div class="panel-title">Favorites</div>
-        <div class="panel-sub">Member's saved content.</div>
-      </div>
-
-    </div>
-
-    <div class="side-section">
-
-      <div class="quick-list">
-
-        <a href="#" class="quick">
-          <span>Tacoma Nights</span>
-          <strong>▶</strong>
-        </a>
-
-        <a href="#" class="quick">
-          <span>Voices From The Void</span>
-          <strong>▶</strong>
-        </a>
-
-        <a href="#" class="quick">
-          <span>Back Deck Live</span>
-          <strong>▶</strong>
-        </a>
-
-      </div>
-
-    </div>
-
-  </section>
-
-</div>
-
-</div>
-
-<!-- =========================
-     EDIT PROFILE
-========================= -->
-
-<section class="panel" style="margin-top:18px">
+<section class="panel">
 
   <div class="panel-head">
 
     <div>
-      <div class="panel-title">Administrative Profile Data</div>
+      <div class="panel-title">
+        Profile Overview
+      </div>
+
+      <div class="panel-sub">
+        Member identity and account information.
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="btn small"
+      onclick="scrollToEditor()"
+    >
+      Edit Profile
+    </button>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div class="info-grid">
+
+      <div class="info-card">
+        <div class="info-label">Full Name</div>
+        <div class="info-value" id="infoName">—</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">Display Name</div>
+        <div class="info-value" id="infoDisplayName">—</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">Username</div>
+        <div class="info-value" id="infoUsername">—</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">Email</div>
+        <div class="info-value" id="infoEmail">—</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">Membership</div>
+        <div class="info-value accent" id="infoMembership">—</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">Role</div>
+        <div class="info-value" id="infoRole">—</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">Status</div>
+        <div class="info-value" id="infoStatus">—</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">Joined</div>
+        <div class="info-value" id="infoJoined">—</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-label">Last Active</div>
+        <div class="info-value" id="infoLastActive">—</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Member Statistics
+      </div>
+
+      <div class="panel-sub">
+        Engagement stored on the member record.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel-body">
+
+    <div class="stat-grid">
+
+      <div class="stat">
+        <div class="stat-label">Watch Hours</div>
+        <div class="stat-value" id="watchHours">0</div>
+        <div class="stat-note" id="watchMinutesNote">
+          0 minutes
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Points</div>
+        <div class="stat-value" id="memberPoints">0</div>
+        <div class="stat-note">
+          Member points
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Account Age</div>
+        <div class="stat-value" id="accountAge">0</div>
+        <div class="stat-note">
+          days
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Member ID</div>
+        <div
+          class="stat-value"
+          id="memberIdShort"
+          style="font-size:11px;word-break:break-all"
+        >
+          —
+        </div>
+        <div class="stat-note">
+          Database record
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Recent Account Activity
+      </div>
+
+      <div class="panel-sub">
+        Activity inferred from the member's current account data.
+      </div>
+    </div>
+
+    <a
+      class="btn small"
+      href="activity.html"
+    >
+      Activity Center
+    </a>
+
+  </div>
+
+  <div class="activity-list" id="activityList">
+  </div>
+
+</section>
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Administrative Profile Data
+      </div>
+
       <div class="panel-sub">
         Manage member information and access controls.
       </div>
@@ -1575,71 +1527,218 @@ textarea.input{
       <div class="form-grid">
 
         <div class="form-group">
-          <label class="label">First Name</label>
-          <input class="input" id="firstName" value="Alex">
+          <label class="label" for="firstName">
+            First Name
+          </label>
+
+          <input
+            class="input"
+            id="firstName"
+            autocomplete="given-name"
+          >
         </div>
 
         <div class="form-group">
-          <label class="label">Last Name</label>
-          <input class="input" id="lastName" value="Rivers">
+          <label class="label" for="lastName">
+            Last Name
+          </label>
+
+          <input
+            class="input"
+            id="lastName"
+            autocomplete="family-name"
+          >
         </div>
 
         <div class="form-group">
-          <label class="label">Username</label>
-          <input class="input" id="editUsername" value="alexrivers">
+          <label class="label" for="displayName">
+            Display Name
+          </label>
+
+          <input
+            class="input"
+            id="displayName"
+            autocomplete="nickname"
+          >
         </div>
 
         <div class="form-group">
-          <label class="label">Email</label>
-          <input class="input" id="editEmail" value="alex.rivers@example.com">
+          <label class="label" for="editUsername">
+            Username
+          </label>
+
+          <input
+            class="input"
+            id="editUsername"
+            autocomplete="username"
+          >
         </div>
 
         <div class="form-group">
-          <label class="label">Membership</label>
+          <label class="label" for="editEmail">
+            Email
+          </label>
+
+          <input
+            class="input"
+            id="editEmail"
+            type="email"
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="editMembership">
+            Membership Type
+          </label>
 
           <select class="select" id="editMembership">
-            <option>Free</option>
-            <option selected>Pro</option>
-            <option>Premium</option>
-            <option>Creator</option>
+
+            <option value="Free">
+              Free
+            </option>
+
+            <option value="Pro">
+              Pro
+            </option>
+
+            <option value="Premium">
+              Premium
+            </option>
+
+            <option value="Creator">
+              Creator
+            </option>
+
+            <option value="Owner">
+              Owner
+            </option>
+
           </select>
 
         </div>
 
         <div class="form-group">
-          <label class="label">Role</label>
+          <label class="label" for="editRole">
+            Role
+          </label>
 
           <select class="select" id="editRole">
-            <option selected>Member</option>
-            <option>Creator</option>
-            <option>Moderator</option>
-            <option>Admin</option>
+
+            <option value="Member">
+              Member
+            </option>
+
+            <option value="Creator">
+              Creator
+            </option>
+
+            <option value="Moderator">
+              Moderator
+            </option>
+
+            <option value="Admin">
+              Admin
+            </option>
+
+            <option value="Owner">
+              Owner
+            </option>
+
           </select>
 
         </div>
 
         <div class="form-group">
-          <label class="label">Account Status</label>
+          <label class="label" for="editStatus">
+            Account Status
+          </label>
 
           <select class="select" id="editStatus">
-            <option selected>Active</option>
-            <option>Pending</option>
-            <option>Suspended</option>
-            <option>Disabled</option>
+
+            <option value="Active">
+              Active
+            </option>
+
+            <option value="Pending">
+              Pending
+            </option>
+
+            <option value="Suspended">
+              Suspended
+            </option>
+
+            <option value="Disabled">
+              Disabled
+            </option>
+
           </select>
 
         </div>
 
         <div class="form-group">
-          <label class="label">Points</label>
-          <input class="input" id="editPoints" type="number" value="12840">
+          <label class="label" for="editPoints">
+            Points
+          </label>
+
+          <input
+            class="input"
+            id="editPoints"
+            type="number"
+            min="0"
+            step="1"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="editWatchMinutes">
+            Watch Minutes
+          </label>
+
+          <input
+            class="input"
+            id="editWatchMinutes"
+            type="number"
+            min="0"
+            step="1"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="editLastActive">
+            Last Active
+          </label>
+
+          <input
+            class="input"
+            id="editLastActive"
+            type="datetime-local"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="label" for="editAvatar">
+            Avatar URL
+          </label>
+
+          <input
+            class="input"
+            id="editAvatar"
+            type="url"
+            placeholder="https://..."
+          >
         </div>
 
         <div class="form-group full">
 
-          <label class="label">Bio</label>
+          <label class="label" for="editBio">
+            Bio
+          </label>
 
-          <textarea class="input" id="editBio">CrowRules Entertainment community member.</textarea>
+          <textarea
+            class="input"
+            id="editBio"
+          ></textarea>
 
         </div>
 
@@ -1647,11 +1746,27 @@ textarea.input{
 
       <div class="form-actions">
 
-        <button type="button" class="btn" onclick="resetForm()">
+        <button
+          type="button"
+          class="btn"
+          onclick="resetForm()"
+        >
           Reset
         </button>
 
-        <button type="submit" class="btn primary">
+        <button
+          type="button"
+          class="btn danger"
+          onclick="deleteMember()"
+        >
+          Delete Member
+        </button>
+
+        <button
+          type="submit"
+          class="btn primary"
+          id="saveButton"
+        >
           Save Changes
         </button>
 
@@ -1663,17 +1778,223 @@ textarea.input{
 
 </section>
 
+</div>
+
+<!-- =====================================================
+     RIGHT COLUMN
+===================================================== -->
+
+<div class="stack">
+
+<section class="panel">
+
+  <div class="side-section">
+
+    <div class="side-title">
+      Membership
+    </div>
+
+    <div
+      class="side-value"
+      id="sideMembership"
+    >
+      —
+    </div>
+
+    <div class="progress">
+      <span id="membershipProgress"></span>
+    </div>
+
+    <div
+      style="color:#666672;font-size:8px;margin-top:7px"
+      id="membershipDescription"
+    >
+      Current membership level.
+    </div>
+
+  </div>
+
+  <div class="side-section">
+
+    <div class="side-title">
+      Account
+    </div>
+
+    <div class="quick-list">
+
+      <div class="quick">
+        <span>Status</span>
+        <strong id="sideStatus">—</strong>
+      </div>
+
+      <div class="quick">
+        <span>Role</span>
+        <strong id="sideRole">—</strong>
+      </div>
+
+      <div class="quick">
+        <span>Auth Link</span>
+        <strong id="sideAuth">—</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="side-section">
+
+    <div class="side-title">
+      Quick Actions
+    </div>
+
+    <div class="quick-list">
+
+      <button
+        type="button"
+        class="quick"
+        onclick="messageMember()"
+      >
+        <span>Send Email</span>
+        <strong>→</strong>
+      </button>
+
+      <button
+        type="button"
+        class="quick"
+        onclick="resetPassword()"
+      >
+        <span>Send Password Reset</span>
+        <strong>→</strong>
+      </button>
+
+      <button
+        type="button"
+        class="quick"
+        onclick="changeMembership()"
+      >
+        <span>Change Membership</span>
+        <strong>→</strong>
+      </button>
+
+      <button
+        type="button"
+        class="quick"
+        onclick="exportMember()"
+      >
+        <span>Export Member Data</span>
+        <strong>↓</strong>
+      </button>
+
+      <button
+        type="button"
+        class="quick"
+        onclick="viewCommunity()"
+      >
+        <span>View Community</span>
+        <strong>→</strong>
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Member Identity
+      </div>
+
+      <div class="panel-sub">
+        Database references.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="side-section">
+
+    <div class="quick-list">
+
+      <div class="quick">
+        <span>Member ID</span>
+        <strong id="sideMemberId">—</strong>
+      </div>
+
+      <div class="quick">
+        <span>User ID</span>
+        <strong id="sideUserId">—</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="panel">
+
+  <div class="panel-head">
+
+    <div>
+      <div class="panel-title">
+        Account Dates
+      </div>
+
+      <div class="panel-sub">
+        Membership record timestamps.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="side-section">
+
+    <div class="quick-list">
+
+      <div class="quick">
+        <span>Created</span>
+        <strong id="sideCreated">—</strong>
+      </div>
+
+      <div class="quick">
+        <span>Updated</span>
+        <strong id="sideUpdated">—</strong>
+      </div>
+
+      <div class="quick">
+        <span>Last Active</span>
+        <strong id="sideLastActive">—</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</div>
+
+</div>
+
+</div>
+
 </section>
 
 </main>
 
-</div>
-
-<!-- =========================
+<!-- =====================================================
      MESSAGE MODAL
-========================= -->
+===================================================== -->
 
-<div class="modal-backdrop" id="messageModal">
+<div
+  class="modal-backdrop"
+  id="messageModal"
+>
 
   <div class="modal">
 
@@ -1683,7 +2004,11 @@ textarea.input{
         Message Member
       </div>
 
-      <button class="close" onclick="closeMessage()">
+      <button
+        type="button"
+        class="close"
+        onclick="closeMessage()"
+      >
         ×
       </button>
 
@@ -1693,7 +2018,7 @@ textarea.input{
 
       <div class="form-group">
 
-        <label class="label">
+        <label class="label" for="messageText">
           Message
         </label>
 
@@ -1705,16 +2030,33 @@ textarea.input{
 
       </div>
 
+      <div
+        id="messageRecipient"
+        style="
+          color:#666672;
+          font-size:8px;
+          margin-top:8px;
+        "
+      ></div>
+
     </div>
 
     <div class="modal-foot">
 
-      <button class="btn" onclick="closeMessage()">
+      <button
+        type="button"
+        class="btn"
+        onclick="closeMessage()"
+      >
         Cancel
       </button>
 
-      <button class="btn primary" onclick="sendMessage()">
-        Send Message
+      <button
+        type="button"
+        class="btn primary"
+        onclick="sendMessage()"
+      >
+        Open Email
       </button>
 
     </div>
@@ -1726,23 +2068,55 @@ textarea.input{
 <div class="toast" id="toast"></div>
 
 <script>
+"use strict";
 
-/* ==========================================
+/* =========================================================
    CROWRULES MEMBER ADMIN
-   ========================================== */
+   SUPABASE CONNECTED
+========================================================= */
 
-const toast = document.getElementById("toast");
-const messageModal = document.getElementById("messageModal");
+/*
+  IMPORTANT:
+  Replace these two placeholders with your PUBLIC
+  Supabase project URL and publishable/anon key.
 
-/* =========================
+  NEVER place a service_role / secret key in this file.
+*/
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL ||
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  window.CROWRULES_SUPABASE_PUBLISHABLE_KEY ||
+  window.CROWRULES_SUPABASE_ANON_KEY ||
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+let supabaseClient = null;
+let currentUser = null;
+let currentMember = null;
+let adminRole = null;
+let toastTimer = null;
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const $ = id => document.getElementById(id);
+
+const loadingState = $("loadingState");
+const errorState = $("errorState");
+const memberContent = $("memberContent");
+
+/* =========================================================
    CLOCK
-========================= */
+========================================================= */
 
 function updateClock(){
 
   const now = new Date();
 
-  document.getElementById("clock").textContent =
+  $("clock").textContent =
     now.toLocaleTimeString([],{
       hour:"2-digit",
       minute:"2-digit",
@@ -1753,359 +2127,1695 @@ function updateClock(){
 updateClock();
 setInterval(updateClock,1000);
 
-/* =========================
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
-let toastTimer;
-
-function showToast(message){
+function showToast(message,type=""){
 
   clearTimeout(toastTimer);
 
-  toast.textContent = message;
-  toast.classList.add("show");
+  const el = $("toast");
+
+  el.textContent = message;
+
+  el.className = "toast show";
+
+  if(type){
+    el.classList.add(type);
+  }
 
   toastTimer = setTimeout(()=>{
-    toast.classList.remove("show");
-  },2600);
+    el.className = "toast";
+  },3200);
 }
 
-/* =========================
-   MOBILE NAV
-========================= */
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
-document.getElementById("mobileMenu")
-  .addEventListener("click",()=>{
+function escapeHtml(value){
 
-    document.getElementById("sidebar")
-      .classList.toggle("open");
+  if(value === null || value === undefined){
+    return "";
+  }
 
-  });
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
 
-/* =========================
-   MEMBER URL
-========================= */
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-const params = new URLSearchParams(location.search);
+$("mobileMenu").addEventListener("click",()=>{
+
+  $("sidebar").classList.toggle("open");
+
+});
+
+/* =========================================================
+   URL MEMBER ID
+========================================================= */
+
+const params =
+  new URLSearchParams(window.location.search);
 
 const memberId =
   params.get("id") ||
-  params.get("member") ||
-  "demo-member";
+  params.get("member");
 
-/*
-Example URLs:
+/* =========================================================
+   ADMIN ROLES
+========================================================= */
 
-member.html?id=alex-rivers
-member.html?id=12345
+const ADMIN_ROLES = [
+  "owner",
+  "super_admin",
+  "admin"
+];
 
-The production version should retrieve
-the profile using the authenticated
-Supabase user's admin permissions.
-*/
+function normalizeRole(role){
 
-/* =========================
-   EDIT FORM
-========================= */
+  return String(role || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g,"_");
+}
 
-function openEdit(){
+function isAdminRole(role){
 
-  document.getElementById("editForm")
-    .scrollIntoView({
-      behavior:"smooth",
-      block:"center"
-    });
+  return ADMIN_ROLES.includes(
+    normalizeRole(role)
+  );
+}
 
-  showToast("Edit profile opened.");
+/* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function formatDate(value){
+
+  if(!value){
+    return "Never";
+  }
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "Unknown";
+  }
+
+  return date.toLocaleDateString([],{
+    year:"numeric",
+    month:"long",
+    day:"numeric"
+  });
+}
+
+function formatDateTime(value){
+
+  if(!value){
+    return "Never";
+  }
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "Unknown";
+  }
+
+  return date.toLocaleString([],{
+    year:"numeric",
+    month:"short",
+    day:"numeric",
+    hour:"numeric",
+    minute:"2-digit"
+  });
+}
+
+function toDateTimeLocal(value){
+
+  if(!value){
+    return "";
+  }
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "";
+  }
+
+  const pad =
+    n => String(n).padStart(2,"0");
+
+  return (
+    date.getFullYear() +
+    "-" +
+    pad(date.getMonth()+1) +
+    "-" +
+    pad(date.getDate()) +
+    "T" +
+    pad(date.getHours()) +
+    ":" +
+    pad(date.getMinutes())
+  );
+}
+
+function accountAgeDays(value){
+
+  if(!value){
+    return 0;
+  }
+
+  const created =
+    new Date(value).getTime();
+
+  if(!Number.isFinite(created)){
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    Math.floor(
+      (Date.now()-created) /
+      86400000
+    )
+  );
+}
+
+/* =========================================================
+   NUMBER HELPERS
+========================================================= */
+
+function safeNumber(value){
+
+  const n = Number(value);
+
+  return Number.isFinite(n)
+    ? n
+    : 0;
+}
+
+function formatNumber(value){
+
+  return safeNumber(value)
+    .toLocaleString();
+}
+
+function getWatchHours(minutes){
+
+  return Math.floor(
+    safeNumber(minutes) / 60
+  );
+}
+
+/* =========================================================
+   MEMBER DISPLAY
+========================================================= */
+
+function memberDisplayName(member){
+
+  return (
+    member.display_name ||
+    [
+      member.first_name,
+      member.last_name
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .trim() ||
+    member.username ||
+    member.email ||
+    "Member"
+  );
+}
+
+function memberFullName(member){
+
+  const name =
+    [
+      member.first_name,
+      member.last_name
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
+
+  return name ||
+    member.display_name ||
+    member.username ||
+    "Member";
+}
+
+function initials(member){
+
+  const name =
+    memberDisplayName(member)
+      .trim();
+
+  const pieces =
+    name.split(/\s+/)
+      .filter(Boolean);
+
+  if(pieces.length >= 2){
+
+    return (
+      pieces[0][0] +
+      pieces[pieces.length-1][0]
+    )
+      .toUpperCase();
+  }
+
+  return name
+    .slice(0,2)
+    .toUpperCase();
+}
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+function setBadge(element,value){
+
+  const normalized =
+    String(value || "")
+      .toLowerCase()
+      .replace(/\s+/g,"-");
+
+  element.textContent =
+    value || "Unknown";
+
+  element.className =
+    "badge " +
+    normalized;
+}
+
+/* =========================================================
+   ERROR UI
+========================================================= */
+
+function showError(title,text,code=""){
+
+  loadingState.classList.add("hidden");
+  memberContent.classList.add("hidden");
+  errorState.classList.remove("hidden");
+
+  $("errorText").textContent =
+    text || title;
+
+  $("errorCode").textContent =
+    code || "";
+
+  if(!code){
+    $("errorCode").classList.add("hidden");
+  }else{
+    $("errorCode").classList.remove("hidden");
+  }
+}
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+
+async function initializeSupabase(){
+
+  if(
+    SUPABASE_URL.startsWith("YOUR_") ||
+    SUPABASE_KEY.startsWith("YOUR_")
+  ){
+
+    throw new Error(
+      "Supabase configuration is missing. Set CROWRULES_SUPABASE_URL and CROWRULES_SUPABASE_PUBLISHABLE_OR_ANON_KEY."
+    );
+  }
+
+  if(
+    !window.supabase ||
+    !window.supabase.createClient
+  ){
+
+    throw new Error(
+      "Supabase JavaScript library failed to load."
+    );
+  }
+
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY,
+      {
+        auth:{
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:true
+        }
+      }
+    );
+}
+
+async function requireAdmin(){
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.getUser();
+
+  if(error){
+    throw error;
+  }
+
+  const user =
+    data?.user;
+
+  if(!user){
+
+    window.location.href =
+      "login.html?redirect=" +
+      encodeURIComponent(
+        window.location.pathname +
+        window.location.search
+      );
+
+    return false;
+  }
+
+  currentUser = user;
+
+  const metadata =
+    user.app_metadata || {};
+
+  adminRole =
+    metadata.role ||
+    metadata.user_role ||
+    metadata.admin_role ||
+    "";
+
+  /*
+    Owner/admin authorization is based on
+    app_metadata, not user_metadata.
+  */
+
+  if(!isAdminRole(adminRole)){
+
+    showError(
+      "Access Denied",
+      "Your account is authenticated but does not have CrowRules administrator privileges.",
+      "Required role: owner, super_admin, or admin"
+    );
+
+    return false;
+  }
+
+  $("adminName").textContent =
+    user.email ||
+    "Administrator";
+
+  $("adminRole").textContent =
+    String(adminRole)
+      .replace(/_/g," ")
+      .replace(/\b\w/g,c=>c.toUpperCase());
+
+  const adminInitial =
+    (user.email || "CR")
+      .slice(0,2)
+      .toUpperCase();
+
+  $("adminAvatar").textContent =
+    adminInitial;
+
+  return true;
+}
+
+/* =========================================================
+   LOAD MEMBER
+========================================================= */
+
+async function loadMember(){
+
+  loadingState.classList.remove("hidden");
+  errorState.classList.add("hidden");
+  memberContent.classList.add("hidden");
+
+  if(!memberId){
+
+    showError(
+      "Missing Member",
+      "No member ID was supplied in the URL.",
+      "Example: member.html?id=MEMBER_UUID"
+    );
+
+    return;
+  }
+
+  try{
+
+    if(!supabaseClient){
+      await initializeSupabase();
+    }
+
+    const allowed =
+      await requireAdmin();
+
+    if(!allowed){
+      return;
+    }
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("members")
+        .select("*")
+        .eq("id",memberId)
+        .maybeSingle();
+
+    if(error){
+      throw error;
+    }
+
+    if(!data){
+
+      showError(
+        "Member Not Found",
+        "No member record was found for this ID.",
+        memberId
+      );
+
+      return;
+    }
+
+    currentMember = data;
+
+    renderMember(data);
+
+  }catch(error){
+
+    console.error(
+      "CrowRules member load error:",
+      error
+    );
+
+    showError(
+      "Member Load Failed",
+      "Supabase could not load this member.",
+      error?.message ||
+      String(error)
+    );
+  }
+}
+
+/* =========================================================
+   RENDER MEMBER
+========================================================= */
+
+function renderMember(member){
+
+  loadingState.classList.add("hidden");
+  errorState.classList.add("hidden");
+  memberContent.classList.remove("hidden");
+
+  const displayName =
+    memberDisplayName(member);
+
+  const fullName =
+    memberFullName(member);
+
+  const username =
+    member.username
+      ? "@" + member.username.replace(/^@/,"")
+      : "No username";
+
+  $("breadcrumbName").textContent =
+    displayName;
+
+  $("memberName").textContent =
+    displayName;
+
+  $("username").textContent =
+    username;
+
+  /* Avatar */
+
+  const avatar =
+    $("avatar");
+
+  if(member.avatar_url){
+
+    avatar.innerHTML =
+      `<img src="${escapeHtml(member.avatar_url)}"
+            alt="${escapeHtml(displayName)}"
+            onerror="this.remove()">`;
+  }else{
+
+    avatar.textContent =
+      initials(member);
+  }
+
+  /* Badges */
+
+  setBadge(
+    $("statusBadge"),
+    member.status || "Unknown"
+  );
+
+  const membership =
+    member.membership_type || "Free";
+
+  setBadge(
+    $("membershipBadge"),
+    membership
+  );
+
+  setBadge(
+    $("roleBadge"),
+    member.role || "Member"
+  );
+
+  /* Overview */
+
+  $("infoName").textContent =
+    fullName;
+
+  $("infoDisplayName").textContent =
+    member.display_name ||
+    "—";
+
+  $("infoUsername").textContent =
+    username;
+
+  $("infoEmail").textContent =
+    member.email ||
+    "—";
+
+  $("infoMembership").textContent =
+    membership;
+
+  $("infoRole").textContent =
+    member.role ||
+    "Member";
+
+  $("infoStatus").textContent =
+    member.status ||
+    "Unknown";
+
+  $("infoJoined").textContent =
+    formatDate(member.created_at);
+
+  $("infoLastActive").textContent =
+    formatDateTime(member.last_active_at);
+
+  /* Stats */
+
+  const watchMinutes =
+    safeNumber(member.watch_minutes);
+
+  $("watchHours").textContent =
+    formatNumber(
+      getWatchHours(watchMinutes)
+    );
+
+  $("watchMinutesNote").textContent =
+    formatNumber(watchMinutes) +
+    " minutes total";
+
+  $("memberPoints").textContent =
+    formatNumber(member.points);
+
+  $("accountAge").textContent =
+    formatNumber(
+      accountAgeDays(member.created_at)
+    );
+
+  $("memberIdShort").textContent =
+    member.id;
+
+  /* Right side */
+
+  $("sideMembership").textContent =
+    membership;
+
+  $("sideStatus").textContent =
+    member.status ||
+    "Unknown";
+
+  $("sideRole").textContent =
+    member.role ||
+    "Member";
+
+  $("sideAuth").textContent =
+    member.user_id
+      ? "LINKED"
+      : "NONE";
+
+  $("sideMemberId").textContent =
+    member.id;
+
+  $("sideUserId").textContent =
+    member.user_id ||
+    "Not linked";
+
+  $("sideCreated").textContent =
+    formatDateTime(member.created_at);
+
+  $("sideUpdated").textContent =
+    formatDateTime(member.updated_at);
+
+  $("sideLastActive").textContent =
+    formatDateTime(member.last_active_at);
+
+  updateMembershipProgress(
+    membership
+  );
+
+  updateStatusAction(
+    member.status
+  );
+
+  fillForm(member);
+
+  renderActivity(member);
+}
+
+/* =========================================================
+   MEMBERSHIP PROGRESS
+========================================================= */
+
+function updateMembershipProgress(type){
+
+  const values = {
+    "Free":20,
+    "Pro":50,
+    "Premium":75,
+    "Creator":90,
+    "Owner":100
+  };
+
+  const width =
+    values[type] ||
+    20;
+
+  $("membershipProgress")
+    .style.width =
+      width + "%";
+
+  const descriptions = {
+
+    Free:
+      "Free CrowRules membership.",
+
+    Pro:
+      "Pro CrowRules membership.",
+
+    Premium:
+      "Premium CrowRules membership.",
+
+    Creator:
+      "Creator-level membership.",
+
+    Owner:
+      "Owner-level CrowRules membership."
+
+  };
+
+  $("membershipDescription")
+    .textContent =
+      descriptions[type] ||
+      "Current membership level.";
+}
+
+/* =========================================================
+   STATUS ACTION
+========================================================= */
+
+function updateStatusAction(status){
+
+  const button =
+    $("statusAction");
+
+  const normalized =
+    String(status || "")
+      .toLowerCase();
+
+  if(
+    normalized === "suspended" ||
+    normalized === "disabled"
+  ){
+
+    button.textContent =
+      "Restore";
+
+    button.className =
+      "btn success";
+
+  }else{
+
+    button.textContent =
+      "Suspend";
+
+    button.className =
+      "btn danger";
+  }
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+function fillForm(member){
+
+  $("firstName").value =
+    member.first_name || "";
+
+  $("lastName").value =
+    member.last_name || "";
+
+  $("displayName").value =
+    member.display_name || "";
+
+  $("editUsername").value =
+    member.username || "";
+
+  $("editEmail").value =
+    member.email || "";
+
+  $("editMembership").value =
+    member.membership_type || "Free";
+
+  $("editRole").value =
+    member.role || "Member";
+
+  $("editStatus").value =
+    member.status || "Active";
+
+  $("editPoints").value =
+    safeNumber(member.points);
+
+  $("editWatchMinutes").value =
+    safeNumber(member.watch_minutes);
+
+  $("editLastActive").value =
+    toDateTimeLocal(
+      member.last_active_at
+    );
+
+  $("editAvatar").value =
+    member.avatar_url || "";
+
+  $("editBio").value =
+    member.bio || "";
 }
 
 function resetForm(){
 
-  document.getElementById("firstName").value = "Alex";
-  document.getElementById("lastName").value = "Rivers";
-  document.getElementById("editUsername").value = "alexrivers";
-  document.getElementById("editEmail").value =
-    "alex.rivers@example.com";
-  document.getElementById("editMembership").value = "Pro";
-  document.getElementById("editRole").value = "Member";
-  document.getElementById("editStatus").value = "Active";
-  document.getElementById("editPoints").value = "12840";
-  document.getElementById("editBio").value =
-    "CrowRules Entertainment community member.";
+  if(!currentMember){
+    return;
+  }
 
-  showToast("Form reset.");
+  fillForm(currentMember);
+
+  showToast(
+    "Form reset to the saved member data."
+  );
 }
 
-document.getElementById("editForm")
-  .addEventListener("submit",event=>{
+/* =========================================================
+   SAVE
+========================================================= */
+
+$("editForm").addEventListener(
+  "submit",
+  async event => {
 
     event.preventDefault();
 
-    const member = {
+    if(!currentMember){
+      showToast(
+        "No member is loaded.",
+        "error"
+      );
+      return;
+    }
 
-      id:memberId,
+    const saveButton =
+      $("saveButton");
 
-      first_name:
-        document.getElementById("firstName").value.trim(),
+    saveButton.disabled = true;
+    saveButton.textContent =
+      "Saving…";
 
-      last_name:
-        document.getElementById("lastName").value.trim(),
+    try{
 
-      username:
-        document.getElementById("editUsername").value.trim(),
+      const lastActiveValue =
+        $("editLastActive").value;
 
-      email:
-        document.getElementById("editEmail").value.trim(),
+      const payload = {
 
-      membership_type:
-        document.getElementById("editMembership").value,
+        first_name:
+          $("firstName")
+            .value
+            .trim() || null,
 
-      role:
-        document.getElementById("editRole").value,
+        last_name:
+          $("lastName")
+            .value
+            .trim() || null,
 
-      status:
-        document.getElementById("editStatus").value,
+        display_name:
+          $("displayName")
+            .value
+            .trim() || null,
 
-      points:
-        Number(document.getElementById("editPoints").value || 0),
+        username:
+          $("editUsername")
+            .value
+            .trim() || null,
 
-      bio:
-        document.getElementById("editBio").value.trim()
-    };
+        email:
+          $("editEmail")
+            .value
+            .trim() || null,
 
-    console.log("Member update payload:",member);
+        membership_type:
+          $("editMembership")
+            .value,
 
-    showToast("Member changes saved.");
+        role:
+          $("editRole")
+            .value,
 
+        status:
+          $("editStatus")
+            .value,
+
+        points:
+          Math.max(
+            0,
+            Math.trunc(
+              safeNumber(
+                $("editPoints").value
+              )
+            )
+          ),
+
+        watch_minutes:
+          Math.max(
+            0,
+            Math.trunc(
+              safeNumber(
+                $("editWatchMinutes").value
+              )
+            )
+          ),
+
+        last_active_at:
+          lastActiveValue
+            ? new Date(
+                lastActiveValue
+              ).toISOString()
+            : null,
+
+        avatar_url:
+          $("editAvatar")
+            .value
+            .trim() || null,
+
+        bio:
+          $("editBio")
+            .value
+            .trim() || null,
+
+        updated_at:
+          new Date().toISOString()
+      };
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("members")
+          .update(payload)
+          .eq("id",currentMember.id)
+          .select("*")
+          .single();
+
+      if(error){
+        throw error;
+      }
+
+      currentMember =
+        data;
+
+      renderMember(
+        currentMember
+      );
+
+      showToast(
+        "Member changes saved successfully.",
+        "success"
+      );
+
+    }catch(error){
+
+      console.error(
+        "Member save error:",
+        error
+      );
+
+      showToast(
+        "Saving member failed: " +
+        (error?.message || "Unknown error"),
+        "error"
+      );
+
+    }finally{
+
+      saveButton.disabled = false;
+      saveButton.textContent =
+        "Save Changes";
+    }
+  }
+);
+
+/* =========================================================
+   SCROLL TO EDITOR
+========================================================= */
+
+function scrollToEditor(){
+
+  const form =
+    $("editForm");
+
+  if(!form){
+    return;
+  }
+
+  form.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
   });
 
-/* =========================
+  setTimeout(()=>{
+    $("firstName").focus();
+  },450);
+}
+
+/* =========================================================
+   CHANGE MEMBERSHIP
+========================================================= */
+
+function changeMembership(){
+
+  scrollToEditor();
+
+  setTimeout(()=>{
+    $("editMembership").focus();
+  },450);
+}
+
+/* =========================================================
+   SUSPEND / RESTORE
+========================================================= */
+
+async function toggleMemberStatus(){
+
+  if(!currentMember){
+    return;
+  }
+
+  const currentStatus =
+    String(
+      currentMember.status || ""
+    ).toLowerCase();
+
+  const isSuspended =
+    currentStatus === "suspended" ||
+    currentStatus === "disabled";
+
+  const nextStatus =
+    isSuspended
+      ? "Active"
+      : "Suspended";
+
+  const action =
+    isSuspended
+      ? "restore"
+      : "suspend";
+
+  const confirmed =
+    window.confirm(
+      `Are you sure you want to ${action} this member?`
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("members")
+        .update({
+          status:nextStatus,
+          updated_at:new Date().toISOString()
+        })
+        .eq("id",currentMember.id)
+        .select("*")
+        .single();
+
+    if(error){
+      throw error;
+    }
+
+    currentMember =
+      data;
+
+    renderMember(
+      currentMember
+    );
+
+    showToast(
+      `Member account ${action}d.`,
+      "success"
+    );
+
+  }catch(error){
+
+    console.error(
+      "Member status error:",
+      error
+    );
+
+    showToast(
+      "Status update failed: " +
+      (error?.message || "Unknown error"),
+      "error"
+    );
+  }
+}
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deleteMember(){
+
+  if(!currentMember){
+    return;
+  }
+
+  const name =
+    memberDisplayName(
+      currentMember
+    );
+
+  const confirmed =
+    window.confirm(
+      `Delete "${name}" from the members table?\n\nThis removes the member record from public.members. It does NOT delete the associated Supabase Auth user.`
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("members")
+        .delete()
+        .eq("id",currentMember.id);
+
+    if(error){
+      throw error;
+    }
+
+    showToast(
+      "Member record deleted.",
+      "success"
+    );
+
+    setTimeout(()=>{
+      window.location.href =
+        "members.html";
+    },700);
+
+  }catch(error){
+
+    console.error(
+      "Member delete error:",
+      error
+    );
+
+    showToast(
+      "Deleting member failed: " +
+      (error?.message || "Unknown error"),
+      "error"
+    );
+  }
+}
+
+/* =========================================================
+   PASSWORD RESET
+========================================================= */
+
+async function resetPassword(){
+
+  if(!currentMember?.email){
+
+    showToast(
+      "This member does not have an email address.",
+      "error"
+    );
+
+    return;
+  }
+
+  if(!currentMember.user_id){
+
+    showToast(
+      "This member is not linked to a Supabase Auth user.",
+      "error"
+    );
+
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      `Send a password reset email to ${currentMember.email}?`
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient.auth
+        .resetPasswordForEmail(
+          currentMember.email,
+          {
+            redirectTo:
+              window.location.origin +
+              window.location.pathname
+          }
+        );
+
+    if(error){
+      throw error;
+    }
+
+    showToast(
+      "Password reset email requested.",
+      "success"
+    );
+
+  }catch(error){
+
+    console.error(
+      "Password reset error:",
+      error
+    );
+
+    showToast(
+      "Password reset failed: " +
+      (error?.message || "Unknown error"),
+      "error"
+    );
+  }
+}
+
+/* =========================================================
    MESSAGE
-========================= */
+========================================================= */
 
 function messageMember(){
 
-  messageModal.classList.add("show");
+  if(!currentMember){
+    return;
+  }
 
-  document.getElementById("messageText").focus();
+  if(!currentMember.email){
+
+    showToast(
+      "This member has no email address.",
+      "error"
+    );
+
+    return;
+  }
+
+  $("messageRecipient").textContent =
+    "Recipient: " +
+    currentMember.email;
+
+  $("messageText").value =
+    "";
+
+  $("messageModal")
+    .classList.add("show");
+
+  setTimeout(()=>{
+    $("messageText").focus();
+  },100);
 }
 
 function closeMessage(){
-  messageModal.classList.remove("show");
+
+  $("messageModal")
+    .classList.remove("show");
 }
 
 function sendMessage(){
 
+  if(!currentMember?.email){
+
+    showToast(
+      "No email address is available.",
+      "error"
+    );
+
+    return;
+  }
+
   const message =
-    document.getElementById("messageText")
-      .value.trim();
+    $("messageText")
+      .value
+      .trim();
 
   if(!message){
 
-    showToast("Enter a message first.");
+    showToast(
+      "Enter a message first.",
+      "error"
+    );
 
     return;
   }
 
-  console.log("Member message:",{
-    member_id:memberId,
-    message
-  });
+  const subject =
+    encodeURIComponent(
+      "CrowRules Entertainment"
+    );
 
-  document.getElementById("messageText").value = "";
+  const body =
+    encodeURIComponent(
+      message
+    );
+
+  const mailto =
+    `mailto:${currentMember.email}` +
+    `?subject=${subject}` +
+    `&body=${body}`;
+
+  window.location.href =
+    mailto;
 
   closeMessage();
-
-  showToast("Message sent.");
-
 }
 
-/* =========================
-   ACCOUNT ACTIONS
-========================= */
-
-function suspendMember(){
-
-  const confirmed =
-    confirm(
-      "Suspend this member account?"
-    );
-
-  if(!confirmed){
-    return;
-  }
-
-  showToast("Member account suspended.");
-
-}
-
-function resetPassword(){
-
-  const confirmed =
-    confirm(
-      "Send a password reset request to this member?"
-    );
-
-  if(!confirmed){
-    return;
-  }
-
-  showToast("Password reset request sent.");
-
-}
-
-function changeMembership(){
-
-  openEdit();
-
-  setTimeout(()=>{
-    document.getElementById("editMembership").focus();
-  },350);
-
-}
+/* =========================================================
+   COMMUNITY
+========================================================= */
 
 function viewCommunity(){
 
-  location.href =
-    "community.html?member=" +
-    encodeURIComponent(memberId);
+  if(!currentMember){
+    return;
+  }
 
+  window.location.href =
+    "community.html?member=" +
+    encodeURIComponent(
+      currentMember.id
+    );
 }
 
-/* =========================
-   MODAL
-========================= */
+/* =========================================================
+   EXPORT
+========================================================= */
 
-messageModal.addEventListener("click",event=>{
+function csvEscape(value){
 
-  if(event.target === messageModal){
-    closeMessage();
+  if(value === null ||
+     value === undefined){
+    return "";
   }
 
-});
+  const text =
+    String(value);
 
-document.addEventListener("keydown",event=>{
+  return (
+    '"' +
+    text.replace(/"/g,'""') +
+    '"'
+  );
+}
 
-  if(event.key === "Escape"){
-    closeMessage();
+function exportMember(){
+
+  if(!currentMember){
+    return;
   }
 
-});
+  const fields = [
+    "id",
+    "user_id",
+    "first_name",
+    "last_name",
+    "display_name",
+    "username",
+    "email",
+    "membership_type",
+    "role",
+    "status",
+    "points",
+    "watch_minutes",
+    "bio",
+    "avatar_url",
+    "last_active_at",
+    "created_at",
+    "updated_at"
+  ];
 
-/* =========================
-   FUTURE SUPABASE MODEL
-=========================
+  const rows = [
+    fields.map(csvEscape).join(","),
+    fields
+      .map(field =>
+        csvEscape(
+          currentMember[field]
+        )
+      )
+      .join(",")
+  ];
 
-Suggested relationship:
+  const blob =
+    new Blob(
+      [
+        rows.join("\n")
+      ],
+      {
+        type:"text/csv;charset=utf-8"
+      }
+    );
 
-auth.users
-    │
-    └── profiles
-          │
-          ├── memberships
-          ├── member_roles
-          ├── member_points
-          ├── member_badges
-          ├── watch_history
-          ├── favorites
-          ├── notifications
-          ├── community_posts
-          └── member_activity
+  const url =
+    URL.createObjectURL(blob);
 
-Recommended profile fields:
+  const link =
+    document.createElement("a");
 
-id
-username
-display_name
-first_name
-last_name
-avatar_url
-bio
-role
-status
-membership_type
-points
-watch_hours
-created_at
-updated_at
+  link.href =
+    url;
 
-Recommended membership fields:
+  link.download =
+    "crowrules-member-" +
+    currentMember.id +
+    ".csv";
 
-id
-user_id
-plan_id
-status
-started_at
-expires_at
-renewed_at
-created_at
-updated_at
+  document.body.appendChild(link);
 
-Recommended watch history:
+  link.click();
 
-id
-user_id
-content_type
-content_id
-progress_seconds
-duration_seconds
-completed
-last_watched_at
-created_at
+  link.remove();
 
-Recommended member activity:
+  URL.revokeObjectURL(url);
 
-id
-user_id
-activity_type
-content_type
-content_id
-metadata
-created_at
+  showToast(
+    "Member data exported.",
+    "success"
+  );
+}
 
-Recommended badges:
+/* =========================================================
+   ACTIVITY
+========================================================= */
 
-id
-name
-slug
-description
-icon
-points_required
-active
+function relativeTime(value){
 
-Recommended member_badges:
+  if(!value){
+    return "No activity recorded";
+  }
 
-id
-user_id
-badge_id
-earned_at
+  const time =
+    new Date(value).getTime();
 
-IMPORTANT:
+  if(!Number.isFinite(time)){
+    return "Unknown";
+  }
 
-Do not expose a Supabase service-role
-key in this HTML page.
+  const diff =
+    Math.max(
+      0,
+      Date.now() - time
+    );
 
-Use the public/anon key with RLS,
-and perform privileged administrative
-operations through secure server-side
-logic or Supabase Edge Functions.
+  const minutes =
+    Math.floor(
+      diff / 60000
+    );
 
-Example future read:
+  if(minutes < 1){
+    return "Just now";
+  }
 
-const { data, error } = await supabase
-  .from("profiles")
-  .select("*")
-  .eq("id", memberId)
-  .single();
+  if(minutes < 60){
+    return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+  }
 
-The exact production query should be
-adapted to the existing CrowRules schema
-rather than assuming these columns already
-exist.
+  const hours =
+    Math.floor(
+      minutes / 60
+    );
 
-*/
+  if(hours < 24){
+    return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+  }
 
+  const days =
+    Math.floor(
+      hours / 24
+    );
+
+  if(days < 30){
+    return `${days} day${days === 1 ? "" : "s"} ago`;
+  }
+
+  return formatDate(value);
+}
+
+function addActivity(
+  icon,
+  text,
+  time
+){
+
+  return `
+    <div class="activity">
+
+      <div class="activity-icon">
+        ${escapeHtml(icon)}
+      </div>
+
+      <div class="activity-text">
+
+        ${text}
+
+        <div class="activity-time">
+          ${escapeHtml(time)}
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function renderActivity(member){
+
+  const activities = [];
+
+  if(member.last_active_at){
+
+    activities.push(
+      addActivity(
+        "●",
+        `Last active as a <strong>${escapeHtml(member.role || "Member")}</strong>.`,
+        relativeTime(member.last_active_at)
+      )
+    );
+  }
+
+  if(
+    safeNumber(member.watch_minutes) > 0
+  ){
+
+    activities.push(
+      addActivity(
+        "▶",
+        `Recorded <strong>${escapeHtml(formatNumber(member.watch_minutes))} minutes</strong> of watch time.`,
+        "Member statistics"
+      )
+    );
+  }
+
+  if(
+    safeNumber(member.points) > 0
+  ){
+
+    activities.push(
+      addActivity(
+        "★",
+        `Has accumulated <strong>${escapeHtml(formatNumber(member.points))} points</strong>.`,
+        "Member statistics"
+      )
+    );
+  }
+
+  if(member.created_at){
+
+    activities.push(
+      addActivity(
+        "+",
+        `Joined CrowRules Entertainment as a <strong>${escapeHtml(member.membership_type || "Free")}</strong> member.`,
+        formatDate(member.created_at)
+      )
+    );
+  }
+
+  if(member.updated_at){
+
+    activities.push(
+      addActivity(
+        "✎",
+        `Member record was last updated.`,
+        formatDateTime(member.updated_at)
+      )
+    );
+  }
+
+  if(!activities.length){
+
+    $("activityList").innerHTML =
+      `<div class="empty">
+        No account activity is available for this member.
+      </div>`;
+
+    return;
+  }
+
+  $("activityList").innerHTML =
+    activities.join("");
+}
+
+/* =========================================================
+   MODAL EVENTS
+========================================================= */
+
+$("messageModal")
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        $("messageModal")
+      ){
+        closeMessage();
+      }
+
+    }
+  );
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Escape"){
+      closeMessage();
+    }
+
+  }
+);
+
+/* =========================================================
+   AUTH STATE LISTENER
+========================================================= */
+
+async function setupAuthListener(){
+
+  if(!supabaseClient){
+    return;
+  }
+
+  supabaseClient.auth
+    .onAuthStateChange(
+      (event,session)=>{
+
+        if(
+          event === "SIGNED_OUT" ||
+          !session
+        ){
+
+          window.location.href =
+            "login.html?redirect=" +
+            encodeURIComponent(
+              window.location.pathname +
+              window.location.search
+            );
+        }
+
+      }
+    );
+}
+
+/* =========================================================
+   BOOT
+========================================================= */
+
+(async function boot(){
+
+  try{
+
+    await initializeSupabase();
+
+    await setupAuthListener();
+
+    await loadMember();
+
+  }catch(error){
+
+    console.error(
+      "CrowRules member boot error:",
+      error
+    );
+
+    showError(
+      "Application Error",
+      "The member administration page could not initialize.",
+      error?.message ||
+      String(error)
+    );
+  }
+
+})();
 </script>
 
 </body>
