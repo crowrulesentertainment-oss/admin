@@ -5,12 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>Articles — CrowRules Entertainment Admin</title>
+
 <meta name="theme-color" content="#050505">
 <meta name="description" content="CrowRules Entertainment Articles and Editorial Administration">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
+  rel="stylesheet"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
@@ -22,6 +29,7 @@
   --line2:#383842;
   --text:#f5f5f7;
   --muted:#8d8d98;
+
   --accent:#b66cff;
   --accent2:#6c5cff;
   --cyan:#37d7ff;
@@ -29,7 +37,8 @@
   --yellow:#f3c969;
   --red:#ff526d;
   --orange:#ff8a4c;
-  --sidebar:260px;
+
+  --sidebar:270px;
 }
 
 *{
@@ -42,8 +51,16 @@ body{
   padding:0;
   min-height:100%;
   background:
-    radial-gradient(circle at 82% -10%,rgba(182,108,255,.10),transparent 30%),
-    radial-gradient(circle at 5% 35%,rgba(55,215,255,.045),transparent 28%),
+    radial-gradient(
+      circle at 82% -10%,
+      rgba(182,108,255,.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 5% 35%,
+      rgba(55,215,255,.045),
+      transparent 28%
+    ),
     var(--bg);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
@@ -69,9 +86,83 @@ a{
   text-decoration:none;
 }
 
-/* =================================
+.hidden{
+  display:none!important;
+}
+
+/* =========================================================
+   AUTH GATE
+========================================================= */
+
+.auth-gate{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(182,108,255,.12),
+      transparent 35%
+    ),
+    #050505;
+}
+
+.auth-box{
+  width:min(460px,calc(100% - 30px));
+  padding:34px;
+  border:1px solid var(--line2);
+  background:#0b0b0f;
+  text-align:center;
+  box-shadow:0 30px 90px rgba(0,0,0,.65);
+}
+
+.auth-logo{
+  width:58px;
+  height:58px;
+  margin:0 auto 18px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(182,108,255,.55);
+  color:var(--accent);
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+  font-weight:800;
+  box-shadow:0 0 35px rgba(182,108,255,.12);
+}
+
+.auth-title{
+  font-family:Orbitron,sans-serif;
+  font-size:18px;
+  letter-spacing:1px;
+}
+
+.auth-text{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+}
+
+.auth-status{
+  margin-top:20px;
+  padding:12px;
+  border:1px solid var(--line);
+  background:#101015;
+  color:#aaaab4;
+  font-size:10px;
+}
+
+.auth-status.error{
+  border-color:rgba(255,82,109,.3);
+  color:var(--red);
+}
+
+/* =========================================================
    SIDEBAR
-================================= */
+========================================================= */
 
 .sidebar{
   position:fixed;
@@ -79,12 +170,18 @@ a{
   top:0;
   bottom:0;
   width:var(--sidebar);
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.025),transparent 20%),
-    #09090c;
-  border-right:1px solid var(--line);
   z-index:100;
   overflow-y:auto;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.025),
+      transparent 20%
+    ),
+    #09090c;
+
+  border-right:1px solid var(--line);
 }
 
 .brand{
@@ -123,30 +220,30 @@ a{
 }
 
 .nav{
-  padding:17px 12px 30px;
+  padding:15px 11px 35px;
 }
 
 .nav-label{
   color:#555560;
-  font-size:9px;
+  font-size:8px;
   letter-spacing:2px;
   text-transform:uppercase;
-  padding:13px 11px 8px;
+  padding:13px 11px 7px;
   font-weight:700;
 }
 
 .nav a{
   display:flex;
   align-items:center;
-  gap:12px;
-  min-height:42px;
-  padding:0 12px;
+  gap:11px;
+  min-height:40px;
+  padding:0 11px;
   margin:2px 0;
   border:1px solid transparent;
-  color:#aaaab4;
   border-radius:7px;
+  color:#aaaab4;
   transition:.18s ease;
-  font-size:12px;
+  font-size:11px;
   font-weight:600;
 }
 
@@ -159,7 +256,11 @@ a{
 .nav a.active{
   color:#fff;
   background:
-    linear-gradient(90deg,rgba(182,108,255,.13),rgba(108,92,255,.04));
+    linear-gradient(
+      90deg,
+      rgba(182,108,255,.13),
+      rgba(108,92,255,.04)
+    );
   border-color:rgba(182,108,255,.30);
   box-shadow:inset 3px 0 0 var(--accent);
 }
@@ -167,24 +268,25 @@ a{
 .nav-icon{
   width:20px;
   text-align:center;
-  font-size:14px;
+  font-size:13px;
 }
 
 .nav-badge{
   margin-left:auto;
   min-width:22px;
-  height:20px;
+  height:19px;
+  padding:0 5px;
   display:grid;
   place-items:center;
   border:1px solid var(--line2);
   color:var(--muted);
   border-radius:4px;
-  font-size:9px;
+  font-size:8px;
 }
 
-/* =================================
+/* =========================================================
    MAIN
-================================= */
+========================================================= */
 
 .main{
   min-height:100vh;
@@ -196,11 +298,15 @@ a{
   position:sticky;
   top:0;
   z-index:80;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 28px;
+
+  padding:0 27px;
+
   border-bottom:1px solid var(--line);
+
   background:rgba(5,5,5,.78);
   backdrop-filter:blur(14px);
 }
@@ -210,7 +316,7 @@ a{
   align-items:center;
   gap:9px;
   color:var(--muted);
-  font-size:11px;
+  font-size:10px;
 }
 
 .crumb strong{
@@ -220,7 +326,7 @@ a{
 .top-actions{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
 }
 
 .clock{
@@ -229,16 +335,18 @@ a{
   border-radius:5px;
   color:var(--cyan);
   font-family:Orbitron,sans-serif;
-  font-size:10px;
+  font-size:9px;
   letter-spacing:1px;
 }
 
 .icon-btn{
   width:35px;
   height:35px;
+
   background:#0c0c10;
   border:1px solid var(--line);
   border-radius:6px;
+
   color:#aaaab4;
 }
 
@@ -247,12 +355,37 @@ a{
   border-color:var(--line2);
 }
 
-/* =================================
+.profile{
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  height:35px;
+  padding:0 10px;
+
+  border:1px solid var(--line);
+  border-radius:6px;
+
+  background:#0c0c10;
+  color:#aaaab4;
+
+  font-size:9px;
+}
+
+.profile-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px rgba(69,230,154,.6);
+}
+
+/* =========================================================
    CONTENT
-================================= */
+========================================================= */
 
 .content{
-  max-width:1800px;
+  max-width:1850px;
   margin:auto;
   padding:28px;
 }
@@ -260,73 +393,99 @@ a{
 .hero{
   position:relative;
   min-height:190px;
+
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
+
   gap:25px;
   overflow:hidden;
+
   padding:30px;
+
   border:1px solid var(--line);
+
   background:
-    radial-gradient(circle at 85% 30%,rgba(182,108,255,.13),transparent 28%),
-    linear-gradient(135deg,#111117,#09090d);
+    radial-gradient(
+      circle at 85% 30%,
+      rgba(182,108,255,.13),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #111117,
+      #09090d
+    );
 }
 
 .hero:before{
   content:"EDITORIAL";
+
   position:absolute;
   right:-25px;
   top:5px;
+
   color:rgba(255,255,255,.018);
+
   font-family:Orbitron,sans-serif;
   font-size:88px;
   line-height:1;
   font-weight:800;
+
   pointer-events:none;
 }
 
 .eyebrow{
   margin-bottom:11px;
+
   color:var(--accent);
+
   font-family:Orbitron,sans-serif;
-  font-size:10px;
+  font-size:9px;
   letter-spacing:3px;
   text-transform:uppercase;
 }
 
 .hero h1{
   margin:0;
+
   font-family:Orbitron,sans-serif;
   font-size:clamp(25px,3vw,40px);
   letter-spacing:-1px;
 }
 
 .hero p{
-  max-width:740px;
+  max-width:760px;
+
   margin:12px 0 0;
+
   color:var(--muted);
-  font-size:12px;
+
+  font-size:11px;
   line-height:1.7;
 }
 
 .hero-actions{
   position:relative;
   z-index:2;
+
   display:flex;
   flex-wrap:wrap;
-  gap:9px;
+  gap:8px;
 }
 
 .btn{
-  min-height:39px;
-  padding:0 14px;
+  min-height:38px;
+  padding:0 13px;
+
   border:1px solid var(--line2);
   border-radius:6px;
+
   background:#101015;
   color:#ddd;
-  font-size:11px;
+
+  font-size:10px;
   font-weight:700;
-  letter-spacing:.3px;
 }
 
 .btn:hover{
@@ -350,100 +509,137 @@ a{
 }
 
 .btn.danger{
-  border-color:rgba(255,82,109,.25);
+  border-color:rgba(255,82,109,.28);
   color:var(--red);
 }
 
-/* =================================
+.btn.success{
+  border-color:rgba(69,230,154,.28);
+  color:var(--green);
+}
+
+/* =========================================================
    STATS
-================================= */
+========================================================= */
 
 .stats{
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:12px;
+
   margin:16px 0;
 }
 
 .stat{
   position:relative;
   overflow:hidden;
-  padding:18px;
+
+  min-height:105px;
+  padding:17px;
+
   border:1px solid var(--line);
   background:var(--panel);
 }
 
 .stat:after{
   content:"";
+
   position:absolute;
   right:-30px;
   bottom:-45px;
+
   width:100px;
   height:100px;
+
   border-radius:50%;
+
   background:rgba(182,108,255,.035);
 }
 
 .stat-label{
   color:var(--muted);
-  font-size:9px;
+
+  font-size:8px;
   letter-spacing:1.5px;
   text-transform:uppercase;
 }
 
 .stat-value{
-  margin-top:9px;
+  margin-top:8px;
+
   font-family:Orbitron,sans-serif;
-  font-size:27px;
+  font-size:25px;
 }
 
 .stat-meta{
-  margin-top:6px;
+  margin-top:5px;
+
   color:#666672;
-  font-size:9px;
+  font-size:8px;
 }
 
-.stat.accent .stat-value{color:var(--accent)}
-.stat.green .stat-value{color:var(--green)}
-.stat.yellow .stat-value{color:var(--yellow)}
-.stat.cyan .stat-value{color:var(--cyan)}
-.stat.red .stat-value{color:var(--red)}
+.stat.accent .stat-value{
+  color:var(--accent);
+}
 
-/* =================================
+.stat.green .stat-value{
+  color:var(--green);
+}
+
+.stat.yellow .stat-value{
+  color:var(--yellow);
+}
+
+.stat.cyan .stat-value{
+  color:var(--cyan);
+}
+
+.stat.red .stat-value{
+  color:var(--red);
+}
+
+/* =========================================================
    TOOLBAR
-================================= */
+========================================================= */
 
 .toolbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
   flex-wrap:wrap;
-  gap:15px;
+
+  gap:14px;
+
   margin:22px 0 13px;
 }
 
 .toolbar-title{
   font-family:Orbitron,sans-serif;
-  font-size:14px;
+  font-size:13px;
   letter-spacing:.5px;
 }
 
 .toolbar-right{
   display:flex;
   flex-wrap:wrap;
-  gap:8px;
+  gap:7px;
 }
 
 .search{
   width:270px;
-  height:39px;
-  padding:0 12px;
+  height:38px;
+
+  padding:0 11px;
+
   outline:none;
+
   border:1px solid var(--line);
   border-radius:6px;
+
   background:#0d0d11;
   color:#fff;
-  font-size:11px;
+
+  font-size:10px;
 }
 
 .search:focus{
@@ -451,58 +647,67 @@ a{
 }
 
 .select{
-  height:39px;
+  height:38px;
+
   padding:0 10px;
+
   outline:none;
+
   border:1px solid var(--line);
   border-radius:6px;
+
   background:#0d0d11;
   color:#bbb;
-  font-size:10px;
+
+  font-size:9px;
 }
 
-/* =================================
-   ARTICLE TABLE
-================================= */
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table-wrap{
   overflow:auto;
+
   border:1px solid var(--line);
   background:var(--panel);
 }
 
 .article-table{
   width:100%;
-  min-width:950px;
+  min-width:1100px;
+
   border-collapse:collapse;
 }
 
 .article-table th{
-  padding:13px 15px;
+  padding:13px 14px;
+
   border-bottom:1px solid var(--line);
+
   background:#0f0f14;
+
   color:#666672;
+
   font-size:8px;
   letter-spacing:1.5px;
+
   text-align:left;
   text-transform:uppercase;
+
   white-space:nowrap;
 }
 
 .article-table td{
-  padding:13px 15px;
+  padding:13px 14px;
+
   border-bottom:1px solid #1d1d24;
+
   color:#aaaab4;
-  font-size:10px;
+
+  font-size:9px;
+
   vertical-align:middle;
-}
-
-.article-table tr:last-child td{
-  border-bottom:0;
-}
-
-.article-table tbody tr{
-  transition:.15s ease;
 }
 
 .article-table tbody tr:hover{
@@ -513,37 +718,66 @@ a{
   display:flex;
   align-items:center;
   gap:12px;
-  min-width:320px;
+
+  min-width:360px;
 }
 
 .article-thumb{
-  width:62px;
-  height:44px;
+  width:64px;
+  height:45px;
+
   flex:0 0 auto;
+
   display:grid;
   place-items:center;
+
+  overflow:hidden;
+
   border:1px solid #34343e;
+
   background:
-    radial-gradient(circle at 25% 25%,rgba(55,215,255,.14),transparent 35%),
-    radial-gradient(circle at 80% 80%,rgba(182,108,255,.18),transparent 40%),
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(55,215,255,.14),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(182,108,255,.18),
+      transparent 40%
+    ),
     #111117;
+
   color:var(--accent);
+
   font-family:Orbitron,sans-serif;
-  font-size:11px;
+  font-size:10px;
+  font-weight:700;
+}
+
+.article-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
 .article-name{
   color:#fff;
-  font-size:11px;
+  font-size:10px;
   font-weight:700;
 }
 
 .article-excerpt{
-  max-width:380px;
+  max-width:430px;
+
   margin-top:4px;
+
   overflow:hidden;
+
   color:#666672;
+
   font-size:8px;
+
   white-space:nowrap;
   text-overflow:ellipsis;
 }
@@ -551,11 +785,15 @@ a{
 .badge{
   display:inline-flex;
   align-items:center;
-  min-height:23px;
+
+  min-height:22px;
+
   padding:0 7px;
+
   border:1px solid;
   border-radius:4px;
-  font-size:8px;
+
+  font-size:7px;
   letter-spacing:.5px;
   text-transform:uppercase;
 }
@@ -585,30 +823,39 @@ a{
 
 .category{
   color:var(--accent);
-  font-size:9px;
+
+  font-size:8px;
   font-weight:700;
+
+  text-transform:uppercase;
 }
 
 .views{
   color:#ddd;
+
   font-family:Orbitron,sans-serif;
-  font-size:9px;
+  font-size:8px;
 }
 
 .row-actions{
   display:flex;
-  gap:5px;
+  gap:4px;
+  flex-wrap:wrap;
 }
 
 .row-btn{
   min-width:30px;
-  height:29px;
+  height:28px;
+
   padding:0 7px;
+
   border:1px solid var(--line);
   border-radius:5px;
+
   background:#101015;
   color:#aaa;
-  font-size:9px;
+
+  font-size:8px;
 }
 
 .row-btn:hover{
@@ -624,14 +871,20 @@ a{
   color:var(--red);
 }
 
-/* =================================
-   LOWER PANELS
-================================= */
+.row-btn.publish{
+  color:var(--green);
+}
+
+/* =========================================================
+   LOWER
+========================================================= */
 
 .lower{
   display:grid;
   grid-template-columns:1.3fr .7fr;
+
   gap:14px;
+
   margin-top:16px;
 }
 
@@ -644,20 +897,26 @@ a{
   display:flex;
   justify-content:space-between;
   align-items:center;
+
+  gap:10px;
+
   padding:15px 17px;
+
   border-bottom:1px solid var(--line);
 }
 
 .panel-title{
   font-family:Orbitron,sans-serif;
-  font-size:11px;
+  font-size:10px;
   letter-spacing:.7px;
 }
 
 .panel-sub{
   margin-top:3px;
+
   color:#666672;
-  font-size:9px;
+
+  font-size:8px;
 }
 
 .activity{
@@ -668,7 +927,9 @@ a{
   display:flex;
   align-items:center;
   gap:12px;
+
   min-height:58px;
+
   border-bottom:1px solid #1c1c22;
 }
 
@@ -679,10 +940,13 @@ a{
 .activity-icon{
   width:32px;
   height:32px;
+
   display:grid;
   place-items:center;
+
   border:1px solid rgba(182,108,255,.2);
   border-radius:6px;
+
   background:#111117;
   color:var(--accent);
 }
@@ -694,13 +958,16 @@ a{
 
 .activity-title{
   color:#ddd;
-  font-size:10px;
+
+  font-size:9px;
   font-weight:700;
 }
 
 .activity-meta{
   margin-top:4px;
+
   color:#666672;
+
   font-size:8px;
 }
 
@@ -714,7 +981,7 @@ a{
 }
 
 .breakdown-item{
-  margin-bottom:16px;
+  margin-bottom:15px;
 }
 
 .breakdown-item:last-child{
@@ -724,37 +991,54 @@ a{
 .breakdown-head{
   display:flex;
   justify-content:space-between;
-  margin-bottom:7px;
+
+  margin-bottom:6px;
+
   color:#aaaab4;
-  font-size:9px;
+
+  font-size:8px;
 }
 
 .bar{
   height:6px;
+
   overflow:hidden;
+
   border:1px solid #24242c;
   background:#08080b;
 }
 
 .bar span{
   display:block;
+
   height:100%;
-  background:linear-gradient(90deg,var(--accent2),var(--accent));
+
+  background:linear-gradient(
+    90deg,
+    var(--accent2),
+    var(--accent)
+  );
 }
 
-/* =================================
+/* =========================================================
    MODAL
-================================= */
+========================================================= */
 
 .modal{
   position:fixed;
   inset:0;
+
   z-index:300;
+
   display:none;
+
   align-items:center;
   justify-content:center;
+
   padding:20px;
+
   background:rgba(0,0,0,.72);
+
   backdrop-filter:blur(8px);
 }
 
@@ -763,11 +1047,15 @@ a{
 }
 
 .modal-box{
-  width:min(760px,100%);
-  max-height:90vh;
+  width:min(820px,100%);
+  max-height:92vh;
+
   overflow:auto;
+
   border:1px solid var(--line2);
+
   background:#0b0b0f;
+
   box-shadow:0 30px 80px rgba(0,0,0,.55);
 }
 
@@ -775,20 +1063,24 @@ a{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:18px 20px;
+
+  padding:17px 20px;
+
   border-bottom:1px solid var(--line);
 }
 
 .modal-title{
   font-family:Orbitron,sans-serif;
-  font-size:14px;
+  font-size:13px;
 }
 
 .close{
   width:32px;
   height:32px;
+
   border:1px solid var(--line);
   border-radius:5px;
+
   background:#111117;
   color:#aaa;
 }
@@ -809,9 +1101,12 @@ a{
 
 .field label{
   display:block;
+
   margin-bottom:7px;
+
   color:#777783;
-  font-size:9px;
+
+  font-size:8px;
   letter-spacing:1px;
   text-transform:uppercase;
 }
@@ -820,17 +1115,22 @@ a{
 .field select,
 .field textarea{
   width:100%;
+
   outline:none;
+
   padding:10px;
+
   border:1px solid var(--line);
   border-radius:5px;
+
   background:#101015;
   color:#fff;
-  font-size:10px;
+
+  font-size:9px;
 }
 
 .field textarea{
-  min-height:120px;
+  min-height:115px;
   resize:vertical;
 }
 
@@ -844,9 +1144,12 @@ a{
   display:flex;
   align-items:center;
   gap:8px;
-  min-height:39px;
+
+  min-height:38px;
+
   color:#aaaab4;
-  font-size:10px;
+
+  font-size:9px;
 }
 
 .checkbox-row input{
@@ -856,27 +1159,125 @@ a{
 .modal-foot{
   display:flex;
   justify-content:flex-end;
+
   gap:8px;
+
   padding:14px 20px;
+
   border-top:1px solid var(--line);
 }
 
-/* =================================
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+.preview-box{
+  width:min(900px,100%);
+}
+
+.preview-title{
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+  line-height:1.25;
+}
+
+.preview-meta{
+  margin:12px 0;
+
+  color:var(--muted);
+
+  font-size:9px;
+}
+
+.preview-image{
+  width:100%;
+  max-height:300px;
+
+  object-fit:cover;
+
+  margin:10px 0 20px;
+
+  border:1px solid var(--line);
+}
+
+.preview-excerpt{
+  margin-bottom:18px;
+
+  color:#aaaab4;
+
+  font-size:11px;
+  line-height:1.7;
+}
+
+.preview-body{
+  color:#d0d0d5;
+
+  font-size:11px;
+  line-height:1.9;
+
+  white-space:pre-wrap;
+}
+
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
+
+.loading-row,
+.empty-row{
+  padding:40px!important;
+
+  color:#666672!important;
+
+  text-align:center;
+}
+
+.loading-spinner{
+  width:24px;
+  height:24px;
+
+  margin:0 auto 10px;
+
+  border:2px solid #25252d;
+  border-top-color:var(--accent);
+
+  border-radius:50%;
+
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* =========================================================
    TOAST
-================================= */
+========================================================= */
 
 .toast{
   position:fixed;
+
   right:22px;
   bottom:22px;
+
   z-index:500;
-  min-width:260px;
+
+  min-width:280px;
+  max-width:420px;
+
   padding:13px 15px;
+
   border:1px solid var(--line2);
+
   background:#111117;
+
   box-shadow:0 15px 45px rgba(0,0,0,.45);
+
   opacity:0;
+
   transform:translateY(130px);
+
   transition:.25s ease;
 }
 
@@ -887,32 +1288,45 @@ a{
 
 .toast-title{
   color:var(--accent);
+
   font-family:Orbitron,sans-serif;
-  font-size:9px;
+
+  font-size:8px;
   letter-spacing:1px;
 }
 
 .toast-text{
   margin-top:5px;
+
   color:#aaaab4;
-  font-size:10px;
+
+  font-size:9px;
+
+  line-height:1.5;
 }
 
-/* =================================
+/* =========================================================
    MOBILE
-================================= */
+========================================================= */
 
 .mobile-menu{
   display:none;
+
   width:35px;
   height:35px;
+
   border:1px solid var(--line);
   border-radius:6px;
+
   background:#0d0d11;
   color:#fff;
 }
 
-@media(max-width:1200px){
+.sidebar-overlay{
+  display:none;
+}
+
+@media(max-width:1250px){
 
   .stats{
     grid-template-columns:repeat(3,1fr);
@@ -921,22 +1335,36 @@ a{
   .lower{
     grid-template-columns:1fr;
   }
+
 }
 
-@media(max-width:800px){
+@media(max-width:850px){
 
   :root{
     --sidebar:0px;
   }
 
   .sidebar{
-    width:270px;
+    width:275px;
+
     transform:translateX(-100%);
+
     transition:.25s ease;
   }
 
   body.menu-open .sidebar{
     transform:translateX(0);
+  }
+
+  body.menu-open .sidebar-overlay{
+    display:block;
+
+    position:fixed;
+    inset:0;
+
+    z-index:90;
+
+    background:rgba(0,0,0,.55);
   }
 
   .main{
@@ -955,6 +1383,10 @@ a{
     display:none;
   }
 
+  .profile span:last-child{
+    display:none;
+  }
+
   .content{
     padding:15px;
   }
@@ -962,6 +1394,7 @@ a{
   .hero{
     flex-direction:column;
     align-items:flex-start;
+
     padding:22px;
   }
 
@@ -992,9 +1425,10 @@ a{
   .field.full{
     grid-column:auto;
   }
+
 }
 
-@media(max-width:450px){
+@media(max-width:480px){
 
   .stats{
     grid-template-columns:1fr;
@@ -1003,30 +1437,93 @@ a{
   .hero h1{
     font-size:24px;
   }
+
+  .hero-actions{
+    width:100%;
+  }
+
+  .hero-actions .btn{
+    flex:1;
+  }
+
+  .profile{
+    display:none;
+  }
+
+  .toast{
+    right:12px;
+    bottom:12px;
+    left:12px;
+    min-width:0;
+  }
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- =================================
+<!-- ========================================================
+     AUTH GATE
+========================================================= -->
+
+<div class="auth-gate" id="authGate">
+
+  <div class="auth-box">
+
+    <div class="auth-logo">
+      CR
+    </div>
+
+    <div class="auth-title">
+      CROW RULES ADMIN
+    </div>
+
+    <div class="auth-text">
+      Verifying your administrative session.
+    </div>
+
+    <div
+      class="auth-status"
+      id="authStatus">
+      Connecting to Supabase Authentication...
+    </div>
+
+  </div>
+
+</div>
+
+<div class="sidebar-overlay" onclick="closeMenu()"></div>
+
+<!-- ========================================================
      SIDEBAR
-================================= -->
+========================================================= -->
 
 <aside class="sidebar">
 
   <div class="brand">
-    <div class="brand-mark">CR</div>
+
+    <div class="brand-mark">
+      CR
+    </div>
 
     <div>
-      <div class="brand-text">CrowRules</div>
-      <div class="brand-sub">ENTERTAINMENT ADMIN</div>
+      <div class="brand-text">
+        CrowRules
+      </div>
+
+      <div class="brand-sub">
+        ENTERTAINMENT ADMIN
+      </div>
     </div>
+
   </div>
 
   <nav class="nav">
 
-    <div class="nav-label">Main</div>
+    <div class="nav-label">
+      Main
+    </div>
 
     <a href="index.html">
       <span class="nav-icon">⌂</span>
@@ -1036,6 +1533,21 @@ a{
     <a href="content.html">
       <span class="nav-icon">▦</span>
       Content
+    </a>
+
+    <a href="pages.html">
+      <span class="nav-icon">▤</span>
+      Pages
+    </a>
+
+    <a href="categories.html">
+      <span class="nav-icon">◫</span>
+      Categories
+    </a>
+
+    <a href="tags.html">
+      <span class="nav-icon">#</span>
+      Tags
     </a>
 
     <a href="shows.html">
@@ -1061,8 +1573,12 @@ a{
     <a href="articles.html" class="active">
       <span class="nav-icon">▤</span>
       Articles
-      <span class="nav-badge">12</span>
+      <span class="nav-badge" id="articleNavBadge">—</span>
     </a>
+
+    <div class="nav-label">
+      TV Network
+    </div>
 
     <a href="channels.html">
       <span class="nav-icon">◈</span>
@@ -1084,11 +1600,28 @@ a{
       TV Guide
     </a>
 
-    <div class="nav-label">People</div>
+    <a href="catalog.html">
+      <span class="nav-icon">▥</span>
+      Catalog
+    </a>
+
+    <div class="nav-label">
+      Members
+    </div>
 
     <a href="members.html">
       <span class="nav-icon">♙</span>
       Members
+    </a>
+
+    <a href="membership.html">
+      <span class="nav-icon">◇</span>
+      Membership
+    </a>
+
+    <a href="subscriptions.html">
+      <span class="nav-icon">▰</span>
+      Subscriptions
     </a>
 
     <a href="community.html">
@@ -1096,26 +1629,129 @@ a{
       Community
     </a>
 
+    <a href="friends.html">
+      <span class="nav-icon">♧</span>
+      Friends
+    </a>
+
+    <div class="nav-label">
+      Creators
+    </div>
+
     <a href="creators.html">
       <span class="nav-icon">✦</span>
       Creators
     </a>
 
-    <div class="nav-label">CrowRules Network</div>
+    <a href="creator-content.html">
+      <span class="nav-icon">✧</span>
+      Creator Content
+    </a>
+
+    <a href="creator-approvals.html">
+      <span class="nav-icon">✓</span>
+      Approvals
+    </a>
+
+    <div class="nav-label">
+      Music
+    </div>
 
     <a href="records.html">
       <span class="nav-icon">◒</span>
       Records
     </a>
 
+    <a href="artists.html">
+      <span class="nav-icon">♬</span>
+      Artists
+    </a>
+
+    <a href="albums.html">
+      <span class="nav-icon">▣</span>
+      Albums
+    </a>
+
+    <a href="tracks.html">
+      <span class="nav-icon">♫</span>
+      Tracks
+    </a>
+
+    <div class="nav-label">
+      Sports
+    </div>
+
     <a href="sports.html">
       <span class="nav-icon">◇</span>
-      Sports
+      Sports Center
     </a>
+
+    <a href="teams.html">
+      <span class="nav-icon">◈</span>
+      Teams
+    </a>
+
+    <a href="standings.html">
+      <span class="nav-icon">≡</span>
+      Standings
+    </a>
+
+    <a href="rankings.html">
+      <span class="nav-icon">↕</span>
+      Rankings
+    </a>
+
+    <a href="games.html">
+      <span class="nav-icon">●</span>
+      Games
+    </a>
+
+    <a href="pickem.html">
+      <span class="nav-icon">◆</span>
+      Pick'em
+    </a>
+
+    <div class="nav-label">
+      Memorials
+    </div>
 
     <a href="memorials.html">
       <span class="nav-icon">✧</span>
       Memorials
+    </a>
+
+    <a href="memorial-photos.html">
+      <span class="nav-icon">▧</span>
+      Memorial Photos
+    </a>
+
+    <a href="memorial-videos.html">
+      <span class="nav-icon">▶</span>
+      Memorial Videos
+    </a>
+
+    <a href="candles.html">
+      <span class="nav-icon">✦</span>
+      Candles
+    </a>
+
+    <div class="nav-label">
+      Publishing
+    </div>
+
+    <a href="publishing.html">
+      <span class="nav-icon">▤</span>
+      Publishing
+    </a>
+
+    <a href="yearbooks.html">
+      <span class="nav-icon">▥</span>
+      Yearbooks
+    </a>
+
+    <a href="podcasting.html">
+      <span class="nav-icon">◉</span>
+      Podcasting
     </a>
 
     <a href="awards.html">
@@ -1123,7 +1759,38 @@ a{
       Awards
     </a>
 
-    <div class="nav-label">System</div>
+    <a href="holidays.html">
+      <span class="nav-icon">✦</span>
+      Holidays
+    </a>
+
+    <div class="nav-label">
+      Commerce
+    </div>
+
+    <a href="business.html">
+      <span class="nav-icon">▣</span>
+      Business
+    </a>
+
+    <a href="donations.html">
+      <span class="nav-icon">♡</span>
+      Donations
+    </a>
+
+    <a href="shop.html">
+      <span class="nav-icon">◇</span>
+      Shop
+    </a>
+
+    <a href="orders.html">
+      <span class="nav-icon">▰</span>
+      Orders
+    </a>
+
+    <div class="nav-label">
+      System
+    </div>
 
     <a href="analytics.html">
       <span class="nav-icon">⌁</span>
@@ -1150,6 +1817,31 @@ a{
       Activity
     </a>
 
+    <a href="storage.html">
+      <span class="nav-icon">▥</span>
+      Storage
+    </a>
+
+    <a href="authentication.html">
+      <span class="nav-icon">◉</span>
+      Authentication
+    </a>
+
+    <a href="roles.html">
+      <span class="nav-icon">♙</span>
+      Roles
+    </a>
+
+    <a href="permissions.html">
+      <span class="nav-icon">◆</span>
+      Permissions
+    </a>
+
+    <a href="api.html">
+      <span class="nav-icon">⌘</span>
+      API
+    </a>
+
     <a href="settings.html">
       <span class="nav-icon">⚙</span>
       Settings
@@ -1159,37 +1851,69 @@ a{
 
 </aside>
 
-<!-- =================================
+<!-- ========================================================
      MAIN
-================================= -->
+========================================================= -->
 
 <main class="main">
 
   <header class="topbar">
 
     <div class="crumb">
-      <button class="mobile-menu" onclick="toggleMenu()">☰</button>
-      <span>Admin</span>
-      <span>/</span>
-      <strong>Articles</strong>
+
+      <button
+        class="mobile-menu"
+        onclick="toggleMenu()">
+        ☰
+      </button>
+
+      <span>
+        Admin
+      </span>
+
+      <span>
+        /
+      </span>
+
+      <strong>
+        Articles
+      </strong>
+
     </div>
 
     <div class="top-actions">
 
-      <div class="clock" id="clock">
+      <div
+        class="clock"
+        id="clock">
         --:--:--
       </div>
 
       <button
         class="icon-btn"
-        onclick="showToast('SYSTEM','Editorial administration online.')">
-        ⌁
+        title="Refresh"
+        onclick="loadDashboard()">
+        ↻
       </button>
 
       <button
         class="icon-btn"
+        title="Settings"
         onclick="location.href='settings.html'">
         ⚙
+      </button>
+
+      <button
+        class="profile"
+        onclick="logout()"
+        title="Sign out">
+
+        <span class="profile-dot"></span>
+
+        <span id="profileEmail">
+          Admin
+        </span>
+
       </button>
 
     </div>
@@ -1198,7 +1922,9 @@ a{
 
   <section class="content">
 
-    <!-- HERO -->
+    <!-- ====================================================
+         HERO
+    ===================================================== -->
 
     <div class="hero">
 
@@ -1215,7 +1941,7 @@ a{
         <p>
           Create, edit, review and publish CrowRules Entertainment
           articles, news stories, editorials, interviews, announcements,
-          features and community coverage.
+          features, sports coverage and community stories.
         </p>
 
       </div>
@@ -1224,100 +1950,121 @@ a{
 
         <button
           class="btn primary"
-          onclick="openModal()">
+          onclick="openArticleModal()">
           ＋ New Article
         </button>
 
         <button
           class="btn cyan"
-          onclick="showToast('EDITOR','Opening full article editor.')">
-          ✎ Open Editor
+          onclick="refreshArticles()">
+          ↻ Refresh
         </button>
 
       </div>
 
     </div>
 
-    <!-- STATS -->
+    <!-- ====================================================
+         STATS
+    ===================================================== -->
 
     <div class="stats">
 
       <div class="stat accent">
+
         <div class="stat-label">
           Total Articles
         </div>
 
-        <div class="stat-value"
-             id="totalArticles">
-          42
+        <div
+          class="stat-value"
+          id="totalArticles">
+          —
         </div>
 
         <div class="stat-meta">
           All editorial content
         </div>
+
       </div>
 
       <div class="stat green">
+
         <div class="stat-label">
           Published
         </div>
 
-        <div class="stat-value"
-             id="publishedArticles">
-          31
+        <div
+          class="stat-value"
+          id="publishedArticles">
+          —
         </div>
 
         <div class="stat-meta">
           Public articles
         </div>
+
       </div>
 
       <div class="stat yellow">
+
         <div class="stat-label">
           Drafts
         </div>
 
-        <div class="stat-value"
-             id="draftArticles">
-          7
+        <div
+          class="stat-value"
+          id="draftArticles">
+          —
         </div>
 
         <div class="stat-meta">
           Work in progress
         </div>
+
       </div>
 
       <div class="stat cyan">
+
         <div class="stat-label">
           Review
         </div>
 
-        <div class="stat-value">
-          4
+        <div
+          class="stat-value"
+          id="reviewArticles">
+          —
         </div>
 
         <div class="stat-meta">
           Awaiting approval
         </div>
+
       </div>
 
       <div class="stat red">
+
         <div class="stat-label">
           Featured
         </div>
 
-        <div class="stat-value">
-          8
+        <div
+          class="stat-value"
+          id="featuredArticles">
+          —
         </div>
 
         <div class="stat-meta">
           Homepage features
         </div>
+
       </div>
 
     </div>
 
-    <!-- TOOLBAR -->
+    <!-- ====================================================
+         TOOLBAR
+    ===================================================== -->
 
     <div class="toolbar">
 
@@ -1332,13 +2079,11 @@ a{
           id="search"
           type="search"
           placeholder="Search articles..."
-          oninput="filterArticles()"
         >
 
         <select
           class="select"
-          id="categoryFilter"
-          onchange="filterArticles()">
+          id="categoryFilter">
 
           <option value="all">
             All Categories
@@ -1372,8 +2117,7 @@ a{
 
         <select
           class="select"
-          id="statusFilter"
-          onchange="filterArticles()">
+          id="statusFilter">
 
           <option value="all">
             All Status
@@ -1401,7 +2145,9 @@ a{
 
     </div>
 
-    <!-- ARTICLE TABLE -->
+    <!-- ====================================================
+         ARTICLE TABLE
+    ===================================================== -->
 
     <div class="table-wrap">
 
@@ -1410,479 +2156,51 @@ a{
         <thead>
 
           <tr>
-            <th>Article</th>
-            <th>Category</th>
-            <th>Status</th>
-            <th>Author</th>
-            <th>Views</th>
-            <th>Published</th>
-            <th>Actions</th>
+
+            <th>
+              Article
+            </th>
+
+            <th>
+              Category
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Author
+            </th>
+
+            <th>
+              Views
+            </th>
+
+            <th>
+              Published
+            </th>
+
+            <th>
+              Actions
+            </th>
+
           </tr>
 
         </thead>
 
         <tbody id="articleBody">
 
-          <tr
-            data-title="CrowRules TV Announces Expanded Programming"
-            data-category="news"
-            data-status="published">
+          <tr>
+            <td
+              colspan="7"
+              class="loading-row">
 
-            <td>
+              <div class="loading-spinner"></div>
 
-              <div class="article-cell">
-
-                <div class="article-thumb">
-                  CR
-                </div>
-
-                <div>
-
-                  <div class="article-name">
-                    CrowRules TV Announces Expanded Programming
-                  </div>
-
-                  <div class="article-excerpt">
-                    New original programming, live events and creator channels are coming to the network.
-                  </div>
-
-                </div>
-
-              </div>
+              Loading editorial library...
 
             </td>
-
-            <td>
-              <span class="category">
-                NEWS
-              </span>
-            </td>
-
-            <td>
-              <span class="badge published">
-                Published
-              </span>
-            </td>
-
-            <td>
-              CrowRules Editorial
-            </td>
-
-            <td>
-              <span class="views">
-                2,481
-              </span>
-            </td>
-
-            <td>
-              Sep 07, 2026
-            </td>
-
-            <td>
-
-              <div class="row-actions">
-
-                <button
-                  class="row-btn edit"
-                  onclick="editArticle('CrowRules TV Announces Expanded Programming')">
-                  Edit
-                </button>
-
-                <button
-                  class="row-btn"
-                  onclick="previewArticle('CrowRules TV Announces Expanded Programming')">
-                  View
-                </button>
-
-              </div>
-
-            </td>
-
-          </tr>
-
-          <tr
-            data-title="Inside Tacoma Nights"
-            data-category="features"
-            data-status="published">
-
-            <td>
-
-              <div class="article-cell">
-
-                <div class="article-thumb">
-                  TN
-                </div>
-
-                <div>
-
-                  <div class="article-name">
-                    Inside Tacoma Nights
-                  </div>
-
-                  <div class="article-excerpt">
-                    A behind-the-scenes look at the production and evolution of Tacoma Nights.
-                  </div>
-
-                </div>
-
-              </div>
-
-            </td>
-
-            <td>
-              <span class="category">
-                FEATURES
-              </span>
-            </td>
-
-            <td>
-              <span class="badge published">
-                Published
-              </span>
-            </td>
-
-            <td>
-              CrowRules Editorial
-            </td>
-
-            <td>
-              <span class="views">
-                1,932
-              </span>
-            </td>
-
-            <td>
-              Sep 06, 2026
-            </td>
-
-            <td>
-
-              <div class="row-actions">
-
-                <button
-                  class="row-btn edit"
-                  onclick="editArticle('Inside Tacoma Nights')">
-                  Edit
-                </button>
-
-                <button
-                  class="row-btn"
-                  onclick="previewArticle('Inside Tacoma Nights')">
-                  View
-                </button>
-
-              </div>
-
-            </td>
-
-          </tr>
-
-          <tr
-            data-title="Building Independent Media in the Pacific Northwest"
-            data-category="editorial"
-            data-status="review">
-
-            <td>
-
-              <div class="article-cell">
-
-                <div class="article-thumb">
-                  PN
-                </div>
-
-                <div>
-
-                  <div class="article-name">
-                    Building Independent Media in the Pacific Northwest
-                  </div>
-
-                  <div class="article-excerpt">
-                    Why independent creators and local media networks matter.
-                  </div>
-
-                </div>
-
-              </div>
-
-            </td>
-
-            <td>
-              <span class="category">
-                EDITORIAL
-              </span>
-            </td>
-
-            <td>
-              <span class="badge review">
-                Review
-              </span>
-            </td>
-
-            <td>
-              Jonathan
-            </td>
-
-            <td>
-              <span class="views">
-                842
-              </span>
-            </td>
-
-            <td>
-              —
-            </td>
-
-            <td>
-
-              <div class="row-actions">
-
-                <button
-                  class="row-btn edit"
-                  onclick="editArticle('Building Independent Media in the Pacific Northwest')">
-                  Edit
-                </button>
-
-                <button
-                  class="row-btn"
-                  onclick="previewArticle('Building Independent Media in the Pacific Northwest')">
-                  View
-                </button>
-
-              </div>
-
-            </td>
-
-          </tr>
-
-          <tr
-            data-title="Meet the Creators Behind CrowRules"
-            data-category="interviews"
-            data-status="published">
-
-            <td>
-
-              <div class="article-cell">
-
-                <div class="article-thumb">
-                  MC
-                </div>
-
-                <div>
-
-                  <div class="article-name">
-                    Meet the Creators Behind CrowRules
-                  </div>
-
-                  <div class="article-excerpt">
-                    Interviews with creators helping build the CrowRules entertainment universe.
-                  </div>
-
-                </div>
-
-              </div>
-
-            </td>
-
-            <td>
-              <span class="category">
-                INTERVIEWS
-              </span>
-            </td>
-
-            <td>
-              <span class="badge published">
-                Published
-              </span>
-            </td>
-
-            <td>
-              CrowRules Editorial
-            </td>
-
-            <td>
-              <span class="views">
-                1,104
-              </span>
-            </td>
-
-            <td>
-              Sep 05, 2026
-            </td>
-
-            <td>
-
-              <div class="row-actions">
-
-                <button
-                  class="row-btn edit"
-                  onclick="editArticle('Meet the Creators Behind CrowRules')">
-                  Edit
-                </button>
-
-                <button
-                  class="row-btn"
-                  onclick="previewArticle('Meet the Creators Behind CrowRules')">
-                  View
-                </button>
-
-              </div>
-
-            </td>
-
-          </tr>
-
-          <tr
-            data-title="CrowRules Sports Center Is Coming"
-            data-category="sports"
-            data-status="draft">
-
-            <td>
-
-              <div class="article-cell">
-
-                <div class="article-thumb">
-                  SP
-                </div>
-
-                <div>
-
-                  <div class="article-name">
-                    CrowRules Sports Center Is Coming
-                  </div>
-
-                  <div class="article-excerpt">
-                    A new sports destination covering teams, scores, standings, rankings and more.
-                  </div>
-
-                </div>
-
-              </div>
-
-            </td>
-
-            <td>
-              <span class="category">
-                SPORTS
-              </span>
-            </td>
-
-            <td>
-              <span class="badge draft">
-                Draft
-              </span>
-            </td>
-
-            <td>
-              CrowRules Editorial
-            </td>
-
-            <td>
-              <span class="views">
-                0
-              </span>
-            </td>
-
-            <td>
-              —
-            </td>
-
-            <td>
-
-              <div class="row-actions">
-
-                <button
-                  class="row-btn edit"
-                  onclick="editArticle('CrowRules Sports Center Is Coming')">
-                  Edit
-                </button>
-
-                <button
-                  class="row-btn"
-                  onclick="previewArticle('CrowRules Sports Center Is Coming')">
-                  View
-                </button>
-
-              </div>
-
-            </td>
-
-          </tr>
-
-          <tr
-            data-title="CrowRules Community Spotlight"
-            data-category="community"
-            data-status="published">
-
-            <td>
-
-              <div class="article-cell">
-
-                <div class="article-thumb">
-                  CO
-                </div>
-
-                <div>
-
-                  <div class="article-name">
-                    CrowRules Community Spotlight
-                  </div>
-
-                  <div class="article-excerpt">
-                    Highlighting members, creators and projects making an impact across the CrowRules community.
-                  </div>
-
-                </div>
-
-              </div>
-
-            </td>
-
-            <td>
-              <span class="category">
-                COMMUNITY
-              </span>
-            </td>
-
-            <td>
-              <span class="badge published">
-                Published
-              </span>
-            </td>
-
-            <td>
-              CrowRules Editorial
-            </td>
-
-            <td>
-              <span class="views">
-                733
-              </span>
-            </td>
-
-            <td>
-              Sep 03, 2026
-            </td>
-
-            <td>
-
-              <div class="row-actions">
-
-                <button
-                  class="row-btn edit"
-                  onclick="editArticle('CrowRules Community Spotlight')">
-                  Edit
-                </button>
-
-                <button
-                  class="row-btn"
-                  onclick="previewArticle('CrowRules Community Spotlight')">
-                  View
-                </button>
-
-              </div>
-
-            </td>
-
           </tr>
 
         </tbody>
@@ -1891,7 +2209,9 @@ a{
 
     </div>
 
-    <!-- LOWER PANELS -->
+    <!-- ====================================================
+         LOWER PANELS
+    ===================================================== -->
 
     <div class="lower">
 
@@ -1919,100 +2239,26 @@ a{
 
         </div>
 
-        <div class="activity">
+        <div
+          class="activity"
+          id="activityList">
 
           <div class="activity-row">
 
             <div class="activity-icon">
-              ✓
+              •
             </div>
 
             <div class="activity-main">
 
               <div class="activity-title">
-                CrowRules TV Announces Expanded Programming
+                Loading activity...
               </div>
 
               <div class="activity-meta">
-                Published to News
+                Connecting to Supabase
               </div>
 
-            </div>
-
-            <div class="activity-time">
-              8m
-            </div>
-
-          </div>
-
-          <div class="activity-row">
-
-            <div class="activity-icon">
-              ✎
-            </div>
-
-            <div class="activity-main">
-
-              <div class="activity-title">
-                Building Independent Media in the Pacific Northwest
-              </div>
-
-              <div class="activity-meta">
-                Submitted for review
-              </div>
-
-            </div>
-
-            <div class="activity-time">
-              31m
-            </div>
-
-          </div>
-
-          <div class="activity-row">
-
-            <div class="activity-icon">
-              ★
-            </div>
-
-            <div class="activity-main">
-
-              <div class="activity-title">
-                Inside Tacoma Nights
-              </div>
-
-              <div class="activity-meta">
-                Featured article enabled
-              </div>
-
-            </div>
-
-            <div class="activity-time">
-              2h
-            </div>
-
-          </div>
-
-          <div class="activity-row">
-
-            <div class="activity-icon">
-              +
-            </div>
-
-            <div class="activity-main">
-
-              <div class="activity-title">
-                Meet the Creators Behind CrowRules
-              </div>
-
-              <div class="activity-meta">
-                New article published
-              </div>
-
-            </div>
-
-            <div class="activity-time">
-              1d
             </div>
 
           </div>
@@ -2039,82 +2285,26 @@ a{
 
         </div>
 
-        <div class="breakdown">
+        <div
+          class="breakdown"
+          id="breakdown">
 
           <div class="breakdown-item">
 
             <div class="breakdown-head">
-              <span>News</span>
-              <span>34%</span>
+
+              <span>
+                Loading...
+              </span>
+
+              <span>
+                —
+              </span>
+
             </div>
 
             <div class="bar">
-              <span style="width:34%"></span>
-            </div>
-
-          </div>
-
-          <div class="breakdown-item">
-
-            <div class="breakdown-head">
-              <span>Features</span>
-              <span>24%</span>
-            </div>
-
-            <div class="bar">
-              <span style="width:24%"></span>
-            </div>
-
-          </div>
-
-          <div class="breakdown-item">
-
-            <div class="breakdown-head">
-              <span>Interviews</span>
-              <span>17%</span>
-            </div>
-
-            <div class="bar">
-              <span style="width:17%"></span>
-            </div>
-
-          </div>
-
-          <div class="breakdown-item">
-
-            <div class="breakdown-head">
-              <span>Editorial</span>
-              <span>12%</span>
-            </div>
-
-            <div class="bar">
-              <span style="width:12%"></span>
-            </div>
-
-          </div>
-
-          <div class="breakdown-item">
-
-            <div class="breakdown-head">
-              <span>Community</span>
-              <span>8%</span>
-            </div>
-
-            <div class="bar">
-              <span style="width:8%"></span>
-            </div>
-
-          </div>
-
-          <div class="breakdown-item">
-
-            <div class="breakdown-head">
-              <span>Sports</span>
-              <span>5%</span>
-            </div>
-
-            <div class="bar">
-              <span style="width:5%"></span>
+              <span style="width:0"></span>
             </div>
 
           </div>
@@ -2129,23 +2319,27 @@ a{
 
 </main>
 
-<!-- =================================
+<!-- ========================================================
      ARTICLE MODAL
-================================= -->
+========================================================= -->
 
-<div class="modal" id="articleModal">
+<div
+  class="modal"
+  id="articleModal">
 
   <div class="modal-box">
 
     <div class="modal-head">
 
-      <div class="modal-title">
+      <div
+        class="modal-title"
+        id="articleModalTitle">
         CREATE ARTICLE
       </div>
 
       <button
         class="close"
-        onclick="closeModal()">
+        onclick="closeArticleModal()">
         ×
       </button>
 
@@ -2163,6 +2357,7 @@ a{
 
           <input
             id="articleTitle"
+            autocomplete="off"
             placeholder="Enter article headline">
 
         </div>
@@ -2258,6 +2453,19 @@ a{
         <div class="field full">
 
           <label>
+            Slug
+          </label>
+
+          <input
+            id="articleSlug"
+            autocomplete="off"
+            placeholder="article-slug">
+
+        </div>
+
+        <div class="field full">
+
+          <label>
             Excerpt
           </label>
 
@@ -2280,7 +2488,7 @@ a{
 
         </div>
 
-        <div class="field">
+        <div class="field full">
 
           <label>
             Featured Image URL
@@ -2289,18 +2497,6 @@ a{
           <input
             id="articleImage"
             placeholder="https://...">
-
-        </div>
-
-        <div class="field">
-
-          <label>
-            Slug
-          </label>
-
-          <input
-            id="articleSlug"
-            placeholder="article-slug">
 
         </div>
 
@@ -2328,12 +2524,13 @@ a{
 
       <button
         class="btn"
-        onclick="closeModal()">
+        onclick="closeArticleModal()">
         Cancel
       </button>
 
       <button
         class="btn primary"
+        id="saveArticleButton"
         onclick="saveArticle()">
         Save Article
       </button>
@@ -2344,11 +2541,90 @@ a{
 
 </div>
 
-<!-- =================================
-     TOAST
-================================= -->
+<!-- ========================================================
+     PREVIEW MODAL
+========================================================= -->
 
-<div class="toast" id="toast">
+<div
+  class="modal"
+  id="previewModal">
+
+  <div class="modal-box preview-box">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        ARTICLE PREVIEW
+      </div>
+
+      <button
+        class="close"
+        onclick="closePreview()">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div
+        class="preview-title"
+        id="previewTitle">
+        —
+      </div>
+
+      <div
+        class="preview-meta"
+        id="previewMeta">
+        —
+      </div>
+
+      <img
+        class="preview-image hidden"
+        id="previewImage"
+        alt="Article image">
+
+      <div
+        class="preview-excerpt"
+        id="previewExcerpt">
+        —
+      </div>
+
+      <div
+        class="preview-body"
+        id="previewBody">
+        —
+      </div>
+
+    </div>
+
+    <div class="modal-foot">
+
+      <button
+        class="btn"
+        onclick="closePreview()">
+        Close
+      </button>
+
+      <button
+        class="btn primary"
+        id="previewEditButton">
+        Edit Article
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========================================================
+     TOAST
+========================================================= -->
+
+<div
+  class="toast"
+  id="toast">
 
   <div
     class="toast-title"
@@ -2365,16 +2641,67 @@ a{
 </div>
 
 <script>
+"use strict";
 
-/* =================================
+/* =========================================================
+   CONFIGURATION
+========================================================= */
+
+const CONFIG = {
+
+  SUPABASE_URL:
+    window.CROWRULES_SUPABASE_URL || "",
+
+  SUPABASE_KEY:
+    window.CROWRULES_SUPABASE_ANON_KEY ||
+    window.CROWRULES_SUPABASE_PUBLISHABLE_KEY ||
+    "",
+
+  ARTICLES_TABLE:
+    window.CROWRULES_ARTICLES_TABLE ||
+    "articles",
+
+  LOGIN_PAGE:
+    window.CROWRULES_LOGIN_PAGE ||
+    "login.html",
+
+  ADMIN_ROLES:[
+    "owner",
+    "super_admin",
+    "admin",
+    "administrator"
+  ]
+
+};
+
+let supabaseClient = null;
+
+let currentUser = null;
+
+let currentArticleId = null;
+
+let editingArticle = false;
+
+let allArticles = [];
+
+let toastTimer = null;
+
+
+/* =========================================================
    CLOCK
-================================= */
+========================================================= */
 
 function updateClock(){
 
-  const now = new Date();
+  const el =
+    document.getElementById("clock");
 
-  document.getElementById("clock").textContent =
+  if(!el) return;
+
+  const now =
+    new Date();
+
+  el.textContent =
     now.toLocaleTimeString([],{
       hour:"2-digit",
       minute:"2-digit",
@@ -2388,218 +2715,1448 @@ updateClock();
 setInterval(updateClock,1000);
 
 
-/* =================================
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      year:"numeric",
+      month:"short",
+      day:"2-digit"
+    }
+  );
+
+}
+
+
+function formatDateTime(value){
+
+  if(!value){
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
+
+  return date.toLocaleString(
+    undefined,
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric",
+      hour:"numeric",
+      minute:"2-digit"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+async function initSupabase(){
+
+  if(
+    !CONFIG.SUPABASE_URL ||
+    !CONFIG.SUPABASE_KEY
+  ){
+
+    throw new Error(
+      "Supabase configuration is missing. Set CROWRULES_SUPABASE_URL and CROWRULES_SUPABASE_ANON_KEY."
+    );
+
+  }
+
+  if(
+    !window.supabase ||
+    typeof window.supabase.createClient !== "function"
+  ){
+
+    throw new Error(
+      "Supabase JavaScript client failed to load."
+    );
+
+  }
+
+  supabaseClient =
+    window.supabase.createClient(
+      CONFIG.SUPABASE_URL,
+      CONFIG.SUPABASE_KEY,
+      {
+        auth:{
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:true
+        }
+      }
+    );
+
+}
+
+
+function setAuthStatus(
+  text,
+  isError=false
+){
+
+  const el =
+    document.getElementById("authStatus");
+
+  if(!el) return;
+
+  el.textContent = text;
+
+  el.classList.toggle(
+    "error",
+    isError
+  );
+
+}
+
+
+function getRedirectUrl(){
+
+  const current =
+    location.pathname.split("/").pop() ||
+    "articles.html";
+
+  return encodeURIComponent(current);
+
+}
+
+
+async function requireAdmin(){
+
+  if(!supabaseClient){
+    throw new Error(
+      "Supabase is not initialized."
+    );
+  }
+
+  /*
+   * getUser() performs a request to Supabase Auth
+   * and is used here rather than trusting arbitrary
+   * client-side session data.
+   */
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.getUser();
+
+  if(error){
+    throw error;
+  }
+
+  const user =
+    data?.user;
+
+  if(!user){
+
+    location.href =
+      CONFIG.LOGIN_PAGE +
+      "?redirect=" +
+      getRedirectUrl();
+
+    return false;
+
+  }
+
+  currentUser =
+    user;
+
+  /*
+   * Authorization must ultimately be enforced
+   * by Supabase RLS/server policies.
+   *
+   * This browser-side role check is only the
+   * administrative UI gate.
+   */
+
+  const appMetadata =
+    user.app_metadata || {};
+
+  const role =
+    String(
+      appMetadata.role ||
+      ""
+    ).toLowerCase();
+
+  const roles =
+    Array.isArray(
+      appMetadata.roles
+    )
+      ? appMetadata.roles
+      : [];
+
+  const normalizedRoles =
+    roles.map(
+      r => String(r).toLowerCase()
+    );
+
+  const isAdmin =
+    CONFIG.ADMIN_ROLES.includes(role) ||
+    normalizedRoles.some(
+      r => CONFIG.ADMIN_ROLES.includes(r)
+    );
+
+  /*
+   * If no role exists, allow an authenticated
+   * user only when explicitly configured.
+   *
+   * Default is strict admin mode.
+   */
+
+  const allowAuthenticatedAdmins =
+    window.CROWRULES_ALLOW_AUTHENTICATED_ADMIN === true;
+
+  if(
+    !isAdmin &&
+    !allowAuthenticatedAdmins
+  ){
+
+    setAuthStatus(
+      "Authenticated account is not authorized for the Admin Center.",
+      true
+    );
+
+    setTimeout(
+      () => {
+        location.href =
+          CONFIG.LOGIN_PAGE +
+          "?redirect=" +
+          getRedirectUrl() +
+          "&error=not_authorized";
+      },
+      1500
+    );
+
+    return false;
+
+  }
+
+  updateProfileUI();
+
+  return true;
+
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function updateProfileUI(){
+
+  if(!currentUser){
+    return;
+  }
+
+  const email =
+    currentUser.email ||
+    "Admin";
+
+  const el =
+    document.getElementById(
+      "profileEmail"
+    );
+
+  if(el){
+    el.textContent =
+      email;
+  }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout(){
+
+  if(!supabaseClient){
+    location.href =
+      CONFIG.LOGIN_PAGE;
+
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient.auth.signOut();
+
+    if(error){
+      throw error;
+    }
+
+  }catch(error){
+
+    console.error(
+      "Logout failed:",
+      error
+    );
+
+  }finally{
+
+    location.href =
+      CONFIG.LOGIN_PAGE;
+
+  }
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+function watchAuth(){
+
+  if(!supabaseClient){
+    return;
+  }
+
+  supabaseClient.auth.onAuthStateChange(
+    function(event){
+
+      if(event === "SIGNED_OUT"){
+
+        location.href =
+          CONFIG.LOGIN_PAGE +
+          "?redirect=" +
+          getRedirectUrl();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
    MOBILE MENU
-================================= */
+========================================================= */
 
 function toggleMenu(){
 
-  document.body.classList.toggle("menu-open");
+  document.body.classList.toggle(
+    "menu-open"
+  );
 
 }
 
 
-/* =================================
-   MODAL
-================================= */
+function closeMenu(){
 
-function openModal(){
-
-  document.getElementById("articleModal")
-    .classList.add("show");
+  document.body.classList.remove(
+    "menu-open"
+  );
 
 }
 
-function closeModal(){
 
-  document.getElementById("articleModal")
-    .classList.remove("show");
-
-}
-
-document.getElementById("articleModal")
-  .addEventListener("click",function(e){
-
-    if(e.target === this){
-      closeModal();
-    }
-
-  });
-
-
-/* =================================
+/* =========================================================
    TOAST
-================================= */
+========================================================= */
 
-let toastTimer;
-
-function showToast(title,text){
+function showToast(
+  title,
+  text
+){
 
   const toast =
     document.getElementById("toast");
 
-  document.getElementById("toastTitle")
-    .textContent = title;
+  if(!toast){
+    return;
+  }
 
-  document.getElementById("toastText")
-    .textContent = text;
+  document.getElementById(
+    "toastTitle"
+  ).textContent =
+    title;
 
-  toast.classList.add("show");
+  document.getElementById(
+    "toastText"
+  ).textContent =
+    text;
 
-  clearTimeout(toastTimer);
+  toast.classList.add(
+    "show"
+  );
 
-  toastTimer = setTimeout(function(){
+  clearTimeout(
+    toastTimer
+  );
 
-    toast.classList.remove("show");
+  toastTimer =
+    setTimeout(
+      function(){
 
-  },3000);
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      3500
+    );
 
 }
 
 
-/* =================================
-   FILTER ARTICLES
-================================= */
+/* =========================================================
+   SUPABASE ERROR NORMALIZATION
+========================================================= */
+
+function friendlyError(error){
+
+  if(!error){
+    return "Unknown Supabase error.";
+  }
+
+  const message =
+    error.message ||
+    error.error_description ||
+    String(error);
+
+  if(
+    /relation .* does not exist/i.test(
+      message
+    )
+  ){
+
+    return (
+      "The articles table does not exist. " +
+      "Create the public.articles table or update CROWRULES_ARTICLES_TABLE."
+    );
+
+  }
+
+  if(
+    /permission denied/i.test(
+      message
+    ) ||
+    /row-level security/i.test(
+      message
+    )
+  ){
+
+    return (
+      "Supabase denied this operation. " +
+      "Check the authenticated admin RLS policies."
+    );
+
+  }
+
+  if(
+    /column .* does not exist/i.test(
+      message
+    )
+  ){
+
+    return (
+      "The articles table is missing a required column. " +
+      message
+    );
+
+  }
+
+  return message;
+
+}
+
+
+/* =========================================================
+   ARTICLE FIELD NORMALIZATION
+========================================================= */
+
+function normalizeArticle(row){
+
+  const article =
+    row || {};
+
+  return {
+
+    id:
+      article.id,
+
+    title:
+      article.title ||
+      article.headline ||
+      "Untitled Article",
+
+    slug:
+      article.slug ||
+      "",
+
+    excerpt:
+      article.excerpt ||
+      article.summary ||
+      "",
+
+    body:
+      article.body ||
+      article.content ||
+      "",
+
+    category:
+      String(
+        article.category ||
+        "news"
+      ).toLowerCase(),
+
+    status:
+      String(
+        article.status ||
+        (
+          article.is_published
+            ? "published"
+            : "draft"
+        )
+      ).toLowerCase(),
+
+    author:
+      article.author_name ||
+      article.author ||
+      "CrowRules Editorial",
+
+    authorId:
+      article.author_id ||
+      null,
+
+    image:
+      article.featured_image_url ||
+      article.image_url ||
+      article.image ||
+      "",
+
+    views:
+      Number(
+        article.views ||
+        article.view_count ||
+        0
+      ),
+
+    featured:
+      Boolean(
+        article.featured ||
+        article.is_featured
+      ),
+
+    publishedAt:
+      article.published_at ||
+      article.publish_date ||
+      null,
+
+    createdAt:
+      article.created_at ||
+      null,
+
+    updatedAt:
+      article.updated_at ||
+      null
+
+  };
+
+}
+
+
+/* =========================================================
+   LOAD ARTICLES
+========================================================= */
+
+async function loadArticles(){
+
+  const body =
+    document.getElementById(
+      "articleBody"
+    );
+
+  body.innerHTML = `
+    <tr>
+      <td colspan="7" class="loading-row">
+        <div class="loading-spinner"></div>
+        Loading editorial library...
+      </td>
+    </tr>
+  `;
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.ARTICLES_TABLE)
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        );
+
+    if(error){
+      throw error;
+    }
+
+    allArticles =
+      (data || []).map(
+        normalizeArticle
+      );
+
+    renderArticles(
+      allArticles
+    );
+
+    updateStats(
+      allArticles
+    );
+
+    renderBreakdown(
+      allArticles
+    );
+
+    document.getElementById(
+      "articleNavBadge"
+    ).textContent =
+      allArticles.length;
+
+  }catch(error){
+
+    console.error(
+      "Articles load error:",
+      error
+    );
+
+    allArticles = [];
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="7" class="loading-row">
+          <strong style="color:var(--red)">
+            Unable to load articles
+          </strong>
+          <br><br>
+          ${escapeHtml(
+            friendlyError(error)
+          )}
+        </td>
+      </tr>
+    `;
+
+    updateStats([]);
+
+    showToast(
+      "SUPABASE",
+      friendlyError(error)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER ARTICLES
+========================================================= */
+
+function renderArticles(
+  articles
+){
+
+  const body =
+    document.getElementById(
+      "articleBody"
+    );
+
+  if(!articles.length){
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="7" class="empty-row">
+          No articles found.
+          <br><br>
+          <button
+            class="btn primary"
+            onclick="openArticleModal()">
+            ＋ Create First Article
+          </button>
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+  body.innerHTML =
+    articles
+      .map(
+        articleRow
+      )
+      .join("");
+
+}
+
+
+function articleRow(
+  article
+){
+
+  const title =
+    escapeHtml(
+      article.title
+    );
+
+  const excerpt =
+    escapeHtml(
+      article.excerpt
+    );
+
+  const category =
+    escapeHtml(
+      article.category
+        .toUpperCase()
+    );
+
+  const author =
+    escapeHtml(
+      article.author
+    );
+
+  const views =
+    Number.isFinite(
+      article.views
+    )
+      ? article.views.toLocaleString()
+      : "0";
+
+  const status =
+    article.status || "draft";
+
+  const statusLabel =
+    status.charAt(0).toUpperCase() +
+    status.slice(1);
+
+  const badgeClass =
+    [
+      "published",
+      "draft",
+      "review",
+      "archived"
+    ].includes(status)
+      ? status
+      : "draft";
+
+  const thumb =
+    article.image
+      ? `
+        <img
+          src="${escapeHtml(article.image)}"
+          alt=""
+          loading="lazy"
+          onerror="this.style.display='none'">
+      `
+      : escapeHtml(
+          initials(article.title)
+        );
+
+  return `
+    <tr
+      data-id="${escapeHtml(article.id || "")}"
+      data-title="${escapeHtml(article.title)}"
+      data-category="${escapeHtml(article.category)}"
+      data-status="${escapeHtml(status)}">
+
+      <td>
+
+        <div class="article-cell">
+
+          <div class="article-thumb">
+            ${thumb}
+          </div>
+
+          <div>
+
+            <div class="article-name">
+              ${title}
+            </div>
+
+            <div class="article-excerpt">
+              ${excerpt || "No excerpt provided."}
+            </div>
+
+          </div>
+
+        </div>
+
+      </td>
+
+      <td>
+        <span class="category">
+          ${category}
+        </span>
+      </td>
+
+      <td>
+        <span class="badge ${badgeClass}">
+          ${escapeHtml(statusLabel)}
+        </span>
+      </td>
+
+      <td>
+        ${author}
+      </td>
+
+      <td>
+        <span class="views">
+          ${views}
+        </span>
+      </td>
+
+      <td>
+        ${formatDate(article.publishedAt)}
+      </td>
+
+      <td>
+
+        <div class="row-actions">
+
+          <button
+            class="row-btn edit"
+            onclick="editArticle('${escapeJs(article.id)}')">
+            Edit
+          </button>
+
+          <button
+            class="row-btn"
+            onclick="previewArticle('${escapeJs(article.id)}')">
+            View
+          </button>
+
+          ${
+            status !== "published"
+              ? `
+                <button
+                  class="row-btn publish"
+                  onclick="publishArticle('${escapeJs(article.id)}')">
+                  Publish
+                </button>
+              `
+              : ""
+          }
+
+          <button
+            class="row-btn delete"
+            onclick="deleteArticle('${escapeJs(article.id)}')">
+            Delete
+          </button>
+
+        </div>
+
+      </td>
+
+    </tr>
+  `;
+
+}
+
+
+function escapeJs(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/\n/g,"\\n")
+    .replace(/\r/g,"\\r");
+
+}
+
+
+function initials(
+  title
+){
+
+  return String(
+    title || "CR"
+  )
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0,2)
+    .map(
+      word =>
+        word.charAt(0)
+    )
+    .join("")
+    .toUpperCase();
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(
+  articles
+){
+
+  const total =
+    articles.length;
+
+  const published =
+    articles.filter(
+      a =>
+        a.status === "published"
+    ).length;
+
+  const drafts =
+    articles.filter(
+      a =>
+        a.status === "draft"
+    ).length;
+
+  const review =
+    articles.filter(
+      a =>
+        a.status === "review"
+    ).length;
+
+  const featured =
+    articles.filter(
+      a =>
+        a.featured
+    ).length;
+
+  document.getElementById(
+    "totalArticles"
+  ).textContent =
+    total;
+
+  document.getElementById(
+    "publishedArticles"
+  ).textContent =
+    published;
+
+  document.getElementById(
+    "draftArticles"
+  ).textContent =
+    drafts;
+
+  document.getElementById(
+    "reviewArticles"
+  ).textContent =
+    review;
+
+  document.getElementById(
+    "featuredArticles"
+  ).textContent =
+    featured;
+
+}
+
+
+/* =========================================================
+   BREAKDOWN
+========================================================= */
+
+function renderBreakdown(
+  articles
+){
+
+  const container =
+    document.getElementById(
+      "breakdown"
+    );
+
+  if(!articles.length){
+
+    container.innerHTML = `
+      <div class="empty-row">
+        No article data available.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  const counts = {};
+
+  articles.forEach(
+    article => {
+
+      const category =
+        article.category ||
+        "other";
+
+      counts[category] =
+        (counts[category] || 0) + 1;
+
+    }
+  );
+
+  const sorted =
+    Object.entries(
+      counts
+    )
+      .sort(
+        (a,b) =>
+          b[1] - a[1]
+      );
+
+  const total =
+    articles.length;
+
+  container.innerHTML =
+    sorted
+      .slice(0,8)
+      .map(
+        ([category,count]) => {
+
+          const percent =
+            Math.round(
+              count /
+              total *
+              100
+            );
+
+          return `
+            <div class="breakdown-item">
+
+              <div class="breakdown-head">
+
+                <span>
+                  ${escapeHtml(
+                    category
+                      .charAt(0)
+                      .toUpperCase() +
+                    category.slice(1)
+                  )}
+                </span>
+
+                <span>
+                  ${percent}%
+                </span>
+
+              </div>
+
+              <div class="bar">
+                <span
+                  style="width:${percent}%">
+                </span>
+              </div>
+
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
 
 function filterArticles(){
 
   const search =
-    document.getElementById("search")
+    document.getElementById(
+      "search"
+    )
       .value
       .toLowerCase()
       .trim();
 
   const category =
-    document.getElementById("categoryFilter")
-      .value;
+    document.getElementById(
+      "categoryFilter"
+    ).value;
 
   const status =
-    document.getElementById("statusFilter")
-      .value;
+    document.getElementById(
+      "statusFilter"
+    ).value;
 
-  const rows =
-    document.querySelectorAll(
-      "#articleBody tr"
+  const filtered =
+    allArticles.filter(
+      article => {
+
+        const searchable =
+          (
+            article.title +
+            " " +
+            article.excerpt +
+            " " +
+            article.author
+          )
+            .toLowerCase();
+
+        const searchMatch =
+          !search ||
+          searchable.includes(
+            search
+          );
+
+        const categoryMatch =
+          category === "all" ||
+          article.category === category;
+
+        const statusMatch =
+          status === "all" ||
+          article.status === status;
+
+        return (
+          searchMatch &&
+          categoryMatch &&
+          statusMatch
+        );
+
+      }
     );
 
-  rows.forEach(function(row){
-
-    const title =
-      row.dataset.title.toLowerCase();
-
-    const rowCategory =
-      row.dataset.category;
-
-    const rowStatus =
-      row.dataset.status;
-
-    const searchMatch =
-      !search ||
-      title.includes(search);
-
-    const categoryMatch =
-      category === "all" ||
-      rowCategory === category;
-
-    const statusMatch =
-      status === "all" ||
-      rowStatus === status;
-
-    row.style.display =
-      searchMatch &&
-      categoryMatch &&
-      statusMatch
-        ? ""
-        : "none";
-
-  });
-
-}
-
-
-/* =================================
-   EDIT ARTICLE
-================================= */
-
-function editArticle(title){
-
-  document.getElementById("articleTitle")
-    .value = title;
-
-  openModal();
-
-  document.querySelector(".modal-title")
-    .textContent = "EDIT ARTICLE";
-
-  showToast(
-    "EDIT MODE",
-    "Editing " + title
+  renderArticles(
+    filtered
   );
 
 }
 
 
-/* =================================
-   PREVIEW
-================================= */
+/* =========================================================
+   MODAL
+========================================================= */
 
-function previewArticle(title){
+function openArticleModal(
+  article=null
+){
 
-  showToast(
-    "ARTICLE PREVIEW",
-    "Opening preview for " + title
+  editingArticle =
+    Boolean(article);
+
+  currentArticleId =
+    article?.id ||
+    null;
+
+  document.getElementById(
+    "articleModalTitle"
+  ).textContent =
+    editingArticle
+      ? "EDIT ARTICLE"
+      : "CREATE ARTICLE";
+
+  clearArticleForm();
+
+  if(article){
+
+    document.getElementById(
+      "articleTitle"
+    ).value =
+      article.title || "";
+
+    document.getElementById(
+      "articleCategory"
+    ).value =
+      article.category || "news";
+
+    document.getElementById(
+      "articleStatus"
+    ).value =
+      article.status || "draft";
+
+    document.getElementById(
+      "articleAuthor"
+    ).value =
+      article.author ||
+      "CrowRules Editorial";
+
+    document.getElementById(
+      "articleSlug"
+    ).value =
+      article.slug || "";
+
+    document.getElementById(
+      "articleExcerpt"
+    ).value =
+      article.excerpt || "";
+
+    document.getElementById(
+      "articleBodyInput"
+    ).value =
+      article.body || "";
+
+    document.getElementById(
+      "articleImage"
+    ).value =
+      article.image || "";
+
+    document.getElementById(
+      "featuredArticle"
+    ).checked =
+      Boolean(
+        article.featured
+      );
+
+    const date =
+      article.publishedAt ||
+      article.createdAt;
+
+    if(date){
+
+      const d =
+        new Date(date);
+
+      if(!Number.isNaN(
+        d.getTime()
+      )){
+
+        document.getElementById(
+          "articleDate"
+        ).value =
+          d.toISOString()
+            .slice(0,10);
+
+      }
+
+    }
+
+  }
+
+  document.getElementById(
+    "articleModal"
+  ).classList.add(
+    "show"
   );
 
 }
 
 
-/* =================================
-   SAVE ARTICLE
-================================= */
+function clearArticleForm(){
 
-function saveArticle(){
+  document.getElementById(
+    "articleTitle"
+  ).value = "";
+
+  document.getElementById(
+    "articleCategory"
+  ).value = "news";
+
+  document.getElementById(
+    "articleStatus"
+  ).value = "draft";
+
+  document.getElementById(
+    "articleAuthor"
+  ).value =
+    "CrowRules Editorial";
+
+  document.getElementById(
+    "articleSlug"
+  ).value = "";
+
+  document.getElementById(
+    "articleExcerpt"
+  ).value = "";
+
+  document.getElementById(
+    "articleBodyInput"
+  ).value = "";
+
+  document.getElementById(
+    "articleImage"
+  ).value = "";
+
+  document.getElementById(
+    "featuredArticle"
+  ).checked = false;
+
+  setDefaultDate();
+
+}
+
+
+function closeArticleModal(){
+
+  document.getElementById(
+    "articleModal"
+  ).classList.remove(
+    "show"
+  );
+
+}
+
+
+function setDefaultDate(){
+
+  const date =
+    new Date();
+
+  document.getElementById(
+    "articleDate"
+  ).value =
+    date.toISOString()
+      .slice(0,10);
+
+}
+
+
+/* =========================================================
+   EDIT
+========================================================= */
+
+function editArticle(
+  id
+){
+
+  const article =
+    allArticles.find(
+      a =>
+        String(a.id) ===
+        String(id)
+    );
+
+  if(!article){
+
+    showToast(
+      "ARTICLE",
+      "Article could not be found."
+    );
+
+    return;
+
+  }
+
+  openArticleModal(
+    article
+  );
+
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+async function saveArticle(){
+
+  if(!supabaseClient){
+
+    showToast(
+      "SUPABASE",
+      "Supabase is not initialized."
+    );
+
+    return;
+
+  }
+
+  const button =
+    document.getElementById(
+      "saveArticleButton"
+    );
 
   const title =
-    document.getElementById("articleTitle")
-      .value
-      .trim();
+    document.getElementById(
+      "articleTitle"
+    ).value.trim();
 
   const category =
-    document.getElementById("articleCategory")
-      .value;
+    document.getElementById(
+      "articleCategory"
+    ).value;
 
   const status =
-    document.getElementById("articleStatus")
-      .value;
+    document.getElementById(
+      "articleStatus"
+    ).value;
 
   const author =
-    document.getElementById("articleAuthor")
-      .value
-      .trim();
-
-  const excerpt =
-    document.getElementById("articleExcerpt")
-      .value
-      .trim();
-
-  const body =
-    document.getElementById("articleBodyInput")
-      .value
-      .trim();
+    document.getElementById(
+      "articleAuthor"
+    ).value.trim() ||
+    "CrowRules Editorial";
 
   const slug =
-    document.getElementById("articleSlug")
-      .value
-      .trim();
+    document.getElementById(
+      "articleSlug"
+    ).value.trim() ||
+    slugify(title);
+
+  const excerpt =
+    document.getElementById(
+      "articleExcerpt"
+    ).value.trim();
+
+  const body =
+    document.getElementById(
+      "articleBodyInput"
+    ).value.trim();
 
   const image =
-    document.getElementById("articleImage")
-      .value
-      .trim();
+    document.getElementById(
+      "articleImage"
+    ).value.trim();
 
   const featured =
-    document.getElementById("featuredArticle")
-      .checked;
+    document.getElementById(
+      "featuredArticle"
+    ).checked;
+
+  const date =
+    document.getElementById(
+      "articleDate"
+    ).value;
 
   if(!title){
 
@@ -2612,162 +4169,964 @@ function saveArticle(){
 
   }
 
-  closeModal();
+  button.disabled =
+    true;
 
-  showToast(
-    "ARTICLE SAVED",
-    title + " saved as " + status + "."
-  );
+  button.textContent =
+    "Saving...";
 
-  /*
-  ==========================================
-  SUPABASE INTEGRATION HOOK
-  ==========================================
+  try{
 
-  Recommended table:
+    const now =
+      new Date().toISOString();
 
-  articles
+    const payload = {
 
-  Suggested columns:
-
-  id
-  title
-  slug
-  excerpt
-  body
-  content
-  category
-  status
-  author_id
-  author_name
-  featured
-  featured_image_url
-  views
-  published_at
-  created_at
-  updated_at
-
-  Example:
-
-  const { data, error } = await supabase
-    .from("articles")
-    .insert({
       title,
+
       slug,
+
       excerpt,
+
       body,
+
+      content:body,
+
       category,
+
       status,
-      author_name: author,
+
+      author_id:
+        currentUser?.id ||
+        null,
+
+      author_name:
+        author,
+
       featured,
-      featured_image_url: image
-    });
 
-  IMPORTANT:
+      is_featured:
+        featured,
 
-  Do not assume these columns already exist.
-  Inspect the existing Supabase schema first
-  before connecting this page to production.
-  */
+      featured_image_url:
+        image || null,
+
+      views:0
+
+    };
+
+    if(
+      status === "published"
+    ){
+
+      payload.published_at =
+        date
+          ? new Date(
+              date +
+              "T12:00:00"
+            ).toISOString()
+          : now;
+
+    }else{
+
+      payload.published_at =
+        null;
+
+    }
+
+    if(editingArticle){
+
+      delete payload.views;
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(CONFIG.ARTICLES_TABLE)
+          .update({
+            ...payload,
+            updated_at:now
+          })
+          .eq(
+            "id",
+            currentArticleId
+          );
+
+      if(error){
+        throw error;
+      }
+
+      showToast(
+        "ARTICLE UPDATED",
+        title + " has been updated."
+      );
+
+    }else{
+
+      payload.created_at =
+        now;
+
+      payload.updated_at =
+        now;
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(CONFIG.ARTICLES_TABLE)
+          .insert(
+            payload
+          );
+
+      if(error){
+        throw error;
+      }
+
+      showToast(
+        "ARTICLE CREATED",
+        title + " has been created."
+      );
+
+    }
+
+    closeArticleModal();
+
+    await loadDashboard();
+
+  }catch(error){
+
+    console.error(
+      "Article save error:",
+      error
+    );
+
+    showToast(
+      "SAVE FAILED",
+      friendlyError(error)
+    );
+
+  }finally{
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "Save Article";
+
+  }
 
 }
 
 
-/* =================================
-   AUTO SLUG
-================================= */
+/* =========================================================
+   DELETE
+========================================================= */
 
-document.getElementById("articleTitle")
-  .addEventListener("input",function(){
+async function deleteArticle(
+  id
+){
 
-    const slugInput =
-      document.getElementById("articleSlug");
+  const article =
+    allArticles.find(
+      a =>
+        String(a.id) ===
+        String(id)
+    );
 
-    if(
-      !slugInput.value ||
-      slugInput.dataset.auto === "true"
-    ){
+  if(!article){
 
-      slugInput.value =
-        this.value
-          .toLowerCase()
-          .trim()
-          .replace(/[^a-z0-9]+/g,"-")
-          .replace(/^-+|-+$/g,"");
+    showToast(
+      "ARTICLE",
+      "Article not found."
+    );
 
-      slugInput.dataset.auto = "true";
+    return;
 
+  }
+
+  const confirmed =
+    confirm(
+      "Delete this article?\n\n" +
+      article.title +
+      "\n\nThis action cannot be undone."
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.ARTICLES_TABLE)
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+    if(error){
+      throw error;
     }
 
-  });
+    showToast(
+      "ARTICLE DELETED",
+      article.title +
+      " was deleted."
+    );
 
-document.getElementById("articleSlug")
-  .addEventListener("input",function(){
+    await loadDashboard();
 
-    this.dataset.auto = "false";
+  }catch(error){
 
-  });
+    console.error(
+      "Delete article error:",
+      error
+    );
 
-
-/* =================================
-   ESCAPE
-================================= */
-
-document.addEventListener("keydown",function(e){
-
-  if(e.key === "Escape"){
-
-    closeModal();
-
-    document.body.classList.remove(
-      "menu-open"
+    showToast(
+      "DELETE FAILED",
+      friendlyError(error)
     );
 
   }
 
-});
+}
 
 
-/* =================================
-   DATE DEFAULT
-================================= */
+/* =========================================================
+   PUBLISH
+========================================================= */
 
-(function(){
+async function publishArticle(
+  id
+){
+
+  const article =
+    allArticles.find(
+      a =>
+        String(a.id) ===
+        String(id)
+    );
+
+  if(!article){
+    return;
+  }
+
+  try{
+
+    const now =
+      new Date().toISOString();
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(CONFIG.ARTICLES_TABLE)
+        .update({
+          status:"published",
+          published_at:now,
+          updated_at:now
+        })
+        .eq(
+          "id",
+          id
+        );
+
+    if(error){
+      throw error;
+    }
+
+    showToast(
+      "PUBLISHED",
+      article.title +
+      " is now published."
+    );
+
+    await loadDashboard();
+
+  }catch(error){
+
+    console.error(
+      "Publish error:",
+      error
+    );
+
+    showToast(
+      "PUBLISH FAILED",
+      friendlyError(error)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function previewArticle(
+  id
+){
+
+  const article =
+    allArticles.find(
+      a =>
+        String(a.id) ===
+        String(id)
+    );
+
+  if(!article){
+
+    showToast(
+      "ARTICLE",
+      "Article could not be found."
+    );
+
+    return;
+
+  }
+
+  document.getElementById(
+    "previewTitle"
+  ).textContent =
+    article.title;
+
+  document.getElementById(
+    "previewMeta"
+  ).textContent =
+    [
+      article.category?.toUpperCase(),
+      article.status?.toUpperCase(),
+      article.author,
+      formatDate(
+        article.publishedAt ||
+        article.createdAt
+      )
+    ]
+      .filter(Boolean)
+      .join(" • ");
+
+  document.getElementById(
+    "previewExcerpt"
+  ).textContent =
+    article.excerpt ||
+    "No excerpt provided.";
+
+  document.getElementById(
+    "previewBody"
+  ).textContent =
+    article.body ||
+    "No article body provided.";
+
+  const image =
+    document.getElementById(
+      "previewImage"
+    );
+
+  if(article.image){
+
+    image.src =
+      article.image;
+
+    image.classList.remove(
+      "hidden"
+    );
+
+  }else{
+
+    image.src = "";
+
+    image.classList.add(
+      "hidden"
+    );
+
+  }
+
+  document.getElementById(
+    "previewEditButton"
+  ).onclick =
+    function(){
+
+      closePreview();
+
+      editArticle(
+        article.id
+      );
+
+    };
+
+  document.getElementById(
+    "previewModal"
+  ).classList.add(
+    "show"
+  );
+
+}
+
+
+function closePreview(){
+
+  document.getElementById(
+    "previewModal"
+  ).classList.remove(
+    "show"
+  );
+
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+async function loadActivity(){
+
+  const container =
+    document.getElementById(
+      "activityList"
+    );
+
+  /*
+   * Try the generic activity_logs table.
+   * If it does not exist, show a clean fallback.
+   */
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("activity_logs")
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(6);
+
+    if(error){
+      throw error;
+    }
+
+    if(!data?.length){
+
+      renderFallbackActivity();
+
+      return;
+
+    }
+
+    container.innerHTML =
+      data.map(
+        row => {
+
+          const title =
+            row.title ||
+            row.description ||
+            row.action ||
+            "Editorial activity";
+
+          const meta =
+            row.entity_type ||
+            row.module ||
+            "Administration";
+
+          return `
+            <div class="activity-row">
+
+              <div class="activity-icon">
+                ✓
+              </div>
+
+              <div class="activity-main">
+
+                <div class="activity-title">
+                  ${escapeHtml(title)}
+                </div>
+
+                <div class="activity-meta">
+                  ${escapeHtml(meta)}
+                </div>
+
+              </div>
+
+              <div class="activity-time">
+                ${escapeHtml(
+                  relativeTime(
+                    row.created_at
+                  )
+                )}
+              </div>
+
+            </div>
+          `;
+
+        }
+      ).join("");
+
+  }catch(error){
+
+    /*
+     * activity_logs may not exist in every
+     * CrowRules deployment.
+     *
+     * Do not break the Articles page because
+     * the optional activity table is missing.
+     */
+
+    renderFallbackActivity();
+
+  }
+
+}
+
+
+function renderFallbackActivity(){
+
+  const container =
+    document.getElementById(
+      "activityList"
+    );
+
+  const recent =
+    [...allArticles]
+      .sort(
+        (a,b) =>
+          new Date(
+            b.updatedAt ||
+            b.createdAt ||
+            0
+          ) -
+          new Date(
+            a.updatedAt ||
+            a.createdAt ||
+            0
+          )
+      )
+      .slice(0,5);
+
+  if(!recent.length){
+
+    container.innerHTML = `
+      <div class="activity-row">
+
+        <div class="activity-icon">
+          •
+        </div>
+
+        <div class="activity-main">
+
+          <div class="activity-title">
+            No editorial activity yet
+          </div>
+
+          <div class="activity-meta">
+            Activity will appear as articles are created.
+          </div>
+
+        </div>
+
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML =
+    recent.map(
+      article => `
+
+        <div class="activity-row">
+
+          <div class="activity-icon">
+            ✎
+          </div>
+
+          <div class="activity-main">
+
+            <div class="activity-title">
+              ${escapeHtml(
+                article.title
+              )}
+            </div>
+
+            <div class="activity-meta">
+              Article ${escapeHtml(
+                article.status
+              )}
+            </div>
+
+          </div>
+
+          <div class="activity-time">
+            ${escapeHtml(
+              relativeTime(
+                article.updatedAt ||
+                article.createdAt
+              )
+            )}
+          </div>
+
+        </div>
+
+      `
+    ).join("");
+
+}
+
+
+function relativeTime(
+  value
+){
+
+  if(!value){
+    return "—";
+  }
 
   const date =
-    document.getElementById("articleDate");
+    new Date(value);
 
-  const now = new Date();
+  if(Number.isNaN(
+    date.getTime()
+  )){
+    return "—";
+  }
 
-  const year =
-    now.getFullYear();
+  const seconds =
+    Math.floor(
+      (
+        Date.now() -
+        date.getTime()
+      ) / 1000
+    );
 
-  const month =
-    String(now.getMonth()+1)
-      .padStart(2,"0");
+  if(seconds < 60){
+    return "now";
+  }
 
-  const day =
-    String(now.getDate())
-      .padStart(2,"0");
+  const minutes =
+    Math.floor(
+      seconds / 60
+    );
 
-  date.value =
-    year + "-" + month + "-" + day;
+  if(minutes < 60){
+    return minutes + "m";
+  }
 
-})();
+  const hours =
+    Math.floor(
+      minutes / 60
+    );
+
+  if(hours < 24){
+    return hours + "h";
+  }
+
+  const days =
+    Math.floor(
+      hours / 24
+    );
+
+  if(days < 30){
+    return days + "d";
+  }
+
+  const months =
+    Math.floor(
+      days / 30
+    );
+
+  return months + "mo";
+
+}
 
 
-/* =================================
-   ADMIN READY
-================================= */
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
-console.log(
-  "%cCrowRules Articles Admin",
-  "color:#b66cff;font-weight:bold;font-size:16px"
+async function loadDashboard(){
+
+  if(!supabaseClient){
+    return;
+  }
+
+  await Promise.all([
+    loadArticles(),
+    loadActivity()
+  ]);
+
+}
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+async function refreshArticles(){
+
+  showToast(
+    "REFRESH",
+    "Refreshing editorial data..."
+  );
+
+  await loadDashboard();
+
+  showToast(
+    "READY",
+    "Editorial library refreshed."
+  );
+
+}
+
+
+/* =========================================================
+   SLUG
+========================================================= */
+
+function slugify(
+  value
+){
+
+  return String(
+    value || ""
+  )
+    .toLowerCase()
+    .trim()
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    );
+
+}
+
+
+document.getElementById(
+  "articleTitle"
+).addEventListener(
+  "input",
+  function(){
+
+    const slugInput =
+      document.getElementById(
+        "articleSlug"
+      );
+
+    if(
+      !slugInput.value ||
+      slugInput.dataset.manual !== "true"
+    ){
+
+      slugInput.value =
+        slugify(
+          this.value
+        );
+
+    }
+
+  }
 );
 
-console.log(
-  "Editorial Command Center initialized."
+
+document.getElementById(
+  "articleSlug"
+).addEventListener(
+  "input",
+  function(){
+
+    this.dataset.manual =
+      "true";
+
+  }
 );
+
+
+/* =========================================================
+   MODAL EVENTS
+========================================================= */
+
+document.getElementById(
+  "articleModal"
+).addEventListener(
+  "click",
+  function(event){
+
+    if(
+      event.target ===
+      this
+    ){
+
+      closeArticleModal();
+
+    }
+
+  }
+);
+
+
+document.getElementById(
+  "previewModal"
+).addEventListener(
+  "click",
+  function(event){
+
+    if(
+      event.target ===
+      this
+    ){
+
+      closePreview();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   SEARCH EVENTS
+========================================================= */
+
+document.getElementById(
+  "search"
+).addEventListener(
+  "input",
+  filterArticles
+);
+
+document.getElementById(
+  "categoryFilter"
+).addEventListener(
+  "change",
+  filterArticles
+);
+
+document.getElementById(
+  "statusFilter"
+).addEventListener(
+  "change",
+  filterArticles
+);
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Escape"
+    ){
+
+      closeArticleModal();
+
+      closePreview();
+
+      closeMenu();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INITIAL DATE
+========================================================= */
+
+setDefaultDate();
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+async function boot(){
+
+  try{
+
+    setAuthStatus(
+      "Connecting to Supabase..."
+    );
+
+    await initSupabase();
+
+    setAuthStatus(
+      "Verifying administrator account..."
+    );
+
+    const authorized =
+      await requireAdmin();
+
+    if(!authorized){
+      return;
+    }
+
+    watchAuth();
+
+    setAuthStatus(
+      "Administrator verified."
+    );
+
+    setTimeout(
+      function(){
+
+        document.getElementById(
+          "authGate"
+        ).classList.add(
+          "hidden"
+        );
+
+      },
+      250
+    );
+
+    await loadDashboard();
+
+    console.log(
+      "%cCrowRules Articles Admin",
+      "color:#b66cff;font-weight:bold;font-size:16px"
+    );
+
+    console.log(
+      "Supabase editorial command center initialized."
+    );
+
+  }catch(error){
+
+    console.error(
+      "Articles admin initialization failed:",
+      error
+    );
+
+    setAuthStatus(
+      friendlyError(error),
+      true
+    );
+
+  }
+
+}
+
+boot();
 
 </script>
 
