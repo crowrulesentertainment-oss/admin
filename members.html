@@ -1,13 +1,12 @@
 <!doctype html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Members — CrowRules Entertainment Admin</title>
+<title>CrowRules Entertainment — Members Admin</title>
 <meta name="theme-color" content="#050505">
-<meta name="description" content="CrowRules Entertainment Admin — Member Management">
+<meta name="description" content="CrowRules Entertainment Members Administration">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,24 +17,24 @@
 <style>
 :root{
   --bg:#050505;
-  --bg2:#090909;
-  --panel:#0d0d0f;
-  --panel2:#111114;
-  --panel3:#151519;
-  --line:#24242b;
-  --line2:#303039;
-  --text:#f5f5f7;
-  --muted:#9696a2;
-  --dim:#666671;
-  --purple:#9b5cff;
-  --purple2:#6e35d9;
-  --cyan:#32e6ff;
-  --green:#39e58c;
-  --yellow:#ffd166;
-  --red:#ff4d6d;
-  --orange:#ff914d;
-  --shadow:0 20px 60px rgba(0,0,0,.45);
-  --radius:16px;
+  --bg2:#09090c;
+  --panel:#0d0d12;
+  --panel2:#111118;
+  --panel3:#15151d;
+  --border:rgba(255,255,255,.08);
+  --border2:rgba(255,255,255,.13);
+  --text:#f4f4f7;
+  --muted:#92929f;
+  --muted2:#6f6f7b;
+  --purple:#9d5cff;
+  --purple2:#6f32ff;
+  --cyan:#36e6ff;
+  --red:#ff365f;
+  --green:#42e695;
+  --yellow:#ffc857;
+  --blue:#5c9dff;
+  --shadow:0 18px 60px rgba(0,0,0,.45);
+  --radius:18px;
   --sidebar:270px;
 }
 
@@ -44,18 +43,23 @@
 }
 
 html{
-  scroll-behavior:smooth;
+  min-height:100%;
+  background:var(--bg);
 }
 
 body{
   margin:0;
+  min-height:100vh;
   background:
-    radial-gradient(circle at 20% 0%,rgba(155,92,255,.08),transparent 30%),
-    radial-gradient(circle at 90% 10%,rgba(50,230,255,.05),transparent 25%),
-    var(--bg);
+    radial-gradient(circle at 15% 10%,rgba(111,50,255,.10),transparent 30%),
+    radial-gradient(circle at 85% 15%,rgba(54,230,255,.06),transparent 25%),
+    linear-gradient(180deg,#050505 0%,#07070a 100%);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
-  min-height:100vh;
+}
+
+body.modal-open{
+  overflow:hidden;
 }
 
 button,
@@ -78,9 +82,9 @@ a{
   display:none!important;
 }
 
-/* =========================
+/* ============================================================
    LOADING / AUTH
-========================= */
+============================================================ */
 
 #authScreen{
   position:fixed;
@@ -89,43 +93,57 @@ a{
   display:flex;
   align-items:center;
   justify-content:center;
-  background:#050505;
+  padding:24px;
+  background:
+    radial-gradient(circle at center,rgba(111,50,255,.12),transparent 45%),
+    #050505;
 }
 
-.auth-box{
-  width:min(440px,calc(100% - 32px));
-  padding:34px;
-  border:1px solid var(--line);
-  border-radius:22px;
-  background:linear-gradient(145deg,#111116,#080809);
-  box-shadow:var(--shadow);
+.auth-card{
+  width:min(480px,100%);
+  padding:42px;
   text-align:center;
+  background:rgba(13,13,18,.94);
+  border:1px solid var(--border2);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(18px);
 }
 
 .auth-logo{
-  font-family:Orbitron,sans-serif;
-  font-weight:800;
-  letter-spacing:2px;
-  font-size:25px;
-  margin-bottom:12px;
-}
-
-.auth-logo span{
+  width:74px;
+  height:74px;
+  margin:0 auto 22px;
+  display:grid;
+  place-items:center;
+  border-radius:20px;
+  background:
+    linear-gradient(135deg,rgba(157,92,255,.25),rgba(54,230,255,.08));
+  border:1px solid rgba(157,92,255,.4);
   color:var(--purple);
+  font:800 28px Orbitron,sans-serif;
+  box-shadow:0 0 35px rgba(157,92,255,.15);
 }
 
-.auth-box p{
+.auth-card h1{
+  margin:0 0 10px;
+  font:700 20px Orbitron,sans-serif;
+  letter-spacing:.05em;
+}
+
+.auth-card p{
+  margin:0;
   color:var(--muted);
   line-height:1.7;
 }
 
 .spinner{
-  width:38px;
-  height:38px;
-  border:3px solid #292933;
+  width:34px;
+  height:34px;
+  margin:25px auto 0;
+  border:3px solid rgba(255,255,255,.10);
   border-top-color:var(--purple);
   border-radius:50%;
-  margin:25px auto 0;
   animation:spin .8s linear infinite;
 }
 
@@ -133,55 +151,100 @@ a{
   to{transform:rotate(360deg)}
 }
 
+/* ============================================================
+   APP
+============================================================ */
+
 #app{
   display:none;
+  min-height:100vh;
 }
 
-/* =========================
+.layout{
+  min-height:100vh;
+}
+
+/* ============================================================
    SIDEBAR
-========================= */
+============================================================ */
 
 .sidebar{
   position:fixed;
   inset:0 auto 0 0;
+  z-index:500;
   width:var(--sidebar);
-  background:rgba(7,7,8,.97);
-  border-right:1px solid var(--line);
-  z-index:1000;
   overflow-y:auto;
+  background:
+    linear-gradient(180deg,#08080b,#07070a 75%,#050505);
+  border-right:1px solid var(--border);
   scrollbar-width:thin;
 }
 
-.brand{
-  padding:24px 22px;
-  border-bottom:1px solid var(--line);
+.sidebar-header{
+  height:78px;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  background:rgba(8,8,11,.96);
+  backdrop-filter:blur(15px);
+  z-index:3;
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  flex:0 0 40px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(157,92,255,.22),rgba(54,230,255,.08));
+  border:1px solid rgba(157,92,255,.35);
+  color:var(--purple);
+  font:800 16px Orbitron,sans-serif;
+}
+
+.brand-copy{
+  min-width:0;
 }
 
 .brand-title{
-  font-family:Orbitron,sans-serif;
-  font-size:18px;
-  font-weight:800;
-  letter-spacing:1.5px;
-}
-
-.brand-title span{
-  color:var(--purple);
+  font:700 13px Orbitron,sans-serif;
+  letter-spacing:.06em;
+  white-space:nowrap;
 }
 
 .brand-sub{
-  color:var(--dim);
+  margin-top:3px;
+  color:var(--muted2);
   font-size:10px;
+  letter-spacing:.12em;
   text-transform:uppercase;
-  letter-spacing:2px;
-  margin-top:7px;
+}
+
+.mobile-close{
+  display:none;
+  margin-left:auto;
+  width:34px;
+  height:34px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:transparent;
+  color:var(--muted);
+}
+
+.nav{
+  padding:16px 12px 30px;
 }
 
 .nav-section{
-  padding:18px 14px 6px;
-  color:#5d5d68;
-  font-family:Orbitron,sans-serif;
-  font-size:9px;
-  letter-spacing:1.7px;
+  margin:18px 10px 8px;
+  color:#5e5e69;
+  font:700 9px Orbitron,sans-serif;
+  letter-spacing:.18em;
   text-transform:uppercase;
 }
 
@@ -189,45 +252,45 @@ a{
   display:flex;
   align-items:center;
   gap:11px;
-  padding:10px 14px;
-  margin:2px 8px;
-  border-radius:10px;
-  color:#aaaab5;
+  min-height:42px;
+  padding:10px 12px;
+  margin:2px 0;
+  color:#a5a5b0;
+  border:1px solid transparent;
+  border-radius:11px;
+  transition:.18s ease;
   font-size:12px;
-  transition:.2s;
+  font-weight:600;
 }
 
 .nav-link:hover{
   color:#fff;
-  background:#141419;
+  background:rgba(255,255,255,.035);
+  border-color:var(--border);
 }
 
 .nav-link.active{
   color:#fff;
-  background:linear-gradient(90deg,rgba(155,92,255,.18),rgba(155,92,255,.04));
-  border-left:2px solid var(--purple);
+  background:
+    linear-gradient(90deg,rgba(157,92,255,.15),rgba(54,230,255,.035));
+  border-color:rgba(157,92,255,.25);
+  box-shadow:inset 3px 0 0 var(--purple);
 }
 
 .nav-icon{
-  width:19px;
+  width:20px;
   text-align:center;
-  opacity:.9;
+  font-size:14px;
+  color:var(--muted2);
 }
 
-.mobile-close{
-  display:none;
-  position:absolute;
-  right:15px;
-  top:17px;
-  background:none;
-  border:0;
-  color:#fff;
-  font-size:24px;
+.nav-link.active .nav-icon{
+  color:var(--purple);
 }
 
-/* =========================
+/* ============================================================
    MAIN
-========================= */
+============================================================ */
 
 .main{
   margin-left:var(--sidebar);
@@ -235,32 +298,33 @@ a{
 }
 
 .topbar{
+  height:78px;
   position:sticky;
   top:0;
-  z-index:900;
-  height:68px;
+  z-index:400;
+  padding:0 28px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 28px;
-  border-bottom:1px solid var(--line);
+  gap:20px;
   background:rgba(5,5,5,.86);
-  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(18px);
 }
 
-.top-left{
+.topbar-left{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:15px;
 }
 
 .mobile-menu{
   display:none;
-  border:1px solid var(--line);
-  background:#111116;
-  color:#fff;
   width:40px;
   height:40px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:#fff;
   border-radius:10px;
 }
 
@@ -273,7 +337,7 @@ a{
   color:#fff;
 }
 
-.top-right{
+.topbar-right{
   display:flex;
   align-items:center;
   gap:18px;
@@ -281,294 +345,326 @@ a{
 
 .clock{
   color:var(--muted);
-  font-size:11px;
-  font-family:Orbitron,sans-serif;
+  font:600 11px Orbitron,sans-serif;
+  letter-spacing:.05em;
 }
 
-.admin-user{
+.admin-profile{
   display:flex;
   align-items:center;
   gap:10px;
 }
 
 .admin-avatar{
-  width:35px;
-  height:35px;
-  border-radius:50%;
+  width:38px;
+  height:38px;
   display:grid;
   place-items:center;
-  background:linear-gradient(135deg,var(--purple),#3b187e);
-  font-family:Orbitron,sans-serif;
-  font-size:11px;
-  font-weight:800;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--purple2),#30156e);
+  border:1px solid rgba(157,92,255,.5);
+  color:#fff;
+  font:700 12px Orbitron,sans-serif;
 }
 
-.admin-meta{
-  line-height:1.2;
+.admin-copy{
+  min-width:0;
 }
 
 .admin-name{
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.admin-role{
+  margin-top:2px;
+  color:var(--muted2);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.logout-btn{
+  border:1px solid rgba(255,54,95,.22);
+  background:rgba(255,54,95,.05);
+  color:#ff8097;
+  padding:9px 12px;
+  border-radius:9px;
   font-size:11px;
   font-weight:700;
 }
 
-.admin-role{
-  color:var(--purple);
-  font-size:9px;
-  text-transform:uppercase;
-  letter-spacing:1px;
+.logout-btn:hover{
+  background:rgba(255,54,95,.12);
 }
-
-.logout{
-  border:1px solid var(--line);
-  background:#111116;
-  color:#aaaab5;
-  border-radius:9px;
-  padding:8px 11px;
-  font-size:10px;
-}
-
-.logout:hover{
-  color:#fff;
-  border-color:#44444f;
-}
-
-/* =========================
-   CONTENT
-========================= */
 
 .content{
   padding:30px;
   max-width:1800px;
-  margin:auto;
+  margin:0 auto;
 }
 
+/* ============================================================
+   HERO
+============================================================ */
+
 .hero{
-  display:flex;
-  justify-content:space-between;
-  gap:25px;
-  align-items:flex-end;
-  margin-bottom:25px;
+  position:relative;
+  overflow:hidden;
+  padding:28px;
+  margin-bottom:24px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:
+    radial-gradient(circle at 80% 0%,rgba(54,230,255,.07),transparent 35%),
+    radial-gradient(circle at 10% 100%,rgba(157,92,255,.09),transparent 40%),
+    var(--panel);
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  right:-90px;
+  top:-90px;
+  width:220px;
+  height:220px;
+  border:1px solid rgba(157,92,255,.14);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 30px rgba(157,92,255,.025),
+    0 0 0 60px rgba(157,92,255,.018);
 }
 
 .eyebrow{
   color:var(--purple);
-  font-family:Orbitron,sans-serif;
+  font:700 10px Orbitron,sans-serif;
+  letter-spacing:.2em;
   text-transform:uppercase;
-  font-size:10px;
-  letter-spacing:2px;
-  margin-bottom:8px;
+  margin-bottom:9px;
 }
 
-h1{
+.hero h1{
+  position:relative;
+  z-index:1;
   margin:0;
-  font-family:Orbitron,sans-serif;
-  font-size:31px;
-  letter-spacing:1px;
+  font:700 clamp(25px,3vw,38px) Orbitron,sans-serif;
+  letter-spacing:.03em;
 }
 
 .hero p{
+  position:relative;
+  z-index:1;
+  max-width:800px;
+  margin:11px 0 0;
   color:var(--muted);
-  margin:9px 0 0;
+  line-height:1.7;
   font-size:13px;
 }
 
-.actions{
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-}
-
-.btn{
-  border:1px solid var(--line2);
-  background:#111116;
-  color:#dddde4;
-  padding:10px 14px;
-  border-radius:10px;
-  font-size:11px;
-  font-weight:700;
-  transition:.2s;
-}
-
-.btn:hover{
-  border-color:#555562;
-  transform:translateY(-1px);
-}
-
-.btn.primary{
-  background:linear-gradient(135deg,var(--purple),var(--purple2));
-  border-color:var(--purple);
-  color:#fff;
-}
-
-.btn.danger{
-  border-color:rgba(255,77,109,.35);
-  color:#ff8399;
-}
-
-.btn.success{
-  border-color:rgba(57,229,140,.3);
-  color:#62eca3;
-}
-
-.btn.small{
-  padding:7px 9px;
-  font-size:10px;
-}
-
-/* =========================
-   STATS
-========================= */
+/* ============================================================
+   CARDS / STATS
+============================================================ */
 
 .stats{
   display:grid;
   grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:13px;
-  margin-bottom:22px;
+  gap:14px;
+  margin-bottom:24px;
 }
 
-.stat{
-  padding:18px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:linear-gradient(145deg,#101014,#0b0b0d);
+.stat-card{
   position:relative;
   overflow:hidden;
+  padding:18px;
+  min-height:110px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:var(--panel);
 }
 
-.stat:after{
+.stat-card:after{
   content:"";
   position:absolute;
-  width:70px;
-  height:70px;
-  right:-25px;
-  bottom:-30px;
+  width:80px;
+  height:80px;
+  right:-35px;
+  bottom:-35px;
   border-radius:50%;
-  background:rgba(155,92,255,.07);
+  background:rgba(157,92,255,.08);
 }
 
 .stat-label{
   color:var(--muted);
-  font-size:9px;
+  font-size:10px;
+  font-weight:700;
   text-transform:uppercase;
-  letter-spacing:1.4px;
+  letter-spacing:.1em;
 }
 
 .stat-value{
-  font-family:Orbitron,sans-serif;
-  font-size:25px;
-  font-weight:700;
   margin-top:9px;
+  font:700 27px Orbitron,sans-serif;
 }
 
-.stat-sub{
-  margin-top:5px;
-  color:var(--dim);
+.stat-note{
+  margin-top:7px;
+  color:var(--muted2);
   font-size:9px;
 }
 
-/* =========================
+.stat-card.cyan .stat-value{
+  color:var(--cyan);
+}
+
+.stat-card.green .stat-value{
+  color:var(--green);
+}
+
+.stat-card.yellow .stat-value{
+  color:var(--yellow);
+}
+
+.stat-card.red .stat-value{
+  color:var(--red);
+}
+
+.stat-card.purple .stat-value{
+  color:var(--purple);
+}
+
+/* ============================================================
    TOOLBAR
-========================= */
+============================================================ */
 
 .panel{
-  background:linear-gradient(145deg,#0f0f12,#0a0a0c);
-  border:1px solid var(--line);
+  background:var(--panel);
+  border:1px solid var(--border);
   border-radius:var(--radius);
-  box-shadow:0 12px 35px rgba(0,0,0,.2);
+  box-shadow:0 10px 35px rgba(0,0,0,.18);
 }
 
 .toolbar{
-  padding:15px;
+  padding:16px;
   display:flex;
+  flex-wrap:wrap;
   gap:10px;
   align-items:center;
-  flex-wrap:wrap;
-  border-bottom:1px solid var(--line);
 }
 
 .search{
-  flex:1 1 260px;
   position:relative;
+  flex:1 1 280px;
 }
 
 .search input{
   width:100%;
-  padding:11px 13px 11px 38px;
-  border:1px solid var(--line);
-  background:#08080a;
-  color:#fff;
+  height:42px;
+  padding:0 14px 0 39px;
+  border:1px solid var(--border);
   border-radius:10px;
+  background:#09090d;
+  color:#fff;
   outline:none;
-  font-size:11px;
 }
 
 .search input:focus{
-  border-color:var(--purple);
+  border-color:rgba(157,92,255,.55);
+  box-shadow:0 0 0 3px rgba(157,92,255,.08);
 }
 
 .search-icon{
   position:absolute;
-  left:13px;
-  top:10px;
-  color:var(--dim);
+  left:14px;
+  top:12px;
+  color:var(--muted2);
 }
 
-.filter{
+.select{
+  height:42px;
   min-width:145px;
-  padding:10px 12px;
-  border:1px solid var(--line);
-  background:#08080a;
-  color:#bbbcc5;
+  padding:0 35px 0 12px;
+  border:1px solid var(--border);
   border-radius:10px;
+  background:#09090d;
+  color:#d9d9df;
   outline:none;
-  font-size:10px;
 }
 
-.filter:focus{
-  border-color:var(--purple);
+.select:focus{
+  border-color:rgba(157,92,255,.5);
 }
 
-.bulk{
-  display:none;
+.btn{
+  height:42px;
+  padding:0 15px;
+  display:inline-flex;
   align-items:center;
+  justify-content:center;
   gap:7px;
-  padding:7px 10px;
-  border:1px solid rgba(155,92,255,.35);
+  border:1px solid var(--border);
   border-radius:10px;
-  background:rgba(155,92,255,.08);
+  background:#111118;
+  color:#ddd;
+  font-size:11px;
+  font-weight:700;
 }
 
-.bulk.show{
-  display:flex;
+.btn:hover{
+  background:#181821;
+  border-color:var(--border2);
 }
 
-.bulk span{
-  font-size:10px;
-  color:#c5c5cf;
+.btn.primary{
+  color:#fff;
+  border-color:rgba(157,92,255,.45);
+  background:linear-gradient(135deg,#5421b9,#7b35e9);
 }
 
-/* =========================
+.btn.primary:hover{
+  filter:brightness(1.1);
+}
+
+.btn.danger{
+  color:#ff8ba0;
+  border-color:rgba(255,54,95,.25);
+  background:rgba(255,54,95,.06);
+}
+
+.btn.success{
+  color:#7af0b0;
+  border-color:rgba(66,230,149,.25);
+  background:rgba(66,230,149,.06);
+}
+
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+/* ============================================================
    TABS
-========================= */
+============================================================ */
 
 .tabs{
   display:flex;
-  gap:3px;
-  padding:0 15px;
-  border-bottom:1px solid var(--line);
-  overflow:auto;
+  gap:4px;
+  padding:8px 12px 0;
+  overflow-x:auto;
+  border-bottom:1px solid var(--border);
 }
 
 .tab{
-  white-space:nowrap;
+  flex:0 0 auto;
   padding:13px 14px;
   border:0;
   border-bottom:2px solid transparent;
-  background:none;
-  color:#777782;
+  background:transparent;
+  color:var(--muted);
   font-size:10px;
-  font-weight:700;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.07em;
 }
 
 .tab:hover{
@@ -580,42 +676,90 @@ h1{
   border-bottom-color:var(--purple);
 }
 
-/* =========================
+.tab-count{
+  display:inline-block;
+  margin-left:5px;
+  padding:2px 6px;
+  border-radius:20px;
+  background:rgba(255,255,255,.06);
+  color:var(--muted);
+  font-size:9px;
+}
+
+/* ============================================================
+   BULK BAR
+============================================================ */
+
+.bulk-bar{
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 16px;
+  border-bottom:1px solid rgba(157,92,255,.18);
+  background:rgba(157,92,255,.045);
+}
+
+.bulk-bar.show{
+  display:flex;
+}
+
+.bulk-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.bulk-count{
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+}
+
+.bulk-right{
+  display:flex;
+  gap:8px;
+}
+
+/* ============================================================
    TABLE
-========================= */
+============================================================ */
 
 .table-wrap{
-  overflow:auto;
+  overflow-x:auto;
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:1050px;
+  min-width:1100px;
 }
 
 th{
+  padding:13px 14px;
   text-align:left;
-  padding:12px 15px;
-  color:#666671;
-  font-family:Orbitron,sans-serif;
-  font-size:8px;
+  color:#696975;
+  border-bottom:1px solid var(--border);
+  font:700 9px Orbitron,sans-serif;
+  letter-spacing:.08em;
   text-transform:uppercase;
-  letter-spacing:1.2px;
-  border-bottom:1px solid var(--line);
   white-space:nowrap;
 }
 
 td{
-  padding:13px 15px;
-  border-bottom:1px solid #18181d;
-  font-size:10px;
-  color:#c9c9d0;
+  padding:13px 14px;
+  border-bottom:1px solid rgba(255,255,255,.045);
+  color:#c7c7cf;
+  font-size:11px;
   vertical-align:middle;
 }
 
-tr:hover td{
-  background:rgba(255,255,255,.015);
+tbody tr{
+  transition:.15s ease;
+}
+
+tbody tr:hover{
+  background:rgba(255,255,255,.018);
 }
 
 .check{
@@ -627,22 +771,22 @@ tr:hover td{
 .member{
   display:flex;
   align-items:center;
-  gap:11px;
+  gap:10px;
+  min-width:190px;
 }
 
 .member-avatar{
-  width:37px;
-  height:37px;
-  flex:none;
-  border-radius:50%;
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
   display:grid;
   place-items:center;
-  background:linear-gradient(135deg,#262630,#15151a);
-  border:1px solid #363641;
-  font-family:Orbitron,sans-serif;
-  font-size:10px;
-  font-weight:700;
   overflow:hidden;
+  border-radius:11px;
+  background:linear-gradient(135deg,#271550,#121219);
+  border:1px solid rgba(157,92,255,.24);
+  color:#c9a7ff;
+  font:700 11px Orbitron,sans-serif;
 }
 
 .member-avatar img{
@@ -653,65 +797,73 @@ tr:hover td{
 
 .member-name{
   color:#fff;
-  font-weight:700;
+  font-weight:800;
   font-size:11px;
 }
 
 .member-handle{
-  color:#666671;
-  font-size:9px;
   margin-top:3px;
+  color:var(--muted2);
+  font-size:9px;
+}
+
+.role{
+  color:#c7b2ff;
+  font-size:10px;
+  font-weight:700;
 }
 
 .badge{
   display:inline-flex;
-  padding:5px 7px;
-  border-radius:6px;
-  font-size:8px;
+  align-items:center;
+  min-height:24px;
+  padding:3px 8px;
+  border-radius:20px;
+  background:rgba(255,255,255,.06);
+  color:#bbb;
+  border:1px solid rgba(255,255,255,.07);
+  font-size:9px;
   font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.7px;
-  white-space:nowrap;
 }
 
 .badge.free{
-  background:#1a1a1f;
-  color:#a6a6b0;
+  color:#aaa;
 }
 
 .badge.pro{
-  background:rgba(50,230,255,.1);
-  color:var(--cyan);
+  color:#69dfff;
+  border-color:rgba(54,230,255,.18);
+  background:rgba(54,230,255,.06);
 }
 
 .badge.premium{
-  background:rgba(155,92,255,.12);
-  color:#bb91ff;
+  color:#d1a5ff;
+  border-color:rgba(157,92,255,.22);
+  background:rgba(157,92,255,.07);
 }
 
 .badge.creator{
-  background:rgba(255,145,77,.12);
-  color:#ffae7c;
+  color:#ffc857;
+  border-color:rgba(255,200,87,.2);
+  background:rgba(255,200,87,.06);
 }
 
 .badge.active{
-  background:rgba(57,229,140,.1);
-  color:var(--green);
+  color:#72efae;
+  border-color:rgba(66,230,149,.18);
+  background:rgba(66,230,149,.05);
 }
 
 .badge.pending{
-  background:rgba(255,209,102,.1);
-  color:var(--yellow);
+  color:#ffd36e;
+  border-color:rgba(255,200,87,.2);
+  background:rgba(255,200,87,.05);
 }
 
 .badge.suspended{
-  background:rgba(255,77,109,.1);
-  color:#ff8097;
-}
-
-.role{
-  color:#aaaab4;
-  font-size:9px;
+  color:#ff8299;
+  border-color:rgba(255,54,95,.2);
+  background:rgba(255,54,95,.05);
 }
 
 .row-actions{
@@ -720,189 +872,252 @@ tr:hover td{
 }
 
 .icon-btn{
-  width:30px;
-  height:30px;
+  width:31px;
+  height:31px;
   display:grid;
   place-items:center;
-  border:1px solid var(--line);
-  background:#101014;
-  color:#888893;
-  border-radius:7px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#111118;
+  color:#a8a8b1;
+  font-size:12px;
 }
 
 .icon-btn:hover{
   color:#fff;
-  border-color:#44444e;
+  border-color:rgba(157,92,255,.35);
+  background:#17131f;
+}
+
+.icon-btn.approve:hover{
+  color:var(--green);
+  border-color:rgba(66,230,149,.3);
+}
+
+.icon-btn.suspend:hover{
+  color:var(--red);
+  border-color:rgba(255,54,95,.3);
 }
 
 .empty{
-  padding:55px 25px;
+  min-height:220px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
   text-align:center;
   color:var(--muted);
 }
 
 .empty strong{
-  display:block;
   color:#fff;
-  margin-bottom:6px;
+  font-size:14px;
 }
 
-/* =========================
+.empty span{
+  font-size:11px;
+}
+
+.pagination-info{
+  padding:14px 16px;
+  color:var(--muted2);
+  font-size:10px;
+  border-top:1px solid var(--border);
+}
+
+/* ============================================================
    LOWER GRID
-========================= */
+============================================================ */
 
 .lower-grid{
   display:grid;
-  grid-template-columns:1.4fr 1fr;
+  grid-template-columns:1.25fr .75fr;
   gap:18px;
   margin-top:18px;
 }
 
-.panel-head{
-  padding:16px 18px;
-  border-bottom:1px solid var(--line);
+.section-head{
+  padding:17px 18px;
   display:flex;
   justify-content:space-between;
   align-items:center;
+  border-bottom:1px solid var(--border);
 }
 
-.panel-title{
-  font-family:Orbitron,sans-serif;
-  font-size:11px;
-  letter-spacing:.8px;
+.section-head h2{
+  margin:0;
+  font:700 12px Orbitron,sans-serif;
+  letter-spacing:.06em;
 }
 
-.panel-body{
-  padding:18px;
+.section-head span{
+  color:var(--muted2);
+  font-size:9px;
 }
 
-.activity{
-  display:flex;
-  flex-direction:column;
-  gap:13px;
+.activity-list{
+  padding:4px 18px 12px;
 }
 
 .activity-item{
   display:flex;
   gap:11px;
-  align-items:flex-start;
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,.045);
+}
+
+.activity-item:last-child{
+  border-bottom:0;
 }
 
 .activity-dot{
   width:8px;
   height:8px;
-  margin-top:5px;
+  margin-top:4px;
+  flex:0 0 8px;
   border-radius:50%;
   background:var(--purple);
-  box-shadow:0 0 10px rgba(155,92,255,.6);
+  box-shadow:0 0 10px rgba(157,92,255,.5);
 }
 
 .activity-text{
+  color:#c8c8d0;
   font-size:10px;
-  color:#b8b8c1;
   line-height:1.5;
 }
 
 .activity-time{
-  color:#5f5f6b;
-  font-size:8px;
-  margin-top:2px;
+  margin-top:4px;
+  color:var(--muted2);
+  font-size:9px;
 }
 
 .breakdown{
+  padding:18px;
+}
+
+.breakdown-item{
+  margin-bottom:17px;
+}
+
+.breakdown-top{
   display:flex;
-  flex-direction:column;
-  gap:13px;
-}
-
-.break-row{
-  display:grid;
-  grid-template-columns:90px 1fr 40px;
   align-items:center;
-  gap:10px;
+  justify-content:space-between;
+  margin-bottom:7px;
 }
 
-.break-label{
-  color:#aaaab3;
-  font-size:9px;
+.breakdown-label{
+  color:#c9c9d0;
+  font-size:10px;
+  font-weight:700;
 }
 
-.bar{
+.breakdown-count{
+  color:#fff;
+  font:700 10px Orbitron,sans-serif;
+}
+
+.progress{
   height:7px;
-  border-radius:99px;
-  background:#19191e;
   overflow:hidden;
+  border-radius:10px;
+  background:#191920;
 }
 
-.bar span{
+.progress span{
   display:block;
+  width:0;
   height:100%;
+  border-radius:10px;
   background:linear-gradient(90deg,var(--purple),var(--cyan));
-  border-radius:99px;
+  transition:width .3s ease;
 }
 
-.break-value{
-  color:#777783;
-  font-size:9px;
-  text-align:right;
-}
-
-/* =========================
+/* ============================================================
    MODAL
-========================= */
+============================================================ */
 
-.modal-backdrop{
+.modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(8px);
-  z-index:5000;
+  z-index:2000;
   display:none;
   align-items:center;
   justify-content:center;
   padding:20px;
+  background:rgba(0,0,0,.76);
+  backdrop-filter:blur(10px);
 }
 
-.modal-backdrop.open{
+.modal.open{
   display:flex;
 }
 
-.modal{
-  width:min(760px,100%);
-  max-height:92vh;
+.modal-card{
+  width:min(820px,100%);
+  max-height:calc(100vh - 40px);
   overflow:auto;
-  background:#0d0d10;
-  border:1px solid #30303a;
-  border-radius:18px;
-  box-shadow:0 30px 100px rgba(0,0,0,.7);
+  background:#0b0b10;
+  border:1px solid var(--border2);
+  border-radius:20px;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+
+.modal-card.small{
+  width:min(650px,100%);
 }
 
 .modal-head{
+  position:sticky;
+  top:0;
+  z-index:2;
   padding:18px 20px;
-  border-bottom:1px solid var(--line);
   display:flex;
   justify-content:space-between;
   align-items:center;
-  position:sticky;
-  top:0;
-  background:#0d0d10;
-  z-index:2;
+  background:rgba(11,11,16,.96);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(14px);
 }
 
 .modal-title{
-  font-family:Orbitron,sans-serif;
-  font-size:13px;
+  margin:0;
+  font:700 14px Orbitron,sans-serif;
 }
 
 .modal-close{
-  border:0;
-  background:none;
-  color:#777782;
-  font-size:22px;
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:#111118;
+  color:#aaa;
 }
 
 .modal-body{
   padding:20px;
+}
+
+.modal-foot{
+  position:sticky;
+  bottom:0;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  background:rgba(11,11,16,.96);
+  border-top:1px solid var(--border);
+  backdrop-filter:blur(14px);
+}
+
+.modal-actions-left,
+.modal-actions-right{
+  display:flex;
+  gap:8px;
 }
 
 .form-grid{
@@ -922,67 +1137,77 @@ tr:hover td{
 }
 
 .field label{
-  color:#8e8e98;
+  color:#8d8d99;
   font-size:9px;
+  font-weight:800;
+  letter-spacing:.1em;
   text-transform:uppercase;
-  letter-spacing:1px;
 }
 
 .field input,
 .field select,
 .field textarea{
   width:100%;
-  padding:11px 12px;
-  border:1px solid var(--line2);
-  background:#08080a;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#08080c;
   color:#fff;
-  border-radius:9px;
   outline:none;
-  font-size:11px;
+}
+
+.field input,
+.field select{
+  height:42px;
+  padding:0 12px;
 }
 
 .field textarea{
-  min-height:100px;
+  min-height:105px;
+  padding:12px;
   resize:vertical;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus{
-  border-color:var(--purple);
+  border-color:rgba(157,92,255,.55);
+  box-shadow:0 0 0 3px rgba(157,92,255,.07);
 }
 
-.modal-foot{
-  padding:15px 20px;
-  border-top:1px solid var(--line);
+.field input[readonly]{
+  color:#777782;
+  background:#0d0d12;
+}
+
+.help{
+  color:var(--muted2);
+  font-size:9px;
+  line-height:1.5;
+}
+
+/* ============================================================
+   VIEW PROFILE
+============================================================ */
+
+.profile-top{
   display:flex;
-  justify-content:space-between;
-  gap:10px;
+  gap:18px;
   align-items:center;
-}
-
-.modal-right{
-  display:flex;
-  gap:8px;
-}
-
-.view-card{
-  display:grid;
-  grid-template-columns:90px 1fr;
-  gap:20px;
-  align-items:start;
+  padding:5px 0 22px;
 }
 
 .view-avatar{
-  width:90px;
-  height:90px;
-  border-radius:18px;
-  background:#19191f;
-  overflow:hidden;
+  width:80px;
+  height:80px;
+  flex:0 0 80px;
   display:grid;
   place-items:center;
-  font-family:Orbitron,sans-serif;
-  font-size:20px;
+  overflow:hidden;
+  border-radius:20px;
+  background:linear-gradient(135deg,#291452,#111118);
+  border:1px solid rgba(157,92,255,.3);
+  color:#d1b5ff;
+  font:800 20px Orbitron,sans-serif;
 }
 
 .view-avatar img{
@@ -992,104 +1217,154 @@ tr:hover td{
 }
 
 .view-name{
-  font-family:Orbitron,sans-serif;
-  font-size:18px;
+  color:#fff;
+  font:700 20px Orbitron,sans-serif;
 }
 
 .view-email{
+  margin-top:5px;
   color:var(--muted);
   font-size:10px;
-  margin-top:5px;
 }
 
 .view-badges{
   display:flex;
-  gap:7px;
   flex-wrap:wrap;
-  margin-top:12px;
+  gap:6px;
+  margin-top:10px;
 }
 
 .view-stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:9px;
-  margin-top:20px;
+  gap:10px;
+  margin-bottom:18px;
 }
 
 .view-stat{
-  padding:13px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:#09090b;
+  padding:15px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#09090d;
 }
 
 .view-stat span{
   display:block;
-  color:#666671;
-  font-size:8px;
+  color:var(--muted2);
+  font-size:9px;
   text-transform:uppercase;
-  letter-spacing:1px;
+  letter-spacing:.08em;
 }
 
 .view-stat strong{
   display:block;
-  margin-top:6px;
-  font-family:Orbitron,sans-serif;
-  font-size:14px;
+  margin-top:7px;
+  color:#fff;
+  font:700 15px Orbitron,sans-serif;
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.detail{
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#09090d;
+}
+
+.detail-label{
+  color:var(--muted2);
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.detail-value{
+  margin-top:5px;
+  color:#ddd;
+  font-size:10px;
+  word-break:break-word;
 }
 
 .view-bio{
-  margin-top:20px;
-  padding-top:18px;
-  border-top:1px solid var(--line);
-  color:#aaaab4;
-  font-size:10px;
+  padding:15px;
+  min-height:90px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#09090d;
+  color:#aaa;
+  font-size:11px;
   line-height:1.7;
 }
 
-/* =========================
+/* ============================================================
    TOAST
-========================= */
+============================================================ */
 
-.toast-container{
+#toastContainer{
   position:fixed;
   right:22px;
   bottom:22px;
-  z-index:8000;
+  z-index:5000;
   display:flex;
   flex-direction:column;
   gap:9px;
+  width:min(380px,calc(100vw - 44px));
 }
 
 .toast{
-  min-width:280px;
-  max-width:400px;
   padding:13px 15px;
-  border:1px solid var(--line2);
-  border-radius:11px;
-  background:#111116;
-  box-shadow:0 15px 40px rgba(0,0,0,.5);
+  border:1px solid var(--border2);
+  border-radius:12px;
+  background:#111118;
+  box-shadow:0 15px 45px rgba(0,0,0,.45);
+  color:#ddd;
   font-size:10px;
-  color:#dddde4;
-  animation:toastIn .25s ease;
+  line-height:1.5;
 }
 
 .toast.success{
-  border-color:rgba(57,229,140,.3);
+  border-color:rgba(66,230,149,.28);
 }
 
 .toast.error{
-  border-color:rgba(255,77,109,.35);
+  border-color:rgba(255,54,95,.3);
+  color:#ffacba;
 }
 
-@keyframes toastIn{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:none}
+.toast.warning{
+  border-color:rgba(255,200,87,.3);
+  color:#ffe09a;
 }
 
-/* =========================
+/* ============================================================
+   SETUP NOTICE
+============================================================ */
+
+.setup-notice{
+  display:none;
+  margin-bottom:18px;
+  padding:14px 16px;
+  border:1px solid rgba(255,200,87,.25);
+  border-radius:12px;
+  background:rgba(255,200,87,.05);
+  color:#ffe09a;
+  font-size:10px;
+  line-height:1.6;
+}
+
+.setup-notice.show{
+  display:block;
+}
+
+/* ============================================================
    RESPONSIVE
-========================= */
+============================================================ */
 
 @media(max-width:1250px){
   .stats{
@@ -1097,25 +1372,19 @@ tr:hover td{
   }
 }
 
-@media(max-width:1000px){
+@media(max-width:900px){
   :root{
-    --sidebar:250px;
+    --sidebar:270px;
   }
 
-  .lower-grid{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:800px){
   .sidebar{
     transform:translateX(-100%);
-    transition:.25s;
-    box-shadow:30px 0 80px rgba(0,0,0,.6);
+    transition:transform .22s ease;
+    box-shadow:20px 0 70px rgba(0,0,0,.5);
   }
 
   .sidebar.open{
-    transform:none;
+    transform:translateX(0);
   }
 
   .mobile-close{
@@ -1127,36 +1396,53 @@ tr:hover td{
   }
 
   .mobile-menu{
-    display:block;
-  }
-
-  .topbar{
-    padding:0 15px;
+    display:grid;
+    place-items:center;
   }
 
   .clock{
     display:none;
   }
 
-  .admin-meta{
+  .lower-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:650px){
+  .content{
+    padding:16px;
+  }
+
+  .topbar{
+    padding:0 16px;
+  }
+
+  .admin-copy,
+  .logout-btn{
     display:none;
   }
 
-  .content{
-    padding:20px 15px;
-  }
-
   .hero{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  h1{
-    font-size:24px;
+    padding:20px;
   }
 
   .stats{
     grid-template-columns:repeat(2,1fr);
+  }
+
+  .toolbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .search{
+    flex-basis:auto;
+  }
+
+  .select,
+  .toolbar .btn{
+    width:100%;
   }
 
   .form-grid{
@@ -1166,707 +1452,922 @@ tr:hover td{
   .field.full{
     grid-column:auto;
   }
-}
-
-@media(max-width:500px){
-  .stats{
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-  }
-
-  .stat{
-    padding:13px;
-  }
-
-  .stat-value{
-    font-size:19px;
-  }
-
-  .view-card{
-    grid-template-columns:1fr;
-  }
-
-  .view-avatar{
-    width:70px;
-    height:70px;
-  }
 
   .view-stats{
     grid-template-columns:1fr;
   }
 
-  .modal-foot{
-    flex-direction:column;
-    align-items:stretch;
+  .detail-grid{
+    grid-template-columns:1fr;
   }
 
-  .modal-right{
-    justify-content:flex-end;
+  .modal{
+    padding:8px;
+  }
+
+  .modal-card{
+    max-height:calc(100vh - 16px);
+  }
+
+  .modal-foot{
+    flex-direction:column;
+  }
+
+  .modal-actions-left,
+  .modal-actions-right{
+    width:100%;
+  }
+
+  .modal-foot .btn{
+    flex:1;
+  }
+
+  .bulk-bar{
+    align-items:stretch;
+    flex-direction:column;
+  }
+}
+
+@media(max-width:430px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:23px;
   }
 }
 </style>
-
 </head>
 
 <body>
 
-<!-- AUTH SCREEN -->
+<!-- ============================================================
+     AUTH SCREEN
+============================================================ -->
 
 <div id="authScreen">
-  <div class="auth-box">
-    <div class="auth-logo">CROW<span>RULES</span></div>
+  <div class="auth-card">
+    <div class="auth-logo">CR</div>
+    <h1>CROWRULES ADMIN</h1>
     <p id="authMessage">Verifying your administrator session…</p>
     <div class="spinner"></div>
   </div>
 </div>
 
-<!-- APPLICATION -->
+<!-- ============================================================
+     APP
+============================================================ -->
 
 <div id="app">
 
-  <!-- SIDEBAR -->
-
   <aside class="sidebar" id="sidebar">
 
-```
-<button class="mobile-close" id="mobileClose">×</button>
+    <div class="sidebar-header">
+      <div class="brand-mark">CR</div>
 
-<div class="brand">
-  <div class="brand-title">CROW<span>RULES</span></div>
-  <div class="brand-sub">Entertainment Admin</div>
-</div>
+      <div class="brand-copy">
+        <div class="brand-title">CROWRULES</div>
+        <div class="brand-sub">Entertainment Admin</div>
+      </div>
 
-<div class="nav-section">Core</div>
+      <button class="mobile-close" id="mobileClose" aria-label="Close menu">
+        ×
+      </button>
+    </div>
 
-<a class="nav-link" href="index.html">
-  <span class="nav-icon">⌂</span> Dashboard
-</a>
+    <nav class="nav">
 
-<a class="nav-link" href="content.html">
-  <span class="nav-icon">▦</span> Content
-</a>
+      <div class="nav-section">Core</div>
 
-<a class="nav-link" href="pages.html">
-  <span class="nav-icon">▤</span> Pages
-</a>
+      <a class="nav-link" href="index.html">
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </a>
 
-<a class="nav-link" href="categories.html">
-  <span class="nav-icon">◈</span> Categories
-</a>
+      <a class="nav-link" href="content.html">
+        <span class="nav-icon">▦</span>
+        Content
+      </a>
 
-<a class="nav-link" href="tags.html">
-  <span class="nav-icon">#</span> Tags
-</a>
+      <a class="nav-link" href="pages.html">
+        <span class="nav-icon">▤</span>
+        Pages
+      </a>
 
-<div class="nav-section">Broadcast</div>
+      <a class="nav-link" href="categories.html">
+        <span class="nav-icon">◈</span>
+        Categories
+      </a>
 
-<a class="nav-link" href="shows.html">
-  <span class="nav-icon">▣</span> Shows
-</a>
+      <a class="nav-link" href="tags.html">
+        <span class="nav-icon">#</span>
+        Tags
+      </a>
 
-<a class="nav-link" href="episodes.html">
-  <span class="nav-icon">▶</span> Episodes
-</a>
+      <div class="nav-section">Broadcast</div>
 
-<a class="nav-link" href="movies.html">
-  <span class="nav-icon">▤</span> Movies
-</a>
+      <a class="nav-link" href="shows.html">
+        <span class="nav-icon">▶</span>
+        Shows
+      </a>
 
-<a class="nav-link" href="audio.html">
-  <span class="nav-icon">♫</span> Audio
-</a>
+      <a class="nav-link" href="episodes.html">
+        <span class="nav-icon">▻</span>
+        Episodes
+      </a>
 
-<a class="nav-link" href="articles.html">
-  <span class="nav-icon">✎</span> Articles
-</a>
+      <a class="nav-link" href="movies.html">
+        <span class="nav-icon">▣</span>
+        Movies
+      </a>
 
-<a class="nav-link" href="channels.html">
-  <span class="nav-icon">◉</span> Channels
-</a>
+      <a class="nav-link" href="audio.html">
+        <span class="nav-icon">♫</span>
+        Audio
+      </a>
 
-<a class="nav-link" href="schedule.html">
-  <span class="nav-icon">◷</span> Schedule
-</a>
+      <a class="nav-link" href="articles.html">
+        <span class="nav-icon">≡</span>
+        Articles
+      </a>
 
-<a class="nav-link" href="live.html">
-  <span class="nav-icon">●</span> Live
-</a>
+      <a class="nav-link" href="channels.html">
+        <span class="nav-icon">◉</span>
+        Channels
+      </a>
 
-<a class="nav-link" href="guide.html">
-  <span class="nav-icon">☷</span> TV Guide
-</a>
+      <a class="nav-link" href="schedule.html">
+        <span class="nav-icon">◷</span>
+        Schedule
+      </a>
 
-<div class="nav-section">People</div>
+      <a class="nav-link" href="live.html">
+        <span class="nav-icon">●</span>
+        Live
+      </a>
 
-<a class="nav-link active" href="members.html">
-  <span class="nav-icon">♙</span> Members
-</a>
+      <a class="nav-link" href="guide.html">
+        <span class="nav-icon">▥</span>
+        TV Guide
+      </a>
 
-<a class="nav-link" href="community.html">
-  <span class="nav-icon">♧</span> Community
-</a>
+      <div class="nav-section">People</div>
 
-<a class="nav-link" href="creators.html">
-  <span class="nav-icon">✦</span> Creators
-</a>
+      <a class="nav-link active" href="members.html">
+        <span class="nav-icon">♟</span>
+        Members
+      </a>
 
-<a class="nav-link" href="creator.html">
-  <span class="nav-icon">★</span> Creator Profiles
-</a>
+      <a class="nav-link" href="community.html">
+        <span class="nav-icon">♧</span>
+        Community
+      </a>
 
-<a class="nav-link" href="creator-content.html">
-  <span class="nav-icon">▧</span> Creator Content
-</a>
+      <a class="nav-link" href="creators.html">
+        <span class="nav-icon">✦</span>
+        Creators
+      </a>
 
-<a class="nav-link" href="creator-approvals.html">
-  <span class="nav-icon">✓</span> Creator Approvals
-</a>
+      <a class="nav-link" href="creator.html">
+        <span class="nav-icon">★</span>
+        Creator Profiles
+      </a>
 
-<div class="nav-section">CrowRules Network</div>
+      <a class="nav-link" href="creator-content.html">
+        <span class="nav-icon">✧</span>
+        Creator Content
+      </a>
 
-<a class="nav-link" href="artists.html">
-  <span class="nav-icon">♬</span> Artists
-</a>
+      <a class="nav-link" href="creator-approvals.html">
+        <span class="nav-icon">✓</span>
+        Creator Approvals
+      </a>
 
-<a class="nav-link" href="albums.html">
-  <span class="nav-icon">◫</span> Albums
-</a>
+      <a class="nav-link" href="artists.html">
+        <span class="nav-icon">♩</span>
+        Artists
+      </a>
 
-<a class="nav-link" href="tracks.html">
-  <span class="nav-icon">♫</span> Tracks
-</a>
+      <a class="nav-link" href="albums.html">
+        <span class="nav-icon">◫</span>
+        Albums
+      </a>
 
-<a class="nav-link" href="records.html">
-  <span class="nav-icon">◉</span> Records
-</a>
+      <a class="nav-link" href="tracks.html">
+        <span class="nav-icon">♪</span>
+        Tracks
+      </a>
 
-<a class="nav-link" href="sports.html">
-  <span class="nav-icon">⚽</span> Sports
-</a>
+      <a class="nav-link" href="records.html">
+        <span class="nav-icon">◍</span>
+        Records
+      </a>
 
-<a class="nav-link" href="teams.html">
-  <span class="nav-icon">♜</span> Teams
-</a>
+      <div class="nav-section">CrowRules Network</div>
 
-<a class="nav-link" href="rankings.html">
-  <span class="nav-icon">↗</span> Rankings
-</a>
+      <a class="nav-link" href="sports.html">
+        <span class="nav-icon">⚑</span>
+        Sports
+      </a>
 
-<a class="nav-link" href="standings.html">
-  <span class="nav-icon">☷</span> Standings
-</a>
+      <a class="nav-link" href="teams.html">
+        <span class="nav-icon">⚽</span>
+        Teams
+      </a>
 
-<a class="nav-link" href="games.html">
-  <span class="nav-icon">◈</span> Games
-</a>
+      <a class="nav-link" href="rankings.html">
+        <span class="nav-icon">↕</span>
+        Rankings
+      </a>
 
-<a class="nav-link" href="pickem.html">
-  <span class="nav-icon">🎯</span> Pick'em
-</a>
+      <a class="nav-link" href="standings.html">
+        <span class="nav-icon">☷</span>
+        Standings
+      </a>
 
-<a class="nav-link" href="memorials.html">
-  <span class="nav-icon">✝</span> Memorials
-</a>
+      <a class="nav-link" href="games.html">
+        <span class="nav-icon">▣</span>
+        Games
+      </a>
 
-<a class="nav-link" href="memorial-photos.html">
-  <span class="nav-icon">▧</span> Memorial Photos
-</a>
+      <a class="nav-link" href="pickem.html">
+        <span class="nav-icon">✓</span>
+        Pick'em
+      </a>
 
-<a class="nav-link" href="awards.html">
-  <span class="nav-icon">🏆</span> Awards
-</a>
+      <a class="nav-link" href="memorials.html">
+        <span class="nav-icon">✞</span>
+        Memorials
+      </a>
 
-<div class="nav-section">System</div>
+      <a class="nav-link" href="memorial-photos.html">
+        <span class="nav-icon">▧</span>
+        Memorial Photos
+      </a>
 
-<a class="nav-link" href="analytics.html">
-  <span class="nav-icon">◒</span> Analytics
-</a>
+      <a class="nav-link" href="awards.html">
+        <span class="nav-icon">♛</span>
+        Awards
+      </a>
 
-<a class="nav-link" href="moderation.html">
-  <span class="nav-icon">⚠</span> Moderation
-</a>
+      <div class="nav-section">System</div>
 
-<a class="nav-link" href="logs.html">
-  <span class="nav-icon">≡</span> Logs
-</a>
+      <a class="nav-link" href="analytics.html">
+        <span class="nav-icon">◒</span>
+        Analytics
+      </a>
 
-<a class="nav-link" href="notifications.html">
-  <span class="nav-icon">♢</span> Notifications
-</a>
+      <a class="nav-link" href="moderation.html">
+        <span class="nav-icon">⚠</span>
+        Moderation
+      </a>
 
-<a class="nav-link" href="activity.html">
-  <span class="nav-icon">◌</span> Activity
-</a>
+      <a class="nav-link" href="logs.html">
+        <span class="nav-icon">≣</span>
+        Logs
+      </a>
 
-<a class="nav-link" href="settings.html">
-  <span class="nav-icon">⚙</span> Settings
-</a>
-```
+      <a class="nav-link" href="notifications.html">
+        <span class="nav-icon">♢</span>
+        Notifications
+      </a>
 
+      <a class="nav-link" href="activity.html">
+        <span class="nav-icon">◔</span>
+        Activity
+      </a>
+
+      <a class="nav-link" href="settings.html">
+        <span class="nav-icon">⚙</span>
+        Settings
+      </a>
+
+    </nav>
   </aside>
-
-  <!-- MAIN -->
 
   <main class="main">
 
-```
-<header class="topbar">
+    <header class="topbar">
 
-  <div class="top-left">
-    <button class="mobile-menu" id="mobileMenu">☰</button>
+      <div class="topbar-left">
 
-    <div class="breadcrumb">
-      CrowRules Entertainment / <strong>Members</strong>
-    </div>
-  </div>
-
-  <div class="top-right">
-
-    <div class="clock" id="clock">--:--:--</div>
-
-    <div class="admin-user">
-      <div class="admin-avatar" id="adminAvatar">CR</div>
-
-      <div class="admin-meta">
-        <div class="admin-name" id="adminName">Administrator</div>
-        <div class="admin-role" id="adminRole">Admin</div>
-      </div>
-    </div>
-
-    <button class="logout" id="logoutBtn">Sign Out</button>
-
-  </div>
-
-</header>
-
-<section class="content">
-
-  <!-- HERO -->
-  <div class="hero">
-
-    <div>
-      <div class="eyebrow">People Management</div>
-      <h1>Members</h1>
-      <p>Manage CrowRules Entertainment members, memberships, roles and account status.</p>
-    </div>
-
-    <div class="actions">
-      <button class="btn" id="refreshBtn">↻ Refresh</button>
-      <button class="btn" id="exportBtn">⇩ Export CSV</button>
-      <button class="btn primary" id="addBtn">＋ Add Member</button>
-    </div>
-
-  </div>
-
-  <!-- STATS -->
-  <div class="stats">
-
-    <div class="stat">
-      <div class="stat-label">Total Members</div>
-      <div class="stat-value" id="statTotal">0</div>
-      <div class="stat-sub">All member records</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Active</div>
-      <div class="stat-value" id="statActive">0</div>
-      <div class="stat-sub">Currently active</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">New This Month</div>
-      <div class="stat-value" id="statNew">0</div>
-      <div class="stat-sub">Created this month</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Premium / Pro</div>
-      <div class="stat-value" id="statPremium">0</div>
-      <div class="stat-sub">Paid memberships</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Pending</div>
-      <div class="stat-value" id="statPending">0</div>
-      <div class="stat-sub">Awaiting approval</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-label">Suspended</div>
-      <div class="stat-value" id="statSuspended">0</div>
-      <div class="stat-sub">Restricted accounts</div>
-    </div>
-
-  </div>
-
-  <!-- MEMBER DIRECTORY -->
-  <div class="panel">
-
-    <div class="toolbar">
-
-      <div class="search">
-        <span class="search-icon">⌕</span>
-        <input
-          id="searchInput"
-          type="search"
-          placeholder="Search members, usernames or email…"
-          autocomplete="off"
+        <button
+          class="mobile-menu"
+          id="mobileMenu"
+          aria-label="Open menu"
         >
+          ☰
+        </button>
+
+        <div class="breadcrumb">
+          Administration / <strong>Members</strong>
+        </div>
+
       </div>
 
-      <select class="filter" id="membershipFilter">
-        <option value="">All Memberships</option>
-        <option value="Free">Free</option>
-        <option value="Pro">Pro</option>
-        <option value="Premium">Premium</option>
-        <option value="Creator">Creator</option>
-      </select>
+      <div class="topbar-right">
 
-      <select class="filter" id="roleFilter">
-        <option value="">All Roles</option>
-        <option value="Member">Member</option>
-        <option value="Creator">Creator</option>
-        <option value="Moderator">Moderator</option>
-        <option value="Admin">Admin</option>
-      </select>
+        <div class="clock" id="clock">--:--:--</div>
 
-      <select class="filter" id="sortFilter">
-        <option value="newest">Newest</option>
-        <option value="oldest">Oldest</option>
-        <option value="name">Name A–Z</option>
-        <option value="activity">Last Active</option>
-        <option value="watch">Watch Time</option>
-        <option value="points">Points</option>
-      </select>
+        <div class="admin-profile">
 
-      <div class="bulk" id="bulkBar">
-        <span id="selectedCount">0 selected</span>
+          <div class="admin-avatar" id="adminAvatar">
+            CR
+          </div>
 
-        <select class="filter" id="bulkStatus">
-          <option value="">Set Status…</option>
-          <option value="Active">Active</option>
-          <option value="Pending">Pending</option>
-          <option value="Suspended">Suspended</option>
-        </select>
+          <div class="admin-copy">
+            <div class="admin-name" id="adminName">
+              Administrator
+            </div>
 
-        <button class="btn small" id="bulkApply">Apply</button>
-      </div>
-
-    </div>
-
-    <div class="tabs">
-
-      <button class="tab active" data-tab="all">
-        All <span id="tabAllCount">0</span>
-      </button>
-
-      <button class="tab" data-tab="active">
-        Active <span id="tabActiveCount">0</span>
-      </button>
-
-      <button class="tab" data-tab="premium">
-        Premium <span id="tabPremiumCount">0</span>
-      </button>
-
-      <button class="tab" data-tab="pending">
-        Pending <span id="tabPendingCount">0</span>
-      </button>
-
-      <button class="tab" data-tab="suspended">
-        Suspended <span id="tabSuspendedCount">0</span>
-      </button>
-
-      <button class="tab" data-tab="creators">
-        Creators <span id="tabCreatorsCount">0</span>
-      </button>
-
-    </div>
-
-    <div class="table-wrap">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>
-              <input
-                class="check"
-                type="checkbox"
-                id="selectAll"
-                aria-label="Select all"
-              >
-            </th>
-            <th>Member</th>
-            <th>Email</th>
-            <th>Membership</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Points</th>
-            <th>Watch Time</th>
-            <th>Last Active</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody id="memberTableBody"></tbody>
-
-      </table>
-
-      <div class="empty hidden" id="emptyState">
-        <strong>No members found</strong>
-        <span>Try changing your search or filters.</span>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- LOWER DASHBOARD -->
-  <div class="lower-grid">
-
-    <div class="panel">
-
-      <div class="panel-head">
-        <div class="panel-title">Recent Admin Activity</div>
-      </div>
-
-      <div class="panel-body">
-        <div class="activity" id="activityList">
-          <div class="activity-item">
-            <div class="activity-dot"></div>
-            <div>
-              <div class="activity-text">Member management initialized.</div>
-              <div class="activity-time">Current session</div>
+            <div class="admin-role" id="adminRole">
+              Admin
             </div>
           </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="panel">
-
-      <div class="panel-head">
-        <div class="panel-title">Membership Breakdown</div>
-      </div>
-
-      <div class="panel-body">
-
-        <div class="breakdown">
-
-          <div class="break-row">
-            <div class="break-label">Free</div>
-            <div class="bar"><span id="barFree" style="width:0"></span></div>
-            <div class="break-value" id="countFree">0</div>
-          </div>
-
-          <div class="break-row">
-            <div class="break-label">Pro</div>
-            <div class="bar"><span id="barPro" style="width:0"></span></div>
-            <div class="break-value" id="countPro">0</div>
-          </div>
-
-          <div class="break-row">
-            <div class="break-label">Premium</div>
-            <div class="bar"><span id="barPremium" style="width:0"></span></div>
-            <div class="break-value" id="countPremium">0</div>
-          </div>
-
-          <div class="break-row">
-            <div class="break-label">Creator</div>
-            <div class="bar"><span id="barCreator" style="width:0"></span></div>
-            <div class="break-value" id="countCreator">0</div>
-          </div>
 
         </div>
 
+        <button class="logout-btn" id="logoutBtn">
+          Sign Out
+        </button>
+
       </div>
 
-    </div>
+    </header>
 
-  </div>
+    <section class="content">
 
-</section>
-```
+      <div class="setup-notice" id="setupNotice"></div>
+
+      <!-- HERO -->
+
+      <section class="hero">
+
+        <div class="eyebrow">
+          CrowRules Entertainment
+        </div>
+
+        <h1>Members Administration</h1>
+
+        <p>
+          Manage CrowRules members, memberships, roles, activity,
+          points, watch time and account status from one centralized
+          administrator dashboard.
+        </p>
+
+      </section>
+
+      <!-- STATS -->
+
+      <section class="stats">
+
+        <div class="stat-card purple">
+          <div class="stat-label">Total Members</div>
+          <div class="stat-value" id="statTotal">0</div>
+          <div class="stat-note">All member profiles</div>
+        </div>
+
+        <div class="stat-card green">
+          <div class="stat-label">Active</div>
+          <div class="stat-value" id="statActive">0</div>
+          <div class="stat-note">Currently active</div>
+        </div>
+
+        <div class="stat-card cyan">
+          <div class="stat-label">New This Month</div>
+          <div class="stat-value" id="statNew">0</div>
+          <div class="stat-note">Recently registered</div>
+        </div>
+
+        <div class="stat-card purple">
+          <div class="stat-label">Premium / Pro</div>
+          <div class="stat-value" id="statPremium">0</div>
+          <div class="stat-note">Paid memberships</div>
+        </div>
+
+        <div class="stat-card yellow">
+          <div class="stat-label">Pending</div>
+          <div class="stat-value" id="statPending">0</div>
+          <div class="stat-note">Awaiting approval</div>
+        </div>
+
+        <div class="stat-card red">
+          <div class="stat-label">Suspended</div>
+          <div class="stat-value" id="statSuspended">0</div>
+          <div class="stat-note">Restricted profiles</div>
+        </div>
+
+      </section>
+
+      <!-- MEMBERS PANEL -->
+
+      <section class="panel">
+
+        <div class="toolbar">
+
+          <div class="search">
+            <span class="search-icon">⌕</span>
+            <input
+              id="searchInput"
+              type="search"
+              autocomplete="off"
+              placeholder="Search name, username, email, role..."
+            >
+          </div>
+
+          <select class="select" id="membershipFilter">
+            <option value="">All Memberships</option>
+            <option value="Free">Free</option>
+            <option value="Pro">Pro</option>
+            <option value="Premium">Premium</option>
+            <option value="Creator">Creator</option>
+          </select>
+
+          <select class="select" id="roleFilter">
+            <option value="">All Roles</option>
+            <option value="Member">Member</option>
+            <option value="Creator">Creator</option>
+            <option value="Moderator">Moderator</option>
+            <option value="Staff">Staff</option>
+            <option value="Admin">Admin</option>
+          </select>
+
+          <select class="select" id="statusFilter">
+            <option value="">All Statuses</option>
+            <option value="Active">Active</option>
+            <option value="Pending">Pending</option>
+            <option value="Suspended">Suspended</option>
+          </select>
+
+          <select class="select" id="sortFilter">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="name">Name</option>
+            <option value="activity">Recent Activity</option>
+            <option value="points">Points</option>
+            <option value="watch">Watch Time</option>
+          </select>
+
+          <button class="btn" id="refreshBtn">
+            ↻ Refresh
+          </button>
+
+          <button class="btn" id="exportBtn">
+            ⇩ CSV
+          </button>
+
+          <button class="btn primary" id="addBtn">
+            + Add Member
+          </button>
+
+        </div>
+
+        <!-- TABS -->
+
+        <div class="tabs">
+
+          <button class="tab active" data-tab="all">
+            All
+            <span class="tab-count" id="tabAllCount">0</span>
+          </button>
+
+          <button class="tab" data-tab="active">
+            Active
+            <span class="tab-count" id="tabActiveCount">0</span>
+          </button>
+
+          <button class="tab" data-tab="premium">
+            Premium
+            <span class="tab-count" id="tabPremiumCount">0</span>
+          </button>
+
+          <button class="tab" data-tab="pending">
+            Pending
+            <span class="tab-count" id="tabPendingCount">0</span>
+          </button>
+
+          <button class="tab" data-tab="suspended">
+            Suspended
+            <span class="tab-count" id="tabSuspendedCount">0</span>
+          </button>
+
+          <button class="tab" data-tab="creators">
+            Creators
+            <span class="tab-count" id="tabCreatorsCount">0</span>
+          </button>
+
+        </div>
+
+        <!-- BULK -->
+
+        <div class="bulk-bar" id="bulkBar">
+
+          <div class="bulk-left">
+            <span class="bulk-count" id="selectedCount">
+              0 selected
+            </span>
+          </div>
+
+          <div class="bulk-right">
+
+            <select class="select" id="bulkStatus">
+              <option value="">Change Status...</option>
+              <option value="Active">Active</option>
+              <option value="Pending">Pending</option>
+              <option value="Suspended">Suspended</option>
+            </select>
+
+            <button class="btn primary" id="bulkApply">
+              Apply
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- TABLE -->
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    class="check"
+                    id="selectAll"
+                    aria-label="Select all visible members"
+                  >
+                </th>
+                <th>Member</th>
+                <th>Email</th>
+                <th>Membership</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Points</th>
+                <th>Watch Time</th>
+                <th>Last Active</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="memberTableBody"></tbody>
+
+          </table>
+
+        </div>
+
+        <div id="emptyState" class="empty hidden">
+          <strong>No members found</strong>
+          <span>
+            Try changing your search, filters or selected tab.
+          </span>
+        </div>
+
+        <div class="pagination-info" id="paginationInfo">
+          0 members
+        </div>
+
+      </section>
+
+      <!-- LOWER -->
+
+      <section class="lower-grid">
+
+        <div class="panel">
+
+          <div class="section-head">
+            <h2>Admin Activity</h2>
+            <span>This browser session</span>
+          </div>
+
+          <div class="activity-list" id="activityList">
+            <div class="activity-item">
+              <div class="activity-dot"></div>
+              <div>
+                <div class="activity-text">
+                  No activity recorded in this session.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="panel">
+
+          <div class="section-head">
+            <h2>Membership Breakdown</h2>
+            <span>Current database</span>
+          </div>
+
+          <div class="breakdown">
+
+            <div class="breakdown-item">
+              <div class="breakdown-top">
+                <span class="breakdown-label">Free</span>
+                <span class="breakdown-count" id="countFree">0</span>
+              </div>
+              <div class="progress">
+                <span id="barFree"></span>
+              </div>
+            </div>
+
+            <div class="breakdown-item">
+              <div class="breakdown-top">
+                <span class="breakdown-label">Pro</span>
+                <span class="breakdown-count" id="countPro">0</span>
+              </div>
+              <div class="progress">
+                <span id="barPro"></span>
+              </div>
+            </div>
+
+            <div class="breakdown-item">
+              <div class="breakdown-top">
+                <span class="breakdown-label">Premium</span>
+                <span class="breakdown-count" id="countPremium">0</span>
+              </div>
+              <div class="progress">
+                <span id="barPremium"></span>
+              </div>
+            </div>
+
+            <div class="breakdown-item">
+              <div class="breakdown-top">
+                <span class="breakdown-label">Creator</span>
+                <span class="breakdown-count" id="countCreator">0</span>
+              </div>
+              <div class="progress">
+                <span id="barCreator"></span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </section>
 
   </main>
 
 </div>
 
-<!-- ADD / EDIT MODAL -->
+<!-- ============================================================
+     ADD / EDIT MODAL
+============================================================ -->
 
-<div class="modal-backdrop" id="memberModal">
+<div class="modal" id="memberModal">
 
-  <div class="modal">
+  <div class="modal-card">
 
-```
-<div class="modal-head">
-  <div class="modal-title" id="modalTitle">Add Member</div>
-  <button class="modal-close" id="modalClose">×</button>
-</div>
+    <div class="modal-head">
 
-<form id="memberForm">
+      <h2 class="modal-title" id="modalTitle">
+        Add Member
+      </h2>
 
-  <div class="modal-body">
-
-    <input type="hidden" id="memberId">
-
-    <div class="form-grid">
-
-      <div class="field">
-        <label for="firstName">First Name</label>
-        <input id="firstName" type="text">
-      </div>
-
-      <div class="field">
-        <label for="lastName">Last Name</label>
-        <input id="lastName" type="text">
-      </div>
-
-      <div class="field">
-        <label for="username">Username</label>
-        <input id="username" type="text" autocomplete="off">
-      </div>
-
-      <div class="field">
-        <label for="email">Email</label>
-        <input id="email" type="email">
-      </div>
-
-      <div class="field">
-        <label for="membershipType">Membership</label>
-        <select id="membershipType">
-          <option value="Free">Free</option>
-          <option value="Pro">Pro</option>
-          <option value="Premium">Premium</option>
-          <option value="Creator">Creator</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="role">Role</label>
-        <select id="role">
-          <option value="Member">Member</option>
-          <option value="Creator">Creator</option>
-          <option value="Moderator">Moderator</option>
-          <option value="Admin">Admin</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="status">Status</label>
-        <select id="status">
-          <option value="Active">Active</option>
-          <option value="Pending">Pending</option>
-          <option value="Suspended">Suspended</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="points">Points</label>
-        <input id="points" type="number" min="0" step="1" value="0">
-      </div>
-
-      <div class="field">
-        <label for="watchMinutes">Watch Minutes</label>
-        <input id="watchMinutes" type="number" min="0" step="1" value="0">
-      </div>
-
-      <div class="field">
-        <label for="lastActive">Last Active</label>
-        <input id="lastActive" type="datetime-local">
-      </div>
-
-      <div class="field full">
-        <label for="avatarUrl">Avatar URL</label>
-        <input id="avatarUrl" type="url" placeholder="https://…">
-      </div>
-
-      <div class="field full">
-        <label for="bio">Bio</label>
-        <textarea id="bio" placeholder="Member bio…"></textarea>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="modal-foot">
-
-    <button
-      type="button"
-      class="btn danger hidden"
-      id="deleteMemberBtn"
-    >
-      Delete Member
-    </button>
-
-    <div class="modal-right">
-      <button type="button" class="btn" id="cancelModal">Cancel</button>
-      <button type="submit" class="btn primary" id="saveMemberBtn">
-        Save Member
+      <button class="modal-close" id="modalClose">
+        ×
       </button>
+
+    </div>
+
+    <form id="memberForm">
+
+      <div class="modal-body">
+
+        <input type="hidden" id="memberId">
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label for="firstName">First Name</label>
+            <input id="firstName" type="text" maxlength="100">
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last Name</label>
+            <input id="lastName" type="text" maxlength="100">
+          </div>
+
+          <div class="field">
+            <label for="displayName">Display Name</label>
+            <input id="displayName" type="text" maxlength="150">
+            <div class="help">
+              Public-facing member name.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="username">Username</label>
+            <input id="username" type="text" maxlength="100">
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" maxlength="255">
+          </div>
+
+          <div class="field">
+            <label for="userId">Supabase User ID</label>
+            <input id="userId" type="text" readonly>
+            <div class="help">
+              Authentication accounts are managed by Supabase Auth,
+              not created from this browser page.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="membershipType">Membership</label>
+            <select id="membershipType">
+              <option value="Free">Free</option>
+              <option value="Pro">Pro</option>
+              <option value="Premium">Premium</option>
+              <option value="Creator">Creator</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="role">Member Role</label>
+            <select id="role">
+              <option value="Member">Member</option>
+              <option value="Creator">Creator</option>
+              <option value="Moderator">Moderator</option>
+              <option value="Staff">Staff</option>
+              <option value="Admin">Admin</option>
+            </select>
+            <div class="help">
+              This is the member profile role. It does not modify
+              Supabase Auth app_metadata.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="status">Status</label>
+            <select id="status">
+              <option value="Active">Active</option>
+              <option value="Pending">Pending</option>
+              <option value="Suspended">Suspended</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="points">Points</label>
+            <input
+              id="points"
+              type="number"
+              min="0"
+              step="1"
+              value="0"
+            >
+          </div>
+
+          <div class="field">
+            <label for="watchMinutes">Watch Minutes</label>
+            <input
+              id="watchMinutes"
+              type="number"
+              min="0"
+              step="1"
+              value="0"
+            >
+          </div>
+
+          <div class="field">
+            <label for="lastActive">Last Active</label>
+            <input id="lastActive" type="datetime-local">
+          </div>
+
+          <div class="field full">
+            <label for="avatarUrl">Avatar URL</label>
+            <input
+              id="avatarUrl"
+              type="url"
+              maxlength="1000"
+              placeholder="https://..."
+            >
+          </div>
+
+          <div class="field full">
+            <label for="bio">Biography</label>
+            <textarea
+              id="bio"
+              maxlength="5000"
+              placeholder="Member biography..."
+            ></textarea>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="modal-foot">
+
+        <div class="modal-actions-left">
+
+          <button
+            type="button"
+            class="btn danger hidden"
+            id="deleteMemberBtn"
+          >
+            Delete Member
+          </button>
+
+        </div>
+
+        <div class="modal-actions-right">
+
+          <button
+            type="button"
+            class="btn"
+            id="cancelModal"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn primary"
+            id="saveMemberBtn"
+          >
+            Save Member
+          </button>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- ============================================================
+     VIEW MODAL
+============================================================ -->
+
+<div class="modal" id="viewModal">
+
+  <div class="modal-card small">
+
+    <div class="modal-head">
+
+      <h2 class="modal-title">
+        Member Profile
+      </h2>
+
+      <button class="modal-close" id="viewClose">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body" id="viewBody"></div>
+
+    <div class="modal-foot">
+
+      <div class="modal-actions-left"></div>
+
+      <div class="modal-actions-right">
+
+        <button
+          type="button"
+          class="btn"
+          id="viewMessageBtn"
+        >
+          ✉ Message
+        </button>
+
+        <button
+          type="button"
+          class="btn primary"
+          id="viewEditBtn"
+        >
+          ✎ Edit
+        </button>
+
+      </div>
+
     </div>
 
   </div>
 
-</form>
-```
-
-  </div>
-
 </div>
 
-<!-- VIEW MODAL -->
-
-<div class="modal-backdrop" id="viewModal">
-
-  <div class="modal">
-
-```
-<div class="modal-head">
-  <div class="modal-title">Member Profile</div>
-  <button class="modal-close" id="viewClose">×</button>
-</div>
-
-<div class="modal-body" id="viewBody"></div>
-
-<div class="modal-foot">
-  <div></div>
-
-  <div class="modal-right">
-    <button class="btn" id="viewMessageBtn">✉ Message</button>
-    <button class="btn primary" id="viewEditBtn">Edit Member</button>
-  </div>
-</div>
-```
-
-  </div>
-
-</div>
-
-<!-- TOASTS -->
-
-<div class="toast-container" id="toastContainer"></div>
+<div id="toastContainer"></div>
 
 <script>
 "use strict";
 
 /* ============================================================
    CROWRULES SUPABASE CONFIGURATION
-   ============================================================
-
-   IMPORTANT:
-   Use your Supabase PROJECT URL and PUBLISHABLE/ANON KEY.
-
-   NEVER put a service_role/secret key in this file.
-
-   You can either replace the placeholders below OR define:
-
-   window.CROWRULES_SUPABASE_URL
-   window.CROWRULES_SUPABASE_PUBLISHABLE_KEY
-
-   from a shared config file loaded before this script.
 ============================================================ */
 
 const SUPABASE_URL =
@@ -1880,14 +2381,32 @@ const SUPABASE_KEY =
 
 const MEMBERS_TABLE = "members";
 
+const ADMIN_ROLES = [
+  "owner",
+  "super_admin",
+  "admin"
+];
+
+/* ============================================================
+   STATE
+============================================================ */
+
 let supabaseClient = null;
+
 let currentUser = null;
+
 let members = [];
+
 let filteredMembers = [];
+
 let selectedIds = new Set();
+
 let activeTab = "all";
+
 let editingMemberId = null;
+
 let viewingMemberId = null;
+
 let activityItems = [];
 
 /* ============================================================
@@ -1901,22 +2420,23 @@ const authMessage = $("authMessage");
 const app = $("app");
 
 const sidebar = $("sidebar");
-const mobileMenu = $("mobileMenu");
-const mobileClose = $("mobileClose");
 
 const memberModal = $("memberModal");
 const viewModal = $("viewModal");
 
 const memberForm = $("memberForm");
+
 const tableBody = $("memberTableBody");
 const emptyState = $("emptyState");
 
 const searchInput = $("searchInput");
 const membershipFilter = $("membershipFilter");
 const roleFilter = $("roleFilter");
+const statusFilter = $("statusFilter");
 const sortFilter = $("sortFilter");
 
 const selectAll = $("selectAll");
+
 const bulkBar = $("bulkBar");
 const selectedCount = $("selectedCount");
 const bulkStatus = $("bulkStatus");
@@ -1924,23 +2444,36 @@ const bulkStatus = $("bulkStatus");
 const toastContainer = $("toastContainer");
 
 /* ============================================================
-   SUPABASE
+   CONFIG
 ============================================================ */
 
 function configurationReady(){
-  return (
+
+  return Boolean(
     SUPABASE_URL &&
     SUPABASE_KEY &&
-    !SUPABASE_URL.startsWith("YOUR_") &&
-    !SUPABASE_KEY.startsWith("YOUR_")
+    !SUPABASE_URL.includes("YOUR_") &&
+    !SUPABASE_KEY.includes("YOUR_")
   );
+
 }
 
 function initializeSupabase(){
+
   if(!configurationReady()){
+
     throw new Error(
-      "Supabase configuration is missing. Set CROWRULES_SUPABASE_URL and CROWRULES_SUPABASE_PUBLISHABLE_KEY, or replace the placeholders in members.html."
+      "Supabase configuration is missing. Configure CROWRULES_SUPABASE_URL and CROWRULES_SUPABASE_PUBLISHABLE_KEY."
     );
+
+  }
+
+  if(!window.supabase || !window.supabase.createClient){
+
+    throw new Error(
+      "Supabase JavaScript library failed to load."
+    );
+
   }
 
   const { createClient } = window.supabase;
@@ -1956,78 +2489,115 @@ function initializeSupabase(){
       }
     }
   );
+
 }
 
 /* ============================================================
-   AUTHENTICATION
+   AUTH
 ============================================================ */
 
+function normalizeRole(role){
+
+  return String(role || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g,"_");
+
+}
+
 function getAdminRole(user){
-  return user?.app_metadata?.role || "";
+
+  return normalizeRole(
+    user?.app_metadata?.role
+  );
+
 }
 
 function isAdmin(user){
-  return [
-    "owner",
-    "super_admin",
-    "admin"
-  ].includes(getAdminRole(user));
+
+  return ADMIN_ROLES.includes(
+    getAdminRole(user)
+  );
+
+}
+
+function redirectToLogin(){
+
+  const currentPage =
+    window.location.pathname
+      .split("/")
+      .pop() ||
+    "members.html";
+
+  window.location.href =
+    "login.html?redirect=" +
+    encodeURIComponent(currentPage);
+
 }
 
 async function requireAuthentication(){
 
-  authMessage.textContent = "Verifying your administrator session…";
+  authMessage.textContent =
+    "Verifying your administrator session…";
 
   const {
     data,
     error
-  } = await supabaseClient.auth.getUser();
+  } =
+    await supabaseClient.auth.getUser();
 
   if(error){
+
     throw new Error(
-      "Unable to verify your Supabase session: " + error.message
+      "Unable to verify your Supabase session: " +
+      error.message
     );
+
   }
 
   const user = data?.user;
 
   if(!user){
+
     redirectToLogin();
+
     return false;
+
   }
 
   currentUser = user;
 
   if(!isAdmin(user)){
+
     authMessage.textContent =
       "Your account is authenticated, but it does not have administrator access.";
 
-    setTimeout(() => {
-      window.location.href =
-        "login.html?error=admin_required&redirect=members.html";
-    }, 1800);
+    setTimeout(
+      () => {
+
+        window.location.href =
+          "login.html?error=admin_required&redirect=" +
+          encodeURIComponent("members.html");
+
+      },
+      1600
+    );
 
     return false;
+
   }
 
   populateAdminIdentity(user);
 
   return true;
-}
 
-function redirectToLogin(){
-  const redirect =
-    encodeURIComponent(
-      window.location.pathname.split("/").pop() || "members.html"
-    );
-
-  window.location.href =
-    "login.html?redirect=" + redirect;
 }
 
 function populateAdminIdentity(user){
 
-  const role = getAdminRole(user) || "Admin";
+  const role =
+    getAdminRole(user) ||
+    "admin";
 
   const metadata =
     user.user_metadata || {};
@@ -2039,18 +2609,24 @@ function populateAdminIdentity(user){
     user.email?.split("@")[0] ||
     "Administrator";
 
-  $("adminName").textContent = name;
-  $("adminRole").textContent = role.replaceAll("_"," ");
+  $("adminName").textContent =
+    name;
 
-  const initials = name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0,2)
-    .map(x => x[0])
-    .join("")
-    .toUpperCase();
+  $("adminRole").textContent =
+    role.replaceAll("_"," ");
 
-  $("adminAvatar").textContent = initials || "CR";
+  const initials =
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0,2)
+      .map(part => part[0])
+      .join("")
+      .toUpperCase();
+
+  $("adminAvatar").textContent =
+    initials || "CR";
+
 }
 
 /* ============================================================
@@ -2060,63 +2636,160 @@ function populateAdminIdentity(user){
 function subscribeToAuth(){
 
   supabaseClient.auth.onAuthStateChange(
-    async (event, session) => {
+    (event, session) => {
 
       if(event === "SIGNED_OUT"){
-        redirectToLogin();
+
+        window.location.href =
+          "login.html";
+
         return;
+
       }
 
-      if(event === "TOKEN_REFRESHED" && session?.user){
-        currentUser = session.user;
+      if(
+        event === "TOKEN_REFRESHED" &&
+        session?.user
+      ){
+
+        currentUser =
+          session.user;
+
       }
+
     }
   );
+
 }
 
 /* ============================================================
-   DATA LOADING
+   ERROR HELPERS
 ============================================================ */
 
-async function loadMembers(){
+function friendlySupabaseError(error){
 
-  setLoadingState();
-
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from(MEMBERS_TABLE)
-    .select("*")
-    .order("created_at", {
-      ascending:false
-    });
-
-  if(error){
-
-    console.error(error);
-
-    throw new Error(
-      "Could not load members: " +
-      error.message
+  const message =
+    String(
+      error?.message ||
+      error ||
+      "Unknown Supabase error."
     );
+
+  const lower =
+    message.toLowerCase();
+
+  if(
+    lower.includes("permission denied") ||
+    lower.includes("row-level security") ||
+    lower.includes("rls") ||
+    error?.code === "42501"
+  ){
+
+    return (
+      "Supabase denied this operation. " +
+      "Verify that your authenticated user has an administrator role " +
+      "in app_metadata and that the members RLS policies allow admin access."
+    );
+
   }
 
-  members = Array.isArray(data)
-    ? data
-    : [];
+  if(
+    lower.includes("schema cache") ||
+    error?.code === "PGRST204" ||
+    error?.code === "PGRST205"
+  ){
 
-  selectedIds.clear();
+    return (
+      "Supabase could not find a members column or table in the API schema cache. " +
+      "Refresh the Data API schema and confirm the public.members table is exposed."
+    );
 
-  updateStats();
-  updateTabs();
-  renderMembers();
-  updateBreakdown();
-  updateBulkBar();
+  }
 
-  addActivity(
-    `Loaded ${members.length} member ${members.length === 1 ? "record" : "records"} from Supabase.`
-  );
+  if(
+    error?.code === "23505" ||
+    lower.includes("duplicate") ||
+    lower.includes("unique constraint")
+  ){
+
+    return (
+      "A member with that username or another unique value already exists."
+    );
+
+  }
+
+  if(
+    error?.code === "23503"
+  ){
+
+    return (
+      "This member record references another record that does not exist."
+    );
+
+  }
+
+  if(
+    lower.includes("failed to fetch") ||
+    lower.includes("network")
+  ){
+
+    return (
+      "Unable to reach Supabase. Check the project URL, browser connection, " +
+      "Supabase status and Data API configuration."
+    );
+
+  }
+
+  return message;
+
+}
+
+/* ============================================================
+   HTML SAFETY
+============================================================ */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function safeHttpUrl(value){
+
+  const raw =
+    String(value || "").trim();
+
+  if(!raw){
+    return "";
+  }
+
+  try{
+
+    const url =
+      new URL(raw);
+
+    if(
+      url.protocol === "https:" ||
+      url.protocol === "http:"
+    ){
+
+      return url.href;
+
+    }
+
+  }catch(error){
+
+    return "";
+
+  }
+
+  return "";
+
 }
 
 /* ============================================================
@@ -2141,11 +2814,13 @@ function displayName(member){
     member.email ||
     "Member"
   );
+
 }
 
 function initials(member){
 
-  const name = displayName(member);
+  const name =
+    displayName(member);
 
   const parts =
     name
@@ -2154,21 +2829,27 @@ function initials(member){
       .filter(Boolean);
 
   if(parts.length >= 2){
+
     return (
       parts[0][0] +
       parts[1][0]
     ).toUpperCase();
+
   }
 
   return name
     .slice(0,2)
     .toUpperCase();
+
 }
 
 function formatWatchTime(minutes){
 
   const total =
-    Number(minutes || 0);
+    Math.max(
+      0,
+      Number(minutes || 0)
+    );
 
   const hours =
     Math.floor(total / 60);
@@ -2177,10 +2858,13 @@ function formatWatchTime(minutes){
     total % 60;
 
   if(hours <= 0){
+
     return `${mins}m`;
+
   }
 
   return `${hours}h ${mins}m`;
+
 }
 
 function formatDate(value){
@@ -2192,8 +2876,14 @@ function formatDate(value){
   const date =
     new Date(value);
 
-  if(Number.isNaN(date.getTime())){
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
     return "Unknown";
+
   }
 
   return date.toLocaleDateString(
@@ -2204,6 +2894,39 @@ function formatDate(value){
       year:"numeric"
     }
   );
+
+}
+
+function formatDateTime(value){
+
+  if(!value){
+    return "Never";
+  }
+
+  const date =
+    new Date(value);
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
+    return "Unknown";
+
+  }
+
+  return date.toLocaleString(
+    undefined,
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric",
+      hour:"numeric",
+      minute:"2-digit"
+    }
+  );
+
 }
 
 function formatRelativeDate(value){
@@ -2215,13 +2938,23 @@ function formatRelativeDate(value){
   const date =
     new Date(value);
 
-  if(Number.isNaN(date.getTime())){
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
     return "Unknown";
+
   }
 
   const diff =
     Date.now() -
     date.getTime();
+
+  if(diff < 0){
+    return "Just now";
+  }
 
   const minutes =
     Math.floor(diff / 60000);
@@ -2249,20 +2982,65 @@ function formatRelativeDate(value){
   }
 
   return formatDate(value);
+
 }
 
 /* ============================================================
-   HTML ESCAPING
+   LOAD MEMBERS
 ============================================================ */
 
-function escapeHtml(value){
+async function loadMembers(){
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  setLoadingState();
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from(MEMBERS_TABLE)
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+  if(error){
+
+    console.error(
+      "CrowRules members load error:",
+      error
+    );
+
+    throw new Error(
+      friendlySupabaseError(error)
+    );
+
+  }
+
+  members =
+    Array.isArray(data)
+      ? data
+      : [];
+
+  selectedIds.clear();
+
+  updateStats();
+  updateTabs();
+  updateBreakdown();
+  renderMembers();
+  updateBulkBar();
+
+  addActivity(
+    `Loaded ${members.length} member ${
+      members.length === 1
+        ? "record"
+        : "records"
+    } from Supabase.`
+  );
+
 }
 
 /* ============================================================
@@ -2285,6 +3063,9 @@ function getFilteredMembers(){
   const role =
     roleFilter.value;
 
+  const status =
+    statusFilter.value;
+
   if(search){
 
     result =
@@ -2298,110 +3079,195 @@ function getFilteredMembers(){
           member.email,
           member.role,
           member.membership_type,
-          member.status
+          member.status,
+          member.user_id
         ]
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
 
         return haystack.includes(search);
+
       });
+
   }
 
   if(membership){
+
     result =
       result.filter(
         member =>
-          member.membership_type === membership
+          member.membership_type ===
+          membership
       );
+
   }
 
   if(role){
+
     result =
       result.filter(
         member =>
           member.role === role
       );
+
+  }
+
+  if(status){
+
+    result =
+      result.filter(
+        member =>
+          member.status === status
+      );
+
   }
 
   if(activeTab === "active"){
+
     result =
       result.filter(
         member =>
           member.status === "Active"
       );
+
   }
 
   if(activeTab === "premium"){
+
     result =
       result.filter(
         member =>
-          ["Premium","Pro"].includes(
+          [
+            "Premium",
+            "Pro"
+          ].includes(
             member.membership_type
           )
       );
+
   }
 
   if(activeTab === "pending"){
+
     result =
       result.filter(
         member =>
           member.status === "Pending"
       );
+
   }
 
   if(activeTab === "suspended"){
+
     result =
       result.filter(
         member =>
           member.status === "Suspended"
       );
+
   }
 
   if(activeTab === "creators"){
+
     result =
       result.filter(
         member =>
           member.role === "Creator" ||
           member.membership_type === "Creator"
       );
+
   }
 
   const sort =
     sortFilter.value;
 
-  result.sort((a,b) => {
+  result.sort(
+    (a,b) => {
 
-    if(sort === "oldest"){
-      return new Date(a.created_at || 0) -
-             new Date(b.created_at || 0);
+      if(sort === "oldest"){
+
+        return (
+          new Date(a.created_at || 0) -
+          new Date(b.created_at || 0)
+        );
+
+      }
+
+      if(sort === "name"){
+
+        return displayName(a)
+          .localeCompare(
+            displayName(b)
+          );
+
+      }
+
+      if(sort === "activity"){
+
+        return (
+          new Date(b.last_active_at || 0) -
+          new Date(a.last_active_at || 0)
+        );
+
+      }
+
+      if(sort === "watch"){
+
+        return (
+          Number(b.watch_minutes || 0) -
+          Number(a.watch_minutes || 0)
+        );
+
+      }
+
+      if(sort === "points"){
+
+        return (
+          Number(b.points || 0) -
+          Number(a.points || 0)
+        );
+
+      }
+
+      return (
+        new Date(b.created_at || 0) -
+        new Date(a.created_at || 0)
+      );
+
     }
-
-    if(sort === "name"){
-      return displayName(a)
-        .localeCompare(displayName(b));
-    }
-
-    if(sort === "activity"){
-      return new Date(b.last_active_at || 0) -
-             new Date(a.last_active_at || 0);
-    }
-
-    if(sort === "watch"){
-      return Number(b.watch_minutes || 0) -
-             Number(a.watch_minutes || 0);
-    }
-
-    if(sort === "points"){
-      return Number(b.points || 0) -
-             Number(a.points || 0);
-    }
-
-    return new Date(b.created_at || 0) -
-           new Date(a.created_at || 0);
-  });
+  );
 
   return result;
+
+}
+
+/* ============================================================
+   BADGES
+============================================================ */
+
+function badgeClass(value){
+
+  const normalized =
+    String(value || "")
+      .toLowerCase()
+      .replace(/\s+/g,"-")
+      .replace(/\//g,"-");
+
+  const allowed = [
+    "free",
+    "pro",
+    "premium",
+    "creator",
+    "active",
+    "pending",
+    "suspended"
+  ];
+
+  return allowed.includes(normalized)
+    ? normalized
+    : "";
+
 }
 
 /* ============================================================
@@ -2415,170 +3281,294 @@ function renderMembers(){
 
   tableBody.innerHTML = "";
 
-  if(filteredMembers.length === 0){
+  $("paginationInfo").textContent =
+    `${filteredMembers.length.toLocaleString()} of ${members.length.toLocaleString()} members`;
 
-    emptyState.classList.remove("hidden");
+  if(!filteredMembers.length){
+
+    emptyState.classList.remove(
+      "hidden"
+    );
+
     selectAll.checked = false;
+    selectAll.indeterminate = false;
+
     updateBulkBar();
 
     return;
+
   }
 
-  emptyState.classList.add("hidden");
+  emptyState.classList.add(
+    "hidden"
+  );
 
-  filteredMembers.forEach(member => {
+  filteredMembers.forEach(
+    member => {
 
-    const tr =
-      document.createElement("tr");
+      const tr =
+        document.createElement("tr");
 
-    const id =
-      escapeHtml(member.id);
+      const id =
+        escapeHtml(member.id);
 
-    const name =
-      escapeHtml(displayName(member));
+      const name =
+        escapeHtml(
+          displayName(member)
+        );
 
-    const username =
-      member.username
-        ? "@" + escapeHtml(member.username)
-        : "No username";
+      const username =
+        member.username
+          ? "@" +
+            escapeHtml(
+              member.username
+            )
+          : "No username";
 
-    const email =
-      escapeHtml(member.email || "—");
+      const email =
+        escapeHtml(
+          member.email || "—"
+        );
 
-    const avatar =
-      member.avatar_url
-        ? `
-          <div class="member-avatar">
-            <img
-              src="${escapeHtml(member.avatar_url)}"
-              alt=""
-              loading="lazy"
-              onerror="this.parentElement.innerHTML='${escapeHtml(initials(member))}'"
-            >
-          </div>
-        `
-        : `
-          <div class="member-avatar">
-            ${escapeHtml(initials(member))}
-          </div>
-        `;
+      const avatarUrl =
+        safeHttpUrl(
+          member.avatar_url
+        );
 
-    tr.innerHTML = `
-      <td>
-        <input
-          class="check row-check"
-          type="checkbox"
+      const avatar =
+        avatarUrl
+          ? `
+            <div class="member-avatar">
+              <img
+                src="${escapeHtml(avatarUrl)}"
+                alt=""
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(initials(member))}'"
+              >
+            </div>
+          `
+          : `
+            <div class="member-avatar">
+              ${escapeHtml(
+                initials(member)
+              )}
+            </div>
+          `;
+
+      const status =
+        String(
+          member.status ||
+          "Active"
+        );
+
+      const actionButtons = [];
+
+      actionButtons.push(`
+        <button
+          class="icon-btn"
+          data-action="view"
           data-id="${id}"
-          ${selectedIds.has(member.id) ? "checked" : ""}
-          aria-label="Select ${name}"
-        >
-      </td>
+          title="View member"
+          aria-label="View member"
+        >◉</button>
+      `);
 
-      <td>
-        <div class="member">
-          ${avatar}
-          <div>
-            <div class="member-name">${name}</div>
-            <div class="member-handle">${username}</div>
+      actionButtons.push(`
+        <button
+          class="icon-btn"
+          data-action="edit"
+          data-id="${id}"
+          title="Edit member"
+          aria-label="Edit member"
+        >✎</button>
+      `);
+
+      if(status === "Pending"){
+
+        actionButtons.push(`
+          <button
+            class="icon-btn approve"
+            data-action="approve"
+            data-id="${id}"
+            title="Approve member"
+            aria-label="Approve member"
+          >✓</button>
+        `);
+
+      }
+
+      if(status === "Active"){
+
+        actionButtons.push(`
+          <button
+            class="icon-btn suspend"
+            data-action="suspend"
+            data-id="${id}"
+            title="Suspend member"
+            aria-label="Suspend member"
+          >!</button>
+        `);
+
+      }
+
+      if(status === "Suspended"){
+
+        actionButtons.push(`
+          <button
+            class="icon-btn approve"
+            data-action="restore"
+            data-id="${id}"
+            title="Restore member"
+            aria-label="Restore member"
+          >↻</button>
+        `);
+
+      }
+
+      actionButtons.push(`
+        <button
+          class="icon-btn"
+          data-action="message"
+          data-id="${id}"
+          title="Email member"
+          aria-label="Email member"
+        >✉</button>
+      `);
+
+      tr.innerHTML = `
+
+        <td>
+          <input
+            class="check row-check"
+            type="checkbox"
+            data-id="${id}"
+            ${
+              selectedIds.has(
+                member.id
+              )
+                ? "checked"
+                : ""
+            }
+            aria-label="Select ${name}"
+          >
+        </td>
+
+        <td>
+          <div class="member">
+
+            ${avatar}
+
+            <div>
+              <div class="member-name">
+                ${name}
+              </div>
+
+              <div class="member-handle">
+                ${username}
+              </div>
+            </div>
+
           </div>
-        </div>
-      </td>
+        </td>
 
-      <td>${email}</td>
+        <td>
+          ${email}
+        </td>
 
-      <td>
-        <span class="badge ${badgeClass(member.membership_type)}">
-          ${escapeHtml(member.membership_type || "Free")}
-        </span>
-      </td>
+        <td>
+          <span class="badge ${badgeClass(member.membership_type)}">
+            ${escapeHtml(
+              member.membership_type ||
+              "Free"
+            )}
+          </span>
+        </td>
 
-      <td>
-        <span class="role">
-          ${escapeHtml(member.role || "Member")}
-        </span>
-      </td>
+        <td>
+          <span class="role">
+            ${escapeHtml(
+              member.role ||
+              "Member"
+            )}
+          </span>
+        </td>
 
-      <td>
-        <span class="badge ${badgeClass(member.status)}">
-          ${escapeHtml(member.status || "Active")}
-        </span>
-      </td>
+        <td>
+          <span class="badge ${badgeClass(status)}">
+            ${escapeHtml(status)}
+          </span>
+        </td>
 
-      <td>${Number(member.points || 0).toLocaleString()}</td>
+        <td>
+          ${Number(
+            member.points || 0
+          ).toLocaleString()}
+        </td>
 
-      <td>${formatWatchTime(member.watch_minutes)}</td>
+        <td>
+          ${formatWatchTime(
+            member.watch_minutes
+          )}
+        </td>
 
-      <td>
-        <div>${formatRelativeDate(member.last_active_at)}</div>
-      </td>
+        <td>
+          ${formatRelativeDate(
+            member.last_active_at
+          )}
+        </td>
 
-      <td>
-        <div class="row-actions">
+        <td>
+          <div class="row-actions">
+            ${actionButtons.join("")}
+          </div>
+        </td>
 
-          <button
-            class="icon-btn"
-            data-action="view"
-            data-id="${id}"
-            title="View"
-          >◉</button>
+      `;
 
-          <button
-            class="icon-btn"
-            data-action="edit"
-            data-id="${id}"
-            title="Edit"
-          >✎</button>
+      tableBody.appendChild(tr);
 
-          <button
-            class="icon-btn"
-            data-action="message"
-            data-id="${id}"
-            title="Message"
-          >✉</button>
-
-        </div>
-      </td>
-    `;
-
-    tableBody.appendChild(tr);
-  });
+    }
+  );
 
   updateSelectAllState();
+
 }
 
-function badgeClass(value){
-
-  const normalized =
-    String(value || "")
-      .toLowerCase()
-      .replace(/\s+/g,"-")
-      .replace(/\//g,"-");
-
-  if(
-    ["free","pro","premium","creator",
-     "active","pending","suspended"]
-      .includes(normalized)
-  ){
-    return normalized;
-  }
-
-  return "";
-}
+/* ============================================================
+   LOADING
+============================================================ */
 
 function setLoadingState(){
 
   tableBody.innerHTML = `
+
     <tr>
+
       <td colspan="10">
+
         <div class="empty">
-          <strong>Loading members…</strong>
-          <span>Reading member records from Supabase.</span>
+
+          <strong>
+            Loading members…
+          </strong>
+
+          <span>
+            Reading member records from Supabase.
+          </span>
+
         </div>
+
       </td>
+
     </tr>
+
   `;
 
-  emptyState.classList.add("hidden");
+  emptyState.classList.add(
+    "hidden"
+  );
+
 }
 
 /* ============================================================
@@ -2592,24 +3582,31 @@ function updateStats(){
 
   const active =
     members.filter(
-      m => m.status === "Active"
+      m =>
+        m.status === "Active"
     ).length;
 
   const pending =
     members.filter(
-      m => m.status === "Pending"
+      m =>
+        m.status === "Pending"
     ).length;
 
   const suspended =
     members.filter(
-      m => m.status === "Suspended"
+      m =>
+        m.status === "Suspended"
     ).length;
 
   const premium =
     members.filter(
       m =>
-        ["Premium","Pro"]
-          .includes(m.membership_type)
+        [
+          "Premium",
+          "Pro"
+        ].includes(
+          m.membership_type
+        )
     ).length;
 
   const now =
@@ -2622,20 +3619,25 @@ function updateStats(){
     now.getFullYear();
 
   const newThisMonth =
-    members.filter(m => {
+    members.filter(
+      member => {
 
-      if(!m.created_at){
-        return false;
+        if(!member.created_at){
+          return false;
+        }
+
+        const date =
+          new Date(
+            member.created_at
+          );
+
+        return (
+          date.getMonth() === month &&
+          date.getFullYear() === year
+        );
+
       }
-
-      const date =
-        new Date(m.created_at);
-
-      return (
-        date.getMonth() === month &&
-        date.getFullYear() === year
-      );
-    }).length;
+    ).length;
 
   $("statTotal").textContent =
     total.toLocaleString();
@@ -2654,6 +3656,7 @@ function updateStats(){
 
   $("statSuspended").textContent =
     suspended.toLocaleString();
+
 }
 
 /* ============================================================
@@ -2667,24 +3670,31 @@ function updateTabs(){
 
   const active =
     members.filter(
-      m => m.status === "Active"
+      m =>
+        m.status === "Active"
     ).length;
 
   const premium =
     members.filter(
       m =>
-        ["Premium","Pro"]
-          .includes(m.membership_type)
+        [
+          "Premium",
+          "Pro"
+        ].includes(
+          m.membership_type
+        )
     ).length;
 
   const pending =
     members.filter(
-      m => m.status === "Pending"
+      m =>
+        m.status === "Pending"
     ).length;
 
   const suspended =
     members.filter(
-      m => m.status === "Suspended"
+      m =>
+        m.status === "Suspended"
     ).length;
 
   const creators =
@@ -2694,12 +3704,24 @@ function updateTabs(){
         m.membership_type === "Creator"
     ).length;
 
-  $("tabAllCount").textContent = all;
-  $("tabActiveCount").textContent = active;
-  $("tabPremiumCount").textContent = premium;
-  $("tabPendingCount").textContent = pending;
-  $("tabSuspendedCount").textContent = suspended;
-  $("tabCreatorsCount").textContent = creators;
+  $("tabAllCount").textContent =
+    all;
+
+  $("tabActiveCount").textContent =
+    active;
+
+  $("tabPremiumCount").textContent =
+    premium;
+
+  $("tabPendingCount").textContent =
+    pending;
+
+  $("tabSuspendedCount").textContent =
+    suspended;
+
+  $("tabCreatorsCount").textContent =
+    creators;
+
 }
 
 /* ============================================================
@@ -2715,38 +3737,55 @@ function updateBreakdown(){
     Creator:0
   };
 
-  members.forEach(member => {
+  members.forEach(
+    member => {
 
-    if(
-      Object.prototype.hasOwnProperty.call(
-        types,
-        member.membership_type
-      )
-    ){
-      types[member.membership_type]++;
-    }
-  });
+      if(
+        Object.prototype.hasOwnProperty.call(
+          types,
+          member.membership_type
+        )
+      ){
 
-  const total =
-    Math.max(members.length,1);
+        types[
+          member.membership_type
+        ]++;
 
-  Object.entries(types).forEach(
-    ([type,count]) => {
+      }
 
-      const key =
-        type.toLowerCase();
-
-      $(`count${type}`).textContent =
-        count;
-
-      $(`bar${type}`).style.width =
-        `${(count / total) * 100}%`;
     }
   );
+
+  const total =
+    Math.max(
+      members.length,
+      1
+    );
+
+  Object.entries(types)
+    .forEach(
+      ([type,count]) => {
+
+        $(
+          `count${type}`
+        ).textContent =
+          count;
+
+        $(
+          `bar${type}`
+        ).style.width =
+          `${(
+            count /
+            total
+          ) * 100}%`;
+
+      }
+    );
+
 }
 
 /* ============================================================
-   BULK SELECTION
+   SELECTION
 ============================================================ */
 
 function updateBulkBar(){
@@ -2763,29 +3802,42 @@ function updateBulkBar(){
   );
 
   updateSelectAllState();
+
 }
 
 function updateSelectAllState(){
 
   if(!filteredMembers.length){
+
     selectAll.checked = false;
     selectAll.indeterminate = false;
+
     return;
+
   }
 
   const selectedVisible =
     filteredMembers.filter(
       member =>
-        selectedIds.has(member.id)
+        selectedIds.has(
+          member.id
+        )
     ).length;
 
   selectAll.checked =
-    selectedVisible === filteredMembers.length;
+    selectedVisible ===
+    filteredMembers.length;
 
   selectAll.indeterminate =
     selectedVisible > 0 &&
-    selectedVisible < filteredMembers.length;
+    selectedVisible <
+    filteredMembers.length;
+
 }
+
+/* ============================================================
+   BULK UPDATE
+============================================================ */
 
 async function bulkUpdate(){
 
@@ -2793,11 +3845,14 @@ async function bulkUpdate(){
     bulkStatus.value;
 
   if(!status){
+
     showToast(
       "Choose a status before applying the bulk action.",
-      "error"
+      "warning"
     );
+
     return;
+
   }
 
   if(selectedIds.size === 0){
@@ -2807,88 +3862,191 @@ async function bulkUpdate(){
   const ids =
     [...selectedIds];
 
-  const {
-    error
-  } = await supabaseClient
-    .from(MEMBERS_TABLE)
-    .update({
-      status
-    })
-    .in("id",ids);
-
-  if(error){
-    console.error(error);
-
-    showToast(
-      "Bulk update failed: " +
-      error.message,
-      "error"
+  const confirmed =
+    window.confirm(
+      `Change ${ids.length} selected member${
+        ids.length === 1
+          ? ""
+          : "s"
+      } to ${status}?`
     );
 
+  if(!confirmed){
     return;
   }
 
-  addActivity(
-    `Updated ${ids.length} member ${ids.length === 1 ? "record" : "records"} to ${status}.`
-  );
+  const button =
+    $("bulkApply");
 
-  showToast(
-    `${ids.length} member ${ids.length === 1 ? "was" : "were"} updated.`,
-    "success"
-  );
+  button.disabled = true;
+  button.textContent =
+    "Applying…";
 
-  bulkStatus.value = "";
-  selectedIds.clear();
+  try{
 
-  await loadMembers();
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(MEMBERS_TABLE)
+        .update({
+          status,
+          updated_at:
+            new Date().toISOString()
+        })
+        .in(
+          "id",
+          ids
+        )
+        .select("id");
+
+    if(error){
+      throw error;
+    }
+
+    if(!data || data.length !== ids.length){
+
+      throw new Error(
+        "Supabase did not update all selected records. This usually indicates an RLS SELECT/UPDATE policy problem."
+      );
+
+    }
+
+    addActivity(
+      `Updated ${ids.length} member${
+        ids.length === 1
+          ? ""
+          : "s"
+      } to ${status}.`
+    );
+
+    showToast(
+      `${ids.length} member${
+        ids.length === 1
+          ? ""
+          : "s"
+      } updated successfully.`,
+      "success"
+    );
+
+    selectedIds.clear();
+    bulkStatus.value = "";
+
+    await loadMembers();
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      friendlySupabaseError(error),
+      "error"
+    );
+
+  }finally{
+
+    button.disabled = false;
+    button.textContent =
+      "Apply";
+
+  }
+
 }
 
 /* ============================================================
-   MODAL HELPERS
+   MODALS
 ============================================================ */
+
+function syncBodyModalState(){
+
+  const open =
+    memberModal.classList.contains("open") ||
+    viewModal.classList.contains("open");
+
+  document.body.classList.toggle(
+    "modal-open",
+    open
+  );
+
+}
 
 function openModal(){
 
-  memberModal.classList.add("open");
-  document.body.style.overflow = "hidden";
+  memberModal.classList.add(
+    "open"
+  );
+
+  syncBodyModalState();
+
 }
 
 function closeModal(){
 
-  memberModal.classList.remove("open");
-  document.body.style.overflow = "";
+  memberModal.classList.remove(
+    "open"
+  );
+
+  syncBodyModalState();
+
 }
 
 function openViewModal(){
 
-  viewModal.classList.add("open");
-  document.body.style.overflow = "hidden";
+  viewModal.classList.add(
+    "open"
+  );
+
+  syncBodyModalState();
+
 }
 
 function closeViewModal(){
 
-  viewModal.classList.remove("open");
-  document.body.style.overflow = "";
+  viewModal.classList.remove(
+    "open"
+  );
+
+  syncBodyModalState();
+
 }
 
 function resetMemberForm(){
 
   memberForm.reset();
 
-  $("memberId").value = "";
-  $("points").value = "0";
-  $("watchMinutes").value = "0";
-  $("membershipType").value = "Free";
-  $("role").value = "Member";
-  $("status").value = "Active";
+  $("memberId").value =
+    "";
+
+  $("userId").value =
+    "";
+
+  $("points").value =
+    "0";
+
+  $("watchMinutes").value =
+    "0";
+
+  $("membershipType").value =
+    "Free";
+
+  $("role").value =
+    "Member";
+
+  $("status").value =
+    "Active";
 
   $("modalTitle").textContent =
     "Add Member";
 
   $("deleteMemberBtn")
-    .classList.add("hidden");
+    .classList.add(
+      "hidden"
+    );
 
-  editingMemberId = null;
+  editingMemberId =
+    null;
+
 }
 
 function fillMemberForm(member){
@@ -2899,11 +4057,17 @@ function fillMemberForm(member){
   $("memberId").value =
     member.id || "";
 
+  $("userId").value =
+    member.user_id || "";
+
   $("firstName").value =
     member.first_name || "";
 
   $("lastName").value =
     member.last_name || "";
+
+  $("displayName").value =
+    member.display_name || "";
 
   $("username").value =
     member.username || "";
@@ -2912,19 +4076,26 @@ function fillMemberForm(member){
     member.email || "";
 
   $("membershipType").value =
-    member.membership_type || "Free";
+    member.membership_type ||
+    "Free";
 
   $("role").value =
-    member.role || "Member";
+    member.role ||
+    "Member";
 
   $("status").value =
-    member.status || "Active";
+    member.status ||
+    "Active";
 
   $("points").value =
-    Number(member.points || 0);
+    Number(
+      member.points || 0
+    );
 
   $("watchMinutes").value =
-    Number(member.watch_minutes || 0);
+    Number(
+      member.watch_minutes || 0
+    );
 
   $("avatarUrl").value =
     member.avatar_url || "";
@@ -2935,59 +4106,84 @@ function fillMemberForm(member){
   if(member.last_active_at){
 
     const date =
-      new Date(member.last_active_at);
+      new Date(
+        member.last_active_at
+      );
 
-    if(!Number.isNaN(date.getTime())){
+    if(
+      !Number.isNaN(
+        date.getTime()
+      )
+    ){
 
       const local =
         new Date(
           date.getTime() -
-          date.getTimezoneOffset() * 60000
+          date.getTimezoneOffset() *
+          60000
         )
           .toISOString()
           .slice(0,16);
 
       $("lastActive").value =
         local;
+
     }
+
   }else{
-    $("lastActive").value = "";
+
+    $("lastActive").value =
+      "";
+
   }
 
   $("modalTitle").textContent =
     "Edit Member";
 
   $("deleteMemberBtn")
-    .classList.remove("hidden");
-}
+    .classList.remove(
+      "hidden"
+    );
 
-/* ============================================================
-   OPEN ADD / EDIT
-============================================================ */
+}
 
 function openAddMember(){
 
   resetMemberForm();
+
   openModal();
+
+  setTimeout(
+    () =>
+      $("firstName").focus(),
+    50
+  );
+
 }
 
 function openEditMember(id){
 
   const member =
     members.find(
-      m => m.id === id
+      m =>
+        m.id === id
     );
 
   if(!member){
+
     showToast(
       "Member record was not found.",
       "error"
     );
+
     return;
+
   }
 
   fillMemberForm(member);
+
   openModal();
+
 }
 
 /* ============================================================
@@ -2999,16 +4195,31 @@ async function saveMember(event){
   event.preventDefault();
 
   const firstName =
-    $("firstName").value.trim();
+    $("firstName")
+      .value
+      .trim();
 
   const lastName =
-    $("lastName").value.trim();
+    $("lastName")
+      .value
+      .trim();
+
+  const manualDisplayName =
+    $("displayName")
+      .value
+      .trim();
 
   const username =
-    $("username").value.trim() || null;
+    $("username")
+      .value
+      .trim() ||
+    null;
 
   const email =
-    $("email").value.trim() || null;
+    $("email")
+      .value
+      .trim() ||
+    null;
 
   const membershipType =
     $("membershipType").value;
@@ -3037,32 +4248,94 @@ async function saveMember(event){
       ) || 0
     );
 
+  const avatarUrlRaw =
+    $("avatarUrl")
+      .value
+      .trim();
+
   const avatarUrl =
-    $("avatarUrl").value.trim() || null;
-
-  const bio =
-    $("bio").value.trim() || null;
-
-  const lastActiveRaw =
-    $("lastActive").value;
-
-  const lastActive =
-    lastActiveRaw
-      ? new Date(lastActiveRaw).toISOString()
+    avatarUrlRaw
+      ? safeHttpUrl(
+          avatarUrlRaw
+        )
       : null;
 
-  if(!firstName && !lastName && !username && !email){
+  if(
+    avatarUrlRaw &&
+    !avatarUrl
+  ){
 
     showToast(
-      "Enter at least a name, username or email.",
+      "Avatar URL must use http:// or https://.",
       "error"
     );
 
     return;
+
   }
 
-  const displayName =
-    [firstName,lastName]
+  const bio =
+    $("bio")
+      .value
+      .trim() ||
+    null;
+
+  const lastActiveRaw =
+    $("lastActive").value;
+
+  let lastActive =
+    null;
+
+  if(lastActiveRaw){
+
+    const parsed =
+      new Date(
+        lastActiveRaw
+      );
+
+    if(
+      Number.isNaN(
+        parsed.getTime()
+      )
+    ){
+
+      showToast(
+        "The Last Active date is invalid.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    lastActive =
+      parsed.toISOString();
+
+  }
+
+  if(
+    !firstName &&
+    !lastName &&
+    !manualDisplayName &&
+    !username &&
+    !email
+  ){
+
+    showToast(
+      "Enter at least a name, display name, username or email.",
+      "error"
+    );
+
+    return;
+
+  }
+
+  const calculatedDisplayName =
+    manualDisplayName ||
+    [
+      firstName,
+      lastName
+    ]
       .filter(Boolean)
       .join(" ")
       .trim() ||
@@ -3071,44 +4344,88 @@ async function saveMember(event){
     "Member";
 
   const payload = {
-    first_name:firstName || null,
-    last_name:lastName || null,
-    display_name:displayName,
+
+    first_name:
+      firstName ||
+      null,
+
+    last_name:
+      lastName ||
+      null,
+
+    display_name:
+      calculatedDisplayName,
+
     username,
+
     email,
-    membership_type:membershipType,
+
+    membership_type:
+      membershipType,
+
     role,
+
     status,
+
     points,
-    watch_minutes:watchMinutes,
-    avatar_url:avatarUrl,
+
+    watch_minutes:
+      watchMinutes,
+
     bio,
-    last_active_at:lastActive
+
+    avatar_url:
+      avatarUrl,
+
+    last_active_at:
+      lastActive,
+
+    updated_at:
+      new Date().toISOString()
+
   };
 
   const saveButton =
     $("saveMemberBtn");
 
-  saveButton.disabled = true;
-  saveButton.textContent = "Saving…";
+  saveButton.disabled =
+    true;
+
+  saveButton.textContent =
+    "Saving…";
 
   try{
 
     if(editingMemberId){
 
       const {
+        data,
         error
-      } = await supabaseClient
-        .from(MEMBERS_TABLE)
-        .update(payload)
-        .eq("id",editingMemberId);
+      } =
+        await supabaseClient
+          .from(MEMBERS_TABLE)
+          .update(payload)
+          .eq(
+            "id",
+            editingMemberId
+          )
+          .select("id")
+          .single();
 
       if(error){
         throw error;
       }
 
+      if(!data){
+
+        throw new Error(
+          "Member was not updated. Supabase returned no updated row. Check your RLS SELECT and UPDATE policies."
+        );
+
+      }
+
       addActivity(
-        `Updated member: ${displayName}.`
+        `Updated member: ${calculatedDisplayName}.`
       );
 
       showToast(
@@ -3119,63 +4436,68 @@ async function saveMember(event){
     }else{
 
       const {
+        data,
         error
-      } = await supabaseClient
-        .from(MEMBERS_TABLE)
-        .insert(payload);
+      } =
+        await supabaseClient
+          .from(MEMBERS_TABLE)
+          .insert(
+            payload
+          )
+          .select("id")
+          .single();
 
       if(error){
         throw error;
       }
 
+      if(!data){
+
+        throw new Error(
+          "Member was not created. Supabase returned no inserted row."
+        );
+
+      }
+
       addActivity(
-        `Created member: ${displayName}.`
+        `Created member: ${calculatedDisplayName}.`
       );
 
       showToast(
         "Member created successfully.",
         "success"
       );
+
     }
 
     closeModal();
+
     await loadMembers();
 
   }catch(error){
 
-    console.error(error);
-
-    let message =
-      error?.message ||
-      "Unable to save member.";
-
-    if(
-      message.toLowerCase().includes("duplicate") ||
-      message.toLowerCase().includes("unique")
-    ){
-      message =
-        "That username or email already exists.";
-    }
-
-    if(
-      message.toLowerCase().includes("permission") ||
-      message.toLowerCase().includes("row-level")
-    ){
-      message =
-        "Supabase denied this operation. Verify your administrator role and members RLS policies.";
-    }
+    console.error(
+      "Save member error:",
+      error
+    );
 
     showToast(
-      message,
+      friendlySupabaseError(
+        error
+      ),
       "error"
     );
 
   }finally{
 
-    saveButton.disabled = false;
+    saveButton.disabled =
+      false;
+
     saveButton.textContent =
       "Save Member";
+
   }
+
 }
 
 /* ============================================================
@@ -3190,7 +4512,9 @@ async function deleteCurrentMember(){
 
   const member =
     members.find(
-      m => m.id === editingMemberId
+      m =>
+        m.id ===
+        editingMemberId
     );
 
   if(!member){
@@ -3202,7 +4526,7 @@ async function deleteCurrentMember(){
 
   const confirmed =
     window.confirm(
-      `Delete "${name}" from the members table?\n\nThis removes the member profile record. It does not delete the Supabase Auth account.`
+      `Delete "${name}" from the members table?\n\nThis removes the member profile record. It does NOT delete the Supabase Auth account.`
     );
 
   if(!confirmed){
@@ -3212,20 +4536,38 @@ async function deleteCurrentMember(){
   const button =
     $("deleteMemberBtn");
 
-  button.disabled = true;
-  button.textContent = "Deleting…";
+  button.disabled =
+    true;
+
+  button.textContent =
+    "Deleting…";
 
   try{
 
     const {
+      data,
       error
-    } = await supabaseClient
-      .from(MEMBERS_TABLE)
-      .delete()
-      .eq("id",editingMemberId);
+    } =
+      await supabaseClient
+        .from(MEMBERS_TABLE)
+        .delete()
+        .eq(
+          "id",
+          editingMemberId
+        )
+        .select("id")
+        .single();
 
     if(error){
       throw error;
+    }
+
+    if(!data){
+
+      throw new Error(
+        "Member was not deleted. Supabase returned no deleted row."
+      );
+
     }
 
     addActivity(
@@ -3243,20 +4585,133 @@ async function deleteCurrentMember(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "Delete member error:",
+      error
+    );
 
     showToast(
-      "Delete failed: " +
-      error.message,
+      friendlySupabaseError(
+        error
+      ),
       "error"
     );
 
   }finally{
 
-    button.disabled = false;
+    button.disabled =
+      false;
+
     button.textContent =
       "Delete Member";
+
   }
+
+}
+
+/* ============================================================
+   QUICK STATUS ACTION
+============================================================ */
+
+async function setMemberStatus(
+  id,
+  status
+){
+
+  const member =
+    members.find(
+      m =>
+        m.id === id
+    );
+
+  if(!member){
+    return;
+  }
+
+  const name =
+    displayName(member);
+
+  const action =
+    status === "Active"
+      ? "restore"
+      : status === "Suspended"
+        ? "suspend"
+        : "approve";
+
+  const confirmed =
+    window.confirm(
+      `${
+        action === "suspend"
+          ? "Suspend"
+          : action === "approve"
+            ? "Approve"
+            : "Restore"
+      } "${name}"?`
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from(MEMBERS_TABLE)
+        .update({
+          status,
+          updated_at:
+            new Date().toISOString()
+        })
+        .eq(
+          "id",
+          id
+        )
+        .select("id")
+        .single();
+
+    if(error){
+      throw error;
+    }
+
+    if(!data){
+
+      throw new Error(
+        "Supabase returned no updated member. Check RLS policies."
+      );
+
+    }
+
+    addActivity(
+      `${action === "suspend" ? "Suspended" : action === "approve" ? "Approved" : "Restored"} member: ${name}.`
+    );
+
+    showToast(
+      `Member ${status.toLowerCase()}.`,
+      "success"
+    );
+
+    await loadMembers();
+
+  }catch(error){
+
+    console.error(
+      "Member status error:",
+      error
+    );
+
+    showToast(
+      friendlySupabaseError(
+        error
+      ),
+      "error"
+    );
+
+  }
+
 }
 
 /* ============================================================
@@ -3267,7 +4722,8 @@ function openViewMember(id){
 
   const member =
     members.find(
-      m => m.id === id
+      m =>
+        m.id === id
     );
 
   if(!member){
@@ -3278,29 +4734,44 @@ function openViewMember(id){
     member.id;
 
   const name =
-    escapeHtml(displayName(member));
+    escapeHtml(
+      displayName(member)
+    );
 
   const email =
-    escapeHtml(member.email || "No email");
+    escapeHtml(
+      member.email ||
+      "No email"
+    );
+
+  const avatarUrl =
+    safeHttpUrl(
+      member.avatar_url
+    );
 
   const avatar =
-    member.avatar_url
+    avatarUrl
       ? `
         <div class="view-avatar">
           <img
-            src="${escapeHtml(member.avatar_url)}"
+            src="${escapeHtml(avatarUrl)}"
             alt=""
+            referrerpolicy="no-referrer"
+            onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(initials(member))}'"
           >
         </div>
       `
       : `
         <div class="view-avatar">
-          ${escapeHtml(initials(member))}
+          ${escapeHtml(
+            initials(member)
+          )}
         </div>
       `;
 
   $("viewBody").innerHTML = `
-    <div class="view-card">
+
+    <div class="profile-top">
 
       ${avatar}
 
@@ -3315,17 +4786,28 @@ function openViewMember(id){
         </div>
 
         <div class="view-badges">
+
           <span class="badge ${badgeClass(member.membership_type)}">
-            ${escapeHtml(member.membership_type || "Free")}
+            ${escapeHtml(
+              member.membership_type ||
+              "Free"
+            )}
           </span>
 
           <span class="badge ${badgeClass(member.status)}">
-            ${escapeHtml(member.status || "Active")}
+            ${escapeHtml(
+              member.status ||
+              "Active"
+            )}
           </span>
 
           <span class="badge">
-            ${escapeHtml(member.role || "Member")}
+            ${escapeHtml(
+              member.role ||
+              "Member"
+            )}
           </span>
+
         </div>
 
       </div>
@@ -3337,43 +4819,138 @@ function openViewMember(id){
       <div class="view-stat">
         <span>Points</span>
         <strong>
-          ${Number(member.points || 0).toLocaleString()}
+          ${Number(
+            member.points || 0
+          ).toLocaleString()}
         </strong>
       </div>
 
       <div class="view-stat">
         <span>Watch Time</span>
         <strong>
-          ${formatWatchTime(member.watch_minutes)}
+          ${formatWatchTime(
+            member.watch_minutes
+          )}
         </strong>
       </div>
 
       <div class="view-stat">
         <span>Joined</span>
         <strong>
-          ${formatDate(member.created_at)}
+          ${formatDate(
+            member.created_at
+          )}
         </strong>
       </div>
 
     </div>
 
+    <div class="detail-grid">
+
+      <div class="detail">
+        <div class="detail-label">
+          Display Name
+        </div>
+        <div class="detail-value">
+          ${escapeHtml(
+            member.display_name ||
+            "—"
+          )}
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">
+          Username
+        </div>
+        <div class="detail-value">
+          ${
+            member.username
+              ? "@" +
+                escapeHtml(
+                  member.username
+                )
+              : "—"
+          }
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">
+          Supabase User ID
+        </div>
+        <div class="detail-value">
+          ${escapeHtml(
+            member.user_id ||
+            "Not linked"
+          )}
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">
+          Last Active
+        </div>
+        <div class="detail-value">
+          ${formatDateTime(
+            member.last_active_at
+          )}
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">
+          Created
+        </div>
+        <div class="detail-value">
+          ${formatDateTime(
+            member.created_at
+          )}
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">
+          Updated
+        </div>
+        <div class="detail-value">
+          ${formatDateTime(
+            member.updated_at
+          )}
+        </div>
+      </div>
+
+    </div>
+
     <div class="view-bio">
+
       ${
         member.bio
-          ? escapeHtml(member.bio)
+          ? escapeHtml(
+              member.bio
+            )
           : "No biography has been added."
       }
+
     </div>
+
   `;
 
   openViewModal();
+
 }
+
+/* ============================================================
+   MESSAGE
+============================================================ */
 
 function messageMember(){
 
   const member =
     members.find(
-      m => m.id === viewingMemberId
+      m =>
+        m.id ===
+        viewingMemberId
     );
 
   if(!member){
@@ -3384,20 +4961,23 @@ function messageMember(){
 
     showToast(
       "This member does not have an email address.",
-      "error"
+      "warning"
     );
 
     return;
+
   }
 
   window.location.href =
     "mailto:" +
-    encodeURIComponent(member.email);
+    encodeURIComponent(
+      member.email
+    );
 
 }
 
 /* ============================================================
-   CSV EXPORT
+   CSV
 ============================================================ */
 
 function csvValue(value){
@@ -3405,7 +4985,15 @@ function csvValue(value){
   const string =
     String(value ?? "");
 
-  return `"${string.replace(/"/g,'""')}"`;
+  return (
+    '"' +
+    string.replace(
+      /"/g,
+      '""'
+    ) +
+    '"'
+  );
+
 }
 
 function exportCSV(){
@@ -3417,13 +5005,15 @@ function exportCSV(){
 
     showToast(
       "There are no members to export.",
-      "error"
+      "warning"
     );
 
     return;
+
   }
 
   const headers = [
+
     "ID",
     "User ID",
     "First Name",
@@ -3439,61 +5029,91 @@ function exportCSV(){
     "Last Active",
     "Created At",
     "Updated At"
+
   ];
 
   const lines = [
-    headers.map(csvValue).join(",")
+
+    headers
+      .map(csvValue)
+      .join(",")
+
   ];
 
-  rows.forEach(member => {
+  rows.forEach(
+    member => {
 
-    lines.push([
-      member.id,
-      member.user_id,
-      member.first_name,
-      member.last_name,
-      member.display_name,
-      member.username,
-      member.email,
-      member.membership_type,
-      member.role,
-      member.status,
-      member.points,
-      member.watch_minutes,
-      member.last_active_at,
-      member.created_at,
-      member.updated_at
-    ].map(csvValue).join(","));
-  });
+      lines.push(
+
+        [
+          member.id,
+          member.user_id,
+          member.first_name,
+          member.last_name,
+          member.display_name,
+          member.username,
+          member.email,
+          member.membership_type,
+          member.role,
+          member.status,
+          member.points,
+          member.watch_minutes,
+          member.last_active_at,
+          member.created_at,
+          member.updated_at
+        ]
+          .map(csvValue)
+          .join(",")
+
+      );
+
+    }
+  );
 
   const blob =
     new Blob(
-      ["\ufeff" + lines.join("\r\n")],
+      [
+        "\ufeff" +
+        lines.join("\r\n")
+      ],
       {
-        type:"text/csv;charset=utf-8;"
+        type:
+          "text/csv;charset=utf-8;"
       }
     );
 
   const url =
-    URL.createObjectURL(blob);
+    URL.createObjectURL(
+      blob
+    );
 
   const link =
-    document.createElement("a");
+    document.createElement(
+      "a"
+    );
 
   const stamp =
     new Date()
       .toISOString()
       .slice(0,10);
 
-  link.href = url;
+  link.href =
+    url;
+
   link.download =
     `crowrules-members-${stamp}.csv`;
 
-  document.body.appendChild(link);
+  document.body.appendChild(
+    link
+  );
+
   link.click();
+
   link.remove();
 
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(
+    url
+  );
 
   addActivity(
     `Exported ${rows.length} member records to CSV.`
@@ -3503,6 +5123,7 @@ function exportCSV(){
     "CSV export created.",
     "success"
   );
+
 }
 
 /* ============================================================
@@ -3517,9 +5138,13 @@ function addActivity(text){
   });
 
   activityItems =
-    activityItems.slice(0,8);
+    activityItems.slice(
+      0,
+      8
+    );
 
   renderActivity();
+
 }
 
 function renderActivity(){
@@ -3528,45 +5153,75 @@ function renderActivity(){
     $("activityList");
 
   if(!activityItems.length){
+
     list.innerHTML = `
+
       <div class="activity-item">
+
         <div class="activity-dot"></div>
+
         <div>
+
           <div class="activity-text">
             No activity recorded in this session.
           </div>
+
         </div>
+
       </div>
+
     `;
+
     return;
+
   }
 
   list.innerHTML =
     activityItems
-      .map(item => `
-        <div class="activity-item">
-          <div class="activity-dot"></div>
-          <div>
-            <div class="activity-text">
-              ${escapeHtml(item.text)}
+      .map(
+        item => `
+
+          <div class="activity-item">
+
+            <div class="activity-dot"></div>
+
+            <div>
+
+              <div class="activity-text">
+                ${escapeHtml(
+                  item.text
+                )}
+              </div>
+
+              <div class="activity-time">
+                ${formatRelativeDate(
+                  item.time
+                )}
+              </div>
+
             </div>
-            <div class="activity-time">
-              ${formatRelativeDate(item.time)}
-            </div>
+
           </div>
-        </div>
-      `)
+
+        `
+      )
       .join("");
+
 }
 
 /* ============================================================
    TOAST
 ============================================================ */
 
-function showToast(message,type=""){
+function showToast(
+  message,
+  type=""
+){
 
   const toast =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   toast.className =
     `toast ${type}`;
@@ -3574,22 +5229,32 @@ function showToast(message,type=""){
   toast.textContent =
     message;
 
-  toastContainer.appendChild(toast);
+  toastContainer.appendChild(
+    toast
+  );
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    toast.style.opacity = "0";
-    toast.style.transform =
-      "translateY(8px)";
-    toast.style.transition =
-      ".2s";
+      toast.style.opacity =
+        "0";
 
-    setTimeout(
-      () => toast.remove(),
-      220
-    );
+      toast.style.transform =
+        "translateY(8px)";
 
-  },3500);
+      toast.style.transition =
+        ".2s";
+
+      setTimeout(
+        () =>
+          toast.remove(),
+        220
+      );
+
+    },
+    3500
+  );
+
 }
 
 /* ============================================================
@@ -3598,18 +5263,17 @@ function showToast(message,type=""){
 
 function updateClock(){
 
-  const now =
-    new Date();
-
   $("clock").textContent =
-    now.toLocaleTimeString(
-      undefined,
-      {
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit"
-      }
-    );
+    new Date()
+      .toLocaleTimeString(
+        undefined,
+        {
+          hour:"2-digit",
+          minute:"2-digit",
+          second:"2-digit"
+        }
+      );
+
 }
 
 setInterval(
@@ -3624,306 +5288,509 @@ updateClock();
 ============================================================ */
 
 function openSidebar(){
-  sidebar.classList.add("open");
+
+  sidebar.classList.add(
+    "open"
+  );
+
 }
 
 function closeSidebar(){
-  sidebar.classList.remove("open");
+
+  sidebar.classList.remove(
+    "open"
+  );
+
 }
 
-mobileMenu.addEventListener(
-  "click",
-  openSidebar
-);
+$("mobileMenu")
+  .addEventListener(
+    "click",
+    openSidebar
+  );
 
-mobileClose.addEventListener(
-  "click",
-  closeSidebar
-);
+$("mobileClose")
+  .addEventListener(
+    "click",
+    closeSidebar
+  );
 
 document
-  .querySelectorAll(".nav-link")
-  .forEach(link => {
+  .querySelectorAll(
+    ".nav-link"
+  )
+  .forEach(
+    link => {
 
-    link.addEventListener(
-      "click",
-      closeSidebar
-    );
-  });
+      link.addEventListener(
+        "click",
+        closeSidebar
+      );
+
+    }
+  );
 
 /* ============================================================
    EVENTS
 ============================================================ */
 
-$("addBtn").addEventListener(
-  "click",
-  openAddMember
-);
+$("addBtn")
+  .addEventListener(
+    "click",
+    openAddMember
+  );
 
-$("refreshBtn").addEventListener(
-  "click",
-  async () => {
+$("refreshBtn")
+  .addEventListener(
+    "click",
+    async () => {
 
-    try{
-      await loadMembers();
+      try{
 
-      showToast(
-        "Member list refreshed.",
-        "success"
-      );
+        await loadMembers();
 
-    }catch(error){
-
-      showToast(
-        error.message,
-        "error"
-      );
-    }
-  }
-);
-
-$("exportBtn").addEventListener(
-  "click",
-  exportCSV
-);
-
-searchInput.addEventListener(
-  "input",
-  renderMembers
-);
-
-membershipFilter.addEventListener(
-  "change",
-  renderMembers
-);
-
-roleFilter.addEventListener(
-  "change",
-  renderMembers
-);
-
-sortFilter.addEventListener(
-  "change",
-  renderMembers
-);
-
-selectAll.addEventListener(
-  "change",
-  () => {
-
-    if(selectAll.checked){
-
-      filteredMembers.forEach(
-        member =>
-          selectedIds.add(member.id)
-      );
-
-    }else{
-
-      filteredMembers.forEach(
-        member =>
-          selectedIds.delete(member.id)
-      );
-    }
-
-    renderMembers();
-    updateBulkBar();
-  }
-);
-
-$("bulkApply").addEventListener(
-  "click",
-  bulkUpdate
-);
-
-document
-  .querySelectorAll(".tab")
-  .forEach(tab => {
-
-    tab.addEventListener(
-      "click",
-      () => {
-
-        document
-          .querySelectorAll(".tab")
-          .forEach(
-            item =>
-              item.classList.remove("active")
-          );
-
-        tab.classList.add("active");
-
-        activeTab =
-          tab.dataset.tab;
-
-        selectedIds.clear();
-
-        renderMembers();
-        updateBulkBar();
-      }
-    );
-  });
-
-tableBody.addEventListener(
-  "click",
-  event => {
-
-    const button =
-      event.target.closest(
-        "[data-action]"
-      );
-
-    if(!button){
-      return;
-    }
-
-    const action =
-      button.dataset.action;
-
-    const id =
-      button.dataset.id;
-
-    if(action === "view"){
-      openViewMember(id);
-    }
-
-    if(action === "edit"){
-      openEditMember(id);
-    }
-
-    if(action === "message"){
-
-      const member =
-        members.find(
-          m => m.id === id
+        showToast(
+          "Member list refreshed.",
+          "success"
         );
 
-      if(member?.email){
-        window.location.href =
-          "mailto:" +
-          encodeURIComponent(member.email);
-      }else{
+      }catch(error){
+
+        console.error(error);
+
         showToast(
-          "This member does not have an email address.",
+          friendlySupabaseError(
+            error
+          ),
           "error"
         );
+
       }
+
     }
-  }
-);
+  );
 
-tableBody.addEventListener(
-  "change",
-  event => {
+$("exportBtn")
+  .addEventListener(
+    "click",
+    exportCSV
+  );
 
-    if(
-      !event.target.classList.contains(
-        "row-check"
-      )
-    ){
-      return;
+searchInput
+  .addEventListener(
+    "input",
+    renderMembers
+  );
+
+membershipFilter
+  .addEventListener(
+    "change",
+    renderMembers
+  );
+
+roleFilter
+  .addEventListener(
+    "change",
+    renderMembers
+  );
+
+statusFilter
+  .addEventListener(
+    "change",
+    renderMembers
+  );
+
+sortFilter
+  .addEventListener(
+    "change",
+    renderMembers
+  );
+
+/* ============================================================
+   SELECT ALL
+============================================================ */
+
+selectAll
+  .addEventListener(
+    "change",
+    () => {
+
+      if(selectAll.checked){
+
+        filteredMembers.forEach(
+          member =>
+            selectedIds.add(
+              member.id
+            )
+        );
+
+      }else{
+
+        filteredMembers.forEach(
+          member =>
+            selectedIds.delete(
+              member.id
+            )
+        );
+
+      }
+
+      renderMembers();
+
+      updateBulkBar();
+
     }
+  );
 
-    const id =
-      event.target.dataset.id;
+/* ============================================================
+   BULK
+============================================================ */
 
-    if(event.target.checked){
-      selectedIds.add(id);
-    }else{
-      selectedIds.delete(id);
-    }
+$("bulkApply")
+  .addEventListener(
+    "click",
+    bulkUpdate
+  );
 
-    updateBulkBar();
-  }
-);
+/* ============================================================
+   TABS
+============================================================ */
 
-$("modalClose").addEventListener(
-  "click",
-  closeModal
-);
+document
+  .querySelectorAll(
+    ".tab"
+  )
+  .forEach(
+    tab => {
 
-$("cancelModal").addEventListener(
-  "click",
-  closeModal
-);
+      tab.addEventListener(
+        "click",
+        () => {
 
-$("viewClose").addEventListener(
-  "click",
-  closeViewModal
-);
+          document
+            .querySelectorAll(
+              ".tab"
+            )
+            .forEach(
+              item =>
+                item.classList.remove(
+                  "active"
+                )
+            );
 
-$("viewEditBtn").addEventListener(
-  "click",
-  () => {
+          tab.classList.add(
+            "active"
+          );
 
-    if(viewingMemberId){
-      closeViewModal();
-      openEditMember(
-        viewingMemberId
+          activeTab =
+            tab.dataset.tab;
+
+          selectedIds.clear();
+
+          renderMembers();
+
+          updateBulkBar();
+
+        }
       );
+
     }
-  }
-);
+  );
 
-$("viewMessageBtn").addEventListener(
-  "click",
-  messageMember
-);
+/* ============================================================
+   TABLE ACTIONS
+============================================================ */
 
-$("deleteMemberBtn").addEventListener(
-  "click",
-  deleteCurrentMember
-);
+tableBody
+  .addEventListener(
+    "click",
+    event => {
 
-memberForm.addEventListener(
-  "submit",
-  saveMember
-);
+      const button =
+        event.target.closest(
+          "[data-action]"
+        );
 
-memberModal.addEventListener(
-  "click",
-  event => {
+      if(!button){
+        return;
+      }
 
-    if(event.target === memberModal){
-      closeModal();
+      const action =
+        button.dataset.action;
+
+      const id =
+        button.dataset.id;
+
+      if(action === "view"){
+
+        openViewMember(id);
+
+        return;
+
+      }
+
+      if(action === "edit"){
+
+        openEditMember(id);
+
+        return;
+
+      }
+
+      if(action === "approve"){
+
+        setMemberStatus(
+          id,
+          "Active"
+        );
+
+        return;
+
+      }
+
+      if(action === "restore"){
+
+        setMemberStatus(
+          id,
+          "Active"
+        );
+
+        return;
+
+      }
+
+      if(action === "suspend"){
+
+        setMemberStatus(
+          id,
+          "Suspended"
+        );
+
+        return;
+
+      }
+
+      if(action === "message"){
+
+        const member =
+          members.find(
+            m =>
+              m.id === id
+          );
+
+        if(member?.email){
+
+          window.location.href =
+            "mailto:" +
+            encodeURIComponent(
+              member.email
+            );
+
+        }else{
+
+          showToast(
+            "This member does not have an email address.",
+            "warning"
+          );
+
+        }
+
+      }
+
     }
-  }
-);
+  );
 
-viewModal.addEventListener(
-  "click",
-  event => {
+/* ============================================================
+   ROW CHECKBOX
+============================================================ */
 
-    if(event.target === viewModal){
-      closeViewModal();
+tableBody
+  .addEventListener(
+    "change",
+    event => {
+
+      if(
+        !event.target.classList.contains(
+          "row-check"
+        )
+      ){
+
+        return;
+
+      }
+
+      const id =
+        event.target.dataset.id;
+
+      if(event.target.checked){
+
+        selectedIds.add(
+          id
+        );
+
+      }else{
+
+        selectedIds.delete(
+          id
+        );
+
+      }
+
+      updateBulkBar();
+
     }
-  }
-);
+  );
 
-$("logoutBtn").addEventListener(
-  "click",
-  async () => {
+/* ============================================================
+   MODAL EVENTS
+============================================================ */
 
-    const {
-      error
-    } =
-      await supabaseClient.auth.signOut();
+$("modalClose")
+  .addEventListener(
+    "click",
+    closeModal
+  );
 
-    if(error){
+$("cancelModal")
+  .addEventListener(
+    "click",
+    closeModal
+  );
 
-      showToast(
-        "Sign out failed: " +
-        error.message,
-        "error"
-      );
+$("viewClose")
+  .addEventListener(
+    "click",
+    closeViewModal
+  );
 
-      return;
+$("viewEditBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      if(viewingMemberId){
+
+        closeViewModal();
+
+        openEditMember(
+          viewingMemberId
+        );
+
+      }
+
     }
+  );
 
-    window.location.href =
-      "login.html";
-  }
-);
+$("viewMessageBtn")
+  .addEventListener(
+    "click",
+    messageMember
+  );
+
+$("deleteMemberBtn")
+  .addEventListener(
+    "click",
+    deleteCurrentMember
+  );
+
+memberForm
+  .addEventListener(
+    "submit",
+    saveMember
+  );
+
+memberModal
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        memberModal
+      ){
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+viewModal
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        viewModal
+      ){
+
+        closeViewModal();
+
+      }
+
+    }
+  );
+
+/* ============================================================
+   LOGOUT
+============================================================ */
+
+$("logoutBtn")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const button =
+        $("logoutBtn");
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "Signing Out…";
+
+      try{
+
+        const {
+          error
+        } =
+          await supabaseClient
+            .auth
+            .signOut();
+
+        if(error){
+          throw error;
+        }
+
+        window.location.href =
+          "login.html";
+
+      }catch(error){
+
+        console.error(
+          error
+        );
+
+        showToast(
+          "Sign out failed: " +
+          friendlySupabaseError(
+            error
+          ),
+          "error"
+        );
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "Sign Out";
+
+      }
+
+    }
+  );
 
 /* ============================================================
    KEYBOARD
@@ -3936,11 +5803,46 @@ document.addEventListener(
     if(event.key === "Escape"){
 
       closeModal();
+
       closeViewModal();
+
       closeSidebar();
+
     }
+
   }
 );
+
+/* ============================================================
+   SETUP NOTICE
+============================================================ */
+
+function showSetupNotice(){
+
+  const notice =
+    $("setupNotice");
+
+  if(!configurationReady()){
+
+    notice.innerHTML = `
+      <strong>Supabase configuration required.</strong>
+      Configure your CrowRules Supabase URL and publishable/anon
+      key before using the Members Admin.
+    `;
+
+    notice.classList.add(
+      "show"
+    );
+
+    return;
+
+  }
+
+  notice.classList.remove(
+    "show"
+  );
+
+}
 
 /* ============================================================
    STARTUP
@@ -3949,6 +5851,8 @@ document.addEventListener(
 async function boot(){
 
   try{
+
+    showSetupNotice();
 
     initializeSupabase();
 
@@ -3971,22 +5875,34 @@ async function boot(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "CrowRules Members Admin startup error:",
+      error
+    );
 
-    authMessage.innerHTML =
-      `
-        <strong style="color:#ff8097">
-          Members Admin could not start.
-        </strong>
-        <br><br>
-        ${escapeHtml(error.message)}
-        <br><br>
-        <small>
-          Check your Supabase URL, publishable/anon key,
-          authentication session, Data API exposure,
-          and members RLS policies.
-        </small>
-      `;
+    authMessage.innerHTML = `
+
+      <strong style="color:#ff8097">
+        Members Admin could not start.
+      </strong>
+
+      <br><br>
+
+      ${escapeHtml(
+        friendlySupabaseError(
+          error
+        )
+      )}
+
+      <br><br>
+
+      <small style="color:#777">
+        Verify your Supabase project URL, publishable/anon key,
+        administrator authentication, Data API exposure and
+        public.members RLS policies.
+      </small>
+
+    `;
 
     const spinner =
       document.querySelector(
@@ -3994,13 +5910,18 @@ async function boot(){
       );
 
     if(spinner){
+
       spinner.style.display =
         "none";
+
     }
+
   }
+
 }
 
 boot();
+
 </script>
 
 </body>
