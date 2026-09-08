@@ -13,7 +13,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Correct Supabase browser client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <style>
 :root{
@@ -23,16 +24,19 @@
   --panel2:#111116;
   --panel3:#15151b;
   --line:#25252c;
-  --line2:#303038;
+  --line2:#34343d;
   --text:#f5f5f7;
   --muted:#92929d;
   --muted2:#686873;
+
   --red:#e50914;
   --red2:#ff3340;
+
   --green:#39e58c;
   --yellow:#ffd166;
   --cyan:#36d9ff;
   --danger:#ff5362;
+
   --shadow:0 20px 60px rgba(0,0,0,.55);
 }
 
@@ -40,18 +44,20 @@
   box-sizing:border-box;
 }
 
-html,
-body{
-  margin:0;
-  padding:0;
+html{
   min-height:100%;
   background:var(--bg);
-  color:var(--text);
-  font-family:Montserrat,Arial,sans-serif;
 }
 
 body{
   min-height:100vh;
+  margin:0;
+  padding:0;
+  background:
+    radial-gradient(circle at top right,#16070a 0%,transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
 }
 
 button,
@@ -69,9 +75,13 @@ a{
   color:inherit;
 }
 
-/* =========================
+.hidden{
+  display:none!important;
+}
+
+/* =========================================================
    APP
-========================= */
+========================================================= */
 
 .app{
   min-height:100vh;
@@ -102,9 +112,9 @@ a{
 .brand{
   position:sticky;
   top:0;
-  z-index:2;
+  z-index:5;
   padding:22px 20px;
-  background:#08080aee;
+  background:#08080af2;
   backdrop-filter:blur(12px);
   border-bottom:1px solid var(--line);
 }
@@ -166,6 +176,7 @@ a{
 
 .nav-icon{
   width:18px;
+  min-width:18px;
   text-align:center;
   color:#777780;
 }
@@ -174,13 +185,13 @@ a{
   color:var(--red2);
 }
 
-/* =========================
+/* =========================================================
    MAIN
-========================= */
+========================================================= */
 
 .main{
-  margin-left:275px;
   min-height:100vh;
+  margin-left:275px;
 }
 
 .topbar{
@@ -232,8 +243,8 @@ a{
 .auth-pill{
   display:inline-flex;
   align-items:center;
-  gap:6px;
-  padding:7px 10px;
+  gap:7px;
+  padding:7px 11px;
   border:1px solid #194b35;
   border-radius:999px;
   background:#0a1b13;
@@ -248,11 +259,12 @@ a{
   height:6px;
   border-radius:50%;
   background:currentColor;
+  box-shadow:0 0 8px currentColor;
 }
 
-/* =========================
+/* =========================================================
    BUTTONS
-========================= */
+========================================================= */
 
 .btn{
   min-height:36px;
@@ -279,6 +291,7 @@ a{
 
 .btn.primary:hover{
   background:var(--red2);
+  border-color:var(--red2);
 }
 
 .btn.danger{
@@ -291,9 +304,9 @@ a{
   cursor:not-allowed;
 }
 
-/* =========================
+/* =========================================================
    CONTENT
-========================= */
+========================================================= */
 
 .content{
   padding:26px;
@@ -327,9 +340,9 @@ a{
   gap:8px;
 }
 
-/* =========================
+/* =========================================================
    STATS
-========================= */
+========================================================= */
 
 .stats{
   display:grid;
@@ -339,6 +352,8 @@ a{
 }
 
 .stat{
+  position:relative;
+  overflow:hidden;
   padding:16px;
   background:
     linear-gradient(145deg,#0e0e12,#09090b);
@@ -346,7 +361,20 @@ a{
   border-radius:10px;
 }
 
+.stat::after{
+  content:"";
+  position:absolute;
+  right:-25px;
+  bottom:-35px;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:radial-gradient(circle,#e5091420,transparent 70%);
+}
+
 .stat-label{
+  position:relative;
+  z-index:1;
   color:#777781;
   font-size:8px;
   font-weight:800;
@@ -355,15 +383,17 @@ a{
 }
 
 .stat-value{
+  position:relative;
+  z-index:1;
   margin-top:8px;
   font-family:Orbitron,sans-serif;
   font-size:24px;
   font-weight:700;
 }
 
-/* =========================
+/* =========================================================
    TOOLBAR
-========================= */
+========================================================= */
 
 .toolbar{
   display:flex;
@@ -389,18 +419,27 @@ a{
   outline:none;
 }
 
+.search-wrap input::placeholder{
+  color:#5e5e68;
+}
+
 .search-wrap input:focus,
 .filter select:focus{
   border-color:#6b252c;
+  box-shadow:0 0 0 3px #e5091412;
 }
 
 .filter{
   width:180px;
 }
 
-/* =========================
+.filter select{
+  cursor:pointer;
+}
+
+/* =========================================================
    TABLE
-========================= */
+========================================================= */
 
 .table-wrap{
   overflow:auto;
@@ -411,7 +450,7 @@ a{
 
 .table{
   width:100%;
-  min-width:1050px;
+  min-width:1080px;
   border-collapse:collapse;
 }
 
@@ -424,6 +463,7 @@ a{
   font-weight:800;
   letter-spacing:1.2px;
   text-transform:uppercase;
+  background:#0c0c10;
   border-bottom:1px solid var(--line);
 }
 
@@ -435,6 +475,14 @@ a{
   vertical-align:middle;
 }
 
+.table tbody tr{
+  transition:.12s ease;
+}
+
+.table tbody tr:hover{
+  background:#0f0f14;
+}
+
 .table tr:last-child td{
   border-bottom:0;
 }
@@ -443,17 +491,25 @@ a{
   display:flex;
   align-items:center;
   gap:11px;
-  min-width:280px;
+  min-width:300px;
 }
 
 .show-image{
   width:52px;
   height:52px;
   flex:0 0 52px;
-  border-radius:7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   overflow:hidden;
-  background:#15151a;
+  border-radius:7px;
+  background:
+    linear-gradient(145deg,#1b1b22,#0d0d11);
   border:1px solid var(--line);
+  color:#777;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:800;
 }
 
 .show-image img{
@@ -477,6 +533,7 @@ a{
   display:inline-flex;
   align-items:center;
   padding:5px 7px;
+  margin-right:4px;
   border-radius:999px;
   background:#19191e;
   color:#aaa;
@@ -506,6 +563,11 @@ a{
   color:#ffb15b;
 }
 
+.badge.category{
+  background:#151a21;
+  color:#8ecbff;
+}
+
 .row-actions{
   display:flex;
   gap:5px;
@@ -525,6 +587,16 @@ a{
   color:#fff;
 }
 
+.icon-btn.delete:hover{
+  color:#ff6974;
+  border-color:#61252c;
+  background:#1c0c0f;
+}
+
+/* =========================================================
+   STATES
+========================================================= */
+
 .loading,
 .empty,
 .error{
@@ -532,6 +604,7 @@ a{
   text-align:center;
   color:#777780;
   font-size:11px;
+  line-height:1.7;
 }
 
 .error{
@@ -549,12 +622,14 @@ a{
 }
 
 @keyframes spin{
-  to{transform:rotate(360deg)}
+  to{
+    transform:rotate(360deg);
+  }
 }
 
-/* =========================
+/* =========================================================
    MODAL
-========================= */
+========================================================= */
 
 .modal-backdrop{
   position:fixed;
@@ -565,6 +640,7 @@ a{
   justify-content:center;
   padding:20px;
   background:#000c;
+  backdrop-filter:blur(4px);
 }
 
 .modal-backdrop.open{
@@ -572,7 +648,7 @@ a{
 }
 
 .modal{
-  width:min(780px,100%);
+  width:min(800px,100%);
   max-height:92vh;
   overflow:auto;
   background:#0c0c10;
@@ -581,11 +657,25 @@ a{
   box-shadow:var(--shadow);
 }
 
+.modal::-webkit-scrollbar{
+  width:7px;
+}
+
+.modal::-webkit-scrollbar-thumb{
+  background:#292930;
+  border-radius:20px;
+}
+
 .modal-head{
+  position:sticky;
+  top:0;
+  z-index:2;
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:17px 20px;
+  background:#0c0c10f5;
+  backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line);
 }
 
@@ -631,15 +721,28 @@ a{
   outline:none;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus{
-  border-color:#6b252c;
+.form-group input,
+.form-group select{
+  height:40px;
 }
 
 .form-group textarea{
   min-height:125px;
   resize:vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  border-color:#6b252c;
+  box-shadow:0 0 0 3px #e5091412;
+}
+
+.form-help{
+  margin-top:5px;
+  color:#5f5f68;
+  font-size:8px;
+  line-height:1.5;
 }
 
 .checks{
@@ -650,25 +753,37 @@ a{
 }
 
 .check{
-  display:flex;
+  display:flex!important;
   align-items:center;
   gap:7px;
-  color:#bbb;
-  font-size:10px;
-  font-weight:600;
+  margin:0!important;
+  color:#bbb!important;
+  font-size:10px!important;
+  font-weight:600!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+}
+
+.check input{
+  width:auto;
+  height:auto;
 }
 
 .modal-foot{
+  position:sticky;
+  bottom:0;
   display:flex;
   justify-content:flex-end;
   gap:8px;
   padding:14px 20px;
+  background:#0c0c10f5;
+  backdrop-filter:blur(10px);
   border-top:1px solid var(--line);
 }
 
-/* =========================
+/* =========================================================
    LOCK SCREEN
-========================= */
+========================================================= */
 
 .lock{
   position:fixed;
@@ -695,6 +810,22 @@ a{
   box-shadow:var(--shadow);
 }
 
+.lock-logo{
+  width:62px;
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 15px;
+  border:1px solid #542028;
+  border-radius:50%;
+  background:#18090c;
+  color:var(--red2);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  box-shadow:0 0 30px #e5091420;
+}
+
 .lock-card h2{
   margin:9px 0;
   font-family:Orbitron,sans-serif;
@@ -708,9 +839,9 @@ a{
   line-height:1.7;
 }
 
-/* =========================
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
 .toast{
   position:fixed;
@@ -718,7 +849,7 @@ a{
   right:20px;
   bottom:20px;
   display:none;
-  max-width:420px;
+  max-width:440px;
   padding:12px 15px;
   background:#15151a;
   border:1px solid #303038;
@@ -728,6 +859,7 @@ a{
   color:#eee;
   font-size:10px;
   font-weight:600;
+  line-height:1.5;
 }
 
 .toast.show{
@@ -738,9 +870,25 @@ a{
   border-left-color:var(--danger);
 }
 
-/* =========================
+/* =========================================================
+   MOBILE OVERLAY
+========================================================= */
+
+.sidebar-overlay{
+  position:fixed;
+  z-index:90;
+  inset:0;
+  display:none;
+  background:#0009;
+}
+
+.sidebar-overlay.show{
+  display:block;
+}
+
+/* =========================================================
    RESPONSIVE
-========================= */
+========================================================= */
 
 @media(max-width:1100px){
 
@@ -761,6 +909,7 @@ a{
 @media(max-width:760px){
 
   .sidebar{
+    width:275px;
     transform:translateX(-100%);
     transition:.2s ease;
   }
@@ -774,6 +923,7 @@ a{
   }
 
   .topbar{
+    height:64px;
     padding:0 15px;
   }
 
@@ -793,6 +943,18 @@ a{
   .page-head{
     align-items:flex-start;
     flex-direction:column;
+  }
+
+  .page-head h1{
+    font-size:24px;
+  }
+
+  .actions{
+    width:100%;
+  }
+
+  .actions .btn{
+    flex:1;
   }
 
   .stats{
@@ -821,6 +983,11 @@ a{
 
   .stats{
     grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  .stat{
+    padding:13px;
   }
 
   .stat-value{
@@ -828,7 +995,28 @@ a{
   }
 
   .page-head h1{
-    font-size:23px;
+    font-size:22px;
+  }
+
+  .actions{
+    flex-direction:column;
+  }
+
+  .actions .btn{
+    width:100%;
+  }
+
+  .modal-backdrop{
+    padding:8px;
+  }
+
+  .modal-body{
+    padding:15px;
+  }
+
+  .modal-head,
+  .modal-foot{
+    padding:13px 15px;
   }
 
 }
@@ -840,7 +1028,7 @@ a{
 <div class="app">
 
 <!-- =====================================================
-     FULL ADMIN SIDEBAR
+     SIDEBAR
 ===================================================== -->
 
 <aside class="sidebar" id="sidebar">
@@ -868,7 +1056,6 @@ a{
       <span class="nav-icon">●</span>
       Notifications
     </a>
-
 
     <div class="nav-section">CONTENT</div>
 
@@ -927,7 +1114,6 @@ a{
       Media Library
     </a>
 
-
     <div class="nav-section">TELEVISION</div>
 
     <a href="channels.html">
@@ -954,7 +1140,6 @@ a{
       <span class="nav-icon">▸</span>
       On Demand
     </a>
-
 
     <div class="nav-section">PEOPLE</div>
 
@@ -1008,7 +1193,6 @@ a{
       Moderation
     </a>
 
-
     <div class="nav-section">CREATORS</div>
 
     <a href="creators.html">
@@ -1030,7 +1214,6 @@ a{
       <span class="nav-icon">$</span>
       Payouts
     </a>
-
 
     <div class="nav-section">RECORDS</div>
 
@@ -1058,7 +1241,6 @@ a{
       <span class="nav-icon">☷</span>
       Playlists
     </a>
-
 
     <div class="nav-section">SPORTS</div>
 
@@ -1092,7 +1274,6 @@ a{
       Pick'em
     </a>
 
-
     <div class="nav-section">MEMORIALS</div>
 
     <a href="memorials.html">
@@ -1114,7 +1295,6 @@ a{
       <span class="nav-icon">▶</span>
       Memorial Videos
     </a>
-
 
     <div class="nav-section">BRANDS & NETWORK</div>
 
@@ -1147,7 +1327,6 @@ a{
       <span class="nav-icon">★</span>
       Spectrum Awards
     </a>
-
 
     <div class="nav-section">BUSINESS</div>
 
@@ -1185,7 +1364,6 @@ a{
       <span class="nav-icon">⌁</span>
       Analytics
     </a>
-
 
     <div class="nav-section">SYSTEM</div>
 
@@ -1235,8 +1413,10 @@ a{
     </a>
 
   </nav>
+
 </aside>
 
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <!-- =====================================================
      MAIN
@@ -1248,7 +1428,11 @@ a{
 
   <div class="top-left">
 
-    <button class="btn menu-btn" id="menuBtn">
+    <button
+      type="button"
+      class="btn menu-btn"
+      id="menuBtn"
+      aria-label="Open navigation">
       ☰
     </button>
 
@@ -1265,18 +1449,23 @@ a{
       Checking access…
     </span>
 
-    <button class="btn" id="siteBtn">
+    <button
+      type="button"
+      class="btn"
+      id="siteBtn">
       Open Site
     </button>
 
-    <button class="btn" id="logoutBtn">
+    <button
+      type="button"
+      class="btn"
+      id="logoutBtn">
       Sign Out
     </button>
 
   </div>
 
 </header>
-
 
 <section class="content">
 
@@ -1298,22 +1487,30 @@ a{
 
     <div class="actions">
 
-      <button class="btn" id="exportBtn">
+      <button
+        type="button"
+        class="btn"
+        id="exportBtn">
         Export CSV
       </button>
 
-      <button class="btn" id="refreshBtn">
+      <button
+        type="button"
+        class="btn"
+        id="refreshBtn">
         ↻ Refresh
       </button>
 
-      <button class="btn primary" id="newBtn">
+      <button
+        type="button"
+        class="btn primary"
+        id="newBtn">
         ＋ New Show
       </button>
 
     </div>
 
   </div>
-
 
   <!-- STATS -->
 
@@ -1346,17 +1543,18 @@ a{
 
   </div>
 
-
   <!-- FILTERS -->
 
   <div class="toolbar">
 
     <div class="search-wrap">
+
       <input
         id="search"
         type="search"
         placeholder="Search title, category, slug, key, type…"
         autocomplete="off">
+
     </div>
 
     <div class="filter">
@@ -1392,7 +1590,6 @@ a{
     </div>
 
   </div>
-
 
   <!-- TABLE -->
 
@@ -1445,14 +1642,20 @@ a{
 
 </div>
 
-
 <!-- =====================================================
      CREATE / EDIT MODAL
 ===================================================== -->
 
-<div class="modal-backdrop" id="modal">
+<div
+  class="modal-backdrop"
+  id="modal"
+  aria-hidden="true">
 
-  <div class="modal">
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle">
 
     <div class="modal-head">
 
@@ -1460,19 +1663,21 @@ a{
         Create Show
       </h2>
 
-      <button class="icon-btn" id="closeModal">
+      <button
+        type="button"
+        class="icon-btn"
+        id="closeModal"
+        aria-label="Close">
         ×
       </button>
 
     </div>
-
 
     <form id="showForm">
 
       <div class="modal-body">
 
         <div class="form-grid">
-
 
           <div class="form-group">
 
@@ -1483,10 +1688,10 @@ a{
             <input
               id="fTitle"
               required
+              maxlength="200"
               autocomplete="off">
 
           </div>
-
 
           <div class="form-group">
 
@@ -1494,13 +1699,40 @@ a{
               Category *
             </label>
 
-            <input
+            <!-- IMPORTANT:
+                 These values exactly match the database CHECK constraint. -->
+
+            <select
               id="fCategory"
-              required
-              placeholder="Entertainment">
+              required>
+
+              <option value="talk">
+                Talk
+              </option>
+
+              <option value="live">
+                Live
+              </option>
+
+              <option value="documentary">
+                Documentary
+              </option>
+
+              <option value="story">
+                Story
+              </option>
+
+              <option value="music">
+                Music
+              </option>
+
+            </select>
+
+            <div class="form-help">
+              Database categories: talk, live, documentary, story, music.
+            </div>
 
           </div>
-
 
           <div class="form-group">
 
@@ -1510,10 +1742,10 @@ a{
 
             <input
               id="fType"
-              placeholder="series, live, talk, podcast…">
+              maxlength="100"
+              placeholder="Original Series, Live Series, Talk Series…">
 
           </div>
-
 
           <div class="form-group">
 
@@ -1524,10 +1756,14 @@ a{
             <input
               id="fSlug"
               required
+              maxlength="120"
               autocomplete="off">
 
-          </div>
+            <div class="form-help">
+              URL-friendly identifier. Automatically generated from title.
+            </div>
 
+          </div>
 
           <div class="form-group">
 
@@ -1538,10 +1774,14 @@ a{
             <input
               id="fKey"
               required
+              maxlength="120"
               autocomplete="off">
 
-          </div>
+            <div class="form-help">
+              Unique internal show identifier.
+            </div>
 
+          </div>
 
           <div class="form-group">
 
@@ -1551,10 +1791,10 @@ a{
 
             <input
               id="fInitials"
-              maxlength="10">
+              maxlength="10"
+              autocomplete="off">
 
           </div>
-
 
           <div class="form-group">
 
@@ -1565,10 +1805,10 @@ a{
             <input
               id="fDestination"
               type="url"
+              maxlength="1000"
               placeholder="https://…">
 
           </div>
-
 
           <div class="form-group">
 
@@ -1579,10 +1819,10 @@ a{
             <input
               id="fImage"
               type="url"
+              maxlength="1000"
               placeholder="https://…">
 
           </div>
-
 
           <div class="form-group">
 
@@ -1593,15 +1833,17 @@ a{
             <input
               id="fOrder"
               type="number"
+              min="0"
+              max="999999"
+              step="1"
               value="0">
 
           </div>
 
-
           <div class="form-group">
 
             <label>
-              Status
+              Publishing
             </label>
 
             <div class="checks">
@@ -1617,7 +1859,6 @@ a{
 
               </label>
 
-
               <label class="check">
 
                 <input
@@ -1632,7 +1873,6 @@ a{
 
           </div>
 
-
           <div class="form-group full">
 
             <label for="fDescription">
@@ -1641,15 +1881,14 @@ a{
 
             <textarea
               id="fDescription"
+              maxlength="5000"
               placeholder="Describe the show…"></textarea>
 
           </div>
 
-
         </div>
 
       </div>
-
 
       <div class="modal-foot">
 
@@ -1675,14 +1914,19 @@ a{
 
 </div>
 
-
 <!-- =====================================================
      ACCESS LOCK
 ===================================================== -->
 
-<div class="lock" id="lock">
+<div
+  class="lock"
+  id="lock">
 
   <div class="lock-card">
+
+    <div class="lock-logo">
+      CR
+    </div>
 
     <div class="eyebrow">
       ADMIN ACCESS
@@ -1697,6 +1941,7 @@ a{
     </p>
 
     <button
+      type="button"
       class="btn primary"
       id="loginBtn">
       Go to Login
@@ -1706,334 +1951,708 @@ a{
 
 </div>
 
-
-<div class="toast" id="toast"></div>
-
+<div
+  class="toast"
+  id="toast"
+  role="status"
+  aria-live="polite"></div>
 
 <script>
 (() => {
 
-  /*
-   * =====================================================
-   * SUPABASE CONFIGURATION
-   * =====================================================
-   *
-   * Use a Supabase publishable key in browser code.
-   * NEVER use service_role or a secret key here.
-   */
+"use strict";
 
-  const SUPABASE_URL =
-    window.CROWRULES_SUPABASE_URL ||
-    "https://cevylpnoexugwgygvtgu.supabase.co";
+/* =========================================================
+   SUPABASE CONFIGURATION
+========================================================= */
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    window.CROWRULES_SUPABASE_PUBLISHABLE_KEY ||
-    window.CROWRULES_SUPABASE_ANON_KEY ||
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNldnlscG5vZXh1Z3dneWd2dGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4MTYxOTYsImV4cCI6MjEwNDM5MjE5Nn0.bvSF3qRqFNvCtaF5CSDeeEO3yJnsnYt9CXmgUaBWjNQ";
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL ||
+  "https://cevylpnoexugwgygvtgu.supabase.co";
 
+const SUPABASE_PUBLISHABLE_KEY =
+  window.CROWRULES_SUPABASE_PUBLISHABLE_KEY ||
+  window.CROWRULES_SUPABASE_ANON_KEY ||
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
 
-  if (!window.supabase) {
+/*
+ * Never put a service_role or sb_secret key in this page.
+ */
 
-    document.body.innerHTML = `
+if(
+  !window.supabase ||
+  typeof window.supabase.createClient !== "function"
+){
+
+  document.body.innerHTML = `
+    <div style="
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#050505;
+      color:white;
+      font-family:Montserrat,Arial,sans-serif;
+      padding:25px;
+    ">
       <div style="
-        min-height:100vh;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        background:#050505;
-        color:white;
-        font-family:Montserrat,Arial,sans-serif;
-        padding:25px;
+        width:min(500px,100%);
+        text-align:center;
+        background:#0c0c10;
+        border:1px solid #292930;
+        border-radius:12px;
+        padding:30px;
       ">
         <div style="
-          max-width:500px;
-          text-align:center;
-          background:#0c0c10;
-          border:1px solid #292930;
-          border-radius:12px;
-          padding:30px;
+          color:#ff3340;
+          font-family:Orbitron;
+          font-size:10px;
+          font-weight:800;
+          letter-spacing:2px;
         ">
-          <h2 style="font-family:Orbitron">Supabase Failed To Load</h2>
-          <p style="color:#999">
-            The Supabase JavaScript client could not be loaded.
-            Check your internet connection and CDN configuration.
-          </p>
+          CROWRULES ADMIN
         </div>
+
+        <h2 style="
+          font-family:Orbitron;
+          margin:12px 0;
+        ">
+          Supabase Failed To Load
+        </h2>
+
+        <p style="
+          color:#999;
+          font-size:11px;
+          line-height:1.7;
+        ">
+          The Supabase JavaScript client could not be loaded.
+          Check your internet connection or CDN configuration.
+        </p>
       </div>
-    `;
+    </div>
+  `;
 
-    return;
-  }
+  return;
+}
 
+if(!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY){
 
-  const sb =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY,
-      {
-        auth:{
-          persistSession:true,
-          autoRefreshToken:true,
-          detectSessionInUrl:true
-        }
+  window.setTimeout(() => {
+
+    const lock =
+      document.getElementById("lock");
+
+    if(lock){
+      lock.classList.add("show");
+    }
+
+  },0);
+
+  return;
+}
+
+const sb =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
       }
-    );
+    }
+  );
 
 
-  const $ = id =>
-    document.getElementById(id);
+/* =========================================================
+   DOM
+========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
 
 
-  let shows = [];
-  let filteredShows = [];
-  let editingId = null;
+/* =========================================================
+   STATE
+========================================================= */
+
+let shows = [];
+let filteredShows = [];
+let editingId = null;
+let currentUser = null;
+let currentClaims = null;
+let loadingShows = false;
 
 
-  /*
-   * =====================================================
-   * HELPERS
-   * =====================================================
-   */
+/* =========================================================
+   CONSTANTS
+========================================================= */
 
-  function escapeHtml(value){
+const VALID_CATEGORIES = [
+  "talk",
+  "live",
+  "documentary",
+  "story",
+  "music"
+];
 
-    return String(value ?? "")
-      .replace(/[&<>"']/g, char => ({
+const ADMIN_ROLES = [
+  "admin",
+  "super_admin",
+  "owner"
+];
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(
+      /[&<>"']/g,
+      char => ({
         "&":"&amp;",
         "<":"&lt;",
         ">":"&gt;",
         '"':"&quot;",
         "'":"&#39;"
-      }[char]));
+      }[char])
+    );
 
-  }
-
-
-  function slugify(value){
-
-    return String(value || "")
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g,"-")
-      .replace(/^-+|-+$/g,"")
-      .slice(0,120);
-
-  }
+}
 
 
-  function makeInitials(value){
+function slugify(value){
 
-    return String(value || "")
+  return String(value || "")
+    .normalize("NFKD")
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    )
+    .toLowerCase()
+    .trim()
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    )
+    .slice(0,120);
+
+}
+
+
+function makeInitials(value){
+
+  const initials =
+    String(value || "")
       .trim()
       .split(/\s+/)
       .filter(Boolean)
       .slice(0,3)
-      .map(word => word.charAt(0))
-      .join("")
-      .toUpperCase();
+      .map(
+        word =>
+          word
+            .charAt(0)
+            .toUpperCase()
+      )
+      .join("");
 
+  return initials.slice(0,10);
+
+}
+
+
+function formatDate(value){
+
+  if(!value){
+    return "—";
   }
 
+  const date =
+    new Date(value);
 
-  function formatDate(value){
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+    return "—";
+  }
 
-    if(!value){
-      return "—";
+  return date.toLocaleDateString(
+    undefined,
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric"
     }
+  );
 
-    const date =
-      new Date(value);
+}
 
-    if(Number.isNaN(date.getTime())){
-      return "—";
-    }
 
-    return date.toLocaleDateString(
-      undefined,
-      {
-        year:"numeric",
-        month:"short",
-        day:"numeric"
-      }
+function isLive(show){
+
+  return String(
+    show?.show_type || ""
+  )
+    .trim()
+    .toLowerCase()
+    .includes("live");
+
+}
+
+
+function getRoleFromClaims(claims){
+
+  return String(
+    claims?.app_metadata?.role ||
+    claims?.user_metadata?.role ||
+    ""
+  )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+function getRoleFromUser(user){
+
+  return String(
+    user?.app_metadata?.role ||
+    ""
+  )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+function isAdmin(){
+
+  const roleFromClaims =
+    getRoleFromClaims(
+      currentClaims
     );
 
-  }
-
-
-  function isLive(show){
-
-    return String(
-      show?.show_type || ""
-    ).toLowerCase() === "live";
-
-  }
-
-
-  function isAdmin(user){
-
-    const role =
-      String(
-        user?.app_metadata?.role || ""
-      ).toLowerCase();
-
-    return [
-      "admin",
-      "super_admin",
-      "owner"
-    ].includes(role);
-
-  }
-
-
-  function showToast(message,bad=false){
-
-    const toast =
-      $("toast");
-
-    toast.textContent =
-      message;
-
-    toast.className =
-      "toast show" +
-      (bad ? " bad" : "");
-
-    window.clearTimeout(
-      showToast.timer
+  const roleFromUser =
+    getRoleFromUser(
+      currentUser
     );
 
-    showToast.timer =
-      window.setTimeout(
-        () => {
-          toast.className =
-            "toast";
-        },
-        3500
-      );
+  return ADMIN_ROLES.includes(
+    roleFromClaims
+  ) ||
+  ADMIN_ROLES.includes(
+    roleFromUser
+  );
+
+}
+
+
+function showToast(
+  message,
+  bad=false
+){
+
+  const toast =
+    $("toast");
+
+  toast.textContent =
+    message;
+
+  toast.className =
+    "toast show" +
+    (
+      bad
+        ? " bad"
+        : ""
+    );
+
+  window.clearTimeout(
+    showToast.timer
+  );
+
+  showToast.timer =
+    window.setTimeout(
+      () => {
+        toast.className =
+          "toast";
+      },
+      4000
+    );
+
+}
+
+
+function friendlyError(error){
+
+  if(!error){
+    return "Unknown error.";
+  }
+
+  const message =
+    String(
+      error.message ||
+      error.error_description ||
+      error.details ||
+      error.hint ||
+      "Unknown error."
+    );
+
+  const lower =
+    message.toLowerCase();
+
+  if(
+    lower.includes("duplicate key") ||
+    lower.includes("unique constraint") ||
+    lower.includes("already exists")
+  ){
+
+    if(
+      lower.includes("show_key")
+    ){
+      return "That Show Key is already in use.";
+    }
+
+    if(
+      lower.includes("slug")
+    ){
+      return "That slug is already in use.";
+    }
+
+    return "A show with one of those unique values already exists.";
+  }
+
+  if(
+    lower.includes("row-level security") ||
+    lower.includes("permission denied") ||
+    lower.includes("not authorized")
+  ){
+
+    return "Supabase denied this operation. Make sure your account has an admin, super_admin, or owner role in app_metadata and that the shows RLS policies are enabled.";
+  }
+
+  if(
+    lower.includes("violates check constraint") &&
+    lower.includes("category")
+  ){
+
+    return "Invalid category. Choose Talk, Live, Documentary, Story, or Music.";
+  }
+
+  if(
+    lower.includes("schema cache")
+  ){
+
+    return "Supabase's API schema cache is stale. Refresh the Supabase API schema and try again.";
+  }
+
+  return message;
+
+}
+
+
+/* =========================================================
+   ACCESS LOCK
+========================================================= */
+
+function showLock(
+  title,
+  text
+){
+
+  $("lockTitle").textContent =
+    title;
+
+  $("lockText").textContent =
+    text;
+
+  $("lock")
+    .classList
+    .add("show");
+
+  $("authPill").textContent =
+    "Access denied";
+
+}
+
+
+function hideLock(){
+
+  $("lock")
+    .classList
+    .remove("show");
+
+}
+
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+
+async function verifyAdmin(){
+
+  /*
+   * First obtain the current session.
+   * This is used only to determine whether a session exists.
+   */
+
+  const {
+    data:{
+      session
+    },
+    error:sessionError
+  } =
+    await sb.auth.getSession();
+
+  if(sessionError){
+
+    showLock(
+      "Authentication Error",
+      friendlyError(
+        sessionError
+      )
+    );
+
+    return false;
+  }
+
+  if(!session){
+
+    showLock(
+      "Authentication Required",
+      "Sign in to the CrowRules Entertainment admin account before opening this page."
+    );
+
+    return false;
+  }
+
+
+  /*
+   * Refresh the session so recently changed app_metadata
+   * can be reflected in the JWT.
+   */
+
+  const {
+    data:{
+      session:refreshedSession
+    },
+    error:refreshError
+  } =
+    await sb.auth.refreshSession();
+
+  if(refreshError){
+
+    /*
+     * Refresh failure is not automatically fatal if the
+     * existing authenticated session is still usable.
+     */
+
+    console.warn(
+      "Session refresh warning:",
+      refreshError.message
+    );
 
   }
 
 
   /*
-   * =====================================================
-   * AUTH
-   * =====================================================
+   * Verify the actual user with Auth.
    */
 
-  async function boot(){
+  const {
+    data:{
+      user
+    },
+    error:userError
+  } =
+    await sb.auth.getUser();
 
-    if(!SUPABASE_PUBLISHABLE_KEY){
+  if(userError || !user){
 
-      showLock(
-        "Supabase Key Missing",
-        "Add your Supabase publishable key to window.CROWRULES_SUPABASE_PUBLISHABLE_KEY. Never use a service_role or secret key in this page."
-      );
+    showLock(
+      "Authentication Error",
+      friendlyError(
+        userError ||
+        {
+          message:"Unable to verify your account."
+        }
+      )
+    );
 
-      return;
-    }
+    return false;
+  }
+
+  currentUser =
+    user;
 
 
-    const {
-      data:{
-        session
-      },
+  /*
+   * getClaims() verifies the JWT and provides the claims
+   * used by the database RLS policies.
+   */
+
+  let claimsResult;
+
+  try{
+
+    claimsResult =
+      await sb.auth.getClaims();
+
+  }catch(error){
+
+    claimsResult = {
       error
-    } =
-      await sb.auth.getSession();
+    };
+
+  }
+
+  if(
+    claimsResult?.error
+  ){
+
+    showLock(
+      "Token Verification Failed",
+      friendlyError(
+        claimsResult.error
+      )
+    );
+
+    return false;
+  }
+
+  currentClaims =
+    claimsResult?.data?.claims ||
+    null;
 
 
-    if(error){
+  if(!isAdmin()){
 
-      showLock(
-        "Authentication Error",
-        error.message
-      );
+    const role =
+      getRoleFromClaims(
+        currentClaims
+      ) ||
+      getRoleFromUser(
+        currentUser
+      ) ||
+      "none";
 
-      return;
+    showLock(
+      "Admin Access Required",
+      `Your account is authenticated, but the administrator role was not found. Current role: ${role}. Set app_metadata.role to admin, super_admin, or owner.`
+    );
+
+    return false;
+  }
+
+
+  $("authPill").textContent =
+    "Admin access granted";
+
+  hideLock();
+
+  return true;
+
+}
+
+
+/* =========================================================
+   AUTH STATE MONITOR
+========================================================= */
+
+function startAuthListener(){
+
+  const {
+    data:{
+      subscription
     }
-
-
-    if(!session){
-
-      showLock(
-        "Authentication Required",
-        "Sign in to the CrowRules Entertainment admin account before opening this page."
-      );
-
-      return;
-    }
-
-
-    if(!isAdmin(session.user)){
-
-      showLock(
-        "Admin Access Required",
-        "Your account is authenticated, but its app_metadata.role is not admin, super_admin, or owner."
-      );
-
-      return;
-    }
-
-
-    $("authPill").textContent =
-      "Admin access granted";
-
-
-    await loadShows();
-
-
+  } =
     sb.auth.onAuthStateChange(
-      (_event,newSession) => {
+      async (_event,newSession) => {
 
         if(!newSession){
 
           window.location.href =
             "login.html";
 
+          return;
+        }
+
+        /*
+         * Do not blindly trust auth state for authorization.
+         * Re-check claims when the auth state changes.
+         */
+
+        try{
+
+          const allowed =
+            await verifyAdmin();
+
+          if(!allowed){
+            return;
+          }
+
+        }catch(error){
+
+          console.error(
+            error
+          );
+
         }
 
       }
     );
 
+  return subscription;
+
+}
+
+
+/* =========================================================
+   LOAD SHOWS
+========================================================= */
+
+async function loadShows(){
+
+  if(loadingShows){
+    return;
   }
 
+  loadingShows =
+    true;
 
-  function showLock(title,text){
+  $("refreshBtn").disabled =
+    true;
 
-    $("lockTitle").textContent =
-      title;
+  $("refreshBtn").textContent =
+    "Loading…";
 
-    $("lockText").textContent =
-      text;
+  $("showBody").innerHTML = `
+    <tr>
+      <td colspan="8">
+        <div class="loading">
+          <div class="spinner"></div>
+          Loading shows…
+        </div>
+      </td>
+    </tr>
+  `;
 
-    $("lock").classList.add(
-      "show"
-    );
 
-    $("authPill").textContent =
-      "Access denied";
+  try{
 
-  }
-
-
-  /*
-   * =====================================================
-   * LOAD SHOWS
-   * =====================================================
-   */
-
-  async function loadShows(){
-
-    $("showBody").innerHTML = `
-      <tr>
-        <td colspan="8">
-          <div class="loading">
-            <div class="spinner"></div>
-            Loading shows…
-          </div>
-        </td>
-      </tr>
-    `;
-
+    /*
+     * Explicitly select only columns that exist in the
+     * verified public.shows schema.
+     */
 
     const {
       data,
@@ -2061,134 +2680,164 @@ a{
         .order(
           "sort_order",
           {
-            ascending:true
+            ascending:true,
+            nullsFirst:false
           }
         )
         .order(
           "created_at",
           {
-            ascending:false
+            ascending:false,
+            nullsFirst:false
           }
         );
 
 
     if(error){
-
-      $("showBody").innerHTML = `
-        <tr>
-          <td colspan="8">
-            <div class="error">
-              Could not load shows:<br>
-              ${escapeHtml(error.message)}
-            </div>
-          </td>
-        </tr>
-      `;
-
-      showToast(
-        "Could not load shows: " +
-        error.message,
-        true
-      );
-
-      return;
+      throw error;
     }
 
 
     shows =
-      data || [];
+      Array.isArray(data)
+        ? data
+        : [];
+
 
     buildCategoryFilter();
 
     applyFilters();
 
+  }catch(error){
+
+    console.error(
+      "loadShows:",
+      error
+    );
+
+    $("showBody").innerHTML = `
+      <tr>
+        <td colspan="8">
+          <div class="error">
+            <strong>Could not load shows.</strong><br>
+            ${escapeHtml(
+              friendlyError(error)
+            )}
+          </div>
+        </td>
+      </tr>
+    `;
+
+    showToast(
+      "Could not load shows: " +
+      friendlyError(error),
+      true
+    );
+
+  }finally{
+
+    loadingShows =
+      false;
+
+    $("refreshBtn").disabled =
+      false;
+
+    $("refreshBtn").textContent =
+      "↻ Refresh";
+
   }
 
-
-  /*
-   * =====================================================
-   * CATEGORY FILTER
-   * =====================================================
-   */
-
-  function buildCategoryFilter(){
-
-    const current =
-      $("categoryFilter").value;
+}
 
 
-    const categories =
-      [
-        ...new Set(
-          shows
-            .map(
-              show =>
-                String(
-                  show.category || ""
-                ).trim()
-            )
-            .filter(Boolean)
-        )
-      ]
-      .sort(
-        (a,b) =>
-          a.localeCompare(b)
-      );
+/* =========================================================
+   CATEGORY FILTER
+========================================================= */
+
+function buildCategoryFilter(){
+
+  const current =
+    $("categoryFilter").value;
+
+  const categories =
+    [
+      ...new Set(
+        shows
+          .map(
+            show =>
+              String(
+                show.category ||
+                ""
+              )
+                .trim()
+                .toLowerCase()
+          )
+          .filter(
+            category =>
+              VALID_CATEGORIES
+                .includes(category)
+          )
+      )
+    ]
+    .sort(
+      (a,b) =>
+        a.localeCompare(b)
+    );
 
 
-    $("categoryFilter").innerHTML =
-      `
-        <option value="">
-          All Categories
+  $("categoryFilter").innerHTML = `
+    <option value="">
+      All Categories
+    </option>
+  ` +
+  categories
+    .map(
+      category => `
+        <option value="${escapeHtml(category)}">
+          ${escapeHtml(
+            category.charAt(0).toUpperCase() +
+            category.slice(1)
+          )}
         </option>
-      ` +
-      categories
-        .map(
-          category =>
-            `
-              <option value="${escapeHtml(category)}">
-                ${escapeHtml(category)}
-              </option>
-            `
-        )
-        .join("");
+      `
+    )
+    .join("");
 
 
-    if(
-      categories.includes(current)
-    ){
+  if(
+    categories.includes(current)
+  ){
 
-      $("categoryFilter").value =
-        current;
-
-    }
+    $("categoryFilter").value =
+      current;
 
   }
 
-
-  /*
-   * =====================================================
-   * FILTERS
-   * =====================================================
-   */
-
-  function applyFilters(){
-
-    const query =
-      $("search")
-        .value
-        .toLowerCase()
-        .trim();
-
-    const status =
-      $("statusFilter").value;
-
-    const category =
-      $("categoryFilter").value;
+}
 
 
-    filteredShows =
-      shows.filter(show => {
+/* =========================================================
+   FILTERS
+========================================================= */
+
+function applyFilters(){
+
+  const query =
+    $("search")
+      .value
+      .toLowerCase()
+      .trim();
+
+  const status =
+    $("statusFilter").value;
+
+  const category =
+    $("categoryFilter").value;
+
+
+  filteredShows =
+    shows.filter(
+      show => {
 
         const haystack =
           [
@@ -2197,7 +2846,8 @@ a{
             show.slug,
             show.show_key,
             show.show_type,
-            show.description
+            show.description,
+            show.initials
           ]
           .join(" ")
           .toLowerCase();
@@ -2205,21 +2855,27 @@ a{
 
         const matchesQuery =
           !query ||
-          haystack.includes(query);
+          haystack.includes(
+            query
+          );
 
 
         const matchesStatus =
           !status ||
           (
             status === "active"
-            ? show.is_active === true
-            : show.is_active === false
+              ? show.is_active === true
+              : show.is_active === false
           );
 
 
         const matchesCategory =
           !category ||
-          show.category === category;
+          String(
+            show.category || ""
+          )
+            .toLowerCase() ===
+            category;
 
 
         return (
@@ -2228,105 +2884,119 @@ a{
           matchesCategory
         );
 
-      });
+      }
+    );
 
 
-    updateStats();
+  updateStats();
 
-    renderShows();
+  renderShows();
 
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+  $("statTotal").textContent =
+    shows.length;
+
+
+  $("statActive").textContent =
+    shows.filter(
+      show =>
+        show.is_active === true
+    ).length;
+
+
+  $("statInactive").textContent =
+    shows.filter(
+      show =>
+        show.is_active !== true
+    ).length;
+
+
+  $("statLive").textContent =
+    shows.filter(
+      show =>
+        String(
+          show.category || ""
+        ).toLowerCase() === "live" ||
+        isLive(show)
+    ).length;
+
+
+  $("statFeatured").textContent =
+    shows.filter(
+      show =>
+        show.is_featured === true
+    ).length;
+
+}
+
+
+/* =========================================================
+   RENDER SHOWS
+========================================================= */
+
+function renderShows(){
+
+  if(!filteredShows.length){
+
+    $("showBody").innerHTML = `
+      <tr>
+        <td colspan="8">
+          <div class="empty">
+            No shows match the current filters.
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
   }
 
 
-  /*
-   * =====================================================
-   * STATS
-   * =====================================================
-   */
+  $("showBody").innerHTML =
+    filteredShows
+      .map(
+        show => {
 
-  function updateStats(){
+          const initials =
+            show.initials ||
+            makeInitials(
+              show.title
+            );
 
-    $("statTotal").textContent =
-      shows.length;
-
-
-    $("statActive").textContent =
-      shows.filter(
-        show => show.is_active
-      ).length;
-
-
-    $("statInactive").textContent =
-      shows.filter(
-        show => !show.is_active
-      ).length;
-
-
-    $("statLive").textContent =
-      shows.filter(
-        show => isLive(show)
-      ).length;
-
-
-    $("statFeatured").textContent =
-      shows.filter(
-        show => show.is_featured
-      ).length;
-
-  }
-
-
-  /*
-   * =====================================================
-   * RENDER
-   * =====================================================
-   */
-
-  function renderShows(){
-
-    if(!filteredShows.length){
-
-      $("showBody").innerHTML = `
-        <tr>
-          <td colspan="8">
-            <div class="empty">
-              No shows match the current filters.
-            </div>
-          </td>
-        </tr>
-      `;
-
-      return;
-    }
-
-
-    $("showBody").innerHTML =
-      filteredShows
-        .map(show => {
 
           const image =
             show.image_url
               ? `
-                <div class="show-image">
+                <div
+                  class="show-image"
+                  data-fallback="${escapeHtml(initials)}">
+
                   <img
                     src="${escapeHtml(show.image_url)}"
-                    alt=""
-                    onerror="this.style.display='none'">
+                    alt="${escapeHtml(show.title)}"
+                    loading="lazy"
+                    onerror="
+                      this.style.display='none';
+                      this.parentElement.textContent=this.parentElement.dataset.fallback || 'CR';
+                    ">
+
                 </div>
               `
               : `
-                <div class="show-image"></div>
+                <div class="show-image">
+                  ${escapeHtml(
+                    initials || "CR"
+                  )}
+                </div>
               `;
-
-
-          const liveBadge =
-            isLive(show)
-              ? `
-                <span class="badge live">
-                  Live
-                </span>
-              `
-              : "";
 
 
           const statusBadge =
@@ -2353,6 +3023,32 @@ a{
               : "—";
 
 
+          const category =
+            String(
+              show.category || ""
+            ).toLowerCase();
+
+
+          const categoryLabel =
+            category
+              ? category.charAt(0).toUpperCase() +
+                category.slice(1)
+              : "—";
+
+
+          const liveBadge =
+            (
+              category === "live" ||
+              isLive(show)
+            )
+              ? `
+                <span class="badge live">
+                  Live
+                </span>
+              `
+              : "";
+
+
           return `
             <tr>
 
@@ -2365,13 +3061,22 @@ a{
                   <div>
 
                     <div class="show-title">
-                      ${escapeHtml(show.title)}
+                      ${escapeHtml(
+                        show.title ||
+                        "Untitled Show"
+                      )}
                     </div>
 
                     <div class="show-meta">
-                      ${escapeHtml(show.slug)}
+                      ${escapeHtml(
+                        show.slug ||
+                        "no-slug"
+                      )}
                       ·
-                      ${escapeHtml(show.show_key)}
+                      ${escapeHtml(
+                        show.show_key ||
+                        "no-key"
+                      )}
                     </div>
 
                   </div>
@@ -2382,13 +3087,25 @@ a{
 
 
               <td>
-                ${escapeHtml(show.category)}
+
+                <span class="badge category">
+                  ${escapeHtml(
+                    categoryLabel
+                  )}
+                </span>
+
               </td>
 
 
               <td>
-                ${escapeHtml(show.show_type || "—")}
+
+                ${escapeHtml(
+                  show.show_type ||
+                  "—"
+                )}
+
                 ${liveBadge}
+
               </td>
 
 
@@ -2403,12 +3120,16 @@ a{
 
 
               <td>
-                ${escapeHtml(show.sort_order)}
+                ${escapeHtml(
+                  show.sort_order ?? 0
+                )}
               </td>
 
 
               <td>
-                ${formatDate(show.created_at)}
+                ${formatDate(
+                  show.created_at
+                )}
               </td>
 
 
@@ -2417,6 +3138,7 @@ a{
                 <div class="row-actions">
 
                   <button
+                    type="button"
                     class="icon-btn"
                     data-action="edit"
                     data-id="${escapeHtml(show.id)}"
@@ -2425,6 +3147,7 @@ a{
                   </button>
 
                   <button
+                    type="button"
                     class="icon-btn"
                     data-action="view"
                     data-id="${escapeHtml(show.id)}"
@@ -2433,7 +3156,8 @@ a{
                   </button>
 
                   <button
-                    class="icon-btn"
+                    type="button"
+                    class="icon-btn delete"
                     data-action="delete"
                     data-id="${escapeHtml(show.id)}"
                     title="Delete">
@@ -2447,197 +3171,252 @@ a{
             </tr>
           `;
 
-        })
-        .join("");
-
-  }
-
-
-  /*
-   * =====================================================
-   * MODAL
-   * =====================================================
-   */
-
-  function openModal(show=null){
-
-    editingId =
-      show?.id || null;
-
-
-    $("modalTitle").textContent =
-      editingId
-        ? "Edit Show"
-        : "Create Show";
-
-
-    $("fTitle").value =
-      show?.title || "";
-
-
-    $("fCategory").value =
-      show?.category || "";
-
-
-    $("fType").value =
-      show?.show_type || "";
-
-
-    $("fSlug").value =
-      show?.slug || "";
-
-
-    $("fKey").value =
-      show?.show_key || "";
-
-
-    $("fInitials").value =
-      show?.initials || "";
-
-
-    $("fDestination").value =
-      show?.destination_url || "";
-
-
-    $("fImage").value =
-      show?.image_url || "";
-
-
-    $("fOrder").value =
-      show?.sort_order ?? 0;
-
-
-    $("fActive").checked =
-      show?.is_active ?? true;
-
-
-    $("fFeatured").checked =
-      show?.is_featured ?? false;
-
-
-    $("fDescription").value =
-      show?.description || "";
-
-
-    $("fSlug").dataset.touched =
-      editingId
-        ? "1"
-        : "";
-
-
-    $("fKey").dataset.touched =
-      editingId
-        ? "1"
-        : "";
-
-
-    $("modal").classList.add(
-      "open"
-    );
-
-
-    window.setTimeout(
-      () => $("fTitle").focus(),
-      50
-    );
-
-  }
-
-
-  function closeModal(){
-
-    $("modal")
-      .classList
-      .remove("open");
-
-    editingId =
-      null;
-
-  }
-
-
-  /*
-   * =====================================================
-   * AUTOMATIC SLUG / KEY
-   * =====================================================
-   */
-
-  $("fTitle")
-    .addEventListener(
-      "input",
-      () => {
-
-        if(
-          !$("fSlug").dataset.touched
-        ){
-
-          $("fSlug").value =
-            slugify(
-              $("fTitle").value
-            );
-
         }
+      )
+      .join("");
+
+}
 
 
-        if(
-          !$("fKey").dataset.touched
-        ){
+/* =========================================================
+   MODAL
+========================================================= */
 
-          $("fKey").value =
-            slugify(
-              $("fTitle").value
-            );
+function openModal(show=null){
 
-        }
-
-      }
-    );
+  editingId =
+    show?.id || null;
 
 
-  $("fSlug")
-    .addEventListener(
-      "input",
-      () => {
-
-        $("fSlug").dataset.touched =
-          "1";
-
-      }
-    );
+  $("modalTitle").textContent =
+    editingId
+      ? "Edit Show"
+      : "Create Show";
 
 
-  $("fKey")
-    .addEventListener(
-      "input",
-      () => {
+  $("fTitle").value =
+    show?.title || "";
 
-        $("fKey").dataset.touched =
-          "1";
 
-      }
-    );
+  $("fCategory").value =
+    VALID_CATEGORIES.includes(
+      String(
+        show?.category || ""
+      ).toLowerCase()
+    )
+      ? String(
+          show.category
+        ).toLowerCase()
+      : "talk";
+
+
+  $("fType").value =
+    show?.show_type || "";
+
+
+  $("fSlug").value =
+    show?.slug || "";
+
+
+  $("fKey").value =
+    show?.show_key || "";
+
+
+  $("fInitials").value =
+    show?.initials || "";
+
+
+  $("fDestination").value =
+    show?.destination_url || "";
+
+
+  $("fImage").value =
+    show?.image_url || "";
+
+
+  $("fOrder").value =
+    Number.isFinite(
+      Number(show?.sort_order)
+    )
+      ? Number(show.sort_order)
+      : 0;
+
+
+  $("fActive").checked =
+    show?.is_active ??
+    true;
+
+
+  $("fFeatured").checked =
+    show?.is_featured ??
+    false;
+
+
+  $("fDescription").value =
+    show?.description || "";
 
 
   /*
-   * =====================================================
-   * SAVE
-   * =====================================================
+   * Existing records should not have their slug/key
+   * automatically overwritten while editing.
    */
 
-  $("showForm")
-    .addEventListener(
-      "submit",
-      async event => {
-
-        event.preventDefault();
+  $("fSlug").dataset.touched =
+    editingId
+      ? "1"
+      : "";
 
 
-        $("saveBtn").disabled =
-          true;
+  $("fKey").dataset.touched =
+    editingId
+      ? "1"
+      : "";
 
-        $("saveBtn").textContent =
-          "Saving…";
 
+  $("modal")
+    .classList
+    .add("open");
+
+  $("modal")
+    .setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+
+  window.setTimeout(
+    () => {
+      $("fTitle").focus();
+    },
+    50
+  );
+
+}
+
+
+function closeModal(){
+
+  $("modal")
+    .classList
+    .remove("open");
+
+  $("modal")
+    .setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+  editingId =
+    null;
+
+}
+
+
+/* =========================================================
+   AUTOMATIC SLUG / KEY
+========================================================= */
+
+$("fTitle")
+  .addEventListener(
+    "input",
+    () => {
+
+      if(
+        !$("fSlug").dataset.touched
+      ){
+
+        $("fSlug").value =
+          slugify(
+            $("fTitle").value
+          );
+
+      }
+
+
+      if(
+        !$("fKey").dataset.touched
+      ){
+
+        $("fKey").value =
+          slugify(
+            $("fTitle").value
+          );
+
+      }
+
+
+      if(
+        !$("fInitials").value.trim()
+      ){
+
+        $("fInitials").value =
+          makeInitials(
+            $("fTitle").value
+          );
+
+      }
+
+    }
+  );
+
+
+$("fSlug")
+  .addEventListener(
+    "input",
+    () => {
+
+      $("fSlug").dataset.touched =
+        "1";
+
+    }
+  );
+
+
+$("fKey")
+  .addEventListener(
+    "input",
+    () => {
+
+      $("fKey").dataset.touched =
+        "1";
+
+    }
+  );
+
+
+/* =========================================================
+   SAVE SHOW
+========================================================= */
+
+$("showForm")
+  .addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+
+      if(!currentUser || !isAdmin()){
+
+        showToast(
+          "Your admin session is no longer authorized.",
+          true
+        );
+
+        await verifyAdmin();
+
+        return;
+      }
+
+
+      $("saveBtn").disabled =
+        true;
+
+      $("saveBtn").textContent =
+        "Saving…";
+
+
+      try{
 
         const title =
           $("fTitle")
@@ -2646,9 +3425,33 @@ a{
 
 
         const category =
-          $("fCategory")
-            .value
-            .trim();
+          String(
+            $("fCategory").value
+          )
+            .trim()
+            .toLowerCase();
+
+
+        if(!title){
+
+          throw new Error(
+            "Show title is required."
+          );
+
+        }
+
+
+        if(
+          !VALID_CATEGORIES.includes(
+            category
+          )
+        ){
+
+          throw new Error(
+            "Invalid show category."
+          );
+
+        }
 
 
         const slug =
@@ -2665,21 +3468,52 @@ a{
           );
 
 
-        if(!title || !category){
+        if(!slug){
 
-          showToast(
-            "Title and category are required.",
-            true
+          throw new Error(
+            "A valid slug is required."
           );
 
-          $("saveBtn").disabled =
-            false;
-
-          $("saveBtn").textContent =
-            "Save Show";
-
-          return;
         }
+
+
+        if(!showKey){
+
+          throw new Error(
+            "A valid Show Key is required."
+          );
+
+        }
+
+
+        const sortOrderRaw =
+          Number(
+            $("fOrder").value
+          );
+
+
+        const sortOrder =
+          Number.isFinite(
+            sortOrderRaw
+          )
+            ? Math.max(
+                0,
+                Math.trunc(
+                  sortOrderRaw
+                )
+              )
+            : 0;
+
+
+        const initials =
+          $("fInitials")
+            .value
+            .trim()
+            .slice(0,10) ||
+          makeInitials(
+            title
+          ) ||
+          null;
 
 
         const payload = {
@@ -2691,7 +3525,8 @@ a{
           show_type:
             $("fType")
               .value
-              .trim() || null,
+              .trim() ||
+            null,
 
           slug,
 
@@ -2701,35 +3536,37 @@ a{
           description:
             $("fDescription")
               .value
-              .trim() || null,
-
-          initials:
-            $("fInitials")
-              .value
               .trim() ||
-            makeInitials(title) ||
             null,
+
+          initials,
 
           destination_url:
             $("fDestination")
               .value
-              .trim() || null,
+              .trim() ||
+            null,
 
           image_url:
             $("fImage")
               .value
-              .trim() || null,
+              .trim() ||
+            null,
 
           is_featured:
-            $("fFeatured").checked,
+            $("fFeatured")
+              .checked,
 
           is_active:
-            $("fActive").checked,
+            $("fActive")
+              .checked,
 
           sort_order:
-            Number(
-              $("fOrder").value
-            ) || 0
+            sortOrder,
+
+          updated_at:
+            new Date()
+              .toISOString()
 
         };
 
@@ -2743,39 +3580,38 @@ a{
             await sb
               .from("shows")
               .update(payload)
-              .eq("id",editingId);
+              .eq(
+                "id",
+                editingId
+              )
+              .select()
+              .single();
 
         }else{
 
           result =
             await sb
               .from("shows")
-              .insert(payload);
+              .insert(
+                payload
+              )
+              .select()
+              .single();
 
         }
-
-
-        $("saveBtn").disabled =
-          false;
-
-        $("saveBtn").textContent =
-          "Save Show";
 
 
         if(result.error){
 
-          showToast(
-            "Save failed: " +
-            result.error.message,
-            true
-          );
+          throw result.error;
 
-          return;
         }
 
 
         const wasEditing =
-          Boolean(editingId);
+          Boolean(
+            editingId
+          );
 
 
         closeModal();
@@ -2790,96 +3626,151 @@ a{
 
         await loadShows();
 
+
+      }catch(error){
+
+        console.error(
+          "saveShow:",
+          error
+        );
+
+        showToast(
+          "Save failed: " +
+          friendlyError(error),
+          true
+        );
+
+      }finally{
+
+        $("saveBtn").disabled =
+          false;
+
+        $("saveBtn").textContent =
+          "Save Show";
+
       }
-    );
+
+    }
+  );
 
 
-  /*
-   * =====================================================
-   * ROW ACTIONS
-   * =====================================================
-   */
+/* =========================================================
+   ROW ACTIONS
+========================================================= */
 
-  $("showBody")
-    .addEventListener(
-      "click",
-      async event => {
+$("showBody")
+  .addEventListener(
+    "click",
+    async event => {
 
-        const button =
-          event.target.closest(
-            "[data-action]"
+      const button =
+        event.target.closest(
+          "[data-action]"
+        );
+
+
+      if(!button){
+        return;
+      }
+
+
+      const show =
+        shows.find(
+          item =>
+            String(item.id) ===
+            String(button.dataset.id)
+        );
+
+
+      if(!show){
+        return;
+      }
+
+
+      const action =
+        button.dataset.action;
+
+
+      if(action === "edit"){
+
+        openModal(
+          show
+        );
+
+        return;
+      }
+
+
+      if(action === "view"){
+
+        let destination =
+          show.destination_url;
+
+
+        if(!destination && show.slug){
+
+          destination =
+            "../tv/show.html?slug=" +
+            encodeURIComponent(
+              show.slug
+            );
+
+        }
+
+
+        if(!destination){
+
+          showToast(
+            "This show does not have a destination URL.",
+            true
+          );
+
+          return;
+        }
+
+
+        window.open(
+          destination,
+          "_blank",
+          "noopener,noreferrer"
+        );
+
+        return;
+      }
+
+
+      if(action === "delete"){
+
+        if(
+          !currentUser ||
+          !isAdmin()
+        ){
+
+          showToast(
+            "Admin authorization is required to delete shows.",
+            true
+          );
+
+          return;
+        }
+
+
+        const confirmed =
+          window.confirm(
+            `Delete "${show.title}"?\n\nThis permanently removes the show record.`
           );
 
 
-        if(!button){
+        if(!confirmed){
           return;
         }
 
 
-        const show =
-          shows.find(
-            item =>
-              String(item.id) ===
-              String(button.dataset.id)
-          );
+        button.disabled =
+          true;
 
 
-        if(!show){
-          return;
-        }
-
-
-        const action =
-          button.dataset.action;
-
-
-        if(action === "edit"){
-
-          openModal(show);
-
-          return;
-        }
-
-
-        if(action === "view"){
-
-          if(show.destination_url){
-
-            window.open(
-              show.destination_url,
-              "_blank",
-              "noopener,noreferrer"
-            );
-
-          }else{
-
-            window.open(
-              "../tv/show.html?slug=" +
-              encodeURIComponent(
-                show.slug
-              ),
-              "_blank",
-              "noopener,noreferrer"
-            );
-
-          }
-
-          return;
-        }
-
-
-        if(action === "delete"){
-
-          const confirmed =
-            window.confirm(
-              `Delete "${show.title}"?\n\nThis permanently removes the show record.`
-            );
-
-
-          if(!confirmed){
-            return;
-          }
-
+        try{
 
           const {
             error
@@ -2887,18 +3778,16 @@ a{
             await sb
               .from("shows")
               .delete()
-              .eq("id",show.id);
+              .eq(
+                "id",
+                show.id
+              );
 
 
           if(error){
 
-            showToast(
-              "Delete failed: " +
-              error.message,
-              true
-            );
+            throw error;
 
-            return;
           }
 
 
@@ -2909,262 +3798,446 @@ a{
 
           await loadShows();
 
-        }
 
-      }
-    );
+        }catch(error){
 
-
-  /*
-   * =====================================================
-   * EXPORT CSV
-   * =====================================================
-   */
-
-  $("exportBtn")
-    .addEventListener(
-      "click",
-      () => {
-
-        if(!filteredShows.length){
+          console.error(
+            "deleteShow:",
+            error
+          );
 
           showToast(
-            "There are no shows to export.",
+            "Delete failed: " +
+            friendlyError(error),
             true
           );
 
-          return;
+        }finally{
+
+          button.disabled =
+            false;
+
         }
 
+      }
 
-        const columns = [
-
-          "id",
-          "show_key",
-          "slug",
-          "title",
-          "category",
-          "show_type",
-          "description",
-          "initials",
-          "destination_url",
-          "image_url",
-          "is_featured",
-          "is_active",
-          "sort_order",
-          "created_at",
-          "updated_at"
-
-        ];
+    }
+  );
 
 
-        const csvRows = [
+/* =========================================================
+   EXPORT CSV
+========================================================= */
 
-          columns.join(","),
+$("exportBtn")
+  .addEventListener(
+    "click",
+    () => {
 
-          ...filteredShows.map(
-            show =>
-              columns
-                .map(
-                  column =>
-                    '"' +
-                    String(
-                      show[column] ?? ""
-                    )
+      if(
+        !filteredShows.length
+      ){
+
+        showToast(
+          "There are no shows to export.",
+          true
+        );
+
+        return;
+      }
+
+
+      const columns = [
+
+        "id",
+        "show_key",
+        "slug",
+        "title",
+        "category",
+        "show_type",
+        "description",
+        "initials",
+        "destination_url",
+        "image_url",
+        "is_featured",
+        "is_active",
+        "sort_order",
+        "created_at",
+        "updated_at"
+
+      ];
+
+
+      const csvRows = [
+
+        columns.join(","),
+
+        ...filteredShows.map(
+          show =>
+            columns
+              .map(
+                column =>
+                  '"' +
+                  String(
+                    show[column] ??
+                    ""
+                  )
                     .replace(
                       /"/g,
                       '""'
                     ) +
-                    '"'
-                )
-                .join(",")
-          )
+                  '"'
+              )
+              .join(",")
+        )
 
-        ];
-
-
-        const blob =
-          new Blob(
-            [
-              csvRows.join("\n")
-            ],
-            {
-              type:
-                "text/csv;charset=utf-8"
-            }
-          );
+      ];
 
 
-        const url =
-          URL.createObjectURL(
-            blob
-          );
-
-
-        const link =
-          document.createElement(
-            "a"
-          );
-
-
-        link.href =
-          url;
-
-        link.download =
-          "crowrules-shows.csv";
-
-
-        document.body.appendChild(
-          link
+      const blob =
+        new Blob(
+          [
+            "\uFEFF" +
+            csvRows.join("\n")
+          ],
+          {
+            type:
+              "text/csv;charset=utf-8"
+          }
         );
 
-        link.click();
 
-        link.remove();
-
-
-        URL.revokeObjectURL(
-          url
+      const url =
+        URL.createObjectURL(
+          blob
         );
+
+
+      const link =
+        document.createElement(
+          "a"
+        );
+
+
+      link.href =
+        url;
+
+      link.download =
+        "crowrules-shows.csv";
+
+
+      document.body.appendChild(
+        link
+      );
+
+      link.click();
+
+      link.remove();
+
+
+      window.setTimeout(
+        () => {
+          URL.revokeObjectURL(
+            url
+          );
+        },
+        100
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   UI EVENTS
+========================================================= */
+
+$("newBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      openModal();
+
+    }
+  );
+
+
+$("closeModal")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+
+$("cancelBtn")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+
+$("modal")
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        $("modal")
+      ){
+
+        closeModal();
 
       }
-    );
+
+    }
+  );
 
 
-  /*
-   * =====================================================
-   * UI EVENTS
-   * =====================================================
-   */
+document.addEventListener(
+  "keydown",
+  event => {
 
-  $("newBtn")
-    .addEventListener(
-      "click",
-      () => openModal()
-    );
+    if(
+      event.key === "Escape" &&
+      $("modal")
+        .classList
+        .contains("open")
+    ){
 
+      closeModal();
 
-  $("closeModal")
-    .addEventListener(
-      "click",
-      closeModal
-    );
+    }
 
-
-  $("cancelBtn")
-    .addEventListener(
-      "click",
-      closeModal
-    );
+  }
+);
 
 
-  $("modal")
-    .addEventListener(
-      "click",
-      event => {
+$("refreshBtn")
+  .addEventListener(
+    "click",
+    loadShows
+  );
 
-        if(
-          event.target ===
-          $("modal")
-        ){
 
-          closeModal();
+$("search")
+  .addEventListener(
+    "input",
+    applyFilters
+  );
+
+
+$("statusFilter")
+  .addEventListener(
+    "change",
+    applyFilters
+  );
+
+
+$("categoryFilter")
+  .addEventListener(
+    "change",
+    applyFilters
+  );
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+function closeMobileMenu(){
+
+  $("sidebar")
+    .classList
+    .remove("open");
+
+  $("sidebarOverlay")
+    .classList
+    .remove("show");
+
+}
+
+
+$("menuBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("sidebar")
+        .classList
+        .toggle("open");
+
+      $("sidebarOverlay")
+        .classList
+        .toggle("show");
+
+    }
+  );
+
+
+$("sidebarOverlay")
+  .addEventListener(
+    "click",
+    closeMobileMenu
+  );
+
+
+document
+  .querySelectorAll(
+    ".nav a"
+  )
+  .forEach(
+    link => {
+
+      link.addEventListener(
+        "click",
+        () => {
+
+          closeMobileMenu();
+
+        }
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   SITE / LOGIN / LOGOUT
+========================================================= */
+
+$("siteBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      window.open(
+        "../index.html",
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+    }
+  );
+
+
+$("loginBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      window.location.href =
+        "login.html";
+
+    }
+  );
+
+
+$("logoutBtn")
+  .addEventListener(
+    "click",
+    async () => {
+
+      $("logoutBtn").disabled =
+        true;
+
+      $("logoutBtn").textContent =
+        "Signing Out…";
+
+
+      try{
+
+        const {
+          error
+        } =
+          await sb.auth.signOut();
+
+
+        if(error){
+
+          throw error;
 
         }
 
-      }
-    );
 
+        window.location.href =
+          "login.html";
 
-  $("refreshBtn")
-    .addEventListener(
-      "click",
-      loadShows
-    );
+      }catch(error){
 
-
-  $("search")
-    .addEventListener(
-      "input",
-      applyFilters
-    );
-
-
-  $("statusFilter")
-    .addEventListener(
-      "change",
-      applyFilters
-    );
-
-
-  $("categoryFilter")
-    .addEventListener(
-      "change",
-      applyFilters
-    );
-
-
-  $("menuBtn")
-    .addEventListener(
-      "click",
-      () => {
-
-        $("sidebar")
-          .classList
-          .toggle("open");
-
-      }
-    );
-
-
-  $("siteBtn")
-    .addEventListener(
-      "click",
-      () => {
-
-        window.open(
-          "../index.html",
-          "_blank",
-          "noopener,noreferrer"
+        console.error(
+          "signOut:",
+          error
         );
 
-      }
-    );
+        showToast(
+          "Sign out failed: " +
+          friendlyError(error),
+          true
+        );
 
+        $("logoutBtn").disabled =
+          false;
 
-  $("loginBtn")
-    .addEventListener(
-      "click",
-      () => {
-
-        window.location.href =
-          "login.html";
-
-      }
-    );
-
-
-  $("logoutBtn")
-    .addEventListener(
-      "click",
-      async () => {
-
-        await sb.auth.signOut();
-
-        window.location.href =
-          "login.html";
+        $("logoutBtn").textContent =
+          "Sign Out";
 
       }
+
+    }
+  );
+
+
+/* =========================================================
+   BOOT
+========================================================= */
+
+async function boot(){
+
+  $("authPill").textContent =
+    "Checking access…";
+
+
+  try{
+
+    const allowed =
+      await verifyAdmin();
+
+
+    if(!allowed){
+      return;
+    }
+
+
+    await loadShows();
+
+
+    startAuthListener();
+
+
+  }catch(error){
+
+    console.error(
+      "boot:",
+      error
     );
 
+    showLock(
+      "Admin Initialization Failed",
+      friendlyError(error)
+    );
 
-  /*
-   * =====================================================
-   * START
-   * =====================================================
-   */
+  }
 
-  boot();
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+boot();
 
 })();
 </script>
