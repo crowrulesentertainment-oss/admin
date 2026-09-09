@@ -1,12 +1,13 @@
 <!doctype html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Shows — CrowRules Entertainment Admin</title>
+<title>CrowRules Entertainment — Shows Admin</title>
 <meta name="theme-color" content="#050505">
-<meta name="description" content="CrowRules Entertainment Shows Management">
+<meta name="description" content="CrowRules Entertainment Administration — Shows Management">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,44 +18,62 @@
 <style>
 :root{
   --bg:#050505;
-  --bg2:#090909;
-  --panel:#0d0d0d;
-  --panel2:#111;
-  --panel3:#151515;
-  --line:#252525;
-  --line2:#333;
-  --red:#e50914;
-  --red2:#ff1b26;
-  --red3:#8f0008;
-  --text:#f4f4f4;
-  --muted:#8f8f8f;
-  --green:#21c77a;
-  --yellow:#e7b83f;
-  --blue:#4da3ff;
-  --sidebar:270px;
-  --radius:12px;
-  --shadow:0 20px 60px rgba(0,0,0,.45);
+  --bg2:#08080b;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#17171e;
+  --line:#292930;
+  --line2:#3a3a44;
+  --text:#f5f5f7;
+  --muted:#92929d;
+  --muted2:#656570;
+
+  --red:#ff334f;
+  --red2:#b90f2b;
+  --red-soft:rgba(255,51,79,.10);
+
+  --green:#45e69a;
+  --cyan:#37d7ff;
+  --yellow:#f3c969;
+  --orange:#ff8a4c;
+
+  --shadow:0 18px 60px rgba(0,0,0,.48);
+  --radius:15px;
 }
 
 *{
   box-sizing:border-box;
 }
 
-html,
-body{
-  margin:0;
-  padding:0;
-  min-height:100%;
-  background:
-    radial-gradient(circle at 20% 0%,rgba(229,9,20,.08),transparent 30%),
-    radial-gradient(circle at 90% 20%,rgba(229,9,20,.04),transparent 28%),
-    var(--bg);
-  color:var(--text);
-  font-family:Montserrat,Arial,sans-serif;
+html{
+  scroll-behavior:smooth;
 }
 
 body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 85% 5%,rgba(255,51,79,.08),transparent 28%),
+    radial-gradient(circle at 15% 85%,rgba(55,215,255,.04),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
   overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9999;
+  opacity:.028;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    #fff 3px
+  );
 }
 
 button,
@@ -73,569 +92,734 @@ a{
   text-decoration:none;
 }
 
-.hidden{
-  display:none!important;
+/* =========================================================
+   APP
+========================================================= */
+
+.app{
+  min-height:100vh;
 }
 
-/* =========================
+/* =========================================================
    SIDEBAR
-========================= */
+========================================================= */
 
 .sidebar{
   position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
-  width:var(--sidebar);
-  background:
-    linear-gradient(180deg,#090909 0%,#050505 100%);
-  border-right:1px solid var(--line);
-  z-index:1000;
+  inset:0 auto 0 0;
+  width:265px;
+  z-index:100;
   display:flex;
   flex-direction:column;
   overflow-y:auto;
+  background:linear-gradient(180deg,#09090c,#060608);
+  border-right:1px solid var(--line);
+  transition:.25s ease;
 }
 
 .brand{
-  padding:22px 20px 18px;
+  min-height:82px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:0 21px;
   border-bottom:1px solid var(--line);
+  flex-shrink:0;
 }
 
 .brand-mark{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,51,79,.55);
+  border-radius:12px;
+  color:var(--red);
+  background:linear-gradient(
+    135deg,
+    rgba(255,51,79,.14),
+    rgba(255,255,255,.025)
+  );
   font-family:Orbitron,sans-serif;
+  font-size:12px;
   font-weight:900;
-  font-size:21px;
-  letter-spacing:2px;
-  color:#fff;
+  box-shadow:0 0 25px rgba(255,51,79,.10);
 }
 
-.brand-mark span{
-  color:var(--red);
+.brand-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:1.3px;
 }
 
 .brand-sub{
-  margin-top:6px;
-  color:#777;
-  font-size:10px;
-  letter-spacing:2px;
+  margin-top:4px;
+  color:#666670;
+  font-size:8px;
+  letter-spacing:1.6px;
   text-transform:uppercase;
 }
 
 .nav{
-  padding:14px 10px 24px;
+  padding:13px 11px 22px;
 }
 
-.nav-section{
-  margin:17px 10px 7px;
-  color:#555;
+.nav-label{
+  padding:14px 11px 7px;
+  color:#55555f;
   font-family:Orbitron,sans-serif;
-  font-size:9px;
+  font-size:8px;
   font-weight:700;
-  letter-spacing:1.5px;
+  letter-spacing:1.8px;
   text-transform:uppercase;
 }
 
-.nav-link{
+.nav a{
+  min-height:41px;
   display:flex;
   align-items:center;
   gap:11px;
-  min-height:40px;
-  padding:9px 12px;
-  border-radius:8px;
-  color:#aaa;
-  font-size:12px;
-  font-weight:600;
+  margin:3px 0;
+  padding:0 12px;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:#aaaab4;
+  font-size:11px;
+  font-weight:700;
   transition:.18s ease;
-  margin-bottom:2px;
 }
 
-.nav-link:hover{
+.nav a:hover{
   color:#fff;
-  background:#121212;
+  background:#111116;
+  border-color:#22222a;
+  transform:translateX(2px);
 }
 
-.nav-link.active{
+.nav a.active{
   color:#fff;
-  background:
-    linear-gradient(90deg,rgba(229,9,20,.20),rgba(229,9,20,.04));
-  border-left:2px solid var(--red);
-  padding-left:10px;
+  background:linear-gradient(
+    90deg,
+    rgba(255,51,79,.15),
+    rgba(255,51,79,.035)
+  );
+  border-color:rgba(255,51,79,.28);
+  box-shadow:inset 3px 0 0 var(--red);
 }
 
 .nav-icon{
-  width:18px;
+  width:20px;
   text-align:center;
-  color:#777;
-  font-size:13px;
+  font-size:14px;
+  opacity:.9;
 }
 
-.nav-link.active .nav-icon{
-  color:var(--red);
+.sidebar-bottom{
+  margin-top:auto;
+  padding:12px;
+  border-top:1px solid var(--line);
 }
 
-/* =========================
+.system-status{
+  padding:12px;
+  border:1px solid #202027;
+  border-radius:12px;
+  background:#0c0c10;
+}
+
+.status-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.status-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#aaaab4;
+  font-size:9px;
+  font-weight:700;
+}
+
+.status-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
+.status-version{
+  color:#5d5d68;
+  font-family:Orbitron,sans-serif;
+  font-size:7px;
+}
+
+/* =========================================================
    MAIN
-========================= */
+========================================================= */
 
 .main{
-  margin-left:var(--sidebar);
   min-height:100vh;
+  margin-left:265px;
 }
 
 .topbar{
   position:sticky;
   top:0;
-  z-index:900;
-  height:70px;
-  padding:0 28px;
+  z-index:50;
+  min-height:82px;
+  padding:0 30px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  background:rgba(5,5,5,.92);
-  backdrop-filter:blur(15px);
+  gap:20px;
+  background:rgba(5,5,5,.90);
+  backdrop-filter:blur(18px);
   border-bottom:1px solid var(--line);
 }
 
-.page-location{
+.top-left{
   display:flex;
   align-items:center;
-  gap:9px;
-  color:#888;
-  font-size:11px;
+  min-width:0;
+}
+
+.eyebrow{
+  color:var(--red);
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+  letter-spacing:2px;
   text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.page-location strong{
-  color:#fff;
-}
-
-.user-area{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.user-email{
-  color:#aaa;
-  font-size:11px;
-}
-
-.user-dot{
-  width:8px;
-  height:8px;
-  background:var(--green);
-  border-radius:50%;
-  box-shadow:0 0 10px rgba(33,199,122,.6);
-}
-
-.signout{
-  border:1px solid var(--line2);
-  background:#0c0c0c;
-  color:#aaa;
-  padding:8px 11px;
-  border-radius:7px;
-  font-size:10px;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.6px;
-}
-
-.signout:hover{
-  color:#fff;
-  border-color:#555;
-}
-
-.content{
-  padding:28px;
-  max-width:1800px;
-  margin:auto;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.page-head{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:20px;
-  margin-bottom:25px;
 }
 
 .page-title{
-  margin:0;
+  margin:5px 0 0;
   font-family:Orbitron,sans-serif;
-  font-size:27px;
-  letter-spacing:1px;
+  font-size:20px;
+  letter-spacing:.7px;
 }
 
-.page-description{
+.top-actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.top-btn,
+.btn{
+  min-height:39px;
+  padding:0 14px;
+  border:1px solid var(--line2);
+  border-radius:9px;
+  background:#0e0e13;
+  color:#c2c2cb;
+  font-size:10px;
+  font-weight:800;
+  transition:.18s ease;
+}
+
+.top-btn:hover,
+.btn:hover{
+  color:#fff;
+  border-color:#55555f;
+}
+
+.top-btn.primary,
+.btn.primary{
+  color:#fff;
+  border-color:rgba(255,51,79,.45);
+  background:linear-gradient(135deg,#c21d39,#791426);
+  box-shadow:0 8px 25px rgba(150,20,42,.18);
+}
+
+.btn.danger{
+  color:#ff7184;
+  border-color:rgba(255,51,79,.3);
+}
+
+.menu-btn{
+  display:none;
+  width:38px;
+  height:38px;
+  margin-right:9px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#0d0d11;
+  color:#fff;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content{
+  max-width:1800px;
+  margin:auto;
+  padding:28px 30px 65px;
+}
+
+.page-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:20px;
+  margin-bottom:23px;
+}
+
+.page-head h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:26px;
+}
+
+.page-head p{
   margin:8px 0 0;
-  color:#777;
-  font-size:12px;
-  line-height:1.7;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
 }
 
 .head-actions{
   display:flex;
-  gap:8px;
   flex-wrap:wrap;
+  gap:8px;
 }
 
-/* =========================
-   BUTTONS
-========================= */
+/* =========================================================
+   ADMIN USER
+========================================================= */
 
-.btn{
-  border:1px solid var(--line2);
-  background:#111;
-  color:#ddd;
-  border-radius:8px;
-  padding:10px 14px;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.4px;
-  text-transform:uppercase;
-  transition:.18s ease;
-}
-
-.btn:hover{
-  background:#181818;
-  border-color:#555;
-}
-
-.btn-primary{
-  background:var(--red);
-  border-color:var(--red);
-  color:#fff;
-}
-
-.btn-primary:hover{
-  background:var(--red2);
-  border-color:var(--red2);
-}
-
-.btn-danger{
-  color:#ff6b72;
-}
-
-.btn-success{
-  color:#65e2a4;
-}
-
-.btn-small{
-  padding:7px 9px;
+.admin-chip{
+  display:none;
+  align-items:center;
+  gap:8px;
+  margin-bottom:18px;
+  padding:9px 12px;
+  border:1px solid rgba(69,230,154,.18);
+  border-radius:10px;
+  background:rgba(69,230,154,.045);
+  color:#8ee8bd;
   font-size:9px;
+  font-weight:700;
 }
 
-/* =========================
+.admin-chip.show{
+  display:flex;
+}
+
+.admin-chip-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px var(--green);
+}
+
+/* =========================================================
    STATS
-========================= */
+========================================================= */
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
+  grid-template-columns:repeat(5,1fr);
   gap:12px;
-  margin-bottom:18px;
+  margin-bottom:20px;
 }
 
 .stat{
   position:relative;
-  background:
-    linear-gradient(145deg,#101010,#0a0a0a);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:17px;
+  min-height:105px;
   overflow:hidden;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.022),transparent),
+    var(--panel);
+  box-shadow:var(--shadow);
 }
 
 .stat:after{
   content:"";
   position:absolute;
-  width:65px;
-  height:65px;
-  right:-25px;
-  top:-25px;
+  width:110px;
+  height:110px;
+  right:-55px;
+  bottom:-60px;
   border-radius:50%;
-  background:rgba(229,9,20,.08);
+  background:rgba(255,51,79,.07);
+  filter:blur(10px);
 }
 
 .stat-label{
-  color:#777;
+  color:var(--muted);
   font-size:9px;
   font-weight:800;
-  letter-spacing:1.2px;
+  letter-spacing:1px;
   text-transform:uppercase;
 }
 
 .stat-value{
-  margin-top:8px;
+  margin-top:9px;
   font-family:Orbitron,sans-serif;
-  font-size:24px;
+  font-size:26px;
   font-weight:800;
 }
 
-.stat-value.red{
-  color:var(--red);
+.stat-meta{
+  margin-top:6px;
+  color:var(--muted2);
+  font-size:8px;
 }
 
-.stat-value.green{
-  color:var(--green);
-}
-
-.stat-value.yellow{
-  color:var(--yellow);
-}
-
-/* =========================
+/* =========================================================
    TOOLBAR
-========================= */
+========================================================= */
 
 .toolbar{
   display:flex;
   align-items:center;
+  justify-content:space-between;
   gap:10px;
   flex-wrap:wrap;
-  padding:14px;
-  margin-bottom:15px;
-  background:#0b0b0b;
-  border:1px solid var(--line);
-  border-radius:var(--radius);
+  margin-bottom:14px;
 }
 
-.search{
-  flex:1 1 260px;
-  min-width:200px;
+.search-box{
   position:relative;
+  flex:1;
+  min-width:230px;
 }
 
-.search input{
+.search-box input{
   width:100%;
-  height:39px;
-  padding:0 12px 0 36px;
-  color:#fff;
-  background:#111;
-  border:1px solid var(--line2);
-  border-radius:7px;
+  height:44px;
+  padding:0 14px 0 39px;
+  border:1px solid var(--line);
+  border-radius:10px;
   outline:none;
-  font-size:11px;
+  background:#0c0c10;
+  color:#fff;
+  font-size:10px;
 }
 
-.search input:focus{
-  border-color:var(--red);
+.search-box input:focus{
+  border-color:rgba(255,51,79,.5);
+  box-shadow:0 0 0 3px rgba(255,51,79,.07);
 }
 
 .search-icon{
   position:absolute;
   left:13px;
   top:12px;
-  color:#666;
-  font-size:12px;
+  color:#666672;
+  font-size:15px;
 }
 
-.filter{
-  height:39px;
-  min-width:140px;
-  padding:0 10px;
-  color:#ccc;
-  background:#111;
-  border:1px solid var(--line2);
-  border-radius:7px;
+.filters{
+  display:flex;
+  gap:8px;
+}
+
+.select{
+  min-width:145px;
+  height:44px;
+  padding:0 11px;
+  border:1px solid var(--line);
+  border-radius:10px;
   outline:none;
+  background:#0c0c10;
+  color:#c5c5ce;
   font-size:10px;
 }
 
-.filter:focus{
-  border-color:var(--red);
+.select:focus{
+  border-color:rgba(255,51,79,.45);
 }
 
-.result-count{
-  margin-left:auto;
-  color:#666;
-  font-size:10px;
+/* =========================================================
+   PANEL / TABLE
+========================================================= */
+
+.panel{
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.017),transparent),
+    var(--panel);
+  box-shadow:var(--shadow);
 }
 
-/* =========================
-   TABLE
-========================= */
+.panel-header{
+  min-height:62px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.8px;
+}
+
+.panel-meta{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:8px;
+}
 
 .table-wrap{
   overflow:auto;
-  background:#0a0a0a;
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
 }
 
 table{
   width:100%;
-  min-width:1200px;
+  min-width:1050px;
   border-collapse:collapse;
 }
 
 thead{
-  background:#111;
+  background:#0b0b0f;
 }
 
 th{
-  padding:12px 13px;
+  padding:12px 15px;
+  color:#696973;
   text-align:left;
-  color:#666;
-  font-family:Orbitron,sans-serif;
   font-size:8px;
+  font-weight:800;
   letter-spacing:1px;
   text-transform:uppercase;
   border-bottom:1px solid var(--line);
-  white-space:nowrap;
 }
 
 td{
-  padding:12px 13px;
-  border-bottom:1px solid #181818;
-  vertical-align:middle;
+  padding:12px 15px;
+  color:#c7c7ce;
   font-size:10px;
+  vertical-align:middle;
+  border-bottom:1px solid #1b1b21;
 }
 
 tbody tr{
-  transition:.15s ease;
+  transition:.16s ease;
 }
 
 tbody tr:hover{
-  background:#101010;
+  background:rgba(255,255,255,.016);
 }
 
 .show-cell{
   display:flex;
   align-items:center;
   gap:11px;
-  min-width:260px;
 }
 
-.show-thumb{
-  width:60px;
-  height:38px;
-  flex:0 0 60px;
-  border-radius:5px;
+.show-poster{
+  width:70px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
   overflow:hidden;
-  background:#171717;
-  border:1px solid #292929;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:Orbitron,sans-serif;
-  color:#777;
-  font-size:10px;
+  border:1px solid #2b2b34;
+  border-radius:8px;
+  background:
+    linear-gradient(135deg,rgba(255,51,79,.16),rgba(55,215,255,.035)),
+    #15151b;
+  color:#666672;
 }
 
-.show-thumb img{
+.show-poster img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-.show-title{
+.show-name{
   color:#fff;
-  font-weight:800;
   font-size:11px;
+  font-weight:800;
 }
 
-.show-meta{
+.show-id{
   margin-top:4px;
-  color:#666;
+  color:#65656f;
+  font-family:monospace;
   font-size:8px;
 }
 
-.mono{
-  font-family:monospace;
-  color:#888;
-  font-size:9px;
+.category-text{
+  color:#bcbcc5;
+  text-transform:capitalize;
 }
 
-.badges{
-  display:flex;
-  gap:5px;
-  flex-wrap:wrap;
+.episode-count{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:700;
 }
 
 .badge{
   display:inline-flex;
   align-items:center;
-  padding:4px 7px;
-  border-radius:5px;
-  background:#181818;
-  border:1px solid #292929;
-  color:#999;
+  gap:5px;
+  min-height:23px;
+  padding:0 8px;
+  border-radius:999px;
   font-size:8px;
   font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.4px;
+  border:1px solid transparent;
 }
 
-.badge.red{
-  color:#ff626a;
-  border-color:rgba(229,9,20,.35);
-  background:rgba(229,9,20,.08);
+.badge:before{
+  content:"";
+  width:5px;
+  height:5px;
+  border-radius:50%;
 }
 
-.badge.green{
-  color:#61dda0;
-  border-color:rgba(33,199,122,.28);
-  background:rgba(33,199,122,.07);
+.badge.active{
+  color:#72f0b3;
+  background:rgba(69,230,154,.07);
+  border-color:rgba(69,230,154,.18);
 }
 
-.badge.yellow{
-  color:#e8c25d;
-  border-color:rgba(231,184,63,.25);
-  background:rgba(231,184,63,.06);
+.badge.active:before{
+  background:var(--green);
 }
 
-.badge.blue{
-  color:#69b5ff;
-  border-color:rgba(77,163,255,.25);
-  background:rgba(77,163,255,.06);
+.badge.draft{
+  color:#d2d2da;
+  background:#17171d;
+  border-color:#292932;
+}
+
+.badge.draft:before{
+  background:#777782;
+}
+
+.badge.live{
+  color:#6eeaff;
+  background:rgba(55,215,255,.07);
+  border-color:rgba(55,215,255,.18);
+}
+
+.badge.live:before{
+  background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan);
+}
+
+.badge.archived{
+  color:#ff7187;
+  background:rgba(255,51,79,.07);
+  border-color:rgba(255,51,79,.18);
+}
+
+.badge.archived:before{
+  background:var(--red);
+}
+
+.badge.published{
+  color:#72f0b3;
+  background:rgba(69,230,154,.07);
+  border-color:rgba(69,230,154,.18);
 }
 
 .actions{
   display:flex;
   gap:5px;
-  flex-wrap:wrap;
 }
 
-/* =========================
+.icon-btn{
+  width:31px;
+  height:31px;
+  display:grid;
+  place-items:center;
+  border:1px solid #27272e;
+  border-radius:8px;
+  background:#101015;
+  color:#8b8b96;
+  transition:.18s;
+}
+
+.icon-btn:hover{
+  color:#fff;
+  border-color:#55555f;
+}
+
+.icon-btn.delete:hover{
+  color:#ff6b80;
+  border-color:rgba(255,51,79,.4);
+}
+
+/* =========================================================
    EMPTY / LOADING
-========================= */
+========================================================= */
 
-.state{
-  padding:60px 25px;
+.loading{
+  padding:55px 20px;
+  color:#777782;
   text-align:center;
-  color:#666;
-}
-
-.state-icon{
-  font-size:28px;
-  margin-bottom:12px;
-  opacity:.5;
-}
-
-.state-title{
-  color:#aaa;
-  font-family:Orbitron,sans-serif;
-  font-size:13px;
-}
-
-.state-text{
-  margin-top:7px;
   font-size:10px;
-  line-height:1.6;
 }
 
-/* =========================
-   MODAL
-========================= */
+.spinner{
+  width:25px;
+  height:25px;
+  margin:0 auto 12px;
+  border:2px solid #28282f;
+  border-top-color:var(--red);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
 
-.modal-backdrop{
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.empty{
+  display:none;
+  padding:65px 25px;
+  text-align:center;
+}
+
+.empty-icon{
+  font-size:37px;
+  opacity:.35;
+}
+
+.empty h3{
+  margin:13px 0 7px;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+}
+
+.empty p{
+  max-width:450px;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+}
+
+/* =========================================================
+   AUTH SCREEN
+========================================================= */
+
+.auth-screen{
   position:fixed;
   inset:0;
   z-index:2000;
@@ -643,8 +827,165 @@ tbody tr:hover{
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:rgba(0,0,0,.78);
-  backdrop-filter:blur(8px);
+  background:
+    radial-gradient(circle at 50% 20%,rgba(255,51,79,.10),transparent 35%),
+    rgba(0,0,0,.95);
+  backdrop-filter:blur(16px);
+}
+
+.auth-screen.open{
+  display:flex;
+}
+
+.auth-card{
+  width:min(430px,100%);
+  padding:28px;
+  border:1px solid #34343d;
+  border-radius:18px;
+  background:#0b0b0f;
+  box-shadow:0 35px 120px rgba(0,0,0,.8);
+}
+
+.auth-logo{
+  width:54px;
+  height:54px;
+  margin:0 auto 18px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,51,79,.5);
+  border-radius:15px;
+  color:var(--red);
+  font-family:Orbitron,sans-serif;
+  font-weight:900;
+}
+
+.auth-title{
+  margin:0;
+  text-align:center;
+  font-family:Orbitron,sans-serif;
+  font-size:18px;
+}
+
+.auth-sub{
+  margin:8px 0 22px;
+  color:var(--muted);
+  text-align:center;
+  font-size:10px;
+  line-height:1.6;
+}
+
+.auth-field{
+  margin-bottom:13px;
+}
+
+.auth-field label{
+  display:block;
+  margin-bottom:7px;
+  color:#9999a4;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+
+.auth-field input{
+  width:100%;
+  height:43px;
+  padding:0 12px;
+  border:1px solid #292930;
+  border-radius:9px;
+  outline:none;
+  background:#07070a;
+  color:#fff;
+  font-size:10px;
+}
+
+.auth-field input:focus{
+  border-color:rgba(255,51,79,.55);
+}
+
+.auth-button{
+  width:100%;
+  min-height:43px;
+  margin-top:6px;
+  border:1px solid rgba(255,51,79,.5);
+  border-radius:9px;
+  background:linear-gradient(135deg,#c21d39,#791426);
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+}
+
+.auth-message{
+  min-height:16px;
+  margin-top:13px;
+  color:#ff7184;
+  text-align:center;
+  font-size:9px;
+  line-height:1.5;
+}
+
+/* =========================================================
+   ACCESS DENIED
+========================================================= */
+
+.access-denied{
+  position:fixed;
+  inset:0;
+  z-index:1900;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.94);
+}
+
+.access-denied.open{
+  display:flex;
+}
+
+.denied-card{
+  width:min(480px,100%);
+  padding:30px;
+  text-align:center;
+  border:1px solid rgba(255,51,79,.3);
+  border-radius:18px;
+  background:#0b0b0f;
+  box-shadow:0 30px 100px rgba(0,0,0,.8);
+}
+
+.denied-icon{
+  font-size:42px;
+  color:var(--red);
+}
+
+.denied-card h2{
+  margin:14px 0 8px;
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+}
+
+.denied-card p{
+  margin:0;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:1500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.80);
+  backdrop-filter:blur(10px);
 }
 
 .modal-backdrop.open{
@@ -652,273 +993,320 @@ tbody tr:hover{
 }
 
 .modal{
-  width:min(1000px,100%);
+  width:min(820px,100%);
   max-height:92vh;
   overflow:auto;
-  background:
-    linear-gradient(160deg,#111,#090909);
-  border:1px solid #303030;
-  border-radius:15px;
-  box-shadow:0 30px 100px rgba(0,0,0,.7);
+  border:1px solid #36363f;
+  border-radius:18px;
+  background:#0c0c10;
+  box-shadow:0 30px 110px rgba(0,0,0,.8);
 }
 
-.modal-head{
-  position:sticky;
-  top:0;
-  z-index:2;
+.modal-header{
+  min-height:62px;
+  padding:0 21px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  padding:18px 20px;
-  background:#0d0d0d;
+  justify-content:space-between;
   border-bottom:1px solid var(--line);
 }
 
 .modal-title{
-  margin:0;
   font-family:Orbitron,sans-serif;
-  font-size:15px;
+  font-size:13px;
 }
 
 .modal-close{
-  width:32px;
-  height:32px;
-  border:1px solid var(--line2);
-  background:#151515;
+  width:33px;
+  height:33px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#121217;
   color:#aaa;
-  border-radius:7px;
+  font-size:18px;
 }
 
-.modal-close:hover{
-  color:#fff;
-}
-
-.modal-body{
-  padding:20px;
+.form{
+  padding:22px;
 }
 
 .form-grid{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:15px;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
 }
 
-.form-group{
-  min-width:0;
-}
-
-.form-group.full{
+.field.full{
   grid-column:1/-1;
 }
 
-label{
+.field label{
   display:block;
-  margin-bottom:7px;
-  color:#888;
-  font-size:9px;
+  margin-bottom:6px;
+  color:#9b9ba5;
+  font-size:8px;
   font-weight:800;
-  letter-spacing:.8px;
+  letter-spacing:.7px;
   text-transform:uppercase;
 }
 
-input[type="text"],
-input[type="url"],
-input[type="number"],
-select,
-textarea{
+.field input,
+.field select,
+.field textarea{
   width:100%;
-  color:#eee;
-  background:#0b0b0b;
-  border:1px solid #292929;
-  border-radius:7px;
+  border:1px solid #292930;
+  border-radius:9px;
   outline:none;
-  padding:10px 11px;
-  font-size:11px;
+  background:#08080b;
+  color:#fff;
+  padding:11px;
+  font-size:10px;
 }
 
-input[type="text"]:focus,
-input[type="url"]:focus,
-input[type="number"]:focus,
-select:focus,
-textarea:focus{
-  border-color:var(--red);
+.field input,
+.field select{
+  min-height:41px;
 }
 
-textarea{
-  min-height:105px;
+.field textarea{
+  min-height:115px;
   resize:vertical;
-  line-height:1.6;
 }
 
-.checkbox-row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:15px;
-  padding-top:7px;
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:rgba(255,51,79,.55);
 }
 
-.check{
+.checkbox-field{
   display:flex;
   align-items:center;
-  gap:7px;
-  color:#aaa;
-  font-size:10px;
-  font-weight:600;
+  gap:9px;
+  min-height:41px;
+  padding:0 11px;
+  border:1px solid #292930;
+  border-radius:9px;
+  background:#08080b;
 }
 
-.check input{
-  accent-color:var(--red);
+.checkbox-field input{
+  width:auto;
 }
 
-.form-help{
-  margin-top:5px;
-  color:#555;
-  font-size:8px;
-  line-height:1.5;
+.checkbox-field label{
+  margin:0;
+  font-size:9px;
 }
 
-.modal-footer{
+.form-footer{
+  margin-top:20px;
+  padding-top:17px;
   display:flex;
   justify-content:flex-end;
   gap:8px;
-  padding:16px 20px;
   border-top:1px solid var(--line);
-  background:#0b0b0b;
 }
 
-/* =========================
+/* =========================================================
+   VIEW MODAL
+========================================================= */
+
+.view-content{
+  padding:22px;
+}
+
+.view-hero{
+  width:100%;
+  height:210px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:
+    linear-gradient(135deg,rgba(255,51,79,.15),rgba(55,215,255,.04)),
+    #101015;
+}
+
+.view-hero img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.view-title{
+  margin:17px 0 5px;
+  font-family:Orbitron,sans-serif;
+  font-size:20px;
+}
+
+.view-slug{
+  color:#666672;
+  font-family:monospace;
+  font-size:9px;
+}
+
+.view-description{
+  margin-top:14px;
+  color:#b7b7c0;
+  font-size:10px;
+  line-height:1.8;
+}
+
+.view-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:18px;
+}
+
+.view-stat{
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#101015;
+}
+
+.view-stat-label{
+  color:#6e6e78;
+  font-size:7px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.view-stat-value{
+  margin-top:5px;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+/* =========================================================
    TOAST
-========================= */
-
-.toast-wrap{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  z-index:4000;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  width:min(390px,calc(100vw - 40px));
-}
+========================================================= */
 
 .toast{
-  padding:13px 14px;
-  border-radius:9px;
-  background:#151515;
-  border:1px solid #333;
-  box-shadow:0 15px 40px rgba(0,0,0,.5);
-  font-size:10px;
-  line-height:1.5;
-  animation:toastIn .2s ease;
+  position:fixed;
+  right:23px;
+  bottom:23px;
+  z-index:3000;
+  min-width:270px;
+  max-width:420px;
+  padding:14px 16px;
+  border:1px solid #36363f;
+  border-radius:11px;
+  background:#101015;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  transform:translateY(30px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s ease;
 }
 
-.toast.success{
-  border-left:3px solid var(--green);
-}
-
-.toast.error{
-  border-left:3px solid var(--red);
-}
-
-.toast.warning{
-  border-left:3px solid var(--yellow);
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
 }
 
 .toast-title{
-  color:#fff;
+  font-size:10px;
   font-weight:800;
-  margin-bottom:3px;
 }
 
 .toast-message{
-  color:#999;
+  margin-top:4px;
+  color:#92929d;
+  font-size:9px;
+  line-height:1.5;
 }
 
-@keyframes toastIn{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-.mobile-toggle{
-  display:none;
-  width:35px;
-  height:35px;
-  border:1px solid var(--line2);
-  background:#111;
-  color:#aaa;
-  border-radius:7px;
-}
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:1250px){
   .stats{
-    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-columns:repeat(3,1fr);
   }
 }
 
 @media(max-width:900px){
-  :root{
-    --sidebar:0px;
-  }
 
   .sidebar{
-    transform:translateX(-270px);
-    transition:.25s ease;
+    transform:translateX(-100%);
   }
 
-  body.sidebar-open .sidebar{
+  .sidebar.open{
     transform:translateX(0);
-  }
-
-  .mobile-toggle{
-    display:block;
   }
 
   .main{
     margin-left:0;
   }
 
+  .menu-btn{
+    display:grid;
+    place-items:center;
+  }
+
   .topbar{
-    padding:0 16px;
+    padding:0 17px;
   }
 
   .content{
-    padding:18px 14px;
+    padding:22px 17px 45px;
   }
 
   .page-head{
     flex-direction:column;
+    align-items:flex-start;
   }
 
   .stats{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-
-  .user-email{
-    display:none;
-  }
-}
-
-@media(max-width:560px){
-  .stats{
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(2,1fr);
   }
 
   .form-grid{
     grid-template-columns:1fr;
   }
 
-  .form-group.full{
+  .field.full{
     grid-column:auto;
+  }
+}
+
+@media(max-width:600px){
+
+  .top-actions .top-btn:not(.primary){
+    display:none;
+  }
+
+  .page-title{
+    font-size:15px;
+  }
+
+  .stats{
+    gap:8px;
+  }
+
+  .stat{
+    min-height:95px;
+    padding:13px;
+  }
+
+  .stat-value{
+    font-size:20px;
+  }
+
+  .filters{
+    width:100%;
+  }
+
+  .select{
+    flex:1;
+    min-width:0;
+  }
+
+  .view-grid{
+    grid-template-columns:1fr;
   }
 
   .head-actions{
@@ -928,774 +1316,1116 @@ textarea{
   .head-actions .btn{
     flex:1;
   }
+}
 
-  .page-title{
-    font-size:21px;
+@media(max-width:430px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .auth-card{
+    padding:22px;
   }
 }
 </style>
+
 </head>
 
 <body>
 
-<!-- =========================
-     SIDEBAR
-========================= -->
+<div class="app">
 
-<aside class="sidebar">
+<!-- =======================================================
+     SIDEBAR
+======================================================= -->
+
+<aside class="sidebar" id="sidebar">
 
   <div class="brand">
-    <div class="brand-mark">CROW<span>RULES</span></div>
-    <div class="brand-sub">Entertainment Admin</div>
+    <div class="brand-mark">CR</div>
+    <div>
+      <div class="brand-title">CROWRULES</div>
+      <div class="brand-sub">Entertainment Admin</div>
+    </div>
   </div>
 
   <nav class="nav">
 
-    <div class="nav-section">Command Center</div>
+```
+<div class="nav-label">Main</div>
 
-    <a class="nav-link" href="index.html">
-      <span class="nav-icon">⌂</span>
-      <span>Dashboard</span>
-    </a>
+<a href="index.html">
+  <span class="nav-icon">⌂</span>
+  Dashboard
+</a>
 
-    <a class="nav-link" href="content.html">
-      <span class="nav-icon">▦</span>
-      <span>Content</span>
-    </a>
+<a href="content.html">
+  <span class="nav-icon">▦</span>
+  Content
+</a>
 
-    <a class="nav-link" href="pages.html">
-      <span class="nav-icon">▤</span>
-      <span>Pages</span>
-    </a>
+<a href="shows.html" class="active">
+  <span class="nav-icon">▣</span>
+  Shows
+</a>
 
-    <a class="nav-link" href="categories.html">
-      <span class="nav-icon">◫</span>
-      <span>Categories</span>
-    </a>
+<a href="episodes.html">
+  <span class="nav-icon">▶</span>
+  Episodes
+</a>
 
-    <a class="nav-link" href="tags.html">
-      <span class="nav-icon">#</span>
-      <span>Tags</span>
-    </a>
+<a href="movies.html">
+  <span class="nav-icon">◆</span>
+  Movies
+</a>
 
-    <div class="nav-section">CrowRules TV</div>
+<a href="channels.html">
+  <span class="nav-icon">◉</span>
+  Channels
+</a>
 
-    <a class="nav-link active" href="shows.html">
-      <span class="nav-icon">▶</span>
-      <span>Shows</span>
-    </a>
+<div class="nav-label">Programming</div>
 
-    <a class="nav-link" href="episodes.html">
-      <span class="nav-icon">▣</span>
-      <span>Episodes</span>
-    </a>
+<a href="schedule.html">
+  <span class="nav-icon">◷</span>
+  Schedule
+</a>
 
-    <a class="nav-link" href="movies.html">
-      <span class="nav-icon">▰</span>
-      <span>Movies</span>
-    </a>
+<a href="live.html">
+  <span class="nav-icon">●</span>
+  Live
+</a>
 
-    <a class="nav-link" href="audio.html">
-      <span class="nav-icon">♫</span>
-      <span>Audio</span>
-    </a>
+<a href="guide.html">
+  <span class="nav-icon">☷</span>
+  TV Guide
+</a>
 
-    <a class="nav-link" href="articles.html">
-      <span class="nav-icon">≡</span>
-      <span>Articles</span>
-    </a>
+<a href="programming.html">
+  <span class="nav-icon">▤</span>
+  Programming
+</a>
 
-    <div class="nav-section">Broadcast</div>
+<div class="nav-label">Media</div>
 
-    <a class="nav-link" href="channels.html">
-      <span class="nav-icon">▤</span>
-      <span>Channels</span>
-    </a>
+<a href="podcasts.html">
+  <span class="nav-icon">🎙</span>
+  Podcasts
+</a>
 
-    <a class="nav-link" href="schedule.html">
-      <span class="nav-icon">◷</span>
-      <span>Schedule</span>
-    </a>
+<a href="records.html">
+  <span class="nav-icon">♫</span>
+  Records
+</a>
 
-    <a class="nav-link" href="live.html">
-      <span class="nav-icon">●</span>
-      <span>Live</span>
-    </a>
+<a href="artists.html">
+  <span class="nav-icon">♬</span>
+  Artists
+</a>
 
-    <a class="nav-link" href="guide.html">
-      <span class="nav-icon">☷</span>
-      <span>TV Guide</span>
-    </a>
+<a href="albums.html">
+  <span class="nav-icon">▰</span>
+  Albums
+</a>
 
-    <div class="nav-section">People &amp; Members</div>
+<div class="nav-label">Community</div>
 
-    <a class="nav-link" href="members.html">
-      <span class="nav-icon">♙</span>
-      <span>Members</span>
-    </a>
+<a href="members.html">
+  <span class="nav-icon">♙</span>
+  Members
+</a>
 
-    <a class="nav-link" href="community.html">
-      <span class="nav-icon">♧</span>
-      <span>Community</span>
-    </a>
+<a href="community.html">
+  <span class="nav-icon">♧</span>
+  Community
+</a>
 
-    <a class="nav-link" href="creators.html">
-      <span class="nav-icon">✦</span>
-      <span>Creators</span>
-    </a>
+<a href="groups.html">
+  <span class="nav-icon">◎</span>
+  Groups
+</a>
 
-    <a class="nav-link" href="artists.html">
-      <span class="nav-icon">♫</span>
-      <span>Artists</span>
-    </a>
+<a href="creators.html">
+  <span class="nav-icon">✦</span>
+  Creators
+</a>
 
-    <div class="nav-section">CrowRules Network</div>
+<a href="moderation.html">
+  <span class="nav-icon">⚑</span>
+  Moderation
+</a>
 
-    <a class="nav-link" href="records.html">
-      <span class="nav-icon">◉</span>
-      <span>CrowRules Records</span>
-    </a>
+<div class="nav-label">CrowRules Network</div>
 
-    <a class="nav-link" href="sports.html">
-      <span class="nav-icon">⚽</span>
-      <span>Sports</span>
-    </a>
+<a href="sports.html">
+  <span class="nav-icon">◆</span>
+  Sports
+</a>
 
-    <a class="nav-link" href="memorials.html">
-      <span class="nav-icon">✝</span>
-      <span>Memorials</span>
-    </a>
+<a href="memorials.html">
+  <span class="nav-icon">✧</span>
+  Memorials
+</a>
 
-    <a class="nav-link" href="awards.html">
-      <span class="nav-icon">★</span>
-      <span>Awards</span>
-    </a>
+<a href="awards.html">
+  <span class="nav-icon">★</span>
+  Awards
+</a>
 
-    <a class="nav-link" href="holidays.html">
-      <span class="nav-icon">◆</span>
-      <span>Holidays</span>
-    </a>
+<a href="publishing.html">
+  <span class="nav-icon">▥</span>
+  Publishing
+</a>
 
-    <a class="nav-link" href="publishing.html">
-      <span class="nav-icon">▥</span>
-      <span>Publishing</span>
-    </a>
+<a href="holidays.html">
+  <span class="nav-icon">☀</span>
+  Holidays
+</a>
 
-    <a class="nav-link" href="studios.html">
-      <span class="nav-icon">◈</span>
-      <span>Studios</span>
-    </a>
+<a href="yearbooks.html">
+  <span class="nav-icon">▧</span>
+  Yearbooks
+</a>
 
-    <div class="nav-section">Business</div>
+<div class="nav-label">Business</div>
 
-    <a class="nav-link" href="donations.html">
-      <span class="nav-icon">$</span>
-      <span>Donations</span>
-    </a>
+<a href="business.html">
+  <span class="nav-icon">▣</span>
+  Business
+</a>
 
-    <a class="nav-link" href="shop.html">
-      <span class="nav-icon">▱</span>
-      <span>Shop</span>
-    </a>
+<a href="partnerships.html">
+  <span class="nav-icon">♢</span>
+  Partnerships
+</a>
 
-    <a class="nav-link" href="partners.html">
-      <span class="nav-icon">∞</span>
-      <span>Partners</span>
-    </a>
+<a href="inquiries.html">
+  <span class="nav-icon">✉</span>
+  Inquiries
+</a>
 
-    <div class="nav-section">System</div>
+<a href="shop.html">
+  <span class="nav-icon">◇</span>
+  Shop
+</a>
 
-    <a class="nav-link" href="analytics.html">
-      <span class="nav-icon">◒</span>
-      <span>Analytics</span>
-    </a>
+<div class="nav-label">System</div>
 
-    <a class="nav-link" href="moderation.html">
-      <span class="nav-icon">⚠</span>
-      <span>Moderation</span>
-    </a>
+<a href="analytics.html">
+  <span class="nav-icon">⌁</span>
+  Analytics
+</a>
 
-    <a class="nav-link" href="logs.html">
-      <span class="nav-icon">≣</span>
-      <span>Logs</span>
-    </a>
+<a href="activity.html">
+  <span class="nav-icon">◌</span>
+  Activity
+</a>
 
-    <a class="nav-link" href="notifications.html">
-      <span class="nav-icon">♢</span>
-      <span>Notifications</span>
-    </a>
+<a href="logs.html">
+  <span class="nav-icon">≡</span>
+  System Logs
+</a>
 
-    <a class="nav-link" href="activity.html">
-      <span class="nav-icon">↯</span>
-      <span>Activity</span>
-    </a>
+<a href="api.html">
+  <span class="nav-icon">⌘</span>
+  API
+</a>
 
-    <a class="nav-link" href="media.html">
-      <span class="nav-icon">▧</span>
-      <span>Media Library</span>
-    </a>
-
-    <a class="nav-link" href="database.html">
-      <span class="nav-icon">⬡</span>
-      <span>Database</span>
-    </a>
-
-    <a class="nav-link" href="settings.html">
-      <span class="nav-icon">⚙</span>
-      <span>Settings</span>
-    </a>
+<a href="settings.html">
+  <span class="nav-icon">⚙</span>
+  Settings
+</a>
+```
 
   </nav>
+
+  <div class="sidebar-bottom">
+
+```
+<div class="system-status">
+
+  <div class="status-row">
+
+    <div class="status-left">
+      <span class="status-dot"></span>
+      Supabase Online
+    </div>
+
+    <div class="status-version">
+      ADMIN 2.0
+    </div>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
 </aside>
 
-<!-- =========================
+<!-- =======================================================
      MAIN
-========================= -->
+======================================================= -->
 
 <main class="main">
 
   <header class="topbar">
 
-    <div style="display:flex;align-items:center;gap:12px;">
-      <button
-        class="mobile-toggle"
-        id="mobileToggle"
-        type="button"
-        aria-label="Open menu">
-        ☰
-      </button>
+```
+<div class="top-left">
 
-      <div class="page-location">
-        <span>CrowRules TV</span>
-        <span>/</span>
-        <strong>Shows</strong>
-      </div>
+  <button class="menu-btn" id="menuBtn">☰</button>
+
+  <div>
+
+    <div class="eyebrow">
+      CrowRules Entertainment / Administration
     </div>
 
-    <div class="user-area">
-      <span class="user-dot"></span>
-      <span class="user-email" id="userEmail">Checking session…</span>
-      <button class="signout" id="signOutBtn" type="button">
-        Sign Out
-      </button>
-    </div>
-
-  </header>
-
-  <section class="content">
-
-    <!-- HEADER -->
-
-    <div class="page-head">
-
-      <div>
-        <h1 class="page-title">SHOWS</h1>
-
-        <p class="page-description">
-          Manage CrowRules TV series, originals, programming metadata,
-          artwork, publishing status and episode counts.
-        </p>
-      </div>
-
-      <div class="head-actions">
-
-        <button
-          class="btn"
-          id="refreshBtn"
-          type="button">
-          ↻ Refresh
-        </button>
-
-        <button
-          class="btn"
-          id="exportBtn"
-          type="button">
-          ⇩ Export CSV
-        </button>
-
-        <button
-          class="btn btn-primary"
-          id="newShowBtn"
-          type="button">
-          + New Show
-        </button>
-
-      </div>
-
-    </div>
-
-    <!-- STATS -->
-
-    <section class="stats">
-
-      <div class="stat">
-        <div class="stat-label">Total Shows</div>
-        <div class="stat-value" id="statTotal">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Published</div>
-        <div class="stat-value green" id="statPublished">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Drafts</div>
-        <div class="stat-value yellow" id="statDrafts">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Active</div>
-        <div class="stat-value" id="statActive">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Featured</div>
-        <div class="stat-value red" id="statFeatured">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-label">Episodes</div>
-        <div class="stat-value" id="statEpisodes">0</div>
-      </div>
-
-    </section>
-
-    <!-- TOOLBAR -->
-
-    <section class="toolbar">
-
-      <div class="search">
-        <span class="search-icon">⌕</span>
-
-        <input
-          id="searchInput"
-          type="text"
-          autocomplete="off"
-          placeholder="Search title, slug, genre, category, key…">
-      </div>
-
-      <select id="statusFilter" class="filter">
-        <option value="">All Statuses</option>
-        <option value="active">Active</option>
-        <option value="draft">Draft</option>
-        <option value="archived">Archived</option>
-        <option value="coming_soon">Coming Soon</option>
-      </select>
-
-      <select id="categoryFilter" class="filter">
-        <option value="">All Categories</option>
-        <option value="talk">Talk</option>
-        <option value="live">Live</option>
-        <option value="documentary">Documentary</option>
-        <option value="story">Story</option>
-        <option value="music">Music</option>
-        <option value="news">News</option>
-        <option value="gaming">Gaming</option>
-        <option value="podcast">Podcast</option>
-        <option value="original">Original</option>
-      </select>
-
-      <select id="publishedFilter" class="filter">
-        <option value="">All Publishing</option>
-        <option value="published">Published</option>
-        <option value="unpublished">Unpublished</option>
-      </select>
-
-      <select id="featuredFilter" class="filter">
-        <option value="">All Shows</option>
-        <option value="featured">Featured</option>
-        <option value="standard">Standard</option>
-      </select>
-
-      <span class="result-count" id="resultCount">
-        0 shows
-      </span>
-
-    </section>
-
-    <!-- TABLE -->
-
-    <section class="table-wrap">
-
-      <div id="tableState" class="state">
-
-        <div class="state-icon">◌</div>
-
-        <div class="state-title">
-          Loading Shows
-        </div>
-
-        <div class="state-text">
-          Connecting to the CrowRules Supabase database…
-        </div>
-
-      </div>
-
-      <table id="showsTable" class="hidden">
-
-        <thead>
-          <tr>
-            <th>Show</th>
-            <th>Category</th>
-            <th>Genre</th>
-            <th>Status</th>
-            <th>Episodes</th>
-            <th>Publishing</th>
-            <th>Featured</th>
-            <th>Active</th>
-            <th>Updated</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody id="showsBody"></tbody>
-
-      </table>
-
-    </section>
-
-  </section>
-
-</main>
-
-<!-- =========================
-     MODAL
-========================= -->
-
-<div
-  class="modal-backdrop"
-  id="showModal">
-
-  <div class="modal">
-
-    <div class="modal-head">
-
-      <h2 class="modal-title" id="modalTitle">
-        NEW SHOW
-      </h2>
-
-      <button
-        class="modal-close"
-        id="modalClose"
-        type="button"
-        aria-label="Close">
-        ×
-      </button>
-
-    </div>
-
-    <form id="showForm">
-
-      <div class="modal-body">
-
-        <input
-          type="hidden"
-          id="showId">
-
-        <div class="form-grid">
-
-          <!-- TITLE -->
-
-          <div class="form-group">
-            <label for="title">Show Title *</label>
-
-            <input
-              id="title"
-              name="title"
-              type="text"
-              required
-              maxlength="200"
-              placeholder="Example: Tacoma Nights">
-          </div>
-
-          <!-- SLUG -->
-
-          <div class="form-group">
-            <label for="slug">Slug *</label>
-
-            <input
-              id="slug"
-              name="slug"
-              type="text"
-              required
-              maxlength="200"
-              placeholder="tacoma-nights">
-
-            <div class="form-help">
-              Used for URLs and internal show identification.
-            </div>
-          </div>
-
-          <!-- SHOW KEY -->
-
-          <div class="form-group">
-            <label for="showKey">Show Key *</label>
-
-            <input
-              id="showKey"
-              name="show_key"
-              type="text"
-              required
-              maxlength="200"
-              placeholder="SHOW-TACOMA-NIGHTS">
-          </div>
-
-          <!-- CATEGORY -->
-
-          <div class="form-group">
-            <label for="category">Category *</label>
-
-            <select
-              id="category"
-              name="category"
-              required>
-
-              <option value="original">Original</option>
-              <option value="talk">Talk</option>
-              <option value="live">Live</option>
-              <option value="documentary">Documentary</option>
-              <option value="story">Story</option>
-              <option value="music">Music</option>
-              <option value="news">News</option>
-              <option value="gaming">Gaming</option>
-              <option value="podcast">Podcast</option>
-
-            </select>
-          </div>
-
-          <!-- SHOW TYPE -->
-
-          <div class="form-group">
-            <label for="showType">Show Type</label>
-
-            <input
-              id="showType"
-              name="show_type"
-              type="text"
-              maxlength="100"
-              placeholder="Series, Weekly, Live, Original…">
-          </div>
-
-          <!-- GENRE -->
-
-          <div class="form-group">
-            <label for="genre">Genre</label>
-
-            <input
-              id="genre"
-              name="genre"
-              type="text"
-              maxlength="100"
-              placeholder="Comedy, News, Documentary, Talk…">
-          </div>
-
-          <!-- STATUS -->
-
-          <div class="form-group">
-            <label for="status">Status</label>
-
-            <select
-              id="status"
-              name="status">
-
-              <option value="active">Active</option>
-              <option value="draft">Draft</option>
-              <option value="coming_soon">Coming Soon</option>
-              <option value="archived">Archived</option>
-
-            </select>
-          </div>
-
-          <!-- INITIALS -->
-
-          <div class="form-group">
-            <label for="initials">Initials</label>
-
-            <input
-              id="initials"
-              name="initials"
-              type="text"
-              maxlength="12"
-              placeholder="TN">
-          </div>
-
-          <!-- EPISODE COUNT -->
-
-          <div class="form-group">
-            <label for="episodeCount">Episode Count</label>
-
-            <input
-              id="episodeCount"
-              name="episode_count"
-              type="number"
-              min="0"
-              step="1"
-              value="0">
-
-            <div class="form-help">
-              Stored episode count for this show.
-            </div>
-          </div>
-
-          <!-- SORT ORDER -->
-
-          <div class="form-group">
-            <label for="sortOrder">Sort Order</label>
-
-            <input
-              id="sortOrder"
-              name="sort_order"
-              type="number"
-              step="1"
-              value="0">
-          </div>
-
-          <!-- IMAGE -->
-
-          <div class="form-group">
-            <label for="imageUrl">Primary Image URL</label>
-
-            <input
-              id="imageUrl"
-              name="image_url"
-              type="url"
-              maxlength="1000"
-              placeholder="https://…">
-          </div>
-
-          <!-- THUMBNAIL -->
-
-          <div class="form-group">
-            <label for="thumbnailUrl">Thumbnail URL</label>
-
-            <input
-              id="thumbnailUrl"
-              name="thumbnail_url"
-              type="url"
-              maxlength="1000"
-              placeholder="https://…">
-
-            <div class="form-help">
-              Landscape/card artwork for listings.
-            </div>
-          </div>
-
-          <!-- BANNER -->
-
-          <div class="form-group full">
-            <label for="bannerUrl">Banner URL</label>
-
-            <input
-              id="bannerUrl"
-              name="banner_url"
-              type="url"
-              maxlength="1000"
-              placeholder="https://…">
-
-            <div class="form-help">
-              Large hero/banner artwork for the public show page.
-            </div>
-          </div>
-
-          <!-- DESTINATION -->
-
-          <div class="form-group full">
-            <label for="destinationUrl">Destination URL</label>
-
-            <input
-              id="destinationUrl"
-              name="destination_url"
-              type="url"
-              maxlength="1000"
-              placeholder="https://…">
-          </div>
-
-          <!-- DESCRIPTION -->
-
-          <div class="form-group full">
-            <label for="description">Description</label>
-
-            <textarea
-              id="description"
-              name="description"
-              maxlength="10000"
-              placeholder="Describe the show…"></textarea>
-          </div>
-
-          <!-- FLAGS -->
-
-          <div class="form-group full">
-
-            <label>Show Controls</label>
-
-            <div class="checkbox-row">
-
-              <label class="check">
-                <input
-                  id="isPublished"
-                  type="checkbox">
-                Published
-              </label>
-
-              <label class="check">
-                <input
-                  id="isFeatured"
-                  type="checkbox">
-                Featured
-              </label>
-
-              <label class="check">
-                <input
-                  id="isActive"
-                  type="checkbox"
-                  checked>
-                Active
-              </label>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="modal-footer">
-
-        <button
-          class="btn"
-          id="cancelBtn"
-          type="button">
-          Cancel
-        </button>
-
-        <button
-          class="btn btn-primary"
-          id="saveBtn"
-          type="submit">
-          Save Show
-        </button>
-
-      </div>
-
-    </form>
+    <h1 class="page-title">
+      Shows Management
+    </h1>
 
   </div>
 
 </div>
 
-<!-- =========================
-     TOASTS
-========================= -->
+<div class="top-actions">
 
-<div class="toast-wrap" id="toastWrap"></div>
+  <button class="top-btn" id="refreshTopBtn">
+    ↻ Refresh
+  </button>
+
+  <button class="top-btn" id="logoutBtn">
+    Sign Out
+  </button>
+
+  <button class="top-btn primary" id="newShowTopBtn">
+    + New Show
+  </button>
+
+</div>
+```
+
+  </header>
+
+  <section class="content">
+
+```
+<div class="admin-chip" id="adminChip">
+  <span class="admin-chip-dot"></span>
+  <span id="adminIdentity">Authenticated CrowRules administrator</span>
+</div>
+
+
+<div class="page-head">
+
+  <div>
+
+    <h2>Shows</h2>
+
+    <p>
+      Create, edit, publish and organize CrowRules Entertainment
+      television shows and original series.
+    </p>
+
+  </div>
+
+  <div class="head-actions">
+
+    <button class="btn" id="exportBtn">
+      Export CSV
+    </button>
+
+    <button class="btn" id="refreshBtn">
+      Refresh Data
+    </button>
+
+    <button class="btn primary" id="newShowBtn">
+      + Create Show
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ===================================================
+     STATS
+==================================================== -->
+
+<div class="stats">
+
+  <div class="stat">
+    <div class="stat-label">Total Shows</div>
+    <div class="stat-value" id="totalShows">0</div>
+    <div class="stat-meta">All records</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Active</div>
+    <div class="stat-value" id="activeShows">0</div>
+    <div class="stat-meta">Currently active</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Published</div>
+    <div class="stat-value" id="publishedShows">0</div>
+    <div class="stat-meta">Public catalog</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Live</div>
+    <div class="stat-value" id="liveShows">0</div>
+    <div class="stat-meta">Live programming</div>
+  </div>
+
+  <div class="stat">
+    <div class="stat-label">Genres</div>
+    <div class="stat-value" id="genreCount">0</div>
+    <div class="stat-meta">Unique genres</div>
+  </div>
+
+</div>
+
+
+<!-- ===================================================
+     TOOLBAR
+==================================================== -->
+
+<div class="toolbar">
+
+  <div class="search-box">
+
+    <span class="search-icon">⌕</span>
+
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="Search shows, genres, categories, descriptions..."
+      autocomplete="off"
+    >
+
+  </div>
+
+  <div class="filters">
+
+    <select class="select" id="statusFilter">
+
+      <option value="all">
+        All Statuses
+      </option>
+
+      <option value="active">
+        Active
+      </option>
+
+      <option value="draft">
+        Draft
+      </option>
+
+      <option value="live">
+        Live
+      </option>
+
+      <option value="archived">
+        Archived
+      </option>
+
+    </select>
+
+
+    <select class="select" id="publishedFilter">
+
+      <option value="all">
+        Publication
+      </option>
+
+      <option value="published">
+        Published
+      </option>
+
+      <option value="unpublished">
+        Unpublished
+      </option>
+
+    </select>
+
+
+    <select class="select" id="genreFilter">
+
+      <option value="all">
+        All Genres
+      </option>
+
+    </select>
+
+  </div>
+
+</div>
+
+
+<!-- ===================================================
+     CATALOG
+==================================================== -->
+
+<section class="panel">
+
+  <div class="panel-header">
+
+    <div>
+
+      <div class="panel-title">
+        SHOW CATALOG
+      </div>
+
+      <div class="panel-meta" id="resultMeta">
+        Loading shows...
+      </div>
+
+    </div>
+
+    <button class="btn primary" id="panelNewBtn">
+      + Add Show
+    </button>
+
+  </div>
+
+
+  <div class="table-wrap">
+
+    <div class="loading" id="loading">
+
+      <div class="spinner"></div>
+
+      Loading CrowRules shows...
+
+    </div>
+
+
+    <table id="showTable" style="display:none">
+
+      <thead>
+
+        <tr>
+
+          <th>Show</th>
+          <th>Category</th>
+          <th>Genre</th>
+          <th>Status</th>
+          <th>Published</th>
+          <th>Episodes</th>
+          <th>Created</th>
+          <th>Actions</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody id="showBody"></tbody>
+
+    </table>
+
+
+    <div class="empty" id="emptyState">
+
+      <div class="empty-icon">
+        ▣
+      </div>
+
+      <h3>
+        No Shows Found
+      </h3>
+
+      <p>
+        No shows match the current search or filters.
+        Create a CrowRules show to begin building the catalog.
+      </p>
+
+      <br>
+
+      <button class="btn primary" id="emptyNewBtn">
+        + Create Show
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+```
+
+  </section>
+
+</main>
+
+</div>
+
+<!-- =======================================================
+     AUTH SCREEN
+======================================================= -->
+
+<div class="auth-screen" id="authScreen">
+
+  <div class="auth-card">
+
+```
+<div class="auth-logo">
+  CR
+</div>
+
+<h2 class="auth-title">
+  CrowRules Admin
+</h2>
+
+<p class="auth-sub">
+  Administrator authentication is required to access
+  the CrowRules Entertainment management system.
+</p>
+
+<form id="loginForm">
+
+  <div class="auth-field">
+
+    <label for="loginEmail">
+      Administrator Email
+    </label>
+
+    <input
+      id="loginEmail"
+      type="email"
+      autocomplete="username"
+      required
+      placeholder="admin email"
+    >
+
+  </div>
+
+  <div class="auth-field">
+
+    <label for="loginPassword">
+      Password
+    </label>
+
+    <input
+      id="loginPassword"
+      type="password"
+      autocomplete="current-password"
+      required
+      placeholder="password"
+    >
+
+  </div>
+
+  <button
+    class="auth-button"
+    id="loginButton"
+    type="submit"
+  >
+    Sign In
+  </button>
+
+  <div
+    class="auth-message"
+    id="authMessage"
+  ></div>
+
+</form>
+```
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     ACCESS DENIED
+======================================================= -->
+
+<div class="access-denied" id="accessDenied">
+
+  <div class="denied-card">
+
+```
+<div class="denied-icon">
+  ⚠
+</div>
+
+<h2>
+  Administrator Access Required
+</h2>
+
+<p id="deniedMessage">
+  Your account is authenticated, but it does not have
+  the CrowRules administrator role required to manage shows.
+</p>
+
+<br>
+
+<button class="btn primary" id="deniedLogoutBtn">
+  Sign Out
+</button>
+```
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     CREATE / EDIT MODAL
+======================================================= -->
+
+<div class="modal-backdrop" id="modalBackdrop">
+
+  <div class="modal">
+
+```
+<div class="modal-header">
+
+  <div
+    class="modal-title"
+    id="modalTitle"
+  >
+    CREATE SHOW
+  </div>
+
+  <button
+    class="modal-close"
+    id="modalCloseBtn"
+    type="button"
+  >
+    ×
+  </button>
+
+</div>
+
+
+<form class="form" id="showForm">
+
+  <input
+    type="hidden"
+    id="editId"
+  >
+
+
+  <div class="form-grid">
+
+    <div class="field">
+
+      <label for="showTitle">
+        Show Title
+      </label>
+
+      <input
+        id="showTitle"
+        type="text"
+        required
+        placeholder="Tacoma Nights"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showKey">
+        Show Key
+      </label>
+
+      <input
+        id="showKey"
+        type="text"
+        placeholder="tacoma_nights"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showSlug">
+        Slug
+      </label>
+
+      <input
+        id="showSlug"
+        type="text"
+        required
+        placeholder="tacoma-nights"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showCategory">
+        Category
+      </label>
+
+      <select id="showCategory">
+
+        <option value="">
+          Select Category
+        </option>
+
+        <option value="talk">
+          Talk
+        </option>
+
+        <option value="live">
+          Live
+        </option>
+
+        <option value="documentary">
+          Documentary
+        </option>
+
+        <option value="story">
+          Story
+        </option>
+
+        <option value="music">
+          Music
+        </option>
+
+        <option value="news">
+          News
+        </option>
+
+        <option value="gaming">
+          Gaming
+        </option>
+
+        <option value="podcast">
+          Podcast
+        </option>
+
+        <option value="original">
+          Original
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showGenre">
+        Genre
+      </label>
+
+      <input
+        id="showGenre"
+        type="text"
+        placeholder="Talk / Comedy / Drama"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showType">
+        Show Type
+      </label>
+
+      <input
+        id="showType"
+        type="text"
+        placeholder="Original Series"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showStatus">
+        Status
+      </label>
+
+      <select id="showStatus">
+
+        <option value="active">
+          Active
+        </option>
+
+        <option value="draft">
+          Draft
+        </option>
+
+        <option value="live">
+          Live
+        </option>
+
+        <option value="archived">
+          Archived
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showInitials">
+        Initials
+      </label>
+
+      <input
+        id="showInitials"
+        type="text"
+        maxlength="10"
+        placeholder="TN"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showSortOrder">
+        Sort Order
+      </label>
+
+      <input
+        id="showSortOrder"
+        type="number"
+        min="0"
+        value="0"
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showImage">
+        Image URL
+      </label>
+
+      <input
+        id="showImage"
+        type="url"
+        placeholder="https://..."
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showThumbnail">
+        Thumbnail URL
+      </label>
+
+      <input
+        id="showThumbnail"
+        type="url"
+        placeholder="https://..."
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="showBanner">
+        Banner URL
+      </label>
+
+      <input
+        id="showBanner"
+        type="url"
+        placeholder="https://..."
+      >
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="destinationUrl">
+        Destination URL
+      </label>
+
+      <input
+        id="destinationUrl"
+        type="url"
+        placeholder="https://..."
+      >
+
+    </div>
+
+
+    <div class="field full">
+
+      <label for="showDescription">
+        Description
+      </label>
+
+      <textarea
+        id="showDescription"
+        placeholder="Describe this CrowRules show..."
+      ></textarea>
+
+    </div>
+
+
+    <div class="field">
+
+      <div class="checkbox-field">
+
+        <input
+          id="showFeatured"
+          type="checkbox"
+        >
+
+        <label for="showFeatured">
+          Featured Show
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <div class="checkbox-field">
+
+        <input
+          id="showPublished"
+          type="checkbox"
+        >
+
+        <label for="showPublished">
+          Published
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <div class="checkbox-field">
+
+        <input
+          id="showActive"
+          type="checkbox"
+          checked
+        >
+
+        <label for="showActive">
+          Active
+        </label>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="form-footer">
+
+    <button
+      class="btn"
+      id="cancelBtn"
+      type="button"
+    >
+      Cancel
+    </button>
+
+    <button
+      class="btn primary"
+      id="saveBtn"
+      type="submit"
+    >
+      Create Show
+    </button>
+
+  </div>
+
+</form>
+```
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     VIEW MODAL
+======================================================= -->
+
+<div class="modal-backdrop" id="viewBackdrop">
+
+  <div class="modal">
+
+```
+<div class="modal-header">
+
+  <div class="modal-title">
+    SHOW DETAILS
+  </div>
+
+  <button
+    class="modal-close"
+    id="viewCloseBtn"
+    type="button"
+  >
+    ×
+  </button>
+
+</div>
+
+<div
+  class="view-content"
+  id="viewContent"
+></div>
+```
+
+  </div>
+
+</div>
+
+<!-- =======================================================
+     TOAST
+======================================================= -->
+
+<div class="toast" id="toast">
+
+  <div
+    class="toast-title"
+    id="toastTitle"
+  >
+    CrowRules Admin
+  </div>
+
+  <div
+    class="toast-message"
+    id="toastMessage"
+  >
+    Ready.
+  </div>
+
+</div>
 
 <script>
 /* =========================================================
    CROWRULES ENTERTAINMENT
-   SHOWS ADMIN
-   SUPABASE CONNECTED
-========================================================= */
+   SHOWS ADMIN 2.0
+   ========================================================= */
+
+/* =========================================================
+   SUPABASE CONFIG
+   ========================================================= */
 
 const SUPABASE_URL =
   "https://cevylpnoexugwgygvtgu.supabase.co";
@@ -1703,122 +2433,2483 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
 
-const { createClient } = window.supabase;
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
+  );
 
-const supabaseClient = createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
 
 /* =========================================================
    STATE
-========================================================= */
+   ========================================================= */
 
-let allShows = [];
+let shows = [];
 let filteredShows = [];
-let editingId = null;
+let editingShow = null;
+let currentUser = null;
+
 
 /* =========================================================
    DOM
-========================================================= */
+   ========================================================= */
 
-const els = {
-  table: document.getElementById("showsTable"),
-  body: document.getElementById("showsBody"),
-  state: document.getElementById("tableState"),
+const $ = id =>
+  document.getElementById(id);
 
-  search: document.getElementById("searchInput"),
-  statusFilter: document.getElementById("statusFilter"),
-  categoryFilter: document.getElementById("categoryFilter"),
-  publishedFilter: document.getElementById("publishedFilter"),
-  featuredFilter: document.getElementById("featuredFilter"),
-  resultCount: document.getElementById("resultCount"),
+const authScreen =
+  $("authScreen");
 
-  statTotal: document.getElementById("statTotal"),
-  statPublished: document.getElementById("statPublished"),
-  statDrafts: document.getElementById("statDrafts"),
-  statActive: document.getElementById("statActive"),
-  statFeatured: document.getElementById("statFeatured"),
-  statEpisodes: document.getElementById("statEpisodes"),
+const accessDenied =
+  $("accessDenied");
 
-  modal: document.getElementById("showModal"),
-  modalTitle: document.getElementById("modalTitle"),
-  form: document.getElementById("showForm"),
+const loginForm =
+  $("loginForm");
 
-  showId: document.getElementById("showId"),
-  title: document.getElementById("title"),
-  slug: document.getElementById("slug"),
-  showKey: document.getElementById("showKey"),
-  category: document.getElementById("category"),
-  showType: document.getElementById("showType"),
-  genre: document.getElementById("genre"),
-  status: document.getElementById("status"),
-  initials: document.getElementById("initials"),
-  episodeCount: document.getElementById("episodeCount"),
-  sortOrder: document.getElementById("sortOrder"),
-  imageUrl: document.getElementById("imageUrl"),
-  thumbnailUrl: document.getElementById("thumbnailUrl"),
-  bannerUrl: document.getElementById("bannerUrl"),
-  destinationUrl: document.getElementById("destinationUrl"),
-  description: document.getElementById("description"),
-  isPublished: document.getElementById("isPublished"),
-  isFeatured: document.getElementById("isFeatured"),
-  isActive: document.getElementById("isActive"),
+const authMessage =
+  $("authMessage");
 
-  saveBtn: document.getElementById("saveBtn"),
+const loading =
+  $("loading");
 
-  toastWrap: document.getElementById("toastWrap")
-};
+const showTable =
+  $("showTable");
+
+const showBody =
+  $("showBody");
+
+const emptyState =
+  $("emptyState");
+
+const modalBackdrop =
+  $("modalBackdrop");
+
+const viewBackdrop =
+  $("viewBackdrop");
+
+const showForm =
+  $("showForm");
+
+const searchInput =
+  $("searchInput");
+
+const statusFilter =
+  $("statusFilter");
+
+const publishedFilter =
+  $("publishedFilter");
+
+const genreFilter =
+  $("genreFilter");
+
 
 /* =========================================================
-   UTILITIES
+   INIT
 ========================================================= */
 
-function escapeHtml(value){
-  if(value === null || value === undefined){
-    return "";
+document.addEventListener(
+  "DOMContentLoaded",
+  init
+);
+
+async function init(){
+
+  bindEvents();
+
+  setLoading(true);
+
+  try{
+
+    const {
+      data:{
+        session
+      }
+    } =
+      await supabaseClient.auth.getSession();
+
+    if(session?.user){
+
+      currentUser =
+        session.user;
+
+      await verifyAdminAndLoad();
+
+    }else{
+
+      setLoading(false);
+
+      openAuth();
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    setLoading(false);
+
+    showToast(
+      "Initialization Failed",
+      error.message ||
+      "Could not initialize the admin system."
+    );
+
+    openAuth();
+
   }
 
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+
+  supabaseClient.auth.onAuthStateChange(
+    async(event,session)=>{
+
+      if(event === "SIGNED_OUT"){
+
+        currentUser = null;
+
+        shows = [];
+
+        filteredShows = [];
+
+        closeAllModals();
+
+        openAuth();
+
+      }
+
+    }
+  );
+
 }
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+function bindEvents(){
+
+  searchInput.addEventListener(
+    "input",
+    applyFilters
+  );
+
+  statusFilter.addEventListener(
+    "change",
+    applyFilters
+  );
+
+  publishedFilter.addEventListener(
+    "change",
+    applyFilters
+  );
+
+  genreFilter.addEventListener(
+    "change",
+    applyFilters
+  );
+
+
+  loginForm.addEventListener(
+    "submit",
+    handleLogin
+  );
+
+
+  [
+    "newShowTopBtn",
+    "newShowBtn",
+    "panelNewBtn",
+    "emptyNewBtn"
+  ].forEach(id=>{
+
+    $(id).addEventListener(
+      "click",
+      openCreateModal
+    );
+
+  });
+
+
+  [
+    "refreshTopBtn",
+    "refreshBtn"
+  ].forEach(id=>{
+
+    $(id).addEventListener(
+      "click",
+      loadShows
+    );
+
+  });
+
+
+  $("logoutBtn")
+    .addEventListener(
+      "click",
+      signOut
+    );
+
+  $("deniedLogoutBtn")
+    .addEventListener(
+      "click",
+      signOut
+    );
+
+
+  $("exportBtn")
+    .addEventListener(
+      "click",
+      exportShows
+    );
+
+
+  showForm.addEventListener(
+    "submit",
+    saveShow
+  );
+
+
+  $("cancelBtn")
+    .addEventListener(
+      "click",
+      closeModal
+    );
+
+  $("modalCloseBtn")
+    .addEventListener(
+      "click",
+      closeModal
+    );
+
+  $("viewCloseBtn")
+    .addEventListener(
+      "click",
+      closeViewModal
+    );
+
+
+  modalBackdrop.addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target ===
+        modalBackdrop
+      ){
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+
+  viewBackdrop.addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target ===
+        viewBackdrop
+      ){
+
+        closeViewModal();
+
+      }
+
+    }
+  );
+
+
+  $("menuBtn")
+    .addEventListener(
+      "click",
+      ()=>{
+
+        $("sidebar")
+          .classList.toggle("open");
+
+      }
+    );
+
+
+  document.addEventListener(
+    "keydown",
+    event=>{
+
+      if(
+        event.key === "Escape"
+      ){
+
+        closeModal();
+
+        closeViewModal();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+function openAuth(){
+
+  authScreen.classList.add(
+    "open"
+  );
+
+  setTimeout(
+    () =>
+      $("loginEmail").focus(),
+    100
+  );
+
+}
+
+
+function closeAuth(){
+
+  authScreen.classList.remove(
+    "open"
+  );
+
+}
+
+
+async function handleLogin(event){
+
+  event.preventDefault();
+
+  const email =
+    $("loginEmail")
+      .value
+      .trim();
+
+  const password =
+    $("loginPassword")
+      .value;
+
+  if(!email || !password){
+
+    authMessage.textContent =
+      "Enter your administrator email and password.";
+
+    return;
+
+  }
+
+  const button =
+    $("loginButton");
+
+  button.disabled = true;
+
+  button.textContent =
+    "Signing In...";
+
+  authMessage.textContent =
+    "";
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    if(!data.user){
+
+      throw new Error(
+        "Authentication did not return a user."
+      );
+
+    }
+
+
+    currentUser =
+      data.user;
+
+
+    await verifyAdminAndLoad();
+
+
+  }catch(error){
+
+    console.error(
+      "Login error:",
+      error
+    );
+
+    authMessage.textContent =
+      friendlyError(
+        error
+      );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "Sign In";
+
+  }
+
+}
+
+
+/* =========================================================
+   ADMIN AUTHORIZATION
+========================================================= */
+
+async function verifyAdminAndLoad(){
+
+  try{
+
+    setLoading(true);
+
+
+    const {
+      data:{
+        user
+      },
+      error
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    if(!user){
+
+      openAuth();
+
+      return;
+
+    }
+
+
+    currentUser =
+      user;
+
+
+    const metadata =
+      user.app_metadata || {};
+
+
+    const role =
+      String(
+        metadata.role ||
+        ""
+      )
+      .trim()
+      .toLowerCase();
+
+
+    const crowrulesAdmin =
+      String(
+        metadata.crowrules_admin ||
+        ""
+      )
+      .trim()
+      .toLowerCase();
+
+
+    const allowedRoles =
+      [
+        "admin",
+        "owner",
+        "super_admin"
+      ];
+
+
+    const authorized =
+      allowedRoles.includes(role) ||
+      [
+        "true",
+        "admin",
+        "owner",
+        "super_admin"
+      ].includes(
+        crowrulesAdmin
+      );
+
+
+    if(!authorized){
+
+      setLoading(false);
+
+      $("deniedMessage")
+        .textContent =
+          "Your account is authenticated, but its Supabase app_metadata does not contain an authorized CrowRules administrator role.";
+
+      accessDenied.classList.add(
+        "open"
+      );
+
+      return;
+
+    }
+
+
+    accessDenied.classList.remove(
+      "open"
+    );
+
+    closeAuth();
+
+
+    const email =
+      user.email ||
+      "Authenticated administrator";
+
+
+    $("adminIdentity")
+      .textContent =
+        `${email} • ${role || "admin"}`;
+
+    $("adminChip")
+      .classList.add(
+        "show"
+      );
+
+
+    await loadShows();
+
+
+  }catch(error){
+
+    console.error(
+      "Admin verification error:",
+      error
+    );
+
+    setLoading(false);
+
+    showToast(
+      "Authentication Error",
+      friendlyError(error)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SIGN OUT
+========================================================= */
+
+async function signOut(){
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient.auth.signOut();
+
+    if(error){
+
+      throw error;
+
+    }
+
+    currentUser =
+      null;
+
+    shows = [];
+
+    filteredShows = [];
+
+    closeAllModals();
+
+    openAuth();
+
+
+  }catch(error){
+
+    showToast(
+      "Sign Out Failed",
+      friendlyError(error)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD SHOWS
+========================================================= */
+
+async function loadShows(){
+
+  if(!currentUser){
+
+    return;
+
+  }
+
+
+  setLoading(true);
+
+
+  try{
+
+    /*
+      Explicit column list matches the actual
+      public.shows schema in this project.
+    */
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("shows")
+        .select(`
+          id,
+          show_key,
+          slug,
+          title,
+          category,
+          show_type,
+          description,
+          initials,
+          destination_url,
+          image_url,
+          is_featured,
+          is_active,
+          sort_order,
+          created_at,
+          updated_at,
+          genre,
+          status,
+          thumbnail_url,
+          banner_url,
+          is_published,
+          episode_count
+        `)
+        .order(
+          "sort_order",
+          {
+            ascending:true
+          }
+        )
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        );
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    shows =
+      Array.isArray(data)
+        ? data
+        : [];
+
+
+    /*
+      Refresh actual episode counts from the
+      episodes table rather than trusting stale
+      episode_count values.
+    */
+
+    await loadEpisodeCounts();
+
+
+    updateStats();
+
+    populateGenreFilter();
+
+    applyFilters();
+
+    setLoading(false);
+
+
+  }catch(error){
+
+    console.error(
+      "Shows load error:",
+      error
+    );
+
+    shows = [];
+
+    setLoading(false);
+
+    renderTable();
+
+    showToast(
+      "Shows Load Failed",
+      friendlyError(error)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   EPISODE COUNTS
+========================================================= */
+
+async function loadEpisodeCounts(){
+
+  if(!shows.length){
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("episodes")
+      .select("id,show_id");
+
+
+  if(error){
+
+    /*
+      Episode count failure should not
+      prevent the show catalog itself
+      from loading.
+    */
+
+    console.warn(
+      "Episode count query failed:",
+      error
+    );
+
+    return;
+
+  }
+
+
+  const counts =
+    {};
+
+
+  (data || []).forEach(
+    episode=>{
+
+      const key =
+        String(
+          episode.show_id
+        );
+
+      counts[key] =
+        (counts[key] || 0) + 1;
+
+    }
+  );
+
+
+  shows =
+    shows.map(show=>({
+
+      ...show,
+
+      episode_count:
+        counts[
+          String(show.id)
+        ] || 0
+
+    }));
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+  const total =
+    shows.length;
+
+
+  const active =
+    shows.filter(
+      show =>
+        normalizeStatus(
+          show.status
+        ) === "active" &&
+        show.is_active !== false
+    ).length;
+
+
+  const published =
+    shows.filter(
+      show =>
+        show.is_published === true
+    ).length;
+
+
+  const live =
+    shows.filter(
+      show =>
+        normalizeStatus(
+          show.status
+        ) === "live"
+    ).length;
+
+
+  const genres =
+    new Set(
+      shows
+        .map(
+          show =>
+            String(
+              show.genre ||
+              ""
+            )
+            .trim()
+            .toLowerCase()
+        )
+        .filter(Boolean)
+    );
+
+
+  $("totalShows")
+    .textContent =
+      total;
+
+  $("activeShows")
+    .textContent =
+      active;
+
+  $("publishedShows")
+    .textContent =
+      published;
+
+  $("liveShows")
+    .textContent =
+      live;
+
+  $("genreCount")
+    .textContent =
+      genres.size;
+
+}
+
+
+/* =========================================================
+   GENRE FILTER
+========================================================= */
+
+function populateGenreFilter(){
+
+  const current =
+    genreFilter.value;
+
+
+  const genres =
+    [
+      ...new Set(
+        shows
+          .map(
+            show =>
+              String(
+                show.genre ||
+                ""
+              ).trim()
+          )
+          .filter(Boolean)
+      )
+    ].sort(
+      (a,b)=>
+        a.localeCompare(b)
+    );
+
+
+  genreFilter.innerHTML =
+    `
+      <option value="all">
+        All Genres
+      </option>
+    `;
+
+
+  genres.forEach(
+    genre=>{
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        genre.toLowerCase();
+
+      option.textContent =
+        genre;
+
+      genreFilter.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  if(
+    [...genreFilter.options]
+      .some(
+        option =>
+          option.value ===
+          current
+      )
+  ){
+
+    genreFilter.value =
+      current;
+
+  }
+
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+function applyFilters(){
+
+  const search =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+
+  const status =
+    statusFilter.value;
+
+
+  const published =
+    publishedFilter.value;
+
+
+  const genre =
+    genreFilter.value;
+
+
+  filteredShows =
+    shows.filter(
+      show=>{
+
+        const title =
+          String(
+            show.title ||
+            ""
+          ).toLowerCase();
+
+
+        const description =
+          String(
+            show.description ||
+            ""
+          ).toLowerCase();
+
+
+        const category =
+          String(
+            show.category ||
+            ""
+          ).toLowerCase();
+
+
+        const showGenre =
+          String(
+            show.genre ||
+            ""
+          ).toLowerCase();
+
+
+        const showStatus =
+          normalizeStatus(
+            show.status
+          );
+
+
+        const matchesSearch =
+          !search ||
+          title.includes(search) ||
+          description.includes(search) ||
+          category.includes(search) ||
+          showGenre.includes(search);
+
+
+        const matchesStatus =
+          status === "all" ||
+          showStatus === status;
+
+
+        const matchesPublished =
+          published === "all" ||
+          (
+            published === "published" &&
+            show.is_published === true
+          ) ||
+          (
+            published === "unpublished" &&
+            show.is_published !== true
+          );
+
+
+        const matchesGenre =
+          genre === "all" ||
+          showGenre === genre;
+
+
+        return (
+          matchesSearch &&
+          matchesStatus &&
+          matchesPublished &&
+          matchesGenre
+        );
+
+      }
+    );
+
+
+  renderTable();
+
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+function renderTable(){
+
+  showBody.innerHTML =
+    "";
+
+
+  $("resultMeta")
+    .textContent =
+      `${filteredShows.length} show${filteredShows.length === 1 ? "" : "s"} displayed`;
+
+
+  if(!filteredShows.length){
+
+    showTable.style.display =
+      "none";
+
+    emptyState.style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  showTable.style.display =
+    "table";
+
+  emptyState.style.display =
+    "none";
+
+
+  filteredShows.forEach(
+    show=>{
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+
+      const image =
+        show.thumbnail_url ||
+        show.image_url ||
+        "";
+
+
+      const imageHTML =
+        image
+          ? `
+            <img
+              src="${escapeAttribute(image)}"
+              alt=""
+              loading="lazy"
+              onerror="this.style.display='none'"
+            >
+          `
+          : "▣";
+
+
+      const category =
+        show.category ||
+        "—";
+
+
+      const genre =
+        show.genre ||
+        "—";
+
+
+      const status =
+        normalizeStatus(
+          show.status
+        );
+
+
+      const episodes =
+        Number(
+          show.episode_count ||
+          0
+        );
+
+
+      tr.innerHTML =
+        `
+
+        <td>
+
+          <div class="show-cell">
+
+            <div class="show-poster">
+              ${imageHTML}
+            </div>
+
+            <div>
+
+              <div class="show-name">
+                ${escapeHtml(
+                  show.title ||
+                  "Untitled Show"
+                )}
+              </div>
+
+              <div class="show-id">
+                ${escapeHtml(
+                  String(
+                    show.id ||
+                    ""
+                  ).slice(0,18)
+                )}
+              </div>
+
+            </div>
+
+          </div>
+
+        </td>
+
+
+        <td>
+          <span class="category-text">
+            ${escapeHtml(
+              category
+            )}
+          </span>
+        </td>
+
+
+        <td>
+          ${escapeHtml(
+            genre
+          )}
+        </td>
+
+
+        <td>
+          ${statusBadge(status)}
+        </td>
+
+
+        <td>
+          ${
+            show.is_published === true
+              ? `
+                <span class="badge published">
+                  Published
+                </span>
+              `
+              : `
+                <span class="badge draft">
+                  Hidden
+                </span>
+              `
+          }
+        </td>
+
+
+        <td>
+          <span class="episode-count">
+            ${episodes}
+          </span>
+        </td>
+
+
+        <td>
+          ${formatDate(
+            show.created_at
+          )}
+        </td>
+
+
+        <td>
+
+          <div class="actions">
+
+            <button
+              class="icon-btn"
+              title="Edit"
+              onclick="editShow('${escapeJs(show.id)}')"
+            >
+              ✎
+            </button>
+
+            <button
+              class="icon-btn"
+              title="View"
+              onclick="viewShow('${escapeJs(show.id)}')"
+            >
+              ◉
+            </button>
+
+            <button
+              class="icon-btn"
+              title="Toggle Published"
+              onclick="togglePublished('${escapeJs(show.id)}')"
+            >
+              ${show.is_published ? "◐" : "○"}
+            </button>
+
+            <button
+              class="icon-btn delete"
+              title="Delete"
+              onclick="deleteShow('${escapeJs(show.id)}')"
+            >
+              ×
+            </button>
+
+          </div>
+
+        </td>
+
+        `;
+
+
+      showBody.appendChild(
+        tr
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function normalizeStatus(value){
+
+  const status =
+    String(
+      value ||
+      "active"
+    )
+    .trim()
+    .toLowerCase();
+
+
+  if(
+    status === "published" ||
+    status === "public"
+  ){
+
+    return "active";
+
+  }
+
+
+  return status;
+
+}
+
+
+function statusBadge(status){
+
+  const safe =
+    [
+      "active",
+      "draft",
+      "live",
+      "archived"
+    ].includes(status)
+      ? status
+      : "draft";
+
+
+  const label =
+    safe.charAt(0)
+      .toUpperCase() +
+    safe.slice(1);
+
+
+  return `
+    <span class="badge ${safe}">
+      ${label}
+    </span>
+  `;
+
+}
+
+
+/* =========================================================
+   CREATE
+========================================================= */
+
+function openCreateModal(){
+
+  editingShow =
+    null;
+
+
+  $("modalTitle")
+    .textContent =
+      "CREATE SHOW";
+
+
+  $("saveBtn")
+    .textContent =
+      "Create Show";
+
+
+  showForm.reset();
+
+
+  $("showStatus").value =
+    "active";
+
+  $("showActive").checked =
+    true;
+
+  $("showPublished").checked =
+    false;
+
+  $("showFeatured").checked =
+    false;
+
+  $("showSortOrder").value =
+    "0";
+
+
+  $("editId").value =
+    "";
+
+
+  modalBackdrop.classList.add(
+    "open"
+  );
+
+
+  setTimeout(
+    () =>
+      $("showTitle").focus(),
+    100
+  );
+
+}
+
+
+/* =========================================================
+   EDIT
+========================================================= */
+
+function editShow(id){
+
+  const show =
+    shows.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if(!show){
+
+    showToast(
+      "Error",
+      "Show could not be found."
+    );
+
+    return;
+
+  }
+
+
+  editingShow =
+    show;
+
+
+  $("modalTitle")
+    .textContent =
+      "EDIT SHOW";
+
+
+  $("saveBtn")
+    .textContent =
+      "Save Changes";
+
+
+  $("editId").value =
+    show.id || "";
+
+
+  $("showTitle").value =
+    show.title || "";
+
+
+  $("showKey").value =
+    show.show_key || "";
+
+
+  $("showSlug").value =
+    show.slug ||
+    slugify(
+      show.title ||
+      ""
+    );
+
+
+  $("showCategory").value =
+    show.category ||
+    "";
+
+
+  $("showGenre").value =
+    show.genre ||
+    "";
+
+
+  $("showType").value =
+    show.show_type ||
+    "";
+
+
+  $("showStatus").value =
+    normalizeStatus(
+      show.status
+    );
+
+
+  $("showInitials").value =
+    show.initials ||
+    "";
+
+
+  $("showSortOrder").value =
+    Number(
+      show.sort_order ||
+      0
+    );
+
+
+  $("showImage").value =
+    show.image_url ||
+    "";
+
+
+  $("showThumbnail").value =
+    show.thumbnail_url ||
+    "";
+
+
+  $("showBanner").value =
+    show.banner_url ||
+    "";
+
+
+  $("destinationUrl").value =
+    show.destination_url ||
+    "";
+
+
+  $("showDescription").value =
+    show.description ||
+    "";
+
+
+  $("showFeatured").checked =
+    show.is_featured === true;
+
+
+  $("showPublished").checked =
+    show.is_published === true;
+
+
+  $("showActive").checked =
+    show.is_active !== false;
+
+
+  modalBackdrop.classList.add(
+    "open"
+  );
+
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+async function saveShow(event){
+
+  event.preventDefault();
+
+
+  if(!currentUser){
+
+    showToast(
+      "Authentication Required",
+      "Sign in as a CrowRules administrator."
+    );
+
+    return;
+
+  }
+
+
+  const title =
+    $("showTitle")
+      .value
+      .trim();
+
+
+  if(!title){
+
+    showToast(
+      "Missing Title",
+      "Enter a show title."
+    );
+
+    return;
+
+  }
+
+
+  const slug =
+    $("showSlug")
+      .value
+      .trim() ||
+    slugify(title);
+
+
+  const category =
+    $("showCategory")
+      .value ||
+    null;
+
+
+  const status =
+    $("showStatus")
+      .value;
+
+
+  /*
+    This payload only uses columns that
+    actually exist in public.shows.
+  */
+
+  const payload = {
+
+    title,
+
+    show_key:
+      $("showKey")
+        .value
+        .trim() ||
+      slug
+        .replace(/-/g,"_"),
+
+    slug,
+
+    category,
+
+    show_type:
+      $("showType")
+        .value
+        .trim() ||
+      null,
+
+    description:
+      $("showDescription")
+        .value
+        .trim() ||
+      null,
+
+    initials:
+      $("showInitials")
+        .value
+        .trim() ||
+      null,
+
+    destination_url:
+      $("destinationUrl")
+        .value
+        .trim() ||
+      null,
+
+    image_url:
+      $("showImage")
+        .value
+        .trim() ||
+      null,
+
+    thumbnail_url:
+      $("showThumbnail")
+        .value
+        .trim() ||
+      null,
+
+    banner_url:
+      $("showBanner")
+        .value
+        .trim() ||
+      null,
+
+    genre:
+      $("showGenre")
+        .value
+        .trim() ||
+      null,
+
+    status,
+
+    is_featured:
+      $("showFeatured")
+        .checked,
+
+    is_active:
+      $("showActive")
+        .checked,
+
+    sort_order:
+      Math.max(
+        0,
+        Number(
+          $("showSortOrder")
+            .value ||
+          0
+        )
+      ),
+
+    is_published:
+      $("showPublished")
+        .checked
+
+  };
+
+
+  const button =
+    $("saveBtn");
+
+
+  button.disabled =
+    true;
+
+  button.textContent =
+    "Saving...";
+
+
+  try{
+
+    if(editingShow){
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("shows")
+          .update(payload)
+          .eq(
+            "id",
+            editingShow.id
+          )
+          .select()
+          .single();
+
+
+      if(error){
+
+        throw error;
+
+      }
+
+
+      const index =
+        shows.findIndex(
+          item =>
+            String(item.id) ===
+            String(editingShow.id)
+        );
+
+
+      if(index >= 0){
+
+        shows[index] =
+          {
+            ...shows[index],
+            ...data
+          };
+
+      }
+
+
+      showToast(
+        "Show Updated",
+        `${title} was successfully updated.`
+      );
+
+
+    }else{
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("shows")
+          .insert(payload)
+          .select()
+          .single();
+
+
+      if(error){
+
+        throw error;
+
+      }
+
+
+      shows.unshift(
+        {
+          ...data,
+          episode_count:0
+        }
+      );
+
+
+      showToast(
+        "Show Created",
+        `${title} was successfully created.`
+      );
+
+    }
+
+
+    closeModal();
+
+    updateStats();
+
+    populateGenreFilter();
+
+    applyFilters();
+
+
+  }catch(error){
+
+    console.error(
+      "Save show error:",
+      error
+    );
+
+
+    showToast(
+      "Save Failed",
+      friendlyError(error)
+    );
+
+  }finally{
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      editingShow
+        ? "Save Changes"
+        : "Create Show";
+
+  }
+
+}
+
+
+/* =========================================================
+   TOGGLE PUBLISHED
+========================================================= */
+
+async function togglePublished(id){
+
+  const show =
+    shows.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if(!show){
+
+    return;
+
+  }
+
+
+  const next =
+    show.is_published !== true;
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("shows")
+        .update({
+          is_published:next
+        })
+        .eq(
+          "id",
+          show.id
+        )
+        .select()
+        .single();
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    Object.assign(
+      show,
+      data
+    );
+
+
+    updateStats();
+
+    applyFilters();
+
+
+    showToast(
+      next
+        ? "Show Published"
+        : "Show Unpublished",
+      `${show.title} is now ${
+        next
+          ? "published"
+          : "hidden"
+      }.`
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Publication Failed",
+      friendlyError(error)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deleteShow(id){
+
+  const show =
+    shows.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if(!show){
+
+    return;
+
+  }
+
+
+  const confirmed =
+    confirm(
+      `Delete "${show.title}"?\n\nThis will permanently remove the show record.`
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  try{
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("shows")
+        .delete()
+        .eq(
+          "id",
+          show.id
+        );
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    shows =
+      shows.filter(
+        item =>
+          String(item.id) !==
+          String(id)
+      );
+
+
+    updateStats();
+
+    populateGenreFilter();
+
+    applyFilters();
+
+
+    showToast(
+      "Show Deleted",
+      `${show.title} was removed.`
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Delete error:",
+      error
+    );
+
+
+    showToast(
+      "Delete Failed",
+      friendlyError(error)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   VIEW
+========================================================= */
+
+function viewShow(id){
+
+  const show =
+    shows.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+
+  if(!show){
+
+    return;
+
+  }
+
+
+  const image =
+    show.banner_url ||
+    show.image_url ||
+    show.thumbnail_url ||
+    "";
+
+
+  const hero =
+    image
+      ? `
+        <img
+          src="${escapeAttribute(image)}"
+          alt=""
+          onerror="this.style.display='none'"
+        >
+      `
+      : "";
+
+
+  $("viewContent").innerHTML =
+    `
+
+    <div class="view-hero">
+      ${hero}
+    </div>
+
+    <div class="view-title">
+      ${escapeHtml(
+        show.title ||
+        "Untitled Show"
+      )}
+    </div>
+
+    <div class="view-slug">
+      /${escapeHtml(
+        show.slug ||
+        ""
+      )}
+    </div>
+
+    <div class="view-description">
+      ${escapeHtml(
+        show.description ||
+        "No description provided."
+      )}
+    </div>
+
+
+    <div class="view-grid">
+
+      <div class="view-stat">
+
+        <div class="view-stat-label">
+          Category
+        </div>
+
+        <div class="view-stat-value">
+          ${escapeHtml(
+            show.category ||
+            "—"
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="view-stat">
+
+        <div class="view-stat-label">
+          Genre
+        </div>
+
+        <div class="view-stat-value">
+          ${escapeHtml(
+            show.genre ||
+            "—"
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="view-stat">
+
+        <div class="view-stat-label">
+          Episodes
+        </div>
+
+        <div class="view-stat-value">
+          ${Number(
+            show.episode_count ||
+            0
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="view-stat">
+
+        <div class="view-stat-label">
+          Status
+        </div>
+
+        <div class="view-stat-value">
+          ${escapeHtml(
+            normalizeStatus(
+              show.status
+            )
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="view-stat">
+
+        <div class="view-stat-label">
+          Published
+        </div>
+
+        <div class="view-stat-value">
+          ${
+            show.is_published
+              ? "YES"
+              : "NO"
+          }
+        </div>
+
+      </div>
+
+
+      <div class="view-stat">
+
+        <div class="view-stat-label">
+          Created
+        </div>
+
+        <div class="view-stat-value">
+          ${formatDate(
+            show.created_at
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+    `;
+
+
+  viewBackdrop.classList.add(
+    "open"
+  );
+
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function closeModal(){
+
+  modalBackdrop.classList.remove(
+    "open"
+  );
+
+  editingShow =
+    null;
+
+}
+
+
+function closeViewModal(){
+
+  viewBackdrop.classList.remove(
+    "open"
+  );
+
+}
+
+
+function closeAllModals(){
+
+  closeModal();
+
+  closeViewModal();
+
+}
+
+
+/* =========================================================
+   EXPORT
+========================================================= */
+
+function exportShows(){
+
+  if(!shows.length){
+
+    showToast(
+      "Nothing to Export",
+      "There are no show records."
+    );
+
+    return;
+
+  }
+
+
+  const headers = [
+
+    "id",
+    "show_key",
+    "slug",
+    "title",
+    "category",
+    "genre",
+    "show_type",
+    "description",
+    "initials",
+    "destination_url",
+    "image_url",
+    "thumbnail_url",
+    "banner_url",
+    "status",
+    "is_featured",
+    "is_active",
+    "is_published",
+    "episode_count",
+    "sort_order",
+    "created_at",
+    "updated_at"
+
+  ];
+
+
+  const rows =
+    shows.map(
+      show =>
+        headers
+          .map(
+            key =>
+              csvEscape(
+                show[key] ??
+                ""
+              )
+          )
+          .join(",")
+    );
+
+
+  const csv =
+    [
+      headers.join(","),
+      ...rows
+    ].join("\n");
+
+
+  const blob =
+    new Blob(
+      [csv],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+
+  link.href =
+    url;
+
+  link.download =
+    `crowrules-shows-${new Date()
+      .toISOString()
+      .slice(0,10)}.csv`;
+
+
+  document.body.appendChild(
+    link
+  );
+
+  link.click();
+
+  link.remove();
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  showToast(
+    "Export Complete",
+    `${shows.length} shows exported.`
+  );
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function setLoading(value){
+
+  loading.style.display =
+    value
+      ? "block"
+      : "none";
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+
+function showToast(
+  title,
+  message
+){
+
+  $("toastTitle")
+    .textContent =
+      title;
+
+  $("toastMessage")
+    .textContent =
+      message;
+
+
+  const toast =
+    $("toast");
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      () =>
+        toast.classList.remove(
+          "show"
+        ),
+      4500
+    );
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function slugify(value){
-  return String(value || "")
+
+  return String(
+    value ||
+    ""
+  )
     .toLowerCase()
     .trim()
-    .replace(/['"]/g,"")
-    .replace(/[^a-z0-9]+/g,"-")
-    .replace(/^-+|-+$/g,"");
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    );
+
 }
 
-function makeShowKey(slug){
-  const clean = slugify(slug || "show")
-    .toUpperCase()
-    .replace(/-/g,"_");
-
-  const random = Math.random()
-    .toString(36)
-    .slice(2,7)
-    .toUpperCase();
-
-  return `SHOW_${clean}_${random}`;
-}
 
 function formatDate(value){
+
   if(!value){
+
     return "—";
+
   }
 
-  const date = new Date(value);
 
-  if(Number.isNaN(date.getTime())){
+  const date =
+    new Date(value);
+
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
     return "—";
+
   }
+
 
   return date.toLocaleDateString(
     undefined,
@@ -1828,1521 +4919,153 @@ function formatDate(value){
       day:"numeric"
     }
   );
+
 }
 
-function normalizeStatus(status){
-  if(!status){
-    return "draft";
-  }
 
-  return String(status).toLowerCase().trim();
-}
+function escapeHtml(value){
 
-function statusLabel(status){
-  const value = normalizeStatus(status);
-
-  const labels = {
-    active:"Active",
-    draft:"Draft",
-    archived:"Archived",
-    coming_soon:"Coming Soon"
-  };
-
-  return labels[value] || String(status);
-}
-
-function categoryLabel(category){
-  if(!category){
-    return "—";
-  }
-
-  return String(category)
-    .replaceAll("_"," ")
-    .replace(/\b\w/g,c => c.toUpperCase());
-}
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-function toast(
-  title,
-  message,
-  type = "success"
-){
-  const item = document.createElement("div");
-
-  item.className = `toast ${type}`;
-
-  item.innerHTML = `
-    <div class="toast-title">
-      ${escapeHtml(title)}
-    </div>
-
-    <div class="toast-message">
-      ${escapeHtml(message)}
-    </div>
-  `;
-
-  els.toastWrap.appendChild(item);
-
-  setTimeout(() => {
-    item.remove();
-  },5000);
-}
-
-/* =========================================================
-   SUPABASE ERROR HANDLING
-========================================================= */
-
-function readableSupabaseError(error){
-  if(!error){
-    return "Unknown Supabase error.";
-  }
-
-  const message =
-    error.message ||
-    error.details ||
-    error.hint ||
-    String(error);
-
-  const lower = message.toLowerCase();
-
-  if(
-    lower.includes("permission denied") ||
-    lower.includes("row-level security") ||
-    lower.includes("rls")
-  ){
-    return (
-      "Supabase denied access to public.shows. " +
-      "Check the table's RLS policies and make sure your " +
-      "authenticated admin role is allowed to SELECT/INSERT/UPDATE rows."
-    );
-  }
-
-  if(lower.includes("schema cache")){
-    return (
-      "Supabase's schema cache does not recognize one of the shows fields. " +
-      "Refresh the project schema/API cache and verify the column exists."
-    );
-  }
-
-  if(lower.includes("violates row-level security")){
-    return (
-      "This operation was blocked by Row Level Security on public.shows."
-    );
-  }
-
-  return message;
-}
-
-/* =========================================================
-   AUTH
-========================================================= */
-
-async function checkSession(){
-
-  const {
-    data,
-    error
-  } = await supabaseClient.auth.getSession();
-
-  if(error){
-    console.error(error);
-
-    els.userEmail.textContent =
-      "Session error";
-
-    return null;
-  }
-
-  const session = data.session;
-
-  if(!session){
-    els.userEmail.textContent =
-      "Not signed in";
-
-    toast(
-      "Authentication Required",
-      "No active Supabase session was found.",
-      "warning"
+  return String(
+    value
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
     );
 
-    return null;
-  }
-
-  els.userEmail.textContent =
-    session.user.email ||
-    "Authenticated Admin";
-
-  return session;
 }
 
-supabaseClient.auth.onAuthStateChange(
-  (_event,session) => {
 
-    if(session){
+function escapeAttribute(value){
 
-      els.userEmail.textContent =
-        session.user.email ||
-        "Authenticated Admin";
-
-    }else{
-
-      els.userEmail.textContent =
-        "Not signed in";
-
-    }
-
-  }
-);
-
-/* =========================================================
-   LOAD SHOWS
-========================================================= */
-
-async function loadShows(){
-
-  showLoading();
-
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("shows")
-    .select(`
-      id,
-      show_key,
-      slug,
-      title,
-      category,
-      show_type,
-      description,
-      initials,
-      destination_url,
-      image_url,
-      genre,
-      status,
-      thumbnail_url,
-      banner_url,
-      is_published,
-      episode_count,
-      is_featured,
-      is_active,
-      sort_order,
-      created_at,
-      updated_at
-    `)
-    .order("sort_order",{ascending:true})
-    .order("title",{ascending:true});
-
-  if(error){
-
-    console.error(
-      "Failed to load shows:",
-      error
-    );
-
-    showError(
-      readableSupabaseError(error)
-    );
-
-    toast(
-      "Unable to Load Shows",
-      readableSupabaseError(error),
-      "error"
-    );
-
-    return;
-  }
-
-  allShows = Array.isArray(data)
-    ? data
-    : [];
-
-  updateStats();
-  applyFilters();
-
-  if(!allShows.length){
-    showEmpty();
-  }
-}
-
-/* =========================================================
-   TABLE STATES
-========================================================= */
-
-function showLoading(){
-
-  els.table.classList.add("hidden");
-  els.state.classList.remove("hidden");
-
-  els.state.innerHTML = `
-    <div class="state-icon">◌</div>
-    <div class="state-title">Loading Shows</div>
-    <div class="state-text">
-      Loading show records from Supabase…
-    </div>
-  `;
-}
-
-function showEmpty(){
-
-  els.table.classList.add("hidden");
-  els.state.classList.remove("hidden");
-
-  els.state.innerHTML = `
-    <div class="state-icon">◇</div>
-    <div class="state-title">No Shows Found</div>
-    <div class="state-text">
-      Create your first CrowRules TV show to begin building the catalog.
-    </div>
-  `;
-}
-
-function showError(message){
-
-  els.table.classList.add("hidden");
-  els.state.classList.remove("hidden");
-
-  els.state.innerHTML = `
-    <div class="state-icon">!</div>
-    <div class="state-title">Database Access Error</div>
-    <div class="state-text">
-      ${escapeHtml(message)}
-    </div>
-
-    <div style="margin-top:18px;">
-      <button
-        class="btn btn-small"
-        type="button"
-        onclick="loadShows()">
-        Retry
-      </button>
-    </div>
-  `;
-}
-
-/* =========================================================
-   STATS
-========================================================= */
-
-function updateStats(){
-
-  const total =
-    allShows.length;
-
-  const published =
-    allShows.filter(
-      show => show.is_published === true
-    ).length;
-
-  const drafts =
-    allShows.filter(
-      show => normalizeStatus(show.status) === "draft"
-    ).length;
-
-  const active =
-    allShows.filter(
-      show => show.is_active === true
-    ).length;
-
-  const featured =
-    allShows.filter(
-      show => show.is_featured === true
-    ).length;
-
-  const episodes =
-    allShows.reduce(
-      (sum,show) =>
-        sum + Number(show.episode_count || 0),
-      0
-    );
-
-  els.statTotal.textContent =
-    total.toLocaleString();
-
-  els.statPublished.textContent =
-    published.toLocaleString();
-
-  els.statDrafts.textContent =
-    drafts.toLocaleString();
-
-  els.statActive.textContent =
-    active.toLocaleString();
-
-  els.statFeatured.textContent =
-    featured.toLocaleString();
-
-  els.statEpisodes.textContent =
-    episodes.toLocaleString();
-}
-
-/* =========================================================
-   FILTERS
-========================================================= */
-
-function applyFilters(){
-
-  const query =
-    els.search.value
-      .trim()
-      .toLowerCase();
-
-  const status =
-    els.statusFilter.value;
-
-  const category =
-    els.categoryFilter.value;
-
-  const published =
-    els.publishedFilter.value;
-
-  const featured =
-    els.featuredFilter.value;
-
-  filteredShows =
-    allShows.filter(show => {
-
-      const searchable = [
-        show.title,
-        show.slug,
-        show.show_key,
-        show.genre,
-        show.category,
-        show.show_type,
-        show.description
-      ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-
-      if(
-        query &&
-        !searchable.includes(query)
-      ){
-        return false;
-      }
-
-      if(
-        status &&
-        normalizeStatus(show.status) !== status
-      ){
-        return false;
-      }
-
-      if(
-        category &&
-        show.category !== category
-      ){
-        return false;
-      }
-
-      if(
-        published === "published" &&
-        show.is_published !== true
-      ){
-        return false;
-      }
-
-      if(
-        published === "unpublished" &&
-        show.is_published === true
-      ){
-        return false;
-      }
-
-      if(
-        featured === "featured" &&
-        show.is_featured !== true
-      ){
-        return false;
-      }
-
-      if(
-        featured === "standard" &&
-        show.is_featured === true
-      ){
-        return false;
-      }
-
-      return true;
-    });
-
-  renderTable();
-
-}
-
-/* =========================================================
-   RENDER TABLE
-========================================================= */
-
-function renderTable(){
-
-  els.resultCount.textContent =
-    `${filteredShows.length.toLocaleString()} show${filteredShows.length === 1 ? "" : "s"}`;
-
-  if(!filteredShows.length){
-
-    if(allShows.length){
-      els.table.classList.add("hidden");
-      els.state.classList.remove("hidden");
-
-      els.state.innerHTML = `
-        <div class="state-icon">⌕</div>
-        <div class="state-title">No Matching Shows</div>
-        <div class="state-text">
-          Try changing your search or filters.
-        </div>
-      `;
-
-    }else{
-      showEmpty();
-    }
-
-    return;
-  }
-
-  els.state.classList.add("hidden");
-  els.table.classList.remove("hidden");
-
-  els.body.innerHTML =
-    filteredShows
-      .map(renderShowRow)
-      .join("");
-}
-
-function renderShowRow(show){
-
-  const artwork =
-    show.thumbnail_url ||
-    show.image_url ||
-    "";
-
-  const initials =
-    escapeHtml(
-      show.initials ||
-      String(show.title || "CR")
-        .slice(0,2)
-        .toUpperCase()
-    );
-
-  const status =
-    normalizeStatus(show.status);
-
-  const statusClass =
-    status === "active"
-      ? "green"
-      : status === "coming_soon"
-        ? "blue"
-        : status === "archived"
-          ? "red"
-          : "yellow";
-
-  return `
-    <tr>
-
-      <td>
-
-        <div class="show-cell">
-
-          <div class="show-thumb">
-
-            ${
-              artwork
-                ? `
-                  <img
-                    src="${escapeHtml(artwork)}"
-                    alt=""
-                    loading="lazy"
-                    onerror="this.style.display='none';this.parentElement.textContent='${initials}'">
-                `
-                : initials
-            }
-
-          </div>
-
-          <div>
-
-            <div class="show-title">
-              ${escapeHtml(show.title)}
-            </div>
-
-            <div class="show-meta">
-              ${escapeHtml(show.slug || "No slug")}
-              ·
-              ${escapeHtml(show.show_key || "No key")}
-            </div>
-
-          </div>
-
-        </div>
-
-      </td>
-
-      <td>
-        <span class="badge">
-          ${escapeHtml(categoryLabel(show.category))}
-        </span>
-      </td>
-
-      <td>
-        ${
-          show.genre
-            ? escapeHtml(show.genre)
-            : '<span style="color:#555;">—</span>'
-        }
-      </td>
-
-      <td>
-        <span class="badge ${statusClass}">
-          ${escapeHtml(statusLabel(show.status))}
-        </span>
-      </td>
-
-      <td>
-        <strong>
-          ${Number(show.episode_count || 0).toLocaleString()}
-        </strong>
-      </td>
-
-      <td>
-        ${
-          show.is_published
-            ? '<span class="badge green">Published</span>'
-            : '<span class="badge yellow">Unpublished</span>'
-        }
-      </td>
-
-      <td>
-        ${
-          show.is_featured
-            ? '<span class="badge red">Featured</span>'
-            : '<span class="badge">Standard</span>'
-        }
-      </td>
-
-      <td>
-        ${
-          show.is_active
-            ? '<span class="badge green">Active</span>'
-            : '<span class="badge red">Inactive</span>'
-        }
-      </td>
-
-      <td>
-        <span class="mono">
-          ${formatDate(show.updated_at)}
-        </span>
-      </td>
-
-      <td>
-
-        <div class="actions">
-
-          <button
-            class="btn btn-small"
-            type="button"
-            onclick="editShow('${show.id}')">
-            Edit
-          </button>
-
-          <button
-            class="btn btn-small ${show.is_published ? "" : "btn-success"}"
-            type="button"
-            onclick="togglePublished('${show.id}')">
-            ${show.is_published ? "Unpublish" : "Publish"}
-          </button>
-
-          <button
-            class="btn btn-small"
-            type="button"
-            onclick="toggleFeatured('${show.id}')">
-            ${show.is_featured ? "Unfeature" : "Feature"}
-          </button>
-
-          <button
-            class="btn btn-small btn-danger"
-            type="button"
-            onclick="archiveShow('${show.id}')">
-            Archive
-          </button>
-
-        </div>
-
-      </td>
-
-    </tr>
-  `;
-}
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-function openModal(show = null){
-
-  editingId =
-    show
-      ? show.id
-      : null;
-
-  els.form.reset();
-
-  if(show){
-
-    els.modalTitle.textContent =
-      "EDIT SHOW";
-
-    els.showId.value =
-      show.id || "";
-
-    els.title.value =
-      show.title || "";
-
-    els.slug.value =
-      show.slug || "";
-
-    els.showKey.value =
-      show.show_key || "";
-
-    els.category.value =
-      show.category || "original";
-
-    els.showType.value =
-      show.show_type || "";
-
-    els.genre.value =
-      show.genre || "";
-
-    els.status.value =
-      show.status || "draft";
-
-    els.initials.value =
-      show.initials || "";
-
-    els.episodeCount.value =
-      Number(show.episode_count || 0);
-
-    els.sortOrder.value =
-      Number(show.sort_order || 0);
-
-    els.imageUrl.value =
-      show.image_url || "";
-
-    els.thumbnailUrl.value =
-      show.thumbnail_url || "";
-
-    els.bannerUrl.value =
-      show.banner_url || "";
-
-    els.destinationUrl.value =
-      show.destination_url || "";
-
-    els.description.value =
-      show.description || "";
-
-    els.isPublished.checked =
-      show.is_published === true;
-
-    els.isFeatured.checked =
-      show.is_featured === true;
-
-    els.isActive.checked =
-      show.is_active === true;
-
-  }else{
-
-    els.modalTitle.textContent =
-      "NEW SHOW";
-
-    els.category.value =
-      "original";
-
-    els.status.value =
-      "draft";
-
-    els.episodeCount.value =
-      0;
-
-    els.sortOrder.value =
-      0;
-
-    els.isPublished.checked =
-      false;
-
-    els.isFeatured.checked =
-      false;
-
-    els.isActive.checked =
-      true;
-
-  }
-
-  els.modal.classList.add("open");
-
-  setTimeout(() => {
-    els.title.focus();
-  },100);
-}
-
-function closeModal(){
-
-  els.modal.classList.remove("open");
-
-  editingId = null;
-}
-
-/* =========================================================
-   CREATE / UPDATE
-========================================================= */
-
-async function saveShow(event){
-
-  event.preventDefault();
-
-  els.saveBtn.disabled =
-    true;
-
-  els.saveBtn.textContent =
-    "Saving…";
-
-  try{
-
-    let title =
-      els.title.value.trim();
-
-    let slug =
-      els.slug.value.trim();
-
-    if(!title){
-      throw new Error(
-        "Show title is required."
-      );
-    }
-
-    if(!slug){
-      slug =
-        slugify(title);
-
-      els.slug.value =
-        slug;
-    }
-
-    if(!slug){
-      throw new Error(
-        "A valid slug is required."
-      );
-    }
-
-    let showKey =
-      els.showKey.value.trim();
-
-    if(!showKey){
-      showKey =
-        makeShowKey(slug);
-
-      els.showKey.value =
-        showKey;
-    }
-
-    const episodeCount =
-      Math.max(
-        0,
-        Number.parseInt(
-          els.episodeCount.value || "0",
-          10
-        )
-      );
-
-    const payload = {
-
-      show_key:
-        showKey,
-
-      slug:
-        slug,
-
-      title:
-        title,
-
-      category:
-        els.category.value,
-
-      show_type:
-        nullableString(
-          els.showType.value
-        ),
-
-      description:
-        nullableString(
-          els.description.value
-        ),
-
-      initials:
-        nullableString(
-          els.initials.value
-        ),
-
-      destination_url:
-        nullableString(
-          els.destinationUrl.value
-        ),
-
-      image_url:
-        nullableString(
-          els.imageUrl.value
-        ),
-
-      genre:
-        nullableString(
-          els.genre.value
-        ),
-
-      status:
-        nullableString(
-          els.status.value
-        ),
-
-      thumbnail_url:
-        nullableString(
-          els.thumbnailUrl.value
-        ),
-
-      banner_url:
-        nullableString(
-          els.bannerUrl.value
-        ),
-
-      is_published:
-        els.isPublished.checked,
-
-      episode_count:
-        episodeCount,
-
-      is_featured:
-        els.isFeatured.checked,
-
-      is_active:
-        els.isActive.checked,
-
-      sort_order:
-        Number.parseInt(
-          els.sortOrder.value || "0",
-          10
-        ) || 0
-
-    };
-
-    let response;
-
-    if(editingId){
-
-      response =
-        await supabaseClient
-          .from("shows")
-          .update(payload)
-          .eq("id",editingId)
-          .select()
-          .single();
-
-    }else{
-
-      response =
-        await supabaseClient
-          .from("shows")
-          .insert(payload)
-          .select()
-          .single();
-
-    }
-
-    if(response.error){
-
-      console.error(
-        "Save show error:",
-        response.error
-      );
-
-      throw new Error(
-        readableSupabaseError(
-          response.error
-        )
-      );
-    }
-
-    toast(
-      editingId
-        ? "Show Updated"
-        : "Show Created",
-
-      editingId
-        ? `${title} was updated successfully.`
-        : `${title} was added to the shows catalog.`,
-
-      "success"
-    );
-
-    closeModal();
-
-    await loadShows();
-
-  }catch(error){
-
-    console.error(
-      "Save show failed:",
-      error
-    );
-
-    toast(
-      "Saving Show Failed",
-      error.message ||
-        "Unable to save the show.",
-      "error"
-    );
-
-  }finally{
-
-    els.saveBtn.disabled =
-      false;
-
-    els.saveBtn.textContent =
-      "Save Show";
-
-  }
-}
-
-function nullableString(value){
-
-  const clean =
-    String(value || "").trim();
-
-  return clean
-    ? clean
-    : null;
-}
-
-/* =========================================================
-   EDIT
-========================================================= */
-
-window.editShow =
-  function(id){
-
-    const show =
-      allShows.find(
-        item => item.id === id
-      );
-
-    if(!show){
-      toast(
-        "Show Not Found",
-        "The selected show could not be found.",
-        "error"
-      );
-
-      return;
-    }
-
-    openModal(show);
-  };
-
-/* =========================================================
-   TOGGLE PUBLISHED
-========================================================= */
-
-window.togglePublished =
-  async function(id){
-
-    const show =
-      allShows.find(
-        item => item.id === id
-      );
-
-    if(!show){
-      return;
-    }
-
-    const newValue =
-      !show.is_published;
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("shows")
-        .update({
-          is_published:
-            newValue
-        })
-        .eq("id",id);
-
-    if(error){
-
-      console.error(error);
-
-      toast(
-        "Publishing Failed",
-        readableSupabaseError(error),
-        "error"
-      );
-
-      return;
-    }
-
-    toast(
-      newValue
-        ? "Show Published"
-        : "Show Unpublished",
-
-      `${show.title} is now ${
-        newValue
-          ? "published"
-          : "unpublished"
-      }.`,
-      "success"
-    );
-
-    await loadShows();
-  };
-
-/* =========================================================
-   TOGGLE FEATURED
-========================================================= */
-
-window.toggleFeatured =
-  async function(id){
-
-    const show =
-      allShows.find(
-        item => item.id === id
-      );
-
-    if(!show){
-      return;
-    }
-
-    const newValue =
-      !show.is_featured;
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("shows")
-        .update({
-          is_featured:
-            newValue
-        })
-        .eq("id",id);
-
-    if(error){
-
-      console.error(error);
-
-      toast(
-        "Featured Update Failed",
-        readableSupabaseError(error),
-        "error"
-      );
-
-      return;
-    }
-
-    toast(
-      newValue
-        ? "Show Featured"
-        : "Show Unfeatured",
-
-      `${show.title} was ${
-        newValue
-          ? "marked as featured"
-          : "removed from featured shows"
-      }.`,
-      "success"
-    );
-
-    await loadShows();
-  };
-
-/* =========================================================
-   ARCHIVE
-========================================================= */
-
-window.archiveShow =
-  async function(id){
-
-    const show =
-      allShows.find(
-        item => item.id === id
-      );
-
-    if(!show){
-      return;
-    }
-
-    const confirmed =
-      window.confirm(
-        `Archive "${show.title}"?\n\n` +
-        `The show will be marked archived and inactive.`
-      );
-
-    if(!confirmed){
-      return;
-    }
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("shows")
-        .update({
-          status:"archived",
-          is_active:false,
-          is_published:false
-        })
-        .eq("id",id);
-
-    if(error){
-
-      console.error(error);
-
-      toast(
-        "Archive Failed",
-        readableSupabaseError(error),
-        "error"
-      );
-
-      return;
-    }
-
-    toast(
-      "Show Archived",
-      `${show.title} has been archived.`,
-      "success"
-    );
-
-    await loadShows();
-  };
-
-/* =========================================================
-   CSV EXPORT
-========================================================= */
-
-function exportCSV(){
-
-  if(!filteredShows.length){
-
-    toast(
-      "Nothing to Export",
-      "There are no shows matching the current filters.",
-      "warning"
-    );
-
-    return;
-  }
-
-  const headers = [
-    "id",
-    "show_key",
-    "slug",
-    "title",
-    "category",
-    "show_type",
-    "genre",
-    "status",
-    "description",
-    "initials",
-    "destination_url",
-    "image_url",
-    "thumbnail_url",
-    "banner_url",
-    "episode_count",
-    "is_published",
-    "is_featured",
-    "is_active",
-    "sort_order",
-    "created_at",
-    "updated_at"
-  ];
-
-  const rows =
-    filteredShows.map(show =>
-      headers.map(
-        header =>
-          csvEscape(show[header])
-      )
-    );
-
-  const csv =
-    [
-      headers.join(","),
-      ...rows.map(
-        row => row.join(",")
-      )
-    ].join("\n");
-
-  const blob =
-    new Blob(
-      [csv],
-      {
-        type:"text/csv;charset=utf-8;"
-      }
-    );
-
-  const url =
-    URL.createObjectURL(blob);
-
-  const link =
-    document.createElement("a");
-
-  link.href =
-    url;
-
-  link.download =
-    `crowrules-shows-${new Date().toISOString().slice(0,10)}.csv`;
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  link.remove();
-
-  URL.revokeObjectURL(url);
-
-  toast(
-    "CSV Exported",
-    `${filteredShows.length} show records exported.`,
-    "success"
+  return escapeHtml(
+    value
   );
+
 }
+
+
+function escapeJs(value){
+
+  return String(
+    value
+  )
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    )
+    .replace(
+      /"/g,
+      '\\"'
+    )
+    .replace(
+      /\n/g,
+      "\\n"
+    )
+    .replace(
+      /\r/g,
+      "\\r"
+    );
+
+}
+
 
 function csvEscape(value){
 
-  if(value === null || value === undefined){
-    return "";
+  return `"${String(
+    value
+  ).replace(
+    /"/g,
+    '""'
+  )}"`;
+
+}
+
+
+function friendlyError(error){
+
+  if(!error){
+
+    return "Unknown Supabase error.";
+
   }
 
-  const stringValue =
-    String(value);
+
+  const message =
+    String(
+      error.message ||
+      error.error_description ||
+      error
+    );
+
 
   if(
-    stringValue.includes(",") ||
-    stringValue.includes('"') ||
-    stringValue.includes("\n")
+    /permission denied/i.test(
+      message
+    )
   ){
-    return `"${stringValue.replaceAll('"','""')}"`;
-  }
 
-  return stringValue;
-}
-
-/* =========================================================
-   AUTO SLUG / KEY
-========================================================= */
-
-els.title.addEventListener(
-  "input",
-  () => {
-
-    if(editingId){
-      return;
-    }
-
-    const generated =
-      slugify(
-        els.title.value
-      );
-
-    els.slug.value =
-      generated;
-
-    els.showKey.value =
-      generated
-        ? makeShowKey(generated)
-        : "";
-  }
-);
-
-els.slug.addEventListener(
-  "input",
-  () => {
-
-    if(editingId){
-      return;
-    }
-
-    if(!els.slug.value.trim()){
-      els.showKey.value =
-        "";
-      return;
-    }
-
-    els.showKey.value =
-      makeShowKey(
-        els.slug.value
-      );
-  }
-);
-
-/* =========================================================
-   EVENTS
-========================================================= */
-
-els.search.addEventListener(
-  "input",
-  applyFilters
-);
-
-els.statusFilter.addEventListener(
-  "change",
-  applyFilters
-);
-
-els.categoryFilter.addEventListener(
-  "change",
-  applyFilters
-);
-
-els.publishedFilter.addEventListener(
-  "change",
-  applyFilters
-);
-
-els.featuredFilter.addEventListener(
-  "change",
-  applyFilters
-);
-
-document
-  .getElementById("newShowBtn")
-  .addEventListener(
-    "click",
-    () => openModal()
-  );
-
-document
-  .getElementById("refreshBtn")
-  .addEventListener(
-    "click",
-    () => loadShows()
-  );
-
-document
-  .getElementById("exportBtn")
-  .addEventListener(
-    "click",
-    exportCSV
-  );
-
-document
-  .getElementById("modalClose")
-  .addEventListener(
-    "click",
-    closeModal
-  );
-
-document
-  .getElementById("cancelBtn")
-  .addEventListener(
-    "click",
-    closeModal
-  );
-
-els.form.addEventListener(
-  "submit",
-  saveShow
-);
-
-els.modal.addEventListener(
-  "click",
-  event => {
-
-    if(
-      event.target === els.modal
-    ){
-      closeModal();
-    }
+    return "Supabase denied access. Make sure you are signed in with the CrowRules administrator account.";
 
   }
-);
 
-document.addEventListener(
-  "keydown",
-  event => {
 
-    if(
-      event.key === "Escape" &&
-      els.modal.classList.contains("open")
-    ){
-      closeModal();
-    }
+  if(
+    /row-level security/i.test(
+      message
+    )
+  ){
+
+    return "Row Level Security blocked this operation. Your account must have an authorized CrowRules admin role in app_metadata.";
 
   }
-);
 
-/* =========================================================
-   SIGN OUT
-========================================================= */
 
-document
-  .getElementById("signOutBtn")
-  .addEventListener(
-    "click",
-    async () => {
+  if(
+    /invalid login credentials/i.test(
+      message
+    )
+  ){
 
-      const {
-        error
-      } =
-        await supabaseClient.auth.signOut();
+    return "The administrator email or password is incorrect.";
 
-      if(error){
+  }
 
-        toast(
-          "Sign Out Failed",
-          error.message,
-          "error"
-        );
 
-        return;
-      }
+  if(
+    /duplicate key/i.test(
+      message
+    )
+  ){
 
-      window.location.href =
-        "login.html";
-    }
-  );
+    return "A show with that unique key or slug already exists.";
 
-/* =========================================================
-   MOBILE MENU
-========================================================= */
+  }
 
-document
-  .getElementById("mobileToggle")
-  .addEventListener(
-    "click",
-    () => {
 
-      document.body.classList.toggle(
-        "sidebar-open"
-      );
-
-    }
-  );
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-async function init(){
-
-  await checkSession();
-
-  await loadShows();
+  return message;
 
 }
-
-init();
-
 </script>
 
 </body>
