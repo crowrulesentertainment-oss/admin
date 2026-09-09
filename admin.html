@@ -3,302 +3,4605 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CrowRules Entertainment — Admin</title>
+
+<title>CrowRules Entertainment — Universal Admin</title>
+
 <meta name="theme-color" content="#050505">
-<meta name="description" content="CrowRules Entertainment Universal Supabase Administration">
+<meta name="description" content="CrowRules Entertainment Universal Supabase Administration and Dream World Command Center">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{--bg:#050505;--panel:#0d0d11;--panel2:#111117;--panel3:#15151c;--line:#27272f;--line2:#383842;--text:#f5f5f7;--muted:#8d8d98;--accent:#b66cff;--accent2:#6c5cff;--cyan:#37d7ff;--green:#45e69a;--yellow:#f3c969;--red:#ff526d;--orange:#ff8a4c}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Montserrat,system-ui,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 85% 5%,rgba(182,108,255,.12),transparent 32%),radial-gradient(circle at 10% 90%,rgba(55,215,255,.06),transparent 30%)}
-.app{display:flex;min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:285px;background:rgba(9,9,12,.97);border-right:1px solid var(--line);overflow:auto;z-index:20}.brand{padding:22px 20px;border-bottom:1px solid var(--line)}.brand b{font:800 19px Orbitron}.brand small{display:block;color:var(--muted);margin-top:5px;font-size:10px;letter-spacing:2px;text-transform:uppercase}.nav{padding:12px}.nav-group{margin:13px 0}.nav-title{padding:8px 10px;color:#6e6e78;font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase}.nav button{display:flex;width:100%;align-items:center;gap:10px;border:1px solid transparent;background:transparent;color:#b8b8c1;padding:10px;border-radius:9px;text-align:left;margin:2px 0}.nav button:hover,.nav button.active{background:linear-gradient(90deg,rgba(182,108,255,.15),rgba(108,92,255,.06));border-color:rgba(182,108,255,.25);color:#fff}.nav .ico{width:22px;text-align:center}.main{margin-left:285px;width:calc(100% - 285px);min-width:0}.topbar{height:70px;border-bottom:1px solid var(--line);background:rgba(7,7,9,.88);backdrop-filter:blur(12px);display:flex;align-items:center;gap:12px;padding:0 24px;position:sticky;top:0;z-index:15}.hamb{display:none}.search{flex:1;max-width:620px;position:relative}.search input{width:100%;background:var(--panel);border:1px solid var(--line);color:#fff;border-radius:10px;padding:11px 14px 11px 40px;outline:none}.search span{position:absolute;left:14px;top:10px;color:var(--muted)}.clock{color:var(--muted);font:600 11px Orbitron;white-space:nowrap}.admin-chip{border:1px solid rgba(69,230,154,.25);background:rgba(69,230,154,.08);color:var(--green);border-radius:999px;padding:8px 11px;font-size:10px;font-weight:800}.content{padding:26px;max-width:1800px;margin:auto}.hero{padding:28px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,rgba(182,108,255,.12),rgba(17,17,23,.9) 45%,rgba(55,215,255,.05));box-shadow:0 20px 60px rgba(0,0,0,.25)}.eyebrow{color:var(--accent);font:800 10px Orbitron;letter-spacing:2px;text-transform:uppercase}.hero h1{font:800 30px Orbitron;margin:9px 0}.hero p{color:var(--muted);max-width:800px;margin:0;line-height:1.7}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.btn{border:1px solid var(--line2);background:var(--panel2);color:#fff;border-radius:9px;padding:10px 14px;font-weight:700}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent}.btn.danger{color:var(--red);border-color:rgba(255,82,109,.3)}.btn:disabled{opacity:.45;cursor:not-allowed}.stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:16px 0}.stat,.card{border:1px solid var(--line);background:var(--panel);border-radius:14px}.stat{padding:17px}.stat small{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px}.stat strong{display:block;font:800 25px Orbitron;margin-top:7px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:25px 0 12px}.section-head h2{font:700 17px Orbitron;margin:0}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.module{padding:18px;min-height:130px}.module h3{margin:0 0 8px;font:700 14px Orbitron}.module p{font-size:12px;color:var(--muted);line-height:1.6}.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.toolbar input,.toolbar select,.form input,.form select,.form textarea{background:#09090c;border:1px solid var(--line2);color:#fff;border-radius:8px;padding:10px;outline:none;width:100%}.toolbar .grow{flex:1;min-width:220px}.table-wrap{border:1px solid var(--line);border-radius:14px;overflow:auto;background:var(--panel)}table{border-collapse:collapse;width:100%;min-width:850px}th,td{padding:12px;border-bottom:1px solid var(--line);text-align:left;font-size:11px;vertical-align:top}th{font:700 10px Orbitron;color:#a9a9b2;background:#101016;position:sticky;top:0;z-index:1}td{color:#d4d4da}tr:hover td{background:rgba(182,108,255,.035)}.row-actions{display:flex;gap:5px}.mini{padding:6px 8px;border-radius:7px;font-size:10px}.empty{text-align:center;padding:45px;color:var(--muted)}.loading{padding:45px;text-align:center;color:var(--cyan)}.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}.modal.open{display:flex}.modal-box{width:min(850px,100%);max-height:92vh;overflow:auto;background:#0b0b0f;border:1px solid var(--line2);border-radius:16px;box-shadow:0 30px 100px #000}.modal-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.modal-head h3{margin:0;font:700 16px Orbitron}.modal-body{padding:20px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:10px;color:#a9a9b2;font-weight:800;text-transform:uppercase;letter-spacing:.8px}.field textarea{min-height:120px;resize:vertical}.field.checkbox{flex-direction:row;align-items:center}.field.checkbox input{width:auto}.form-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:15px;border-top:1px solid var(--line)}.toast{position:fixed;right:20px;bottom:20px;background:#101016;border:1px solid var(--line2);padding:13px 16px;border-radius:10px;box-shadow:0 15px 50px #000;z-index:100;display:none;max-width:420px;font-size:12px}.toast.show{display:block}.toast.ok{border-color:rgba(69,230,154,.4)}.toast.err{border-color:rgba(255,82,109,.5)}.login{min-height:100vh;display:grid;place-items:center;padding:20px}.loginbox{width:min(470px,100%);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:28px;text-align:center}.loginbox h1{font:800 23px Orbitron}.loginbox p{color:var(--muted);font-size:12px;line-height:1.7}.hidden{display:none!important}.danger-text{color:var(--red)}.success-text{color:var(--green)}
-@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:none}.main{margin-left:0;width:100%}.hamb{display:block;border:1px solid var(--line);background:var(--panel);color:#fff;border-radius:8px;padding:9px}.topbar{padding:0 12px}.clock{display:none}.content{padding:15px}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.search{max-width:none}.admin-chip{display:none}}
+:root{
+  --bg:#050505;
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#3a3a46;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
+
+  --dream:#c78cff;
+  --dream2:#7157ff;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Montserrat,system-ui,sans-serif;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 85% 5%,rgba(182,108,255,.13),transparent 32%),
+    radial-gradient(circle at 10% 90%,rgba(55,215,255,.06),transparent 30%);
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:285px;
+  background:rgba(9,9,12,.98);
+  border-right:1px solid var(--line);
+  overflow:auto;
+  z-index:50;
+}
+
+.brand{
+  padding:22px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.brand b{
+  font:800 19px Orbitron;
+}
+
+.brand small{
+  display:block;
+  color:var(--muted);
+  margin-top:5px;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.nav{
+  padding:12px;
+}
+
+.nav-group{
+  margin:13px 0;
+}
+
+.nav-title{
+  padding:8px 10px;
+  color:#6e6e78;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+}
+
+.nav-title.dream-title{
+  color:var(--dream);
+}
+
+.nav button{
+  display:flex;
+  width:100%;
+  align-items:center;
+  gap:10px;
+  border:1px solid transparent;
+  background:transparent;
+  color:#b8b8c1;
+  padding:10px;
+  border-radius:9px;
+  text-align:left;
+  margin:2px 0;
+  transition:.15s ease;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(182,108,255,.16),
+      rgba(108,92,255,.07)
+    );
+  border-color:rgba(182,108,255,.25);
+  color:#fff;
+}
+
+.nav button.dream-item:hover,
+.nav button.dream-item.active{
+  background:
+    linear-gradient(
+      90deg,
+      rgba(199,140,255,.18),
+      rgba(113,87,255,.09)
+    );
+  border-color:rgba(199,140,255,.30);
+}
+
+.nav .ico{
+  width:22px;
+  min-width:22px;
+  text-align:center;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+  margin-left:285px;
+  width:calc(100% - 285px);
+  min-width:0;
+}
+
+.topbar{
+  height:70px;
+  border-bottom:1px solid var(--line);
+  background:rgba(7,7,9,.90);
+  backdrop-filter:blur(12px);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 24px;
+  position:sticky;
+  top:0;
+  z-index:40;
+}
+
+.hamb{
+  display:none;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#fff;
+  border-radius:8px;
+  padding:9px;
+}
+
+.search{
+  flex:1;
+  max-width:700px;
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:#fff;
+  border-radius:10px;
+  padding:11px 14px 11px 40px;
+  outline:none;
+}
+
+.search input:focus{
+  border-color:rgba(182,108,255,.55);
+  box-shadow:0 0 0 3px rgba(182,108,255,.08);
+}
+
+.search span{
+  position:absolute;
+  left:14px;
+  top:10px;
+  color:var(--muted);
+}
+
+.clock{
+  color:var(--muted);
+  font:600 11px Orbitron;
+  white-space:nowrap;
+}
+
+.admin-chip{
+  border:1px solid rgba(69,230,154,.25);
+  background:rgba(69,230,154,.08);
+  color:var(--green);
+  border-radius:999px;
+  padding:8px 11px;
+  font-size:10px;
+  font-weight:800;
+  max-width:280px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.content{
+  padding:26px;
+  max-width:1900px;
+  margin:auto;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+  padding:28px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(182,108,255,.12),
+      rgba(17,17,23,.92) 45%,
+      rgba(55,215,255,.05)
+    );
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.hero.dream{
+  background:
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(199,140,255,.20),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(113,87,255,.17),
+      rgba(17,17,23,.95) 48%,
+      rgba(199,140,255,.07)
+    );
+  border-color:rgba(199,140,255,.28);
+}
+
+.eyebrow{
+  color:var(--accent);
+  font:800 10px Orbitron;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.hero.dream .eyebrow{
+  color:var(--dream);
+}
+
+.hero h1{
+  font:800 30px Orbitron;
+  margin:9px 0;
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:900px;
+  margin:0;
+  line-height:1.7;
+  font-size:13px;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.btn{
+  border:1px solid var(--line2);
+  background:var(--panel2);
+  color:#fff;
+  border-radius:9px;
+  padding:10px 14px;
+  font-weight:700;
+  transition:.15s ease;
+}
+
+.btn:hover{
+  border-color:#555562;
+  transform:translateY(-1px);
+}
+
+.btn.primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-color:transparent;
+}
+
+.btn.dream{
+  background:linear-gradient(135deg,var(--dream),var(--dream2));
+  border-color:transparent;
+}
+
+.btn.danger{
+  color:var(--red);
+  border-color:rgba(255,82,109,.3);
+}
+
+.btn.success{
+  color:var(--green);
+  border-color:rgba(69,230,154,.3);
+}
+
+.btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.mini{
+  padding:6px 8px;
+  border-radius:7px;
+  font-size:10px;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:12px;
+  margin:16px 0;
+}
+
+.stat,
+.card{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:14px;
+}
+
+.stat{
+  padding:17px;
+}
+
+.stat small{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.stat strong{
+  display:block;
+  font:800 25px Orbitron;
+  margin-top:7px;
+}
+
+.stat.dream-stat{
+  border-color:rgba(199,140,255,.22);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(199,140,255,.08),
+      var(--panel)
+    );
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin:25px 0 12px;
+}
+
+.section-head h2{
+  font:700 17px Orbitron;
+  margin:0;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.module{
+  padding:18px;
+  min-height:130px;
+  transition:.15s ease;
+}
+
+.module:hover{
+  transform:translateY(-2px);
+  border-color:#41414d;
+}
+
+.module.dream-module{
+  border-color:rgba(199,140,255,.20);
+}
+
+.module h3{
+  margin:0 0 8px;
+  font:700 14px Orbitron;
+}
+
+.module p{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.toolbar{
+  display:flex;
+  gap:9px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.toolbar input,
+.toolbar select,
+.form input,
+.form select,
+.form textarea{
+  background:#09090c;
+  border:1px solid var(--line2);
+  color:#fff;
+  border-radius:8px;
+  padding:10px;
+  outline:none;
+  width:100%;
+}
+
+.toolbar input:focus,
+.toolbar select:focus,
+.form input:focus,
+.form select:focus,
+.form textarea:focus{
+  border-color:rgba(182,108,255,.55);
+}
+
+.toolbar .grow{
+  flex:1;
+  min-width:220px;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrap{
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:auto;
+  background:var(--panel);
+}
+
+table{
+  border-collapse:collapse;
+  width:100%;
+  min-width:900px;
+}
+
+th,
+td{
+  padding:12px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+  font-size:11px;
+  vertical-align:top;
+}
+
+th{
+  font:700 10px Orbitron;
+  color:#a9a9b2;
+  background:#101016;
+  position:sticky;
+  top:0;
+  z-index:1;
+}
+
+td{
+  color:#d4d4da;
+  max-width:360px;
+  word-break:break-word;
+}
+
+tr:hover td{
+  background:rgba(182,108,255,.035);
+}
+
+.row-actions{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+.empty{
+  text-align:center;
+  padding:45px;
+  color:var(--muted);
+}
+
+.loading{
+  padding:45px;
+  text-align:center;
+  color:var(--cyan);
+}
+
+.error-box{
+  padding:28px;
+  color:var(--red);
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(1000px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:#0b0b0f;
+  border:1px solid var(--line2);
+  border-radius:16px;
+  box-shadow:0 30px 100px #000;
+}
+
+.modal-head{
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  background:#0b0b0f;
+  z-index:2;
+}
+
+.modal-head h3{
+  margin:0;
+  font:700 16px Orbitron;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+.field label{
+  font-size:10px;
+  color:#a9a9b2;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+}
+
+.field textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.field.checkbox{
+  flex-direction:row;
+  align-items:center;
+}
+
+.field.checkbox input{
+  width:auto;
+}
+
+.field small{
+  color:var(--muted);
+  font-size:9px;
+}
+
+.form-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:18px;
+  padding-top:15px;
+  border-top:1px solid var(--line);
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#101016;
+  border:1px solid var(--line2);
+  padding:13px 16px;
+  border-radius:10px;
+  box-shadow:0 15px 50px #000;
+  z-index:200;
+  display:none;
+  max-width:480px;
+  font-size:12px;
+}
+
+.toast.show{
+  display:block;
+}
+
+.toast.ok{
+  border-color:rgba(69,230,154,.4);
+}
+
+.toast.err{
+  border-color:rgba(255,82,109,.5);
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:20px;
+}
+
+.loginbox{
+  width:min(480px,100%);
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 30px 100px #000;
+}
+
+.loginbox h1{
+  font:800 23px Orbitron;
+}
+
+.loginbox p{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+
+.login-email{
+  margin:18px 0 10px;
+}
+
+.login-email input{
+  width:100%;
+  background:#09090c;
+  border:1px solid var(--line2);
+  color:#fff;
+  border-radius:9px;
+  padding:12px;
+  outline:none;
+}
+
+.login-status{
+  min-height:20px;
+  margin:12px 0;
+  color:var(--muted);
+  font-size:11px;
+}
+
+/* =========================================================
+   HEALTH
+========================================================= */
+
+.health-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.health-card{
+  padding:18px;
+}
+
+.health-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  display:inline-block;
+  margin-right:7px;
+  background:var(--green);
+  box-shadow:0 0 12px rgba(69,230,154,.5);
+}
+
+.health-dot.bad{
+  background:var(--red);
+  box-shadow:0 0 12px rgba(255,82,109,.5);
+}
+
+.health-dot.warn{
+  background:var(--yellow);
+  box-shadow:0 0 12px rgba(243,201,105,.5);
+}
+
+/* =========================================================
+   DREAM DASHBOARD
+========================================================= */
+
+.dream-banner{
+  position:relative;
+  overflow:hidden;
+}
+
+.dream-banner:after{
+  content:"✦";
+  position:absolute;
+  right:55px;
+  top:25px;
+  color:rgba(199,140,255,.18);
+  font-size:100px;
+  font-family:Orbitron;
+}
+
+.dream-cards{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+  margin-top:16px;
+}
+
+.dream-card{
+  padding:18px;
+  border:1px solid rgba(199,140,255,.22);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(199,140,255,.08),
+      rgba(17,17,23,.96)
+    );
+  border-radius:14px;
+}
+
+.dream-card small{
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-size:9px;
+}
+
+.dream-card strong{
+  display:block;
+  font:800 27px Orbitron;
+  margin-top:8px;
+  color:#fff;
+}
+
+.dream-card span{
+  display:block;
+  color:var(--dream);
+  margin-top:6px;
+  font-size:10px;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:1200px){
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .dream-cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .health-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:760px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.2s;
+  }
+
+  .sidebar.open{
+    transform:none;
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+  }
+
+  .hamb{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 12px;
+  }
+
+  .clock{
+    display:none;
+  }
+
+  .content{
+    padding:15px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .dream-cards{
+    grid-template-columns:1fr;
+  }
+
+  .health-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .search{
+    max-width:none;
+  }
+
+  .admin-chip{
+    display:none;
+  }
+
+  .hero{
+    padding:21px;
+  }
+
+  .hero h1{
+    font-size:23px;
+  }
+}
 </style>
 </head>
+
 <body>
+
+<!-- =======================================================
+     LOGIN
+======================================================= -->
 
 <div id="loginView" class="login hidden">
   <div class="loginbox">
-    <div class="eyebrow">CrowRules Entertainment</div>
-    <h1>ADMIN ACCESS</h1>
-    <p id="loginMessage">Sign in with your authorized CrowRules administrator account to continue.</p>
-    <button class="btn primary" onclick="signIn()">Sign In</button>
+
+    <div class="eyebrow">
+      CrowRules Entertainment
+    </div>
+
+    <h1>ADMIN COMMAND</h1>
+
+    <p id="loginMessage">
+      Sign in with your authorized CrowRules administrator account.
+    </p>
+
+    <div class="login-email">
+      <input
+        id="loginEmail"
+        type="email"
+        placeholder="Admin email address"
+        autocomplete="email"
+      >
+    </div>
+
+    <div id="loginStatus" class="login-status"></div>
+
+    <button
+      id="loginButton"
+      class="btn primary"
+      onclick="signIn()"
+    >
+      Send Admin Login Link
+    </button>
+
   </div>
 </div>
+
+
+<!-- =======================================================
+     APP
+======================================================= -->
 
 <div id="app" class="app hidden">
+
   <aside class="sidebar" id="sidebar">
-    <div class="brand"><b>CROWRULES</b><small>Entertainment • Admin Command</small></div>
+
+    <div class="brand">
+      <b>CROWRULES</b>
+      <small>Entertainment • Admin Command</small>
+    </div>
+
     <nav class="nav" id="nav"></nav>
+
   </aside>
 
+
   <main class="main">
+
     <header class="topbar">
-      <button class="hamb" onclick="toggleSidebar()">☰</button>
-      <div class="search"><span>⌕</span><input id="globalSearch" placeholder="Search current module..." oninput="renderCurrent()"></div>
+
+      <button
+        class="hamb"
+        onclick="toggleSidebar()"
+        aria-label="Open navigation"
+      >
+        ☰
+      </button>
+
+      <div class="search">
+        <span>⌕</span>
+
+        <input
+          id="globalSearch"
+          placeholder="Search current module..."
+          oninput="handleSearch()"
+        >
+      </div>
+
       <div class="clock" id="clock"></div>
-      <div class="admin-chip" id="adminChip">ADMIN</div>
+
+      <div class="admin-chip" id="adminChip">
+        ADMIN
+      </div>
+
     </header>
+
+
     <section class="content" id="content"></section>
+
   </main>
+
 </div>
+
+
+<!-- =======================================================
+     MODAL
+======================================================= -->
 
 <div class="modal" id="modal">
+
   <div class="modal-box">
-    <div class="modal-head"><h3 id="modalTitle">Edit</h3><button class="btn" onclick="closeModal()">✕</button></div>
-    <div class="modal-body" id="modalBody"></div>
+
+    <div class="modal-head">
+
+      <h3 id="modalTitle">
+        Edit
+      </h3>
+
+      <button
+        class="btn"
+        onclick="closeModal()"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div
+      class="modal-body"
+      id="modalBody"
+    ></div>
+
   </div>
+
 </div>
-<div class="toast" id="toast"></div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
 
 <script>
-const SUPABASE_URL = "https://cevylpnoexugwgygvtgu.supabase.co";
-const SUPABASE_KEY = "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
-const sb = supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-const MODULES = [
- {group:"COMMAND CENTER",items:[
-  ["dashboard","⌂","Dashboard",null],["analytics","◈","Analytics","analytics_events"],["activity","◉","Activity","activity"],["system-health","♥","System Health",null]
- ]},
- {group:"CONTENT",items:[
-  ["articles","▤","Articles","articles"],["shows","▣","Shows","shows"],["episodes","▶","Episodes","episodes"],["tv-catalog","▦","TV Catalog","crowrules_tv_catalog"],["schedule","◷","TV Schedule","schedule_items"]
- ]},
- {group:"MEMBERS",items:[
-  ["members","●","Members","members"],["member-profiles","◎","Member Profiles","membership_profiles"],["membership-plans","◆","Membership Plans","membership_plans"],["subscriptions","↔","Subscriptions","membership_subscriptions"],["watch-history","◷","Watch History","membership_watch_history"],["friends","♢","Friendships","member_friendships"],["leaderboard","★","Leaderboard","leaderboard_entries"]
- ]},
- {group:"CROWRSPACE / COMMUNITY",items:[
-  ["community-spaces","▰","Community Spaces","community_spaces"],["community-members","●","Community Members","community_members"],["community-posts","✎","Community Posts","community_posts"],["community-comments","☷","Comments","community_comments"],["community-topics","#","Topics","community_topics"],["community-reports","⚠","Reports","community_reports"],["crowspace","☁","CrowSpace Members","crowspace_members"],["crowspace-posts","✦","CrowSpace Posts","crowspace_posts"],["crowspace-groups","◆","CrowSpace Groups","crowspace_groups"]
- ]},
- {group:"CREATORS / STUDIO",items:[
-  ["creators","✧","Creators","creators"],["creator-submissions","↗","Creator Submissions","creator_submissions"],["studio-projects","▣","Studio Projects","studio_projects"],["production-areas","⌘","Production Areas","studio_production_areas"],["studio-inquiries","✉","Studio Inquiries","studio_project_inquiries"]
- ]},
- {group:"PODCASTING",items:[
-  ["podcasts","◉","Podcasts","podcasts"],["podcast-episodes","▶","Podcast Episodes","podcast_episodes"],["podcast-categories","#","Podcast Categories","podcast_categories"],["podcast-schedule","◷","Podcast Schedule","podcast_schedule"],["podcast-news","▤","Podcast News","podcast_news"],["podcast-newsroom","▥","Newsroom Articles","podcast_newsroom_articles"],["podcast-live","●","Podcast Live Channels","podcast_live_channels"],["podcast-tags","#","Newsroom Tags","podcast_newsroom_tags"]
- ]},
- {group:"CROWRULES RECORDS",items:[
-  ["artists","♫","Artists","artists"],["albums","▤","Albums","albums"],["tracks","♪","Tracks","album_tracks"]
- ]},
- {group:"SPORTS CENTER",items:[
-  ["sports-leagues","🏆","Leagues","sports_leagues"],["sports-teams","●","Teams","sports_teams"],["sports-games","▣","Games","sports_games"],["sports-standings","≡","Standings","sports_standings"],["sports-rankings","★","Rankings","sports_rankings"],["sports-players","●","Players","sports_players"],["sports-news","▤","Sports News","sports_news"],["pickem-challenges","✓","Pick'em Challenges","sports_pickem_challenges"],["pickem-options","☑","Pick'em Options","sports_pickem_options"],["sports-live","●","Live Events","sports_live_events"],["sports-broadcasts","▶","Broadcasts","sports_broadcasts"],["sports-settings","⚙","Sports Settings","sports_settings"]
- ]},
- {group:"MEMORIALS",items:[
-  ["memorials","†","Memorials","memorials"],["memorial-photos","▧","Memorial Photos","memorial_photos"],["memorial-videos","▶","Memorial Videos","memorial_videos"],["memorial-stories","▤","Memorial Stories","memorial_stories"],["memorial-tributes","♡","Tributes","memorial_tributes"],["memorial-candles","♨","Candles","memorial_candles"],["memorial-guestbook","✎","Guestbook","memorial_guestbook"],["memorial-categories","#","Memorial Categories","memorial_categories"]
- ]},
- {group:"SPECTRUM AWARDS",items:[
-  ["awards","★","Awards","awards"],["award-categories","#","Award Categories","award_categories"],["award-nominees","●","Nominees","award_nominees"],["award-votes","✓","Votes","award_votes"],["award-winners","♛","Winners","award_winners"],["award-ceremonies","◷","Ceremonies","award_ceremonies"],["spectrum-categories","#","Spectrum Categories","spectrum_award_categories"],["spectrum-nominees","●","Spectrum Nominees","spectrum_award_nominees"],["spectrum-nominations","↗","Nominations","spectrum_award_nominations"],["spectrum-events","◷","Spectrum Events","spectrum_award_events"],["spectrum-hof","♛","Hall of Fame","spectrum_award_hall_of_fame"],["spectrum-settings","⚙","Awards Settings","spectrum_awards_settings"]
- ]},
- {group:"HOLIDAYS",items:[
-  ["holiday-years","◷","Holiday Years","holiday_years"],["holidays","★","Holidays","holidays"],["holiday-pages","▤","Holiday Pages","holiday_pages"],["holiday-events","◷","Holiday Events","holiday_events"],["holiday-programming","▶","Holiday Programming","holiday_programming"],["holiday-content","▦","Holiday Content","holiday_content"],["holiday-countdowns","⌛","Countdowns","holiday_countdowns"]
- ]},
- {group:"YEARBOOKS / PUBLISHING",items:[
-  ["yearbook-editions","▤","Yearbook Editions","yearbook_editions"],["yearbook-projects","▣","Yearbook Projects","yearbook_projects"],["yearbook-sections","☷","Yearbook Sections","yearbook_sections"],["yearbook-interest","✉","Yearbook Interest","yearbook_interest"],["school-profiles","⌂","School Profiles","school_profiles"],["school-yearbook-projects","▣","School Projects","school_yearbook_projects"],["publishing","▤","Publishing","publishing_publications"]
- ]},
- {group:"BUSINESS",items:[
-  ["business-services","◆","Services","business_services"],["business-inquiries","✉","Business Inquiries","business_inquiries"],["partnerships","↔","Partnerships","business_partnerships"],["contact-messages","✉","Contact Messages","contact_messages"],["partner-inquiries","✉","Partner Inquiries","partner_inquiries"],["press-inquiries","▤","Press Inquiries","press_inquiries"],["careers","◆","Jobs","career_jobs"],["applications","✉","Applications","career_applications"],["shop","▣","Shop Products","shop_products"],["shop-interest","♡","Product Interest","shop_product_interest"]
- ]},
- {group:"INFRASTRUCTURE",items:[
-  ["about-content","▤","About Content","crowrules_about_content"],["launches","⌛","Site Launches","site_launches"],["api-endpoints","⌘","API Endpoints","api_endpoints"],["api-keys","⚿","API Keys","api_keys"],["api-webhooks","↗","Webhooks","api_webhooks"],["api-logs","▤","API Request Logs","api_request_logs"],["analytics-daily","◈","Daily Analytics","analytics_daily"],["analytics-realtime","●","Realtime Analytics","analytics_realtime"],["death-runs","†","Celebrity Death Runs","celebrity_death_discovery_runs"]
- ]},
- {group:"SYSTEM",items:[
-  ["database","▦","Database Explorer","__database__"],["settings","⚙","Admin Settings",null],["signout","⇥","Sign Out",null]
- ]}
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const sb =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* =========================================================
+   STATIC NAVIGATION
+========================================================= */
+
+const STATIC_MODULES = [
+
+  {
+    group:"COMMAND CENTER",
+    items:[
+      ["dashboard","⌂","Dashboard",null],
+      ["analytics","◈","Analytics","analytics_events"],
+      ["activity","◉","Activity","activity"],
+      ["system-health","♥","System Health",null]
+    ]
+  },
+
+  {
+    group:"CONTENT",
+    items:[
+      ["articles","▤","Articles","articles"],
+      ["shows","▣","Shows","shows"],
+      ["episodes","▶","Episodes","episodes"],
+      ["tv-catalog","▦","TV Catalog","crowrules_tv_catalog"],
+      ["schedule","◷","TV Schedule","schedule_items"]
+    ]
+  },
+
+  {
+    group:"MEMBERS",
+    items:[
+      ["members","●","Members","members"],
+      ["member-profiles","◎","Member Profiles","membership_profiles"],
+      ["membership-plans","◆","Membership Plans","membership_plans"],
+      ["subscriptions","↔","Subscriptions","membership_subscriptions"],
+      ["watch-history","◷","Watch History","membership_watch_history"],
+      ["friends","♢","Friendships","member_friendships"],
+      ["leaderboard","★","Leaderboard","leaderboard_entries"],
+      ["leaderboard-seasons","◷","Leaderboard Seasons","leaderboard_seasons"],
+      ["leaderboard-events","◉","Leaderboard Events","leaderboard_events"]
+    ]
+  },
+
+  {
+    group:"CROWRSPACE / COMMUNITY",
+    items:[
+      ["community-spaces","▰","Community Spaces","community_spaces"],
+      ["community-members","●","Community Members","community_members"],
+      ["community-posts","✎","Community Posts","community_posts"],
+      ["community-comments","☷","Comments","community_comments"],
+      ["community-topics","#","Topics","community_topics"],
+      ["community-reports","⚠","Reports","community_reports"],
+      ["crowspace","☁","CrowSpace Members","crowspace_members"],
+      ["crowspace-posts","✦","CrowSpace Posts","crowspace_posts"],
+      ["crowspace-groups","◆","CrowSpace Groups","crowspace_groups"],
+      ["crowspace-channels","▰","CrowSpace Channels","crowspace_channels"]
+    ]
+  },
+
+  {
+    group:"CREATORS / STUDIO",
+    items:[
+      ["creators","✧","Creators","creators"],
+      ["creator-submissions","↗","Creator Submissions","creator_submissions"],
+      ["studio-projects","▣","Studio Projects","studio_projects"],
+      ["production-areas","⌘","Production Areas","studio_production_areas"],
+      ["studio-inquiries","✉","Studio Inquiries","studio_project_inquiries"]
+    ]
+  },
+
+  {
+    group:"PODCASTING",
+    items:[
+      ["podcasts","◉","Podcasts","podcasts"],
+      ["podcast-episodes","▶","Podcast Episodes","podcast_episodes"],
+      ["podcast-categories","#","Podcast Categories","podcast_categories"],
+      ["podcast-schedule","◷","Podcast Schedule","podcast_schedule"],
+      ["podcast-news","▤","Podcast News","podcast_news"],
+      ["podcast-newsroom","▥","Newsroom Articles","podcast_newsroom_articles"],
+      ["podcast-live","●","Podcast Live Channels","podcast_live_channels"],
+      ["podcast-tags","#","Newsroom Tags","podcast_newsroom_tags"],
+      ["podcast-transcripts","▤","Transcripts","podcast_transcripts"],
+      ["podcast-comments","☷","Comments","podcast_comments"],
+      ["podcast-listens","◷","Listens","podcast_listens"],
+      ["podcast-progress","◷","Episode Progress","podcast_episode_progress"],
+      ["podcast-saved","♡","Saved Episodes","podcast_saved_episodes"]
+    ]
+  },
+
+  {
+    group:"CROWRULES RECORDS",
+    items:[
+      ["artists","♫","Artists","artists"],
+      ["albums","▤","Albums","albums"],
+      ["tracks","♪","Tracks","album_tracks"]
+    ]
+  },
+
+  {
+    group:"SPORTS CENTER",
+    items:[
+      ["sports-leagues","🏆","Leagues","sports_leagues"],
+      ["sports-teams","●","Teams","sports_teams"],
+      ["sports-games","▣","Games","sports_games"],
+      ["sports-standings","≡","Standings","sports_standings"],
+      ["sports-rankings","★","Rankings","sports_rankings"],
+      ["sports-players","●","Players","sports_players"],
+      ["sports-news","▤","Sports News","sports_news"],
+      ["pickem-challenges","✓","Pick'em Challenges","sports_pickem_challenges"],
+      ["pickem-options","☑","Pick'em Options","sports_pickem_options"],
+      ["sports-live","●","Live Events","sports_live_events"],
+      ["sports-broadcasts","▶","Broadcasts","sports_broadcasts"],
+      ["sports-settings","⚙","Sports Settings","sports_settings"],
+      ["sports-player-rankings","★","Player Rankings","sports_player_rankings"],
+      ["sports-player-sync","↻","Player Sync Runs","sports_player_sync_runs"],
+      ["sports-game-sync","↻","Game Sync Runs","sports_game_sync_runs"],
+      ["sports-newsletter","✉","Newsletter Subscribers","sports_newsletter_subscribers"]
+    ]
+  },
+
+  {
+    group:"MEMORIALS",
+    items:[
+      ["memorials","†","Memorials","memorials"],
+      ["memorial-photos","▧","Memorial Photos","memorial_photos"],
+      ["memorial-videos","▶","Memorial Videos","memorial_videos"],
+      ["memorial-stories","▤","Memorial Stories","memorial_stories"],
+      ["memorial-tributes","♡","Tributes","memorial_tributes"],
+      ["memorial-candles","♨","Candles","memorial_candles"],
+      ["memorial-guestbook","✎","Guestbook","memorial_guestbook"],
+      ["memorial-categories","#","Memorial Categories","memorial_categories"]
+    ]
+  },
+
+  {
+    group:"SPECTRUM AWARDS",
+    items:[
+      ["awards","★","Awards","awards"],
+      ["award-categories","#","Award Categories","award_categories"],
+      ["award-nominees","●","Nominees","award_nominees"],
+      ["award-votes","✓","Votes","award_votes"],
+      ["award-winners","♛","Winners","award_winners"],
+      ["award-ceremonies","◷","Ceremonies","award_ceremonies"],
+      ["spectrum-categories","#","Spectrum Categories","spectrum_award_categories"],
+      ["spectrum-nominees","●","Spectrum Nominees","spectrum_award_nominees"],
+      ["spectrum-nominations","↗","Nominations","spectrum_award_nominations"],
+      ["spectrum-events","◷","Spectrum Events","spectrum_award_events"],
+      ["spectrum-hof","♛","Hall of Fame","spectrum_award_hall_of_fame"],
+      ["spectrum-settings","⚙","Awards Settings","spectrum_awards_settings"]
+    ]
+  },
+
+  {
+    group:"HOLIDAYS",
+    items:[
+      ["holiday-years","◷","Holiday Years","holiday_years"],
+      ["holidays","★","Holidays","holidays"],
+      ["holiday-pages","▤","Holiday Pages","holiday_pages"],
+      ["holiday-events","◷","Holiday Events","holiday_events"],
+      ["holiday-programming","▶","Holiday Programming","holiday_programming"],
+      ["holiday-content","▦","Holiday Content","holiday_content"],
+      ["holiday-countdowns","⌛","Countdowns","holiday_countdowns"]
+    ]
+  },
+
+  {
+    group:"YEARBOOKS / PUBLISHING",
+    items:[
+      ["yearbook-editions","▤","Yearbook Editions","yearbook_editions"],
+      ["yearbook-projects","▣","Yearbook Projects","yearbook_projects"],
+      ["yearbook-sections","☷","Yearbook Sections","yearbook_sections"],
+      ["yearbook-interest","✉","Yearbook Interest","yearbook_interest"],
+      ["school-profiles","⌂","School Profiles","school_profiles"],
+      ["school-yearbook-projects","▣","School Projects","school_yearbook_projects"],
+      ["school-yearbook-sections","☷","School Project Sections","school_yearbook_sections"],
+      ["publishing","▤","Publishing","publishing_publications"]
+    ]
+  },
+
+  {
+    group:"BUSINESS",
+    items:[
+      ["business-services","◆","Services","business_services"],
+      ["business-inquiries","✉","Business Inquiries","business_inquiries"],
+      ["partnerships","↔","Partnerships","business_partnerships"],
+      ["contact-messages","✉","Contact Messages","contact_messages"],
+      ["partner-inquiries","✉","Partner Inquiries","partner_inquiries"],
+      ["press-inquiries","▤","Press Inquiries","press_inquiries"],
+      ["careers","◆","Jobs","career_jobs"],
+      ["applications","✉","Applications","career_applications"],
+      ["shop","▣","Shop Products","shop_products"],
+      ["shop-interest","♡","Product Interest","shop_product_interest"]
+    ]
+  },
+
+  {
+    group:"INFRASTRUCTURE",
+    items:[
+      ["about-content","▤","About Content","crowrules_about_content"],
+      ["launches","⌛","Site Launches","site_launches"],
+      ["api-endpoints","⌘","API Endpoints","api_endpoints"],
+      ["api-keys","⚿","API Keys","api_keys"],
+      ["api-webhooks","↗","Webhooks","api_webhooks"],
+      ["api-logs","▤","API Request Logs","api_request_logs"],
+      ["analytics-daily","◈","Daily Analytics","analytics_daily"],
+      ["analytics-realtime","●","Realtime Analytics","analytics_realtime"],
+      ["death-runs","†","Celebrity Death Runs","celebrity_death_discovery_runs"]
+    ]
+  },
+
+  {
+    group:"SYSTEM",
+    items:[
+      ["database","▦","Database Explorer","__database__"],
+      ["settings","⚙","Admin Settings",null],
+      ["signout","⇥","Sign Out",null]
+    ]
+  }
+
 ];
 
+
+/* =========================================================
+   DREAM WORLD NAVIGATION
+   Automatically populated from every dream_* table
+========================================================= */
+
+const DREAM_ICONS = [
+  "✦","◇","◆","✧","◈","☁","✎","▶","◎","★","♢","⌘"
+];
+
+const DREAM_LABEL_OVERRIDES = {
+
+  dream_profiles:"Creator Profiles",
+  dream_profile_skills:"Profile Skills",
+  dream_profile_formats:"Profile Formats",
+  dream_profile_links:"Profile Links",
+
+  dream_categories:"Dream Categories",
+
+  dream_projects:"Projects",
+  dream_project_members:"Project Members",
+  dream_project_stages:"Project Stages",
+  dream_project_milestones:"Project Milestones",
+
+  dream_submissions:"Dream Submissions",
+  dream_submission_categories:"Submission Categories",
+  dream_submission_events:"Submission Events",
+  dream_submission_reviews:"Submission Reviews",
+  dream_submission_requests:"Submission Requests",
+  dream_submission_status_history:"Submission Status History",
+
+  dream_files:"Files",
+  dream_file_versions:"File Versions",
+  dream_file_shares:"File Shares",
+  dream_file_comments:"File Comments",
+  dream_file_activity:"File Activity",
+
+  dream_creative_documents:"Creative Documents",
+  dream_document_versions:"Document Versions",
+
+  dream_development_notes:"Development Notes",
+  dream_production_history:"Production History",
+
+  dream_collaborations:"Collaboration Requests",
+  dream_creator_collaborations:"Creator Collaborations",
+  dream_creator_followers:"Creator Followers",
+
+  dream_message_threads:"Message Threads",
+  dream_message_participants:"Message Participants",
+  dream_messages:"Messages",
+
+  dream_notifications:"Notifications",
+  dream_notification_preferences:"Notification Preferences",
+
+  dream_rights_records:"Rights Records",
+  dream_rights_events:"Rights Events",
+  dream_rights_requests:"Rights Requests",
+
+  dream_creator_agreements:"Creator Agreements",
+
+  dream_creator_compensation:"Creator Compensation",
+  dream_payment_transactions:"Payment Transactions",
+
+  dream_creator_credits:"Creator Credits",
+  dream_credit_requests:"Credit Requests",
+  dream_credit_history:"Credit History",
+  dream_production_credits:"Production Credits",
+
+  dream_pitches:"Pitch Room",
+  dream_funding:"Funding",
+  dream_campaigns:"Campaigns",
+
+  dream_awards:"Dream Awards",
+
+  dream_meetings:"Creator Meetings",
+
+  dream_activity:"Dream Activity",
+
+  dream_privacy_settings:"Privacy Settings",
+  dream_communication_preferences:"Communication Preferences",
+
+  dream_connected_accounts:"Connected Accounts",
+  dream_account_events:"Account Events"
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
 let schema = {};
+
 let current = "dashboard";
+
+let currentTable = null;
+
 let currentRows = [];
+
+let currentDisplayRows = [];
+
 let editing = null;
 
-function esc(v){
- return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-}
-function pretty(s){return s.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase())}
-function fmt(v){
- if(v===null||v===undefined||v==="") return "—";
- if(typeof v==="object") return esc(JSON.stringify(v));
- return esc(v);
-}
-function isSystemColumn(c){return ["created_at","updated_at"].includes(c.name)}
-function inputType(c){
- if(c.data_type==="boolean") return "boolean";
- if(c.data_type==="jsonb"||c.data_type==="json") return "json";
- if(c.data_type.includes("timestamp")) return "datetime-local";
- if(c.data_type==="date") return "date";
- if(c.data_type.includes("int")||c.data_type==="numeric"||c.data_type==="double precision") return "number";
- if(c.data_type==="text" && ["body","description","message","bio","story","transcript","show_notes","metadata"].some(x=>c.name.includes(x))) return "textarea";
- return "text";
-}
-function defaultValue(c){
- if(!c.default) return c.data_type==="boolean" ? false : "";
- const d=c.default;
- if(d.includes("true")) return true;
- if(d.includes("false")) return false;
- return "";
+let currentUser = null;
+
+let dreamTables = [];
+
+let schemaLoaded = false;
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function esc(value){
+
+  return String(value ?? "")
+    .replace(/[&<>"']/g,m => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    }[m]));
+
 }
 
+
+function pretty(value){
+
+  if(!value) return "";
+
+  return String(value)
+    .replace(/^dream_/,"")
+    .replace(/_/g," ")
+    .replace(/\b\w/g,c=>c.toUpperCase());
+
+}
+
+
+function formatValue(value){
+
+  if(value === null ||
+     value === undefined ||
+     value === "")
+    return "—";
+
+  if(Array.isArray(value))
+    return esc(value.join(", "));
+
+  if(typeof value === "object")
+    return esc(JSON.stringify(value));
+
+  return esc(value);
+
+}
+
+
+function isSystemColumn(column){
+
+  return [
+    "created_at",
+    "updated_at"
+  ].includes(column.name);
+
+}
+
+
+function isArrayColumn(column){
+
+  return column.data_type === "ARRAY" ||
+         column.format?.startsWith("_");
+
+}
+
+
+function isJsonColumn(column){
+
+  return [
+    "json",
+    "jsonb"
+  ].includes(column.data_type);
+
+}
+
+
+function inputType(column){
+
+  if(column.data_type === "boolean")
+    return "boolean";
+
+  if(isArrayColumn(column))
+    return "array";
+
+  if(isJsonColumn(column))
+    return "json";
+
+  if(
+    column.data_type?.includes("timestamp")
+  )
+    return "datetime-local";
+
+  if(column.data_type === "date")
+    return "date";
+
+  if(
+    column.data_type?.includes("int") ||
+    column.data_type === "numeric" ||
+    column.data_type === "double precision" ||
+    column.data_type === "real"
+  )
+    return "number";
+
+  const longTextNames = [
+    "body",
+    "description",
+    "message",
+    "bio",
+    "story",
+    "transcript",
+    "show_notes",
+    "metadata",
+    "content",
+    "details",
+    "notes",
+    "summary",
+    "pitch",
+    "synopsis",
+    "logline",
+    "statement"
+  ];
+
+  if(
+    column.data_type === "text" &&
+    longTextNames.some(x =>
+      column.name.toLowerCase().includes(x)
+    )
+  )
+    return "textarea";
+
+  return "text";
+
+}
+
+
+function defaultValue(column){
+
+  if(!column.default_value)
+    return column.data_type === "boolean"
+      ? false
+      : "";
+
+  const d =
+    String(column.default_value)
+      .toLowerCase();
+
+  if(d.includes("true"))
+    return true;
+
+  if(d.includes("false"))
+    return false;
+
+  if(d.includes("now()"))
+    return "";
+
+  if(d.includes("gen_random_uuid"))
+    return "";
+
+  if(d.includes("array[]"))
+    return [];
+
+  return "";
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
 async function boot(){
- document.getElementById("clock").textContent=new Date().toLocaleString();
- setInterval(()=>document.getElementById("clock").textContent=new Date().toLocaleString(),1000);
- const {data:{session}}=await sb.auth.getSession();
- if(!session){showLogin();return}
- const {data:isAdmin,error}=await sb.rpc("crowrules_is_admin");
- if(error||!isAdmin){showLogin("Your account is signed in, but it is not authorized as a CrowRules administrator.");return}
- document.getElementById("app").classList.remove("hidden");
- document.getElementById("adminChip").textContent=(session.user.email||"ADMIN").toUpperCase();
- buildNav();
- await loadSchema();
- await showSection("dashboard");
+
+  updateClock();
+
+  setInterval(
+    updateClock,
+    1000
+  );
+
+  const {
+    data:{
+      user
+    },
+    error:userError
+  } =
+    await sb.auth.getUser();
+
+  if(userError || !user){
+
+    showLogin();
+
+    return;
+
+  }
+
+  currentUser = user;
+
+  const {
+    data:isAdmin,
+    error:adminError
+  } =
+    await sb.rpc(
+      "crowrules_is_admin"
+    );
+
+  if(
+    adminError ||
+    isAdmin !== true
+  ){
+
+    showLogin(
+      "Your account is signed in, but it is not authorized as a CrowRules administrator."
+    );
+
+    return;
+
+  }
+
+  showApp();
+
 }
-function showLogin(msg){
- document.getElementById("loginView").classList.remove("hidden");
- if(msg) document.getElementById("loginMessage").textContent=msg;
+
+
+function showApp(){
+
+  document
+    .getElementById("loginView")
+    .classList.add("hidden");
+
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("adminChip")
+    .textContent =
+      (
+        currentUser?.email ||
+        "ADMIN"
+      ).toUpperCase();
+
+  buildNav();
+
+  loadSchema()
+    .then(()=>{
+      buildNav();
+      showSection("dashboard");
+    });
+
 }
+
+
+function showLogin(message){
+
+  document
+    .getElementById("loginView")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("app")
+    .classList.add("hidden");
+
+  if(message){
+
+    document
+      .getElementById("loginMessage")
+      .textContent = message;
+
+  }
+
+}
+
+
 async function signIn(){
- const email=prompt("Admin email:");
- if(!email)return;
- const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:location.href}});
- if(error) toast(error.message,true); else toast("Magic-link sign-in sent. Check your email.");
+
+  const input =
+    document.getElementById("loginEmail");
+
+  const email =
+    input.value.trim();
+
+  if(!email){
+
+    setLoginStatus(
+      "Enter your administrator email address.",
+      true
+    );
+
+    return;
+
+  }
+
+  setLoginStatus(
+    "Sending secure magic link..."
+  );
+
+  const {
+    error
+  } =
+    await sb.auth.signInWithOtp({
+      email,
+      options:{
+        emailRedirectTo:
+          window.location.href
+      }
+    });
+
+  if(error){
+
+    setLoginStatus(
+      error.message,
+      true
+    );
+
+    return;
+
+  }
+
+  setLoginStatus(
+    "Magic link sent. Check your email."
+  );
+
 }
+
+
+function setLoginStatus(
+  message,
+  error=false
+){
+
+  const el =
+    document.getElementById(
+      "loginStatus"
+    );
+
+  el.textContent =
+    message;
+
+  el.style.color =
+    error
+      ? "var(--red)"
+      : "var(--muted)";
+
+}
+
+
 async function signOut(){
- await sb.auth.signOut();location.reload();
+
+  await sb.auth.signOut();
+
+  window.location.reload();
+
 }
+
+
+sb.auth.onAuthStateChange(
+  async(event)=>{
+
+    if(event === "SIGNED_OUT"){
+
+      window.location.reload();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function getAllModules(){
+
+  const result =
+    STATIC_MODULES.map(group=>({
+      ...group,
+      items:[
+        ...group.items
+      ]
+    }));
+
+  if(dreamTables.length){
+
+    const dreamItems =
+      dreamTables.map(
+        (table,index)=>[
+          "dream:"+table,
+          DREAM_ICONS[
+            index % DREAM_ICONS.length
+          ],
+          DREAM_LABEL_OVERRIDES[table] ||
+            pretty(table),
+          table
+        ]
+      );
+
+    result.splice(
+      result.length - 1,
+      0,
+      {
+        group:"DREAM WORLD",
+        dream:true,
+        items:[
+          [
+            "dream-dashboard",
+            "✦",
+            "Dream World Dashboard",
+            null
+          ],
+          ...dreamItems
+        ]
+      }
+    );
+
+  }
+
+  return result;
+
+}
+
+
 function buildNav(){
- const nav=document.getElementById("nav");
- nav.innerHTML=MODULES.map(g=>`<div class="nav-group"><div class="nav-title">${g.group}</div>${g.items.map(x=>`<button data-key="${x[0]}" onclick="${x[0]==="signout"?"signOut()":"showSection('"+x[0]+"')"}"><span class="ico">${x[1]}</span><span>${x[2]}</span></button>`).join("")}</div>`).join("");
+
+  const nav =
+    document.getElementById("nav");
+
+  const groups =
+    getAllModules();
+
+  nav.innerHTML =
+    groups.map(group=>`
+
+      <div class="nav-group">
+
+        <div class="nav-title ${group.dream ? "dream-title":""}">
+          ${esc(group.group)}
+        </div>
+
+        ${
+          group.items.map(item=>{
+
+            const [
+              key,
+              icon,
+              label,
+              table
+            ] = item;
+
+            const dreamClass =
+              group.dream
+                ? "dream-item"
+                : "";
+
+            if(key === "signout"){
+
+              return `
+                <button
+                  class="${dreamClass}"
+                  data-key="${esc(key)}"
+                  onclick="signOut()"
+                >
+                  <span class="ico">${icon}</span>
+                  <span>${esc(label)}</span>
+                </button>
+              `;
+
+            }
+
+            return `
+              <button
+                class="${dreamClass}"
+                data-key="${esc(key)}"
+                onclick="showSection('${key.replace(/'/g,"\\'")}')"
+              >
+                <span class="ico">${icon}</span>
+                <span>${esc(label)}</span>
+              </button>
+            `;
+
+          }).join("")
+        }
+
+      </div>
+
+    `).join("");
+
 }
+
+
+/* =========================================================
+   SCHEMA
+========================================================= */
+
 async function loadSchema(){
- const {data,error}=await sb.rpc("crowrules_admin_schema");
- if(error){toast("Schema metadata failed: "+error.message,true);return}
- schema={};
- (data||[]).forEach(t=>schema[t.table_name]=t);
+
+  const {
+    data,
+    error
+  } =
+    await sb.rpc(
+      "crowrules_admin_schema"
+    );
+
+  if(error){
+
+    schemaLoaded = false;
+
+    toast(
+      "Schema metadata failed: " +
+      error.message,
+      true
+    );
+
+    return false;
+
+  }
+
+  schema = {};
+
+  let tables = [];
+
+  /*
+    crowrules_admin_schema() returns JSONB.
+    Support either:
+      [ ... ]
+    or:
+      { tables:[ ... ] }
+  */
+
+  if(Array.isArray(data)){
+
+    tables = data;
+
+  }else if(
+    data &&
+    Array.isArray(data.tables)
+  ){
+
+    tables = data.tables;
+
+  }else if(data){
+
+    /*
+      Some implementations return an
+      object keyed by table name.
+    */
+
+    tables =
+      Object.entries(data)
+        .map(([table_name,value])=>({
+          table_name,
+          ...value
+        }));
+
+  }
+
+  tables.forEach(table=>{
+
+    const tableName =
+      table.table_name ||
+      table.name;
+
+    if(!tableName)
+      return;
+
+    schema[tableName] = {
+
+      table_name:tableName,
+
+      columns:
+        table.columns ||
+        [],
+
+      primary_keys:
+        table.primary_keys ||
+        [],
+
+      foreign_keys:
+        table.foreign_keys ||
+        table.foreign_key_constraints ||
+        [],
+
+      row_count:
+        table.row_count ??
+        table.rows ??
+        null
+
+    };
+
+  });
+
+  dreamTables =
+    Object.keys(schema)
+      .filter(
+        name =>
+          name.startsWith("dream_")
+      )
+      .sort();
+
+  schemaLoaded = true;
+
+  return true;
+
 }
-function moduleByKey(key){
- for(const g of MODULES) for(const x of g.items) if(x[0]===key)return x;
+
+
+/* =========================================================
+   MODULE LOOKUP
+========================================================= */
+
+function findModuleByKey(key){
+
+  for(
+    const group of getAllModules()
+  ){
+
+    for(
+      const item of group.items
+    ){
+
+      if(item[0] === key)
+        return item;
+
+    }
+
+  }
+
+  return null;
+
 }
+
+
+function tableForCurrent(){
+
+  if(
+    current.startsWith("dream:")
+  )
+    return current.substring(6);
+
+  const module =
+    findModuleByKey(current);
+
+  return module?.[3] || currentTable;
+
+}
+
+
+/* =========================================================
+   SECTION ROUTING
+========================================================= */
+
 async function showSection(key){
- current=key;
- document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.key===key));
- if(key==="dashboard"){renderDashboard();return}
- if(key==="settings"){renderSettings();return}
- if(key==="database"){renderDatabase();return}
- const mod=moduleByKey(key);
- if(!mod||!mod[3]){document.getElementById("content").innerHTML=`<div class="hero"><div class="eyebrow">CrowRules Admin</div><h1>${pretty(key)}</h1><p>This administration section is available in the single-file console. Select a database-backed module from the navigation.</p></div>`;return}
- await renderTableModule(mod[3],mod[2]);
- document.getElementById("sidebar").classList.remove("open");
+
+  current = key;
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(button=>{
+
+      button.classList.toggle(
+        "active",
+        button.dataset.key === key
+      );
+
+    });
+
+  if(key === "dashboard"){
+
+    await renderDashboard();
+    return;
+
+  }
+
+  if(key === "dream-dashboard"){
+
+    await renderDreamDashboard();
+    return;
+
+  }
+
+  if(key === "system-health"){
+
+    await renderSystemHealth();
+    return;
+
+  }
+
+  if(key === "settings"){
+
+    renderSettings();
+    return;
+
+  }
+
+  if(key === "database"){
+
+    renderDatabase();
+    return;
+
+  }
+
+  let table = null;
+  let title = null;
+
+  if(key.startsWith("dream:")){
+
+    table =
+      key.substring(6);
+
+    title =
+      DREAM_LABEL_OVERRIDES[table] ||
+      pretty(table);
+
+  }else{
+
+    const module =
+      findModuleByKey(key);
+
+    if(module){
+
+      table = module[3];
+      title = module[2];
+
+    }
+
+  }
+
+  if(!table){
+
+    document
+      .getElementById("content")
+      .innerHTML = `
+        <div class="hero">
+          <div class="eyebrow">
+            CrowRules Admin
+          </div>
+          <h1>
+            ${esc(pretty(key))}
+          </h1>
+          <p>
+            This administration module does not have
+            a database table assigned to it.
+          </p>
+        </div>
+      `;
+
+    return;
+
+  }
+
+  await renderTableModule(
+    table,
+    title,
+    key.startsWith("dream:")
+  );
+
+  document
+    .getElementById("sidebar")
+    .classList.remove("open");
+
 }
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+async function countTable(table){
+
+  const {
+    count,
+    error
+  } =
+    await sb
+      .from(table)
+      .select("*",{
+        count:"exact",
+        head:true
+      });
+
+  return error
+    ? null
+    : count;
+
+}
+
+
 async function renderDashboard(){
- const tables=["members","shows","episodes","sports_teams","sports_games","memorials","podcasts","articles","shop_products"];
- const counts=await Promise.all(tables.map(async t=>{
-  const {count,error}=await sb.from(t).select("*",{count:"exact",head:true});
-  return [t,error?null:count];
- }));
- document.getElementById("content").innerHTML=`
- <div class="hero"><div class="eyebrow">Command Center • Live Database</div><h1>CrowRules Administration</h1><p>Single-file control center connected directly to the CrowRules Supabase project. Modules use live schema metadata and real database CRUD instead of placeholder forms.</p>
- <div class="actions"><button class="btn primary" onclick="showSection('shows')">Manage Shows</button><button class="btn" onclick="showSection('members')">Manage Members</button><button class="btn" onclick="showSection('sports-teams')">Sports Teams</button><button class="btn" onclick="showSection('activity')">Activity</button><button class="btn" onclick="loadSchema().then(()=>toast('Schema refreshed'))">Refresh Schema</button></div></div>
- <div class="stats">${counts.map(([t,c])=>`<div class="stat"><small>${pretty(t)}</small><strong>${c===null?"—":c}</strong></div>`).join("")}</div>
- <div class="section-head"><h2>Administration Modules</h2><span class="muted">${Object.keys(schema).length} database tables detected</span></div>
- <div class="grid">${MODULES.flatMap(g=>g.items.filter(x=>x[3]&&x[3]!=="__database__")).map(x=>`<div class="card module" onclick="showSection('${x[0]}')" style="cursor:pointer"><h3>${x[1]} ${x[2]}</h3><p>${schema[x[3]]?`Connected to public.${x[3]}.`:"Table unavailable or not exposed."} ${schema[x[3]]?`Primary key: ${(schema[x[3]].primary_keys||[]).join(", ")||"none"}.`:""}</p></div>`).join("")}</div>`;
+
+  const tables = [
+
+    ["members","Members"],
+    ["shows","Shows"],
+    ["episodes","Episodes"],
+    ["sports_teams","Sports Teams"],
+    ["sports_games","Sports Games"],
+    ["sports_players","Sports Players"],
+    ["podcasts","Podcasts"],
+    ["articles","Articles"],
+    ["shop_products","Products"],
+    ["dream_projects","Dream Projects"],
+    ["dream_submissions","Dream Submissions"]
+
+  ];
+
+  const counts =
+    await Promise.all(
+      tables.map(
+        async([table,label])=>[
+          label,
+          await countTable(table)
+        ]
+      )
+    );
+
+  document
+    .getElementById("content")
+    .innerHTML = `
+
+      <div class="hero">
+
+        <div class="eyebrow">
+          Command Center • Live Database
+        </div>
+
+        <h1>
+          CrowRules Administration
+        </h1>
+
+        <p>
+          Universal CrowRules administration console
+          connected to the live Supabase project.
+          Content, members, sports, podcasting,
+          community, business, publishing and Dream World
+          are managed from one command center.
+        </p>
+
+        <div class="actions">
+
+          <button
+            class="btn primary"
+            onclick="showSection('shows')"
+          >
+            Manage Shows
+          </button>
+
+          <button
+            class="btn"
+            onclick="showSection('members')"
+          >
+            Manage Members
+          </button>
+
+          <button
+            class="btn"
+            onclick="showSection('sports-teams')"
+          >
+            Sports Teams
+          </button>
+
+          <button
+            class="btn dream"
+            onclick="showSection('dream-dashboard')"
+          >
+            ✦ Dream World
+          </button>
+
+          <button
+            class="btn"
+            onclick="loadSchema().then(()=>{
+              buildNav();
+              toast('Schema refreshed');
+            })"
+          >
+            Refresh Schema
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="stats">
+
+        ${
+          counts.map(
+            ([label,count])=>`
+
+              <div class="stat">
+
+                <small>
+                  ${esc(label)}
+                </small>
+
+                <strong>
+                  ${
+                    count === null
+                      ? "—"
+                      : Number(count).toLocaleString()
+                  }
+                </strong>
+
+              </div>
+
+            `
+          ).join("")
+        }
+
+      </div>
+
+
+      <div class="section-head">
+
+        <h2>
+          Administration Modules
+        </h2>
+
+        <span class="muted">
+          ${Object.keys(schema).length}
+          database tables detected
+        </span>
+
+      </div>
+
+
+      <div class="grid">
+
+        ${
+          getAllModules()
+            .flatMap(
+              group=>group.items
+                .filter(item=>
+                  item[3] &&
+                  item[3] !== "__database__"
+                )
+                .map(item=>({
+                  ...item,
+                  dream:!!group.dream
+                }))
+            )
+            .map(item=>`
+
+              <div
+                class="card module ${item.dream ? "dream-module":""}"
+                onclick="showSection('${item[0].replace(/'/g,"\\'")}')"
+                style="cursor:pointer"
+              >
+
+                <h3>
+                  ${item[1]}
+                  ${esc(item[2])}
+                </h3>
+
+                <p>
+
+                  ${
+                    schema[item[3]]
+                      ? `
+                        Connected to
+                        public.${esc(item[3])}.
+                        <br>
+                        Primary key:
+                        ${
+                          (
+                            schema[item[3]]
+                              .primary_keys || []
+                          ).join(", ") ||
+                          "none"
+                        }
+                      `
+                      : `
+                        Table unavailable from
+                        the current admin schema service.
+                      `
+                  }
+
+                </p>
+
+              </div>
+
+            `).join("")
+        }
+
+      </div>
+    `;
+
 }
-async function renderTableModule(table,title){
- const meta=schema[table];
- if(!meta){document.getElementById("content").innerHTML=`<div class="hero"><h1>${esc(title)}</h1><p class="danger-text">Table <b>${esc(table)}</b> was not returned by the admin schema service.</p><button class="btn" onclick="loadSchema().then(()=>showSection(current))">Retry Schema</button></div>`;return}
- document.getElementById("content").innerHTML=`<div class="section-head"><div><div class="eyebrow">Database Module</div><h2>${esc(title)}</h2><div class="muted">public.${esc(table)} • ${(meta.primary_keys||[]).join(", ")||"no declared primary key"}</div></div><button class="btn primary" onclick="openCreate('${table}')">＋ Add ${esc(title.replace(/s$/,""))}</button></div>
- <div class="toolbar"><input class="grow" id="moduleFilter" placeholder="Filter rows..." oninput="drawRows()"><button class="btn" onclick="loadRows('${table}')">↻ Refresh</button><button class="btn" onclick="exportCSV()">Export CSV</button></div>
- <div id="tableArea" class="table-wrap"><div class="loading">Loading ${esc(table)}…</div></div>`;
- await loadRows(table);
+
+
+/* =========================================================
+   DREAM WORLD DASHBOARD
+========================================================= */
+
+async function renderDreamDashboard(){
+
+  const targets = [
+
+    ["dream_profiles","Creator Profiles"],
+    ["dream_projects","Projects"],
+    ["dream_submissions","Submissions"],
+    ["dream_files","Files"],
+    ["dream_creative_documents","Documents"],
+    ["dream_collaborations","Collaborations"],
+    ["dream_messages","Messages"],
+    ["dream_rights_records","Rights Records"],
+    ["dream_creator_agreements","Agreements"],
+    ["dream_creator_credits","Creator Credits"],
+    ["dream_pitches","Pitches"],
+    ["dream_funding","Funding"]
+
+  ];
+
+  const counts =
+    await Promise.all(
+      targets.map(
+        async([table,label])=>[
+          label,
+          await countTable(table)
+        ]
+      )
+    );
+
+  document
+    .getElementById("content")
+    .innerHTML = `
+
+      <div class="hero dream dream-banner">
+
+        <div class="eyebrow">
+          CrowRules Dream World
+        </div>
+
+        <h1>
+          Dream World Command Center
+        </h1>
+
+        <p>
+          Manage the complete Dream World creator ecosystem:
+          dreams, submissions, projects, development,
+          collaboration, creative documents, files,
+          pitches, funding, rights, agreements, credits,
+          compensation, messages, notifications and activity.
+        </p>
+
+        <div class="actions">
+
+          <button
+            class="btn dream"
+            onclick="showSection('dream: dream_projects'.replace(' ','') )"
+          >
+            Projects
+          </button>
+
+          <button
+            class="btn"
+            onclick="showSection('dream: dream_submissions'.replace(' ','') )"
+          >
+            Submissions
+          </button>
+
+          <button
+            class="btn"
+            onclick="showSection('dream: dream_profiles'.replace(' ','') )"
+          >
+            Creators
+          </button>
+
+          <button
+            class="btn"
+            onclick="showSection('dream: dream_files'.replace(' ','') )"
+          >
+            Files
+          </button>
+
+          <button
+            class="btn"
+            onclick="showSection('dream: dream_rights_records'.replace(' ','') )"
+          >
+            Rights
+          </button>
+
+          <button
+            class="btn"
+            onclick="showSection('dream: dream_creator_agreements'.replace(' ','') )"
+          >
+            Agreements
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="dream-cards">
+
+        ${
+          counts.slice(0,8)
+            .map(
+              ([label,count])=>`
+
+                <div class="dream-card">
+
+                  <small>
+                    ${esc(label)}
+                  </small>
+
+                  <strong>
+                    ${
+                      count === null
+                        ? "—"
+                        : Number(count).toLocaleString()
+                    }
+                  </strong>
+
+                  <span>
+                    DREAM WORLD
+                  </span>
+
+                </div>
+
+              `
+            ).join("")
+        }
+
+      </div>
+
+
+      <div class="section-head">
+
+        <h2>
+          Dream World Modules
+        </h2>
+
+        <span class="muted">
+          ${dreamTables.length}
+          Dream World tables detected
+        </span>
+
+      </div>
+
+
+      <div class="grid">
+
+        ${
+          dreamTables.map(
+            (table,index)=>`
+
+              <div
+                class="card module dream-module"
+                onclick="showSection('dream:${table}')"
+                style="cursor:pointer"
+              >
+
+                <h3>
+                  ${DREAM_ICONS[index % DREAM_ICONS.length]}
+                  ${esc(
+                    DREAM_LABEL_OVERRIDES[table] ||
+                    pretty(table)
+                  )}
+                </h3>
+
+                <p>
+                  public.${esc(table)}
+                  <br>
+                  ${
+                    schema[table]?.columns?.length ||
+                    0
+                  }
+                  columns
+                  <br>
+                  Primary:
+                  ${
+                    (
+                      schema[table]?.primary_keys ||
+                      []
+                    ).join(", ") || "none"
+                  }
+                </p>
+
+              </div>
+
+            `
+          ).join("")
+        }
+
+      </div>
+
+    `;
+
 }
+
+
+/* =========================================================
+   TABLE MODULE
+========================================================= */
+
+async function renderTableModule(
+  table,
+  title,
+  isDream=false
+){
+
+  currentTable = table;
+
+  const meta =
+    schema[table];
+
+  if(!meta){
+
+    document
+      .getElementById("content")
+      .innerHTML = `
+
+        <div class="hero ${isDream ? "dream":""}">
+
+          <div class="eyebrow">
+            Database Module
+          </div>
+
+          <h1>
+            ${esc(title)}
+          </h1>
+
+          <p class="danger-text">
+            Table
+            <b>${esc(table)}</b>
+            was not returned by the protected
+            admin schema service.
+          </p>
+
+          <div class="actions">
+
+            <button
+              class="btn"
+              onclick="loadSchema().then(()=>{
+                buildNav();
+                showSection(current);
+              })"
+            >
+              Retry Schema
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    return;
+
+  }
+
+  document
+    .getElementById("content")
+    .innerHTML = `
+
+      <div class="section-head">
+
+        <div>
+
+          <div class="eyebrow">
+            ${isDream ? "Dream World" : "Database Module"}
+          </div>
+
+          <h2>
+            ${esc(title)}
+          </h2>
+
+          <div class="muted">
+            public.${esc(table)}
+            •
+            ${
+              (
+                meta.primary_keys || []
+              ).join(", ") ||
+              "no declared primary key"
+            }
+          </div>
+
+        </div>
+
+        <button
+          class="btn ${isDream ? "dream":"primary"}"
+          onclick="openCreate('${table}')"
+        >
+          ＋ Add ${esc(
+            title.replace(/s$/,"")
+          )}
+        </button>
+
+      </div>
+
+
+      <div class="toolbar">
+
+        <input
+          class="grow"
+          id="moduleFilter"
+          placeholder="Filter rows..."
+          oninput="drawRows()"
+        >
+
+        <button
+          class="btn"
+          onclick="loadRows('${table}')"
+        >
+          ↻ Refresh
+        </button>
+
+        <button
+          class="btn"
+          onclick="exportCSV()"
+        >
+          Export CSV
+        </button>
+
+      </div>
+
+
+      <div
+        id="tableArea"
+        class="table-wrap"
+      >
+        <div class="loading">
+          Loading ${esc(table)}…
+        </div>
+      </div>
+
+    `;
+
+  await loadRows(table);
+
+}
+
+
+/* =========================================================
+   LOAD ROWS
+========================================================= */
+
 async function loadRows(table){
- const area=document.getElementById("tableArea"); if(area) area.innerHTML='<div class="loading">Loading…</div>';
- const {data,error}=await sb.from(table).select("*").limit(500);
- if(error){if(area)area.innerHTML=`<div class="empty"><div class="danger-text">Database error</div><p>${esc(error.message)}</p></div>`;return}
- currentRows=data||[]; drawRows();
+
+  currentTable = table;
+
+  const area =
+    document.getElementById(
+      "tableArea"
+    );
+
+  if(area){
+
+    area.innerHTML =
+      `<div class="loading">
+        Loading…
+      </div>`;
+
+  }
+
+  const {
+    data,
+    error
+  } =
+    await sb
+      .from(table)
+      .select("*")
+      .limit(500);
+
+  if(error){
+
+    currentRows = [];
+
+    if(area){
+
+      area.innerHTML = `
+
+        <div class="error-box">
+
+          <div class="danger-text">
+            Database error
+          </div>
+
+          <p>
+            ${esc(error.message)}
+          </p>
+
+          <p class="muted">
+            The request is still subject to
+            Supabase authentication and RLS.
+          </p>
+
+        </div>
+
+      `;
+
+    }
+
+    return;
+
+  }
+
+  currentRows =
+    data || [];
+
+  drawRows();
+
 }
+
+
+/* =========================================================
+   DRAW ROWS
+========================================================= */
+
 function drawRows(){
- const area=document.getElementById("tableArea");if(!area)return;
- const q=(document.getElementById("moduleFilter")?.value||document.getElementById("globalSearch")?.value||"").toLowerCase();
- const rows=currentRows.filter(r=>!q||JSON.stringify(r).toLowerCase().includes(q));
- const meta=schema[moduleByKey(current)?.[3]]||schema[current];
- const cols=meta?.columns||Object.keys(rows[0]||{}).map(name=>({name}));
- if(!rows.length){area.innerHTML='<div class="empty">No records found.</div>';return}
- const displayCols=cols.slice(0,12);
- area.innerHTML=`<table><thead><tr>${displayCols.map(c=>`<th>${pretty(c.name)}</th>`).join("")}<th>Actions</th></tr></thead><tbody>${rows.map(r=>`<tr>${displayCols.map(c=>`<td>${fmt(r[c.name])}</td>`).join("")}<td><div class="row-actions"><button class="btn mini" onclick='openEdit(${JSON.stringify(r).replace(/'/g,"&#39;")})'>Edit</button><button class="btn mini danger" onclick='deleteRow(${JSON.stringify(r).replace(/'/g,"&#39;")})'>Delete</button></div></td></tr>`).join("")}</tbody></table>`;
+
+  const area =
+    document.getElementById(
+      "tableArea"
+    );
+
+  if(!area)
+    return;
+
+  const query =
+    (
+      document.getElementById(
+        "moduleFilter"
+      )?.value ||
+      document.getElementById(
+        "globalSearch"
+      )?.value ||
+      ""
+    )
+      .trim()
+      .toLowerCase();
+
+  currentDisplayRows =
+    currentRows.filter(row=>{
+
+      if(!query)
+        return true;
+
+      return JSON.stringify(row)
+        .toLowerCase()
+        .includes(query);
+
+    });
+
+  const meta =
+    schema[currentTable];
+
+  const columns =
+    meta?.columns ||
+    Object.keys(
+      currentDisplayRows[0] || {}
+    ).map(name=>({
+      name
+    }));
+
+  if(!currentDisplayRows.length){
+
+    area.innerHTML =
+      `<div class="empty">
+        No records found.
+      </div>`;
+
+    return;
+
+  }
+
+  /*
+    Keep the table readable while allowing
+    full editing through the modal.
+  */
+
+  const displayColumns =
+    columns.slice(0,14);
+
+  area.innerHTML = `
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          ${
+            displayColumns
+              .map(
+                column=>`
+                  <th>
+                    ${esc(
+                      pretty(column.name)
+                    )}
+                  </th>
+                `
+              ).join("")
+          }
+
+          <th>
+            Actions
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        ${
+          currentDisplayRows
+            .map(
+              (row,index)=>`
+
+                <tr>
+
+                  ${
+                    displayColumns
+                      .map(
+                        column=>`
+                          <td>
+                            ${formatValue(
+                              row[column.name]
+                            )}
+                          </td>
+                        `
+                      ).join("")
+                  }
+
+                  <td>
+
+                    <div class="row-actions">
+
+                      <button
+                        class="btn mini"
+                        onclick="openEditByIndex(${index})"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        class="btn mini danger"
+                        onclick="deleteByIndex(${index})"
+                      >
+                        Delete
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              `
+            ).join("")
+        }
+
+      </tbody>
+
+    </table>
+
+  `;
+
 }
-function formFor(table,row={}){
- const meta=schema[table], pk=meta.primary_keys||[];
- return `<form id="recordForm" class="form" onsubmit="saveRecord(event,'${table}')"><div class="form-grid">${meta.columns.filter(c=>!isSystemColumn(c)&&!(pk.includes(c.name)&&c.default)).map(c=>{
-  const type=inputType(c), val=row[c.name]??defaultValue(c), required=!c.is_nullable&&!c.default&&!pk.includes(c.name);
-  if(type==="boolean")return `<div class="field checkbox"><input id="f_${c.name}" type="checkbox" ${val===true?"checked":""}><label for="f_${c.name}">${pretty(c.name)}</label></div>`;
-  if(type==="textarea")return `<div class="field full"><label>${pretty(c.name)}</label><textarea id="f_${c.name}" ${required?"required":""}>${esc(type==="json"&&typeof val==="object"?JSON.stringify(val,null,2):val)}</textarea></div>`;
-  return `<div class="field"><label>${pretty(c.name)}</label><input id="f_${c.name}" type="${type}" value="${esc(type==="datetime-local"&&val?new Date(val).toISOString().slice(0,16):val)}" ${required?"required":""}></div>`;
- }).join("")}</div><div class="form-foot"><button type="button" class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" type="submit">${row.id?"Save Changes":"Create Record"}</button></div></form>`;
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function handleSearch(){
+
+  if(
+    document.getElementById(
+      "tableArea"
+    )
+  ){
+
+    drawRows();
+
+    return;
+
+  }
+
+  if(
+    current === "dashboard"
+  ){
+
+    renderDashboard();
+
+    return;
+
+  }
+
+  if(
+    current === "dream-dashboard"
+  ){
+
+    renderDreamDashboard();
+
+    return;
+
+  }
+
 }
-function openCreate(table){editing=null;document.getElementById("modalTitle").textContent="Create • "+pretty(table);document.getElementById("modalBody").innerHTML=formFor(table,{});document.getElementById("modal").classList.add("open")}
-function openEdit(row){
- const table=moduleByKey(current)?.[3]; if(!table)return;
- editing=row;document.getElementById("modalTitle").textContent="Edit • "+pretty(table);document.getElementById("modalBody").innerHTML=formFor(table,row);document.getElementById("modal").classList.add("open");
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+function formFor(
+  table,
+  row={}
+){
+
+  const meta =
+    schema[table];
+
+  if(!meta)
+    return "";
+
+  const primaryKeys =
+    meta.primary_keys || [];
+
+  const fields =
+    meta.columns
+      .filter(column=>{
+
+        if(
+          isSystemColumn(column)
+        )
+          return false;
+
+        /*
+          Don't expose generated identity
+          primary keys during creation.
+        */
+
+        if(
+          !editing &&
+          primaryKeys.includes(
+            column.name
+          ) &&
+          column.default_value
+        )
+          return false;
+
+        return true;
+
+      });
+
+  return `
+
+    <form
+      id="recordForm"
+      class="form"
+      onsubmit="saveRecord(event,'${table}')"
+    >
+
+      <div class="form-grid">
+
+        ${
+          fields.map(
+            column=>{
+
+              const type =
+                inputType(column);
+
+              const value =
+                row[column.name] ??
+                defaultValue(column);
+
+              const required =
+                !column.options?.includes(
+                  "nullable"
+                ) &&
+                !column.default_value &&
+                !primaryKeys.includes(
+                  column.name
+                );
+
+              if(type === "boolean"){
+
+                return `
+
+                  <div class="field checkbox">
+
+                    <input
+                      id="f_${esc(column.name)}"
+                      type="checkbox"
+                      ${
+                        value === true
+                          ? "checked"
+                          : ""
+                      }
+                    >
+
+                    <label
+                      for="f_${esc(column.name)}"
+                    >
+                      ${esc(
+                        pretty(column.name)
+                      )}
+                    </label>
+
+                  </div>
+
+                `;
+
+              }
+
+              if(
+                type === "textarea" ||
+                type === "json" ||
+                type === "array"
+              ){
+
+                let textValue = "";
+
+                if(type === "json"){
+
+                  textValue =
+                    typeof value === "object"
+                      ? JSON.stringify(
+                          value,
+                          null,
+                          2
+                        )
+                      : value || "";
+
+                }else if(type === "array"){
+
+                  textValue =
+                    Array.isArray(value)
+                      ? value.join(", ")
+                      : value || "";
+
+                }else{
+
+                  textValue =
+                    value || "";
+
+                }
+
+                return `
+
+                  <div class="field full">
+
+                    <label>
+                      ${esc(
+                        pretty(column.name)
+                      )}
+                    </label>
+
+                    <textarea
+                      id="f_${esc(column.name)}"
+                      ${
+                        required
+                          ? "required"
+                          : ""
+                      }
+                      placeholder="${
+                        type === "json"
+                          ? "Enter valid JSON"
+                          : type === "array"
+                            ? "Comma-separated values"
+                            : ""
+                      }"
+                    >${esc(
+                      textValue
+                    )}</textarea>
+
+                    <small>
+                      ${esc(
+                        column.data_type ||
+                        ""
+                      )}
+                    </small>
+
+                  </div>
+
+                `;
+
+              }
+
+              let inputValue =
+                value ?? "";
+
+              if(
+                type === "datetime-local" &&
+                value
+              ){
+
+                try{
+
+                  inputValue =
+                    new Date(value)
+                      .toISOString()
+                      .slice(0,16);
+
+                }catch(e){}
+
+              }
+
+              return `
+
+                <div class="field">
+
+                  <label>
+                    ${esc(
+                      pretty(column.name)
+                    )}
+                  </label>
+
+                  <input
+                    id="f_${esc(column.name)}"
+                    type="${type}"
+                    value="${esc(
+                      inputValue
+                    )}"
+                    ${
+                      required
+                        ? "required"
+                        : ""
+                    }
+                  >
+
+                  <small>
+                    ${esc(
+                      column.data_type ||
+                      ""
+                    )}
+                  </small>
+
+                </div>
+
+              `;
+
+            }
+          ).join("")
+        }
+
+      </div>
+
+
+      <div class="form-foot">
+
+        <button
+          type="button"
+          class="btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn primary"
+          type="submit"
+        >
+          ${
+            editing
+              ? "Save Changes"
+              : "Create Record"
+          }
+        </button>
+
+      </div>
+
+    </form>
+
+  `;
+
 }
-async function saveRecord(e,table){
- e.preventDefault(); const meta=schema[table], payload={};
- meta.columns.filter(c=>!isSystemColumn(c)).forEach(c=>{
-  if(meta.primary_keys?.includes(c.name)&&!editing)return;
-  const el=document.getElementById("f_"+c.name);if(!el)return;
-  let v=c.data_type==="boolean"?el.checked:el.value;
-  if(v==="" && c.is_nullable)v=null;
-  if(c.data_type==="jsonb"||c.data_type==="json"){try{v=v?JSON.parse(v):{} }catch(err){toast("Invalid JSON in "+c.name,true);return}}
-  if(c.data_type.includes("int")||c.data_type==="numeric"||c.data_type==="double precision"){if(v!==""&&v!==null)v=Number(v)}
-  if(c.data_type.includes("timestamp")&&v)v=new Date(v).toISOString();
-  payload[c.name]=v;
- });
- let query;
- if(editing){
-  const filter={};(meta.primary_keys||[]).forEach(k=>filter[k]=editing[k]);
-  query=sb.from(table).update(payload);
-  Object.entries(filter).forEach(([k,v])=>query=query.eq(k,v));
- }else query=sb.from(table).insert(payload);
- const {error}=await query;
- if(error){toast("Save failed: "+error.message,true);return}
- await logActivity(editing?"update":"create",table,editing?editing[meta.primary_keys?.[0]]:null);
- closeModal();toast(editing?"Record updated":"Record created");await loadRows(table);
+
+
+/* =========================================================
+   CREATE
+========================================================= */
+
+function openCreate(table){
+
+  editing = null;
+
+  currentTable = table;
+
+  document
+    .getElementById("modalTitle")
+    .textContent =
+      "Create • " +
+      (
+        DREAM_LABEL_OVERRIDES[table] ||
+        pretty(table)
+      );
+
+  document
+    .getElementById("modalBody")
+    .innerHTML =
+      formFor(
+        table,
+        {}
+      );
+
+  document
+    .getElementById("modal")
+    .classList.add("open");
+
 }
+
+
+/* =========================================================
+   EDIT
+========================================================= */
+
+function openEditByIndex(index){
+
+  const row =
+    currentDisplayRows[index];
+
+  if(!row)
+    return;
+
+  editing = row;
+
+  const table =
+    currentTable;
+
+  if(!table)
+    return;
+
+  document
+    .getElementById("modalTitle")
+    .textContent =
+      "Edit • " +
+      (
+        DREAM_LABEL_OVERRIDES[table] ||
+        pretty(table)
+      );
+
+  document
+    .getElementById("modalBody")
+    .innerHTML =
+      formFor(
+        table,
+        row
+      );
+
+  document
+    .getElementById("modal")
+    .classList.add("open");
+
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+async function saveRecord(
+  event,
+  table
+){
+
+  event.preventDefault();
+
+  const meta =
+    schema[table];
+
+  if(!meta){
+
+    toast(
+      "Schema unavailable.",
+      true
+    );
+
+    return;
+
+  }
+
+  const payload = {};
+
+  let parseError = null;
+
+  meta.columns
+    .filter(
+      column =>
+        !isSystemColumn(column)
+    )
+    .forEach(column=>{
+
+      /*
+        Don't overwrite generated primary key
+        during create.
+      */
+
+      if(
+        !editing &&
+        meta.primary_keys?.includes(
+          column.name
+        ) &&
+        column.default_value
+      )
+        return;
+
+      const el =
+        document.getElementById(
+          "f_" + column.name
+        );
+
+      if(!el)
+        return;
+
+      let value;
+
+      if(
+        column.data_type === "boolean"
+      ){
+
+        value =
+          el.checked;
+
+      }else{
+
+        value =
+          el.value;
+
+      }
+
+      if(
+        value === "" &&
+        column.options?.includes(
+          "nullable"
+        )
+      ){
+
+        value = null;
+
+      }
+
+      if(isJsonColumn(column)){
+
+        if(
+          value === "" ||
+          value === null
+        ){
+
+          value = {};
+
+        }else{
+
+          try{
+
+            value =
+              JSON.parse(value);
+
+          }catch(error){
+
+            parseError =
+              "Invalid JSON in " +
+              column.name;
+
+          }
+
+        }
+
+      }
+
+      if(isArrayColumn(column)){
+
+        if(
+          value === "" ||
+          value === null
+        ){
+
+          value = [];
+
+        }else{
+
+          value =
+            value
+              .split(",")
+              .map(v=>v.trim())
+              .filter(Boolean);
+
+        }
+
+      }
+
+      if(
+        column.data_type?.includes(
+          "int"
+        ) ||
+        column.data_type === "numeric" ||
+        column.data_type === "double precision" ||
+        column.data_type === "real"
+      ){
+
+        if(
+          value !== "" &&
+          value !== null
+        ){
+
+          value =
+            Number(value);
+
+          if(Number.isNaN(value)){
+
+            parseError =
+              "Invalid number in " +
+              column.name;
+
+          }
+
+        }
+
+      }
+
+      if(
+        column.data_type?.includes(
+          "timestamp"
+        ) &&
+        value
+      ){
+
+        value =
+          new Date(
+            value
+          ).toISOString();
+
+      }
+
+      payload[column.name] =
+        value;
+
+    });
+
+  if(parseError){
+
+    toast(
+      parseError,
+      true
+    );
+
+    return;
+
+  }
+
+  let result;
+
+  if(editing){
+
+    const primaryKeys =
+      meta.primary_keys || [];
+
+    if(!primaryKeys.length){
+
+      toast(
+        "Cannot update a table without a primary key.",
+        true
+      );
+
+      return;
+
+    }
+
+    let query =
+      sb
+        .from(table)
+        .update(payload);
+
+    primaryKeys.forEach(key=>{
+
+      query =
+        query.eq(
+          key,
+          editing[key]
+        );
+
+    });
+
+    result =
+      await query;
+
+  }else{
+
+    result =
+      await sb
+        .from(table)
+        .insert(payload);
+
+  }
+
+  if(result.error){
+
+    toast(
+      "Save failed: " +
+      result.error.message,
+      true
+    );
+
+    return;
+
+  }
+
+  await logActivity(
+    editing
+      ? "update"
+      : "create",
+    table,
+    editing
+      ? primaryKeyValue(
+          meta,
+          editing
+        )
+      : null
+  );
+
+  closeModal();
+
+  toast(
+    editing
+      ? "Record updated successfully."
+      : "Record created successfully."
+  );
+
+  await loadRows(table);
+
+}
+
+
+/* =========================================================
+   PRIMARY KEY
+========================================================= */
+
+function primaryKeyValue(
+  meta,
+  row
+){
+
+  const keys =
+    meta.primary_keys || [];
+
+  if(!keys.length)
+    return null;
+
+  if(keys.length === 1)
+    return row[keys[0]];
+
+  return JSON.stringify(
+    keys.reduce(
+      (obj,key)=>{
+        obj[key] =
+          row[key];
+        return obj;
+      },
+      {}
+    )
+  );
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteByIndex(index){
+
+  const row =
+    currentDisplayRows[index];
+
+  if(!row)
+    return;
+
+  deleteRow(row);
+
+}
+
+
 async function deleteRow(row){
- const table=moduleByKey(current)?.[3], meta=schema[table];if(!meta)return;
- if(!confirm("Delete this record? This cannot be undone."))return;
- let q=sb.from(table).delete();(meta.primary_keys||[]).forEach(k=>q=q.eq(k,row[k]));
- const {error}=await q;if(error){toast("Delete failed: "+error.message,true);return}
- await logActivity("delete",table,row[meta.primary_keys?.[0]]);toast("Record deleted");await loadRows(table);
+
+  const table =
+    currentTable;
+
+  const meta =
+    schema[table];
+
+  if(!meta)
+    return;
+
+  const keys =
+    meta.primary_keys || [];
+
+  if(!keys.length){
+
+    toast(
+      "Cannot delete a table without a primary key.",
+      true
+    );
+
+    return;
+
+  }
+
+  const confirmed =
+    window.confirm(
+      "Delete this record?\n\nThis cannot be undone."
+    );
+
+  if(!confirmed)
+    return;
+
+  let query =
+    sb
+      .from(table)
+      .delete();
+
+  keys.forEach(key=>{
+
+    query =
+      query.eq(
+        key,
+        row[key]
+      );
+
+  });
+
+  const {
+    error
+  } =
+    await query;
+
+  if(error){
+
+    toast(
+      "Delete failed: " +
+      error.message,
+      true
+    );
+
+    return;
+
+  }
+
+  await logActivity(
+    "delete",
+    table,
+    primaryKeyValue(
+      meta,
+      row
+    )
+  );
+
+  toast(
+    "Record deleted."
+  );
+
+  await loadRows(table);
+
 }
-async function logActivity(type,table,id){
- try{await sb.rpc("crowrules_admin_log",{p_event_type:type,p_title:`Admin ${type}: ${table}`,p_description:`${type} operation in ${table}`,p_entity_type:table,p_entity_id:id||null,p_source:"admin",p_severity:type==="delete"?"warning":"success",p_metadata:{module:table}})}catch(e){}
+
+
+/* =========================================================
+   ACTIVITY LOG
+========================================================= */
+
+async function logActivity(
+  type,
+  table,
+  id
+){
+
+  try{
+
+    await sb.rpc(
+      "crowrules_admin_log",
+      {
+        p_event_type:type,
+
+        p_title:
+          "Admin " +
+          type +
+          ": " +
+          table,
+
+        p_description:
+          type +
+          " operation in " +
+          table,
+
+        p_severity:
+          type === "delete"
+            ? "warning"
+            : "success",
+
+        p_source:"admin",
+
+        p_entity_type:table,
+
+        p_entity_id:
+          id === null ||
+          id === undefined
+            ? null
+            : String(id),
+
+        p_metadata:{
+          module:table,
+          admin_user:
+            currentUser?.id || null
+        }
+
+      }
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Admin activity logging failed:",
+      error
+    );
+
+  }
+
 }
+
+
+/* =========================================================
+   DATABASE EXPLORER
+========================================================= */
+
 function renderDatabase(){
- const names=Object.keys(schema).sort();
- document.getElementById("content").innerHTML=`<div class="hero"><div class="eyebrow">Infrastructure</div><h1>Database Explorer</h1><p>Every public base table returned by the protected admin schema service is available here. Choose a table to inspect and manage it.</p></div><div class="section-head"><h2>${names.length} Tables</h2></div><div class="grid">${names.map(t=>`<div class="card module" onclick="openTableDirect('${t}')"><h3>${pretty(t)}</h3><p>public.${t}<br>Primary: ${(schema[t].primary_keys||[]).join(", ")||"none"}<br>${schema[t].columns.length} columns</p></div>`).join("")}</div>`;
+
+  const names =
+    Object.keys(schema)
+      .sort();
+
+  document
+    .getElementById("content")
+    .innerHTML = `
+
+      <div class="hero">
+
+        <div class="eyebrow">
+          Infrastructure
+        </div>
+
+        <h1>
+          Database Explorer
+        </h1>
+
+        <p>
+          Every public table returned by the
+          protected CrowRules administrator schema
+          service is available here.
+        </p>
+
+      </div>
+
+
+      <div class="section-head">
+
+        <h2>
+          ${names.length}
+          Tables
+        </h2>
+
+        <span class="muted">
+          Live schema metadata
+        </span>
+
+      </div>
+
+
+      <div class="grid">
+
+        ${
+          names.map(table=>`
+
+            <div
+              class="card module ${
+                table.startsWith("dream_")
+                  ? "dream-module"
+                  : ""
+              }"
+              onclick="openTableDirect('${table}')"
+              style="cursor:pointer"
+            >
+
+              <h3>
+                ${
+                  table.startsWith("dream_")
+                    ? "✦ "
+                    : "▦ "
+                }
+                ${esc(
+                  DREAM_LABEL_OVERRIDES[table] ||
+                  pretty(table)
+                )}
+              </h3>
+
+              <p>
+                public.${esc(table)}
+                <br>
+
+                Primary:
+                ${
+                  (
+                    schema[table]
+                      .primary_keys ||
+                    []
+                  ).join(", ") ||
+                  "none"
+                }
+
+                <br>
+
+                ${
+                  schema[table]
+                    .columns?.length || 0
+                }
+                columns
+
+              </p>
+
+            </div>
+
+          `).join("")
+        }
+
+      </div>
+
+    `;
+
 }
-async function openTableDirect(t){
- const fake=MODULES.flatMap(g=>g.items).find(x=>x[3]===t);
- if(fake){await showSection(fake[0]);return}
- current="";document.getElementById("content").innerHTML=`<div class="section-head"><div><div class="eyebrow">Database Explorer</div><h2>${pretty(t)}</h2></div><button class="btn primary" onclick="openCreate('${t}')">＋ Add Record</button></div><div class="toolbar"><input class="grow" id="moduleFilter" placeholder="Filter rows..." oninput="drawRows()"><button class="btn" onclick="loadRows('${t}')">↻ Refresh</button></div><div id="tableArea" class="table-wrap"><div class="loading">Loading…</div></div>`;
- currentRows=[];await loadRows(t);
- window.__directTable=t;
+
+
+/* =========================================================
+   DIRECT TABLE
+========================================================= */
+
+async function openTableDirect(
+  table
+){
+
+  currentTable =
+    table;
+
+  current =
+    "database-direct";
+
+  document
+    .getElementById("content")
+    .innerHTML = `
+
+      <div class="section-head">
+
+        <div>
+
+          <div class="eyebrow">
+            Database Explorer
+          </div>
+
+          <h2>
+            ${esc(
+              DREAM_LABEL_OVERRIDES[table] ||
+              pretty(table)
+            )}
+          </h2>
+
+          <div class="muted">
+            public.${esc(table)}
+          </div>
+
+        </div>
+
+        <button
+          class="btn ${
+            table.startsWith("dream_")
+              ? "dream"
+              : "primary"
+          }"
+          onclick="openCreate('${table}')"
+        >
+          ＋ Add Record
+        </button>
+
+      </div>
+
+
+      <div class="toolbar">
+
+        <input
+          class="grow"
+          id="moduleFilter"
+          placeholder="Filter rows..."
+          oninput="drawRows()"
+        >
+
+        <button
+          class="btn"
+          onclick="loadRows('${table}')"
+        >
+          ↻ Refresh
+        </button>
+
+        <button
+          class="btn"
+          onclick="exportCSV()"
+        >
+          Export CSV
+        </button>
+
+        <button
+          class="btn"
+          onclick="renderDatabase()"
+        >
+          ← Database
+        </button>
+
+      </div>
+
+
+      <div
+        id="tableArea"
+        class="table-wrap"
+      >
+        <div class="loading">
+          Loading…
+        </div>
+      </div>
+
+    `;
+
+  await loadRows(table);
+
 }
+
+
+/* =========================================================
+   SYSTEM HEALTH
+========================================================= */
+
+async function renderSystemHealth(){
+
+  const authResult =
+    await sb.auth.getUser();
+
+  const adminResult =
+    await sb.rpc(
+      "crowrules_is_admin"
+    );
+
+  const schemaStatus =
+    schemaLoaded;
+
+  const authOK =
+    !authResult.error &&
+    !!authResult.data?.user;
+
+  const adminOK =
+    !adminResult.error &&
+    adminResult.data === true;
+
+  document
+    .getElementById("content")
+    .innerHTML = `
+
+      <div class="hero">
+
+        <div class="eyebrow">
+          Command Center
+        </div>
+
+        <h1>
+          System Health
+        </h1>
+
+        <p>
+          Live diagnostic status for the
+          CrowRules administration console.
+        </p>
+
+        <div class="actions">
+
+          <button
+            class="btn"
+            onclick="showSection('system-health')"
+          >
+            ↻ Run Diagnostics
+          </button>
+
+          <button
+            class="btn"
+            onclick="loadSchema().then(()=>{
+              buildNav();
+              showSection('system-health');
+            })"
+          >
+            Refresh Schema
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="health-grid">
+
+        <div class="card health-card">
+
+          <h3>
+            <span class="health-dot ${
+              authOK ? "" : "bad"
+            }"></span>
+            Supabase Auth
+          </h3>
+
+          <p class="muted">
+            ${
+              authOK
+                ? "Authenticated administrator session detected."
+                : "No valid authenticated session."
+            }
+          </p>
+
+        </div>
+
+
+        <div class="card health-card">
+
+          <h3>
+            <span class="health-dot ${
+              adminOK ? "" : "bad"
+            }"></span>
+            Administrator Authorization
+          </h3>
+
+          <p class="muted">
+            ${
+              adminOK
+                ? "crowrules_is_admin() returned true."
+                : "Administrator authorization failed."
+            }
+          </p>
+
+        </div>
+
+
+        <div class="card health-card">
+
+          <h3>
+            <span class="health-dot ${
+              schemaStatus ? "" : "bad"
+            }"></span>
+            Schema Service
+          </h3>
+
+          <p class="muted">
+            ${
+              schemaStatus
+                ? Object.keys(schema).length +
+                  " public tables loaded."
+                : "Schema metadata unavailable."
+            }
+          </p>
+
+        </div>
+
+
+        <div class="card health-card">
+
+          <h3>
+            <span class="health-dot"></span>
+            Supabase Project
+          </h3>
+
+          <p class="muted">
+            ${esc(SUPABASE_URL)}
+          </p>
+
+        </div>
+
+
+        <div class="card health-card">
+
+          <h3>
+            <span class="health-dot"></span>
+            Dream World
+          </h3>
+
+          <p class="muted">
+            ${
+              dreamTables.length
+            }
+            Dream World tables discovered.
+          </p>
+
+        </div>
+
+
+        <div class="card health-card">
+
+          <h3>
+            <span class="health-dot"></span>
+            Security Model
+          </h3>
+
+          <p class="muted">
+            Browser operations use the publishable
+            key and remain subject to Supabase RLS.
+          </p>
+
+        </div>
+
+      </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
 function renderSettings(){
- document.getElementById("content").innerHTML=`<div class="hero"><div class="eyebrow">System</div><h1>Admin Settings</h1><p>Supabase project configuration and administrative controls for this single-file console.</p><div class="actions"><button class="btn" onclick="loadSchema().then(()=>toast('Schema refreshed'))">Refresh Schema</button><button class="btn" onclick="location.reload()">Reload Console</button><button class="btn danger" onclick="signOut()">Sign Out</button></div></div><div class="grid"><div class="card module"><h3>Supabase</h3><p>${SUPABASE_URL}</p></div><div class="card module"><h3>Authorization</h3><p>Admin access is checked through <b>crowrules_is_admin()</b>. Database operations remain subject to Supabase RLS.</p></div><div class="card module"><h3>Schema Service</h3><p>Protected RPC: <b>crowrules_admin_schema()</b>. It supplies current public-table and column metadata so forms don't rely on stale hard-coded schemas.</p></div></div>`;
+
+  document
+    .getElementById("content")
+    .innerHTML = `
+
+      <div class="hero">
+
+        <div class="eyebrow">
+          System
+        </div>
+
+        <h1>
+          Admin Settings
+        </h1>
+
+        <p>
+          Configuration and administrative controls
+          for the CrowRules universal administration console.
+        </p>
+
+        <div class="actions">
+
+          <button
+            class="btn"
+            onclick="loadSchema().then(()=>{
+              buildNav();
+              toast('Schema refreshed');
+            })"
+          >
+            Refresh Schema
+          </button>
+
+          <button
+            class="btn"
+            onclick="location.reload()"
+          >
+            Reload Console
+          </button>
+
+          <button
+            class="btn danger"
+            onclick="signOut()"
+          >
+            Sign Out
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="grid">
+
+        <div class="card module">
+
+          <h3>
+            Supabase Project
+          </h3>
+
+          <p>
+            ${esc(SUPABASE_URL)}
+          </p>
+
+        </div>
+
+
+        <div class="card module">
+
+          <h3>
+            Authorization
+          </h3>
+
+          <p>
+            Administrator access is checked through
+            <b>crowrules_is_admin()</b>.
+            Database requests remain protected by
+            Supabase Row Level Security.
+          </p>
+
+        </div>
+
+
+        <div class="card module">
+
+          <h3>
+            Schema Service
+          </h3>
+
+          <p>
+            Protected RPC:
+            <b>crowrules_admin_schema()</b>.
+            Current database metadata drives the
+            CRUD forms instead of stale hard-coded
+            table definitions.
+          </p>
+
+        </div>
+
+
+        <div class="card module dream-module">
+
+          <h3>
+            ✦ Dream World
+          </h3>
+
+          <p>
+            ${dreamTables.length}
+            Dream World tables currently detected.
+          </p>
+
+        </div>
+
+      </div>
+
+    `;
+
 }
+
+
+/* =========================================================
+   CSV
+========================================================= */
+
 function exportCSV(){
- if(!currentRows.length){toast("Nothing to export",true);return}
- const cols=Object.keys(currentRows[0]);const lines=[cols.join(",")].concat(currentRows.map(r=>cols.map(c=>`"${String(typeof r[c]==="object"?JSON.stringify(r[c]):r[c]??"").replace(/"/g,'""')}"`).join(",")));
- const blob=new Blob([lines.join("\n")],{type:"text/csv"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=(moduleByKey(current)?.[3]||window.__directTable||"export")+".csv";a.click();URL.revokeObjectURL(a.href);
+
+  if(!currentRows.length){
+
+    toast(
+      "Nothing to export.",
+      true
+    );
+
+    return;
+
+  }
+
+  const columns =
+    Object.keys(
+      currentRows[0]
+    );
+
+  const lines = [
+
+    columns.join(","),
+
+    ...currentRows.map(row=>
+
+      columns
+        .map(column=>{
+
+          let value =
+            row[column];
+
+          if(
+            typeof value === "object" &&
+            value !== null
+          ){
+
+            value =
+              JSON.stringify(value);
+
+          }
+
+          return `"${String(
+            value ?? ""
+          ).replace(
+            /"/g,
+            '""'
+          )}"`;
+
+        })
+        .join(",")
+
+    )
+
+  ];
+
+  const blob =
+    new Blob(
+      [
+        lines.join("\n")
+      ],
+      {
+        type:"text/csv"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    (
+      currentTable ||
+      "crowrules-export"
+    ) +
+    ".csv";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(
+    url
+  );
+
 }
-function closeModal(){document.getElementById("modal").classList.remove("open");editing=null}
-function toggleSidebar(){document.getElementById("sidebar").classList.toggle("open")}
-function renderCurrent(){if(current==="dashboard")renderDashboard();else if(current==="database")renderDatabase();else if(current==="settings")renderSettings();else {const m=moduleByKey(current);if(m?.[3])renderTableModule(m[3],m[2])}}
-function toast(msg,err=false){const t=document.getElementById("toast");t.textContent=msg;t.className="toast show "+(err?"err":"ok");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.className="toast",3500)}
-sb.auth.onAuthStateChange(()=>{});
+
+
+/* =========================================================
+   MODAL / UI
+========================================================= */
+
+function closeModal(){
+
+  document
+    .getElementById("modal")
+    .classList.remove("open");
+
+  editing = null;
+
+}
+
+
+function toggleSidebar(){
+
+  document
+    .getElementById("sidebar")
+    .classList.toggle("open");
+
+}
+
+
+function toast(
+  message,
+  error=false
+){
+
+  const el =
+    document.getElementById(
+      "toast"
+    );
+
+  el.textContent =
+    message;
+
+  el.className =
+    "toast show " +
+    (
+      error
+        ? "err"
+        : "ok"
+    );
+
+  clearTimeout(
+    window.__toastTimer
+  );
+
+  window.__toastTimer =
+    setTimeout(
+      ()=>{
+        el.className =
+          "toast";
+      },
+      4000
+    );
+
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+  const el =
+    document.getElementById(
+      "clock"
+    );
+
+  if(!el)
+    return;
+
+  el.textContent =
+    new Date()
+      .toLocaleString(
+        undefined,
+        {
+          dateStyle:"medium",
+          timeStyle:"medium"
+        }
+      );
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      event.key === "Escape"
+    ){
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
 boot();
+
 </script>
+
 </body>
 </html>
