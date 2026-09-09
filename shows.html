@@ -12,7 +12,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- IMPORTANT: lowercase package name -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <style>
 :root{
@@ -31,6 +32,7 @@
   --green:#28d17c;
   --yellow:#f4c542;
   --blue:#4da3ff;
+  --danger:#ff5863;
   --shadow:0 20px 60px rgba(0,0,0,.45);
   --radius:14px;
   --sidebar:270px;
@@ -46,8 +48,16 @@ body{
   padding:0;
   min-height:100%;
   background:
-    radial-gradient(circle at 10% 0%,rgba(229,9,20,.08),transparent 30%),
-    radial-gradient(circle at 90% 100%,rgba(229,9,20,.05),transparent 30%),
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(229,9,20,.08),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 90% 100%,
+      rgba(229,9,20,.05),
+      transparent 30%
+    ),
     var(--bg);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
@@ -68,6 +78,11 @@ button{
   cursor:pointer;
 }
 
+button:disabled{
+  cursor:not-allowed;
+  opacity:.55;
+}
+
 a{
   color:inherit;
   text-decoration:none;
@@ -77,9 +92,9 @@ a{
   display:none!important;
 }
 
-/* =========================
-   AUTH LOADING
-========================= */
+/* ============================================================
+   AUTH OVERLAY
+============================================================ */
 
 #authOverlay{
   position:fixed;
@@ -92,12 +107,16 @@ a{
 }
 
 .authBox{
-  width:min(420px,90vw);
+  width:min(430px,90vw);
   padding:36px;
   border:1px solid var(--line);
   border-radius:20px;
   background:
-    linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.01)),
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.035),
+      rgba(255,255,255,.01)
+    ),
     #080809;
   box-shadow:var(--shadow);
   text-align:center;
@@ -109,14 +128,19 @@ a{
   margin:0 auto 18px;
   border-radius:16px;
   background:
-    linear-gradient(135deg,var(--red),#6f0006);
+    linear-gradient(
+      135deg,
+      var(--red),
+      #6f0006
+    );
   display:flex;
   align-items:center;
   justify-content:center;
   font-family:Orbitron,sans-serif;
   font-weight:800;
   font-size:25px;
-  box-shadow:0 0 30px rgba(229,9,20,.2);
+  box-shadow:
+    0 0 30px rgba(229,9,20,.2);
 }
 
 .authTitle{
@@ -129,6 +153,7 @@ a{
 .authText{
   color:var(--muted);
   font-size:13px;
+  line-height:1.5;
 }
 
 .spinner{
@@ -142,12 +167,14 @@ a{
 }
 
 @keyframes spin{
-  to{transform:rotate(360deg)}
+  to{
+    transform:rotate(360deg);
+  }
 }
 
-/* =========================
+/* ============================================================
    APP
-========================= */
+============================================================ */
 
 #app{
   min-height:100vh;
@@ -158,15 +185,19 @@ a{
   min-height:100vh;
 }
 
-/* =========================
+/* ============================================================
    SIDEBAR
-========================= */
+============================================================ */
 
 .sidebar{
   width:var(--sidebar);
   flex:0 0 var(--sidebar);
   background:
-    linear-gradient(180deg,#09090a,#060607);
+    linear-gradient(
+      180deg,
+      #09090a,
+      #060607
+    );
   border-right:1px solid var(--line);
   position:fixed;
   inset:0 auto 0 0;
@@ -200,7 +231,12 @@ a{
   width:40px;
   height:40px;
   border-radius:11px;
-  background:linear-gradient(135deg,var(--red),#750006);
+  background:
+    linear-gradient(
+      135deg,
+      var(--red),
+      #750006
+    );
   display:flex;
   align-items:center;
   justify-content:center;
@@ -261,7 +297,11 @@ a{
 
 .navItem.active{
   background:
-    linear-gradient(90deg,rgba(229,9,20,.2),rgba(229,9,20,.06));
+    linear-gradient(
+      90deg,
+      rgba(229,9,20,.2),
+      rgba(229,9,20,.06)
+    );
   color:#fff;
   border:1px solid rgba(229,9,20,.22);
 }
@@ -276,9 +316,9 @@ a{
   color:var(--red2);
 }
 
-/* =========================
+/* ============================================================
    MAIN
-========================= */
+============================================================ */
 
 .main{
   width:100%;
@@ -350,7 +390,8 @@ a{
   height:7px;
   border-radius:50%;
   background:var(--green);
-  box-shadow:0 0 10px rgba(40,209,124,.55);
+  box-shadow:
+    0 0 10px rgba(40,209,124,.55);
 }
 
 .logoutBtn{
@@ -367,9 +408,9 @@ a{
   background:#250d10;
 }
 
-/* =========================
+/* ============================================================
    CONTENT
-========================= */
+============================================================ */
 
 .content{
   padding:28px;
@@ -423,14 +464,25 @@ a{
 }
 
 .btnPrimary{
-  background:linear-gradient(135deg,var(--red),#a0060d);
+  background:
+    linear-gradient(
+      135deg,
+      var(--red),
+      #a0060d
+    );
   border-color:#ef2029;
-  color:white;
-  box-shadow:0 8px 24px rgba(229,9,20,.14);
+  color:#fff;
+  box-shadow:
+    0 8px 24px rgba(229,9,20,.14);
 }
 
 .btnPrimary:hover{
-  background:linear-gradient(135deg,#f01923,#b4070f);
+  background:
+    linear-gradient(
+      135deg,
+      #f01923,
+      #b4070f
+    );
 }
 
 .btnDanger{
@@ -448,20 +500,25 @@ a{
   font-size:10px;
 }
 
-/* =========================
+/* ============================================================
    STATS
-========================= */
+============================================================ */
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:
+    repeat(4,minmax(0,1fr));
   gap:12px;
   margin-bottom:22px;
 }
 
 .stat{
   background:
-    linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.012)),
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.035),
+      rgba(255,255,255,.012)
+    ),
     var(--panel);
   border:1px solid var(--line);
   border-radius:var(--radius);
@@ -501,9 +558,9 @@ a{
   margin-top:4px;
 }
 
-/* =========================
+/* ============================================================
    TOOLBAR
-========================= */
+============================================================ */
 
 .toolbar{
   display:flex;
@@ -543,7 +600,8 @@ a{
 
 .searchBox input:focus{
   border-color:#5d2025;
-  box-shadow:0 0 0 3px rgba(229,9,20,.07);
+  box-shadow:
+    0 0 0 3px rgba(229,9,20,.07);
 }
 
 .select{
@@ -566,9 +624,9 @@ a{
   margin-left:auto;
 }
 
-/* =========================
+/* ============================================================
    TABLE
-========================= */
+============================================================ */
 
 .tableWrap{
   border:1px solid var(--line);
@@ -644,7 +702,11 @@ tbody tr:last-child td{
   height:40px;
   border-radius:7px;
   background:
-    linear-gradient(135deg,#1b1b1f,#09090a);
+    linear-gradient(
+      135deg,
+      #1b1b1f,
+      #09090a
+    );
   border:1px solid #29292f;
   display:flex;
   align-items:center;
@@ -723,11 +785,14 @@ tbody tr:last-child td{
 .emptyText{
   color:var(--muted);
   font-size:11px;
+  line-height:1.6;
+  max-width:700px;
+  margin:0 auto;
 }
 
-/* =========================
+/* ============================================================
    MODAL
-========================= */
+============================================================ */
 
 .modal{
   position:fixed;
@@ -750,11 +815,16 @@ tbody tr:last-child td{
   max-height:92vh;
   overflow-y:auto;
   background:
-    linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.01)),
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.035),
+      rgba(255,255,255,.01)
+    ),
     #0b0b0d;
   border:1px solid #303036;
   border-radius:17px;
-  box-shadow:0 30px 100px rgba(0,0,0,.7);
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.7);
 }
 
 .modalHeader{
@@ -795,7 +865,8 @@ tbody tr:last-child td{
 
 .formGrid{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
   gap:14px;
 }
 
@@ -836,7 +907,8 @@ input:focus,
 textarea:focus,
 .formSelect:focus{
   border-color:#69242a;
-  box-shadow:0 0 0 3px rgba(229,9,20,.06);
+  box-shadow:
+    0 0 0 3px rgba(229,9,20,.06);
 }
 
 textarea{
@@ -893,9 +965,9 @@ textarea{
   gap:8px;
 }
 
-/* =========================
+/* ============================================================
    TOAST
-========================= */
+============================================================ */
 
 .toastContainer{
   position:fixed;
@@ -911,7 +983,8 @@ textarea{
 .toast{
   border:1px solid #303037;
   background:#111114;
-  box-shadow:0 18px 50px rgba(0,0,0,.55);
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.55);
   border-radius:11px;
   padding:13px 14px;
   animation:toastIn .2s ease;
@@ -923,6 +996,10 @@ textarea{
 
 .toast.error{
   border-color:#5a2529;
+}
+
+.toast.warning{
+  border-color:#5d4a1b;
 }
 
 .toastTitle{
@@ -942,27 +1019,30 @@ textarea{
     transform:translateY(10px);
     opacity:0;
   }
+
   to{
     transform:translateY(0);
     opacity:1;
   }
 }
 
-/* =========================
+/* ============================================================
    MOBILE
-========================= */
+============================================================ */
 
 .mobileOverlay{
   display:none;
 }
 
 @media(max-width:1050px){
+
   :root{
     --sidebar:240px;
   }
 
   .stats{
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
   }
 
   .hero{
@@ -972,6 +1052,7 @@ textarea{
 }
 
 @media(max-width:800px){
+
   .sidebar{
     transform:translateX(-100%);
     transition:.2s ease;
@@ -1024,6 +1105,7 @@ textarea{
 }
 
 @media(max-width:560px){
+
   .stats{
     grid-template-columns:1fr;
   }
@@ -1072,423 +1154,713 @@ textarea{
   .topLeft{
     min-width:0;
   }
+
+  .modalFooter{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .footerActions{
+    width:100%;
+  }
+
+  .footerActions .btn{
+    flex:1;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUTH -->
+<!-- ==========================================================
+     AUTH
+=========================================================== -->
+
 <div id="authOverlay">
+
   <div class="authBox">
-    <div class="authLogo">CR</div>
-    <div class="authTitle">CrowRules Admin</div>
-    <div class="authText" id="authText">
+
+    <div class="authLogo">
+      CR
+    </div>
+
+    <div class="authTitle">
+      CrowRules Admin
+    </div>
+
+    <div
+      class="authText"
+      id="authText"
+    >
       Verifying your administrator session...
     </div>
+
     <div class="spinner"></div>
+
   </div>
+
 </div>
 
-<div id="app" class="hidden">
+<!-- ==========================================================
+     APP
+=========================================================== -->
 
-  <div class="mobileOverlay" id="mobileOverlay"></div>
+<div
+  id="app"
+  class="hidden"
+>
+
+  <div
+    class="mobileOverlay"
+    id="mobileOverlay"
+  ></div>
 
   <div class="layout">
 
-    <!-- =========================
+    <!-- ======================================================
          SIDEBAR
-    ========================== -->
-    <aside class="sidebar" id="sidebar">
+    ======================================================= -->
+
+    <aside
+      class="sidebar"
+      id="sidebar"
+    >
 
       <div class="brand">
-        <div class="brandMark">CR</div>
-        <div class="brandText">
-          <div class="brandTitle">CrowRules</div>
-          <div class="brandSub">Entertainment Admin</div>
+
+        <div class="brandMark">
+          CR
         </div>
+
+        <div class="brandText">
+
+          <div class="brandTitle">
+            CrowRules
+          </div>
+
+          <div class="brandSub">
+            Entertainment Admin
+          </div>
+
+        </div>
+
       </div>
 
       <nav class="nav">
 
-        <div class="navLabel">Main</div>
+        <div class="navLabel">
+          Main
+        </div>
 
-        <a class="navItem" href="admin.html">
+        <a
+          class="navItem"
+          href="admin.html"
+        >
           <span class="navIcon">⌂</span>
           Dashboard
         </a>
 
-        <a class="navItem" href="activity.html">
+        <a
+          class="navItem"
+          href="activity.html"
+        >
           <span class="navIcon">◷</span>
           Activity
         </a>
 
-        <a class="navItem" href="notifications.html">
+        <a
+          class="navItem"
+          href="notifications.html"
+        >
           <span class="navIcon">♢</span>
           Notifications
         </a>
 
-        <a class="navItem" href="content.html">
+        <a
+          class="navItem"
+          href="content.html"
+        >
           <span class="navIcon">▦</span>
           All Content
         </a>
 
-        <div class="navLabel">Content</div>
+        <div class="navLabel">
+          Content
+        </div>
 
-        <a class="navItem active" href="shows.html">
+        <a
+          class="navItem active"
+          href="shows.html"
+        >
           <span class="navIcon">▶</span>
           Shows
         </a>
 
-        <a class="navItem" href="episodes.html">
+        <a
+          class="navItem"
+          href="episodes.html"
+        >
           <span class="navIcon">▤</span>
           Episodes
         </a>
 
-        <a class="navItem" href="movies.html">
+        <a
+          class="navItem"
+          href="movies.html"
+        >
           <span class="navIcon">▣</span>
           Movies
         </a>
 
-        <a class="navItem" href="videos.html">
+        <a
+          class="navItem"
+          href="videos.html"
+        >
           <span class="navIcon">▷</span>
           Videos
         </a>
 
-        <a class="navItem" href="photos.html">
+        <a
+          class="navItem"
+          href="photos.html"
+        >
           <span class="navIcon">▧</span>
           Photos
         </a>
 
-        <a class="navItem" href="audio.html">
+        <a
+          class="navItem"
+          href="audio.html"
+        >
           <span class="navIcon">♫</span>
           Audio
         </a>
 
-        <a class="navItem" href="articles.html">
+        <a
+          class="navItem"
+          href="articles.html"
+        >
           <span class="navIcon">A</span>
           Articles
         </a>
 
-        <a class="navItem" href="categories.html">
+        <a
+          class="navItem"
+          href="categories.html"
+        >
           <span class="navIcon">#</span>
           Categories
         </a>
 
-        <a class="navItem" href="tags.html">
+        <a
+          class="navItem"
+          href="tags.html"
+        >
           <span class="navIcon">⌁</span>
           Tags
         </a>
 
-        <a class="navItem" href="media-library.html">
+        <a
+          class="navItem"
+          href="media-library.html"
+        >
           <span class="navIcon">▰</span>
           Media Library
         </a>
 
-        <div class="navLabel">CrowRules TV</div>
+        <div class="navLabel">
+          CrowRules TV
+        </div>
 
-        <a class="navItem" href="channels.html">
+        <a
+          class="navItem"
+          href="channels.html"
+        >
           <span class="navIcon">▥</span>
           Channels
         </a>
 
-        <a class="navItem" href="schedule.html">
+        <a
+          class="navItem"
+          href="schedule.html"
+        >
           <span class="navIcon">◫</span>
           Schedule
         </a>
 
-        <a class="navItem" href="live-control.html">
+        <a
+          class="navItem"
+          href="live-control.html"
+        >
           <span class="navIcon">●</span>
           Live Control
         </a>
 
-        <a class="navItem" href="tv-guide.html">
+        <a
+          class="navItem"
+          href="tv-guide.html"
+        >
           <span class="navIcon">▤</span>
           TV Guide
         </a>
 
-        <a class="navItem" href="on-demand.html">
+        <a
+          class="navItem"
+          href="on-demand.html"
+        >
           <span class="navIcon">◉</span>
           On Demand
         </a>
 
-        <div class="navLabel">Members</div>
+        <div class="navLabel">
+          Members
+        </div>
 
-        <a class="navItem" href="members.html">
+        <a
+          class="navItem"
+          href="members.html"
+        >
           <span class="navIcon">♙</span>
           Members
         </a>
 
-        <a class="navItem" href="profiles.html">
+        <a
+          class="navItem"
+          href="profiles.html"
+        >
           <span class="navIcon">◎</span>
           Profiles
         </a>
 
-        <a class="navItem" href="membership.html">
+        <a
+          class="navItem"
+          href="membership.html"
+        >
           <span class="navIcon">★</span>
           Membership
         </a>
 
-        <a class="navItem" href="subscriptions.html">
+        <a
+          class="navItem"
+          href="subscriptions.html"
+        >
           <span class="navIcon">◈</span>
           Subscriptions
         </a>
 
-        <a class="navItem" href="friends.html">
+        <a
+          class="navItem"
+          href="friends.html"
+        >
           <span class="navIcon">♧</span>
           Friends
         </a>
 
-        <a class="navItem" href="community.html">
+        <a
+          class="navItem"
+          href="community.html"
+        >
           <span class="navIcon">☷</span>
           Community
         </a>
 
-        <a class="navItem" href="messages.html">
+        <a
+          class="navItem"
+          href="messages.html"
+        >
           <span class="navIcon">✉</span>
           Messages
         </a>
 
-        <a class="navItem" href="favorites.html">
+        <a
+          class="navItem"
+          href="favorites.html"
+        >
           <span class="navIcon">♥</span>
           Favorites
         </a>
 
-        <a class="navItem" href="watch-history.html">
+        <a
+          class="navItem"
+          href="watch-history.html"
+        >
           <span class="navIcon">◴</span>
           Watch History
         </a>
 
-        <div class="navLabel">Management</div>
+        <div class="navLabel">
+          Management
+        </div>
 
-        <a class="navItem" href="moderation.html">
+        <a
+          class="navItem"
+          href="moderation.html"
+        >
           <span class="navIcon">!</span>
           Moderation
         </a>
 
-        <a class="navItem" href="creators.html">
+        <a
+          class="navItem"
+          href="creators.html"
+        >
           <span class="navIcon">♟</span>
           Creators
         </a>
 
-        <a class="navItem" href="creator-content.html">
+        <a
+          class="navItem"
+          href="creator-content.html"
+        >
           <span class="navIcon">◆</span>
           Creator Content
         </a>
 
-        <a class="navItem" href="approvals.html">
+        <a
+          class="navItem"
+          href="approvals.html"
+        >
           <span class="navIcon">✓</span>
           Approvals
         </a>
 
-        <a class="navItem" href="payouts.html">
+        <a
+          class="navItem"
+          href="payouts.html"
+        >
           <span class="navIcon">$</span>
           Payouts
         </a>
 
-        <div class="navLabel">Records</div>
+        <div class="navLabel">
+          Records
+        </div>
 
-        <a class="navItem" href="artists.html">
+        <a
+          class="navItem"
+          href="artists.html"
+        >
           <span class="navIcon">♬</span>
           Artists
         </a>
 
-        <a class="navItem" href="albums.html">
+        <a
+          class="navItem"
+          href="albums.html"
+        >
           <span class="navIcon">▤</span>
           Albums
         </a>
 
-        <a class="navItem" href="tracks.html">
+        <a
+          class="navItem"
+          href="tracks.html"
+        >
           <span class="navIcon">♪</span>
           Tracks
         </a>
 
-        <a class="navItem" href="releases.html">
+        <a
+          class="navItem"
+          href="releases.html"
+        >
           <span class="navIcon">◫</span>
           Releases
         </a>
 
-        <a class="navItem" href="playlists.html">
+        <a
+          class="navItem"
+          href="playlists.html"
+        >
           <span class="navIcon">≡</span>
           Playlists
         </a>
 
-        <div class="navLabel">Sports</div>
+        <div class="navLabel">
+          Sports
+        </div>
 
-        <a class="navItem" href="sports.html">
+        <a
+          class="navItem"
+          href="sports.html"
+        >
           <span class="navIcon">⚑</span>
           Sports
         </a>
 
-        <a class="navItem" href="teams.html">
+        <a
+          class="navItem"
+          href="teams.html"
+        >
           <span class="navIcon">♜</span>
           Teams
         </a>
 
-        <a class="navItem" href="games.html">
+        <a
+          class="navItem"
+          href="games.html"
+        >
           <span class="navIcon">●</span>
           Games
         </a>
 
-        <a class="navItem" href="standings.html">
+        <a
+          class="navItem"
+          href="standings.html"
+        >
           <span class="navIcon">≋</span>
           Standings
         </a>
 
-        <a class="navItem" href="rankings.html">
+        <a
+          class="navItem"
+          href="rankings.html"
+        >
           <span class="navIcon">↕</span>
           Rankings
         </a>
 
-        <a class="navItem" href="pickem.html">
+        <a
+          class="navItem"
+          href="pickem.html"
+        >
           <span class="navIcon">✓</span>
           Pick'em
         </a>
 
-        <div class="navLabel">Memorials</div>
+        <div class="navLabel">
+          Memorials
+        </div>
 
-        <a class="navItem" href="memorials.html">
+        <a
+          class="navItem"
+          href="memorials.html"
+        >
           <span class="navIcon">✦</span>
           Memorials
         </a>
 
-        <a class="navItem" href="memorial-photos.html">
+        <a
+          class="navItem"
+          href="memorial-photos.html"
+        >
           <span class="navIcon">▧</span>
           Memorial Photos
         </a>
 
-        <a class="navItem" href="candles.html">
+        <a
+          class="navItem"
+          href="candles.html"
+        >
           <span class="navIcon">♨</span>
           Candles
         </a>
 
-        <a class="navItem" href="memorial-videos.html">
+        <a
+          class="navItem"
+          href="memorial-videos.html"
+        >
           <span class="navIcon">▷</span>
           Memorial Videos
         </a>
 
-        <div class="navLabel">Business</div>
+        <div class="navLabel">
+          Business
+        </div>
 
-        <a class="navItem" href="records.html">
+        <a
+          class="navItem"
+          href="records.html"
+        >
           <span class="navIcon">♬</span>
           CrowRules Records
         </a>
 
-        <a class="navItem" href="publishing.html">
+        <a
+          class="navItem"
+          href="publishing.html"
+        >
           <span class="navIcon">▤</span>
           CrowRules Publishing
         </a>
 
-        <a class="navItem" href="yearbooks.html">
+        <a
+          class="navItem"
+          href="yearbooks.html"
+        >
           <span class="navIcon">▦</span>
           Yearbooks
         </a>
 
-        <a class="navItem" href="studios.html">
+        <a
+          class="navItem"
+          href="studios.html"
+        >
           <span class="navIcon">▣</span>
           Studios
         </a>
 
-        <a class="navItem" href="crowspace.html">
+        <a
+          class="navItem"
+          href="crowspace.html"
+        >
           <span class="navIcon">◎</span>
           CrowSpace
         </a>
 
-        <a class="navItem" href="awards.html">
+        <a
+          class="navItem"
+          href="awards.html"
+        >
           <span class="navIcon">★</span>
           Spectrum Awards
         </a>
 
-        <a class="navItem" href="business.html">
+        <a
+          class="navItem"
+          href="business.html"
+        >
           <span class="navIcon">◆</span>
           Business
         </a>
 
-        <div class="navLabel">Commerce</div>
+        <div class="navLabel">
+          Commerce
+        </div>
 
-        <a class="navItem" href="shop.html">
+        <a
+          class="navItem"
+          href="shop.html"
+        >
           <span class="navIcon">□</span>
           Shop
         </a>
 
-        <a class="navItem" href="products.html">
+        <a
+          class="navItem"
+          href="products.html"
+        >
           <span class="navIcon">▣</span>
           Products
         </a>
 
-        <a class="navItem" href="orders.html">
+        <a
+          class="navItem"
+          href="orders.html"
+        >
           <span class="navIcon">▤</span>
           Orders
         </a>
 
-        <a class="navItem" href="donations.html">
+        <a
+          class="navItem"
+          href="donations.html"
+        >
           <span class="navIcon">♥</span>
           Donations
         </a>
 
-        <a class="navItem" href="transactions.html">
+        <a
+          class="navItem"
+          href="transactions.html"
+        >
           <span class="navIcon">$</span>
           Transactions
         </a>
 
-        <div class="navLabel">System</div>
+        <div class="navLabel">
+          System
+        </div>
 
-        <a class="navItem" href="analytics.html">
+        <a
+          class="navItem"
+          href="analytics.html"
+        >
           <span class="navIcon">◒</span>
           Analytics
         </a>
 
-        <a class="navItem" href="database.html">
+        <a
+          class="navItem"
+          href="database.html"
+        >
           <span class="navIcon">▦</span>
           Database
         </a>
 
-        <a class="navItem" href="storage.html">
+        <a
+          class="navItem"
+          href="storage.html"
+        >
           <span class="navIcon">▰</span>
           Storage
         </a>
 
-        <a class="navItem" href="authentication.html">
+        <a
+          class="navItem"
+          href="authentication.html"
+        >
           <span class="navIcon">♙</span>
           Authentication
         </a>
 
-        <a class="navItem" href="roles.html">
+        <a
+          class="navItem"
+          href="roles.html"
+        >
           <span class="navIcon">♚</span>
           Roles
         </a>
 
-        <a class="navItem" href="permissions.html">
+        <a
+          class="navItem"
+          href="permissions.html"
+        >
           <span class="navIcon">✓</span>
           Permissions
         </a>
 
-        <a class="navItem" href="api.html">
+        <a
+          class="navItem"
+          href="api.html"
+        >
           <span class="navIcon">{ }</span>
           API
         </a>
 
-        <a class="navItem" href="logs.html">
+        <a
+          class="navItem"
+          href="logs.html"
+        >
           <span class="navIcon">≡</span>
           Logs
         </a>
 
-        <a class="navItem" href="settings.html">
+        <a
+          class="navItem"
+          href="settings.html"
+        >
           <span class="navIcon">⚙</span>
           Settings
         </a>
 
-        <a class="navItem" href="system-health.html">
+        <a
+          class="navItem"
+          href="system-health.html"
+        >
           <span class="navIcon">♥</span>
           System Health
         </a>
 
       </nav>
+
     </aside>
 
-    <!-- =========================
+    <!-- ======================================================
          MAIN
-    ========================== -->
+    ======================================================= -->
+
     <main class="main">
 
       <header class="topbar">
@@ -1500,11 +1872,21 @@ textarea{
             id="mobileMenu"
             type="button"
             aria-label="Open menu"
-          >☰</button>
+            aria-expanded="false"
+          >
+            ☰
+          </button>
 
           <div>
-            <div class="pageEyebrow">Content Management</div>
-            <div class="pageTitle">Shows Administration</div>
+
+            <div class="pageEyebrow">
+              Content Management
+            </div>
+
+            <div class="pageTitle">
+              Shows Administration
+            </div>
+
           </div>
 
         </div>
@@ -1512,8 +1894,13 @@ textarea{
         <div class="topRight">
 
           <div class="adminBadge">
+
             <span class="adminDot"></span>
-            <span id="adminEmail">Administrator</span>
+
+            <span id="adminEmail">
+              Administrator
+            </span>
+
           </div>
 
           <button
@@ -1533,11 +1920,17 @@ textarea{
         <div class="hero">
 
           <div>
-            <h1>Shows</h1>
+
+            <h1>
+              Shows
+            </h1>
+
             <p>
-              Manage CrowRules Entertainment programs, series, talk shows,
-              originals, live programming and other show destinations.
+              Manage CrowRules Entertainment programs, series,
+              talk shows, originals, live programming and other
+              show destinations.
             </p>
+
           </div>
 
           <div class="heroActions">
@@ -1570,85 +1963,190 @@ textarea{
 
         </div>
 
-        <!-- STATS -->
+        <!-- ==================================================
+             STATS
+        =================================================== -->
 
         <div class="stats">
 
           <div class="stat">
+
             <div class="statTop">
-              <div class="statLabel">Total Shows</div>
-              <div class="statIcon">▶</div>
+
+              <div class="statLabel">
+                Total Shows
+              </div>
+
+              <div class="statIcon">
+                ▶
+              </div>
+
             </div>
-            <div class="statValue" id="totalCount">0</div>
-            <div class="statMeta">All show records</div>
+
+            <div
+              class="statValue"
+              id="totalCount"
+            >
+              0
+            </div>
+
+            <div class="statMeta">
+              All show records
+            </div>
+
           </div>
 
           <div class="stat">
+
             <div class="statTop">
-              <div class="statLabel">Active</div>
-              <div class="statIcon">●</div>
+
+              <div class="statLabel">
+                Active
+              </div>
+
+              <div class="statIcon">
+                ●
+              </div>
+
             </div>
-            <div class="statValue" id="activeCount">0</div>
-            <div class="statMeta">Currently active</div>
+
+            <div
+              class="statValue"
+              id="activeCount"
+            >
+              0
+            </div>
+
+            <div class="statMeta">
+              Currently active
+            </div>
+
           </div>
 
           <div class="stat">
+
             <div class="statTop">
-              <div class="statLabel">Featured</div>
-              <div class="statIcon">★</div>
+
+              <div class="statLabel">
+                Featured
+              </div>
+
+              <div class="statIcon">
+                ★
+              </div>
+
             </div>
-            <div class="statValue" id="featuredCount">0</div>
-            <div class="statMeta">Featured programs</div>
+
+            <div
+              class="statValue"
+              id="featuredCount"
+            >
+              0
+            </div>
+
+            <div class="statMeta">
+              Featured programs
+            </div>
+
           </div>
 
           <div class="stat">
+
             <div class="statTop">
-              <div class="statLabel">Categories</div>
-              <div class="statIcon">#</div>
+
+              <div class="statLabel">
+                Categories
+              </div>
+
+              <div class="statIcon">
+                #
+              </div>
+
             </div>
-            <div class="statValue" id="categoryCount">0</div>
-            <div class="statMeta">Unique categories</div>
+
+            <div
+              class="statValue"
+              id="categoryCount"
+            >
+              0
+            </div>
+
+            <div class="statMeta">
+              Unique categories
+            </div>
+
           </div>
 
         </div>
 
-        <!-- TOOLBAR -->
+        <!-- ==================================================
+             TOOLBAR
+        =================================================== -->
 
         <div class="toolbar">
 
           <div class="searchBox">
-            <span>⌕</span>
+
+            <span>
+              ⌕
+            </span>
+
             <input
               id="searchInput"
               type="search"
               placeholder="Search shows, slugs, categories..."
               autocomplete="off"
             >
+
           </div>
 
           <select
             class="select"
             id="statusFilter"
           >
-            <option value="all">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
+
+            <option value="all">
+              All Statuses
+            </option>
+
+            <option value="active">
+              Active
+            </option>
+
+            <option value="inactive">
+              Inactive
+            </option>
+
           </select>
 
           <select
             class="select"
             id="featuredFilter"
           >
-            <option value="all">All Featured</option>
-            <option value="featured">Featured</option>
-            <option value="standard">Standard</option>
+
+            <option value="all">
+              All Featured
+            </option>
+
+            <option value="featured">
+              Featured
+            </option>
+
+            <option value="standard">
+              Standard
+            </option>
+
           </select>
 
           <select
             class="select"
             id="categoryFilter"
           >
-            <option value="all">All Categories</option>
+
+            <option value="all">
+              All Categories
+            </option>
+
           </select>
 
           <button
@@ -1659,13 +2157,18 @@ textarea{
             Clear
           </button>
 
-          <div class="toolbarCount" id="toolbarCount">
+          <div
+            class="toolbarCount"
+            id="toolbarCount"
+          >
             0 shows
           </div>
 
         </div>
 
-        <!-- TABLE -->
+        <!-- ==================================================
+             TABLE
+        =================================================== -->
 
         <div class="tableWrap">
 
@@ -1674,16 +2177,43 @@ textarea{
             <table>
 
               <thead>
+
                 <tr>
-                  <th>Show</th>
-                  <th>Category</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Featured</th>
-                  <th>Order</th>
-                  <th>Updated</th>
-                  <th>Actions</th>
+
+                  <th>
+                    Show
+                  </th>
+
+                  <th>
+                    Category
+                  </th>
+
+                  <th>
+                    Type
+                  </th>
+
+                  <th>
+                    Status
+                  </th>
+
+                  <th>
+                    Featured
+                  </th>
+
+                  <th>
+                    Order
+                  </th>
+
+                  <th>
+                    Updated
+                  </th>
+
+                  <th>
+                    Actions
+                  </th>
+
                 </tr>
+
               </thead>
 
               <tbody id="showsBody"></tbody>
@@ -1699,11 +2229,12 @@ textarea{
     </main>
 
   </div>
+
 </div>
 
-<!-- =========================
-     MODAL
-========================= -->
+<!-- ==========================================================
+     SHOW MODAL
+=========================================================== -->
 
 <div
   class="modal"
@@ -1715,7 +2246,10 @@ textarea{
 
     <div class="modalHeader">
 
-      <div class="modalTitle" id="modalTitle">
+      <div
+        class="modalTitle"
+        id="modalTitle"
+      >
         New Show
       </div>
 
@@ -1743,7 +2277,9 @@ textarea{
 
           <div class="formGroup">
 
-            <label for="showTitle">Title *</label>
+            <label for="showTitle">
+              Title *
+            </label>
 
             <input
               id="showTitle"
@@ -1757,7 +2293,9 @@ textarea{
 
           <div class="formGroup">
 
-            <label for="showKey">Show Key *</label>
+            <label for="showKey">
+              Show Key *
+            </label>
 
             <input
               id="showKey"
@@ -1765,17 +2303,21 @@ textarea{
               required
               maxlength="120"
               placeholder="tacoma-nights"
+              pattern="[a-zA-Z0-9_-]+"
             >
 
             <div class="help">
-              Internal unique identifier.
+              Unique internal identifier. Letters, numbers,
+              hyphens and underscores are recommended.
             </div>
 
           </div>
 
           <div class="formGroup">
 
-            <label for="showSlug">Slug *</label>
+            <label for="showSlug">
+              Slug *
+            </label>
 
             <input
               id="showSlug"
@@ -1785,11 +2327,17 @@ textarea{
               placeholder="tacoma-nights"
             >
 
+            <div class="help">
+              Public URL-friendly identifier.
+            </div>
+
           </div>
 
           <div class="formGroup">
 
-            <label for="showCategory">Category *</label>
+            <label for="showCategory">
+              Category *
+            </label>
 
             <input
               id="showCategory"
@@ -1800,7 +2348,9 @@ textarea{
               placeholder="talk"
             >
 
+            <!-- These exactly match the database CHECK constraint -->
             <datalist id="categorySuggestions">
+
               <option value="talk">
               <option value="live">
               <option value="documentary">
@@ -1810,17 +2360,20 @@ textarea{
               <option value="gaming">
               <option value="podcast">
               <option value="original">
-              <option value="entertainment">
-              <option value="sports">
-              <option value="comedy">
-              <option value="special">
+
             </datalist>
+
+            <div class="help">
+              Must be one of the supported show categories.
+            </div>
 
           </div>
 
           <div class="formGroup">
 
-            <label for="showType">Show Type</label>
+            <label for="showType">
+              Show Type
+            </label>
 
             <input
               id="showType"
@@ -1833,7 +2386,9 @@ textarea{
 
           <div class="formGroup">
 
-            <label for="showInitials">Initials</label>
+            <label for="showInitials">
+              Initials
+            </label>
 
             <input
               id="showInitials"
@@ -1846,7 +2401,9 @@ textarea{
 
           <div class="formGroup full">
 
-            <label for="showDescription">Description</label>
+            <label for="showDescription">
+              Description
+            </label>
 
             <textarea
               id="showDescription"
@@ -1858,7 +2415,9 @@ textarea{
 
           <div class="formGroup">
 
-            <label for="destinationUrl">Destination URL</label>
+            <label for="destinationUrl">
+              Destination URL
+            </label>
 
             <input
               id="destinationUrl"
@@ -1875,7 +2434,9 @@ textarea{
 
           <div class="formGroup">
 
-            <label for="imageUrl">Image URL</label>
+            <label for="imageUrl">
+              Image URL
+            </label>
 
             <input
               id="imageUrl"
@@ -1888,13 +2449,16 @@ textarea{
 
           <div class="formGroup">
 
-            <label for="sortOrder">Sort Order</label>
+            <label for="sortOrder">
+              Sort Order
+            </label>
 
             <input
               id="sortOrder"
               type="number"
               min="0"
               max="999999"
+              step="1"
               value="0"
             >
 
@@ -1902,25 +2466,33 @@ textarea{
 
           <div class="formGroup">
 
-            <label>Publishing Controls</label>
+            <label>
+              Publishing Controls
+            </label>
 
             <div class="checkRow">
 
               <label class="check">
+
                 <input
                   id="isActive"
                   type="checkbox"
                   checked
                 >
+
                 Active
+
               </label>
 
               <label class="check">
+
                 <input
                   id="isFeatured"
                   type="checkbox"
                 >
+
                 Featured
+
               </label>
 
             </div>
@@ -1965,13 +2537,20 @@ textarea{
 
 </div>
 
-<div class="toastContainer" id="toastContainer"></div>
+<!-- ==========================================================
+     TOASTS
+=========================================================== -->
+
+<div
+  class="toastContainer"
+  id="toastContainer"
+></div>
 
 <script>
 "use strict";
 
 /* ============================================================
-   SUPABASE
+   SUPABASE CONFIGURATION
 ============================================================ */
 
 const SUPABASE_URL =
@@ -1980,32 +2559,50 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
 
-const {
-  createClient
-} = window.supabase;
-
 /*
  * IMPORTANT:
- * Do not use a custom storageKey here.
  *
- * This allows login.html and all admin pages using the same
- * Supabase project to share the normal Supabase browser session.
+ * Do NOT add:
+ *
+ * storageKey:"crowrules-admin-auth"
+ *
+ * The standard Supabase browser storage is intentionally used
+ * so login.html and shows.html share the same session.
  */
-const supabase = createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
+
+if(
+  !window.supabase ||
+  typeof window.supabase.createClient !== "function"
+){
+  document.getElementById("authText").textContent =
+    "Supabase failed to load. Check the Supabase CDN connection.";
+  throw new Error(
+    "Supabase JavaScript client did not load."
+  );
+}
+
+const supabase =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
     }
-  }
-);
+  );
 
 /* ============================================================
-   CONFIG
+   DATABASE SCHEMA
 ============================================================ */
+
+/*
+ * This list matches public.shows exactly.
+ *
+ * There is NO is_published column.
+ */
 
 const SHOW_COLUMNS = [
   "id",
@@ -2025,44 +2622,83 @@ const SHOW_COLUMNS = [
   "updated_at"
 ].join(",");
 
-const ADMIN_ROLES = [
+/*
+ * These values match the actual database CHECK constraint
+ * on public.shows.category.
+ */
+
+const VALID_CATEGORIES = [
+  "talk",
+  "live",
+  "documentary",
+  "story",
+  "music",
+  "news",
+  "gaming",
+  "podcast",
+  "original"
+];
+
+/* ============================================================
+   ADMIN ROLES
+============================================================ */
+
+const ADMIN_ROLES = new Set([
   "admin",
   "super_admin",
   "owner"
-];
+]);
 
 /* ============================================================
    STATE
 ============================================================ */
 
 let currentUser = null;
+
 let shows = [];
+
 let filteredShows = [];
+
 let editingId = null;
-let busy = false;
+
+let isLoadingShows = false;
+
+let authRedirecting = false;
 
 /* ============================================================
    DOM
 ============================================================ */
 
-const $ = id => document.getElementById(id);
+const $ = id =>
+  document.getElementById(id);
 
-const authOverlay = $("authOverlay");
-const authText = $("authText");
-const app = $("app");
+const authOverlay =
+  $("authOverlay");
 
-const showsBody = $("showsBody");
+const authText =
+  $("authText");
 
-const showModal = $("showModal");
-const showForm = $("showForm");
+const app =
+  $("app");
 
-const mobileOverlay = $("mobileOverlay");
+const showsBody =
+  $("showsBody");
+
+const showModal =
+  $("showModal");
+
+const showForm =
+  $("showForm");
+
+const mobileOverlay =
+  $("mobileOverlay");
 
 /* ============================================================
-   HELPERS
+   GENERAL HELPERS
 ============================================================ */
 
 function escapeHtml(value){
+
   return String(value ?? "")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
@@ -2072,12 +2708,14 @@ function escapeHtml(value){
 }
 
 function normalize(value){
+
   return String(value ?? "")
     .trim()
     .toLowerCase();
 }
 
 function slugify(value){
+
   return String(value ?? "")
     .trim()
     .toLowerCase()
@@ -2088,17 +2726,22 @@ function slugify(value){
 }
 
 function initialsFromTitle(value){
-  const words = String(value ?? "")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
+
+  const words =
+    String(value ?? "")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
 
   if(!words.length){
     return "";
   }
 
   if(words.length === 1){
-    return words[0].slice(0,2).toUpperCase();
+
+    return words[0]
+      .slice(0,2)
+      .toUpperCase();
   }
 
   return words
@@ -2109,13 +2752,19 @@ function initialsFromTitle(value){
 }
 
 function formatDate(value){
+
   if(!value){
     return "—";
   }
 
-  const date = new Date(value);
+  const date =
+    new Date(value);
 
-  if(Number.isNaN(date.getTime())){
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
     return "—";
   }
 
@@ -2129,25 +2778,47 @@ function formatDate(value){
   );
 }
 
-function safeUrl(value){
-  if(!value){
+function safeHttpUrl(value){
+
+  const raw =
+    String(value ?? "").trim();
+
+  if(!raw){
     return "";
   }
 
   try{
-    const url = new URL(value);
+
+    const url =
+      new URL(raw);
 
     if(
-      url.protocol === "http:" ||
-      url.protocol === "https:"
+      url.protocol !== "http:" &&
+      url.protocol !== "https:"
     ){
-      return url.href;
+      return "";
     }
 
-    return "";
+    return url.href;
+
   }catch{
+
     return "";
   }
+}
+
+function isValidHttpUrl(value){
+
+  const raw =
+    String(value ?? "").trim();
+
+  if(!raw){
+    return true;
+  }
+
+  return Boolean(
+    safeHttpUrl(raw)
+  );
 }
 
 /* ============================================================
@@ -2159,11 +2830,15 @@ function toast(
   message,
   type = "success"
 ){
-  const container = $("toastContainer");
 
-  const item = document.createElement("div");
+  const container =
+    $("toastContainer");
 
-  item.className = `toast ${type}`;
+  const item =
+    document.createElement("div");
+
+  item.className =
+    `toast ${type}`;
 
   item.innerHTML = `
     <div class="toastTitle">
@@ -2177,9 +2852,10 @@ function toast(
 
   container.appendChild(item);
 
-  setTimeout(() => {
-    item.remove();
-  },5000);
+  setTimeout(
+    () => item.remove(),
+    5000
+  );
 }
 
 /* ============================================================
@@ -2189,7 +2865,7 @@ function toast(
 function explainSupabaseError(error){
 
   if(!error){
-    return "An unknown database error occurred.";
+    return "An unknown Supabase error occurred.";
   }
 
   const message =
@@ -2200,29 +2876,60 @@ function explainSupabaseError(error){
       error
     );
 
-  const lower = message.toLowerCase();
+  const lower =
+    message.toLowerCase();
+
+  if(
+    lower.includes("failed to fetch") ||
+    lower.includes("networkerror") ||
+    lower.includes("network error")
+  ){
+
+    return (
+      "The browser could not reach Supabase. " +
+      "Check your internet connection, Supabase project status, " +
+      "and browser extensions."
+    );
+  }
 
   if(
     lower.includes("permission denied") ||
     lower.includes("row-level security") ||
+    lower.includes("violates row-level security") ||
     lower.includes("rls")
   ){
+
     return (
       "Supabase rejected this operation because the current " +
-      "session is not authorized by the shows table RLS policy. " +
-      "Confirm that this account has app_metadata.role set to " +
-      "admin, super_admin, or owner, then sign out and sign back in."
+      "administrator session is not authorized by the shows " +
+      "table RLS policy. Confirm that this account has " +
+      "app_metadata.role set to admin, super_admin, or owner, " +
+      "then sign out and sign back in."
+    );
+  }
+
+  if(
+    lower.includes("jwt") ||
+    lower.includes("token") ||
+    lower.includes("session")
+  ){
+
+    return (
+      "Your administrator session could not be verified. " +
+      "Sign out and sign back in to refresh the Supabase session."
     );
   }
 
   if(
     lower.includes("schema cache") ||
-    lower.includes("could not find")
+    lower.includes("could not find the")
   ){
+
     return (
-      "Supabase's API schema does not match the shows table. " +
-      "The shows schema migration has been prepared for this page. " +
-      "If this message persists, refresh the Supabase Data API schema."
+      "The Supabase API schema does not match the page. " +
+      "This version only uses columns that currently exist " +
+      "in public.shows. If the error remains, refresh the " +
+      "Supabase Data API schema."
     );
   }
 
@@ -2230,22 +2937,58 @@ function explainSupabaseError(error){
     lower.includes("duplicate key") ||
     lower.includes("unique constraint")
   ){
+
+    if(
+      lower.includes("show_key")
+    ){
+
+      return (
+        "That Show Key already exists. " +
+        "Choose a different Show Key."
+      );
+    }
+
+    if(
+      lower.includes("slug")
+    ){
+
+      return (
+        "That Slug already exists. " +
+        "Choose a different Slug."
+      );
+    }
+
     return (
-      "A show with the same unique identifier already exists. " +
-      "Use a different Show Key or Slug."
+      "A show with the same unique identifier already exists."
+    );
+  }
+
+  if(
+    lower.includes("violates check constraint") &&
+    lower.includes("category")
+  ){
+
+    return (
+      "That category is not supported by the shows table. " +
+      "Use talk, live, documentary, story, music, news, " +
+      "gaming, podcast, or original."
     );
   }
 
   if(lower.includes("null value")){
+
     return (
       "A required shows field is missing. " +
-      "Title, Show Key, Slug, and Category are required."
+      "Title, Show Key, Slug and Category are required."
     );
   }
 
-  if(lower.includes("invalid input syntax")){
+  if(
+    lower.includes("invalid input syntax")
+  ){
+
     return (
-      "One of the values has an invalid format. " +
+      "One of the submitted values has an invalid format. " +
       "Check the numeric fields and URLs."
     );
   }
@@ -2254,7 +2997,7 @@ function explainSupabaseError(error){
 }
 
 /* ============================================================
-   AUTH
+   AUTHORIZATION
 ============================================================ */
 
 function getRoleFromUser(user){
@@ -2270,7 +3013,7 @@ function getRoleFromUser(user){
     .toLowerCase();
 
   if(
-    ADMIN_ROLES.includes(role)
+    ADMIN_ROLES.has(role)
   ){
     return role;
   }
@@ -2283,61 +3026,100 @@ function getRoleFromUser(user){
     .toLowerCase();
 
   if(
-    adminFlag === "true" ||
-    ADMIN_ROLES.includes(adminFlag)
+    adminFlag === "true"
   ){
-    return adminFlag === "true"
-      ? "admin"
-      : adminFlag;
+    return "admin";
+  }
+
+  if(
+    ADMIN_ROLES.has(adminFlag)
+  ){
+    return adminFlag;
   }
 
   return "";
 }
 
 function isAdmin(user){
+
   return Boolean(
     user &&
     getRoleFromUser(user)
   );
 }
 
+/* ============================================================
+   AUTH REDIRECT
+============================================================ */
+
+function redirectToLogin(){
+
+  if(authRedirecting){
+    return;
+  }
+
+  authRedirecting = true;
+
+  authText.textContent =
+    "No active administrator session. Redirecting to login...";
+
+  setTimeout(
+    () => {
+      window.location.replace(
+        "login.html"
+      );
+    },
+    350
+  );
+}
+
+/* ============================================================
+   REQUIRE ADMIN
+============================================================ */
+
 async function requireAdmin(){
 
   authText.textContent =
-    "Checking your CrowRules administrator account...";
+    "Restoring your administrator session...";
 
   /*
-   * getSession() restores/refreshes the browser session.
+   * getSession() retrieves the persisted browser session
+   * and handles session refresh when appropriate.
    */
+
   const {
     data: sessionData,
     error: sessionError
-  } = await supabase.auth.getSession();
+  } =
+    await supabase.auth.getSession();
 
   if(sessionError){
     throw sessionError;
   }
 
-  if(!sessionData?.session){
+  const session =
+    sessionData?.session || null;
 
-    authText.textContent =
-      "No active session. Redirecting to login...";
+  if(!session){
 
-    setTimeout(() => {
-      window.location.replace("login.html");
-    },500);
+    redirectToLogin();
 
     return false;
   }
 
+  authText.textContent =
+    "Verifying administrator permissions...";
+
   /*
-   * getUser() makes a request to Supabase Auth and returns
-   * the current authenticated user.
+   * getUser() validates the authenticated user through
+   * the Supabase Auth server.
    */
+
   const {
     data: userData,
     error: userError
-  } = await supabase.auth.getUser();
+  } =
+    await supabase.auth.getUser();
 
   if(userError){
     throw userError;
@@ -2348,12 +3130,7 @@ async function requireAdmin(){
 
   if(!user){
 
-    authText.textContent =
-      "Your session could not be verified. Redirecting...";
-
-    setTimeout(() => {
-      window.location.replace("login.html");
-    },500);
+    redirectToLogin();
 
     return false;
   }
@@ -2365,21 +3142,40 @@ async function requireAdmin(){
 
     toast(
       "Access denied",
-      "Your account is authenticated but does not have an approved CrowRules admin role.",
+      "This authenticated account does not have an approved CrowRules administrator role.",
       "error"
     );
 
-    setTimeout(() => {
-      window.location.replace("login.html");
-    },1800);
+    setTimeout(
+      async () => {
+
+        try{
+          await supabase.auth.signOut();
+        }catch(error){
+          console.error(
+            "signOut after access denial:",
+            error
+          );
+        }
+
+        window.location.replace(
+          "login.html"
+        );
+
+      },
+      1200
+    );
 
     return false;
   }
 
-  currentUser = user;
+  currentUser =
+    user;
 
   $("adminEmail").textContent =
-    user.email || getRoleFromUser(user) || "Administrator";
+    user.email ||
+    getRoleFromUser(user) ||
+    "Administrator";
 
   return true;
 }
@@ -2390,11 +3186,11 @@ async function requireAdmin(){
 
 async function loadShows(){
 
-  if(busy){
+  if(isLoadingShows){
     return;
   }
 
-  busy = true;
+  isLoadingShows = true;
 
   renderLoading();
 
@@ -2403,19 +3199,32 @@ async function loadShows(){
     const {
       data,
       error
-    } = await supabase
-      .from("shows")
-      .select(SHOW_COLUMNS)
-      .order("sort_order",{ascending:true})
-      .order("title",{ascending:true});
+    } =
+      await supabase
+        .from("shows")
+        .select(SHOW_COLUMNS)
+        .order(
+          "sort_order",
+          {
+            ascending:true,
+            nullsFirst:false
+          }
+        )
+        .order(
+          "title",
+          {
+            ascending:true
+          }
+        );
 
     if(error){
       throw error;
     }
 
-    shows = Array.isArray(data)
-      ? data
-      : [];
+    shows =
+      Array.isArray(data)
+        ? data
+        : [];
 
     rebuildCategoryFilter();
 
@@ -2431,14 +3240,24 @@ async function loadShows(){
     );
 
     shows = [];
+
+    filteredShows = [];
+
     updateStats();
+
+    $("toolbarCount").textContent =
+      "0 shows";
 
     showsBody.innerHTML = `
       <tr>
+
         <td colspan="8">
+
           <div class="empty">
 
-            <div class="emptyIcon">⚠</div>
+            <div class="emptyIcon">
+              ⚠
+            </div>
 
             <div class="emptyTitle">
               Unable to load shows
@@ -2451,7 +3270,9 @@ async function loadShows(){
             </div>
 
           </div>
+
         </td>
+
       </tr>
     `;
 
@@ -2463,8 +3284,7 @@ async function loadShows(){
 
   }finally{
 
-    busy = false;
-
+    isLoadingShows = false;
   }
 }
 
@@ -2476,9 +3296,14 @@ function renderLoading(){
 
   showsBody.innerHTML = `
     <tr>
+
       <td colspan="8">
+
         <div class="empty">
-          <div class="spinner"></div>
+
+          <div
+            class="spinner"
+          ></div>
 
           <div
             class="emptyTitle"
@@ -2490,14 +3315,17 @@ function renderLoading(){
           <div class="emptyText">
             Connecting to CrowRules Supabase...
           </div>
+
         </div>
+
       </td>
+
     </tr>
   `;
 }
 
 /* ============================================================
-   FILTERS
+   CATEGORY FILTER
 ============================================================ */
 
 function rebuildCategoryFilter(){
@@ -2509,11 +3337,18 @@ function rebuildCategoryFilter(){
     select.value;
 
   const categories =
-    [...new Set(
-      shows
-        .map(show => String(show.category || "").trim())
-        .filter(Boolean)
-    )]
+    [
+      ...new Set(
+        shows
+          .map(
+            show =>
+              String(
+                show.category || ""
+              ).trim()
+          )
+          .filter(Boolean)
+      )
+    ]
     .sort(
       (a,b) =>
         a.localeCompare(b)
@@ -2522,19 +3357,39 @@ function rebuildCategoryFilter(){
   select.innerHTML =
     `<option value="all">All Categories</option>` +
     categories
-      .map(category => `
-        <option value="${escapeHtml(category)}">
-          ${escapeHtml(category)}
-        </option>
-      `)
+      .map(
+        category =>
+          `
+          <option value="${escapeHtml(category)}">
+            ${escapeHtml(category)}
+          </option>
+          `
+      )
       .join("");
 
   if(
-    categories.includes(current)
+    categories.some(
+      category =>
+        normalize(category) ===
+        normalize(current)
+    )
   ){
-    select.value = current;
+
+    const match =
+      categories.find(
+        category =>
+          normalize(category) ===
+          normalize(current)
+      );
+
+    select.value =
+      match;
   }
 }
+
+/* ============================================================
+   FILTERS
+============================================================ */
 
 function applyFilters(){
 
@@ -2553,64 +3408,67 @@ function applyFilters(){
     $("categoryFilter").value;
 
   filteredShows =
-    shows.filter(show => {
+    shows.filter(
+      show => {
 
-      const haystack = [
-        show.title,
-        show.slug,
-        show.show_key,
-        show.category,
-        show.show_type,
-        show.description
-      ]
-      .map(normalize)
-      .join(" ");
+        const haystack =
+          [
+            show.title,
+            show.slug,
+            show.show_key,
+            show.category,
+            show.show_type,
+            show.description
+          ]
+          .map(normalize)
+          .join(" ");
 
-      if(
-        query &&
-        !haystack.includes(query)
-      ){
-        return false;
+        if(
+          query &&
+          !haystack.includes(query)
+        ){
+          return false;
+        }
+
+        if(
+          status === "active" &&
+          !Boolean(show.is_active)
+        ){
+          return false;
+        }
+
+        if(
+          status === "inactive" &&
+          Boolean(show.is_active)
+        ){
+          return false;
+        }
+
+        if(
+          featured === "featured" &&
+          !Boolean(show.is_featured)
+        ){
+          return false;
+        }
+
+        if(
+          featured === "standard" &&
+          Boolean(show.is_featured)
+        ){
+          return false;
+        }
+
+        if(
+          category !== "all" &&
+          normalize(show.category) !==
+          normalize(category)
+        ){
+          return false;
+        }
+
+        return true;
       }
-
-      if(
-        status === "active" &&
-        !show.is_active
-      ){
-        return false;
-      }
-
-      if(
-        status === "inactive" &&
-        show.is_active
-      ){
-        return false;
-      }
-
-      if(
-        featured === "featured" &&
-        !show.is_featured
-      ){
-        return false;
-      }
-
-      if(
-        featured === "standard" &&
-        show.is_featured
-      ){
-        return false;
-      }
-
-      if(
-        category !== "all" &&
-        normalize(show.category) !==
-        normalize(category)
-      ){
-        return false;
-      }
-
-      return true;
-    });
+    );
 
   renderShows();
 
@@ -2623,7 +3481,7 @@ function applyFilters(){
 }
 
 /* ============================================================
-   RENDER
+   RENDER SHOWS
 ============================================================ */
 
 function renderShows(){
@@ -2632,11 +3490,14 @@ function renderShows(){
 
     showsBody.innerHTML = `
       <tr>
+
         <td colspan="8">
 
           <div class="empty">
 
-            <div class="emptyIcon">◌</div>
+            <div class="emptyIcon">
+              ◌
+            </div>
 
             <div class="emptyTitle">
               No shows found
@@ -2649,6 +3510,7 @@ function renderShows(){
           </div>
 
         </td>
+
       </tr>
     `;
 
@@ -2657,138 +3519,216 @@ function renderShows(){
 
   showsBody.innerHTML =
     filteredShows
-      .map(show => {
+      .map(
+        show => {
 
-        const image =
-          safeUrl(show.image_url);
+          const image =
+            safeHttpUrl(
+              show.image_url
+            );
 
-        const initials =
-          escapeHtml(
-            show.initials ||
-            initialsFromTitle(show.title) ||
-            "CR"
-          );
+          const initials =
+            escapeHtml(
+              show.initials ||
+              initialsFromTitle(
+                show.title
+              ) ||
+              "CR"
+            );
 
-        const statusClass =
-          show.is_active
-            ? "badgeGreen"
-            : "badgeRed";
+          const statusClass =
+            show.is_active
+              ? "badgeGreen"
+              : "badgeRed";
 
-        const featuredClass =
-          show.is_featured
-            ? "badgeYellow"
-            : "";
+          const featuredClass =
+            show.is_featured
+              ? "badgeYellow"
+              : "";
 
-        return `
-          <tr>
+          const safeId =
+            escapeHtml(
+              show.id
+            );
 
-            <td>
+          return `
+            <tr>
 
-              <div class="showCell">
+              <td>
 
-                ${
-                  image
-                    ? `
-                      <img
-                        class="showImage"
-                        src="${escapeHtml(image)}"
-                        alt=""
-                        loading="lazy"
-                        onerror="this.outerHTML='<div class=&quot;showImageFallback&quot;>${initials}</div>'"
-                      >
-                    `
-                    : `
-                      <div class="showImageFallback">
-                        ${initials}
-                      </div>
-                    `
-                }
+                <div class="showCell">
 
-                <div>
+                  ${
+                    image
+                      ?
+                        `
+                        <img
+                          class="showImage"
+                          src="${escapeHtml(image)}"
+                          alt=""
+                          loading="lazy"
+                          data-fallback="${initials}"
+                        >
+                        `
+                      :
+                        `
+                        <div class="showImageFallback">
+                          ${initials}
+                        </div>
+                        `
+                  }
 
-                  <div class="showName">
-                    ${escapeHtml(show.title)}
-                  </div>
+                  <div>
 
-                  <div class="showSlug">
-                    ${escapeHtml(show.slug)}
+                    <div class="showName">
+                      ${escapeHtml(
+                        show.title
+                      )}
+                    </div>
+
+                    <div class="showSlug">
+                      ${escapeHtml(
+                        show.slug
+                      )}
+                    </div>
+
                   </div>
 
                 </div>
 
-              </div>
+              </td>
 
-            </td>
+              <td>
 
-            <td>
-              <span class="badge">
-                ${escapeHtml(show.category || "—")}
-              </span>
-            </td>
+                <span class="badge">
+                  ${escapeHtml(
+                    show.category || "—"
+                  )}
+                </span>
 
-            <td>
-              ${escapeHtml(show.show_type || "—")}
-            </td>
+              </td>
 
-            <td>
+              <td>
+                ${escapeHtml(
+                  show.show_type || "—"
+                )}
+              </td>
 
-              <button
-                class="btn btnSmall ${statusClass}"
-                type="button"
-                data-action="toggle"
-                data-id="${escapeHtml(show.id)}"
-              >
-                ${show.is_active ? "Active" : "Inactive"}
-              </button>
-
-            </td>
-
-            <td>
-
-              <span class="badge ${featuredClass}">
-                ${show.is_featured ? "Featured" : "Standard"}
-              </span>
-
-            </td>
-
-            <td>
-              ${Number(show.sort_order || 0)}
-            </td>
-
-            <td>
-              ${formatDate(show.updated_at)}
-            </td>
-
-            <td>
-
-              <div class="actions">
+              <td>
 
                 <button
-                  class="btn btnSmall"
+                  class="btn btnSmall ${statusClass}"
                   type="button"
-                  data-action="edit"
-                  data-id="${escapeHtml(show.id)}"
+                  data-action="toggle"
+                  data-id="${safeId}"
                 >
-                  Edit
+                  ${
+                    show.is_active
+                      ? "Active"
+                      : "Inactive"
+                  }
                 </button>
 
-                <button
-                  class="btn btnSmall btnDanger"
-                  type="button"
-                  data-action="delete"
-                  data-id="${escapeHtml(show.id)}"
+              </td>
+
+              <td>
+
+                <span
+                  class="badge ${featuredClass}"
                 >
-                  Delete
-                </button>
+                  ${
+                    show.is_featured
+                      ? "Featured"
+                      : "Standard"
+                  }
+                </span>
 
-              </div>
+              </td>
 
-            </td>
+              <td>
+                ${Number(
+                  show.sort_order || 0
+                )}
+              </td>
 
-          </tr>
-        `;
-      })
+              <td>
+                ${formatDate(
+                  show.updated_at
+                )}
+              </td>
+
+              <td>
+
+                <div class="actions">
+
+                  <button
+                    class="btn btnSmall"
+                    type="button"
+                    data-action="edit"
+                    data-id="${safeId}"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    class="btn btnSmall btnDanger"
+                    type="button"
+                    data-action="delete"
+                    data-id="${safeId}"
+                  >
+                    Delete
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+          `;
+        }
+      )
       .join("");
+
+  /*
+   * Image errors are handled here instead of putting a
+   * complicated HTML string inside an onerror attribute.
+   */
+
+  showsBody
+    .querySelectorAll(
+      "img[data-fallback]"
+    )
+    .forEach(
+      image => {
+
+        image.addEventListener(
+          "error",
+          () => {
+
+            const fallback =
+              document.createElement(
+                "div"
+              );
+
+            fallback.className =
+              "showImageFallback";
+
+            fallback.textContent =
+              image.dataset.fallback ||
+              "CR";
+
+            image.replaceWith(
+              fallback
+            );
+
+          },
+          {
+            once:true
+          }
+        );
+
+      }
+    );
 }
 
 /* ============================================================
@@ -2802,18 +3742,25 @@ function updateStats(){
 
   const active =
     shows.filter(
-      show => Boolean(show.is_active)
+      show =>
+        Boolean(show.is_active)
     ).length;
 
   const featured =
     shows.filter(
-      show => Boolean(show.is_featured)
+      show =>
+        Boolean(show.is_featured)
     ).length;
 
   const categories =
     new Set(
       shows
-        .map(show => normalize(show.category))
+        .map(
+          show =>
+            normalize(
+              show.category
+            )
+        )
         .filter(Boolean)
     ).size;
 
@@ -2833,6 +3780,23 @@ function updateStats(){
 /* ============================================================
    MODAL
 ============================================================ */
+
+function resetForm(){
+
+  showForm.reset();
+
+  $("showId").value =
+    "";
+
+  $("sortOrder").value =
+    "0";
+
+  $("isActive").checked =
+    true;
+
+  $("isFeatured").checked =
+    false;
+}
 
 function openModal(show = null){
 
@@ -2891,7 +3855,10 @@ function openModal(show = null){
       ? Boolean(show.is_featured)
       : false;
 
-  showModal.classList.add("open");
+  showModal.classList.add(
+    "open"
+  );
+
   showModal.setAttribute(
     "aria-hidden",
     "false"
@@ -2900,14 +3867,19 @@ function openModal(show = null){
   document.body.style.overflow =
     "hidden";
 
-  setTimeout(() => {
-    $("showTitle").focus();
-  },50);
+  setTimeout(
+    () =>
+      $("showTitle").focus(),
+    50
+  );
 }
 
 function closeModal(){
 
-  showModal.classList.remove("open");
+  showModal.classList.remove(
+    "open"
+  );
+
   showModal.setAttribute(
     "aria-hidden",
     "true"
@@ -2916,15 +3888,196 @@ function closeModal(){
   document.body.style.overflow =
     "";
 
-  editingId = null;
-  showForm.reset();
+  editingId =
+    null;
 
-  $("isActive").checked = true;
-  $("sortOrder").value = 0;
+  resetForm();
 }
 
 /* ============================================================
-   SAVE
+   VALIDATE SHOW
+============================================================ */
+
+function validateShow(){
+
+  const title =
+    $("showTitle")
+      .value
+      .trim();
+
+  const showKey =
+    $("showKey")
+      .value
+      .trim();
+
+  const slug =
+    $("showSlug")
+      .value
+      .trim();
+
+  const category =
+    normalize(
+      $("showCategory")
+        .value
+    );
+
+  const destinationUrl =
+    $("destinationUrl")
+      .value
+      .trim();
+
+  const imageUrl =
+    $("imageUrl")
+      .value
+      .trim();
+
+  if(!title){
+
+    toast(
+      "Missing title",
+      "Enter a show title.",
+      "error"
+    );
+
+    $("showTitle").focus();
+
+    return false;
+  }
+
+  if(!showKey){
+
+    toast(
+      "Missing Show Key",
+      "Enter a unique Show Key.",
+      "error"
+    );
+
+    $("showKey").focus();
+
+    return false;
+  }
+
+  if(
+    !/^[a-zA-Z0-9_-]+$/.test(
+      showKey
+    )
+  ){
+
+    toast(
+      "Invalid Show Key",
+      "Use only letters, numbers, hyphens and underscores.",
+      "error"
+    );
+
+    $("showKey").focus();
+
+    return false;
+  }
+
+  if(!slug){
+
+    toast(
+      "Missing Slug",
+      "Enter a unique public slug.",
+      "error"
+    );
+
+    $("showSlug").focus();
+
+    return false;
+  }
+
+  if(!category){
+
+    toast(
+      "Missing category",
+      "Choose a supported show category.",
+      "error"
+    );
+
+    $("showCategory").focus();
+
+    return false;
+  }
+
+  if(
+    !VALID_CATEGORIES.includes(
+      category
+    )
+  ){
+
+    toast(
+      "Invalid category",
+      "Use talk, live, documentary, story, music, news, gaming, podcast, or original.",
+      "error"
+    );
+
+    $("showCategory").focus();
+
+    return false;
+  }
+
+  if(
+    !isValidHttpUrl(
+      destinationUrl
+    )
+  ){
+
+    toast(
+      "Invalid destination URL",
+      "Use a valid http:// or https:// URL.",
+      "error"
+    );
+
+    $("destinationUrl").focus();
+
+    return false;
+  }
+
+  if(
+    !isValidHttpUrl(
+      imageUrl
+    )
+  ){
+
+    toast(
+      "Invalid image URL",
+      "Use a valid http:// or https:// URL.",
+      "error"
+    );
+
+    $("imageUrl").focus();
+
+    return false;
+  }
+
+  const order =
+    Number(
+      $("sortOrder").value
+    );
+
+  if(
+    !Number.isInteger(order) ||
+    order < 0 ||
+    order > 999999
+  ){
+
+    toast(
+      "Invalid sort order",
+      "Sort Order must be a whole number from 0 to 999999.",
+      "error"
+    );
+
+    $("sortOrder").focus();
+
+    return false;
+  }
+
+  return true;
+}
+
+/* ============================================================
+   SAVE SHOW
 ============================================================ */
 
 async function saveShow(event){
@@ -2932,68 +4085,105 @@ async function saveShow(event){
   event.preventDefault();
 
   if(!currentUser){
+
     toast(
       "Authentication required",
       "Your administrator session is no longer available.",
       "error"
     );
 
+    redirectToLogin();
+
     return;
   }
+
+  if(!validateShow()){
+    return;
+  }
+
+  /*
+   * Save this BEFORE closeModal() clears editingId.
+   */
+
+  const wasEditing =
+    Boolean(editingId);
+
+  const editingRecordId =
+    editingId;
 
   const title =
-    $("showTitle").value.trim();
-
-  const showKey =
-    $("showKey").value.trim();
-
-  const slug =
-    $("showSlug").value.trim();
-
-  const category =
-    $("showCategory").value.trim();
-
-  if(
-    !title ||
-    !showKey ||
-    !slug ||
-    !category
-  ){
-    toast(
-      "Missing required fields",
-      "Title, Show Key, Slug and Category are required.",
-      "error"
-    );
-
-    return;
-  }
+    $("showTitle")
+      .value
+      .trim();
 
   const payload = {
-    show_key:showKey,
-    slug:slug,
-    title:title,
-    category:category,
+
+    show_key:
+      $("showKey")
+        .value
+        .trim(),
+
+    slug:
+      $("showSlug")
+        .value
+        .trim(),
+
+    title:
+
+      title,
+
+    category:
+      normalize(
+        $("showCategory")
+          .value
+      ),
+
     show_type:
-      $("showType").value.trim() || null,
+      $("showType")
+        .value
+        .trim() ||
+      null,
+
     description:
-      $("showDescription").value.trim() || null,
+      $("showDescription")
+        .value
+        .trim() ||
+      null,
+
     initials:
-      $("showInitials").value.trim() ||
-      initialsFromTitle(title),
+      $("showInitials")
+        .value
+        .trim()
+        .toUpperCase() ||
+      initialsFromTitle(
+        title
+      ),
+
     destination_url:
-      $("destinationUrl").value.trim() || null,
+      $("destinationUrl")
+        .value
+        .trim() ||
+      null,
+
     image_url:
-      $("imageUrl").value.trim() || null,
+      $("imageUrl")
+        .value
+        .trim() ||
+      null,
+
     is_featured:
-      $("isFeatured").checked,
+      Boolean(
+        $("isFeatured").checked
+      ),
+
     is_active:
-      $("isActive").checked,
+      Boolean(
+        $("isActive").checked
+      ),
+
     sort_order:
-      Math.max(
-        0,
-        Number(
-          $("sortOrder").value || 0
-        )
+      Number(
+        $("sortOrder").value || 0
       )
   };
 
@@ -3003,7 +4193,9 @@ async function saveShow(event){
   const originalText =
     saveBtn.textContent;
 
-  saveBtn.disabled = true;
+  saveBtn.disabled =
+    true;
+
   saveBtn.textContent =
     "Saving...";
 
@@ -3011,13 +4203,16 @@ async function saveShow(event){
 
     let error = null;
 
-    if(editingId){
+    if(wasEditing){
 
       const result =
         await supabase
           .from("shows")
           .update(payload)
-          .eq("id",editingId);
+          .eq(
+            "id",
+            editingRecordId
+          );
 
       error =
         result.error;
@@ -3027,7 +4222,9 @@ async function saveShow(event){
       const result =
         await supabase
           .from("shows")
-          .insert(payload);
+          .insert(
+            payload
+          );
 
       error =
         result.error;
@@ -3042,10 +4239,14 @@ async function saveShow(event){
     await loadShows();
 
     toast(
-      editingId
+      wasEditing
         ? "Show updated"
         : "Show created",
-      `${title} was saved successfully.`
+      `${title} was ${
+        wasEditing
+          ? "updated"
+          : "created"
+      } successfully.`
     );
 
   }catch(error){
@@ -3063,10 +4264,11 @@ async function saveShow(event){
 
   }finally{
 
-    saveBtn.disabled = false;
+    saveBtn.disabled =
+      false;
+
     saveBtn.textContent =
       originalText;
-
   }
 }
 
@@ -3076,9 +4278,16 @@ async function saveShow(event){
 
 async function toggleShow(id){
 
+  if(!currentUser){
+    redirectToLogin();
+    return;
+  }
+
   const show =
     shows.find(
-      item => String(item.id) === String(id)
+      item =>
+        String(item.id) ===
+        String(id)
     );
 
   if(!show){
@@ -3086,18 +4295,24 @@ async function toggleShow(id){
   }
 
   const next =
-    !Boolean(show.is_active);
+    !Boolean(
+      show.is_active
+    );
 
   try{
 
     const {
       error
-    } = await supabase
-      .from("shows")
-      .update({
-        is_active:next
-      })
-      .eq("id",id);
+    } =
+      await supabase
+        .from("shows")
+        .update({
+          is_active:next
+        })
+        .eq(
+          "id",
+          id
+        );
 
     if(error){
       throw error;
@@ -3132,14 +4347,21 @@ async function toggleShow(id){
 }
 
 /* ============================================================
-   DELETE
+   DELETE SHOW
 ============================================================ */
 
 async function deleteShow(id){
 
+  if(!currentUser){
+    redirectToLogin();
+    return;
+  }
+
   const show =
     shows.find(
-      item => String(item.id) === String(id)
+      item =>
+        String(item.id) ===
+        String(id)
     );
 
   if(!show){
@@ -3148,7 +4370,8 @@ async function deleteShow(id){
 
   const confirmed =
     window.confirm(
-      `Delete "${show.title}"?\n\nThis action cannot be undone.`
+      `Delete "${show.title}"?\n\n` +
+      `This action cannot be undone.`
     );
 
   if(!confirmed){
@@ -3159,10 +4382,14 @@ async function deleteShow(id){
 
     const {
       error
-    } = await supabase
-      .from("shows")
-      .delete()
-      .eq("id",id);
+    } =
+      await supabase
+        .from("shows")
+        .delete()
+        .eq(
+          "id",
+          id
+        );
 
     if(error){
       throw error;
@@ -3191,7 +4418,7 @@ async function deleteShow(id){
 }
 
 /* ============================================================
-   CSV EXPORT
+   CSV
 ============================================================ */
 
 function csvEscape(value){
@@ -3202,9 +4429,14 @@ function csvEscape(value){
   if(
     text.includes(",") ||
     text.includes('"') ||
-    text.includes("\n")
+    text.includes("\n") ||
+    text.includes("\r")
   ){
-    return `"${text.replaceAll('"','""')}"`;
+
+    return `"${text.replaceAll(
+      '"',
+      '""'
+    )}"`;
   }
 
   return text;
@@ -3213,10 +4445,11 @@ function csvEscape(value){
 function exportCsv(){
 
   if(!shows.length){
+
     toast(
       "Nothing to export",
       "There are no show records.",
-      "error"
+      "warning"
     );
 
     return;
@@ -3244,47 +4477,63 @@ function exportCsv(){
     headers.join(",")
   ];
 
-  shows.forEach(show => {
+  shows.forEach(
+    show => {
 
-    lines.push(
-      headers
-        .map(
-          header =>
-            csvEscape(show[header])
-        )
-        .join(",")
-    );
+      lines.push(
+        headers
+          .map(
+            header =>
+              csvEscape(
+                show[header]
+              )
+          )
+          .join(",")
+      );
 
-  });
+    }
+  );
 
   const blob =
     new Blob(
-      [lines.join("\n")],
+      [
+        lines.join("\n")
+      ],
       {
-        type:"text/csv;charset=utf-8;"
+        type:
+          "text/csv;charset=utf-8;"
       }
     );
 
   const url =
-    URL.createObjectURL(blob);
+    URL.createObjectURL(
+      blob
+    );
 
   const anchor =
-    document.createElement("a");
+    document.createElement(
+      "a"
+    );
 
-  anchor.href = url;
+  anchor.href =
+    url;
 
   anchor.download =
     `crowrules-shows-${new Date()
       .toISOString()
       .slice(0,10)}.csv`;
 
-  document.body.appendChild(anchor);
+  document.body.appendChild(
+    anchor
+  );
 
   anchor.click();
 
   anchor.remove();
 
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(
+    url
+  );
 
   toast(
     "CSV exported",
@@ -3293,251 +4542,450 @@ function exportCsv(){
 }
 
 /* ============================================================
-   AUTO SLUG / KEY
+   AUTO-GENERATE SLUG / KEY / INITIALS
 ============================================================ */
 
-$("showTitle").addEventListener(
-  "input",
-  () => {
+$("showTitle")
+  .addEventListener(
+    "input",
+    () => {
 
-    if(editingId){
-      return;
+      if(editingId){
+        return;
+      }
+
+      const title =
+        $("showTitle")
+          .value;
+
+      const generated =
+        slugify(
+          title
+        );
+
+      if(
+        !$("showKey")
+          .value
+          .trim()
+      ){
+
+        $("showKey").value =
+          generated;
+      }
+
+      if(
+        !$("showSlug")
+          .value
+          .trim()
+      ){
+
+        $("showSlug").value =
+          generated;
+      }
+
+      if(
+        !$("showInitials")
+          .value
+          .trim()
+      ){
+
+        $("showInitials").value =
+          initialsFromTitle(
+            title
+          );
+      }
+
     }
+  );
 
-    const title =
-      $("showTitle").value;
+/* ============================================================
+   SLUG AUTO-GENERATION
+============================================================ */
 
-    const generated =
-      slugify(title);
+$("showSlug")
+  .addEventListener(
+    "blur",
+    () => {
 
-    if(
-      !$("showKey").value.trim()
-    ){
-      $("showKey").value =
-        generated;
+      if(editingId){
+        return;
+      }
+
+      if(
+        !$("showSlug")
+          .value
+          .trim()
+      ){
+
+        $("showSlug").value =
+          slugify(
+            $("showTitle")
+              .value
+          );
+      }
+
     }
+  );
 
-    if(
-      !$("showSlug").value.trim()
-    ){
-      $("showSlug").value =
-        generated;
+/* ============================================================
+   SHOW KEY AUTO-GENERATION
+============================================================ */
+
+$("showKey")
+  .addEventListener(
+    "blur",
+    () => {
+
+      if(editingId){
+        return;
+      }
+
+      if(
+        !$("showKey")
+          .value
+          .trim()
+      ){
+
+        $("showKey").value =
+          slugify(
+            $("showTitle")
+              .value
+          );
+      }
+
     }
-
-    if(
-      !$("showInitials").value.trim()
-    ){
-      $("showInitials").value =
-        initialsFromTitle(title);
-    }
-
-  }
-);
+  );
 
 /* ============================================================
    EVENTS
 ============================================================ */
 
-$("addBtn").addEventListener(
-  "click",
-  () => openModal()
-);
+$("addBtn")
+  .addEventListener(
+    "click",
+    () => {
 
-$("refreshBtn").addEventListener(
-  "click",
-  () => loadShows()
-);
+      resetForm();
 
-$("exportBtn").addEventListener(
-  "click",
-  exportCsv
-);
-
-$("searchInput").addEventListener(
-  "input",
-  applyFilters
-);
-
-$("statusFilter").addEventListener(
-  "change",
-  applyFilters
-);
-
-$("featuredFilter").addEventListener(
-  "change",
-  applyFilters
-);
-
-$("categoryFilter").addEventListener(
-  "change",
-  applyFilters
-);
-
-$("clearFiltersBtn").addEventListener(
-  "click",
-  () => {
-
-    $("searchInput").value = "";
-    $("statusFilter").value = "all";
-    $("featuredFilter").value = "all";
-    $("categoryFilter").value = "all";
-
-    applyFilters();
-  }
-);
-
-$("modalClose").addEventListener(
-  "click",
-  closeModal
-);
-
-$("cancelBtn").addEventListener(
-  "click",
-  closeModal
-);
-
-showModal.addEventListener(
-  "click",
-  event => {
-
-    if(
-      event.target === showModal
-    ){
-      closeModal();
+      openModal();
     }
+  );
 
-  }
-);
+$("refreshBtn")
+  .addEventListener(
+    "click",
+    () => {
 
-showForm.addEventListener(
-  "submit",
-  saveShow
-);
+      loadShows();
 
-showsBody.addEventListener(
-  "click",
-  event => {
-
-    const button =
-      event.target.closest(
-        "[data-action]"
-      );
-
-    if(!button){
-      return;
     }
+  );
 
-    const action =
-      button.dataset.action;
+$("exportBtn")
+  .addEventListener(
+    "click",
+    exportCsv
+  );
 
-    const id =
-      button.dataset.id;
+$("searchInput")
+  .addEventListener(
+    "input",
+    applyFilters
+  );
 
-    if(action === "edit"){
+$("statusFilter")
+  .addEventListener(
+    "change",
+    applyFilters
+  );
 
-      const show =
-        shows.find(
-          item =>
-            String(item.id) ===
-            String(id)
-        );
+$("featuredFilter")
+  .addEventListener(
+    "change",
+    applyFilters
+  );
 
-      if(show){
-        openModal(show);
+$("categoryFilter")
+  .addEventListener(
+    "change",
+    applyFilters
+  );
+
+$("clearFiltersBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("searchInput").value =
+        "";
+
+      $("statusFilter").value =
+        "all";
+
+      $("featuredFilter").value =
+        "all";
+
+      $("categoryFilter").value =
+        "all";
+
+      applyFilters();
+    }
+  );
+
+$("modalClose")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+$("cancelBtn")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+showModal
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        showModal
+      ){
+
+        closeModal();
       }
 
-      return;
     }
+  );
 
-    if(action === "toggle"){
+showForm
+  .addEventListener(
+    "submit",
+    saveShow
+  );
 
-      toggleShow(id);
+/* ============================================================
+   TABLE ACTIONS
+============================================================ */
 
-      return;
+showsBody
+  .addEventListener(
+    "click",
+    event => {
+
+      const button =
+        event.target.closest(
+          "[data-action]"
+        );
+
+      if(!button){
+        return;
+      }
+
+      const action =
+        button.dataset.action;
+
+      const id =
+        button.dataset.id;
+
+      if(action === "edit"){
+
+        const show =
+          shows.find(
+            item =>
+              String(item.id) ===
+              String(id)
+          );
+
+        if(show){
+          openModal(show);
+        }
+
+        return;
+      }
+
+      if(action === "toggle"){
+
+        toggleShow(id);
+
+        return;
+      }
+
+      if(action === "delete"){
+
+        deleteShow(id);
+
+        return;
+      }
+
     }
-
-    if(action === "delete"){
-
-      deleteShow(id);
-
-      return;
-    }
-
-  }
-);
+  );
 
 /* ============================================================
    MOBILE MENU
 ============================================================ */
 
-$("mobileMenu").addEventListener(
-  "click",
-  () => {
-    document.body.classList.toggle(
-      "menuOpen"
-    );
-  }
-);
+$("mobileMenu")
+  .addEventListener(
+    "click",
+    () => {
 
-mobileOverlay.addEventListener(
-  "click",
-  () => {
-    document.body.classList.remove(
-      "menuOpen"
-    );
-  }
-);
+      const open =
+        document.body.classList.toggle(
+          "menuOpen"
+        );
+
+      $("mobileMenu")
+        .setAttribute(
+          "aria-expanded",
+          String(open)
+        );
+
+    }
+  );
+
+mobileOverlay
+  .addEventListener(
+    "click",
+    () => {
+
+      document.body.classList.remove(
+        "menuOpen"
+      );
+
+      $("mobileMenu")
+        .setAttribute(
+          "aria-expanded",
+          "false"
+        );
+
+    }
+  );
+
+/* Close mobile menu after navigation */
+
+document
+  .querySelectorAll(
+    ".navItem"
+  )
+  .forEach(
+    link => {
+
+      link.addEventListener(
+        "click",
+        () => {
+
+          document.body
+            .classList
+            .remove(
+              "menuOpen"
+            );
+
+        }
+      );
+
+    }
+  );
 
 /* ============================================================
    LOGOUT
 ============================================================ */
 
-$("logoutBtn").addEventListener(
-  "click",
-  async () => {
+$("logoutBtn")
+  .addEventListener(
+    "click",
+    async () => {
 
-    $("logoutBtn").disabled = true;
+      const button =
+        $("logoutBtn");
 
-    try{
+      button.disabled =
+        true;
 
-      await supabase.auth.signOut();
+      button.textContent =
+        "Signing Out...";
 
-    }catch(error){
+      try{
 
-      console.error(
-        "signOut:",
-        error
-      );
+        const {
+          error
+        } =
+          await supabase.auth.signOut();
 
-    }finally{
+        if(error){
+          console.error(
+            "signOut:",
+            error
+          );
+        }
 
-      window.location.replace(
-        "login.html"
-      );
+      }catch(error){
+
+        console.error(
+          "signOut:",
+          error
+        );
+
+      }finally{
+
+        window.location.replace(
+          "login.html"
+        );
+
+      }
 
     }
-
-  }
-);
+  );
 
 /* ============================================================
-   AUTH STATE
+   AUTH STATE LISTENER
 ============================================================ */
 
-supabase.auth.onAuthStateChange(
-  (event, session) => {
+supabase.auth
+  .onAuthStateChange(
+    (event, session) => {
 
-    if(
-      event === "SIGNED_OUT" ||
-      !session
-    ){
-      window.location.replace(
-        "login.html"
-      );
+      /*
+       * Do not redirect on every auth event.
+       *
+       * INITIAL_SESSION can occur during startup.
+       * TOKEN_REFRESHED is normal.
+       *
+       * Only a real SIGNED_OUT event should immediately
+       * terminate this page.
+       */
+
+      if(
+        event === "SIGNED_OUT"
+      ){
+
+        window.location.replace(
+          "login.html"
+        );
+
+        return;
+      }
+
+      /*
+       * If the session disappears after the page has already
+       * been initialized, return to login.
+       */
+
+      if(
+        !session &&
+        currentUser
+      ){
+
+        window.location.replace(
+          "login.html"
+        );
+
+      }
+
     }
-
-  }
-);
+  );
 
 /* ============================================================
    KEYBOARD
@@ -3548,10 +4996,35 @@ document.addEventListener(
   event => {
 
     if(
-      event.key === "Escape" &&
-      showModal.classList.contains("open")
+      event.key === "Escape"
     ){
-      closeModal();
+
+      if(
+        showModal.classList.contains(
+          "open"
+        )
+      ){
+
+        closeModal();
+
+      }else if(
+        document.body.classList.contains(
+          "menuOpen"
+        )
+      ){
+
+        document.body.classList.remove(
+          "menuOpen"
+        );
+
+        $("mobileMenu")
+          .setAttribute(
+            "aria-expanded",
+            "false"
+          );
+
+      }
+
     }
 
   }
@@ -3565,12 +5038,23 @@ async function initialize(){
 
   try{
 
+    authText.textContent =
+      "Connecting to CrowRules Supabase...";
+
     const authorized =
       await requireAdmin();
 
     if(!authorized){
       return;
     }
+
+    authText.textContent =
+      "Administrator verified. Loading shows...";
+
+    /*
+     * Give the browser a moment to finish the visual
+     * transition before revealing the application.
+     */
 
     authOverlay.classList.add(
       "hidden"
@@ -3590,19 +5074,39 @@ async function initialize(){
     );
 
     authText.textContent =
-      explainSupabaseError(error);
-
-    setTimeout(() => {
-      window.location.replace(
-        "login.html"
+      explainSupabaseError(
+        error
       );
-    },3000);
+
+    toast(
+      "Initialization failed",
+      explainSupabaseError(
+        error
+      ),
+      "error"
+    );
+
+    setTimeout(
+      () => {
+
+        window.location.replace(
+          "login.html"
+        );
+
+      },
+      2500
+    );
 
   }
 
 }
 
+/* ============================================================
+   START
+============================================================ */
+
 initialize();
+
 </script>
 
 </body>
