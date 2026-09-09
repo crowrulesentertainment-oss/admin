@@ -4,78 +4,63 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>CrowRules Entertainment — Main Admin</title>
-
+<title>CrowRules Entertainment — Admin</title>
 <meta name="theme-color" content="#050505">
-<meta name="description"
-      content="CrowRules Entertainment Main Administration Command Center">
+<meta name="description" content="CrowRules Entertainment Unified Administration">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet">
-
-<!-- IMPORTANT:
-     This is the correct lowercase Supabase CDN package name.
-     Browser applications must use a publishable/anon key,
-     NEVER a service_role/secret key.
--->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
   --bg:#050505;
-  --bg2:#090909;
-  --panel:#0d0d0f;
-  --panel2:#111114;
-  --panel3:#161619;
-  --line:#242429;
-  --line2:#303036;
-
-  --red:#e51b23;
-  --red2:#ff3139;
-  --red-dark:#7e0d12;
-
-  --green:#28d17c;
-  --yellow:#f2c94c;
-  --blue:#4da3ff;
-  --purple:#a970ff;
-  --cyan:#36d9ff;
-
-  --text:#f4f4f5;
-  --muted:#8c8c94;
-  --muted2:#62626b;
-
+  --panel:#0d0d11;
+  --panel2:#111117;
+  --panel3:#15151c;
+  --line:#27272f;
+  --line2:#383842;
+  --text:#f5f5f7;
+  --muted:#8d8d98;
+  --accent:#b66cff;
+  --accent2:#6c5cff;
+  --cyan:#37d7ff;
+  --green:#45e69a;
+  --yellow:#f3c969;
+  --red:#ff526d;
+  --orange:#ff8a4c;
   --sidebar:280px;
   --topbar:72px;
-
-  --radius:14px;
-  --shadow:0 20px 60px rgba(0,0,0,.35);
+  --radius:16px;
 }
 
 *{
   box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-html{
-  scroll-behavior:smooth;
+html,body{
+  width:100%;
+  min-height:100%;
 }
 
 body{
-  margin:0;
   background:
-    radial-gradient(circle at 15% 0%,rgba(229,27,35,.08),transparent 30%),
-    radial-gradient(circle at 90% 20%,rgba(169,112,255,.05),transparent 25%),
+    radial-gradient(circle at 15% 10%,rgba(182,108,255,.08),transparent 30%),
+    radial-gradient(circle at 85% 20%,rgba(55,215,255,.05),transparent 28%),
     var(--bg);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
-  min-height:100vh;
+  overflow-x:hidden;
 }
 
 button,
 input,
-select{
+select,
+textarea{
   font:inherit;
 }
 
@@ -88,30 +73,162 @@ a{
   text-decoration:none;
 }
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
+::-webkit-scrollbar{
+  width:9px;
+}
+
+::-webkit-scrollbar-track{
+  background:#070709;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#292932;
+  border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:#3b3b47;
+}
+
+/* LOGIN */
+
+.login-screen{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at center,rgba(108,92,255,.13),transparent 35%),
+    #030304;
+}
+
+.login-box{
+  width:min(460px,100%);
+  background:rgba(13,13,17,.96);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:38px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.login-logo{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:28px;
+}
+
+.logo-mark{
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--accent);
+  border-radius:14px;
+  color:var(--accent);
+  font-family:Orbitron;
+  font-weight:800;
+  box-shadow:0 0 30px rgba(182,108,255,.16);
+}
+
+.login-logo strong{
+  display:block;
+  font-family:Orbitron;
+  letter-spacing:2px;
+}
+
+.login-logo span{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+
+.login-box h1{
+  font-family:Orbitron;
+  font-size:25px;
+  margin-bottom:8px;
+}
+
+.login-box p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+  margin-bottom:24px;
+}
+
+.field{
+  margin-bottom:16px;
+}
+
+.field label{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:7px;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  background:#09090c;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px 13px;
+  outline:none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(182,108,255,.08);
+}
+
+.primary-btn{
+  width:100%;
+  border:0;
+  border-radius:10px;
+  padding:13px 18px;
+  color:white;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+}
+
+.login-note{
+  margin-top:16px;
+  text-align:center;
+  font-size:11px;
+  color:var(--muted);
+}
+
+/* APP */
+
+.app{
+  display:none;
+}
+
+.app.active{
+  display:block;
+}
 
 .sidebar{
   position:fixed;
   inset:0 auto 0 0;
   width:var(--sidebar);
   background:
-    linear-gradient(180deg,#090909,#050505);
+    linear-gradient(180deg,#09090c,#050505 75%);
   border-right:1px solid var(--line);
   z-index:1000;
   overflow-y:auto;
-  overflow-x:hidden;
-  transition:transform .25s ease;
-}
-
-.sidebar::-webkit-scrollbar{
-  width:5px;
-}
-
-.sidebar::-webkit-scrollbar-thumb{
-  background:#27272c;
-  border-radius:20px;
 }
 
 .brand{
@@ -119,194 +236,142 @@ a{
   display:flex;
   align-items:center;
   gap:12px;
-  padding:0 18px;
+  padding:0 20px;
   border-bottom:1px solid var(--line);
-  position:sticky;
-  top:0;
-  background:rgba(5,5,5,.96);
-  backdrop-filter:blur(16px);
-  z-index:5;
 }
 
 .brand-mark{
-  width:38px;
-  height:38px;
+  width:40px;
+  height:40px;
+  border:1px solid var(--accent);
+  border-radius:11px;
   display:grid;
   place-items:center;
-  border:1px solid rgba(229,27,35,.7);
-  background:
-    linear-gradient(135deg,rgba(229,27,35,.25),rgba(229,27,35,.03));
-  color:var(--red2);
-  font-family:Orbitron,sans-serif;
+  font-family:Orbitron;
+  color:var(--accent);
   font-weight:800;
-  font-size:13px;
-  box-shadow:0 0 25px rgba(229,27,35,.12);
 }
 
-.brand-title{
-  font-family:Orbitron,sans-serif;
+.brand-text strong{
+  display:block;
+  font-family:Orbitron;
   font-size:13px;
-  font-weight:800;
-  letter-spacing:.08em;
+  letter-spacing:1px;
 }
 
-.brand-subtitle{
+.brand-text span{
+  display:block;
   color:var(--muted);
   font-size:9px;
-  margin-top:2px;
-  letter-spacing:.12em;
+  letter-spacing:1.5px;
   text-transform:uppercase;
+  margin-top:3px;
 }
 
-.sidebar-search{
-  padding:14px 12px 8px;
+.nav{
+  padding:15px 11px 120px;
 }
 
-.sidebar-search button{
+.nav-section{
+  margin:18px 9px 7px;
+  color:#5f5f6b;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.8px;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:11px;
   width:100%;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  border:1px solid var(--line);
-  background:#0d0d0f;
-  color:var(--muted);
-  border-radius:10px;
-  padding:10px 12px;
-  text-align:left;
-}
-
-.sidebar-search button:hover{
-  border-color:#3b3b42;
-  color:var(--text);
-}
-
-.menu-section{
-  padding:14px 10px 4px;
-}
-
-.menu-label{
-  color:#55555d;
-  font-family:Orbitron,sans-serif;
-  font-size:9px;
-  font-weight:700;
-  letter-spacing:.16em;
-  padding:0 9px 7px;
-  text-transform:uppercase;
-}
-
-.menu-link{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  min-height:38px;
-  padding:8px 10px;
+  padding:10px 11px;
   margin:2px 0;
   border-radius:9px;
-  color:#a6a6ad;
+  border:1px solid transparent;
+  background:transparent;
+  color:#aaaab4;
+  text-align:left;
   font-size:12px;
-  transition:.18s ease;
+  transition:.18s;
 }
 
-.menu-link-main{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:0;
+.nav-item:hover{
+  background:#111117;
+  color:white;
 }
 
-.menu-icon{
+.nav-item.active{
+  color:white;
+  background:linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.06));
+  border-color:rgba(182,108,255,.24);
+}
+
+.nav-icon{
   width:22px;
   text-align:center;
-  color:#696971;
-  flex:none;
+  opacity:.9;
 }
 
-.menu-link:hover{
-  background:#111114;
-  color:#fff;
-}
-
-.menu-link:hover .menu-icon{
-  color:var(--red2);
-}
-
-.menu-link.active{
-  background:
-    linear-gradient(90deg,rgba(229,27,35,.19),rgba(229,27,35,.04));
-  color:#fff;
-  border-left:2px solid var(--red);
-  padding-left:8px;
-}
-
-.menu-link.active .menu-icon{
-  color:var(--red2);
-}
-
-.menu-badge{
-  min-width:19px;
-  height:19px;
-  display:grid;
-  place-items:center;
-  padding:0 5px;
+.nav-badge{
+  margin-left:auto;
+  min-width:20px;
+  padding:2px 6px;
   border-radius:20px;
-  background:var(--red);
-  color:#fff;
+  background:rgba(255,82,109,.13);
+  color:var(--red);
   font-size:9px;
-  font-weight:800;
+  text-align:center;
 }
 
-.sidebar-footer{
-  margin:14px 12px 20px;
-  padding:13px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#0b0b0d;
+.sidebar-status{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:var(--sidebar);
+  padding:13px 15px;
+  background:rgba(5,5,5,.96);
+  border-top:1px solid var(--line);
 }
 
-.status-line{
+.status-row{
   display:flex;
-  align-items:center;
-  gap:8px;
-  color:#c8c8cd;
-  font-size:10px;
-}
-
-.status-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 12px rgba(40,209,124,.8);
-}
-
-.sidebar-version{
-  margin-top:8px;
-  color:#55555d;
+  justify-content:space-between;
+  padding:5px 0;
   font-size:9px;
 }
 
-/* =========================================================
-   TOPBAR
-========================================================= */
+.status-row span:first-child{
+  color:var(--muted);
+}
+
+.online{
+  color:var(--green);
+}
+
+/* TOPBAR */
+
+.main{
+  margin-left:var(--sidebar);
+  min-height:100vh;
+}
 
 .topbar{
-  position:fixed;
-  left:var(--sidebar);
-  right:0;
+  position:sticky;
   top:0;
+  z-index:900;
   height:var(--topbar);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 22px;
-  background:rgba(7,7,8,.9);
+  padding:0 24px;
+  background:rgba(5,5,5,.88);
   backdrop-filter:blur(18px);
   border-bottom:1px solid var(--line);
-  z-index:900;
 }
 
-.topbar-left,
-.topbar-right{
+.top-left{
   display:flex;
   align-items:center;
   gap:12px;
@@ -314,876 +379,683 @@ a{
 
 .mobile-menu{
   display:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:#0d0d11;
+  color:white;
+  border-radius:9px;
 }
 
-.icon-button{
+.breadcrumb{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.breadcrumb strong{
+  color:white;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.top-btn{
   width:38px;
   height:38px;
   display:grid;
   place-items:center;
   border:1px solid var(--line);
-  background:#0d0d0f;
-  color:#aaaab1;
   border-radius:9px;
+  background:#0d0d11;
+  color:#ccc;
 }
 
-.icon-button:hover{
-  color:#fff;
-  border-color:#3a3a40;
+.top-btn:hover{
+  border-color:var(--accent);
+  color:white;
 }
 
-.context{
-  display:flex;
-  flex-direction:column;
+.clock{
+  font-family:Orbitron;
+  color:var(--cyan);
+  font-size:10px;
+  letter-spacing:1px;
+  margin:0 8px;
 }
 
-.context-main{
-  font-family:Orbitron,sans-serif;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.05em;
-}
-
-.context-sub{
-  color:var(--muted);
-  font-size:9px;
-  margin-top:3px;
-}
-
-.admin-user{
+.admin-chip{
   display:flex;
   align-items:center;
-  gap:9px;
-  padding-left:8px;
-  border-left:1px solid var(--line);
+  gap:8px;
+  padding:5px 9px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  font-size:10px;
 }
 
-.admin-avatar{
-  width:35px;
-  height:35px;
+.avatar{
+  width:28px;
+  height:28px;
   display:grid;
   place-items:center;
-  border-radius:9px;
-  background:linear-gradient(135deg,#b80e15,#430508);
-  color:#fff;
-  font-family:Orbitron,sans-serif;
-  font-size:10px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:white;
+  font-family:Orbitron;
+  font-size:9px;
   font-weight:800;
 }
 
-.admin-name{
-  font-size:10px;
-  font-weight:700;
-}
+/* CONTENT */
 
-.admin-role{
-  color:var(--muted);
-  font-size:9px;
-  margin-top:2px;
-}
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-.main{
-  margin-left:var(--sidebar);
-  padding-top:var(--topbar);
-  min-height:100vh;
-}
-
-.content{
-  padding:28px;
-  max-width:1900px;
+.page{
+  padding:26px;
+  max-width:1800px;
   margin:auto;
 }
 
-.page-heading{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:20px;
-  margin-bottom:24px;
-}
-
-.eyebrow{
-  color:var(--red2);
-  font-family:Orbitron,sans-serif;
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-}
-
-h1{
-  margin:7px 0 7px;
-  font-family:Orbitron,sans-serif;
-  font-size:30px;
-  line-height:1.1;
-}
-
-.page-date{
-  color:var(--muted);
-  font-size:11px;
-}
-
-.connection-state{
-  display:flex;
-  align-items:center;
-  gap:8px;
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:30px;
   border:1px solid var(--line);
-  padding:9px 12px;
-  border-radius:10px;
-  background:#0b0b0d;
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 90% 30%,rgba(55,215,255,.08),transparent 28%),
+    radial-gradient(circle at 20% 0%,rgba(182,108,255,.12),transparent 35%),
+    var(--panel);
+  margin-bottom:22px;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(255,255,255,.012) 4px
+    );
+}
+
+.hero h1{
+  position:relative;
+  z-index:1;
+  font-family:Orbitron;
+  font-size:clamp(24px,3vw,39px);
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  position:relative;
+  z-index:1;
+  max-width:760px;
   color:var(--muted);
-  font-size:10px;
+  font-size:13px;
+  line-height:1.7;
 }
 
-.connection-state.live{
-  color:#d5ffe8;
-  border-color:rgba(40,209,124,.3);
-}
-
-.connection-state.error{
-  color:#ffd6d8;
-  border-color:rgba(229,27,35,.35);
-}
-
-/* =========================================================
-   ACTIONS
-========================================================= */
-
-.actions{
+.hero-meta{
+  position:relative;
+  z-index:1;
   display:flex;
   gap:8px;
   flex-wrap:wrap;
+  margin-top:20px;
 }
 
-.action{
-  border:1px solid var(--line2);
-  background:#101012;
-  color:#ddd;
-  padding:10px 13px;
-  border-radius:9px;
+.tag{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 9px;
+  border:1px solid var(--line);
+  background:#0a0a0d;
+  color:#aaa;
+  border-radius:20px;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.tag.live{
+  color:var(--green);
+  border-color:rgba(69,230,154,.25);
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:25px 0 12px;
+}
+
+.section-title h2{
+  font-family:Orbitron;
+  font-size:15px;
+}
+
+.section-title span{
+  color:var(--muted);
   font-size:10px;
-  font-weight:700;
 }
 
-.action:hover{
-  border-color:#55555d;
-  background:#151519;
-}
-
-.action.primary{
-  border-color:rgba(229,27,35,.55);
-  background:rgba(229,27,35,.12);
-  color:#fff;
-}
-
-/* =========================================================
-   STAT GRID
-========================================================= */
+/* STATS */
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
+  grid-template-columns:repeat(6,1fr);
   gap:12px;
-  margin-bottom:18px;
 }
 
-.stat-card{
-  position:relative;
-  overflow:hidden;
-  background:
-    linear-gradient(145deg,#111113,#0b0b0d);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
+.stat{
   padding:18px;
-  min-height:120px;
-  box-shadow:var(--shadow);
-}
-
-.stat-card:after{
-  content:"";
-  position:absolute;
-  width:90px;
-  height:90px;
-  right:-35px;
-  top:-35px;
-  border-radius:50%;
-  background:rgba(229,27,35,.08);
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
 }
 
 .stat-label{
   color:var(--muted);
   font-size:9px;
+  font-weight:800;
   text-transform:uppercase;
-  letter-spacing:.12em;
-  font-weight:700;
+  letter-spacing:1px;
 }
 
 .stat-value{
-  margin-top:12px;
-  font-family:Orbitron,sans-serif;
-  font-size:25px;
-  font-weight:800;
+  margin-top:10px;
+  font-family:Orbitron;
+  font-size:23px;
 }
 
-.stat-note{
-  color:#5e5e66;
-  font-size:9px;
+.stat-sub{
   margin-top:6px;
+  color:var(--muted);
+  font-size:9px;
 }
 
-.stat-icon{
-  position:absolute;
-  right:14px;
-  bottom:14px;
-  color:#38383e;
-  font-size:22px;
-}
-
-/* =========================================================
-   LAYOUT
-========================================================= */
+/* GRID */
 
 .grid{
   display:grid;
-  grid-template-columns:minmax(0,1.55fr) minmax(300px,.75fr);
-  gap:16px;
+  gap:14px;
 }
 
-.stack{
-  display:grid;
-  gap:16px;
+.grid-2{
+  grid-template-columns:repeat(2,1fr);
 }
 
-.panel{
-  background:
-    linear-gradient(145deg,#0e0e10,#0a0a0c);
+.grid-3{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.grid-4{
+  grid-template-columns:repeat(4,1fr);
+}
+
+.card{
+  background:var(--panel);
   border:1px solid var(--line);
   border-radius:var(--radius);
   overflow:hidden;
 }
 
-.panel-head{
-  min-height:55px;
-  padding:14px 16px;
+.card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 18px;
   border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
 }
 
-.panel-title{
-  font-family:Orbitron,sans-serif;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.05em;
+.card-head h3{
+  font-family:Orbitron;
+  font-size:12px;
 }
 
-.panel-sub{
-  color:var(--muted);
-  font-size:9px;
-  margin-top:4px;
-}
-
-.panel-body{
-  padding:16px;
-}
-
-.panel-link{
-  color:var(--red2);
-  font-size:9px;
-  font-weight:700;
-}
-
-/* =========================================================
-   HEALTH
-========================================================= */
-
-.health-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-
-.health{
-  border:1px solid var(--line);
-  background:#0b0b0d;
-  border-radius:10px;
-  padding:12px;
-}
-
-.health-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.health-name{
-  font-size:10px;
-  font-weight:700;
-}
-
-.health-status{
-  font-size:8px;
-  color:var(--green);
-  font-weight:800;
-}
-
-.health-desc{
-  color:#5f5f67;
-  font-size:8px;
-  margin-top:7px;
-}
-
-/* =========================================================
-   CONTENT OVERVIEW
-========================================================= */
-
-.overview-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-
-.overview{
-  border:1px solid var(--line);
-  background:#0b0b0d;
-  border-radius:10px;
-  padding:14px;
-}
-
-.overview-label{
+.card-head span{
   color:var(--muted);
   font-size:9px;
 }
 
-.overview-value{
-  margin-top:8px;
-  font-family:Orbitron,sans-serif;
-  font-size:18px;
+.card-body{
+  padding:18px;
 }
 
-.overview-link{
-  display:inline-block;
-  margin-top:10px;
-  color:var(--red2);
-  font-size:9px;
-}
+/* DASHBOARD */
 
-/* =========================================================
-   ACTIVITY
-========================================================= */
-
-.activity-list{
+.dashboard-grid{
   display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:14px;
 }
 
-.activity-item{
-  display:grid;
-  grid-template-columns:32px 1fr auto;
-  gap:10px;
-  padding:12px 0;
-  border-bottom:1px solid #18181b;
-}
-
-.activity-item:last-child{
-  border-bottom:0;
-}
-
-.activity-icon{
-  width:30px;
-  height:30px;
-  display:grid;
-  place-items:center;
-  border-radius:8px;
-  background:#151519;
-  color:var(--red2);
-  font-size:11px;
-}
-
-.activity-title{
-  font-size:10px;
-  font-weight:700;
-}
-
-.activity-desc{
-  color:#6d6d75;
-  font-size:9px;
-  margin-top:4px;
-}
-
-.activity-time{
-  color:#55555d;
-  font-size:8px;
-  white-space:nowrap;
-}
-
-/* =========================================================
-   TV
-========================================================= */
-
-.broadcast{
-  border:1px solid rgba(229,27,35,.25);
-  background:
-    radial-gradient(circle at 80% 10%,rgba(229,27,35,.12),transparent 40%),
-    #0b0b0d;
-}
-
-.live-banner{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:13px 15px;
-  border-bottom:1px solid var(--line);
-}
-
-.live-label{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  color:#fff;
-  font-family:Orbitron,sans-serif;
-  font-size:10px;
-  font-weight:800;
-}
-
-.live-dot{
-  width:7px;
-  height:7px;
-  background:var(--red);
-  border-radius:50%;
-  box-shadow:0 0 14px rgba(229,27,35,.8);
-  animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-  0%,100%{opacity:1}
-  50%{opacity:.35}
-}
-
-.channel-list{
-  display:grid;
-}
-
-.channel{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:12px 15px;
-  border-bottom:1px solid #18181b;
-}
-
-.channel:last-child{
-  border-bottom:0;
-}
-
-.channel-name{
-  font-size:10px;
-  font-weight:700;
-}
-
-.channel-status{
-  color:var(--green);
-  font-size:8px;
-  font-weight:800;
-}
-
-/* =========================================================
-   MEMBER METRICS
-========================================================= */
-
-.member-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-}
-
-.member-metric{
-  text-align:center;
-  border:1px solid var(--line);
-  background:#0b0b0d;
-  border-radius:9px;
-  padding:13px 6px;
-}
-
-.member-number{
-  font-family:Orbitron,sans-serif;
-  font-size:17px;
-  font-weight:800;
-}
-
-.member-label{
-  color:#64646c;
-  font-size:8px;
-  margin-top:5px;
-}
-
-/* =========================================================
-   SCHEDULE
-========================================================= */
-
-.schedule{
-  display:grid;
-}
-
-.schedule-row{
-  display:grid;
-  grid-template-columns:62px 1fr auto;
-  gap:10px;
-  padding:12px 0;
-  border-bottom:1px solid #18181b;
-  align-items:center;
-}
-
-.schedule-row:last-child{
-  border-bottom:0;
-}
-
-.schedule-time{
-  font-family:Orbitron,sans-serif;
-  color:var(--red2);
-  font-size:10px;
-  font-weight:800;
-}
-
-.schedule-title{
-  font-size:10px;
-  font-weight:700;
-}
-
-.schedule-meta{
-  color:#5f5f67;
-  font-size:8px;
-  margin-top:4px;
-}
-
-.schedule-state{
-  color:#777780;
-  font-size:8px;
-}
-
-/* =========================================================
-   REVENUE / ANALYTICS
-========================================================= */
-
-.revenue-value{
-  font-family:Orbitron,sans-serif;
-  font-size:28px;
-  font-weight:800;
-}
-
-.revenue-note{
-  color:#6b6b73;
-  font-size:9px;
-  margin-top:4px;
-}
-
-.bars{
+.chart{
+  height:260px;
   display:flex;
   align-items:flex-end;
-  gap:7px;
-  height:110px;
-  margin-top:18px;
+  gap:8px;
+  padding:20px;
 }
 
 .bar{
   flex:1;
   min-width:8px;
-  background:
-    linear-gradient(to top,var(--red-dark),var(--red2));
-  border-radius:4px 4px 0 0;
+  border-radius:5px 5px 0 0;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));
   opacity:.8;
 }
 
-/* =========================================================
-   QUICK ACCESS
-========================================================= */
-
-.quick-grid{
+.activity-row{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:35px 1fr auto;
   gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-.quick{
-  border:1px solid var(--line);
-  background:#0b0b0d;
-  border-radius:10px;
-  padding:14px;
-  transition:.18s ease;
+.activity-icon{
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:#15151c;
+  font-size:12px;
 }
 
-.quick:hover{
-  border-color:#414149;
-  transform:translateY(-1px);
+.activity-main strong{
+  display:block;
+  font-size:11px;
 }
 
-.quick-icon{
-  color:var(--red2);
-  font-size:17px;
+.activity-main span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:9px;
 }
 
-.quick-title{
-  margin-top:10px;
-  font-size:10px;
-  font-weight:800;
-}
-
-.quick-desc{
-  margin-top:5px;
-  color:#5f5f67;
+.activity-time{
+  color:var(--muted);
   font-size:8px;
 }
 
-/* =========================================================
-   SEARCH OVERLAY
-========================================================= */
+/* TOOLBAR */
 
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  backdrop-filter:blur(10px);
-  z-index:2000;
-  display:none;
-  align-items:flex-start;
-  justify-content:center;
-  padding-top:10vh;
-}
-
-.overlay.open{
-  display:flex;
-}
-
-.search-box{
-  width:min(720px,calc(100% - 30px));
-  background:#0c0c0e;
-  border:1px solid #34343a;
-  border-radius:15px;
-  box-shadow:0 30px 100px rgba(0,0,0,.7);
-  overflow:hidden;
-}
-
-.search-input{
-  width:100%;
-  border:0;
-  outline:0;
-  background:#101012;
-  color:#fff;
-  padding:19px;
-  font-size:14px;
-}
-
-.search-results{
-  max-height:60vh;
-  overflow:auto;
-  padding:8px;
-}
-
-.search-result{
+.toolbar{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap:12px;
+  gap:8px;
+  flex-wrap:wrap;
   padding:12px;
-  border-radius:9px;
+  margin-bottom:14px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
 }
 
-.search-result:hover{
-  background:#151519;
+.toolbar input,
+.toolbar select{
+  min-width:150px;
+  background:#08080b;
+  border:1px solid var(--line);
+  color:white;
+  border-radius:8px;
+  padding:9px 11px;
+  outline:none;
+  font-size:10px;
 }
 
-.search-result-main{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.search-result-icon{
-  color:var(--red2);
-  width:25px;
-  text-align:center;
-}
-
-.search-result-title{
+.tool-btn{
+  padding:9px 12px;
+  border:1px solid var(--line);
+  background:#101016;
+  color:#ccc;
+  border-radius:8px;
   font-size:10px;
   font-weight:700;
 }
 
-.search-result-section{
-  color:#55555d;
+.tool-btn:hover{
+  border-color:var(--accent);
+  color:white;
+}
+
+.tool-btn.primary{
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  color:white;
+  border:0;
+}
+
+/* TABLE */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:800px;
+}
+
+th{
+  padding:11px 12px;
+  color:#777783;
+  text-align:left;
   font-size:8px;
-}
-
-/* =========================================================
-   NOTIFICATION DRAWER
-========================================================= */
-
-.drawer{
-  position:fixed;
-  top:0;
-  right:-410px;
-  width:min(390px,100%);
-  height:100vh;
-  background:#0a0a0c;
-  border-left:1px solid var(--line);
-  z-index:2100;
-  transition:right .25s ease;
-  box-shadow:-20px 0 60px rgba(0,0,0,.4);
-}
-
-.drawer.open{
-  right:0;
-}
-
-.drawer-head{
-  height:var(--topbar);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 18px;
+  text-transform:uppercase;
+  letter-spacing:1px;
   border-bottom:1px solid var(--line);
 }
 
-.drawer-title{
-  font-family:Orbitron,sans-serif;
-  font-size:11px;
-  font-weight:800;
+td{
+  padding:13px 12px;
+  font-size:10px;
+  border-bottom:1px solid rgba(255,255,255,.045);
 }
 
-.notifications{
-  padding:10px;
-  overflow:auto;
-  height:calc(100vh - var(--topbar));
+tr:hover td{
+  background:rgba(255,255,255,.012);
 }
 
-.notification{
-  padding:14px;
-  margin-bottom:8px;
+.status{
+  display:inline-flex;
+  padding:4px 7px;
+  border-radius:20px;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.status.green{
+  color:var(--green);
+  background:rgba(69,230,154,.09);
+}
+
+.status.yellow{
+  color:var(--yellow);
+  background:rgba(243,201,105,.08);
+}
+
+.status.red{
+  color:var(--red);
+  background:rgba(255,82,109,.08);
+}
+
+.status.blue{
+  color:var(--cyan);
+  background:rgba(55,215,255,.08);
+}
+
+.status.purple{
+  color:var(--accent);
+  background:rgba(182,108,255,.08);
+}
+
+/* MODULE CARDS */
+
+.module-card{
+  min-height:145px;
+  padding:19px;
   border:1px solid var(--line);
-  border-radius:10px;
-  background:#0e0e10;
+  border-radius:15px;
+  background:var(--panel);
+  transition:.2s;
+  cursor:pointer;
 }
 
-.notification-title{
-  font-size:10px;
-  font-weight:800;
+.module-card:hover{
+  transform:translateY(-2px);
+  border-color:#42424e;
 }
 
-.notification-text{
-  color:#777780;
-  font-size:9px;
-  line-height:1.5;
-  margin-top:5px;
-}
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-.toast-container{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  z-index:3000;
+.module-icon{
+  width:40px;
+  height:40px;
   display:grid;
-  gap:8px;
+  place-items:center;
+  border-radius:11px;
+  background:#15151c;
+  margin-bottom:14px;
+  font-size:18px;
 }
 
-.toast{
-  min-width:280px;
-  max-width:390px;
-  padding:13px 15px;
-  border:1px solid #34343a;
-  border-left:3px solid var(--red);
-  border-radius:10px;
-  background:#101012;
-  box-shadow:var(--shadow);
-  animation:toastIn .2s ease;
+.module-card h3{
+  font-family:Orbitron;
+  font-size:12px;
+  margin-bottom:6px;
 }
 
-.toast strong{
+.module-card p{
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.6;
+}
+
+/* PROGRESS */
+
+.progress{
+  height:7px;
+  background:#08080b;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:8px;
+}
+
+.progress span{
   display:block;
-  font-size:10px;
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
 }
 
-.toast span{
+/* SETTINGS */
+
+.setting-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  padding:15px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.setting-row strong{
   display:block;
-  color:#7e7e86;
+  font-size:11px;
+}
+
+.setting-row span{
+  display:block;
+  color:var(--muted);
   font-size:9px;
   margin-top:4px;
 }
 
-@keyframes toastIn{
-  from{
-    opacity:0;
-    transform:translateY(8px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
+.toggle{
+  width:42px;
+  height:23px;
+  border-radius:20px;
+  background:#292932;
+  position:relative;
+  border:0;
 }
 
-/* =========================================================
-   LOADING / EMPTY
-========================================================= */
-
-.loading{
-  color:#66666e;
-  font-size:9px;
-  padding:18px 0;
+.toggle:after{
+  content:"";
+  position:absolute;
+  width:17px;
+  height:17px;
+  top:2px;
+  left:3px;
+  border-radius:50%;
+  background:white;
+  transition:.2s;
 }
+
+.toggle.on{
+  background:var(--accent2);
+}
+
+.toggle.on:after{
+  left:21px;
+}
+
+/* EMPTY */
 
 .empty{
-  color:#5d5d65;
-  font-size:9px;
-  padding:18px 0;
+  padding:45px 20px;
   text-align:center;
+  color:var(--muted);
 }
 
-.skeleton{
-  height:12px;
-  border-radius:5px;
-  background:#18181b;
-  animation:skeleton 1.2s infinite alternate;
+.empty-icon{
+  font-size:30px;
+  margin-bottom:12px;
 }
 
-@keyframes skeleton{
-  from{opacity:.4}
-  to{opacity:1}
+.empty strong{
+  display:block;
+  color:white;
+  font-family:Orbitron;
+  font-size:12px;
+  margin-bottom:5px;
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+/* MODAL */
 
-@media(max-width:1250px){
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(7px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(680px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#0d0d11;
+  border:1px solid var(--line2);
+  border-radius:18px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:17px 20px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-head h3{
+  font-family:Orbitron;
+  font-size:13px;
+}
+
+.close{
+  border:0;
+  background:transparent;
+  color:#aaa;
+  font-size:20px;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:15px 20px;
+  border-top:1px solid var(--line);
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:9000;
+  min-width:260px;
+  max-width:400px;
+  padding:14px 16px;
+  background:#111117;
+  border:1px solid var(--line2);
+  border-radius:11px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  transform:translateY(30px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.toast strong{
+  display:block;
+  font-size:11px;
+}
+
+.toast span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+/* MOBILE */
+
+@media(max-width:1200px){
   .stats{
     grid-template-columns:repeat(3,1fr);
   }
 
-  .quick-grid{
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+
+  .grid-4{
     grid-template-columns:repeat(2,1fr);
   }
 }
 
-@media(max-width:950px){
+@media(max-width:850px){
+  :root{
+    --sidebar:270px;
+  }
+
   .sidebar{
     transform:translateX(-100%);
+    transition:.25s;
   }
 
   .sidebar.open{
     transform:translateX(0);
-  }
-
-  .topbar{
-    left:0;
   }
 
   .main{
@@ -1192,47 +1064,50 @@ h1{
 
   .mobile-menu{
     display:grid;
+    place-items:center;
   }
 
-  .grid{
-    grid-template-columns:1fr;
+  .clock{
+    display:none;
   }
 
-  .page-heading{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-}
-
-@media(max-width:650px){
-  .content{
-    padding:18px 12px;
+  .page{
+    padding:16px;
   }
 
   .stats{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .health-grid,
-  .overview-grid{
+  .grid-3,
+  .grid-2{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:560px){
+  .stats{
     grid-template-columns:1fr;
   }
 
-  .quick-grid{
+  .grid-4{
     grid-template-columns:1fr;
   }
 
-  .context{
+  .hero{
+    padding:22px;
+  }
+
+  .hero h1{
+    font-size:22px;
+  }
+
+  .admin-chip span{
     display:none;
   }
 
-  .admin-name,
-  .admin-role{
-    display:none;
-  }
-
-  h1{
-    font-size:23px;
+  .topbar{
+    padding:0 12px;
   }
 }
 </style>
@@ -1240,3554 +1115,3049 @@ h1{
 
 <body>
 
-<!-- =========================================================
-     SIDEBAR
-========================================================= -->
+<!-- LOGIN -->
 
-<aside class="sidebar" id="sidebar">
+<section class="login-screen" id="loginScreen">
+  <div class="login-box">
 
-  <div class="brand">
-    <div class="brand-mark">CR</div>
-    <div>
-      <div class="brand-title">CROWRULES</div>
-      <div class="brand-subtitle">Entertainment Admin</div>
-    </div>
-  </div>
-
-  <div class="sidebar-search">
-    <button id="sidebarSearchBtn" type="button">
-      <span>⌕</span>
-      <span>Search administration...</span>
-    </button>
-  </div>
-
-  <!-- COMMAND -->
-  <div class="menu-section">
-    <div class="menu-label">Command</div>
-
-    <a class="menu-link active" href="index.html">
-      <span class="menu-link-main">
-        <span class="menu-icon">⌂</span>
-        <span>Dashboard</span>
-      </span>
-    </a>
-
-    <a class="menu-link" href="activity.html">
-      <span class="menu-link-main">
-        <span class="menu-icon">◷</span>
-        <span>Activity</span>
-      </span>
-    </a>
-
-    <a class="menu-link" href="notifications.html">
-      <span class="menu-link-main">
-        <span class="menu-icon">♢</span>
-        <span>Notifications</span>
-      </span>
-      <span class="menu-badge" id="notificationBadge">0</span>
-    </a>
-  </div>
-
-  <!-- CONTENT -->
-  <div class="menu-section">
-    <div class="menu-label">Content</div>
-
-    <a class="menu-link" href="content.html">
-      <span class="menu-link-main"><span class="menu-icon">▦</span><span>All Content</span></span>
-    </a>
-
-    <a class="menu-link" href="pages.html">
-      <span class="menu-link-main"><span class="menu-icon">▤</span><span>Pages</span></span>
-    </a>
-
-    <a class="menu-link" href="shows.html">
-      <span class="menu-link-main"><span class="menu-icon">▶</span><span>Shows</span></span>
-    </a>
-
-    <a class="menu-link" href="episodes.html">
-      <span class="menu-link-main"><span class="menu-icon">▹</span><span>Episodes</span></span>
-    </a>
-
-    <a class="menu-link" href="movies.html">
-      <span class="menu-link-main"><span class="menu-icon">▣</span><span>Movies</span></span>
-    </a>
-
-    <a class="menu-link" href="videos.html">
-      <span class="menu-link-main"><span class="menu-icon">◉</span><span>Videos</span></span>
-    </a>
-
-    <a class="menu-link" href="photos.html">
-      <span class="menu-link-main"><span class="menu-icon">▧</span><span>Photos</span></span>
-    </a>
-
-    <a class="menu-link" href="audio.html">
-      <span class="menu-link-main"><span class="menu-icon">♫</span><span>Audio</span></span>
-    </a>
-
-    <a class="menu-link" href="articles.html">
-      <span class="menu-link-main"><span class="menu-icon">≡</span><span>Articles</span></span>
-    </a>
-
-    <a class="menu-link" href="categories.html">
-      <span class="menu-link-main"><span class="menu-icon">◈</span><span>Categories</span></span>
-    </a>
-
-    <a class="menu-link" href="tags.html">
-      <span class="menu-link-main"><span class="menu-icon">#</span><span>Tags</span></span>
-    </a>
-
-    <a class="menu-link" href="media.html">
-      <span class="menu-link-main"><span class="menu-icon">▥</span><span>Media Library</span></span>
-    </a>
-  </div>
-
-  <!-- TELEVISION -->
-  <div class="menu-section">
-    <div class="menu-label">Television</div>
-
-    <a class="menu-link" href="tv.html">
-      <span class="menu-link-main"><span class="menu-icon">TV</span><span>CrowRules TV</span></span>
-    </a>
-
-    <a class="menu-link" href="channels.html">
-      <span class="menu-link-main"><span class="menu-icon">◉</span><span>Channels</span></span>
-    </a>
-
-    <a class="menu-link" href="schedule.html">
-      <span class="menu-link-main"><span class="menu-icon">▦</span><span>Schedule</span></span>
-    </a>
-
-    <a class="menu-link" href="guide.html">
-      <span class="menu-link-main"><span class="menu-icon">☷</span><span>TV Guide</span></span>
-    </a>
-
-    <a class="menu-link" href="live.html">
-      <span class="menu-link-main"><span class="menu-icon">●</span><span>Live Control</span></span>
-    </a>
-
-    <a class="menu-link" href="ondemand.html">
-      <span class="menu-link-main"><span class="menu-icon">▶</span><span>On Demand</span></span>
-    </a>
-
-    <a class="menu-link" href="watchlists.html">
-      <span class="menu-link-main"><span class="menu-icon">♡</span><span>Watchlists</span></span>
-    </a>
-  </div>
-
-  <!-- MEMBERS -->
-  <div class="menu-section">
-    <div class="menu-label">Members</div>
-
-    <a class="menu-link" href="members.html">
-      <span class="menu-link-main"><span class="menu-icon">♙</span><span>Members</span></span>
-    </a>
-
-    <a class="menu-link" href="profiles.html">
-      <span class="menu-link-main"><span class="menu-icon">◎</span><span>Profiles</span></span>
-    </a>
-
-    <a class="menu-link" href="membership.html">
-      <span class="menu-link-main"><span class="menu-icon">◆</span><span>Membership</span></span>
-    </a>
-
-    <a class="menu-link" href="subscriptions.html">
-      <span class="menu-link-main"><span class="menu-icon">↻</span><span>Subscriptions</span></span>
-    </a>
-
-    <a class="menu-link" href="friends.html">
-      <span class="menu-link-main"><span class="menu-icon">♧</span><span>Friendships</span></span>
-    </a>
-
-    <a class="menu-link" href="favorites.html">
-      <span class="menu-link-main"><span class="menu-icon">♥</span><span>Favorites</span></span>
-    </a>
-
-    <a class="menu-link" href="history.html">
-      <span class="menu-link-main"><span class="menu-icon">◴</span><span>Watch History</span></span>
-    </a>
-
-    <a class="menu-link" href="leaderboard.html">
-      <span class="menu-link-main"><span class="menu-icon">♛</span><span>Leaderboard</span></span>
-    </a>
-
-    <a class="menu-link" href="messages.html">
-      <span class="menu-link-main"><span class="menu-icon">✉</span><span>Messages</span></span>
-    </a>
-  </div>
-
-  <!-- COMMUNITY -->
-  <div class="menu-section">
-    <div class="menu-label">Community</div>
-
-    <a class="menu-link" href="community.html">
-      <span class="menu-link-main"><span class="menu-icon">◉</span><span>Community</span></span>
-    </a>
-
-    <a class="menu-link" href="groups.html">
-      <span class="menu-link-main"><span class="menu-icon">♙</span><span>Groups</span></span>
-    </a>
-
-    <a class="menu-link" href="posts.html">
-      <span class="menu-link-main"><span class="menu-icon">▤</span><span>Posts</span></span>
-    </a>
-
-    <a class="menu-link" href="comments.html">
-      <span class="menu-link-main"><span class="menu-icon">◌</span><span>Comments</span></span>
-    </a>
-
-    <a class="menu-link" href="moderation.html">
-      <span class="menu-link-main"><span class="menu-icon">⚑</span><span>Moderation</span></span>
-    </a>
-
-    <a class="menu-link" href="reports.html">
-      <span class="menu-link-main"><span class="menu-icon">!</span><span>Reports</span></span>
-    </a>
-  </div>
-
-  <!-- CREATORS -->
-  <div class="menu-section">
-    <div class="menu-label">Creators</div>
-
-    <a class="menu-link" href="creators.html">
-      <span class="menu-link-main"><span class="menu-icon">✦</span><span>Creators</span></span>
-    </a>
-
-    <a class="menu-link" href="creator-content.html">
-      <span class="menu-link-main"><span class="menu-icon">▦</span><span>Creator Content</span></span>
-    </a>
-
-    <a class="menu-link" href="creator-submissions.html">
-      <span class="menu-link-main"><span class="menu-icon">↥</span><span>Submissions</span></span>
-    </a>
-
-    <a class="menu-link" href="creator-payouts.html">
-      <span class="menu-link-main"><span class="menu-icon">$</span><span>Payouts</span></span>
-    </a>
-  </div>
-
-  <!-- RECORDS -->
-  <div class="menu-section">
-    <div class="menu-label">CrowRules Records</div>
-
-    <a class="menu-link" href="records.html">
-      <span class="menu-link-main"><span class="menu-icon">♫</span><span>Records Home</span></span>
-    </a>
-
-    <a class="menu-link" href="artists.html">
-      <span class="menu-link-main"><span class="menu-icon">♬</span><span>Artists</span></span>
-    </a>
-
-    <a class="menu-link" href="albums.html">
-      <span class="menu-link-main"><span class="menu-icon">▣</span><span>Albums</span></span>
-    </a>
-
-    <a class="menu-link" href="tracks.html">
-      <span class="menu-link-main"><span class="menu-icon">♫</span><span>Tracks</span></span>
-    </a>
-
-    <a class="menu-link" href="releases.html">
-      <span class="menu-link-main"><span class="menu-icon">↗</span><span>Releases</span></span>
-    </a>
-
-    <a class="menu-link" href="playlists.html">
-      <span class="menu-link-main"><span class="menu-icon">☷</span><span>Playlists</span></span>
-    </a>
-
-    <a class="menu-link" href="podcasts.html">
-      <span class="menu-link-main"><span class="menu-icon">◉</span><span>Podcasts</span></span>
-    </a>
-
-    <a class="menu-link" href="podcast-episodes.html">
-      <span class="menu-link-main"><span class="menu-icon">▶</span><span>Podcast Episodes</span></span>
-    </a>
-  </div>
-
-  <!-- SPORTS -->
-  <div class="menu-section">
-    <div class="menu-label">Sports</div>
-
-    <a class="menu-link" href="sports.html">
-      <span class="menu-link-main"><span class="menu-icon">⚽</span><span>Sports Center</span></span>
-    </a>
-
-    <a class="menu-link" href="leagues.html">
-      <span class="menu-link-main"><span class="menu-icon">◇</span><span>Leagues</span></span>
-    </a>
-
-    <a class="menu-link" href="teams.html">
-      <span class="menu-link-main"><span class="menu-icon">♜</span><span>Teams</span></span>
-    </a>
-
-    <a class="menu-link" href="games.html">
-      <span class="menu-link-main"><span class="menu-icon">◉</span><span>Games</span></span>
-    </a>
-
-    <a class="menu-link" href="standings.html">
-      <span class="menu-link-main"><span class="menu-icon">☷</span><span>Standings</span></span>
-    </a>
-
-    <a class="menu-link" href="rankings.html">
-      <span class="menu-link-main"><span class="menu-icon">♛</span><span>Rankings</span></span>
-    </a>
-
-    <a class="menu-link" href="sports-news.html">
-      <span class="menu-link-main"><span class="menu-icon">≡</span><span>Sports News</span></span>
-    </a>
-
-    <a class="menu-link" href="pickem.html">
-      <span class="menu-link-main"><span class="menu-icon">✓</span><span>Pick'em</span></span>
-    </a>
-  </div>
-
-  <!-- MEMORIALS -->
-  <div class="menu-section">
-    <div class="menu-label">Memorials</div>
-
-    <a class="menu-link" href="memorials.html">
-      <span class="menu-link-main"><span class="menu-icon">✝</span><span>Memorials</span></span>
-    </a>
-
-    <a class="menu-link" href="memorial-photos.html">
-      <span class="menu-link-main"><span class="menu-icon">▧</span><span>Memorial Photos</span></span>
-    </a>
-
-    <a class="menu-link" href="candles.html">
-      <span class="menu-link-main"><span class="menu-icon">◈</span><span>Candles</span></span>
-    </a>
-
-    <a class="menu-link" href="tributes.html">
-      <span class="menu-link-main"><span class="menu-icon">♡</span><span>Tributes</span></span>
-    </a>
-
-    <a class="menu-link" href="memorial-videos.html">
-      <span class="menu-link-main"><span class="menu-icon">▶</span><span>Videos</span></span>
-    </a>
-
-    <a class="menu-link" href="guestbook.html">
-      <span class="menu-link-main"><span class="menu-icon">✎</span><span>Guestbook</span></span>
-    </a>
-  </div>
-
-  <!-- AWARDS -->
-  <div class="menu-section">
-    <div class="menu-label">Awards</div>
-
-    <a class="menu-link" href="awards.html">
-      <span class="menu-link-main"><span class="menu-icon">♛</span><span>Awards</span></span>
-    </a>
-
-    <a class="menu-link" href="award-categories.html">
-      <span class="menu-link-main"><span class="menu-icon">◇</span><span>Categories</span></span>
-    </a>
-
-    <a class="menu-link" href="award-nominees.html">
-      <span class="menu-link-main"><span class="menu-icon">✦</span><span>Nominees</span></span>
-    </a>
-
-    <a class="menu-link" href="award-votes.html">
-      <span class="menu-link-main"><span class="menu-icon">✓</span><span>Votes</span></span>
-    </a>
-
-    <a class="menu-link" href="award-winners.html">
-      <span class="menu-link-main"><span class="menu-icon">★</span><span>Winners</span></span>
-    </a>
-
-    <a class="menu-link" href="spectrum-awards.html">
-      <span class="menu-link-main"><span class="menu-icon">◆</span><span>Spectrum Awards</span></span>
-    </a>
-  </div>
-
-  <!-- PUBLISHING -->
-  <div class="menu-section">
-    <div class="menu-label">Publishing</div>
-
-    <a class="menu-link" href="publishing.html">
-      <span class="menu-link-main"><span class="menu-icon">▤</span><span>Publishing</span></span>
-    </a>
-
-    <a class="menu-link" href="publications.html">
-      <span class="menu-link-main"><span class="menu-icon">▣</span><span>Publications</span></span>
-    </a>
-
-    <a class="menu-link" href="yearbooks.html">
-      <span class="menu-link-main"><span class="menu-icon">▥</span><span>Yearbooks</span></span>
-    </a>
-
-    <a class="menu-link" href="yearbook-projects.html">
-      <span class="menu-link-main"><span class="menu-icon">▦</span><span>Yearbook Projects</span></span>
-    </a>
-  </div>
-
-  <!-- BUSINESS -->
-  <div class="menu-section">
-    <div class="menu-label">Business</div>
-
-    <a class="menu-link" href="business.html">
-      <span class="menu-link-main"><span class="menu-icon">◆</span><span>Business</span></span>
-    </a>
-
-    <a class="menu-link" href="partnerships.html">
-      <span class="menu-link-main"><span class="menu-icon">♧</span><span>Partnerships</span></span>
-    </a>
-
-    <a class="menu-link" href="inquiries.html">
-      <span class="menu-link-main"><span class="menu-icon">✉</span><span>Inquiries</span></span>
-    </a>
-
-    <a class="menu-link" href="subscriptions.html">
-      <span class="menu-link-main"><span class="menu-icon">↻</span><span>Subscriptions</span></span>
-    </a>
-
-    <a class="menu-link" href="donations.html">
-      <span class="menu-link-main"><span class="menu-icon">$</span><span>Donations</span></span>
-    </a>
-
-    <a class="menu-link" href="shop.html">
-      <span class="menu-link-main"><span class="menu-icon">◇</span><span>Shop</span></span>
-    </a>
-
-    <a class="menu-link" href="products.html">
-      <span class="menu-link-main"><span class="menu-icon">▦</span><span>Products</span></span>
-    </a>
-
-    <a class="menu-link" href="orders.html">
-      <span class="menu-link-main"><span class="menu-icon">▤</span><span>Orders</span></span>
-    </a>
-  </div>
-
-  <!-- NETWORK -->
-  <div class="menu-section">
-    <div class="menu-label">Network</div>
-
-    <a class="menu-link" href="brands.html">
-      <span class="menu-link-main"><span class="menu-icon">◆</span><span>Brands</span></span>
-    </a>
-
-    <a class="menu-link" href="studios.html">
-      <span class="menu-link-main"><span class="menu-icon">▣</span><span>Studios</span></span>
-    </a>
-
-    <a class="menu-link" href="crowspace.html">
-      <span class="menu-link-main"><span class="menu-icon">◎</span><span>CrowSpace</span></span>
-    </a>
-
-    <a class="menu-link" href="holiday-admin.html">
-      <span class="menu-link-main"><span class="menu-icon">✦</span><span>Holidays</span></span>
-    </a>
-  </div>
-
-  <!-- SYSTEM -->
-  <div class="menu-section">
-    <div class="menu-label">System</div>
-
-    <a class="menu-link" href="analytics.html">
-      <span class="menu-link-main"><span class="menu-icon">▥</span><span>Analytics</span></span>
-    </a>
-
-    <a class="menu-link" href="database.html">
-      <span class="menu-link-main"><span class="menu-icon">▦</span><span>Database</span></span>
-    </a>
-
-    <a class="menu-link" href="storage.html">
-      <span class="menu-link-main"><span class="menu-icon">▣</span><span>Storage</span></span>
-    </a>
-
-    <a class="menu-link" href="authentication.html">
-      <span class="menu-link-main"><span class="menu-icon">♙</span><span>Authentication</span></span>
-    </a>
-
-    <a class="menu-link" href="roles.html">
-      <span class="menu-link-main"><span class="menu-icon">♛</span><span>Roles</span></span>
-    </a>
-
-    <a class="menu-link" href="permissions.html">
-      <span class="menu-link-main"><span class="menu-icon">⚿</span><span>Permissions</span></span>
-    </a>
-
-    <a class="menu-link" href="api.html">
-      <span class="menu-link-main"><span class="menu-icon">{ }</span><span>API</span></span>
-    </a>
-
-    <a class="menu-link" href="logs.html">
-      <span class="menu-link-main"><span class="menu-icon">≡</span><span>System Logs</span></span>
-    </a>
-
-    <a class="menu-link" href="system.html">
-      <span class="menu-link-main"><span class="menu-icon">⚙</span><span>System Health</span></span>
-    </a>
-
-    <a class="menu-link" href="settings.html">
-      <span class="menu-link-main"><span class="menu-icon">⚙</span><span>Settings</span></span>
-    </a>
-  </div>
-
-  <div class="sidebar-footer">
-    <div class="status-line">
-      <span class="status-dot"></span>
-      <span id="sidebarSystemStatus">Checking systems...</span>
-    </div>
-
-    <div class="sidebar-version">
-      CrowRules Core • Admin v2.0
-    </div>
-  </div>
-
-</aside>
-
-<!-- =========================================================
-     TOPBAR
-========================================================= -->
-
-<header class="topbar">
-
-  <div class="topbar-left">
-
-    <button class="icon-button mobile-menu"
-            id="menuBtn"
-            type="button"
-            aria-label="Open menu">
-      ☰
-    </button>
-
-    <div class="context">
-      <div class="context-main">
-        CrowRules Entertainment
-      </div>
-
-      <div class="context-sub">
-        Main Administration Command Center
-      </div>
-    </div>
-
-  </div>
-
-  <div class="topbar-right">
-
-    <button class="icon-button"
-            id="searchBtn"
-            type="button"
-            title="Search">
-      ⌕
-    </button>
-
-    <button class="icon-button"
-            id="notificationBtn"
-            type="button"
-            title="Notifications">
-      ♢
-    </button>
-
-    <button class="icon-button"
-            id="fullscreenBtn"
-            type="button"
-            title="Fullscreen">
-      ⛶
-    </button>
-
-    <div class="admin-user">
-
-      <div class="admin-avatar">
-        CR
-      </div>
-
+    <div class="login-logo">
+      <div class="logo-mark">CR</div>
       <div>
-        <div class="admin-name"
-             id="adminName">
-          Administrator
-        </div>
-
-        <div class="admin-role"
-             id="adminRole">
-          System Admin
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-</header>
-
-<!-- =========================================================
-     MAIN
-========================================================= -->
-
-<main class="main">
-
-<div class="content">
-
-  <!-- PAGE HEADING -->
-
-  <section class="page-heading">
-
-    <div>
-      <div class="eyebrow">Command Center</div>
-
-      <h1>Administration Dashboard</h1>
-
-      <div class="page-date"
-           id="dateText">
-        Loading...
+        <strong>CROWRULES</strong>
+        <span>Entertainment Admin</span>
       </div>
     </div>
 
-    <div class="connection-state"
-         id="connectionState">
-      <span class="status-dot"></span>
-      <span id="connectionText">
-        Connecting to Supabase...
-      </span>
+    <h1>Admin Command Center</h1>
+
+    <p>
+      Unified administration for CrowRules Entertainment, CrowRules TV,
+      CrowSpace, Records, Sports, Memorials, Spectrum Awards,
+      memberships and business operations.
+    </p>
+
+    <form id="loginForm">
+
+      <div class="field">
+        <label>Email</label>
+        <input
+          id="loginEmail"
+          type="email"
+          placeholder="admin@example.com"
+          required>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input
+          id="loginPassword"
+          type="password"
+          placeholder="Password"
+          required>
+      </div>
+
+      <button class="primary-btn" type="submit">
+        Enter Admin
+      </button>
+
+    </form>
+
+    <div class="login-note">
+      CrowRules Entertainment • Secure Administration
     </div>
-
-  </section>
-
-  <!-- QUICK ACTIONS -->
-
-  <div class="actions">
-
-    <button class="action primary"
-            onclick="quickCreate('show')">
-      + New Show
-    </button>
-
-    <button class="action"
-            onclick="quickCreate('episode')">
-      + New Episode
-    </button>
-
-    <button class="action"
-            onclick="quickCreate('movie')">
-      + New Movie
-    </button>
-
-    <button class="action"
-            onclick="quickCreate('member')">
-      + Member
-    </button>
-
-    <button class="action"
-            onclick="quickCreate('creator')">
-      + Creator
-    </button>
-
-    <button class="action"
-            onclick="quickCreate('memorial')">
-      + Memorial
-    </button>
-
-    <button class="action"
-            onclick="quickCreate('article')">
-      + Article
-    </button>
 
   </div>
+</section>
 
-  <br>
 
-  <!-- STATS -->
+<!-- APP -->
 
-  <section class="stats">
+<div class="app" id="app">
 
-    <div class="stat-card">
-      <div class="stat-label">Members</div>
-      <div class="stat-value" id="statMembers">—</div>
-      <div class="stat-note">Membership profiles</div>
-      <div class="stat-icon">♙</div>
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-mark">CR</div>
+
+      <div class="brand-text">
+        <strong>CROWRULES</strong>
+        <span>Entertainment Admin</span>
+      </div>
     </div>
 
-    <div class="stat-card">
-      <div class="stat-label">Shows</div>
-      <div class="stat-value" id="statShows">—</div>
-      <div class="stat-note">CrowRules productions</div>
-      <div class="stat-icon">▶</div>
+    <nav class="nav">
+
+      <div class="nav-section">Command Center</div>
+
+      <button class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </button>
+
+      <button class="nav-item" data-page="analytics">
+        <span class="nav-icon">◫</span>
+        Analytics
+      </button>
+
+      <button class="nav-item" data-page="activity">
+        <span class="nav-icon">◌</span>
+        Activity
+      </button>
+
+      <button class="nav-item" data-page="notifications">
+        <span class="nav-icon">●</span>
+        Notifications
+        <span class="nav-badge">4</span>
+      </button>
+
+      <button class="nav-item" data-page="system-health">
+        <span class="nav-icon">♥</span>
+        System Health
+      </button>
+
+
+      <div class="nav-section">Content Management</div>
+
+      <button class="nav-item" data-page="content">
+        <span class="nav-icon">▦</span>
+        All Content
+      </button>
+
+      <button class="nav-item" data-page="pages">
+        <span class="nav-icon">▤</span>
+        Pages
+      </button>
+
+      <button class="nav-item" data-page="categories">
+        <span class="nav-icon">◇</span>
+        Categories
+      </button>
+
+      <button class="nav-item" data-page="tags">
+        <span class="nav-icon">#</span>
+        Tags
+      </button>
+
+      <button class="nav-item" data-page="videos">
+        <span class="nav-icon">▶</span>
+        Videos
+      </button>
+
+      <button class="nav-item" data-page="audio">
+        <span class="nav-icon">♫</span>
+        Audio
+      </button>
+
+      <button class="nav-item" data-page="articles">
+        <span class="nav-icon">☰</span>
+        Articles
+      </button>
+
+
+      <div class="nav-section">CrowRules TV</div>
+
+      <button class="nav-item" data-page="tv">
+        <span class="nav-icon">▣</span>
+        TV Dashboard
+      </button>
+
+      <button class="nav-item" data-page="shows">
+        <span class="nav-icon">▤</span>
+        Shows
+      </button>
+
+      <button class="nav-item" data-page="episodes">
+        <span class="nav-icon">▶</span>
+        Episodes
+      </button>
+
+      <button class="nav-item" data-page="movies">
+        <span class="nav-icon">🎬</span>
+        Movies
+      </button>
+
+      <button class="nav-item" data-page="channels">
+        <span class="nav-icon">▥</span>
+        Live Channels
+      </button>
+
+      <button class="nav-item" data-page="playlists">
+        <span class="nav-icon">☷</span>
+        Playlists
+      </button>
+
+      <button class="nav-item" data-page="schedule">
+        <span class="nav-icon">◷</span>
+        Schedules
+      </button>
+
+      <button class="nav-item" data-page="live">
+        <span class="nav-icon">●</span>
+        Live Control
+      </button>
+
+      <button class="nav-item" data-page="guide">
+        <span class="nav-icon">▦</span>
+        TV Guide
+      </button>
+
+      <button class="nav-item" data-page="top10">
+        <span class="nav-icon">10</span>
+        Top 10
+      </button>
+
+
+      <div class="nav-section">People & Members</div>
+
+      <button class="nav-item" data-page="members">
+        <span class="nav-icon">♙</span>
+        Members
+      </button>
+
+      <button class="nav-item" data-page="member">
+        <span class="nav-icon">◎</span>
+        Member Profiles
+      </button>
+
+      <button class="nav-item" data-page="membership">
+        <span class="nav-icon">◆</span>
+        Membership
+      </button>
+
+      <button class="nav-item" data-page="subscriptions">
+        <span class="nav-icon">↻</span>
+        Subscriptions
+      </button>
+
+      <button class="nav-item" data-page="friends">
+        <span class="nav-icon">♧</span>
+        Friends
+      </button>
+
+      <button class="nav-item" data-page="points">
+        <span class="nav-icon">★</span>
+        Points
+      </button>
+
+      <button class="nav-item" data-page="leaderboard">
+        <span class="nav-icon">♛</span>
+        Leaderboard
+      </button>
+
+
+      <div class="nav-section">CrowSpace</div>
+
+      <button class="nav-item" data-page="crowspace">
+        <span class="nav-icon">◉</span>
+        CrowSpace
+      </button>
+
+      <button class="nav-item" data-page="community">
+        <span class="nav-icon">☵</span>
+        Community
+      </button>
+
+      <button class="nav-item" data-page="posts">
+        <span class="nav-icon">✎</span>
+        Posts
+      </button>
+
+      <button class="nav-item" data-page="groups">
+        <span class="nav-icon">♟</span>
+        Groups
+      </button>
+
+      <button class="nav-item" data-page="moderation">
+        <span class="nav-icon">⚠</span>
+        Moderation
+        <span class="nav-badge">7</span>
+      </button>
+
+
+      <div class="nav-section">Creators</div>
+
+      <button class="nav-item" data-page="creator">
+        <span class="nav-icon">♙</span>
+        Creator Center
+      </button>
+
+      <button class="nav-item" data-page="creator-content">
+        <span class="nav-icon">▧</span>
+        Creator Content
+      </button>
+
+      <button class="nav-item" data-page="creator-approvals">
+        <span class="nav-icon">✓</span>
+        Creator Approvals
+        <span class="nav-badge">3</span>
+      </button>
+
+
+      <div class="nav-section">CrowRules Records</div>
+
+      <button class="nav-item" data-page="records">
+        <span class="nav-icon">♫</span>
+        Records Dashboard
+      </button>
+
+      <button class="nav-item" data-page="artists">
+        <span class="nav-icon">♩</span>
+        Artists
+      </button>
+
+      <button class="nav-item" data-page="albums">
+        <span class="nav-icon">▣</span>
+        Albums
+      </button>
+
+      <button class="nav-item" data-page="tracks">
+        <span class="nav-icon">♫</span>
+        Tracks
+      </button>
+
+
+      <div class="nav-section">CrowRules Sports</div>
+
+      <button class="nav-item" data-page="sports">
+        <span class="nav-icon">◆</span>
+        Sports Center
+      </button>
+
+      <button class="nav-item" data-page="teams">
+        <span class="nav-icon">♜</span>
+        Teams
+      </button>
+
+      <button class="nav-item" data-page="games">
+        <span class="nav-icon">◉</span>
+        Games
+      </button>
+
+      <button class="nav-item" data-page="standings">
+        <span class="nav-icon">≡</span>
+        Standings
+      </button>
+
+      <button class="nav-item" data-page="rankings">
+        <span class="nav-icon">↟</span>
+        Rankings
+      </button>
+
+      <button class="nav-item" data-page="pickem">
+        <span class="nav-icon">✓</span>
+        Pick'em Challenge
+      </button>
+
+
+      <div class="nav-section">CrowRules Memorials</div>
+
+      <button class="nav-item" data-page="memorials">
+        <span class="nav-icon">♢</span>
+        Memorials
+      </button>
+
+      <button class="nav-item" data-page="memorial-photos">
+        <span class="nav-icon">▧</span>
+        Memorial Photos
+      </button>
+
+      <button class="nav-item" data-page="memorial-videos">
+        <span class="nav-icon">▶</span>
+        Memorial Videos
+      </button>
+
+
+      <div class="nav-section">Spectrum Awards</div>
+
+      <button class="nav-item" data-page="awards">
+        <span class="nav-icon">★</span>
+        Awards
+      </button>
+
+      <button class="nav-item" data-page="award-categories">
+        <span class="nav-icon">◇</span>
+        Award Categories
+      </button>
+
+      <button class="nav-item" data-page="nominees">
+        <span class="nav-icon">♙</span>
+        Nominees
+      </button>
+
+      <button class="nav-item" data-page="voting">
+        <span class="nav-icon">✓</span>
+        Voting
+      </button>
+
+
+      <div class="nav-section">Business</div>
+
+      <button class="nav-item" data-page="business">
+        <span class="nav-icon">▦</span>
+        Business Center
+      </button>
+
+      <button class="nav-item" data-page="donations">
+        <span class="nav-icon">♥</span>
+        Donations
+      </button>
+
+      <button class="nav-item" data-page="shop">
+        <span class="nav-icon">□</span>
+        Shop
+      </button>
+
+      <button class="nav-item" data-page="orders">
+        <span class="nav-icon">☷</span>
+        Orders
+      </button>
+
+
+      <div class="nav-section">Administration</div>
+
+      <button class="nav-item" data-page="roles">
+        <span class="nav-icon">♟</span>
+        Roles
+      </button>
+
+      <button class="nav-item" data-page="permissions">
+        <span class="nav-icon">⌁</span>
+        Permissions
+      </button>
+
+      <button class="nav-item" data-page="authentication">
+        <span class="nav-icon">●</span>
+        Authentication
+      </button>
+
+      <button class="nav-item" data-page="logs">
+        <span class="nav-icon">☰</span>
+        System Logs
+      </button>
+
+
+      <div class="nav-section">Database & Infrastructure</div>
+
+      <button class="nav-item" data-page="database">
+        <span class="nav-icon">▦</span>
+        Database
+      </button>
+
+      <button class="nav-item" data-page="storage">
+        <span class="nav-icon">▤</span>
+        Storage
+      </button>
+
+      <button class="nav-item" data-page="api">
+        <span class="nav-icon">⌘</span>
+        API
+      </button>
+
+      <button class="nav-item" data-page="backups">
+        <span class="nav-icon">◈</span>
+        Backups
+      </button>
+
+
+      <div class="nav-section">System</div>
+
+      <button class="nav-item" data-page="settings">
+        <span class="nav-icon">⚙</span>
+        Settings
+      </button>
+
+      <button class="nav-item" data-page="profile">
+        <span class="nav-icon">◎</span>
+        My Profile
+      </button>
+
+      <button class="nav-item" id="signOutBtn">
+        <span class="nav-icon">↪</span>
+        Sign Out
+      </button>
+
+    </nav>
+
+    <div class="sidebar-status">
+      <div class="status-row">
+        <span>Core Services</span>
+        <span class="online">ONLINE</span>
+      </div>
+
+      <div class="status-row">
+        <span>Supabase</span>
+        <span class="online">READY</span>
+      </div>
+
+      <div class="status-row">
+        <span>Admin Session</span>
+        <span class="online">ACTIVE</span>
+      </div>
     </div>
 
-    <div class="stat-card">
-      <div class="stat-label">Episodes</div>
-      <div class="stat-value" id="statEpisodes">—</div>
-      <div class="stat-note">Podcast / episode catalog</div>
-      <div class="stat-icon">▹</div>
-    </div>
+  </aside>
 
-    <div class="stat-card">
-      <div class="stat-label">Movies</div>
-      <div class="stat-value" id="statMovies">—</div>
-      <div class="stat-note">Cinema catalog</div>
-      <div class="stat-icon">▣</div>
-    </div>
 
-    <div class="stat-card">
-      <div class="stat-label">Channels</div>
-      <div class="stat-value" id="statChannels">—</div>
-      <div class="stat-note">Active media channels</div>
-      <div class="stat-icon">TV</div>
-    </div>
+  <!-- MAIN -->
 
-    <div class="stat-card">
-      <div class="stat-label">Monthly Revenue</div>
-      <div class="stat-value" id="statRevenue">—</div>
-      <div class="stat-note">Analytics revenue</div>
-      <div class="stat-icon">$</div>
-    </div>
+  <main class="main">
 
-  </section>
+    <header class="topbar">
 
-  <!-- MAIN GRID -->
+      <div class="top-left">
 
-  <section class="grid">
+        <button class="mobile-menu" id="mobileMenu">
+          ☰
+        </button>
 
-    <!-- LEFT -->
-
-    <div class="stack">
-
-      <!-- SYSTEM HEALTH -->
-
-      <section class="panel">
-
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">System Health</div>
-            <div class="panel-sub">
-              Live administrative service checks
-            </div>
-          </div>
-
-          <a class="panel-link"
-             href="system.html">
-            Open System Health →
-          </a>
+        <div class="breadcrumb">
+          CrowRules Entertainment
+          /
+          <strong id="breadcrumb">Dashboard</strong>
         </div>
 
-        <div class="panel-body">
+      </div>
 
-          <div class="health-grid">
+      <div class="top-actions">
 
-            <div class="health">
-              <div class="health-top">
-                <div class="health-name">Supabase</div>
-                <div class="health-status" id="healthSupabase">
-                  CHECKING
-                </div>
-              </div>
-              <div class="health-desc">
-                Database and API connection
-              </div>
-            </div>
+        <button class="top-btn" onclick="refreshPage()" title="Refresh">
+          ↻
+        </button>
 
-            <div class="health">
-              <div class="health-top">
-                <div class="health-name">Authentication</div>
-                <div class="health-status" id="healthAuth">
-                  CHECKING
-                </div>
-              </div>
-              <div class="health-desc">
-                Current administrator session
-              </div>
-            </div>
+        <button
+          class="top-btn"
+          onclick="showPage('notifications')"
+          title="Notifications">
+          ●
+        </button>
 
-            <div class="health">
-              <div class="health-top">
-                <div class="health-name">Database</div>
-                <div class="health-status" id="healthDatabase">
-                  CHECKING
-                </div>
-              </div>
-              <div class="health-desc">
-                Public schema availability
-              </div>
-            </div>
-
-            <div class="health">
-              <div class="health-top">
-                <div class="health-name">TV Scheduler</div>
-                <div class="health-status" id="healthTV">
-                  READY
-                </div>
-              </div>
-              <div class="health-desc">
-                CrowRules TV scheduling system
-              </div>
-            </div>
-
-            <div class="health">
-              <div class="health-top">
-                <div class="health-name">Realtime</div>
-                <div class="health-status" id="healthRealtime">
-                  READY
-                </div>
-              </div>
-              <div class="health-desc">
-                Supabase realtime client
-              </div>
-            </div>
-
-            <div class="health">
-              <div class="health-top">
-                <div class="health-name">Website</div>
-                <div class="health-status">
-                  ONLINE
-                </div>
-              </div>
-              <div class="health-desc">
-                Current administration interface
-              </div>
-            </div>
-
-          </div>
-
+        <div class="clock" id="clock">
+          --:--:--
         </div>
 
-      </section>
-
-      <!-- CONTENT OVERVIEW -->
-
-      <section class="panel">
-
-        <div class="panel-head">
-
-          <div>
-            <div class="panel-title">
-              Content Overview
-            </div>
-
-            <div class="panel-sub">
-              Current CrowRules content inventory
-            </div>
-          </div>
-
-          <a class="panel-link"
-             href="content.html">
-            Manage Content →
-          </a>
-
+        <div class="admin-chip">
+          <div class="avatar" id="adminAvatar">CR</div>
+          <span id="adminName">Administrator</span>
         </div>
 
-        <div class="panel-body">
+      </div>
 
-          <div class="overview-grid">
+    </header>
 
-            <div class="overview">
-              <div class="overview-label">
-                Television
-              </div>
 
-              <div class="overview-value"
-                   id="overviewShows">
-                —
-              </div>
+    <section class="page" id="pageContent">
+      <!-- dynamic -->
+    </section>
 
-              <a class="overview-link"
-                 href="shows.html">
-                Manage Shows →
-              </a>
-            </div>
-
-            <div class="overview">
-              <div class="overview-label">
-                Episodes
-              </div>
-
-              <div class="overview-value"
-                   id="overviewEpisodes">
-                —
-              </div>
-
-              <a class="overview-link"
-                 href="episodes.html">
-                Manage Episodes →
-              </a>
-            </div>
-
-            <div class="overview">
-              <div class="overview-label">
-                Movies
-              </div>
-
-              <div class="overview-value"
-                   id="overviewMovies">
-                —
-              </div>
-
-              <a class="overview-link"
-                 href="movies.html">
-                Manage Movies →
-              </a>
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- ACTIVITY -->
-
-      <section class="panel">
-
-        <div class="panel-head">
-
-          <div>
-            <div class="panel-title">
-              Recent Activity
-            </div>
-
-            <div class="panel-sub">
-              Latest administrative events
-            </div>
-          </div>
-
-          <a class="panel-link"
-             href="activity.html">
-            View All →
-          </a>
-
-        </div>
-
-        <div class="panel-body">
-
-          <div class="activity-list"
-               id="activityList">
-
-            <div class="loading">
-              Loading activity...
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- QUICK ACCESS -->
-
-      <section class="panel">
-
-        <div class="panel-head">
-
-          <div>
-            <div class="panel-title">
-              Quick Access
-            </div>
-
-            <div class="panel-sub">
-              Frequently used administration areas
-            </div>
-          </div>
-
-        </div>
-
-        <div class="panel-body">
-
-          <div class="quick-grid">
-
-            <a class="quick" href="shows.html">
-              <div class="quick-icon">▶</div>
-              <div class="quick-title">Shows</div>
-              <div class="quick-desc">
-                Manage CrowRules programming
-              </div>
-            </a>
-
-            <a class="quick" href="schedule.html">
-              <div class="quick-icon">▦</div>
-              <div class="quick-title">Schedule</div>
-              <div class="quick-desc">
-                Manage programming schedule
-              </div>
-            </a>
-
-            <a class="quick" href="members.html">
-              <div class="quick-icon">♙</div>
-              <div class="quick-title">Members</div>
-              <div class="quick-desc">
-                Membership management
-              </div>
-            </a>
-
-            <a class="quick" href="creators.html">
-              <div class="quick-icon">✦</div>
-              <div class="quick-title">Creators</div>
-              <div class="quick-desc">
-                Creator management
-              </div>
-            </a>
-
-            <a class="quick" href="memorials.html">
-              <div class="quick-icon">✝</div>
-              <div class="quick-title">Memorials</div>
-              <div class="quick-desc">
-                Memorial administration
-              </div>
-            </a>
-
-            <a class="quick" href="records.html">
-              <div class="quick-icon">♫</div>
-              <div class="quick-title">Records</div>
-              <div class="quick-desc">
-                CrowRules Records
-              </div>
-            </a>
-
-            <a class="quick" href="analytics.html">
-              <div class="quick-icon">▥</div>
-              <div class="quick-title">Analytics</div>
-              <div class="quick-desc">
-                Traffic and engagement
-              </div>
-            </a>
-
-            <a class="quick" href="system.html">
-              <div class="quick-icon">⚙</div>
-              <div class="quick-title">System Health</div>
-              <div class="quick-desc">
-                Infrastructure status
-              </div>
-            </a>
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </div>
-
-    <!-- RIGHT -->
-
-    <div class="stack">
-
-      <!-- TV BROADCAST -->
-
-      <section class="panel broadcast">
-
-        <div class="live-banner">
-
-          <div class="live-label">
-            <span class="live-dot"></span>
-            CROWRULES TV
-          </div>
-
-          <div class="health-status"
-               id="broadcastStatus">
-            CHECKING
-          </div>
-
-        </div>
-
-        <div class="panel-body">
-
-          <div style="
-            font-family:Orbitron;
-            font-size:20px;
-            font-weight:800;
-            margin-bottom:5px;">
-            24/7 BROADCAST
-          </div>
-
-          <div style="
-            color:#66666e;
-            font-size:9px;
-            margin-bottom:15px;">
-            Network operations overview
-          </div>
-
-          <div class="channel-list">
-
-            <div class="channel">
-              <div class="channel-name">
-                CrowRules TV LIVE
-              </div>
-
-              <div class="channel-status">
-                LIVE
-              </div>
-            </div>
-
-            <div class="channel">
-              <div class="channel-name">
-                Tacoma Nights
-              </div>
-
-              <div class="channel-status">
-                READY
-              </div>
-            </div>
-
-            <div class="channel">
-              <div class="channel-name">
-                Back Deck Live
-              </div>
-
-              <div class="channel-status">
-                READY
-              </div>
-            </div>
-
-          </div>
-
-          <br>
-
-          <a class="action primary"
-             href="live.html"
-             style="display:inline-block;">
-            Open Live Control
-          </a>
-
-        </div>
-
-      </section>
-
-      <!-- MEMBERS -->
-
-      <section class="panel">
-
-        <div class="panel-head">
-
-          <div>
-            <div class="panel-title">
-              Members
-            </div>
-
-            <div class="panel-sub">
-              Membership activity
-            </div>
-          </div>
-
-          <a class="panel-link"
-             href="members.html">
-            Manage →
-          </a>
-
-        </div>
-
-        <div class="panel-body">
-
-          <div class="member-grid">
-
-            <div class="member-metric">
-              <div class="member-number"
-                   id="activeMembers">
-                —
-              </div>
-
-              <div class="member-label">
-                ACTIVE
-              </div>
-            </div>
-
-            <div class="member-metric">
-              <div class="member-number"
-                   id="newMembers">
-                —
-              </div>
-
-              <div class="member-label">
-                NEW
-              </div>
-            </div>
-
-            <div class="member-metric">
-              <div class="member-number"
-                   id="onlineMembers">
-                —
-              </div>
-
-              <div class="member-label">
-                ONLINE
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- UP NEXT -->
-
-      <section class="panel">
-
-        <div class="panel-head">
-
-          <div>
-            <div class="panel-title">
-              Up Next
-            </div>
-
-            <div class="panel-sub">
-              Upcoming programming
-            </div>
-          </div>
-
-          <a class="panel-link"
-             href="schedule.html">
-            Schedule →
-          </a>
-
-        </div>
-
-        <div class="panel-body">
-
-          <div class="schedule"
-               id="scheduleList">
-
-            <div class="loading">
-              Loading schedule...
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- ANALYTICS -->
-
-      <section class="panel">
-
-        <div class="panel-head">
-
-          <div>
-            <div class="panel-title">
-              Monthly Support
-            </div>
-
-            <div class="panel-sub">
-              Analytics revenue snapshot
-            </div>
-          </div>
-
-          <a class="panel-link"
-             href="analytics.html">
-            Analytics →
-          </a>
-
-        </div>
-
-        <div class="panel-body">
-
-          <div class="revenue-value"
-               id="revenueValue">
-            —
-          </div>
-
-          <div class="revenue-note"
-               id="revenueNote">
-            Loading monthly analytics...
-          </div>
-
-          <div class="bars"
-               id="revenueBars">
-
-            <div class="bar" style="height:25%"></div>
-            <div class="bar" style="height:42%"></div>
-            <div class="bar" style="height:35%"></div>
-            <div class="bar" style="height:60%"></div>
-            <div class="bar" style="height:48%"></div>
-            <div class="bar" style="height:75%"></div>
-            <div class="bar" style="height:62%"></div>
-            <div class="bar" style="height:88%"></div>
-            <div class="bar" style="height:70%"></div>
-            <div class="bar" style="height:94%"></div>
-            <div class="bar" style="height:82%"></div>
-            <div class="bar" style="height:100%"></div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </div>
-
-  </section>
+  </main>
 
 </div>
 
-</main>
 
-<!-- =========================================================
-     SEARCH
-========================================================= -->
+<!-- MODAL -->
 
-<div class="overlay"
-     id="searchOverlay">
+<div class="modal" id="modal">
 
-  <div class="search-box">
+  <div class="modal-box">
 
-    <input class="search-input"
-           id="searchInput"
-           type="search"
-           autocomplete="off"
-           placeholder="Search administration...">
+    <div class="modal-head">
+      <h3 id="modalTitle">Details</h3>
 
-    <div class="search-results"
-         id="searchResults">
+      <button class="close" onclick="closeModal()">
+        ×
+      </button>
+    </div>
 
-      <!-- populated dynamically -->
+    <div class="modal-body" id="modalBody"></div>
 
+    <div class="modal-foot">
+      <button class="tool-btn" onclick="closeModal()">
+        Cancel
+      </button>
+
+      <button class="tool-btn primary" onclick="saveModal()">
+        Save
+      </button>
     </div>
 
   </div>
 
 </div>
 
-<!-- =========================================================
-     NOTIFICATIONS
-========================================================= -->
 
-<aside class="drawer"
-       id="notificationDrawer">
-
-  <div class="drawer-head">
-
-    <div class="drawer-title">
-      Notifications
-    </div>
-
-    <button class="icon-button"
-            id="closeNotifications"
-            type="button">
-      ×
-    </button>
-
-  </div>
-
-  <div class="notifications"
-       id="notificationsList">
-
-    <div class="loading">
-      Loading notifications...
-    </div>
-
-  </div>
-
-</aside>
-
-<!-- =========================================================
-     TOAST
-========================================================= -->
-
-<div class="toast-container"
-     id="toastContainer">
+<div class="toast" id="toast">
+  <strong id="toastTitle">Success</strong>
+  <span id="toastMessage">Operation completed.</span>
 </div>
+
 
 <script>
 /* =========================================================
-   CROWRULES ADMIN v2.0
-   Supabase-connected command center
-========================================================= */
-
-const CrowRulesAdmin = {
-
-  /* -------------------------------------------------------
-     SUPABASE
-  ------------------------------------------------------- */
-
-  supabaseUrl:
-    "https://cevylpnoexugwgygvtgu.supabase.co",
-
-  supabaseKey:
-    "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-",
-
-  supabase:null,
-
-  session:null,
-
-  user:null,
-
-  /* -------------------------------------------------------
-     FALLBACKS
-     These are intentionally empty instead of fake production
-     numbers. A missing/blocked table displays —.
-  ------------------------------------------------------- */
-
-  data:{
-    members:null,
-    shows:null,
-    episodes:null,
-    movies:null,
-    channels:null,
-    revenue:null,
-    activeMembers:null,
-    newMembers:null,
-    onlineMembers:null
-  },
-
-  /* -------------------------------------------------------
-     ADMIN MENU
-  ------------------------------------------------------- */
-
-  menu:[
-
-    ["Dashboard","index.html","Command"],
-
-    ["Activity","activity.html","Command"],
-    ["Notifications","notifications.html","Command"],
-
-    ["All Content","content.html","Content"],
-    ["Pages","pages.html","Content"],
-    ["Shows","shows.html","Content"],
-    ["Episodes","episodes.html","Content"],
-    ["Movies","movies.html","Content"],
-    ["Videos","videos.html","Content"],
-    ["Photos","photos.html","Content"],
-    ["Audio","audio.html","Content"],
-    ["Articles","articles.html","Content"],
-    ["Categories","categories.html","Content"],
-    ["Tags","tags.html","Content"],
-    ["Media Library","media.html","Content"],
-
-    ["CrowRules TV","tv.html","Television"],
-    ["Channels","channels.html","Television"],
-    ["Schedule","schedule.html","Television"],
-    ["TV Guide","guide.html","Television"],
-    ["Live Control","live.html","Television"],
-    ["On Demand","ondemand.html","Television"],
-
-    ["Members","members.html","Members"],
-    ["Profiles","profiles.html","Members"],
-    ["Membership","membership.html","Members"],
-    ["Subscriptions","subscriptions.html","Members"],
-    ["Friendships","friends.html","Members"],
-    ["Favorites","favorites.html","Members"],
-    ["Watch History","history.html","Members"],
-    ["Leaderboard","leaderboard.html","Members"],
-    ["Messages","messages.html","Members"],
-
-    ["Community","community.html","Community"],
-    ["Groups","groups.html","Community"],
-    ["Posts","posts.html","Community"],
-    ["Comments","comments.html","Community"],
-    ["Moderation","moderation.html","Community"],
-    ["Reports","reports.html","Community"],
-
-    ["Creators","creators.html","Creators"],
-    ["Creator Content","creator-content.html","Creators"],
-    ["Submissions","creator-submissions.html","Creators"],
-    ["Payouts","creator-payouts.html","Creators"],
-
-    ["Records","records.html","Records"],
-    ["Artists","artists.html","Records"],
-    ["Albums","albums.html","Records"],
-    ["Tracks","tracks.html","Records"],
-    ["Releases","releases.html","Records"],
-    ["Playlists","playlists.html","Records"],
-    ["Podcasts","podcasts.html","Records"],
-    ["Podcast Episodes","podcast-episodes.html","Records"],
-
-    ["Sports Center","sports.html","Sports"],
-    ["Leagues","leagues.html","Sports"],
-    ["Teams","teams.html","Sports"],
-    ["Games","games.html","Sports"],
-    ["Standings","standings.html","Sports"],
-    ["Rankings","rankings.html","Sports"],
-    ["Sports News","sports-news.html","Sports"],
-    ["Pick'em","pickem.html","Sports"],
-
-    ["Memorials","memorials.html","Memorials"],
-    ["Memorial Photos","memorial-photos.html","Memorials"],
-    ["Candles","candles.html","Memorials"],
-    ["Tributes","tributes.html","Memorials"],
-    ["Memorial Videos","memorial-videos.html","Memorials"],
-    ["Guestbook","guestbook.html","Memorials"],
-
-    ["Awards","awards.html","Awards"],
-    ["Award Categories","award-categories.html","Awards"],
-    ["Award Nominees","award-nominees.html","Awards"],
-    ["Award Votes","award-votes.html","Awards"],
-    ["Award Winners","award-winners.html","Awards"],
-    ["Spectrum Awards","spectrum-awards.html","Awards"],
-
-    ["Publishing","publishing.html","Publishing"],
-    ["Publications","publications.html","Publishing"],
-    ["Yearbooks","yearbooks.html","Publishing"],
-    ["Yearbook Projects","yearbook-projects.html","Publishing"],
-
-    ["Business","business.html","Business"],
-    ["Partnerships","partnerships.html","Business"],
-    ["Inquiries","inquiries.html","Business"],
-    ["Donations","donations.html","Business"],
-    ["Shop","shop.html","Business"],
-    ["Products","products.html","Business"],
-    ["Orders","orders.html","Business"],
-
-    ["Brands","brands.html","Network"],
-    ["Studios","studios.html","Network"],
-    ["CrowSpace","crowspace.html","Network"],
-    ["Holidays","holiday-admin.html","Network"],
-
-    ["Analytics","analytics.html","System"],
-    ["Database","database.html","System"],
-    ["Storage","storage.html","System"],
-    ["Authentication","authentication.html","System"],
-    ["Roles","roles.html","System"],
-    ["Permissions","permissions.html","System"],
-    ["API","api.html","System"],
-    ["System Logs","logs.html","System"],
-    ["System Health","system.html","System"],
-    ["Settings","settings.html","System"]
-
-  ],
-
-  /* -------------------------------------------------------
-     INIT
-  ------------------------------------------------------- */
-
-  async init(){
-
-    this.initializeDate();
-
-    this.initializeNavigation();
-
-    this.initializeSearch();
-
-    this.initializeNotifications();
-
-    this.initializeFullscreen();
-
-    this.initializeKeyboard();
-
-    this.initializeActiveMenu();
-
-    this.initializeSearchIndex();
-
-    await this.initializeSupabase();
-
-  },
-
-  /* -------------------------------------------------------
-     SUPABASE
-  ------------------------------------------------------- */
-
-  async initializeSupabase(){
-
-    const connection =
-      document.getElementById("connectionState");
-
-    const connectionText =
-      document.getElementById("connectionText");
-
-    if(!window.supabase){
-
-      this.setConnection(
-        "error",
-        "Supabase library unavailable"
-      );
-
-      this.setHealth(
-        "healthSupabase",
-        "ERROR"
-      );
-
-      return;
-
-    }
-
-    if(
-      !this.supabaseUrl ||
-      !this.supabaseKey
-    ){
-
-      this.setConnection(
-        "error",
-        "Supabase configuration required"
-      );
-
-      this.setHealth(
-        "healthSupabase",
-        "CONFIG"
-      );
-
-      return;
-
-    }
-
-    try{
-
-      this.supabase =
-        window.supabase.createClient(
-          this.supabaseUrl,
-          this.supabaseKey,
-          {
-            auth:{
-              autoRefreshToken:true,
-              persistSession:true,
-              detectSessionInUrl:true
-            }
-          }
-        );
-
-      this.setHealth(
-        "healthSupabase",
-        "ONLINE"
-      );
-
-      this.setConnection(
-        "live",
-        "Supabase connected"
-      );
-
-      await this.loadSession();
-
-      await this.loadDashboard();
-
-      this.subscribeRealtime();
-
-    }catch(error){
-
-      console.error(
-        "[CrowRules] Supabase initialization error:",
-        error
-      );
-
-      this.setConnection(
-        "error",
-        "Supabase connection failed"
-      );
-
-      this.setHealth(
-        "healthSupabase",
-        "ERROR"
-      );
-
-      this.toast(
-        "Supabase",
-        "Connection failed. Check the browser console and project configuration."
-      );
-
-    }
-
-  },
-
-  /* -------------------------------------------------------
-     SESSION
-  ------------------------------------------------------- */
-
-  async loadSession(){
-
-    if(!this.supabase){
-
-      return;
-
-    }
-
-    try{
-
-      const {
-        data,
-        error
-      } =
-        await this.supabase.auth.getSession();
-
-      if(error){
-
-        throw error;
-
-      }
-
-      this.session =
-        data?.session || null;
-
-      this.user =
-        this.session?.user || null;
-
-      if(this.user){
-
-        this.setHealth(
-          "healthAuth",
-          "AUTHENTICATED"
-        );
-
-        const email =
-          this.user.email ||
-          "Administrator";
-
-        this.setText(
-          "adminName",
-          email
-        );
-
-        this.setText(
-          "adminRole",
-          "Authenticated Admin"
-        );
-
-      }else{
-
-        this.setHealth(
-          "healthAuth",
-          "NO SESSION"
-        );
-
-        this.setText(
-          "adminName",
-          "Administrator"
-        );
-
-        this.setText(
-          "adminRole",
-          "No active session"
-        );
-
-        /*
-         * Do not automatically redirect because some
-         * deployments intentionally use an authenticated
-         * reverse proxy. The dashboard remains usable
-         * according to the RLS policies.
-         */
-
-      }
-
-      this.supabase.auth.onAuthStateChange(
-        (_event,session) => {
-
-          this.session = session || null;
-
-          this.user =
-            this.session?.user || null;
-
-          if(this.user){
-
-            this.setHealth(
-              "healthAuth",
-              "AUTHENTICATED"
-            );
-
-            this.setText(
-              "adminName",
-              this.user.email || "Administrator"
-            );
-
-          }else{
-
-            this.setHealth(
-              "healthAuth",
-              "NO SESSION"
-            );
-
-          }
-
-        }
-      );
-
-    }catch(error){
-
-      console.warn(
-        "[CrowRules] Session check failed:",
-        error
-      );
-
-      this.setHealth(
-        "healthAuth",
-        "ERROR"
-      );
-
-    }
-
-  },
-
-  /* -------------------------------------------------------
-     DASHBOARD
-  ------------------------------------------------------- */
-
-  async loadDashboard(){
-
-    this.setHealth(
-      "healthDatabase",
-      "CHECKING"
+   CROWRULES ENTERTAINMENT UNIFIED ADMIN
+   ========================================================= */
+
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL ||
+  localStorage.getItem("CROWRULES_SUPABASE_URL") ||
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY ||
+  localStorage.getItem("CROWRULES_SUPABASE_ANON_KEY") ||
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+let supabaseClient = null;
+
+if(SUPABASE_URL && SUPABASE_KEY){
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
     );
-
-    await Promise.allSettled([
-
-      this.loadMemberStats(),
-
-      this.loadShowStats(),
-
-      this.loadEpisodeStats(),
-
-      this.loadMovieStats(),
-
-      this.loadChannelStats(),
-
-      this.loadRevenue(),
-
-      this.loadActivity(),
-
-      this.loadSchedule(),
-
-      this.loadNotifications()
-
-    ]);
-
-    this.renderStats();
-
-    this.setHealth(
-      "healthDatabase",
-      "ONLINE"
-    );
-
-    this.setText(
-      "sidebarSystemStatus",
-      "All Systems Operational"
-    );
-
-  },
-
-  /* -------------------------------------------------------
-     GENERIC COUNT
-  ------------------------------------------------------- */
-
-  async countTable(table){
-
-    if(!this.supabase){
-
-      return null;
-
-    }
-
-    try{
-
-      const {
-        count,
-        error
-      } =
-        await this.supabase
-          .from(table)
-          .select("*",{
-            count:"exact",
-            head:true
-          });
-
-      if(error){
-
-        console.warn(
-          `[CrowRules] ${table} count unavailable:`,
-          error.message
-        );
-
-        return null;
-
-      }
-
-      return typeof count === "number"
-        ? count
-        : null;
-
-    }catch(error){
-
-      console.warn(
-        `[CrowRules] ${table} count failed:`,
-        error
-      );
-
-      return null;
-
-    }
-
-  },
-
-  /* -------------------------------------------------------
-     MEMBERS
-  ------------------------------------------------------- */
-
-  async loadMemberStats(){
-
-    /*
-     * The old dashboard queried "profiles".
-     * That table does not exist in the inspected project.
-     *
-     * The actual CrowRules membership profile table is:
-     * membership_profiles
-     */
-
-    const members =
-      await this.countTable(
-        "membership_profiles"
-      );
-
-    this.data.members = members;
-
-    const active =
-      await this.countTable(
-        "membership_subscriptions"
-      );
-
-    this.data.activeMembers =
-      active;
-
-    const online =
-      await this.countTable(
-        "member_presence"
-      );
-
-    /*
-     * member_presence contains online/away/offline
-     * statuses. Query online specifically.
-     */
-
-    if(this.supabase){
-
-      try{
-
-        const {
-          count,
-          error
-        } =
-          await this.supabase
-            .from("member_presence")
-            .select("*",{
-              count:"exact",
-              head:true
-            })
-            .eq("status","online");
-
-        if(!error){
-
-          this.data.onlineMembers =
-            count ?? 0;
-
-        }
-
-      }catch(error){
-
-        console.warn(
-          "[CrowRules] Online member count failed.",
-          error
-        );
-
-      }
-
-    }
-
-    if(this.supabase){
-
-      try{
-
-        const start =
-          new Date();
-
-        start.setDate(
-          start.getDate() - 30
-        );
-
-        const {
-          count,
-          error
-        } =
-          await this.supabase
-            .from("membership_profiles")
-            .select("*",{
-              count:"exact",
-              head:true
-            })
-            .gte(
-              "created_at",
-              start.toISOString()
-            );
-
-        if(!error){
-
-          this.data.newMembers =
-            count ?? 0;
-
-        }
-
-      }catch(error){
-
-        console.warn(
-          "[CrowRules] New member count failed.",
-          error
-        );
-
-      }
-
-    }
-
-  },
-
-  /* -------------------------------------------------------
-     SHOWS
-  ------------------------------------------------------- */
-
-  async loadShowStats(){
-
-    this.data.shows =
-      await this.countTable(
-        "shows"
-      );
-
-  },
-
-  /* -------------------------------------------------------
-     EPISODES
-  ------------------------------------------------------- */
-
-  async loadEpisodeStats(){
-
-    /*
-     * CrowRules currently has podcast_episodes.
-     * We do not assume an "episodes" table exists.
-     */
-
-    let count =
-      await this.countTable(
-        "podcast_episodes"
-      );
-
-    if(count === null){
-
-      count =
-        await this.countTable(
-          "episodes"
-        );
-
-    }
-
-    this.data.episodes =
-      count;
-
-  },
-
-  /* -------------------------------------------------------
-     MOVIES
-  ------------------------------------------------------- */
-
-  async loadMovieStats(){
-
-    /*
-     * Try the dedicated movies table first.
-     * If it does not exist, attempt known catalog tables.
-     */
-
-    let count =
-      await this.countTable(
-        "movies"
-      );
-
-    if(count === null){
-
-      count =
-        await this.countTable(
-          "crowrules_tv_catalog"
-        );
-
-    }
-
-    this.data.movies =
-      count;
-
-  },
-
-  /* -------------------------------------------------------
-     CHANNELS
-  ------------------------------------------------------- */
-
-  async loadChannelStats(){
-
-    let count =
-      await this.countTable(
-        "channels"
-      );
-
-    if(count === null){
-
-      count =
-        await this.countTable(
-          "podcast_live_channels"
-        );
-
-    }
-
-    this.data.channels =
-      count;
-
-  },
-
-  /* -------------------------------------------------------
-     REVENUE
-  ------------------------------------------------------- */
-
-  async loadRevenue(){
-
-    if(!this.supabase){
-
-      return;
-
-    }
-
-    try{
-
-      const first =
-        new Date();
-
-      first.setDate(1);
-      first.setHours(0,0,0,0);
-
-      const {
-        data,
-        error
-      } =
-        await this.supabase
-          .from("analytics_daily")
-          .select(
-            "day,revenue_cents,property"
-          )
-          .gte(
-            "day",
-            first.toISOString().slice(0,10)
-          )
-          .eq(
-            "property",
-            "all"
-          )
-          .order(
-            "day",
-            {ascending:true}
-          );
-
-      if(error){
-
-        console.warn(
-          "[CrowRules] Revenue unavailable:",
-          error.message
-        );
-
-        return;
-
-      }
-
-      if(Array.isArray(data)){
-
-        const cents =
-          data.reduce(
-            (sum,row) =>
-              sum +
-              Number(
-                row.revenue_cents || 0
-              ),
-            0
-          );
-
-        this.data.revenue =
-          cents / 100;
-
-      }
-
-    }catch(error){
-
-      console.warn(
-        "[CrowRules] Revenue query failed.",
-        error
-      );
-
-    }
-
-  },
-
-  /* -------------------------------------------------------
-     ACTIVITY
-  ------------------------------------------------------- */
-
-  async loadActivity(){
-
-    const container =
-      document.getElementById(
-        "activityList"
-      );
-
-    if(!this.supabase){
-
-      container.innerHTML =
-        '<div class="empty">Supabase is not configured.</div>';
-
-      return;
-
-    }
-
-    try{
-
-      const {
-        data,
-        error
-      } =
-        await this.supabase
-          .from("activity")
-          .select(
-            "id,event_type,severity,title,description,actor,source,created_at"
-          )
-          .order(
-            "created_at",
-            {ascending:false}
-          )
-          .limit(8);
-
-      if(error){
-
-        console.warn(
-          "[CrowRules] Activity unavailable:",
-          error.message
-        );
-
-        container.innerHTML =
-          '<div class="empty">Activity is unavailable or blocked by Row Level Security.</div>';
-
-        return;
-
-      }
-
-      if(!data?.length){
-
-        container.innerHTML =
-          '<div class="empty">No activity has been recorded yet.</div>';
-
-        return;
-
-      }
-
-      container.innerHTML = "";
-
-      data.forEach(item => {
-
-        const row =
-          document.createElement("div");
-
-        row.className =
-          "activity-item";
-
-        const icon =
-          document.createElement("div");
-
-        icon.className =
-          "activity-icon";
-
-        icon.textContent =
-          this.activityIcon(
-            item.event_type
-          );
-
-        const body =
-          document.createElement("div");
-
-        const title =
-          document.createElement("div");
-
-        title.className =
-          "activity-title";
-
-        title.textContent =
-          item.title ||
-          "Administrative activity";
-
-        const desc =
-          document.createElement("div");
-
-        desc.className =
-          "activity-desc";
-
-        desc.textContent =
-          item.description ||
-          item.actor ||
-          item.source ||
-          "";
-
-        body.appendChild(title);
-        body.appendChild(desc);
-
-        const time =
-          document.createElement("div");
-
-        time.className =
-          "activity-time";
-
-        time.textContent =
-          this.relativeTime(
-            item.created_at
-          );
-
-        row.appendChild(icon);
-        row.appendChild(body);
-        row.appendChild(time);
-
-        container.appendChild(row);
-
-      });
-
-    }catch(error){
-
-      console.warn(
-        "[CrowRules] Activity load failed.",
-        error
-      );
-
-      container.innerHTML =
-        '<div class="empty">Unable to load activity.</div>';
-
-    }
-
-  },
-
-  /* -------------------------------------------------------
-     SCHEDULE
-  ------------------------------------------------------- */
-
-  async loadSchedule(){
-
-    const container =
-      document.getElementById(
-        "scheduleList"
-      );
-
-    if(!this.supabase){
-
-      container.innerHTML =
-        '<div class="empty">Supabase is not configured.</div>';
-
-      return;
-
-    }
-
-    /*
-     * IMPORTANT:
-     * Do not use the old "start_time" column.
-     *
-     * Existing podcast schedule uses starts_at.
-     */
-
-    try{
-
-      const now =
-        new Date();
-
-      const {
-        data,
-        error
-      } =
-        await this.supabase
-          .from("podcast_schedule")
-          .select(
-            "id,title,starts_at,ends_at,status"
-          )
-          .gte(
-            "starts_at",
-            now.toISOString()
-          )
-          .order(
-            "starts_at",
-            {ascending:true}
-          )
-          .limit(5);
-
-      if(error){
-
-        console.warn(
-          "[CrowRules] Schedule unavailable:",
-          error.message
-        );
-
-        container.innerHTML =
-          '<div class="empty">No connected schedule source is available.</div>';
-
-        return;
-
-      }
-
-      if(!data?.length){
-
-        container.innerHTML =
-          '<div class="empty">No upcoming programming found.</div>';
-
-        return;
-
-      }
-
-      container.innerHTML = "";
-
-      data.forEach(item => {
-
-        const row =
-          document.createElement("div");
-
-        row.className =
-          "schedule-row";
-
-        const date =
-          new Date(
-            item.starts_at
-          );
-
-        const time =
-          document.createElement("div");
-
-        time.className =
-          "schedule-time";
-
-        time.textContent =
-          date.toLocaleTimeString(
-            "en-US",
-            {
-              hour:"numeric",
-              minute:"2-digit"
-            }
-          );
-
-        const center =
-          document.createElement("div");
-
-        const title =
-          document.createElement("div");
-
-        title.className =
-          "schedule-title";
-
-        title.textContent =
-          item.title ||
-          "Untitled programming";
-
-        const meta =
-          document.createElement("div");
-
-        meta.className =
-          "schedule-meta";
-
-        meta.textContent =
-          date.toLocaleDateString(
-            "en-US",
-            {
-              month:"short",
-              day:"numeric"
-            }
-          );
-
-        center.appendChild(title);
-        center.appendChild(meta);
-
-        const state =
-          document.createElement("div");
-
-        state.className =
-          "schedule-state";
-
-        state.textContent =
-          String(
-            item.status ||
-            "scheduled"
-          ).toUpperCase();
-
-        row.appendChild(time);
-        row.appendChild(center);
-        row.appendChild(state);
-
-        container.appendChild(row);
-
-      });
-
-    }catch(error){
-
-      console.warn(
-        "[CrowRules] Schedule load failed.",
-        error
-      );
-
-      container.innerHTML =
-        '<div class="empty">Schedule unavailable.</div>';
-
-    }
-
-  },
-
-  /* -------------------------------------------------------
-     NOTIFICATIONS
-  ------------------------------------------------------- */
-
-  async loadNotifications(){
-
-    const container =
-      document.getElementById(
-        "notificationsList"
-      );
-
-    /*
-     * There is no assumed notifications table.
-     * Use activity as a safe existing source instead of
-     * inventing a schema.
-     */
-
-    if(!this.supabase){
-
-      container.innerHTML =
-        '<div class="empty">Supabase is not configured.</div>';
-
-      return;
-
-    }
-
-    try{
-
-      const {
-        data,
-        error
-      } =
-        await this.supabase
-          .from("activity")
-          .select(
-            "id,title,description,severity,created_at"
-          )
-          .order(
-            "created_at",
-            {ascending:false}
-          )
-          .limit(8);
-
-      if(error){
-
-        container.innerHTML =
-          '<div class="empty">Notifications unavailable.</div>';
-
-        return;
-
-      }
-
-      const badge =
-        document.getElementById(
-          "notificationBadge"
-        );
-
-      badge.textContent =
-        data?.length || 0;
-
-      if(!data?.length){
-
-        container.innerHTML =
-          '<div class="empty">No notifications.</div>';
-
-        return;
-
-      }
-
-      container.innerHTML = "";
-
-      data.forEach(item => {
-
-        const notification =
-          document.createElement("div");
-
-        notification.className =
-          "notification";
-
-        const title =
-          document.createElement("div");
-
-        title.className =
-          "notification-title";
-
-        title.textContent =
-          item.title ||
-          "System notification";
-
-        const text =
-          document.createElement("div");
-
-        text.className =
-          "notification-text";
-
-        text.textContent =
-          item.description ||
-          "Administrative activity recorded.";
-
-        notification.appendChild(title);
-        notification.appendChild(text);
-
-        container.appendChild(
-          notification
-        );
-
-      });
-
-    }catch(error){
-
-      console.warn(
-        "[CrowRules] Notification load failed.",
-        error
-      );
-
-    }
-
-  },
-
-  /* -------------------------------------------------------
-     RENDER
-  ------------------------------------------------------- */
-
-  renderStats(){
-
-    this.setText(
-      "statMembers",
-      this.number(
-        this.data.members
-      )
-    );
-
-    this.setText(
-      "statShows",
-      this.number(
-        this.data.shows
-      )
-    );
-
-    this.setText(
-      "statEpisodes",
-      this.number(
-        this.data.episodes
-      )
-    );
-
-    this.setText(
-      "statMovies",
-      this.number(
-        this.data.movies
-      )
-    );
-
-    this.setText(
-      "statChannels",
-      this.number(
-        this.data.channels
-      )
-    );
-
-    this.setText(
-      "statRevenue",
-      this.currency(
-        this.data.revenue
-      )
-    );
-
-    this.setText(
-      "overviewShows",
-      this.data.shows === null
-        ? "Unavailable"
-        : `${this.number(this.data.shows)} shows`
-    );
-
-    this.setText(
-      "overviewEpisodes",
-      this.data.episodes === null
-        ? "Unavailable"
-        : `${this.number(this.data.episodes)} episodes`
-    );
-
-    this.setText(
-      "overviewMovies",
-      this.data.movies === null
-        ? "Unavailable"
-        : `${this.number(this.data.movies)} movies`
-    );
-
-    this.setText(
-      "revenueValue",
-      this.currency(
-        this.data.revenue
-      )
-    );
-
-    this.setText(
-      "activeMembers",
-      this.number(
-        this.data.activeMembers
-      )
-    );
-
-    this.setText(
-      "newMembers",
-      this.number(
-        this.data.newMembers
-      )
-    );
-
-    this.setText(
-      "onlineMembers",
-      this.number(
-        this.data.onlineMembers
-      )
-    );
-
-    this.setText(
-      "revenueNote",
-      this.data.revenue === null
-        ? "No analytics revenue data available"
-        : "Current month from analytics_daily"
-    );
-
-  },
-
-  /* -------------------------------------------------------
-     REALTIME
-  ------------------------------------------------------- */
-
-  subscribeRealtime(){
-
-    if(!this.supabase){
-
-      return;
-
-    }
-
-    try{
-
-      this.supabase
-        .channel(
-          "crowrules-admin-activity"
-        )
-        .on(
-          "postgres_changes",
-          {
-            event:"*",
-            schema:"public",
-            table:"activity"
-          },
-          () => {
-
-            this.loadActivity();
-
-          }
-        )
-        .subscribe(
-          status => {
-
-            if(status === "SUBSCRIBED"){
-
-              this.setHealth(
-                "healthRealtime",
-                "ONLINE"
-              );
-
-            }else{
-
-              this.setHealth(
-                "healthRealtime",
-                status
-              );
-
-            }
-
-          }
-        );
-
-    }catch(error){
-
-      console.warn(
-        "[CrowRules] Realtime initialization failed.",
-        error
-      );
-
-      this.setHealth(
-        "healthRealtime",
-        "UNAVAILABLE"
-      );
-
-    }
-
-  },
-
-  /* -------------------------------------------------------
-     DATE
-  ------------------------------------------------------- */
-
-  initializeDate(){
-
-    const element =
-      document.getElementById(
-        "dateText"
-      );
-
-    const now =
-      new Date();
-
-    element.textContent =
-      now.toLocaleDateString(
-        "en-US",
-        {
-          weekday:"long",
-          year:"numeric",
-          month:"long",
-          day:"numeric"
-        }
-      ) +
-      " • CrowRules administrative command center";
-
-  },
-
-  /* -------------------------------------------------------
-     NAVIGATION
-  ------------------------------------------------------- */
-
-  initializeNavigation(){
-
-    const menu =
-      document.getElementById(
-        "menuBtn"
-      );
-
-    const sidebar =
-      document.getElementById(
-        "sidebar"
-      );
-
-    if(menu){
-
-      menu.addEventListener(
-        "click",
-        event => {
-
-          event.stopPropagation();
-
-          sidebar.classList.toggle(
-            "open"
-          );
-
-        }
-      );
-
-    }
-
-    document.addEventListener(
-      "click",
-      event => {
-
-        if(
-          window.innerWidth <= 950 &&
-          sidebar.classList.contains("open") &&
-          !sidebar.contains(event.target) &&
-          !menu?.contains(event.target)
-        ){
-
-          sidebar.classList.remove(
-            "open"
-          );
-
-        }
-
-      }
-    );
-
-  },
-
-  /* -------------------------------------------------------
-     ACTIVE MENU
-  ------------------------------------------------------- */
-
-  initializeActiveMenu(){
-
-    const current =
-      location.pathname
-        .split("/")
-        .pop()
-        .toLowerCase() ||
-      "index.html";
-
-    document
-      .querySelectorAll(".menu-link")
-      .forEach(link => {
-
-        const href =
-          link
-            .getAttribute("href")
-            ?.toLowerCase();
-
-        if(href === current){
-
-          link.classList.add(
-            "active"
-          );
-
-        }
-
-      });
-
-  },
-
-  /* -------------------------------------------------------
-     SEARCH INDEX
-  ------------------------------------------------------- */
-
-  initializeSearchIndex(){
-
-    const container =
-      document.getElementById(
-        "searchResults"
-      );
-
-    container.innerHTML = "";
-
-    this.menu.forEach(
-      ([title,url,section]) => {
-
-        const item =
-          document.createElement("a");
-
-        item.className =
-          "search-result";
-
-        item.href =
-          url;
-
-        item.dataset.search =
-          `${title} ${section} ${url}`
-            .toLowerCase();
-
-        const left =
-          document.createElement("div");
-
-        left.className =
-          "search-result-main";
-
-        const icon =
-          document.createElement("div");
-
-        icon.className =
-          "search-result-icon";
-
-        icon.textContent =
-          this.sectionIcon(
-            section
-          );
-
-        const titleElement =
-          document.createElement("div");
-
-        const titleText =
-          document.createElement("div");
-
-        titleText.className =
-          "search-result-title";
-
-        titleText.textContent =
-          title;
-
-        const sectionText =
-          document.createElement("div");
-
-        sectionText.className =
-          "search-result-section";
-
-        sectionText.textContent =
-          section;
-
-        titleElement.appendChild(
-          titleText
-        );
-
-        titleElement.appendChild(
-          sectionText
-        );
-
-        left.appendChild(icon);
-        left.appendChild(titleElement);
-
-        item.appendChild(left);
-
-        container.appendChild(item);
-
-      }
-    );
-
-  },
-
-  /* -------------------------------------------------------
-     SEARCH
-  ------------------------------------------------------- */
-
-  initializeSearch(){
-
-    const buttons = [
-
-      document.getElementById(
-        "searchBtn"
-      ),
-
-      document.getElementById(
-        "sidebarSearchBtn"
-      )
-
-    ];
-
-    const overlay =
-      document.getElementById(
-        "searchOverlay"
-      );
-
-    const input =
-      document.getElementById(
-        "searchInput"
-      );
-
-    buttons.forEach(button => {
-
-      if(!button){
-
-        return;
-
-      }
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          overlay.classList.add(
-            "open"
-          );
-
-          setTimeout(
-            () => input.focus(),
-            40
-          );
-
-        }
-      );
-
-    });
-
-    overlay.addEventListener(
-      "click",
-      event => {
-
-        if(
-          event.target === overlay
-        ){
-
-          overlay.classList.remove(
-            "open"
-          );
-
-        }
-
-      }
-    );
-
-    input.addEventListener(
-      "input",
-      () => {
-
-        const query =
-          input.value
-            .trim()
-            .toLowerCase();
-
-        document
-          .querySelectorAll(
-            ".search-result"
-          )
-          .forEach(item => {
-
-            const haystack =
-              item.dataset.search ||
-              "";
-
-            item.style.display =
-              !query ||
-              haystack.includes(query)
-                ? "flex"
-                : "none";
-
-          });
-
-      }
-    );
-
-  },
-
-  /* -------------------------------------------------------
-     NOTIFICATIONS
-  ------------------------------------------------------- */
-
-  initializeNotifications(){
-
-    const button =
-      document.getElementById(
-        "notificationBtn"
-      );
-
-    const drawer =
-      document.getElementById(
-        "notificationDrawer"
-      );
-
-    const close =
-      document.getElementById(
-        "closeNotifications"
-      );
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        drawer.classList.add(
-          "open"
-        );
-
-      }
-    );
-
-    close.addEventListener(
-      "click",
-      () => {
-
-        drawer.classList.remove(
-          "open"
-        );
-
-      }
-    );
-
-  },
-
-  /* -------------------------------------------------------
-     FULLSCREEN
-  ------------------------------------------------------- */
-
-  initializeFullscreen(){
-
-    const button =
-      document.getElementById(
-        "fullscreenBtn"
-      );
-
-    button.addEventListener(
-      "click",
-      async () => {
-
-        try{
-
-          if(!document.fullscreenElement){
-
-            await document
-              .documentElement
-              .requestFullscreen();
-
-          }else{
-
-            await document
-              .exitFullscreen();
-
-          }
-
-        }catch(error){
-
-          console.warn(
-            "[CrowRules] Fullscreen unavailable.",
-            error
-          );
-
-        }
-
-      }
-    );
-
-  },
-
-  /* -------------------------------------------------------
-     KEYBOARD
-  ------------------------------------------------------- */
-
-  initializeKeyboard(){
-
-    document.addEventListener(
-      "keydown",
-      event => {
-
-        if(
-          (event.ctrlKey ||
-           event.metaKey) &&
-          event.key.toLowerCase() === "k"
-        ){
-
-          event.preventDefault();
-
-          document
-            .getElementById(
-              "searchBtn"
-            )
-            .click();
-
-        }
-
-        if(
-          event.key === "Escape"
-        ){
-
-          document
-            .getElementById(
-              "searchOverlay"
-            )
-            .classList.remove(
-              "open"
-            );
-
-          document
-            .getElementById(
-              "notificationDrawer"
-            )
-            .classList.remove(
-              "open"
-            );
-
-        }
-
-      }
-    );
-
-  },
-
-  /* -------------------------------------------------------
-     HELPERS
-  ------------------------------------------------------- */
-
-  setText(id,value){
-
-    const element =
-      document.getElementById(id);
-
-    if(element){
-
-      element.textContent =
-        value;
-
-    }
-
-  },
-
-  setHealth(id,value){
-
-    const element =
-      document.getElementById(id);
-
-    if(!element){
-
-      return;
-
-    }
-
-    element.textContent =
-      String(value)
-        .toUpperCase();
-
-    const normalized =
-      String(value)
-        .toUpperCase();
-
-    if(
-      normalized === "ONLINE" ||
-      normalized === "AUTHENTICATED" ||
-      normalized === "READY"
-    ){
-
-      element.style.color =
-        "var(--green)";
-
-    }else if(
-      normalized === "CHECKING"
-    ){
-
-      element.style.color =
-        "var(--yellow)";
-
-    }else{
-
-      element.style.color =
-        "var(--red2)";
-
-    }
-
-  },
-
-  setConnection(type,text){
-
-    const state =
-      document.getElementById(
-        "connectionState"
-      );
-
-    const label =
-      document.getElementById(
-        "connectionText"
-      );
-
-    if(!state || !label){
-
-      return;
-
-    }
-
-    state.classList.remove(
-      "live",
-      "error"
-    );
-
-    if(type){
-
-      state.classList.add(
-        type
-      );
-
-    }
-
-    label.textContent =
-      text;
-
-  },
-
-  number(value){
-
-    if(
-      value === null ||
-      value === undefined
-    ){
-
-      return "—";
-
-    }
-
-    return Number(value)
-      .toLocaleString(
-        "en-US"
-      );
-
-  },
-
-  currency(value){
-
-    if(
-      value === null ||
-      value === undefined
-    ){
-
-      return "—";
-
-    }
-
-    return Number(value)
-      .toLocaleString(
-        "en-US",
-        {
-          style:"currency",
-          currency:"USD",
-          maximumFractionDigits:0
-        }
-      );
-
-  },
-
-  relativeTime(value){
-
-    if(!value){
-
-      return "";
-
-    }
-
-    const then =
-      new Date(value);
-
-    const now =
-      new Date();
-
-    const seconds =
-      Math.max(
-        0,
-        Math.floor(
-          (now - then) / 1000
-        )
-      );
-
-    if(seconds < 60){
-
-      return `${seconds}s`;
-
-    }
-
-    const minutes =
-      Math.floor(
-        seconds / 60
-      );
-
-    if(minutes < 60){
-
-      return `${minutes}m`;
-
-    }
-
-    const hours =
-      Math.floor(
-        minutes / 60
-      );
-
-    if(hours < 24){
-
-      return `${hours}h`;
-
-    }
-
-    const days =
-      Math.floor(
-        hours / 24
-      );
-
-    return `${days}d`;
-
-  },
-
-  activityIcon(type){
-
-    const icons = {
-      create:"+",
-      update:"↻",
-      publish:"✓",
-      delete:"×",
-      login:"♙",
-      live:"●",
-      system:"⚙"
-    };
-
-    return icons[type] || "•";
-
-  },
-
-  sectionIcon(section){
-
-    const icons = {
-      Command:"⌂",
-      Content:"▦",
-      Television:"TV",
-      Members:"♙",
-      Community:"◎",
-      Creators:"✦",
-      Records:"♫",
-      Sports:"◇",
-      Memorials:"✝",
-      Awards:"♛",
-      Publishing:"▤",
-      Business:"◆",
-      Network:"◉",
-      System:"⚙"
-    };
-
-    return icons[section] || "•";
-
-  },
-
-  /* -------------------------------------------------------
-     TOAST
-  ------------------------------------------------------- */
-
-  toast(title,message){
-
-    const container =
-      document.getElementById(
-        "toastContainer"
-      );
-
-    if(!container){
-
-      return;
-
-    }
-
-    const toast =
-      document.createElement(
-        "div"
-      );
-
-    toast.className =
-      "toast";
-
-    const strong =
-      document.createElement(
-        "strong"
-      );
-
-    strong.textContent =
-      title;
-
-    const span =
-      document.createElement(
-        "span"
-      );
-
-    span.textContent =
-      message;
-
-    toast.appendChild(
-      strong
-    );
-
-    toast.appendChild(
-      span
-    );
-
-    container.appendChild(
-      toast
-    );
-
-    setTimeout(
-      () => toast.remove(),
-      4500
-    );
-
-  }
+}
+
+
+/* =========================================================
+   PAGE DEFINITIONS
+   ========================================================= */
+
+const PAGE_META = {
+
+dashboard:{
+  title:"Admin Command Center",
+  subtitle:"Unified control center for the CrowRules Entertainment ecosystem."
+},
+
+analytics:{
+  title:"Analytics Command Center",
+  subtitle:"Monitor audience, content, members, streams and platform performance."
+},
+
+activity:{
+  title:"Activity Command Center",
+  subtitle:"Track administrative, content, member, live TV and system activity."
+},
+
+notifications:{
+  title:"Notification Center",
+  subtitle:"Manage system alerts, member notifications and administrative notices."
+},
+
+"system-health":{
+  title:"System Health",
+  subtitle:"Monitor the operational health of the CrowRules platform."
+},
+
+content:{
+  title:"Content Management",
+  subtitle:"Central content inventory across CrowRules Entertainment."
+},
+
+pages:{
+  title:"Page Manager",
+  subtitle:"Manage site pages, landing pages and informational content."
+},
+
+categories:{
+  title:"Content Categories",
+  subtitle:"Organize CrowRules content into manageable categories."
+},
+
+tags:{
+  title:"Tags",
+  subtitle:"Manage metadata and content discovery tags."
+},
+
+videos:{
+  title:"Video Manager",
+  subtitle:"Manage videos, replays, uploads and published media."
+},
+
+audio:{
+  title:"Audio Manager",
+  subtitle:"Manage audio programming, recordings and audio-first content."
+},
+
+articles:{
+  title:"Article Manager",
+  subtitle:"Manage news, commentary and editorial content."
+},
+
+tv:{
+  title:"CrowRules TV",
+  subtitle:"Master control center for the CrowRules television network."
+},
+
+shows:{
+  title:"Shows Manager",
+  subtitle:"Manage series, programs, seasons and show metadata."
+},
+
+episodes:{
+  title:"Episodes Manager",
+  subtitle:"Manage individual episodes and publishing status."
+},
+
+movies:{
+  title:"Movie Library",
+  subtitle:"Manage the CrowRules TV cinema and on-demand movie catalog."
+},
+
+channels:{
+  title:"Live Channels",
+  subtitle:"Manage streaming channels and live programming."
+},
+
+playlists:{
+  title:"Playlists",
+  subtitle:"Manage television, audio and on-demand playlists."
+},
+
+schedule:{
+  title:"Programming Schedule",
+  subtitle:"Manage the CrowRules TV programming schedule."
+},
+
+live:{
+  title:"Live Control",
+  subtitle:"Monitor and control live programming."
+},
+
+guide:{
+  title:"TV Guide",
+  subtitle:"Manage the 24/7 electronic program guide."
+},
+
+top10:{
+  title:"Top 10",
+  subtitle:"Monitor the most watched CrowRules TV content."
+},
+
+members:{
+  title:"Members",
+  subtitle:"Manage CrowRules members and accounts."
+},
+
+member:{
+  title:"Member Profiles",
+  subtitle:"View and manage individual member profiles."
+},
+
+membership:{
+  title:"Membership",
+  subtitle:"Manage membership levels and member benefits."
+},
+
+subscriptions:{
+  title:"Subscriptions",
+  subtitle:"Monitor active memberships and subscription activity."
+},
+
+friends:{
+  title:"Friends & Connections",
+  subtitle:"Manage member relationships and social connections."
+},
+
+points:{
+  title:"Points Center",
+  subtitle:"Manage CrowRules points and reward activity."
+},
+
+leaderboard:{
+  title:"Leaderboard",
+  subtitle:"Monitor rankings, seasons and member competition."
+},
+
+crowspace:{
+  title:"CrowSpace",
+  subtitle:"Manage the CrowRules social community."
+},
+
+community:{
+  title:"Community",
+  subtitle:"Manage community spaces and conversations."
+},
+
+posts:{
+  title:"Community Posts",
+  subtitle:"Review and manage CrowSpace posts."
+},
+
+groups:{
+  title:"Community Groups",
+  subtitle:"Manage community groups and memberships."
+},
+
+moderation:{
+  title:"Moderation Center",
+  subtitle:"Review reports, flagged content and moderation activity."
+},
+
+creator:{
+  title:"Creator Center",
+  subtitle:"Manage CrowRules creators and creator accounts."
+},
+
+"creator-content":{
+  title:"Creator Content",
+  subtitle:"Review content submitted by CrowRules creators."
+},
+
+"creator-approvals":{
+  title:"Creator Approvals",
+  subtitle:"Review and approve creator submissions."
+},
+
+records:{
+  title:"CrowRules Records",
+  subtitle:"Manage the CrowRules music and audio catalog."
+},
+
+artists:{
+  title:"Artists",
+  subtitle:"Manage CrowRules Records artists."
+},
+
+albums:{
+  title:"Albums",
+  subtitle:"Manage releases and albums."
+},
+
+tracks:{
+  title:"Tracks",
+  subtitle:"Manage individual music tracks."
+},
+
+sports:{
+  title:"Sports Center",
+  subtitle:"Manage CrowRules Sports programming and data."
+},
+
+teams:{
+  title:"Teams",
+  subtitle:"Manage sports teams and regional coverage."
+},
+
+games:{
+  title:"Games",
+  subtitle:"Manage games, schedules and results."
+},
+
+standings:{
+  title:"Standings",
+  subtitle:"Manage league standings."
+},
+
+rankings:{
+  title:"Rankings",
+  subtitle:"Manage sports rankings."
+},
+
+pickem:{
+  title:"Pick'em Challenge",
+  subtitle:"Manage prediction challenges and member entries."
+},
+
+memorials:{
+  title:"Memorials",
+  subtitle:"Manage CrowRules Memorials."
+},
+
+"memorial-photos":{
+  title:"Memorial Photos",
+  subtitle:"Manage memorial photo collections."
+},
+
+"memorial-videos":{
+  title:"Memorial Videos",
+  subtitle:"Manage memorial video archives."
+},
+
+awards:{
+  title:"Spectrum Awards",
+  subtitle:"Manage awards, ceremonies and award seasons."
+},
+
+"award-categories":{
+  title:"Award Categories",
+  subtitle:"Manage Spectrum Awards categories."
+},
+
+nominees:{
+  title:"Award Nominees",
+  subtitle:"Manage nominees and nomination status."
+},
+
+voting:{
+  title:"Award Voting",
+  subtitle:"Monitor and manage voting."
+},
+
+business:{
+  title:"Business Center",
+  subtitle:"Manage business operations and partnerships."
+},
+
+donations:{
+  title:"Donations",
+  subtitle:"Monitor CrowRules support and donations."
+},
+
+shop:{
+  title:"Shop",
+  subtitle:"Manage CrowRules products."
+},
+
+orders:{
+  title:"Orders",
+  subtitle:"Manage customer orders."
+},
+
+roles:{
+  title:"Roles",
+  subtitle:"Manage administrator roles."
+},
+
+permissions:{
+  title:"Permissions",
+  subtitle:"Manage administrative permissions."
+},
+
+authentication:{
+  title:"Authentication",
+  subtitle:"Monitor Supabase authentication."
+},
+
+logs:{
+  title:"System Logs",
+  subtitle:"Review application and administrative logs."
+},
+
+database:{
+  title:"Database",
+  subtitle:"Supabase database administration."
+},
+
+storage:{
+  title:"Storage",
+  subtitle:"Manage Supabase Storage buckets and media."
+},
+
+api:{
+  title:"API Center",
+  subtitle:"Manage API services and integrations."
+},
+
+backups:{
+  title:"Backups",
+  subtitle:"Monitor database and infrastructure backups."
+},
+
+settings:{
+  title:"System Settings",
+  subtitle:"Configure CrowRules Entertainment administration."
+},
+
+profile:{
+  title:"My Profile",
+  subtitle:"Manage your administrator profile."
+}
 
 };
 
 
 /* =========================================================
-   QUICK CREATE
-========================================================= */
+   SAMPLE DATA
+   ========================================================= */
 
-function quickCreate(type){
+const demoStats = {
+  members:2418,
+  videos:1284,
+  shows:48,
+  episodes:624,
+  movies:173,
+  channels:8,
+  creators:96,
+  reports:7,
+  submissions:3,
+  awards:4,
+  posts:842,
+  views:"184K"
+};
 
-  const destinations = {
 
-    show:"shows.html",
+/* =========================================================
+   PAGE RENDER
+   ========================================================= */
 
-    episode:"episodes.html",
+function showPage(page){
 
-    movie:"movies.html",
+  document
+    .querySelectorAll(".nav-item")
+    .forEach(item=>{
+      item.classList.toggle(
+        "active",
+        item.dataset.page === page
+      );
+    });
 
-    member:"members.html",
+  const meta =
+    PAGE_META[page] ||
+    PAGE_META.dashboard;
 
-    creator:"creators.html",
+  document.getElementById("breadcrumb").textContent =
+    meta.title;
 
-    memorial:"memorials.html",
+  document.title =
+    "CrowRules Entertainment — " +
+    meta.title;
 
-    article:"articles.html"
+  document.getElementById("pageContent").innerHTML =
+    buildPage(page);
 
-  };
+  document.getElementById("sidebar")
+    .classList.remove("open");
 
-  if(
-    destinations[type]
-  ){
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 
-    window.location.href =
-      destinations[type];
-
-  }
-
+  history.replaceState(
+    {},
+    "",
+    "#" + page
+  );
 }
 
 
 /* =========================================================
-   START
-========================================================= */
+   UNIVERSAL PAGE
+   ========================================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+function buildPage(page){
 
-    CrowRulesAdmin.init();
+  if(page === "dashboard")
+    return dashboardPage();
+
+  if(page === "analytics")
+    return analyticsPage();
+
+  if(page === "activity")
+    return activityPage();
+
+  if(page === "notifications")
+    return notificationsPage();
+
+  if(page === "system-health")
+    return systemHealthPage();
+
+  if(page === "tv")
+    return tvPage();
+
+  if(page === "moderation")
+    return moderationPage();
+
+  if(page === "members")
+    return membersPage();
+
+  if(page === "membership")
+    return membershipPage();
+
+  if(page === "leaderboard")
+    return leaderboardPage();
+
+  if(page === "awards")
+    return awardsPage();
+
+  if(page === "storage")
+    return storagePage();
+
+  if(page === "settings")
+    return settingsPage();
+
+  if(page === "profile")
+    return profilePage();
+
+  return genericManagerPage(page);
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+function hero(meta){
+
+  return `
+    <div class="hero">
+
+      <h1>${meta.title}</h1>
+
+      <p>${meta.subtitle}</p>
+
+      <div class="hero-meta">
+        <span class="tag live">● SYSTEM ONLINE</span>
+        <span class="tag">SUPABASE CONNECTED</span>
+        <span class="tag">ADMIN MODE</span>
+      </div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+function dashboardPage(){
+
+  return `
+
+    ${hero(PAGE_META.dashboard)}
+
+    <div class="stats">
+
+      ${stat("Members",demoStats.members,"Active accounts")}
+
+      ${stat("Videos",demoStats.videos,"Media library")}
+
+      ${stat("Shows",demoStats.shows,"Series")}
+
+      ${stat("Episodes",demoStats.episodes,"Published + draft")}
+
+      ${stat("TV Channels",demoStats.channels,"Live network")}
+
+      ${stat("Creators",demoStats.creators,"Creator accounts")}
+
+    </div>
+
+    <div class="section-title">
+      <h2>Platform Overview</h2>
+      <span>LIVE COMMAND DATA</span>
+    </div>
+
+    <div class="dashboard-grid">
+
+      <div class="card">
+
+        <div class="card-head">
+          <h3>Audience Activity</h3>
+          <span>Last 30 Days</span>
+        </div>
+
+        <div class="chart">
+          ${bars()}
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-head">
+          <h3>System Status</h3>
+          <span>LIVE</span>
+        </div>
+
+        <div class="card-body">
+
+          ${statusLine("Supabase Database","ONLINE","green")}
+          ${statusLine("Authentication","ONLINE","green")}
+          ${statusLine("Storage","ONLINE","green")}
+          ${statusLine("CrowSpace","ONLINE","green")}
+          ${statusLine("CrowRules TV","ONLINE","green")}
+          ${statusLine("API Services","ONLINE","green")}
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      <h2>Management Modules</h2>
+      <span>QUICK ACCESS</span>
+    </div>
+
+    <div class="grid grid-4">
+
+      ${module("▣","CrowRules TV","Shows, episodes, movies, channels and schedules.","tv")}
+      ${module("♙","Members","Members, profiles, subscriptions and points.","members")}
+      ${module("◉","CrowSpace","Posts, groups, reports and moderation.","crowspace")}
+      ${module("♫","Records","Artists, albums and tracks.","records")}
+      ${module("◆","Sports","Teams, games, standings and rankings.","sports")}
+      ${module("♢","Memorials","Memorials, photos and videos.","memorials")}
+      ${module("★","Awards","Awards, categories, nominees and voting.","awards")}
+      ${module("▦","Business","Shop, orders, donations and business.","business")}
+
+    </div>
+
+
+    <div class="section-title">
+      <h2>Recent Activity</h2>
+      <span>LAST EVENTS</span>
+    </div>
+
+    <div class="card">
+
+      <div class="card-body">
+
+        ${activityRow("▶","Episode published","Tacoma Nights — Episode 12","2 min ago")}
+        ${activityRow("♙","New member","crowner joined CrowRules","8 min ago")}
+        ${activityRow("⚠","Moderation report","New community report received","14 min ago")}
+        ${activityRow("●","Live channel","CrowRules TV Channel 1 online","22 min ago")}
+        ${activityRow("♫","Track added","New CrowRules Records track","31 min ago")}
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   ANALYTICS
+   ========================================================= */
+
+function analyticsPage(){
+
+  return `
+
+    ${hero(PAGE_META.analytics)}
+
+    <div class="stats">
+
+      ${stat("Total Views","184K","+18.4%")}
+      ${stat("Watch Hours","8,420","+12.7%")}
+      ${stat("Members","2,418","+8.2%")}
+      ${stat("Sessions","31,842","+21.1%")}
+      ${stat("Live Viewers","824","CURRENT")}
+      ${stat("Retention","67%","+4.1%")}
+
+    </div>
+
+    <div class="grid grid-2" style="margin-top:14px">
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Audience Growth</h3>
+          <span>30 DAYS</span>
+        </div>
+        <div class="chart">${bars()}</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Content Performance</h3>
+          <span>TOP CONTENT</span>
+        </div>
+        <div class="card-body">
+          ${metric("Tacoma Nights",92)}
+          ${metric("Back Deck Live",81)}
+          ${metric("Voices From The Void",76)}
+          ${metric("Movie Library",68)}
+          ${metric("CrowSpace",61)}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-title">
+      <h2>Platform Analytics</h2>
+      <span>LIVE DATA</span>
+    </div>
+
+    ${dataTable([
+      ["Metric","Current","Previous","Change"],
+      ["Unique Visitors","42,841","35,912","+19.3%"],
+      ["Video Starts","31,284","27,921","+12.0%"],
+      ["Completed Views","18,442","15,921","+15.8%"],
+      ["Member Signups","184","142","+29.5%"],
+      ["Community Posts","842","704","+19.6%"]
+    ])}
+
+  `;
+}
+
+
+/* =========================================================
+   ACTIVITY
+   ========================================================= */
+
+function activityPage(){
+
+  return `
+
+    ${hero(PAGE_META.activity)}
+
+    <div class="stats">
+
+      ${stat("Total Events","12,842","All time")}
+      ${stat("Today","184","Events")}
+      ${stat("Administrative","62","Today")}
+      ${stat("Warnings","7","Needs review")}
+      ${stat("Critical","1","Requires attention")}
+      ${stat("Monitor","LIVE","Active")}
+
+    </div>
+
+    <div class="section-title">
+      <h2>Activity Stream</h2>
+      <span>REAL-TIME MONITOR</span>
+    </div>
+
+    <div class="toolbar">
+
+      <input
+        placeholder="Search activity..."
+        oninput="filterTable(this.value)">
+
+      <select>
+        <option>All Event Types</option>
+        <option>Create</option>
+        <option>Update</option>
+        <option>Publish</option>
+        <option>Delete</option>
+        <option>Login</option>
+        <option>Live</option>
+        <option>System</option>
+      </select>
+
+      <select>
+        <option>All Severity</option>
+        <option>Info</option>
+        <option>Success</option>
+        <option>Warning</option>
+        <option>Critical</option>
+      </select>
+
+      <button class="tool-btn" onclick="refreshPage()">↻ Refresh</button>
+      <button class="tool-btn" onclick="exportCSV()">Export CSV</button>
+
+    </div>
+
+    ${dataTable([
+      ["Time","Event","Source","User","Severity"],
+      ["14:38","Episode published","Content","Administrator","SUCCESS"],
+      ["14:32","Member created","Members","Administrator","INFO"],
+      ["14:26","Login successful","Admin","crowner","SUCCESS"],
+      ["14:19","Report received","Community","System","WARNING"],
+      ["14:05","Live channel started","Live TV","System","INFO"],
+      ["13:58","Database connection verified","System","System","SUCCESS"],
+      ["13:42","Creator submission received","Creators","Creator","INFO"]
+    ])}
+
+  `;
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+   ========================================================= */
+
+function notificationsPage(){
+
+  return `
+
+    ${hero(PAGE_META.notifications)}
+
+    <div class="stats">
+
+      ${stat("Unread","4","Requires review")}
+      ${stat("Today","18","Notifications")}
+      ${stat("System","6","System alerts")}
+      ${stat("Members","8","Member alerts")}
+      ${stat("Moderation","4","Moderation alerts")}
+      ${stat("Status","LIVE","Monitoring")}
+
+    </div>
+
+    <div class="card" style="margin-top:14px">
+
+      <div class="card-head">
+        <h3>Notification Center</h3>
+        <button class="tool-btn" onclick="toast('Notifications marked read','All notifications have been marked as read.')">
+          Mark All Read
+        </button>
+      </div>
+
+      <div class="card-body">
+
+        ${notification("⚠","Moderation report requires review","A new community report has been submitted.","2 minutes ago")}
+        ${notification("✓","Creator submission received","A new creator submission is waiting for approval.","8 minutes ago")}
+        ${notification("●","Live channel online","CrowRules TV Channel 1 is currently broadcasting.","14 minutes ago")}
+        ${notification("♙","New member","crowner has joined the CrowRules platform.","21 minutes ago")}
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   SYSTEM HEALTH
+   ========================================================= */
+
+function systemHealthPage(){
+
+  return `
+
+    ${hero(PAGE_META["system-health"])}
+
+    <div class="stats">
+      ${stat("Database","ONLINE","Healthy")}
+      ${stat("Auth","ONLINE","Healthy")}
+      ${stat("Storage","ONLINE","Healthy")}
+      ${stat("API","ONLINE","Healthy")}
+      ${stat("Realtime","ONLINE","Healthy")}
+      ${stat("Uptime","99.98%","30 days")}
+    </div>
+
+    <div class="section-title">
+      <h2>Service Health</h2>
+      <span>LIVE</span>
+    </div>
+
+    <div class="grid grid-3">
+
+      ${healthCard("Supabase PostgreSQL","Operational","99.99%")}
+      ${healthCard("Supabase Auth","Operational","99.98%")}
+      ${healthCard("Supabase Storage","Operational","99.97%")}
+      ${healthCard("CrowRules TV","Operational","99.96%")}
+      ${healthCard("CrowSpace","Operational","99.99%")}
+      ${healthCard("Admin API","Operational","100%")}
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   TV
+   ========================================================= */
+
+function tvPage(){
+
+  return `
+
+    ${hero(PAGE_META.tv)}
+
+    <div class="stats">
+
+      ${stat("Shows",demoStats.shows,"Active catalog")}
+      ${stat("Episodes",demoStats.episodes,"Library")}
+      ${stat("Movies",demoStats.movies,"Cinema")}
+      ${stat("Channels",demoStats.channels,"Network")}
+      ${stat("Live Viewers","824","Current")}
+      ${stat("Top 10","LIVE","Ranking")}
+
+    </div>
+
+    <div class="section-title">
+      <h2>TV Master Control</h2>
+      <span>24/7 NETWORK</span>
+    </div>
+
+    <div class="grid grid-3">
+
+      ${module("▤","Shows","Manage series and programming.","shows")}
+      ${module("▶","Episodes","Manage episodes and releases.","episodes")}
+      ${module("🎬","Movies","Manage cinema library.","movies")}
+      ${module("▥","Channels","Manage live channels.","channels")}
+      ${module("◷","Schedule","Manage 24/7 programming.","schedule")}
+      ${module("●","Live Control","Monitor live streams.","live")}
+      ${module("▦","TV Guide","Electronic program guide.","guide")}
+      ${module("☷","Playlists","Manage playlists.","playlists")}
+      ${module("10","Top 10","Most watched content.","top10")}
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   MODERATION
+   ========================================================= */
+
+function moderationPage(){
+
+  return `
+
+    ${hero(PAGE_META.moderation)}
+
+    <div class="stats">
+
+      ${stat("Open Reports","7","Needs review")}
+      ${stat("High Priority","2","Immediate")}
+      ${stat("Resolved Today","18","Actions")}
+      ${stat("Flagged Posts","12","Pending")}
+      ${stat("Suspended","4","Members")}
+      ${stat("Monitor","LIVE","Active")}
+
+    </div>
+
+    <div class="section-title">
+      <h2>Moderation Queue</h2>
+      <span>PRIORITY REVIEW</span>
+    </div>
+
+    <div class="toolbar">
+
+      <input placeholder="Search reports...">
+
+      <select>
+        <option>All Reports</option>
+        <option>Pending</option>
+        <option>High Priority</option>
+        <option>Resolved</option>
+        <option>Dismissed</option>
+      </select>
+
+      <select>
+        <option>All Types</option>
+        <option>Spam</option>
+        <option>Harassment</option>
+        <option>Abuse</option>
+        <option>Other</option>
+      </select>
+
+      <button
+        class="tool-btn"
+        onclick="toast('Queue refreshed','Moderation queue refreshed.')">
+        ↻ Refresh
+      </button>
+
+    </div>
+
+    ${dataTable([
+      ["Priority","Report","Content","Reporter","Status","Action"],
+      ["HIGH","Harassment","Community Post","Member #204","PENDING","Review"],
+      ["HIGH","Spam","Comment","Member #812","PENDING","Review"],
+      ["MEDIUM","Off-topic","Community Post","Member #331","PENDING","Review"],
+      ["LOW","Duplicate","Comment","Member #551","PENDING","Review"],
+      ["LOW","Spam","Post","Member #728","RESOLVED","View"]
+    ])}
+
+    <div class="section-title">
+      <h2>Moderation Rules</h2>
+      <span>AUTOMATION</span>
+    </div>
+
+    <div class="card">
+
+      <div class="card-body">
+
+        ${setting("Automatic spam detection","Flag suspicious posts automatically.",true)}
+        ${setting("Profanity filtering","Automatically flag potentially offensive content.",true)}
+        ${setting("Report notifications","Notify administrators about new reports.",true)}
+        ${setting("Auto-hide critical content","Hide content when confidence is extremely high.",false)}
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   MEMBERS
+   ========================================================= */
+
+function membersPage(){
+
+  return `
+
+    ${hero(PAGE_META.members)}
+
+    <div class="stats">
+
+      ${stat("Members","2,418","Total")}
+      ${stat("Active","1,824","Currently active")}
+      ${stat("New Today","18","New accounts")}
+      ${stat("Pro","684","Members")}
+      ${stat("Premium","241","Members")}
+      ${stat("Creators","96","Creator accounts")}
+
+    </div>
+
+    <div class="toolbar">
+
+      <input placeholder="Search members...">
+
+      <select>
+        <option>All Memberships</option>
+        <option>Free</option>
+        <option>Pro</option>
+        <option>Premium</option>
+        <option>Creator</option>
+      </select>
+
+      <select>
+        <option>All Status</option>
+        <option>Active</option>
+        <option>Suspended</option>
+        <option>Disabled</option>
+      </select>
+
+      <button
+        class="tool-btn primary"
+        onclick="openMemberModal()">
+        + Add Member
+      </button>
+
+    </div>
+
+    ${dataTable([
+      ["Member","Username","Plan","Role","Status","Joined"],
+      ["Crowner","crowner","Free","Administrator","ACTIVE","Today"],
+      ["Member 002","member002","Pro","Member","ACTIVE","Sep 7"],
+      ["Member 003","member003","Premium","Member","ACTIVE","Sep 6"],
+      ["Member 004","member004","Free","Member","ACTIVE","Sep 5"],
+      ["Member 005","member005","Creator","Creator","ACTIVE","Sep 4"]
+    ])}
+
+  `;
+}
+
+
+/* =========================================================
+   MEMBERSHIP
+   ========================================================= */
+
+function membershipPage(){
+
+  return `
+
+    ${hero(PAGE_META.membership)}
+
+    <div class="stats">
+
+      ${stat("Subscribers","2,418","Active")}
+      ${stat("MRR","$18.4K","Current")}
+      ${stat("Plans","4","Active")}
+      ${stat("Trials","184","Current")}
+      ${stat("Renewals","327","This month")}
+      ${stat("Cancelled","38","This month")}
+
+    </div>
+
+    <div class="grid grid-4" style="margin-top:14px">
+
+      ${planCard("Free","$0","Basic access")}
+      ${planCard("Pro","$7.99","Enhanced access")}
+      ${planCard("Premium","$12.99","Full access")}
+      ${planCard("Creator","$19.99","Creator tools")}
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   LEADERBOARD
+   ========================================================= */
+
+function leaderboardPage(){
+
+  return `
+
+    ${hero(PAGE_META.leaderboard)}
+
+    <div class="stats">
+      ${stat("Ranked Members","1,824","Current season")}
+      ${stat("Points","842K","This month")}
+      ${stat("Top Member","48.2K","Points")}
+      ${stat("Competitors","1,276","Active")}
+      ${stat("Season","S26","Current")}
+      ${stat("Status","LIVE","Updated")}
+
+    </div>
+
+    ${dataTable([
+      ["Rank","Member","Points","Watch Hours","Posts","Status"],
+      ["1","Crowner","48,200","842","142","ACTIVE"],
+      ["2","Member 002","44,821","719","128","ACTIVE"],
+      ["3","Member 003","41,902","684","119","ACTIVE"],
+      ["4","Member 004","39,441","602","104","ACTIVE"],
+      ["5","Member 005","37,182","571","92","ACTIVE"]
+    ])}
+
+  `;
+}
+
+
+/* =========================================================
+   AWARDS
+   ========================================================= */
+
+function awardsPage(){
+
+  return `
+
+    ${hero(PAGE_META.awards)}
+
+    <div class="stats">
+
+      ${stat("Awards","4","Active")}
+      ${stat("Categories","24","Current")}
+      ${stat("Nominees","184","Current")}
+      ${stat("Votes","8.4K","Current")}
+      ${stat("Winners","24","Selected")}
+      ${stat("Status","OPEN","Voting")}
+
+    </div>
+
+    <div class="grid grid-3" style="margin-top:14px">
+
+      ${module("★","Awards","Manage award seasons.","awards")}
+      ${module("◇","Categories","Manage award categories.","award-categories")}
+      ${module("♙","Nominees","Manage nominees.","nominees")}
+      ${module("✓","Voting","Monitor award voting.","voting")}
+      ${module("◆","Ceremonies","Manage ceremonies and broadcasts.","awards")}
+      ${module("♛","Winners","Manage winners and announcements.","awards")}
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+
+function storagePage(){
+
+  return `
+
+    ${hero(PAGE_META.storage)}
+
+    <div class="stats">
+
+      ${stat("Usage","63%","Storage capacity")}
+      ${stat("Buckets","6","Configured")}
+      ${stat("Files","6,842","Total")}
+      ${stat("Videos","1,284","Media")}
+      ${stat("Photos","4,812","Images")}
+      ${stat("Status","ONLINE","Storage")}
+
+    </div>
+
+    <div class="section-title">
+      <h2>Storage Buckets</h2>
+      <span>SUPABASE STORAGE</span>
+    </div>
+
+    <div class="grid grid-3">
+
+      ${bucket("videos","1,284 files","42%")}
+      ${bucket("memorial-photos","4,812 files","24%")}
+      ${bucket("memorial-videos","184 files","13%")}
+      ${bucket("audio","392 files","8%")}
+      ${bucket("avatars","170 files","4%")}
+      ${bucket("public-media","—","9%")}
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+function settingsPage(){
+
+  return `
+
+    ${hero(PAGE_META.settings)}
+
+    <div class="grid grid-2">
+
+      <div class="card">
+
+        <div class="card-head">
+          <h3>Platform Settings</h3>
+        </div>
+
+        <div class="card-body">
+
+          ${setting("Maintenance Mode","Temporarily disable public access.",false)}
+          ${setting("Registration","Allow new members to register.",true)}
+          ${setting("Community","Enable CrowSpace.",true)}
+          ${setting("Live TV","Enable live television services.",true)}
+          ${setting("Creator Uploads","Allow creator submissions.",true)}
+          ${setting("Notifications","Enable system notifications.",true)}
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-head">
+          <h3>Supabase Configuration</h3>
+        </div>
+
+        <div class="card-body">
+
+          <div class="field">
+            <label>Project URL</label>
+            <input
+              value="${escapeHtml(SUPABASE_URL || "Not configured")}"
+              readonly>
+          </div>
+
+          <div class="field">
+            <label>Connection</label>
+            <input
+              value="${SUPABASE_URL ? "CONNECTED" : "NOT CONFIGURED"}"
+              readonly>
+          </div>
+
+          <button
+            class="tool-btn primary"
+            onclick="testSupabase()">
+            Test Connection
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+function profilePage(){
+
+  return `
+
+    ${hero(PAGE_META.profile)}
+
+    <div class="grid grid-2">
+
+      <div class="card">
+
+        <div class="card-head">
+          <h3>Administrator Profile</h3>
+        </div>
+
+        <div class="card-body">
+
+          <div class="field">
+            <label>Display Name</label>
+            <input id="profileName" value="Administrator">
+          </div>
+
+          <div class="field">
+            <label>Email</label>
+            <input
+              id="profileEmail"
+              value="crowrulesentertainment@gmail.com"
+              readonly>
+          </div>
+
+          <div class="field">
+            <label>Username</label>
+            <input value="crowner">
+          </div>
+
+          <div class="field">
+            <label>Role</label>
+            <input value="Administrator" readonly>
+          </div>
+
+          <button
+            class="tool-btn primary"
+            onclick="toast('Profile saved','Administrator profile updated.')">
+            Save Profile
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-head">
+          <h3>Administrator Access</h3>
+        </div>
+
+        <div class="card-body">
+
+          ${permission("Dashboard","Full")}
+          ${permission("Content","Full")}
+          ${permission("Members","Full")}
+          ${permission("CrowSpace","Full")}
+          ${permission("Creators","Full")}
+          ${permission("Sports","Full")}
+          ${permission("Awards","Full")}
+          ${permission("Database","Full")}
+          ${permission("System","Full")}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   GENERIC MANAGER
+   ========================================================= */
+
+function genericManagerPage(page){
+
+  const meta =
+    PAGE_META[page] ||
+    {
+      title:page,
+      subtitle:"CrowRules Entertainment administration module."
+    };
+
+  const names = {
+    content:["Content","Published","Drafts","Pending","Featured","Views"],
+    pages:["Pages","Published","Drafts","Scheduled","Archived","Views"],
+    categories:["Categories","Active","Content","Featured","Unused","Total"],
+    tags:["Tags","Active","Used","Unused","Popular","Total"],
+    videos:["Videos","Published","Drafts","Pending","Featured","Views"],
+    audio:["Audio","Published","Drafts","Pending","Featured","Plays"],
+    articles:["Articles","Published","Drafts","Pending","Featured","Views"],
+    shows:["Shows","Published","Drafts","Upcoming","Featured","Seasons"],
+    episodes:["Episodes","Published","Drafts","Pending","Featured","Views"],
+    movies:["Movies","Published","Drafts","Pending","Featured","Views"],
+    channels:["Channels","Live","Offline","Scheduled","Viewers","Status"],
+    playlists:["Playlists","Active","Drafts","Items","Featured","Views"],
+    schedule:["Programs","Today","Tomorrow","Live","Upcoming","Hours"],
+    live:["Channels","Live","Viewers","Programs","Alerts","Status"],
+    guide:["Programs","Today","Channels","Live","Upcoming","Hours"],
+    top10:["Items","Movies","Shows","Episodes","Channels","Views"],
+    member:["Profiles","Active","New","Premium","Creators","Complete"],
+    subscriptions:["Subscriptions","Active","Trials","Renewals","Cancelled","MRR"],
+    friends:["Connections","Pending","Accepted","Blocked","Today","Total"],
+    points:["Points Issued","Redeemed","Earners","Rules","Rewards","Claims"],
+    crowspace:["Members","Posts","Groups","Reports","Comments","Online"],
+    community:["Spaces","Members","Posts","Comments","Reports","Topics"],
+    posts:["Posts","Published","Pending","Flagged","Hidden","Views"],
+    groups:["Groups","Active","Members","Private","Public","Posts"],
+    creator:["Creators","Active","Pending","Submissions","Published","Views"],
+    "creator-content":["Content","Published","Pending","Rejected","Featured","Views"],
+    "creator-approvals":["Pending","Approved","Rejected","Today","Creators","Status"],
+    records:["Artists","Albums","Tracks","Releases","Plays","Views"],
+    artists:["Artists","Active","Albums","Tracks","Featured","Plays"],
+    albums:["Albums","Published","Drafts","Tracks","Featured","Plays"],
+    tracks:["Tracks","Published","Drafts","Pending","Featured","Plays"],
+    sports:["Leagues","Teams","Games","Live","News","Fans"],
+    teams:["Teams","Active","Regions","Following","Games","Players"],
+    games:["Games","Today","Upcoming","Live","Completed","Leagues"],
+    standings:["Leagues","Teams","Games","Updated","Regions","Status"],
+    rankings:["Rankings","Players","Teams","Leagues","Updated","Status"],
+    pickem:["Challenges","Entries","Players","Open","Completed","Points"],
+    memorials:["Memorials","Active","Photos","Videos","Tributes","Candles"],
+    "memorial-photos":["Photos","Memorials","Featured","Pending","Storage","Views"],
+    "memorial-videos":["Videos","Memorials","Featured","Pending","Storage","Views"],
+    "award-categories":["Categories","Active","Nominees","Winners","Awards","Status"],
+    nominees:["Nominees","Nominated","Withdrawn","Disqualified","Winners","Awards"],
+    voting:["Votes","Open","Categories","Nominees","Members","Status"],
+    business:["Services","Inquiries","Partners","Projects","Careers","Status"],
+    donations:["Donations","Today","This Month","Supporters","Recurring","Total"],
+    shop:["Products","Active","Drafts","Sold","Interest","Views"],
+    orders:["Orders","Pending","Processing","Shipped","Completed","Revenue"],
+    roles:["Roles","Admins","Editors","Moderators","Creators","Active"],
+    permissions:["Permissions","Roles","Granted","Restricted","Modules","Rules"],
+    authentication:["Users","Active","Sessions","Providers","Verified","Status"],
+    logs:["Logs","Today","Warnings","Errors","Critical","Events"],
+    database:["Tables","Rows","Policies","Indexes","Functions","Status"],
+    api:["Requests","Today","Errors","Endpoints","Latency","Status"],
+    backups:["Backups","Latest","Successful","Failed","Storage","Status"]
+  };
+
+  const stats =
+    names[page] ||
+    ["Items","Active","Pending","Drafts","Featured","Total"];
+
+  return `
+
+    ${hero(meta)}
+
+    <div class="stats">
+
+      ${stat(stats[0],randomNumber(),"Current")}
+      ${stat(stats[1],randomNumber(),"Active")}
+      ${stat(stats[2],randomNumber(),"Current")}
+      ${stat(stats[3],randomNumber(),"Current")}
+      ${stat(stats[4],randomNumber(),"Current")}
+      ${stat(stats[5],randomNumber(),"Total")}
+
+    </div>
+
+
+    <div class="section-title">
+      <h2>${meta.title}</h2>
+      <span>ADMIN MANAGEMENT</span>
+    </div>
+
+
+    <div class="toolbar">
+
+      <input
+        placeholder="Search ${meta.title.toLowerCase()}...">
+
+      <select>
+        <option>All Status</option>
+        <option>Active</option>
+        <option>Published</option>
+        <option>Draft</option>
+        <option>Pending</option>
+        <option>Archived</option>
+      </select>
+
+      <select>
+        <option>Sort: Newest</option>
+        <option>Sort: Oldest</option>
+        <option>Sort: Name</option>
+        <option>Sort: Popular</option>
+      </select>
+
+      <button
+        class="tool-btn"
+        onclick="refreshPage()">
+        ↻ Refresh
+      </button>
+
+      <button
+        class="tool-btn primary"
+        onclick="openCreateModal('${escapeHtml(meta.title)}')">
+        + Add New
+      </button>
+
+    </div>
+
+
+    ${dataTable([
+      ["Name","Type","Status","Owner","Updated","Actions"],
+      ["Primary Item","Content","PUBLISHED","CrowRules","Today","Edit"],
+      ["Secondary Item","Content","ACTIVE","CrowRules","Yesterday","Edit"],
+      ["Featured Item","Featured","PUBLISHED","Administrator","Sep 7","Edit"],
+      ["Pending Item","Content","PENDING","Creator","Sep 6","Review"],
+      ["Archived Item","Archive","ARCHIVED","Administrator","Sep 5","View"]
+    ])}
+
+
+    <div class="section-title">
+      <h2>Quick Actions</h2>
+      <span>COMMANDS</span>
+    </div>
+
+
+    <div class="grid grid-4">
+
+      ${module("＋","Create","Create a new record.","")}
+      ${module("✎","Edit","Modify existing records.","")}
+      ${module("✓","Publish","Publish selected records.","")}
+      ${module("▣","Import","Import platform data.","")}
+      ${module("⇩","Export","Export records.","")}
+      ${module("⚙","Configure","Configure module settings.","settings")}
+      ${module("◉","Monitor","Monitor activity.","activity")}
+      ${module("♥","Health","Check system health.","system-health")}
+
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   COMPONENTS
+   ========================================================= */
+
+function stat(label,value,sub){
+  return `
+    <div class="stat">
+      <div class="stat-label">${label}</div>
+      <div class="stat-value">${value}</div>
+      <div class="stat-sub">${sub}</div>
+    </div>
+  `;
+}
+
+function module(icon,title,text,page){
+
+  return `
+    <div
+      class="module-card"
+      ${page ? `onclick="showPage('${page}')"` : ""}>
+
+      <div class="module-icon">${icon}</div>
+
+      <h3>${title}</h3>
+
+      <p>${text}</p>
+
+    </div>
+  `;
+}
+
+function statusLine(name,status,type){
+
+  return `
+    <div class="setting-row">
+
+      <div>
+        <strong>${name}</strong>
+        <span>Service health</span>
+      </div>
+
+      <span class="status ${type}">
+        ${status}
+      </span>
+
+    </div>
+  `;
+}
+
+function activityRow(icon,title,text,time){
+
+  return `
+    <div class="activity-row">
+
+      <div class="activity-icon">${icon}</div>
+
+      <div class="activity-main">
+        <strong>${title}</strong>
+        <span>${text}</span>
+      </div>
+
+      <div class="activity-time">
+        ${time}
+      </div>
+
+    </div>
+  `;
+}
+
+function bars(){
+
+  let html="";
+
+  for(let i=0;i<32;i++){
+
+    const height =
+      20 +
+      Math.floor(
+        Math.random()*78
+      );
+
+    html += `
+      <div
+        class="bar"
+        style="height:${height}%"
+        title="${height}%">
+      </div>
+    `;
+  }
+
+  return html;
+}
+
+function metric(name,value){
+
+  return `
+    <div style="margin-bottom:17px">
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        font-size:10px;
+      ">
+        <span>${name}</span>
+        <span>${value}%</span>
+      </div>
+
+      <div class="progress">
+        <span style="width:${value}%"></span>
+      </div>
+
+    </div>
+  `;
+}
+
+function dataTable(rows){
+
+  const head=rows[0];
+
+  return `
+    <div class="card">
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              ${head.map(x=>`<th>${x}</th>`).join("")}
+            </tr>
+          </thead>
+
+          <tbody>
+
+            ${rows.slice(1).map(row=>`
+
+              <tr>
+
+                ${row.map((cell,index)=>{
+
+                  if(
+                    /ACTIVE|PUBLISHED|SUCCESS|ONLINE|OPEN/i.test(cell)
+                  ){
+
+                    return `
+                      <td>
+                        <span class="status green">
+                          ${cell}
+                        </span>
+                      </td>
+                    `;
+                  }
+
+                  if(
+                    /PENDING|WARNING|PROCESSING/i.test(cell)
+                  ){
+
+                    return `
+                      <td>
+                        <span class="status yellow">
+                          ${cell}
+                        </span>
+                      </td>
+                    `;
+                  }
+
+                  if(
+                    /CRITICAL|ERROR|SUSPENDED|REJECTED/i.test(cell)
+                  ){
+
+                    return `
+                      <td>
+                        <span class="status red">
+                          ${cell}
+                        </span>
+                      </td>
+                    `;
+                  }
+
+                  return `<td>${cell}</td>`;
+
+                }).join("")}
+
+              </tr>
+
+            `).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function notification(icon,title,text,time){
+
+  return `
+    <div class="activity-row">
+
+      <div class="activity-icon">${icon}</div>
+
+      <div class="activity-main">
+        <strong>${title}</strong>
+        <span>${text}</span>
+      </div>
+
+      <div class="activity-time">
+        ${time}
+      </div>
+
+    </div>
+  `;
+}
+
+function healthCard(name,status,uptime){
+
+  return `
+    <div class="card">
+
+      <div class="card-head">
+        <h3>${name}</h3>
+        <span class="status green">ONLINE</span>
+      </div>
+
+      <div class="card-body">
+
+        <div style="
+          font-family:Orbitron;
+          font-size:20px;
+        ">
+          ${uptime}
+        </div>
+
+        <div style="
+          color:var(--muted);
+          font-size:9px;
+          margin-top:5px;
+        ">
+          ${status}
+        </div>
+
+        <div class="progress">
+          <span style="width:99%"></span>
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function planCard(name,price,text){
+
+  return `
+    <div class="card">
+
+      <div class="card-head">
+        <h3>${name}</h3>
+        <span>ACTIVE</span>
+      </div>
+
+      <div class="card-body">
+
+        <div style="
+          font-family:Orbitron;
+          font-size:24px;
+          margin-bottom:8px;
+        ">
+          ${price}
+        </div>
+
+        <div style="
+          color:var(--muted);
+          font-size:9px;
+        ">
+          ${text}
+        </div>
+
+        <button
+          class="tool-btn"
+          style="margin-top:16px"
+          onclick="toast('${name}','Membership plan selected.')">
+          Manage Plan
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function bucket(name,files,usage){
+
+  return `
+    <div class="card">
+
+      <div class="card-head">
+        <h3>${name}</h3>
+        <span>${usage}</span>
+      </div>
+
+      <div class="card-body">
+
+        <strong style="font-size:11px">
+          ${files}
+        </strong>
+
+        <div class="progress">
+          <span style="width:${parseInt(usage)||10}%"></span>
+        </div>
+
+        <button
+          class="tool-btn"
+          style="margin-top:14px"
+          onclick="toast('Storage','Opening ${name}.')">
+          Open Bucket
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function setting(title,text,on){
+
+  return `
+    <div class="setting-row">
+
+      <div>
+        <strong>${title}</strong>
+        <span>${text}</span>
+      </div>
+
+      <button
+        class="toggle ${on ? "on":""}"
+        onclick="this.classList.toggle('on')">
+      </button>
+
+    </div>
+  `;
+}
+
+function permission(name,value){
+
+  return `
+    <div class="setting-row">
+
+      <div>
+        <strong>${name}</strong>
+        <span>Administrative permission</span>
+      </div>
+
+      <span class="status purple">
+        ${value}
+      </span>
+
+    </div>
+  `;
+}
+
+function randomNumber(){
+
+  return Math.floor(
+    Math.random()*900
+  )+100;
+}
+
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+function openCreateModal(title){
+
+  document.getElementById("modalTitle").textContent =
+    "Create — " + title;
+
+  document.getElementById("modalBody").innerHTML = `
+
+    <div class="field">
+      <label>Name</label>
+      <input id="createName" placeholder="Enter name">
+    </div>
+
+    <div class="field">
+      <label>Status</label>
+      <select id="createStatus">
+        <option>Draft</option>
+        <option>Published</option>
+        <option>Pending</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <textarea
+        id="createDescription"
+        rows="5"
+        placeholder="Description"></textarea>
+    </div>
+
+  `;
+
+  document
+    .getElementById("modal")
+    .classList.add("show");
+}
+
+function openMemberModal(){
+
+  document.getElementById("modalTitle").textContent =
+    "Create Member";
+
+  document.getElementById("modalBody").innerHTML = `
+
+    <div class="field">
+      <label>Email</label>
+      <input
+        id="memberEmail"
+        type="email"
+        value="crowrulesentertainment@gmail.com">
+    </div>
+
+    <div class="field">
+      <label>Username</label>
+      <input
+        id="memberUsername"
+        value="crowner">
+    </div>
+
+    <div class="field">
+      <label>Membership</label>
+      <select>
+        <option>Free</option>
+        <option>Pro</option>
+        <option>Premium</option>
+        <option>Creator</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Role</label>
+      <select>
+        <option>Administrator</option>
+        <option>Member</option>
+        <option>Moderator</option>
+      </select>
+    </div>
+
+    <div style="
+      color:var(--yellow);
+      font-size:9px;
+      line-height:1.6;
+      padding:10px;
+      border:1px solid rgba(243,201,105,.2);
+      border-radius:8px;
+    ">
+      Authentication users must be created through the
+      Supabase Auth Admin API. Never place a service-role
+      key in this browser application.
+    </div>
+
+  `;
+
+  document
+    .getElementById("modal")
+    .classList.add("show");
+}
+
+function closeModal(){
+
+  document
+    .getElementById("modal")
+    .classList.remove("show");
+}
+
+function saveModal(){
+
+  closeModal();
+
+  toast(
+    "Saved",
+    "The administration interface accepted the request."
+  );
+}
+
+
+/* =========================================================
+   SUPABASE
+   ========================================================= */
+
+async function testSupabase(){
+
+  if(!supabaseClient){
+
+    toast(
+      "Supabase not configured",
+      "Add CROWRULES_SUPABASE_URL and CROWRULES_SUPABASE_ANON_KEY."
+    );
+
+    return;
+  }
+
+  try{
+
+    const {error} =
+      await supabaseClient
+        .from("membership_profiles")
+        .select("id")
+        .limit(1);
+
+    if(error){
+
+      toast(
+        "Connection warning",
+        error.message
+      );
+
+      return;
+    }
+
+    toast(
+      "Supabase connected",
+      "Database connection verified."
+    );
+
+  }catch(error){
+
+    toast(
+      "Connection failed",
+      error.message
+    );
 
   }
+}
+
+
+/* =========================================================
+   AUTH
+   ========================================================= */
+
+async function initAuth(){
+
+  if(!supabaseClient){
+
+    showDemoAdmin();
+
+    return;
+  }
+
+  const {
+    data:{
+      session
+    }
+  } =
+    await supabaseClient
+      .auth
+      .getSession();
+
+  if(session){
+
+    await activateApp(
+      session.user
+    );
+
+  }else{
+
+    showLogin();
+
+  }
+
+  supabaseClient
+    .auth
+    .onAuthStateChange(
+      async(event,session)=>{
+
+        if(session){
+
+          await activateApp(
+            session.user
+          );
+
+        }else{
+
+          showLogin();
+
+        }
+
+      }
+    );
+}
+
+async function activateApp(user){
+
+  document
+    .getElementById("loginScreen")
+    .style.display="none";
+
+  document
+    .getElementById("app")
+    .classList.add("active");
+
+  const email =
+    user?.email ||
+    "Administrator";
+
+  document
+    .getElementById("adminName")
+    .textContent =
+      email.split("@")[0];
+
+  document
+    .getElementById("adminAvatar")
+    .textContent =
+      email
+        .substring(0,2)
+        .toUpperCase();
+
+  showPage(
+    location.hash
+      ? location.hash.substring(1)
+      : "dashboard"
+  );
+}
+
+function showLogin(){
+
+  document
+    .getElementById("loginScreen")
+    .style.display="flex";
+
+  document
+    .getElementById("app")
+    .classList.remove("active");
+}
+
+function showDemoAdmin(){
+
+  activateApp({
+    email:"crowrulesentertainment@gmail.com"
+  });
+
+  toast(
+    "Demo Administration",
+    "Supabase credentials are not configured."
+  );
+}
+
+
+/* =========================================================
+   LOGIN FORM
+   ========================================================= */
+
+document
+  .getElementById("loginForm")
+  .addEventListener(
+    "submit",
+    async event=>{
+
+      event.preventDefault();
+
+      const email =
+        document
+          .getElementById("loginEmail")
+          .value
+          .trim();
+
+      const password =
+        document
+          .getElementById("loginPassword")
+          .value;
+
+      if(!supabaseClient){
+
+        showDemoAdmin();
+
+        return;
+      }
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .auth
+          .signInWithPassword({
+            email,
+            password
+          });
+
+      if(error){
+
+        toast(
+          "Login failed",
+          error.message
+        );
+
+        return;
+      }
+
+      if(data?.user){
+
+        await activateApp(
+          data.user
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+document
+  .querySelectorAll(".nav-item[data-page]")
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+        showPage(
+          button.dataset.page
+        );
+      }
+    );
+
+  });
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+document
+  .getElementById("mobileMenu")
+  .addEventListener(
+    "click",
+    ()=>{
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+    }
+  );
+
+
+/* =========================================================
+   SIGN OUT
+   ========================================================= */
+
+document
+  .getElementById("signOutBtn")
+  .addEventListener(
+    "click",
+    async()=>{
+
+      if(supabaseClient){
+
+        await supabaseClient
+          .auth
+          .signOut();
+
+      }
+
+      showLogin();
+
+      toast(
+        "Signed out",
+        "Your admin session has ended."
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+function updateClock(){
+
+  const now =
+    new Date();
+
+  document
+    .getElementById("clock")
+    .textContent =
+      now.toLocaleTimeString(
+        "en-US",
+        {
+          hour12:false
+        }
+      );
+
+}
+
+setInterval(
+  updateClock,
+  1000
 );
+
+updateClock();
+
+
+/* =========================================================
+   REFRESH
+   ========================================================= */
+
+function refreshPage(){
+
+  const hash =
+    location.hash
+      ? location.hash.substring(1)
+      : "dashboard";
+
+  showPage(hash);
+
+  toast(
+    "Refreshed",
+    "Administration data refreshed."
+  );
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer;
+
+function toast(title,message){
+
+  const el =
+    document.getElementById("toast");
+
+  document
+    .getElementById("toastTitle")
+    .textContent =
+      title;
+
+  document
+    .getElementById("toastMessage")
+    .textContent =
+      message;
+
+  el.classList.add("show");
+
+  clearTimeout(
+    toastTimer
+  );
+
+  toastTimer =
+    setTimeout(
+      ()=>{
+        el.classList.remove("show");
+      },
+      3500
+    );
+}
+
+
+/* =========================================================
+   CSV
+   ========================================================= */
+
+function exportCSV(){
+
+  const table =
+    document.querySelector("table");
+
+  if(!table){
+
+    toast(
+      "Nothing to export",
+      "No table is available on this page."
+    );
+
+    return;
+  }
+
+  const rows =
+    [...table.querySelectorAll("tr")];
+
+  const csv =
+    rows
+      .map(row=>
+        [...row.children]
+          .map(cell=>
+            `"${cell.innerText
+              .replace(/"/g,'""')}"`
+          )
+          .join(",")
+      )
+      .join("\n");
+
+  const blob =
+    new Blob(
+      [csv],
+      {type:"text/csv"}
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href=url;
+
+  a.download =
+    "crowrules-admin-export.csv";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+  toast(
+    "Export complete",
+    "CSV file generated."
+  );
+}
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function filterTable(value){
+
+  const query =
+    value
+      .toLowerCase()
+      .trim();
+
+  document
+    .querySelectorAll("tbody tr")
+    .forEach(row=>{
+
+      row.style.display =
+        row.innerText
+          .toLowerCase()
+          .includes(query)
+          ? ""
+          : "none";
+
+    });
+}
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+initAuth();
+
 </script>
 
 </body>
