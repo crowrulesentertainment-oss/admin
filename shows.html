@@ -1,8 +1,10 @@
 <!doctype html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>CrowRules Entertainment — Shows Admin</title>
 <meta name="theme-color" content="#050505">
 <meta name="description" content="CrowRules Entertainment Shows Administration">
@@ -10,132 +12,928 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
-  --bg:#050505;--panel:#0c0c0c;--panel2:#111;--panel3:#151515;
-  --border:#252525;--border2:#343434;--red:#e50914;--red2:#ff2934;
-  --text:#f5f5f5;--muted:#858585;--green:#25c58b;--yellow:#eabf45;
-  --danger:#ff5360;--blue:#4da3ff;--sidebar:280px;--topbar:72px;
+  --bg:#050505;
+  --panel:#0b0b0b;
+  --panel2:#101010;
+  --panel3:#151515;
+  --border:#242424;
+  --border2:#333;
+  --red:#e50914;
+  --red2:#ff2934;
+  --text:#f5f5f5;
+  --muted:#858585;
+  --green:#25c58b;
+  --yellow:#eabf45;
+  --danger:#ff5360;
+  --blue:#4da3ff;
+  --sidebar:280px;
+  --topbar:72px;
 }
+
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Montserrat,Arial,sans-serif}
-body{overflow-x:hidden}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-a{color:inherit;text-decoration:none}
-.hidden{display:none!important}
 
-.sidebar{position:fixed;z-index:100;inset:0 auto 0 0;width:var(--sidebar);
-background:linear-gradient(180deg,#0b0b0b,#050505);border-right:1px solid #202020;overflow-y:auto}
-.sidebar-brand{height:var(--topbar);display:flex;align-items:center;gap:12px;padding:0 20px;
-border-bottom:1px solid #202020;position:sticky;top:0;background:#090909;z-index:3}
-.logo,.auth-logo{display:grid;place-items:center;border:1px solid var(--red);color:var(--red2);
-font-family:Orbitron,sans-serif;font-weight:900;box-shadow:0 0 25px rgba(229,9,20,.12)}
-.logo{width:38px;height:38px;border-radius:10px;font-size:14px}
-.brand-text strong{display:block;font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:.8px}
-.brand-text span{display:block;color:#666;margin-top:3px;font-size:9px;text-transform:uppercase;letter-spacing:1.5px}
-.nav-section{padding:18px 12px 5px;color:#505050;font-family:Orbitron,sans-serif;font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
-.nav-link{margin:2px 8px;min-height:39px;display:flex;align-items:center;gap:11px;padding:0 12px;border-radius:8px;color:#9a9a9a;font-size:11px;font-weight:600;transition:.15s}
-.nav-link:hover{color:#fff;background:#111}
-.nav-link.active{color:#fff;background:linear-gradient(90deg,rgba(229,9,20,.16),rgba(229,9,20,.03));border-left:2px solid var(--red);padding-left:10px}
-.nav-icon{width:18px;text-align:center;color:#676767}.nav-link.active .nav-icon{color:var(--red2)}
-
-.main{margin-left:var(--sidebar);min-height:100vh}
-.topbar{position:sticky;top:0;z-index:50;height:var(--topbar);display:flex;align-items:center;justify-content:space-between;
-gap:15px;padding:0 24px;background:rgba(7,7,7,.94);border-bottom:1px solid #202020;backdrop-filter:blur(14px)}
-.page-heading{display:flex;align-items:center;gap:13px}.menu-btn{display:none;width:38px;height:38px;border:1px solid #292929;border-radius:8px;background:#111;color:#fff}
-.page-heading h1{margin:0;font-family:Orbitron,sans-serif;font-size:15px;letter-spacing:.6px}
-.page-heading p{margin:4px 0 0;color:#666;font-size:10px}
-.user-area{display:flex;align-items:center;gap:12px}.user-info{text-align:right}
-.user-email{font-size:11px;font-weight:700}.user-role{color:var(--red2);margin-top:3px;font-family:Orbitron,sans-serif;font-size:8px;letter-spacing:1px}
-.avatar{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:#161616;border:1px solid #303030;font-family:Orbitron,sans-serif;font-size:11px}
-.logout-btn{border:1px solid #2a2a2a;border-radius:8px;background:#101010;color:#aaa;padding:9px 12px;font-size:10px;font-weight:700}
-.logout-btn:hover{border-color:var(--red);color:#fff}
-.content{padding:24px;max-width:1800px}
-
-.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:20px}
-.stat{min-height:108px;padding:17px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(145deg,#101010,#0a0a0a)}
-.stat-label{color:#737373;font-size:9px;text-transform:uppercase;letter-spacing:1.2px;font-weight:700}
-.stat-value{margin-top:13px;font-family:Orbitron,sans-serif;font-size:25px}.stat-note{color:#555;margin-top:6px;font-size:9px}
-
-.panel{border:1px solid var(--border);border-radius:13px;background:#0b0b0b;overflow:hidden}
-.panel-header{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 17px;border-bottom:1px solid #202020}
-.panel-title{font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:.5px}.panel-subtitle{color:#666;font-size:9px;margin-top:4px}
-.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:13px;border-bottom:1px solid #1c1c1c;background:#0a0a0a}
-.search{flex:1 1 230px}.control,.search input{width:100%;height:38px;border:1px solid #292929;border-radius:8px;background:#111;color:#fff;outline:none;padding:0 11px;font-size:10px}
-.control:focus,.search input:focus{border-color:var(--red)}select.control{min-width:125px}
-.btn{min-height:38px;border:1px solid #2b2b2b;border-radius:8px;padding:0 13px;background:#111;color:#ccc;font-size:10px;font-weight:700}
-.btn:hover{border-color:#555;color:#fff}.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-primary{background:linear-gradient(135deg,var(--red),#a60008);border-color:var(--red);color:#fff}
-.btn-danger{color:#ff8c94;border-color:rgba(255,83,96,.25)}.btn-small{min-height:30px;padding:0 9px;font-size:9px}
-
-.table-wrap{width:100%;overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:1080px}
-th{padding:12px 14px;text-align:left;color:#5e5e5e;font-size:8px;font-weight:800;letter-spacing:1px;text-transform:uppercase;background:#090909;border-bottom:1px solid #202020}
-td{padding:12px 14px;border-bottom:1px solid #181818;color:#bdbdbd;font-size:10px;vertical-align:middle}
-tbody tr:hover{background:#0e0e0e}
-.show-cell{display:flex;align-items:center;gap:10px}.show-image{width:42px;height:42px;flex:0 0 42px;border-radius:8px;overflow:hidden;border:1px solid #292929;background:#151515;display:grid;place-items:center;color:var(--red2);font-family:Orbitron,sans-serif;font-size:11px;font-weight:800}
-.show-image img{width:100%;height:100%;object-fit:cover}.show-title{color:#fff;font-size:11px;font-weight:700}.show-slug{margin-top:3px;color:#555;font-size:8px}
-.badge{display:inline-flex;align-items:center;min-height:22px;padding:0 8px;border-radius:999px;background:#151515;border:1px solid #282828;color:#999;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-.badge.active{color:#6ee4b8;border-color:rgba(37,197,139,.25);background:rgba(37,197,139,.06)}
-.badge.inactive{color:#ff8b92;border-color:rgba(255,83,96,.25);background:rgba(255,83,96,.06)}
-.badge.featured{color:#ffd76a;border-color:rgba(234,191,69,.25);background:rgba(234,191,69,.06)}
-.actions{display:flex;gap:5px;white-space:nowrap}
-
-.state{padding:55px 20px;text-align:center;color:#666;font-size:11px}.state strong{display:block;color:#bbb;margin-bottom:7px;font-family:Orbitron,sans-serif;font-size:12px}
-.state.error strong{color:#ff8f98}.state .hint{margin-top:8px;color:#555;font-size:9px}
-
-.modal-backdrop{position:fixed;z-index:300;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.76);backdrop-filter:blur(8px)}
-.modal-backdrop.open{display:flex}.modal{width:100%;max-width:780px;max-height:92vh;overflow-y:auto;border:1px solid #303030;border-radius:16px;background:#0c0c0c;box-shadow:0 35px 100px rgba(0,0,0,.8)}
-.modal-header{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:17px 20px;background:#0d0d0d;border-bottom:1px solid #202020}
-.modal-title{font-family:Orbitron,sans-serif;font-size:13px}.close{width:34px;height:34px;border:1px solid #2a2a2a;border-radius:8px;background:#111;color:#aaa}
-.modal-body{padding:20px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.form-field.full{grid-column:1/-1}
-.form-field label{display:block;margin-bottom:7px;color:#888;font-size:9px;text-transform:uppercase;letter-spacing:1px;font-weight:800}
-.form-field input,.form-field select,.form-field textarea{width:100%;border:1px solid #292929;border-radius:8px;background:#090909;color:#fff;outline:none;padding:10px 11px;font-size:11px}
-.form-field input,.form-field select{height:40px}.form-field textarea{min-height:110px;resize:vertical;line-height:1.5}
-.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--red)}
-.check-row{display:flex;flex-wrap:wrap;gap:20px;padding-top:5px}.check{display:flex;align-items:center;gap:7px;color:#aaa;font-size:10px}.check input{width:auto;accent-color:var(--red)}
-.modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:15px 20px;border-top:1px solid #202020}
-.toast{position:fixed;right:20px;bottom:20px;z-index:500;max-width:420px;padding:13px 15px;border-radius:10px;border:1px solid #303030;background:#121212;color:#ddd;box-shadow:0 20px 50px rgba(0,0,0,.55);font-size:10px;opacity:0;transform:translateY(12px);pointer-events:none;transition:.2s}
-.toast.show{opacity:1;transform:translateY(0)}.toast.success{border-color:rgba(37,197,139,.3)}.toast.error{border-color:rgba(255,83,96,.35);color:#ffb7bc}
-
-.auth-loading{position:fixed;z-index:1000;inset:0;display:flex;align-items:center;justify-content:center;background:#050505}
-.auth-loading-card{text-align:center;max-width:480px;padding:25px}.auth-logo{width:60px;height:60px;margin:0 auto 17px;border-width:2px;border-radius:14px;font-size:16px}
-.auth-loading-card strong{display:block;font-family:Orbitron,sans-serif;font-size:12px}.auth-loading-card span{display:block;margin-top:7px;color:#666;font-size:10px;line-height:1.6}
-
-.schema-note{margin:0 13px 13px;padding:12px;border:1px solid #242424;border-radius:9px;background:#0b0b0b;color:#666;font-size:8px;line-height:1.5}
-.schema-note b{color:#999}.schema-note code{color:#c9c9c9}
-
-@media(max-width:1100px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:800px){
-  .sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:translateX(0)}
-  .sidebar-overlay{position:fixed;z-index:90;inset:0;background:rgba(0,0,0,.65);display:none}
-  .sidebar-overlay.open{display:block}.main{margin-left:0}.menu-btn{display:block}.user-info{display:none}.content{padding:15px}
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
 }
+
+body{
+  overflow-x:hidden;
+}
+
+button,input,select,textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* AUTH */
+
+.auth-loading{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#050505;
+}
+
+.auth-loading-card{
+  width:min(92vw,480px);
+  padding:30px;
+  text-align:center;
+}
+
+.auth-logo{
+  width:64px;
+  height:64px;
+  margin:0 auto 18px;
+  display:grid;
+  place-items:center;
+  border:2px solid var(--red);
+  border-radius:15px;
+  color:var(--red2);
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+  font-weight:900;
+  box-shadow:0 0 35px rgba(229,9,20,.14);
+}
+
+.auth-loading-card strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  letter-spacing:.8px;
+}
+
+.auth-loading-card span{
+  display:block;
+  margin-top:8px;
+  color:#666;
+  font-size:10px;
+  line-height:1.7;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  z-index:100;
+  width:var(--sidebar);
+  overflow-y:auto;
+  background:linear-gradient(180deg,#0b0b0b,#050505);
+  border-right:1px solid #202020;
+}
+
+.sidebar-brand{
+  position:sticky;
+  top:0;
+  z-index:3;
+  height:var(--topbar);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  background:#090909;
+  border-bottom:1px solid #202020;
+}
+
+.logo{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--red);
+  border-radius:10px;
+  color:var(--red2);
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  font-weight:900;
+}
+
+.brand-text strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.8px;
+}
+
+.brand-text span{
+  display:block;
+  margin-top:3px;
+  color:#666;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+
+.nav-section{
+  padding:18px 12px 5px;
+  color:#505050;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.nav-link{
+  min-height:39px;
+  margin:2px 8px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:0 12px;
+  border-radius:8px;
+  color:#9a9a9a;
+  font-size:11px;
+  font-weight:600;
+  transition:.15s;
+}
+
+.nav-link:hover{
+  color:#fff;
+  background:#111;
+}
+
+.nav-link.active{
+  padding-left:10px;
+  color:#fff;
+  background:linear-gradient(
+    90deg,
+    rgba(229,9,20,.16),
+    rgba(229,9,20,.03)
+  );
+  border-left:2px solid var(--red);
+}
+
+.nav-icon{
+  width:18px;
+  text-align:center;
+  color:#676767;
+}
+
+.nav-link.active .nav-icon{
+  color:var(--red2);
+}
+
+/* MAIN */
+
+.main{
+  min-height:100vh;
+  margin-left:var(--sidebar);
+}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:var(--topbar);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:0 24px;
+  background:rgba(7,7,7,.94);
+  border-bottom:1px solid #202020;
+  backdrop-filter:blur(14px);
+}
+
+.page-heading{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.menu-btn{
+  display:none;
+  width:38px;
+  height:38px;
+  border:1px solid #292929;
+  border-radius:8px;
+  background:#111;
+  color:#fff;
+}
+
+.page-heading h1{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+  letter-spacing:.6px;
+}
+
+.page-heading p{
+  margin:4px 0 0;
+  color:#666;
+  font-size:10px;
+}
+
+.user-area{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.user-info{
+  text-align:right;
+}
+
+.user-email{
+  font-size:11px;
+  font-weight:700;
+}
+
+.user-role{
+  margin-top:3px;
+  color:var(--red2);
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+  letter-spacing:1px;
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid #303030;
+  border-radius:50%;
+  background:#161616;
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+}
+
+.logout-btn{
+  padding:9px 12px;
+  border:1px solid #2a2a2a;
+  border-radius:8px;
+  background:#101010;
+  color:#aaa;
+  font-size:10px;
+  font-weight:700;
+}
+
+.logout-btn:hover{
+  border-color:var(--red);
+  color:#fff;
+}
+
+.content{
+  max-width:1800px;
+  padding:24px;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:20px;
+}
+
+.stat{
+  min-height:108px;
+  padding:17px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:linear-gradient(145deg,#101010,#0a0a0a);
+}
+
+.stat-label{
+  color:#737373;
+  font-size:9px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+}
+
+.stat-value{
+  margin-top:13px;
+  font-family:Orbitron,sans-serif;
+  font-size:25px;
+}
+
+.stat-note{
+  margin-top:6px;
+  color:#555;
+  font-size:9px;
+}
+
+/* PANELS */
+
+.panel{
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:#0b0b0b;
+}
+
+.panel-header{
+  min-height:66px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 17px;
+  border-bottom:1px solid #202020;
+}
+
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.5px;
+}
+
+.panel-subtitle{
+  margin-top:4px;
+  color:#666;
+  font-size:9px;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  padding:13px;
+  background:#0a0a0a;
+  border-bottom:1px solid #1c1c1c;
+}
+
+.search{
+  flex:1 1 230px;
+}
+
+.control,
+.search input{
+  width:100%;
+  height:38px;
+  padding:0 11px;
+  outline:none;
+  border:1px solid #292929;
+  border-radius:8px;
+  background:#111;
+  color:#fff;
+  font-size:10px;
+}
+
+select.control{
+  min-width:145px;
+}
+
+.control:focus,
+.search input:focus{
+  border-color:var(--red);
+}
+
+/* BUTTONS */
+
+.btn{
+  min-height:38px;
+  padding:0 13px;
+  border:1px solid #2b2b2b;
+  border-radius:8px;
+  background:#111;
+  color:#ccc;
+  font-size:10px;
+  font-weight:700;
+}
+
+.btn:hover{
+  border-color:#555;
+  color:#fff;
+}
+
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.btn-primary{
+  border-color:var(--red);
+  background:linear-gradient(135deg,var(--red),#a60008);
+  color:#fff;
+}
+
+.btn-danger{
+  border-color:rgba(255,83,96,.25);
+  color:#ff8c94;
+}
+
+.btn-small{
+  min-height:30px;
+  padding:0 9px;
+  font-size:9px;
+}
+
+/* TABLE */
+
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  min-width:1100px;
+  border-collapse:collapse;
+}
+
+th{
+  padding:12px 14px;
+  text-align:left;
+  background:#090909;
+  border-bottom:1px solid #202020;
+  color:#5e5e5e;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+td{
+  padding:12px 14px;
+  border-bottom:1px solid #181818;
+  color:#bdbdbd;
+  font-size:10px;
+  vertical-align:middle;
+}
+
+tbody tr:hover{
+  background:#0e0e0e;
+}
+
+.show-cell{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.show-image{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border:1px solid #292929;
+  border-radius:8px;
+  background:#151515;
+  color:var(--red2);
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  font-weight:800;
+}
+
+.show-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.show-title{
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+}
+
+.show-slug{
+  margin-top:3px;
+  color:#555;
+  font-size:8px;
+}
+
+.badge{
+  min-height:22px;
+  display:inline-flex;
+  align-items:center;
+  padding:0 8px;
+  border:1px solid #282828;
+  border-radius:999px;
+  background:#151515;
+  color:#999;
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.badge.active{
+  border-color:rgba(37,197,139,.25);
+  background:rgba(37,197,139,.06);
+  color:#6ee4b8;
+}
+
+.badge.inactive{
+  border-color:rgba(255,83,96,.25);
+  background:rgba(255,83,96,.06);
+  color:#ff8b92;
+}
+
+.badge.featured{
+  border-color:rgba(234,191,69,.25);
+  background:rgba(234,191,69,.06);
+  color:#ffd76a;
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+  white-space:nowrap;
+}
+
+/* STATES */
+
+.state{
+  padding:55px 20px;
+  text-align:center;
+  color:#666;
+  font-size:11px;
+}
+
+.state strong{
+  display:block;
+  margin-bottom:7px;
+  color:#bbb;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+}
+
+.state.error strong{
+  color:#ff8f98;
+}
+
+.state .hint{
+  margin-top:8px;
+  color:#555;
+  font-size:9px;
+}
+
+/* MODAL */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:300;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.76);
+  backdrop-filter:blur(8px);
+}
+
+.modal-backdrop.open{
+  display:flex;
+}
+
+.modal{
+  width:100%;
+  max-width:780px;
+  max-height:92vh;
+  overflow-y:auto;
+  border:1px solid #303030;
+  border-radius:16px;
+  background:#0c0c0c;
+  box-shadow:0 35px 100px rgba(0,0,0,.8);
+}
+
+.modal-header{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:17px 20px;
+  background:#0d0d0d;
+  border-bottom:1px solid #202020;
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.close{
+  width:34px;
+  height:34px;
+  border:1px solid #2a2a2a;
+  border-radius:8px;
+  background:#111;
+  color:#aaa;
+  font-size:20px;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.form-field.full{
+  grid-column:1/-1;
+}
+
+.form-field label{
+  display:block;
+  margin-bottom:7px;
+  color:#888;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea{
+  width:100%;
+  padding:10px 11px;
+  outline:none;
+  border:1px solid #292929;
+  border-radius:8px;
+  background:#090909;
+  color:#fff;
+  font-size:11px;
+}
+
+.form-field input,
+.form-field select{
+  height:40px;
+}
+
+.form-field textarea{
+  min-height:110px;
+  resize:vertical;
+  line-height:1.5;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus{
+  border-color:var(--red);
+}
+
+.check-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  padding-top:5px;
+}
+
+.check{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#aaa;
+  font-size:10px;
+}
+
+.check input{
+  width:auto;
+  accent-color:var(--red);
+}
+
+.modal-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:15px 20px;
+  border-top:1px solid #202020;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:500;
+  max-width:440px;
+  padding:13px 15px;
+  border:1px solid #303030;
+  border-radius:10px;
+  background:#121212;
+  color:#ddd;
+  box-shadow:0 20px 50px rgba(0,0,0,.55);
+  font-size:10px;
+  opacity:0;
+  transform:translateY(12px);
+  pointer-events:none;
+  transition:.2s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.toast.success{
+  border-color:rgba(37,197,139,.3);
+}
+
+.toast.error{
+  border-color:rgba(255,83,96,.35);
+  color:#ffb7bc;
+}
+
+/* SCHEMA */
+
+.schema-note{
+  margin:13px;
+  padding:12px;
+  border:1px solid #242424;
+  border-radius:9px;
+  background:#0b0b0b;
+  color:#666;
+  font-size:8px;
+  line-height:1.5;
+}
+
+.schema-note b{
+  color:#999;
+}
+
+.schema-note code{
+  color:#c9c9c9;
+}
+
+/* MOBILE */
+
+.sidebar-overlay{
+  display:none;
+}
+
+@media(max-width:1100px){
+  .stats{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+
+@media(max-width:800px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.2s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .sidebar-overlay{
+    position:fixed;
+    inset:0;
+    z-index:90;
+    display:none;
+    background:rgba(0,0,0,.65);
+  }
+
+  .sidebar-overlay.open{
+    display:block;
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .user-info{
+    display:none;
+  }
+
+  .content{
+    padding:15px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
 @media(max-width:520px){
-  .topbar{padding:0 13px}.page-heading h1{font-size:12px}.logout-btn{padding:8px}.stats{gap:8px}.stat{min-height:95px;padding:13px}.stat-value{font-size:19px}
-  .form-grid{grid-template-columns:1fr}.form-field.full{grid-column:auto}.modal-backdrop{padding:8px}.modal-body{padding:14px}
+
+  .topbar{
+    padding:0 13px;
+  }
+
+  .page-heading h1{
+    font-size:12px;
+  }
+
+  .logout-btn{
+    padding:8px;
+  }
+
+  .stats{
+    gap:8px;
+  }
+
+  .stat{
+    min-height:95px;
+    padding:13px;
+  }
+
+  .stat-value{
+    font-size:19px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-field.full{
+    grid-column:auto;
+  }
+
+  .modal-backdrop{
+    padding:8px;
+  }
+
+  .modal-body{
+    padding:14px;
+  }
 }
 </style>
+
 </head>
 
 <body>
+
+<!-- AUTH LOADING -->
+
 <div class="auth-loading" id="authLoading">
   <div class="auth-loading-card">
     <div class="auth-logo">CR</div>
     <strong>CROWRULES ADMIN</strong>
-    <span id="authLoadingText">Verifying authentication...</span>
+    <span id="authLoadingText">Verifying administrator session...</span>
   </div>
 </div>
 
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+<!-- SIDEBAR -->
+
 <aside class="sidebar" id="sidebar">
+
   <div class="sidebar-brand">
     <div class="logo">CR</div>
-    <div class="brand-text"><strong>CROWRULES</strong><span>Entertainment Admin</span></div>
+    <div class="brand-text">
+      <strong>CROWRULES</strong>
+      <span>Entertainment Admin</span>
+    </div>
   </div>
 
   <div class="nav-section">Main</div>
@@ -231,106 +1029,514 @@ tbody tr:hover{background:#0e0e0e}
   <a class="nav-link" href="system-health.html"><span class="nav-icon">♥</span>System Health</a>
 
   <div class="schema-note">
-    <b>Shows schema expected by this page</b><br>
-    <code>id, show_key, slug, title, category, show_type, description, initials, destination_url, image_url, is_featured, is_active, sort_order, created_at, updated_at</code>
+    <b>Live Supabase shows schema</b><br>
+    <code>
+      id, show_key, slug, title, category, show_type,
+      description, initials, destination_url, image_url,
+      is_featured, is_active, sort_order, created_at, updated_at
+    </code>
   </div>
+
 </aside>
 
+<!-- MAIN -->
+
 <main class="main">
+
 <header class="topbar">
+
   <div class="page-heading">
-    <button class="menu-btn" id="menuButton" type="button" aria-label="Open menu">☰</button>
-    <div><h1>Shows</h1><p>Manage CrowRules Entertainment programming</p></div>
+
+<button
+  class="menu-btn"
+  id="menuButton"
+  type="button"
+  aria-label="Open menu"
+>☰</button>
+
+<div>
+  <h1>Shows</h1>
+  <p>Manage CrowRules Entertainment programming</p>
+</div>
+
   </div>
+
   <div class="user-area">
-    <div class="user-info"><div class="user-email" id="userEmail">Administrator</div><div class="user-role" id="userRole">ADMIN</div></div>
-    <div class="avatar" id="avatar">CR</div>
-    <button class="logout-btn" id="logoutButton" type="button">SIGN OUT</button>
-  </div>
-</header>
 
-<section class="content">
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Total Shows</div><div class="stat-value" id="statTotal">0</div><div class="stat-note">All records</div></div>
-    <div class="stat"><div class="stat-label">Active</div><div class="stat-value" id="statActive">0</div><div class="stat-note">Currently enabled</div></div>
-    <div class="stat"><div class="stat-label">Inactive</div><div class="stat-value" id="statInactive">0</div><div class="stat-note">Disabled records</div></div>
-    <div class="stat"><div class="stat-label">Live</div><div class="stat-value" id="statLive">0</div><div class="stat-note">Live programming</div></div>
-    <div class="stat"><div class="stat-label">Featured</div><div class="stat-value" id="statFeatured">0</div><div class="stat-note">Featured shows</div></div>
+<div class="user-info">
+  <div class="user-email" id="userEmail">
+    Administrator
   </div>
 
-  <section class="panel">
-    <div class="panel-header">
-      <div><div class="panel-title">SHOW LIBRARY</div><div class="panel-subtitle">Create, edit, activate and manage CrowRules shows.</div></div>
-      <button class="btn btn-primary" id="newShowButton" type="button">+ NEW SHOW</button>
-    </div>
-
-    <div class="toolbar">
-      <div class="search"><input id="searchInput" type="search" placeholder="Search title, slug, category..."></div>
-      <select id="statusFilter" class="control">
-        <option value="all">All Status</option><option value="active">Active</option><option value="inactive">Inactive</option>
-      </select>
-      <select id="categoryFilter" class="control"><option value="all">All Categories</option></select>
-      <button class="btn" id="refreshButton" type="button">REFRESH</button>
-      <button class="btn" id="exportButton" type="button">CSV</button>
-    </div>
-
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Show</th><th>Category</th><th>Type</th><th>Status</th><th>Featured</th><th>Order</th><th>Updated</th><th>Actions</th></tr></thead>
-        <tbody id="showsBody">
-          <tr><td colspan="8"><div class="state"><strong>Loading shows...</strong>Connecting to Supabase.</div></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-</section>
-</main>
-
-<div class="modal-backdrop" id="modalBackdrop">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-header"><div class="modal-title" id="modalTitle">New Show</div><button class="close" id="closeModal" type="button" aria-label="Close">×</button></div>
-    <form id="showForm">
-      <div class="modal-body">
-        <div class="form-grid">
-          <div class="form-field"><label for="showKey">Show Key</label><input id="showKey" type="text" placeholder="tacoma-nights"></div>
-          <div class="form-field"><label for="slug">Slug</label><input id="slug" type="text" placeholder="tacoma-nights"></div>
-          <div class="form-field full"><label for="title">Title *</label><input id="title" type="text" required placeholder="Tacoma Nights"></div>
-          <div class="form-field"><label for="category">Category</label><input id="category" type="text" list="categorySuggestions" placeholder="talk"></div>
-          <datalist id="categorySuggestions"><option value="talk"><option value="live"><option value="documentary"><option value="story"><option value="music"><option value="news"><option value="gaming"><option value="podcast"><option value="original"></datalist>
-          <div class="form-field"><label for="showType">Show Type</label><input id="showType" type="text" placeholder="series"></div>
-          <div class="form-field full"><label for="description">Description</label><textarea id="description" placeholder="Show description..."></textarea></div>
-          <div class="form-field"><label for="initials">Initials</label><input id="initials" type="text" maxlength="8" placeholder="TN"></div>
-          <div class="form-field"><label for="sortOrder">Sort Order</label><input id="sortOrder" type="number" step="1" value="0"></div>
-          <div class="form-field full"><label for="destinationUrl">Destination URL</label><input id="destinationUrl" type="url" placeholder="https://..."></div>
-          <div class="form-field full"><label for="imageUrl">Image URL</label><input id="imageUrl" type="url" placeholder="https://..."></div>
-          <div class="form-field full"><div class="check-row">
-            <label class="check"><input id="isActive" type="checkbox" checked>Active</label>
-            <label class="check"><input id="isFeatured" type="checkbox">Featured</label>
-          </div></div>
-        </div>
-      </div>
-      <div class="modal-footer"><button type="button" class="btn" id="cancelModal">CANCEL</button><button type="submit" class="btn btn-primary" id="saveButton">SAVE SHOW</button></div>
-    </form>
+  <div class="user-role" id="userRole">
+    ADMIN
   </div>
 </div>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="avatar" id="avatar">CR</div>
+
+<button
+  class="logout-btn"
+  id="logoutButton"
+  type="button"
+>
+  SIGN OUT
+</button>
+
+  </div>
+
+</header>
+
+<section class="content">
+
+  <!-- STATS -->
+
+  <div class="stats">
+
+<div class="stat">
+  <div class="stat-label">Total Shows</div>
+  <div class="stat-value" id="statTotal">0</div>
+  <div class="stat-note">All records</div>
+</div>
+
+<div class="stat">
+  <div class="stat-label">Active</div>
+  <div class="stat-value" id="statActive">0</div>
+  <div class="stat-note">Currently enabled</div>
+</div>
+
+<div class="stat">
+  <div class="stat-label">Inactive</div>
+  <div class="stat-value" id="statInactive">0</div>
+  <div class="stat-note">Disabled records</div>
+</div>
+
+<div class="stat">
+  <div class="stat-label">Live</div>
+  <div class="stat-value" id="statLive">0</div>
+  <div class="stat-note">Live programming</div>
+</div>
+
+<div class="stat">
+  <div class="stat-label">Featured</div>
+  <div class="stat-value" id="statFeatured">0</div>
+  <div class="stat-note">Featured shows</div>
+</div>
+
+  </div>
+
+  <!-- LIBRARY -->
+
+  <section class="panel">
+
+<div class="panel-header">
+
+  <div>
+    <div class="panel-title">
+      SHOW LIBRARY
+    </div>
+
+    <div class="panel-subtitle">
+      Create, edit, activate and manage CrowRules shows.
+    </div>
+  </div>
+
+  <button
+    class="btn btn-primary"
+    id="newShowButton"
+    type="button"
+  >
+    + NEW SHOW
+  </button>
+
+</div>
+
+<div class="toolbar">
+
+  <div class="search">
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="Search title, slug, category..."
+      autocomplete="off"
+    >
+  </div>
+
+  <select
+    id="statusFilter"
+    class="control"
+  >
+    <option value="all">All Status</option>
+    <option value="active">Active</option>
+    <option value="inactive">Inactive</option>
+  </select>
+
+  <select
+    id="categoryFilter"
+    class="control"
+  >
+    <option value="all">All Categories</option>
+  </select>
+
+  <button
+    class="btn"
+    id="refreshButton"
+    type="button"
+  >
+    REFRESH
+  </button>
+
+  <button
+    class="btn"
+    id="exportButton"
+    type="button"
+  >
+    CSV
+  </button>
+
+</div>
+
+<div class="table-wrap">
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>Show</th>
+        <th>Category</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Featured</th>
+        <th>Order</th>
+        <th>Updated</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody id="showsBody">
+
+      <tr>
+        <td colspan="8">
+
+          <div class="state">
+            <strong>Loading shows...</strong>
+            Connecting to Supabase.
+          </div>
+
+        </td>
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+
+  </section>
+
+</section>
+
+</main>
+
+<!-- MODAL -->
+
+<div
+  class="modal-backdrop"
+  id="modalBackdrop"
+>
+
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+  >
+
+<div class="modal-header">
+
+  <div
+    class="modal-title"
+    id="modalTitle"
+  >
+    New Show
+  </div>
+
+  <button
+    class="close"
+    id="closeModal"
+    type="button"
+    aria-label="Close"
+  >
+    ×
+  </button>
+
+</div>
+
+<form id="showForm">
+
+  <div class="modal-body">
+
+    <div class="form-grid">
+
+      <div class="form-field">
+        <label for="showKey">
+          Show Key
+        </label>
+
+        <input
+          id="showKey"
+          type="text"
+          maxlength="120"
+          placeholder="tacoma-nights"
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="slug">
+          Slug
+        </label>
+
+        <input
+          id="slug"
+          type="text"
+          maxlength="120"
+          placeholder="tacoma-nights"
+        >
+      </div>
+
+      <div class="form-field full">
+
+        <label for="title">
+          Title *
+        </label>
+
+        <input
+          id="title"
+          type="text"
+          maxlength="200"
+          required
+          placeholder="Tacoma Nights"
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label for="category">
+          Category
+        </label>
+
+        <select
+          id="category"
+        >
+          <option value="talk">Talk</option>
+          <option value="live">Live</option>
+          <option value="documentary">Documentary</option>
+          <option value="story">Story</option>
+          <option value="music">Music</option>
+          <option value="news">News</option>
+          <option value="gaming">Gaming</option>
+          <option value="podcast">Podcast</option>
+          <option value="original">Original</option>
+        </select>
+
+      </div>
+
+      <div class="form-field">
+
+        <label for="showType">
+          Show Type
+        </label>
+
+        <input
+          id="showType"
+          type="text"
+          maxlength="100"
+          placeholder="series"
+        >
+
+      </div>
+
+      <div class="form-field full">
+
+        <label for="description">
+          Description
+        </label>
+
+        <textarea
+          id="description"
+          maxlength="5000"
+          placeholder="Show description..."
+        ></textarea>
+
+      </div>
+
+      <div class="form-field">
+
+        <label for="initials">
+          Initials
+        </label>
+
+        <input
+          id="initials"
+          type="text"
+          maxlength="8"
+          placeholder="TN"
+        >
+
+      </div>
+
+      <div class="form-field">
+
+        <label for="sortOrder">
+          Sort Order
+        </label>
+
+        <input
+          id="sortOrder"
+          type="number"
+          step="1"
+          value="0"
+        >
+
+      </div>
+
+      <div class="form-field full">
+
+        <label for="destinationUrl">
+          Destination URL
+        </label>
+
+        <input
+          id="destinationUrl"
+          type="url"
+          maxlength="2000"
+          placeholder="https://..."
+        >
+
+      </div>
+
+      <div class="form-field full">
+
+        <label for="imageUrl">
+          Image URL
+        </label>
+
+        <input
+          id="imageUrl"
+          type="url"
+          maxlength="2000"
+          placeholder="https://..."
+        >
+
+      </div>
+
+      <div class="form-field full">
+
+        <div class="check-row">
+
+          <label class="check">
+            <input
+              id="isActive"
+              type="checkbox"
+              checked
+            >
+            Active
+          </label>
+
+          <label class="check">
+            <input
+              id="isFeatured"
+              type="checkbox"
+            >
+            Featured
+          </label>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+
+    <button
+      type="button"
+      class="btn"
+      id="cancelModal"
+    >
+      CANCEL
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      id="saveButton"
+    >
+      SAVE SHOW
+    </button>
+
+  </div>
+
+</form>
+
+  </div>
+
+</div>
+
+<div
+  class="toast"
+  id="toast"
+  role="status"
+  aria-live="polite"
+></div>
 
 <script>
 "use strict";
 
 /*
-  CrowRules Shows Admin — Supabase-safe rewrite.
+  CROWRULES ENTERTAINMENT
+  SHOWS ADMIN
+  SUPABASE REWRITE
+
+  DEPLOYED TABLE:
+    public.shows
+
+  DEPLOYED COLUMNS:
+    id
+    show_key
+    slug
+    title
+    category
+    show_type
+    description
+    initials
+    destination_url
+    image_url
+    is_featured
+    is_active
+    sort_order
+    created_at
+    updated_at
 
   IMPORTANT:
-  1. This browser page uses only the publishable/anon key.
-  2. Never place a service_role key in this file.
-  3. Database authorization must be enforced by Supabase RLS.
-  4. This page intentionally does NOT reference is_published.
+  This file intentionally does NOT use:
+    is_published
+
+  Browser authentication:
+    Supabase Auth + publishable key
+
+  Database authorization:
+    Supabase RLS
 */
 
-const SUPABASE_URL = "https://cevylpnoexugwgygvtgu.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
 
 const sb = window.supabase.createClient(
   SUPABASE_URL,
@@ -345,497 +1551,1883 @@ const sb = window.supabase.createClient(
   }
 );
 
-const ADMIN_ROLES = new Set(["admin","super_admin","owner"]);
+/* -------------------------------------------------------
+   CONFIG
+------------------------------------------------------- */
+
+const ADMIN_ROLES = new Set([
+  "admin",
+  "super_admin",
+  "owner"
+]);
+
+const ADMIN_CLAIMS = new Set([
+  "admin",
+  "super_admin",
+  "owner",
+  "true"
+]);
+
 const SHOW_COLUMNS = [
-  "id","show_key","slug","title","category","show_type","description",
-  "initials","destination_url","image_url","is_featured","is_active",
-  "sort_order","created_at","updated_at"
+  "id",
+  "show_key",
+  "slug",
+  "title",
+  "category",
+  "show_type",
+  "description",
+  "initials",
+  "destination_url",
+  "image_url",
+  "is_featured",
+  "is_active",
+  "sort_order",
+  "created_at",
+  "updated_at"
 ];
+
+const ALLOWED_CATEGORIES = [
+  "talk",
+  "live",
+  "documentary",
+  "story",
+  "music",
+  "news",
+  "gaming",
+  "podcast",
+  "original"
+];
+
+/* -------------------------------------------------------
+   STATE
+------------------------------------------------------- */
 
 let authorizedUser = null;
 let allShows = [];
 let editingId = null;
 let toastTimer = null;
 
+/* -------------------------------------------------------
+   DOM
+------------------------------------------------------- */
+
 const $ = id => document.getElementById(id);
-const authLoading = $("authLoading");
-const authLoadingText = $("authLoadingText");
-const showsBody = $("showsBody");
-const modalBackdrop = $("modalBackdrop");
-const showForm = $("showForm");
-const searchInput = $("searchInput");
-const statusFilter = $("statusFilter");
-const categoryFilter = $("categoryFilter");
+
+const authLoading =
+  $("authLoading");
+
+const authLoadingText =
+  $("authLoadingText");
+
+const showsBody =
+  $("showsBody");
+
+const modalBackdrop =
+  $("modalBackdrop");
+
+const showForm =
+  $("showForm");
+
+const searchInput =
+  $("searchInput");
+
+const statusFilter =
+  $("statusFilter");
+
+const categoryFilter =
+  $("categoryFilter");
+
+/* -------------------------------------------------------
+   HELPERS
+------------------------------------------------------- */
 
 function escapeHtml(value){
+
   return String(value ?? "")
-    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function escapeAttribute(value){
+  return escapeHtml(value);
 }
 
 function slugify(value){
-  return String(value || "").toLowerCase().trim()
-    .replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+
+  return String(value || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-+|-+$/g,"")
+    .slice(0,120);
 }
 
 function makeInitials(title){
-  const words = String(title || "").trim().split(/\s+/).filter(Boolean);
-  if(!words.length) return "CR";
-  if(words.length === 1) return words[0].slice(0,2).toUpperCase();
-  return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+
+  const words =
+    String(title || "")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+
+  if(!words.length){
+    return "CR";
+  }
+
+  if(words.length === 1){
+    return words[0]
+      .slice(0,2)
+      .toUpperCase();
+  }
+
+  return (
+    words[0][0] +
+    words[words.length - 1][0]
+  ).toUpperCase();
 }
 
 function formatDate(value){
-  if(!value) return "—";
-  const d = new Date(value);
-  if(Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+
+  if(!value){
+    return "—";
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      year:"numeric",
+      month:"short",
+      day:"numeric"
+    }
+  );
 }
 
-function showToast(message,type=""){
-  const toast = $("toast");
-  toast.textContent = message;
-  toast.className = "toast show " + type;
+function showToast(
+  message,
+  type=""
+){
+
+  const toast =
+    $("toast");
+
+  toast.textContent =
+    message;
+
+  toast.className =
+    "toast show " + type;
+
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.className = "toast",4000);
+
+  toastTimer =
+    setTimeout(
+      () => {
+        toast.className =
+          "toast";
+      },
+      4500
+    );
 }
 
 function errorText(error){
-  const message = String(error?.message || error?.details || error?.hint || error || "Unknown Supabase error.");
-  const lower = message.toLowerCase();
 
-  if(lower.includes("permission denied"))
-    return "Supabase denied access to the shows table. Your authenticated role needs an RLS policy allowing this operation.";
-  if(lower.includes("row-level security"))
-    return "Row Level Security blocked this operation. Verify the CrowRules administrator RLS policies.";
-  if(lower.includes("is_published"))
-    return "The deployed page is using an old shows schema. This rewrite does not use is_published.";
-  if(lower.includes("schema cache") || lower.includes("could not find the"))
-    return "The Supabase schema does not match this page. Verify the shows columns and refresh the API schema.";
-  if(lower.includes("jwt") || lower.includes("session"))
-    return "The administrator session is invalid or expired. Sign in again.";
-  if(lower.includes("duplicate key"))
-    return "A show with that unique key or slug already exists.";
-  if(lower.includes("not-null"))
-    return "A required shows-table column is missing from the submitted data.";
+  const message =
+    String(
+      error?.message ||
+      error?.details ||
+      error?.hint ||
+      error ||
+      "Unknown Supabase error."
+    );
+
+  const lower =
+    message.toLowerCase();
+
+  if(
+    lower.includes(
+      "permission denied"
+    )
+  ){
+    return (
+      "Supabase denied access to " +
+      "public.shows. Verify the authenticated " +
+      "administrator RLS policy."
+    );
+  }
+
+  if(
+    lower.includes(
+      "row-level security"
+    )
+  ){
+    return (
+      "Row Level Security blocked this operation. " +
+      "The signed-in account must have an " +
+      "administrator role in app_metadata."
+    );
+  }
+
+  if(
+    lower.includes(
+      "violates row-level security policy"
+    )
+  ){
+    return (
+      "The CrowRules administrator policy " +
+      "rejected this database operation."
+    );
+  }
+
+  if(
+    lower.includes(
+      "is_published"
+    )
+  ){
+    return (
+      "An old version of the page is still being " +
+      "served. This shows.html does not use is_published."
+    );
+  }
+
+  if(
+    lower.includes(
+      "schema cache"
+    ) ||
+    lower.includes(
+      "could not find the"
+    )
+  ){
+    return (
+      "The browser is seeing a stale or mismatched " +
+      "Supabase schema. Hard-refresh the page."
+    );
+  }
+
+  if(
+    lower.includes(
+      "duplicate key"
+    )
+  ){
+    return (
+      "That show key or slug already exists. " +
+      "Choose a unique value."
+    );
+  }
+
+  if(
+    lower.includes(
+      "check constraint"
+    )
+  ){
+    return (
+      "The selected category is not accepted " +
+      "by the deployed shows schema."
+    );
+  }
+
+  if(
+    lower.includes(
+      "not-null"
+    )
+  ){
+    return (
+      "A required database field was not supplied."
+    );
+  }
+
+  if(
+    lower.includes(
+      "jwt"
+    ) ||
+    lower.includes(
+      "session"
+    )
+  ){
+    return (
+      "The administrator session is invalid or expired. " +
+      "Please sign in again."
+    );
+  }
+
   return message;
 }
 
+/* -------------------------------------------------------
+   AUTHORIZATION
+------------------------------------------------------- */
+
 async function getAuthorizedUser(){
-  authLoadingText.textContent = "Checking your Supabase session...";
 
-  const {data:sessionData,error:sessionError} = await sb.auth.getSession();
-  if(sessionError) throw sessionError;
+  authLoadingText.textContent =
+    "Checking your Supabase session...";
 
-  const session = sessionData?.session || null;
-  if(!session) return null;
+  const {
+    data,
+    error
+  } =
+    await sb.auth.getSession();
 
-  authLoadingText.textContent = "Verifying administrator account...";
+  if(error){
+    throw error;
+  }
 
-  const {data:userData,error:userError} = await sb.auth.getUser();
-  if(userError) throw userError;
+  const session =
+    data?.session || null;
 
-  const user = userData?.user || null;
-  if(!user) return null;
+  if(!session){
+    return null;
+  }
 
-  const role = String(user.app_metadata?.role || "").trim().toLowerCase();
-  const claim = String(user.app_metadata?.crowrules_admin || "").trim().toLowerCase();
+  authLoadingText.textContent =
+    "Verifying administrator account...";
+
+  /*
+    getUser() makes a server-side Auth request.
+    Do not trust a user object read only from
+    browser storage for authorization.
+  */
+
+  const {
+    data:userData,
+    error:userError
+  } =
+    await sb.auth.getUser();
+
+  if(userError){
+    throw userError;
+  }
+
+  const user =
+    userData?.user || null;
+
+  if(!user){
+    return null;
+  }
+
+  const metadata =
+    user.app_metadata || {};
+
+  const role =
+    String(
+      metadata.role || ""
+    )
+      .trim()
+      .toLowerCase();
+
+  const claim =
+    String(
+      metadata.crowrules_admin || ""
+    )
+      .trim()
+      .toLowerCase();
 
   const isAdmin =
     ADMIN_ROLES.has(role) ||
-    ["true","admin","super_admin","owner"].includes(claim);
+    ADMIN_CLAIMS.has(claim);
 
   if(!isAdmin){
+
     throw new Error(
-      "Your account is authenticated but is not an approved CrowRules administrator. " +
-      "Set app_metadata.role to admin, super_admin, or owner."
+      "Your account is authenticated, " +
+      "but it is not an approved CrowRules administrator. " +
+      "The administrator role must be stored in app_metadata."
     );
   }
 
   return {
-    session,user,
-    role:ADMIN_ROLES.has(role) ? role : (claim || "admin")
+    session,
+    user,
+    role:
+      ADMIN_ROLES.has(role)
+        ? role
+        : (
+            ADMIN_ROLES.has(claim)
+              ? claim
+              : "admin"
+          )
   };
 }
 
 function renderUser(){
-  if(!authorizedUser) return;
-  const user = authorizedUser.user;
-  $("userEmail").textContent = user.email || "Administrator";
-  $("userRole").textContent = String(authorizedUser.role).replaceAll("_"," ").toUpperCase();
-  $("avatar").textContent = (user.email || "CR").slice(0,2).toUpperCase();
+
+  if(!authorizedUser){
+    return;
+  }
+
+  const user =
+    authorizedUser.user;
+
+  $("userEmail").textContent =
+    user.email ||
+    "Administrator";
+
+  $("userRole").textContent =
+    String(
+      authorizedUser.role
+    )
+      .replaceAll("_"," ")
+      .toUpperCase();
+
+  $("avatar").textContent =
+    (
+      user.email ||
+      "CR"
+    )
+      .slice(0,2)
+      .toUpperCase();
 }
 
-/*
-  Query only the columns this page actually needs.
-  No legacy is_published field is requested.
-*/
+/* -------------------------------------------------------
+   SHOW DATA
+------------------------------------------------------- */
+
 async function loadShows(){
-  showsBody.innerHTML = `<tr><td colspan="8"><div class="state"><strong>Loading shows...</strong>Querying Supabase.</div></td></tr>`;
 
-  const {data,error} = await sb
-    .from("shows")
-    .select(SHOW_COLUMNS.join(","))
-    .order("sort_order",{ascending:true,nullsFirst:true})
-    .order("created_at",{ascending:false});
+  showsBody.innerHTML = `
+    <tr>
+      <td colspan="8">
+        <div class="state">
+          <strong>Loading shows...</strong>
+          Querying Supabase.
+        </div>
+      </td>
+    </tr>
+  `;
 
-  if(error) throw error;
+  const {
+    data,
+    error
+  } =
+    await sb
+      .from("shows")
+      .select(
+        SHOW_COLUMNS.join(",")
+      )
+      .order(
+        "sort_order",
+        {
+          ascending:true,
+          nullsFirst:true
+        }
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
 
-  allShows = Array.isArray(data) ? data : [];
+  if(error){
+    throw error;
+  }
+
+  allShows =
+    Array.isArray(data)
+      ? data
+      : [];
+
   buildCategoryFilter();
   updateStats();
   renderShows();
 }
 
 function buildCategoryFilter(){
-  const current = categoryFilter.value;
-  const categories = [...new Set(
-    allShows.map(s => String(s.category || "").trim()).filter(Boolean)
-  )].sort((a,b) => a.localeCompare(b));
+
+  const current =
+    categoryFilter.value;
+
+  const categories =
+    new Set();
+
+  ALLOWED_CATEGORIES.forEach(
+    category => categories.add(category)
+  );
+
+  allShows.forEach(show => {
+
+    const category =
+      String(
+        show.category || ""
+      )
+      .trim()
+      .toLowerCase();
+
+    if(category){
+      categories.add(category);
+    }
+  });
+
+  const ordered =
+    [...categories]
+      .sort(
+        (a,b) =>
+          a.localeCompare(b)
+      );
 
   categoryFilter.innerHTML =
-    `<option value="all">All Categories</option>` +
-    categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
+    `
+      <option value="all">
+        All Categories
+      </option>
+    ` +
+    ordered
+      .map(
+        category =>
+          `
+            <option value="${escapeAttribute(category)}">
+              ${escapeHtml(
+                category.charAt(0).toUpperCase() +
+                category.slice(1)
+              )}
+            </option>
+          `
+      )
+      .join("");
 
-  if(categories.includes(current)) categoryFilter.value = current;
+  if(
+    [...categories]
+      .includes(current)
+  ){
+    categoryFilter.value =
+      current;
+  }
 }
 
 function updateStats(){
-  const total = allShows.length;
-  const active = allShows.filter(s => s.is_active === true).length;
-  const live = allShows.filter(s =>
-    String(s.category || "").toLowerCase() === "live" ||
-    String(s.show_type || "").toLowerCase() === "live"
-  ).length;
-  const featured = allShows.filter(s => s.is_featured === true).length;
 
-  $("statTotal").textContent = total;
-  $("statActive").textContent = active;
-  $("statInactive").textContent = total - active;
-  $("statLive").textContent = live;
-  $("statFeatured").textContent = featured;
+  const total =
+    allShows.length;
+
+  const active =
+    allShows.filter(
+      show =>
+        show.is_active === true
+    ).length;
+
+  const live =
+    allShows.filter(
+      show => {
+
+        const category =
+          String(
+            show.category || ""
+          )
+          .toLowerCase();
+
+        const type =
+          String(
+            show.show_type || ""
+          )
+          .toLowerCase();
+
+        return (
+          category === "live" ||
+          type === "live"
+        );
+      }
+    ).length;
+
+  const featured =
+    allShows.filter(
+      show =>
+        show.is_featured === true
+    ).length;
+
+  $("statTotal").textContent =
+    total;
+
+  $("statActive").textContent =
+    active;
+
+  $("statInactive").textContent =
+    total - active;
+
+  $("statLive").textContent =
+    live;
+
+  $("statFeatured").textContent =
+    featured;
 }
 
 function getFilteredShows(){
-  const query = searchInput.value.trim().toLowerCase();
-  const status = statusFilter.value;
-  const category = categoryFilter.value;
 
-  return allShows.filter(show => {
-    const searchable = [
-      show.title,show.slug,show.show_key,show.category,
-      show.show_type,show.description
-    ].filter(Boolean).join(" ").toLowerCase();
+  const query =
+    searchInput.value
+      .trim()
+      .toLowerCase();
 
-    if(query && !searchable.includes(query)) return false;
-    if(status === "active" && show.is_active !== true) return false;
-    if(status === "inactive" && show.is_active === true) return false;
-    if(category !== "all" && String(show.category || "") !== category) return false;
-    return true;
-  });
+  const status =
+    statusFilter.value;
+
+  const category =
+    categoryFilter.value;
+
+  return allShows.filter(
+    show => {
+
+      const searchable = [
+        show.title,
+        show.slug,
+        show.show_key,
+        show.category,
+        show.show_type,
+        show.description
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      if(
+        query &&
+        !searchable.includes(query)
+      ){
+        return false;
+      }
+
+      if(
+        status === "active" &&
+        show.is_active !== true
+      ){
+        return false;
+      }
+
+      if(
+        status === "inactive" &&
+        show.is_active === true
+      ){
+        return false;
+      }
+
+      if(
+        category !== "all" &&
+        String(
+          show.category || ""
+        ) !== category
+      ){
+        return false;
+      }
+
+      return true;
+    }
+  );
 }
 
 function renderShows(){
-  const shows = getFilteredShows();
+
+  const shows =
+    getFilteredShows();
 
   if(!shows.length){
-    showsBody.innerHTML = `<tr><td colspan="8"><div class="state"><strong>No shows found</strong>Try changing your search or filters.</div></td></tr>`;
+
+    showsBody.innerHTML = `
+      <tr>
+        <td colspan="8">
+          <div class="state">
+            <strong>No shows found</strong>
+            Try changing your search or filters.
+          </div>
+        </td>
+      </tr>
+    `;
+
     return;
   }
 
-  showsBody.innerHTML = shows.map(show => {
-    const initials = escapeHtml(show.initials || makeInitials(show.title));
-    const image = show.image_url
-      ? `<img src="${escapeHtml(show.image_url)}" alt="" loading="lazy" onerror="this.remove()">`
-      : "";
+  showsBody.innerHTML =
+    shows
+      .map(
+        show => {
 
-    return `
-      <tr>
-        <td>
-          <div class="show-cell">
-            <div class="show-image">${image || initials}</div>
-            <div>
-              <div class="show-title">${escapeHtml(show.title || "Untitled")}</div>
-              <div class="show-slug">${escapeHtml(show.slug || "No slug")}</div>
-            </div>
-          </div>
-        </td>
-        <td><span class="badge">${escapeHtml(show.category || "—")}</span></td>
-        <td>${escapeHtml(show.show_type || "—")}</td>
-        <td><span class="badge ${show.is_active ? "active":"inactive"}">${show.is_active ? "Active":"Inactive"}</span></td>
-        <td>${show.is_featured ? `<span class="badge featured">Featured</span>` : `<span class="badge">No</span>`}</td>
-        <td>${escapeHtml(show.sort_order ?? 0)}</td>
-        <td>${formatDate(show.updated_at || show.created_at)}</td>
-        <td>
-          <div class="actions">
-            <button class="btn btn-small" type="button" data-action="edit" data-id="${escapeHtml(show.id)}">EDIT</button>
-            <button class="btn btn-small" type="button" data-action="toggle" data-id="${escapeHtml(show.id)}">${show.is_active ? "DISABLE":"ENABLE"}</button>
-            <button class="btn btn-small btn-danger" type="button" data-action="delete" data-id="${escapeHtml(show.id)}">DELETE</button>
-          </div>
-        </td>
-      </tr>`;
-  }).join("");
+          const initials =
+            escapeHtml(
+              show.initials ||
+              makeInitials(
+                show.title
+              )
+            );
+
+          const image =
+            show.image_url
+              ? `
+                <img
+                  src="${escapeAttribute(
+                    show.image_url
+                  )}"
+                  alt=""
+                  loading="lazy"
+                  onerror="this.style.display='none'"
+                >
+              `
+              : "";
+
+          return `
+            <tr>
+
+              <td>
+
+                <div class="show-cell">
+
+                  <div class="show-image">
+                    ${
+                      image ||
+                      initials
+                    }
+                  </div>
+
+                  <div>
+
+                    <div class="show-title">
+                      ${escapeHtml(
+                        show.title ||
+                        "Untitled"
+                      )}
+                    </div>
+
+                    <div class="show-slug">
+                      ${escapeHtml(
+                        show.slug ||
+                        "No slug"
+                      )}
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+              <td>
+                <span class="badge">
+                  ${escapeHtml(
+                    show.category ||
+                    "—"
+                  )}
+                </span>
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  show.show_type ||
+                  "—"
+                )}
+              </td>
+
+              <td>
+
+                <span class="badge ${
+                  show.is_active
+                    ? "active"
+                    : "inactive"
+                }">
+
+                  ${
+                    show.is_active
+                      ? "Active"
+                      : "Inactive"
+                  }
+
+                </span>
+
+              </td>
+
+              <td>
+
+                ${
+                  show.is_featured
+                    ? `
+                      <span class="badge featured">
+                        Featured
+                      </span>
+                    `
+                    : `
+                      <span class="badge">
+                        No
+                      </span>
+                    `
+                }
+
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  show.sort_order ?? 0
+                )}
+              </td>
+
+              <td>
+                ${formatDate(
+                  show.updated_at ||
+                  show.created_at
+                )}
+              </td>
+
+              <td>
+
+                <div class="actions">
+
+                  <button
+                    class="btn btn-small"
+                    type="button"
+                    data-action="edit"
+                    data-id="${escapeAttribute(
+                      show.id
+                    )}"
+                  >
+                    EDIT
+                  </button>
+
+                  <button
+                    class="btn btn-small"
+                    type="button"
+                    data-action="toggle"
+                    data-id="${escapeAttribute(
+                      show.id
+                    )}"
+                  >
+                    ${
+                      show.is_active
+                        ? "DISABLE"
+                        : "ENABLE"
+                    }
+                  </button>
+
+                  <button
+                    class="btn btn-small btn-danger"
+                    type="button"
+                    data-action="delete"
+                    data-id="${escapeAttribute(
+                      show.id
+                    )}"
+                  >
+                    DELETE
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+          `;
+        }
+      )
+      .join("");
 }
 
-function setFormValue(id,value){ $(id).value = value ?? ""; }
+/* -------------------------------------------------------
+   FORM
+------------------------------------------------------- */
 
-function openModal(show=null){
-  editingId = show?.id || null;
-  $("modalTitle").textContent = show ? "Edit Show" : "New Show";
+function setFormValue(
+  id,
+  value
+){
 
-  setFormValue("showKey",show?.show_key);
-  setFormValue("slug",show?.slug);
-  setFormValue("title",show?.title);
-  setFormValue("category",show?.category || "talk");
-  setFormValue("showType",show?.show_type || "series");
-  setFormValue("description",show?.description);
-  setFormValue("initials",show?.initials || makeInitials(show?.title || ""));
-  setFormValue("destinationUrl",show?.destination_url);
-  setFormValue("imageUrl",show?.image_url);
-  setFormValue("sortOrder",show?.sort_order ?? 0);
+  $(id).value =
+    value ?? "";
+}
 
-  $("isFeatured").checked = show?.is_featured === true;
-  $("isActive").checked = show ? show.is_active === true : true;
+function openModal(
+  show = null
+){
 
-  modalBackdrop.classList.add("open");
-  setTimeout(() => $("title").focus(),50);
+  editingId =
+    show?.id ||
+    null;
+
+  $("modalTitle").textContent =
+    show
+      ? "Edit Show"
+      : "New Show";
+
+  setFormValue(
+    "showKey",
+    show?.show_key
+  );
+
+  setFormValue(
+    "slug",
+    show?.slug
+  );
+
+  setFormValue(
+    "title",
+    show?.title
+  );
+
+  const category =
+    String(
+      show?.category ||
+      "talk"
+    )
+    .toLowerCase();
+
+  $("category").value =
+    ALLOWED_CATEGORIES.includes(
+      category
+    )
+      ? category
+      : "talk";
+
+  setFormValue(
+    "showType",
+    show?.show_type ||
+    "series"
+  );
+
+  setFormValue(
+    "description",
+    show?.description
+  );
+
+  setFormValue(
+    "initials",
+    show?.initials ||
+    makeInitials(
+      show?.title ||
+      ""
+    )
+  );
+
+  setFormValue(
+    "destinationUrl",
+    show?.destination_url
+  );
+
+  setFormValue(
+    "imageUrl",
+    show?.image_url
+  );
+
+  setFormValue(
+    "sortOrder",
+    show?.sort_order ??
+    0
+  );
+
+  $("isFeatured").checked =
+    show?.is_featured === true;
+
+  $("isActive").checked =
+    show
+      ? show.is_active === true
+      : true;
+
+  modalBackdrop.classList.add(
+    "open"
+  );
+
+  setTimeout(
+    () =>
+      $("title").focus(),
+    50
+  );
 }
 
 function closeModal(){
-  modalBackdrop.classList.remove("open");
-  editingId = null;
+
+  modalBackdrop.classList.remove(
+    "open"
+  );
+
+  editingId =
+    null;
+
   showForm.reset();
-  $("isActive").checked = true;
-  $("sortOrder").value = 0;
+
+  $("category").value =
+    "talk";
+
+  $("isActive").checked =
+    true;
+
+  $("isFeatured").checked =
+    false;
+
+  $("sortOrder").value =
+    0;
 }
 
 function buildPayload(){
-  const title = $("title").value.trim();
-  if(!title) throw new Error("Show title is required.");
 
-  const slug = $("slug").value.trim() || slugify(title);
-  const showKey = $("showKey").value.trim() || slug;
+  const title =
+    $("title")
+      .value
+      .trim();
 
-  if(!slug) throw new Error("A valid slug is required.");
-  if(!showKey) throw new Error("A valid show key is required.");
+  if(!title){
+    throw new Error(
+      "Show title is required."
+    );
+  }
 
-  const sortValue = Number($("sortOrder").value || 0);
-  if(!Number.isFinite(sortValue)) throw new Error("Sort order must be a number.");
+  const slug =
+    slugify(
+      $("slug").value.trim() ||
+      title
+    );
+
+  const showKey =
+    slugify(
+      $("showKey").value.trim() ||
+      slug
+    );
+
+  if(!slug){
+    throw new Error(
+      "A valid slug is required."
+    );
+  }
+
+  if(!showKey){
+    throw new Error(
+      "A valid show key is required."
+    );
+  }
+
+  const category =
+    String(
+      $("category").value ||
+      "talk"
+    )
+    .trim()
+    .toLowerCase();
+
+  if(
+    !ALLOWED_CATEGORIES.includes(
+      category
+    )
+  ){
+    throw new Error(
+      "Invalid show category."
+    );
+  }
+
+  const sortValue =
+    Number(
+      $("sortOrder").value ||
+      0
+    );
+
+  if(
+    !Number.isFinite(
+      sortValue
+    )
+  ){
+    throw new Error(
+      "Sort order must be a number."
+    );
+  }
 
   return {
-    show_key:showKey,
-    slug,
-    title,
-    category:$("category").value.trim() || null,
-    show_type:$("showType").value.trim() || null,
-    description:$("description").value.trim() || null,
-    initials:($("initials").value.trim() || makeInitials(title)).slice(0,8),
-    destination_url:$("destinationUrl").value.trim() || null,
-    image_url:$("imageUrl").value.trim() || null,
-    is_featured:$("isFeatured").checked,
-    is_active:$("isActive").checked,
-    sort_order:Math.trunc(sortValue)
+
+    show_key:
+      showKey,
+
+    slug:
+      slug,
+
+    title:
+      title,
+
+    category:
+      category,
+
+    show_type:
+      $("showType")
+        .value
+        .trim() ||
+      null,
+
+    description:
+      $("description")
+        .value
+        .trim() ||
+      null,
+
+    initials:
+      (
+        $("initials")
+          .value
+          .trim() ||
+        makeInitials(title)
+      )
+      .slice(0,8),
+
+    destination_url:
+      $("destinationUrl")
+        .value
+        .trim() ||
+      null,
+
+    image_url:
+      $("imageUrl")
+        .value
+        .trim() ||
+      null,
+
+    is_featured:
+      $("isFeatured")
+        .checked,
+
+    is_active:
+      $("isActive")
+        .checked,
+
+    sort_order:
+      Math.trunc(
+        sortValue
+      )
   };
 }
 
-async function saveShow(event){
+/* -------------------------------------------------------
+   SAVE
+------------------------------------------------------- */
+
+async function saveShow(
+  event
+){
+
   event.preventDefault();
 
-  const saveButton = $("saveButton");
-  saveButton.disabled = true;
-  saveButton.textContent = "SAVING...";
+  const saveButton =
+    $("saveButton");
+
+  saveButton.disabled =
+    true;
+
+  saveButton.textContent =
+    "SAVING...";
 
   try{
-    const payload = buildPayload();
+
+    /*
+      Refresh the session before a
+      sensitive database mutation.
+    */
+
+    const {
+      data,
+      error
+    } =
+      await sb.auth.getSession();
+
+    if(error){
+      throw error;
+    }
+
+    if(!data?.session){
+
+      window.location.replace(
+        "login.html"
+      );
+
+      return;
+    }
+
+    const payload =
+      buildPayload();
 
     if(editingId){
-      const {error} = await sb
-        .from("shows")
-        .update({...payload,updated_at:new Date().toISOString()})
-        .eq("id",editingId);
 
-      if(error) throw error;
-      showToast("Show updated successfully.","success");
+      const {
+        error:updateError
+      } =
+        await sb
+          .from("shows")
+          .update({
+            ...payload,
+            updated_at:
+              new Date()
+                .toISOString()
+          })
+          .eq(
+            "id",
+            editingId
+          );
+
+      if(updateError){
+        throw updateError;
+      }
+
+      showToast(
+        "Show updated successfully.",
+        "success"
+      );
+
     }else{
-      const {error} = await sb.from("shows").insert(payload);
-      if(error) throw error;
-      showToast("Show created successfully.","success");
+
+      const {
+        error:insertError
+      } =
+        await sb
+          .from("shows")
+          .insert(
+            payload
+          );
+
+      if(insertError){
+        throw insertError;
+      }
+
+      showToast(
+        "Show created successfully.",
+        "success"
+      );
     }
 
     closeModal();
+
     await loadShows();
+
   }catch(error){
-    console.error("Saving show failed:",error);
-    showToast("Saving show failed: " + errorText(error),"error");
+
+    console.error(
+      "Saving show failed:",
+      error
+    );
+
+    showToast(
+      "Saving show failed: " +
+      errorText(error),
+      "error"
+    );
+
   }finally{
-    saveButton.disabled = false;
-    saveButton.textContent = "SAVE SHOW";
+
+    saveButton.disabled =
+      false;
+
+    saveButton.textContent =
+      "SAVE SHOW";
   }
 }
 
+/* -------------------------------------------------------
+   ACTIONS
+------------------------------------------------------- */
+
 function findShow(id){
-  return allShows.find(show => String(show.id) === String(id));
+
+  return allShows.find(
+    show =>
+      String(show.id) ===
+      String(id)
+  );
 }
 
 function editShow(id){
-  const show = findShow(id);
-  if(!show){ showToast("Show could not be found.","error"); return; }
+
+  const show =
+    findShow(id);
+
+  if(!show){
+
+    showToast(
+      "Show could not be found.",
+      "error"
+    );
+
+    return;
+  }
+
   openModal(show);
 }
 
 async function toggleShow(id){
-  const show = findShow(id);
-  if(!show) return;
+
+  const show =
+    findShow(id);
+
+  if(!show){
+    return;
+  }
 
   try{
-    const {error} = await sb
-      .from("shows")
-      .update({is_active:!Boolean(show.is_active),updated_at:new Date().toISOString()})
-      .eq("id",id);
 
-    if(error) throw error;
-    showToast(show.is_active ? "Show disabled.":"Show activated.","success");
+    const {
+      error
+    } =
+      await sb
+        .from("shows")
+        .update({
+          is_active:
+            !Boolean(
+              show.is_active
+            ),
+          updated_at:
+            new Date()
+              .toISOString()
+        })
+        .eq(
+          "id",
+          id
+        );
+
+    if(error){
+      throw error;
+    }
+
+    showToast(
+      show.is_active
+        ? "Show disabled."
+        : "Show activated.",
+      "success"
+    );
+
     await loadShows();
+
   }catch(error){
-    console.error("Toggle show failed:",error);
-    showToast("Unable to change show status: " + errorText(error),"error");
+
+    console.error(
+      "Toggle show failed:",
+      error
+    );
+
+    showToast(
+      "Unable to change show status: " +
+      errorText(error),
+      "error"
+    );
   }
 }
 
 async function deleteShow(id){
-  const show = findShow(id);
-  if(!show) return;
 
-  if(!window.confirm(`Delete "${show.title}"?\n\nThis action cannot be undone.`)) return;
+  const show =
+    findShow(id);
+
+  if(!show){
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      `Delete "${show.title}"?\n\n` +
+      "This action cannot be undone."
+    );
+
+  if(!confirmed){
+    return;
+  }
 
   try{
-    const {error} = await sb.from("shows").delete().eq("id",id);
-    if(error) throw error;
-    showToast("Show deleted.","success");
+
+    const {
+      error
+    } =
+      await sb
+        .from("shows")
+        .delete()
+        .eq(
+          "id",
+          id
+        );
+
+    if(error){
+      throw error;
+    }
+
+    showToast(
+      "Show deleted.",
+      "success"
+    );
+
     await loadShows();
+
   }catch(error){
-    console.error("Delete show failed:",error);
-    showToast("Delete failed: " + errorText(error),"error");
+
+    console.error(
+      "Delete show failed:",
+      error
+    );
+
+    showToast(
+      "Delete failed: " +
+      errorText(error),
+      "error"
+    );
   }
 }
 
-showsBody.addEventListener("click",event => {
-  const button = event.target.closest("button[data-action]");
-  if(!button) return;
-  const id = button.dataset.id;
-  if(button.dataset.action === "edit") editShow(id);
-  if(button.dataset.action === "toggle") toggleShow(id);
-  if(button.dataset.action === "delete") deleteShow(id);
-});
+/* -------------------------------------------------------
+   TABLE ACTIONS
+------------------------------------------------------- */
 
-function csvEscape(value){
-  return '"' + String(value ?? "").replaceAll('"','""') + '"';
-}
+showsBody.addEventListener(
+  "click",
+  event => {
 
-function exportCsv(){
-  const shows = getFilteredShows();
-  if(!shows.length){ showToast("There are no shows to export.","error"); return; }
+    const button =
+      event.target.closest(
+        "button[data-action]"
+      );
 
-  const rows = [SHOW_COLUMNS.join(",")];
-  for(const show of shows){
-    rows.push(SHOW_COLUMNS.map(column => csvEscape(show[column])).join(","));
-  }
-
-  const blob = new Blob([rows.join("\r\n")],{type:"text/csv;charset=utf-8;"});
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "crowrules-shows-" + new Date().toISOString().slice(0,10) + ".csv";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-}
-
-function openSidebar(){
-  $("sidebar").classList.add("open");
-  $("sidebarOverlay").classList.add("open");
-}
-function closeSidebar(){
-  $("sidebar").classList.remove("open");
-  $("sidebarOverlay").classList.remove("open");
-}
-
-$("menuButton").addEventListener("click",openSidebar);
-$("sidebarOverlay").addEventListener("click",closeSidebar);
-$("newShowButton").addEventListener("click",() => openModal());
-$("closeModal").addEventListener("click",closeModal);
-$("cancelModal").addEventListener("click",closeModal);
-modalBackdrop.addEventListener("click",e => { if(e.target === modalBackdrop) closeModal(); });
-showForm.addEventListener("submit",saveShow);
-
-$("title").addEventListener("input",() => {
-  if(editingId) return;
-  const title = $("title").value;
-  $("slug").value = slugify(title);
-  $("showKey").value = slugify(title);
-  $("initials").value = makeInitials(title);
-});
-
-searchInput.addEventListener("input",renderShows);
-statusFilter.addEventListener("change",renderShows);
-categoryFilter.addEventListener("change",renderShows);
-
-$("refreshButton").addEventListener("click",async () => {
-  try{ await loadShows(); showToast("Shows refreshed.","success"); }
-  catch(error){ console.error(error); showToast(errorText(error),"error"); }
-});
-
-$("exportButton").addEventListener("click",exportCsv);
-
-$("logoutButton").addEventListener("click",async () => {
-  try{
-    const {error} = await sb.auth.signOut();
-    if(error) throw error;
-    window.location.replace("login.html");
-  }catch(error){
-    console.error("Sign out failed:",error);
-    showToast("Sign out failed: " + errorText(error),"error");
-  }
-});
-
-document.addEventListener("keydown",event => {
-  if(event.key !== "Escape") return;
-  if(modalBackdrop.classList.contains("open")) closeModal();
-  closeSidebar();
-});
-
-sb.auth.onAuthStateChange((event) => {
-  console.log("CrowRules auth event:",event);
-  if(event === "SIGNED_OUT"){
-    authorizedUser = null;
-    window.location.replace("login.html");
-  }
-});
-
-async function init(){
-  try{
-    const auth = await getAuthorizedUser();
-
-    if(!auth){
-      authLoadingText.textContent = "No active session. Returning to login...";
-      setTimeout(() => window.location.replace("login.html"),700);
+    if(!button){
       return;
     }
 
-    authorizedUser = auth;
+    const id =
+      button.dataset.id;
+
+    const action =
+      button.dataset.action;
+
+    if(action === "edit"){
+      editShow(id);
+    }
+
+    if(action === "toggle"){
+      toggleShow(id);
+    }
+
+    if(action === "delete"){
+      deleteShow(id);
+    }
+  }
+);
+
+/* -------------------------------------------------------
+   CSV
+------------------------------------------------------- */
+
+function csvEscape(value){
+
+  return (
+    '"' +
+    String(
+      value ?? ""
+    )
+      .replaceAll(
+        '"',
+        '""'
+      ) +
+    '"'
+  );
+}
+
+function exportCsv(){
+
+  const shows =
+    getFilteredShows();
+
+  if(!shows.length){
+
+    showToast(
+      "There are no shows to export.",
+      "error"
+    );
+
+    return;
+  }
+
+  const rows = [
+    SHOW_COLUMNS.join(",")
+  ];
+
+  for(
+    const show of shows
+  ){
+
+    rows.push(
+      SHOW_COLUMNS
+        .map(
+          column =>
+            csvEscape(
+              show[column]
+            )
+        )
+        .join(",")
+    );
+  }
+
+  const blob =
+    new Blob(
+      [
+        rows.join(
+          "\r\n"
+        )
+      ],
+      {
+        type:
+          "text/csv;charset=utf-8;"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+  const link =
+    document.createElement(
+      "a"
+    );
+
+  link.href =
+    url;
+
+  link.download =
+    "crowrules-shows-" +
+    new Date()
+      .toISOString()
+      .slice(0,10) +
+    ".csv";
+
+  document.body.appendChild(
+    link
+  );
+
+  link.click();
+
+  link.remove();
+
+  URL.revokeObjectURL(
+    url
+  );
+}
+
+/* -------------------------------------------------------
+   MOBILE MENU
+------------------------------------------------------- */
+
+function openSidebar(){
+
+  $("sidebar")
+    .classList.add(
+      "open"
+    );
+
+  $("sidebarOverlay")
+    .classList.add(
+      "open"
+    );
+}
+
+function closeSidebar(){
+
+  $("sidebar")
+    .classList.remove(
+      "open"
+    );
+
+  $("sidebarOverlay")
+    .classList.remove(
+      "open"
+    );
+}
+
+/* -------------------------------------------------------
+   EVENTS
+------------------------------------------------------- */
+
+$("menuButton")
+  .addEventListener(
+    "click",
+    openSidebar
+  );
+
+$("sidebarOverlay")
+  .addEventListener(
+    "click",
+    closeSidebar
+  );
+
+$("newShowButton")
+  .addEventListener(
+    "click",
+    () =>
+      openModal()
+  );
+
+$("closeModal")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+$("cancelModal")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+modalBackdrop
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target ===
+        modalBackdrop
+      ){
+        closeModal();
+      }
+    }
+  );
+
+showForm
+  .addEventListener(
+    "submit",
+    saveShow
+  );
+
+/*
+  Automatically generate slug,
+  show key and initials for new shows.
+*/
+
+$("title")
+  .addEventListener(
+    "input",
+    () => {
+
+      if(editingId){
+        return;
+      }
+
+      const title =
+        $("title")
+          .value;
+
+      const slug =
+        slugify(title);
+
+      $("slug").value =
+        slug;
+
+      $("showKey").value =
+        slug;
+
+      $("initials").value =
+        makeInitials(
+          title
+        );
+    }
+  );
+
+searchInput
+  .addEventListener(
+    "input",
+    renderShows
+  );
+
+statusFilter
+  .addEventListener(
+    "change",
+    renderShows
+  );
+
+categoryFilter
+  .addEventListener(
+    "change",
+    renderShows
+  );
+
+$("refreshButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      try{
+
+        await loadShows();
+
+        showToast(
+          "Shows refreshed.",
+          "success"
+        );
+
+      }catch(error){
+
+        console.error(
+          error
+        );
+
+        showToast(
+          errorText(error),
+          "error"
+        );
+      }
+    }
+  );
+
+$("exportButton")
+  .addEventListener(
+    "click",
+    exportCsv
+  );
+
+/* -------------------------------------------------------
+   LOGOUT
+------------------------------------------------------- */
+
+$("logoutButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      try{
+
+        const {
+          error
+        } =
+          await sb.auth.signOut();
+
+        if(error){
+          throw error;
+        }
+
+        window.location.replace(
+          "login.html"
+        );
+
+      }catch(error){
+
+        console.error(
+          "Sign out failed:",
+          error
+        );
+
+        showToast(
+          "Sign out failed: " +
+          errorText(error),
+          "error"
+        );
+      }
+    }
+  );
+
+/* -------------------------------------------------------
+   KEYBOARD
+------------------------------------------------------- */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key !==
+      "Escape"
+    ){
+      return;
+    }
+
+    if(
+      modalBackdrop
+        .classList
+        .contains("open")
+    ){
+      closeModal();
+    }
+
+    closeSidebar();
+  }
+);
+
+/* -------------------------------------------------------
+   AUTH STATE
+------------------------------------------------------- */
+
+const {
+  data:authListener
+} =
+  sb.auth.onAuthStateChange(
+    (event) => {
+
+      console.log(
+        "CrowRules auth event:",
+        event
+      );
+
+      if(
+        event ===
+        "SIGNED_OUT"
+      ){
+
+        authorizedUser =
+          null;
+
+        window.location.replace(
+          "login.html"
+        );
+      }
+    }
+  );
+
+/* -------------------------------------------------------
+   INIT
+------------------------------------------------------- */
+
+async function init(){
+
+  try{
+
+    const auth =
+      await getAuthorizedUser();
+
+    if(!auth){
+
+      authLoadingText.textContent =
+        "No active session. Returning to login...";
+
+      setTimeout(
+        () =>
+          window.location.replace(
+            "login.html"
+          ),
+        700
+      );
+
+      return;
+    }
+
+    authorizedUser =
+      auth;
+
     renderUser();
-    authLoadingText.textContent = "Loading CrowRules administration...";
+
+    authLoadingText.textContent =
+      "Loading CrowRules administration...";
+
     await loadShows();
-    authLoading.classList.add("hidden");
+
+    authLoading.classList.add(
+      "hidden"
+    );
+
   }catch(error){
-    console.error("CrowRules admin initialization failed:",error);
-    authLoadingText.textContent = errorText(error);
-    setTimeout(() => window.location.replace("login.html"),3000);
+
+    console.error(
+      "CrowRules admin initialization failed:",
+      error
+    );
+
+    authLoadingText.textContent =
+      errorText(error);
+
+    setTimeout(
+      () =>
+        window.location.replace(
+          "login.html"
+        ),
+      3000
+    );
   }
 }
 
 init();
+
 </script>
+
 </body>
 </html>
