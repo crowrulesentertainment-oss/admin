@@ -6,30 +6,36 @@
 
 <title>Artists — CrowRules Entertainment Admin</title>
 <meta name="theme-color" content="#050505">
-<meta name="description" content="CrowRules Entertainment Main Admin — Artist Command Center">
+<meta name="description" content="CrowRules Entertainment Admin — Artists Management">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root{
   --bg:#050505;
-  --panel:#0d0d11;
-  --panel2:#111117;
-  --panel3:#15151c;
-  --line:#27272f;
-  --line2:#383842;
-  --text:#f5f5f7;
-  --muted:#8d8d98;
-  --accent:#b66cff;
-  --accent2:#6c5cff;
-  --cyan:#37d7ff;
-  --green:#45e69a;
-  --yellow:#f3c969;
-  --red:#ff526d;
-  --orange:#ff8a4c;
-  --shadow:0 20px 60px rgba(0,0,0,.42);
+  --bg2:#090909;
+  --panel:#0d0d0d;
+  --panel2:#111111;
+  --panel3:#151515;
+  --border:#252525;
+  --border2:#343434;
+  --text:#f5f5f5;
+  --muted:#999;
+  --muted2:#666;
+  --red:#e50914;
+  --red2:#ff2633;
+  --red-dark:#6f080e;
+  --green:#22c55e;
+  --yellow:#f5b942;
+  --blue:#4da3ff;
+  --sidebar:280px;
+  --topbar:70px;
+  --radius:12px;
+  --shadow:0 20px 60px rgba(0,0,0,.45);
 }
 
 *{
@@ -37,18 +43,20 @@
 }
 
 html{
-  scroll-behavior:smooth;
+  min-height:100%;
+  background:var(--bg);
 }
 
 body{
   margin:0;
+  min-height:100vh;
   background:
-    radial-gradient(circle at 80% 0%,rgba(182,108,255,.08),transparent 28%),
-    radial-gradient(circle at 15% 25%,rgba(55,215,255,.045),transparent 25%),
-    var(--bg);
+    radial-gradient(circle at 15% 0%,rgba(229,9,20,.10),transparent 28%),
+    radial-gradient(circle at 100% 20%,rgba(229,9,20,.06),transparent 25%),
+    linear-gradient(135deg,#030303,#090909 50%,#050505);
   color:var(--text);
   font-family:Montserrat,Arial,sans-serif;
-  min-height:100vh;
+  overflow-x:hidden;
 }
 
 body:before{
@@ -56,12 +64,17 @@ body:before{
   position:fixed;
   inset:0;
   pointer-events:none;
-  opacity:.035;
+  opacity:.025;
   background-image:
-    linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px);
-  background-size:42px 42px;
-  mask-image:linear-gradient(to bottom,black,transparent 80%);
+    linear-gradient(rgba(255,255,255,.7) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.7) 1px,transparent 1px);
+  background-size:45px 45px;
+  mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
 }
 
 button,
@@ -75,888 +88,829 @@ button{
   cursor:pointer;
 }
 
-a{
-  color:inherit;
-  text-decoration:none;
+.hidden{
+  display:none!important;
 }
 
-/* =========================
-   APP SHELL
-========================= */
-
-.app{
-  display:flex;
-  min-height:100vh;
-}
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .sidebar{
-  width:270px;
   position:fixed;
   left:0;
   top:0;
   bottom:0;
-  z-index:50;
-  overflow-y:auto;
+  width:var(--sidebar);
   background:
-    linear-gradient(180deg,rgba(255,255,255,.025),transparent 30%),
-    #08080b;
-  border-right:1px solid var(--line);
-  padding:20px 14px;
+    linear-gradient(180deg,#080808 0%,#050505 100%);
+  border-right:1px solid var(--border);
+  z-index:1000;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
 }
 
 .brand{
+  height:var(--topbar);
   display:flex;
   align-items:center;
   gap:12px;
-  padding:6px 10px 22px;
-  border-bottom:1px solid var(--line);
-  margin-bottom:18px;
+  padding:0 20px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
 }
 
-.logo{
-  width:42px;
-  height:42px;
+.brand-mark{
+  width:38px;
+  height:38px;
   display:grid;
   place-items:center;
-  border:1px solid rgba(182,108,255,.65);
-  background:linear-gradient(135deg,#181020,#0d0d12);
-  box-shadow:0 0 30px rgba(182,108,255,.12);
+  border:1px solid rgba(229,9,20,.7);
+  background:rgba(229,9,20,.08);
+  color:var(--red);
   font-family:Orbitron,sans-serif;
   font-weight:800;
-  color:var(--accent);
-  letter-spacing:-2px;
-}
-
-.brand strong{
-  display:block;
-  font-family:Orbitron,sans-serif;
   font-size:15px;
-  letter-spacing:1px;
+  box-shadow:0 0 22px rgba(229,9,20,.13);
 }
 
-.brand span{
-  display:block;
-  margin-top:3px;
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:1.8px;
-  text-transform:uppercase;
-}
-
-.nav-title{
-  color:#666671;
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  padding:14px 10px 7px;
-}
-
-.nav{
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-}
-
-.nav a{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-height:40px;
-  padding:9px 11px;
-  border:1px solid transparent;
-  color:#aaaab4;
-  font-size:12px;
-  border-radius:7px;
-  transition:.18s ease;
-}
-
-.nav a:hover{
-  background:#111117;
-  color:#fff;
-  border-color:#252530;
-}
-
-.nav a.active{
-  background:
-    linear-gradient(90deg,rgba(182,108,255,.16),rgba(108,92,255,.05));
-  color:#fff;
-  border-color:rgba(182,108,255,.32);
-  box-shadow:inset 3px 0 0 var(--accent);
-}
-
-.nav-icon{
-  width:18px;
-  text-align:center;
-  opacity:.85;
-}
-
-.sidebar-footer{
-  margin-top:20px;
-  padding:13px 10px;
-  border-top:1px solid var(--line);
-  color:#676773;
-  font-size:9px;
-  line-height:1.6;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.main{
-  width:calc(100% - 270px);
-  margin-left:270px;
+.brand-copy{
   min-width:0;
 }
 
+.brand-title{
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:1px;
+  white-space:nowrap;
+}
+
+.brand-sub{
+  color:var(--muted2);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin-top:3px;
+}
+
+.nav-scroll{
+  flex:1;
+  overflow:auto;
+  padding:14px 10px 20px;
+}
+
+.nav-section{
+  margin:15px 10px 7px;
+  color:#555;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:1.7px;
+}
+
+.nav-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  width:100%;
+  padding:10px 12px;
+  margin:2px 0;
+  color:#aaa;
+  border:1px solid transparent;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:600;
+  transition:.18s ease;
+}
+
+.nav-item:hover{
+  color:#fff;
+  background:#101010;
+  border-color:#202020;
+}
+
+.nav-item.active{
+  color:#fff;
+  background:
+    linear-gradient(90deg,rgba(229,9,20,.17),rgba(229,9,20,.035));
+  border-color:rgba(229,9,20,.32);
+}
+
+.nav-item.active:before{
+  content:"";
+  position:absolute;
+  left:-10px;
+  top:8px;
+  bottom:8px;
+  width:3px;
+  background:var(--red);
+  box-shadow:0 0 12px rgba(229,9,20,.75);
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+  color:#777;
+  font-size:14px;
+}
+
+.nav-item.active .nav-icon{
+  color:var(--red2);
+}
+
+.sidebar-footer{
+  border-top:1px solid var(--border);
+  padding:12px;
+  flex-shrink:0;
+}
+
+.admin-user{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px;
+  border:1px solid var(--border);
+  background:#0b0b0b;
+  border-radius:9px;
+}
+
+.avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#35070a,#e50914);
+  display:grid;
+  place-items:center;
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  font-weight:800;
+}
+
+.user-info{
+  min-width:0;
+  flex:1;
+}
+
+.user-name{
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.user-role{
+  font-size:9px;
+  color:var(--red2);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-top:2px;
+}
+
+.signout-mini{
+  border:0;
+  background:none;
+  color:#777;
+  padding:5px;
+  font-size:15px;
+}
+
+.signout-mini:hover{
+  color:#fff;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+  margin-left:var(--sidebar);
+  min-height:100vh;
+}
+
 .topbar{
-  height:68px;
+  height:var(--topbar);
   position:sticky;
   top:0;
-  z-index:30;
+  z-index:900;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 28px;
-  background:rgba(5,5,5,.86);
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--line);
+  padding:0 26px;
+  background:rgba(5,5,5,.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
 }
 
-.topbar-left{
+.top-left{
   display:flex;
   align-items:center;
   gap:14px;
 }
 
-.menu-btn{
+.mobile-menu{
   display:none;
-  width:40px;
-  height:40px;
-  background:#111117;
-  border:1px solid var(--line);
+  border:1px solid var(--border);
+  background:#0d0d0d;
   color:#fff;
-  border-radius:7px;
+  width:38px;
+  height:38px;
+  border-radius:8px;
 }
 
-.crumb{
-  color:var(--muted);
+.page-location{
+  color:#777;
   font-size:11px;
 }
 
-.crumb b{
+.page-location strong{
   color:#fff;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.db-status{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 10px;
+  border:1px solid var(--border);
+  border-radius:7px;
+  color:#aaa;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.7px;
 }
 
 .status-dot{
   width:7px;
   height:7px;
   border-radius:50%;
+  background:#777;
+}
+
+.status-dot.online{
   background:var(--green);
-  box-shadow:0 0 12px var(--green);
+  box-shadow:0 0 10px rgba(34,197,94,.7);
 }
 
-.clock{
-  font-family:Orbitron,sans-serif;
-  font-size:10px;
-  color:#9f9fa9;
-  letter-spacing:1px;
+.status-dot.error{
+  background:var(--red);
+  box-shadow:0 0 10px rgba(229,9,20,.7);
 }
-
-/* =========================
-   CONTENT
-========================= */
 
 .content{
-  padding:30px;
+  padding:28px;
   max-width:1800px;
   margin:auto;
 }
 
+/* =========================================================
+   HERO
+========================================================= */
+
 .hero{
   position:relative;
   overflow:hidden;
-  padding:30px;
-  border:1px solid var(--line);
+  min-height:190px;
+  padding:28px;
+  border:1px solid var(--border);
+  border-radius:16px;
   background:
-    radial-gradient(circle at 90% 10%,rgba(182,108,255,.12),transparent 28%),
-    linear-gradient(135deg,#101016,#0a0a0d);
+    radial-gradient(circle at 90% 50%,rgba(229,9,20,.15),transparent 30%),
+    linear-gradient(135deg,#0d0d0d,#080808);
   box-shadow:var(--shadow);
 }
 
 .hero:after{
   content:"ARTISTS";
   position:absolute;
-  right:-15px;
-  bottom:-38px;
+  right:25px;
+  bottom:-20px;
   font-family:Orbitron,sans-serif;
-  font-size:105px;
+  font-size:100px;
   font-weight:800;
-  letter-spacing:-8px;
   color:rgba(255,255,255,.018);
+  letter-spacing:8px;
   pointer-events:none;
 }
 
-.eyebrow{
-  color:var(--accent);
+.hero-label{
+  color:var(--red2);
+  font-family:Orbitron,sans-serif;
   font-size:10px;
-  font-weight:800;
-  letter-spacing:2.5px;
+  font-weight:700;
+  letter-spacing:2px;
   text-transform:uppercase;
-  margin-bottom:9px;
+  margin-bottom:10px;
 }
 
 .hero h1{
   margin:0;
   font-family:Orbitron,sans-serif;
-  font-size:clamp(27px,4vw,46px);
-  line-height:1.05;
-  letter-spacing:-1px;
+  font-size:clamp(25px,4vw,42px);
+  letter-spacing:1px;
 }
 
 .hero p{
-  max-width:700px;
-  color:var(--muted);
+  max-width:760px;
+  color:#999;
   font-size:13px;
   line-height:1.7;
-  margin:14px 0 0;
+  margin:12px 0 0;
 }
 
 .hero-actions{
+  position:absolute;
+  right:28px;
+  top:28px;
   display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-  margin-top:22px;
+  gap:8px;
+  z-index:2;
 }
 
+/* =========================================================
+   BUTTONS
+========================================================= */
+
 .btn{
-  border:1px solid var(--line2);
-  background:#111117;
-  color:#eee;
-  padding:11px 15px;
-  border-radius:6px;
+  border:1px solid var(--border2);
+  background:#111;
+  color:#ddd;
+  border-radius:8px;
+  padding:10px 14px;
   font-size:11px;
-  font-weight:800;
-  letter-spacing:.4px;
+  font-weight:700;
   transition:.18s ease;
 }
 
 .btn:hover{
-  transform:translateY(-1px);
-  border-color:#565660;
-}
-
-.btn.primary{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  border-color:transparent;
+  background:#171717;
+  border-color:#444;
   color:#fff;
-  box-shadow:0 8px 25px rgba(108,92,255,.2);
 }
 
-.btn.cyan{
-  border-color:rgba(55,215,255,.3);
-  color:var(--cyan);
+.btn-primary{
+  background:var(--red);
+  border-color:var(--red);
+  color:#fff;
+  box-shadow:0 0 20px rgba(229,9,20,.18);
 }
 
-.btn.danger{
-  border-color:rgba(255,82,109,.3);
-  color:var(--red);
+.btn-primary:hover{
+  background:var(--red2);
+  border-color:var(--red2);
 }
 
-/* =========================
+.btn-danger{
+  color:#ff6b73;
+  border-color:#57161a;
+}
+
+.btn-danger:hover{
+  background:#26090b;
+}
+
+.btn-sm{
+  padding:7px 10px;
+  font-size:10px;
+}
+
+/* =========================================================
    STATS
-========================= */
+========================================================= */
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(5,minmax(0,1fr));
   gap:12px;
-  margin-top:16px;
+  margin-top:18px;
 }
 
 .stat{
+  min-height:105px;
+  border:1px solid var(--border);
+  background:linear-gradient(135deg,#0d0d0d,#090909);
+  border-radius:12px;
+  padding:16px;
   position:relative;
-  padding:19px;
-  min-height:110px;
-  border:1px solid var(--line);
-  background:linear-gradient(145deg,#0f0f14,#0a0a0d);
+  overflow:hidden;
+}
+
+.stat:after{
+  content:"";
+  position:absolute;
+  width:80px;
+  height:80px;
+  right:-30px;
+  bottom:-30px;
+  border-radius:50%;
+  border:1px solid rgba(229,9,20,.16);
 }
 
 .stat-label{
-  color:#777783;
+  color:#777;
   font-size:9px;
-  font-weight:800;
-  letter-spacing:1.5px;
   text-transform:uppercase;
+  letter-spacing:1.3px;
+  font-weight:700;
 }
 
 .stat-value{
   margin-top:10px;
   font-family:Orbitron,sans-serif;
   font-size:27px;
-  font-weight:700;
+  font-weight:800;
 }
 
 .stat-meta{
-  margin-top:7px;
-  color:#686873;
+  color:#666;
   font-size:9px;
+  margin-top:4px;
 }
 
-.stat-accent{
-  position:absolute;
-  right:0;
-  top:0;
-  bottom:0;
-  width:3px;
-  background:var(--accent);
+/* =========================================================
+   PANELS
+========================================================= */
+
+.panel{
+  margin-top:18px;
+  border:1px solid var(--border);
+  background:rgba(10,10,10,.92);
+  border-radius:14px;
+  overflow:hidden;
 }
 
-.stat:nth-child(2) .stat-accent{
-  background:var(--green);
+.panel-head{
+  min-height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 18px;
+  border-bottom:1px solid var(--border);
 }
 
-.stat:nth-child(3) .stat-accent{
-  background:var(--cyan);
+.panel-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.8px;
 }
 
-.stat:nth-child(4) .stat-accent{
-  background:var(--yellow);
+.panel-sub{
+  color:#666;
+  font-size:10px;
+  margin-top:4px;
 }
 
-.stat:nth-child(5) .stat-accent{
-  background:var(--orange);
+.panel-actions{
+  display:flex;
+  gap:7px;
+  align-items:center;
 }
-
-/* =========================
-   TOOLBAR
-========================= */
 
 .toolbar{
-  margin-top:18px;
-  padding:13px;
   display:flex;
   flex-wrap:wrap;
-  align-items:center;
-  gap:9px;
-  border:1px solid var(--line);
-  background:#0b0b0f;
+  gap:8px;
+  padding:14px 18px;
+  border-bottom:1px solid var(--border);
+  background:#0b0b0b;
 }
 
-.search{
-  flex:1 1 270px;
-  position:relative;
+.search-box{
+  flex:1 1 280px;
+  min-width:220px;
 }
 
-.search input{
+.input,
+.select,
+.textarea{
   width:100%;
-  height:40px;
-  padding:0 13px 0 38px;
-  color:#fff;
-  background:#111117;
-  border:1px solid var(--line);
-  border-radius:6px;
+  border:1px solid #292929;
+  background:#080808;
+  color:#eee;
+  border-radius:8px;
   outline:none;
+  padding:10px 11px;
+  font-size:11px;
+  transition:.18s ease;
 }
 
-.search input:focus{
-  border-color:rgba(182,108,255,.55);
-  box-shadow:0 0 0 3px rgba(182,108,255,.08);
+.input:focus,
+.select:focus,
+.textarea:focus{
+  border-color:rgba(229,9,20,.65);
+  box-shadow:0 0 0 3px rgba(229,9,20,.08);
 }
 
-.search-icon{
-  position:absolute;
-  left:13px;
-  top:11px;
-  color:#777783;
-  font-size:13px;
+.textarea{
+  min-height:120px;
+  resize:vertical;
+  line-height:1.6;
 }
 
 .filter{
-  height:40px;
-  min-width:150px;
-  padding:0 11px;
-  color:#ddd;
-  background:#111117;
-  border:1px solid var(--line);
-  border-radius:6px;
-  outline:none;
+  width:170px;
 }
 
-.filter:focus{
-  border-color:rgba(182,108,255,.5);
-}
-
-/* =========================
-   FEATURED ARTISTS
-========================= */
-
-.section{
-  margin-top:22px;
-}
-
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  gap:15px;
-  margin-bottom:12px;
-}
-
-.section-head h2{
-  margin:0;
-  font-family:Orbitron,sans-serif;
-  font-size:16px;
-  letter-spacing:.4px;
-}
-
-.section-head p{
-  margin:5px 0 0;
-  color:#71717d;
-  font-size:10px;
-}
-
-.featured-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-}
-
-.artist-card{
-  overflow:hidden;
-  position:relative;
-  border:1px solid var(--line);
-  background:#0d0d12;
-  transition:.2s ease;
-}
-
-.artist-card:hover{
-  transform:translateY(-3px);
-  border-color:#44444f;
-}
-
-.artist-image{
-  height:175px;
-  position:relative;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 30%,rgba(182,108,255,.22),transparent 30%),
-    linear-gradient(145deg,#191421,#09090d);
-}
-
-.artist-image img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
-  opacity:.82;
-  filter:saturate(.8);
-}
-
-.artist-placeholder{
-  height:100%;
-  display:grid;
-  place-items:center;
-  font-family:Orbitron,sans-serif;
-  font-size:42px;
-  color:rgba(255,255,255,.22);
-}
-
-.featured-badge{
-  position:absolute;
-  top:10px;
-  left:10px;
-  padding:5px 7px;
-  background:rgba(5,5,5,.82);
-  border:1px solid rgba(182,108,255,.45);
-  color:var(--accent);
-  font-size:8px;
-  font-weight:800;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-
-.artist-info{
-  padding:15px;
-}
-
-.artist-name{
-  font-family:Orbitron,sans-serif;
-  font-size:14px;
-  font-weight:700;
-}
-
-.artist-type{
-  color:var(--accent);
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  margin-top:5px;
-}
-
-.artist-meta{
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  margin-top:13px;
-  color:#777783;
-  font-size:9px;
-}
-
-.artist-actions{
-  display:flex;
-  gap:6px;
-  margin-top:14px;
-}
-
-.small-btn{
-  flex:1;
-  border:1px solid var(--line);
-  background:#111117;
-  color:#bbb;
-  border-radius:5px;
-  padding:8px 7px;
-  font-size:9px;
-  font-weight:800;
-}
-
-.small-btn:hover{
-  color:#fff;
-  border-color:#4a4a55;
-}
-
-/* =========================
-   REGISTRY
-========================= */
-
-.registry{
-  overflow:hidden;
-  border:1px solid var(--line);
-  background:#0b0b0f;
-}
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table-wrap{
-  overflow-x:auto;
+  width:100%;
+  overflow:auto;
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:900px;
+  min-width:1050px;
 }
 
-thead{
-  background:#101015;
-}
-
-th{
-  padding:12px 14px;
+thead th{
+  padding:11px 14px;
+  color:#666;
+  background:#090909;
+  border-bottom:1px solid var(--border);
   text-align:left;
-  color:#686873;
+  font-family:Orbitron,sans-serif;
   font-size:8px;
-  letter-spacing:1.4px;
+  letter-spacing:1.2px;
   text-transform:uppercase;
-  border-bottom:1px solid var(--line);
+  white-space:nowrap;
 }
 
-td{
-  padding:13px 14px;
-  border-bottom:1px solid #1b1b22;
-  color:#b7b7c0;
-  font-size:10px;
+tbody td{
+  padding:12px 14px;
+  border-bottom:1px solid #171717;
+  font-size:11px;
+  color:#ccc;
   vertical-align:middle;
 }
 
+tbody tr{
+  transition:.15s ease;
+}
+
 tbody tr:hover{
-  background:rgba(255,255,255,.018);
+  background:#0e0e0e;
 }
 
 .artist-cell{
   display:flex;
   align-items:center;
   gap:11px;
+  min-width:230px;
 }
 
-.avatar{
-  width:40px;
-  height:40px;
-  flex:0 0 40px;
+.artist-image{
+  width:44px;
+  height:44px;
+  border-radius:8px;
+  object-fit:cover;
+  background:
+    linear-gradient(135deg,#260608,#111);
+  border:1px solid #2b2b2b;
+  flex-shrink:0;
+}
+
+.artist-placeholder{
   display:grid;
   place-items:center;
-  overflow:hidden;
-  border:1px solid #33333d;
-  background:linear-gradient(135deg,#1c1425,#0d0d11);
-  color:#bfbfc7;
   font-family:Orbitron,sans-serif;
-  font-size:12px;
+  font-size:13px;
+  font-weight:800;
+  color:#777;
 }
 
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.artist-cell strong{
-  display:block;
+.artist-name{
   color:#fff;
-  font-size:11px;
+  font-weight:700;
 }
 
-.artist-cell span{
-  display:block;
+.artist-slug{
+  color:#555;
+  font-size:9px;
   margin-top:3px;
-  color:#686873;
-  font-size:8px;
 }
 
 .badge{
   display:inline-flex;
   align-items:center;
   padding:5px 7px;
-  border:1px solid;
-  border-radius:4px;
+  border-radius:5px;
   font-size:8px;
   font-weight:800;
-  letter-spacing:.7px;
+  letter-spacing:.6px;
   text-transform:uppercase;
+  border:1px solid #292929;
+  background:#111;
+  color:#999;
 }
 
 .badge.active{
-  color:var(--green);
-  border-color:rgba(69,230,154,.25);
-  background:rgba(69,230,154,.05);
+  color:#7bea9f;
+  border-color:#194a2a;
+  background:#08160d;
 }
 
 .badge.draft{
-  color:var(--yellow);
-  border-color:rgba(243,201,105,.25);
-  background:rgba(243,201,105,.05);
+  color:#f6d178;
+  border-color:#4a3916;
+  background:#171106;
 }
 
 .badge.archived{
-  color:#8a8a95;
-  border-color:#292931;
-  background:#111116;
+  color:#999;
+  border-color:#292929;
+  background:#111;
 }
 
 .badge.featured{
-  color:var(--accent);
-  border-color:rgba(182,108,255,.25);
-  background:rgba(182,108,255,.05);
+  color:#ff6b73;
+  border-color:#5a151b;
+  background:#1b0709;
 }
 
-.type-pill{
-  color:#a6a6b0;
-  font-size:9px;
-}
-
-.row-actions{
+.actions{
   display:flex;
   gap:5px;
+  white-space:nowrap;
 }
 
-.icon-btn{
-  width:31px;
-  height:29px;
+/* =========================================================
+   FEATURED
+========================================================= */
+
+.featured-grid{
   display:grid;
-  place-items:center;
-  border:1px solid var(--line);
-  background:#111117;
-  color:#9999a3;
-  border-radius:5px;
-  font-size:10px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  padding:16px;
 }
 
-.icon-btn:hover{
+.featured-card{
+  position:relative;
+  min-height:170px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  background:#080808;
+}
+
+.featured-image{
+  width:100%;
+  height:105px;
+  object-fit:cover;
+  background:#111;
+}
+
+.featured-info{
+  padding:9px 11px;
+}
+
+.featured-name{
   color:#fff;
-  border-color:#494953;
+  font-size:11px;
+  font-weight:700;
 }
 
-.icon-btn.delete:hover{
-  color:var(--red);
-  border-color:rgba(255,82,109,.35);
+.featured-meta{
+  color:#666;
+  font-size:9px;
+  margin-top:4px;
 }
 
-/* =========================
-   LOWER PANELS
-========================= */
+/* =========================================================
+   EMPTY / LOADING
+========================================================= */
 
-.lower-grid{
-  display:grid;
-  grid-template-columns:1.15fr .85fr;
-  gap:14px;
+.empty{
+  padding:50px 20px;
+  text-align:center;
+  color:#666;
 }
 
-.panel{
-  border:1px solid var(--line);
-  background:#0b0b0f;
+.empty-icon{
+  font-size:28px;
+  margin-bottom:10px;
+  color:#444;
 }
 
-.panel-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 16px;
-  border-bottom:1px solid var(--line);
-}
-
-.panel-head h3{
-  margin:0;
+.empty-title{
+  color:#aaa;
   font-family:Orbitron,sans-serif;
   font-size:12px;
 }
 
-.panel-head span{
-  color:#656570;
-  font-size:9px;
-}
-
-.activity{
-  padding:4px 15px;
-}
-
-.activity-item{
-  display:flex;
-  gap:12px;
-  padding:13px 0;
-  border-bottom:1px solid #1b1b21;
-}
-
-.activity-item:last-child{
-  border-bottom:0;
-}
-
-.activity-icon{
-  width:29px;
-  height:29px;
-  flex:0 0 29px;
-  display:grid;
-  place-items:center;
-  border:1px solid rgba(182,108,255,.25);
-  background:rgba(182,108,255,.05);
-  color:var(--accent);
+.empty-copy{
+  max-width:500px;
+  margin:7px auto 0;
   font-size:10px;
+  line-height:1.6;
 }
 
-.activity-text{
-  flex:1;
-  color:#9999a3;
-  font-size:9px;
-  line-height:1.55;
+.loading{
+  padding:40px;
+  text-align:center;
+  color:#666;
 }
 
-.activity-text strong{
-  color:#eee;
+.spinner{
+  width:24px;
+  height:24px;
+  margin:0 auto 10px;
+  border:2px solid #292929;
+  border-top-color:var(--red);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
 }
 
-.activity-time{
-  display:block;
-  color:#5f5f69;
-  font-size:8px;
-  margin-top:3px;
+@keyframes spin{
+  to{transform:rotate(360deg)}
 }
 
-.breakdown{
-  padding:15px;
-}
-
-.metric{
-  margin-bottom:17px;
-}
-
-.metric:last-child{
-  margin-bottom:0;
-}
-
-.metric-top{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:7px;
-}
-
-.metric-top span{
-  color:#9999a3;
-  font-size:9px;
-}
-
-.metric-top strong{
-  color:#eee;
-  font-size:9px;
-}
-
-.bar{
-  height:5px;
-  background:#18181e;
-  overflow:hidden;
-}
-
-.bar i{
-  display:block;
-  height:100%;
-  background:linear-gradient(90deg,var(--accent2),var(--accent));
-}
-
-/* =========================
+/* =========================================================
    MODAL
-========================= */
+========================================================= */
 
-.modal{
+.modal-backdrop{
   position:fixed;
   inset:0;
-  z-index:100;
-  display:none;
+  z-index:2000;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(8px);
+  display:flex;
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(10px);
 }
 
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:min(720px,100%);
-  max-height:90vh;
+.modal{
+  width:min(820px,100%);
+  max-height:92vh;
   overflow:auto;
-  border:1px solid #3a3a44;
-  background:#0d0d12;
+  background:#0b0b0b;
+  border:1px solid #303030;
+  border-radius:14px;
   box-shadow:0 30px 100px rgba(0,0,0,.7);
 }
 
 .modal-head{
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  padding:17px 18px;
-  border-bottom:1px solid var(--line);
+  justify-content:space-between;
+  padding:17px 20px;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  background:#0b0b0b;
+  z-index:2;
 }
 
-.modal-head h3{
-  margin:0;
+.modal-title{
   font-family:Orbitron,sans-serif;
   font-size:14px;
 }
 
-.close{
-  width:31px;
-  height:31px;
-  border:1px solid var(--line);
-  background:#111117;
+.modal-close{
+  border:1px solid var(--border);
+  background:#111;
   color:#aaa;
-  border-radius:5px;
+  width:34px;
+  height:34px;
+  border-radius:7px;
 }
 
-.form{
-  padding:18px;
+.modal-close:hover{
+  color:#fff;
+}
+
+.modal-body{
+  padding:20px;
 }
 
 .form-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:13px;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
 }
 
 .field.full{
@@ -964,176 +918,187 @@ tbody tr:hover{
 }
 
 .field label{
-  display:block;
-  margin-bottom:6px;
-  color:#797983;
-  font-size:8px;
+  color:#888;
+  font-size:9px;
   font-weight:800;
-  letter-spacing:1.2px;
   text-transform:uppercase;
+  letter-spacing:1px;
 }
 
-.field input,
-.field select,
-.field textarea{
-  width:100%;
-  color:#eee;
-  background:#111117;
-  border:1px solid var(--line);
-  border-radius:5px;
-  padding:10px 11px;
-  outline:none;
-}
-
-.field textarea{
-  min-height:100px;
-  resize:vertical;
-}
-
-.field input:focus,
-.field select:focus,
-.field textarea:focus{
-  border-color:rgba(182,108,255,.5);
-  box-shadow:0 0 0 3px rgba(182,108,255,.07);
-}
-
-.checkbox{
-  display:flex;
+.checkbox-field{
+  flex-direction:row;
   align-items:center;
   gap:9px;
-  color:#aaa;
-  font-size:10px;
+  padding-top:19px;
 }
 
-.checkbox input{
-  accent-color:var(--accent);
+.checkbox-field input{
+  accent-color:var(--red);
+  width:16px;
+  height:16px;
+}
+
+.checkbox-field label{
+  margin:0;
 }
 
 .modal-foot{
   display:flex;
   justify-content:flex-end;
   gap:8px;
-  padding:14px 18px;
-  border-top:1px solid var(--line);
+  padding:15px 20px;
+  border-top:1px solid var(--border);
 }
 
-/* =========================
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
+
+.toast-stack{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:3000;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  width:min(380px,calc(100vw - 40px));
+}
 
 .toast{
-  position:fixed;
-  right:22px;
-  bottom:22px;
-  z-index:200;
-  min-width:240px;
-  max-width:360px;
-  padding:13px 15px;
-  border:1px solid #3a3a45;
-  background:#111117;
-  box-shadow:0 20px 50px rgba(0,0,0,.5);
-  color:#eee;
-  font-size:10px;
-  transform:translateY(20px);
-  opacity:0;
-  pointer-events:none;
-  transition:.25s ease;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:13px 14px;
+  border:1px solid #292929;
+  border-left:3px solid var(--red);
+  background:#0d0d0d;
+  border-radius:9px;
+  box-shadow:var(--shadow);
+  animation:toastIn .2s ease;
 }
 
-.toast.show{
-  transform:translateY(0);
-  opacity:1;
+.toast.success{
+  border-left-color:var(--green);
 }
 
-.toast strong{
-  color:var(--accent);
-  display:block;
-  margin-bottom:3px;
-  font-family:Orbitron,sans-serif;
-  font-size:9px;
+.toast.error{
+  border-left-color:var(--red);
 }
 
-/* =========================
-   EMPTY
-========================= */
-
-.empty{
-  display:none;
-  padding:45px 20px;
-  text-align:center;
-  color:#6b6b75;
+.toast-title{
+  color:#fff;
   font-size:11px;
+  font-weight:700;
 }
 
-.empty strong{
-  display:block;
-  color:#aaa;
-  font-family:Orbitron,sans-serif;
-  margin-bottom:5px;
+.toast-message{
+  color:#777;
+  font-size:9px;
+  line-height:1.5;
+  margin-top:2px;
 }
 
-/* =========================
+@keyframes toastIn{
+  from{
+    opacity:0;
+    transform:translateY(8px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.sidebar-overlay{
+  display:none;
+}
+
+/* =========================================================
    RESPONSIVE
-========================= */
+========================================================= */
 
-@media(max-width:1200px){
+@media(max-width:1250px){
+  :root{
+    --sidebar:240px;
+  }
+
   .stats{
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(3,minmax(0,1fr));
   }
 
   .featured-grid{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
 
 @media(max-width:900px){
+  :root{
+    --sidebar:260px;
+  }
+
   .sidebar{
     transform:translateX(-100%);
-    transition:.25s ease;
+    transition:transform .22s ease;
   }
 
   .sidebar.open{
-    transform:translateX(0);
-    box-shadow:20px 0 70px rgba(0,0,0,.6);
+    transform:none;
   }
 
-  .main{
-    width:100%;
-    margin-left:0;
+  .sidebar-overlay{
+    position:fixed;
+    inset:0;
+    z-index:950;
+    background:rgba(0,0,0,.65);
+    display:none;
   }
 
-  .menu-btn{
+  .sidebar-overlay.show{
     display:block;
   }
 
-  .topbar{
-    padding:0 16px;
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
   }
 
   .content{
     padding:18px;
   }
 
-  .lower-grid{
-    grid-template-columns:1fr;
+  .hero-actions{
+    position:static;
+    margin-top:18px;
   }
 }
 
 @media(max-width:650px){
+  .topbar{
+    padding:0 14px;
+  }
+
+  .page-location{
+    display:none;
+  }
+
+  .db-status span:not(.status-dot){
+    display:none;
+  }
+
   .stats{
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 
   .featured-grid{
     grid-template-columns:1fr;
-  }
-
-  .hero{
-    padding:22px;
-  }
-
-  .hero:after{
-    font-size:65px;
   }
 
   .form-grid{
@@ -1144,12 +1109,25 @@ tbody tr:hover{
     grid-column:auto;
   }
 
-  .clock{
-    display:none;
+  .hero{
+    padding:20px;
+  }
+
+  .hero:after{
+    font-size:55px;
+  }
+
+  .hero-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .hero-actions .btn{
+    width:100%;
   }
 }
 
-@media(max-width:440px){
+@media(max-width:430px){
   .stats{
     grid-template-columns:1fr;
   }
@@ -1158,12 +1136,17 @@ tbody tr:hover{
     padding:12px;
   }
 
-  .toolbar{
-    align-items:stretch;
+  .panel-head{
+    align-items:flex-start;
+    flex-direction:column;
   }
 
-  .filter{
+  .panel-actions{
     width:100%;
+  }
+
+  .panel-actions .btn{
+    flex:1;
   }
 }
 </style>
@@ -1171,1520 +1154,2390 @@ tbody tr:hover{
 
 <body>
 
-<div class="app">
+<!-- ======================================================
+     SIDEBAR
+======================================================= -->
 
-  <!-- =========================
-       SIDEBAR
-  ========================== -->
+<aside class="sidebar" id="sidebar">
 
-  <aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="brand-mark">CR</div>
+    <div class="brand-copy">
+      <div class="brand-title">CROWRULES</div>
+      <div class="brand-sub">Entertainment Admin</div>
+    </div>
+  </div>
 
-    <div class="brand">
-      <div class="logo">CR</div>
-      <div>
-        <strong>CROWRULES</strong>
-        <span>Entertainment Admin</span>
+  <div class="nav-scroll">
+
+    <div class="nav-section">Command Center</div>
+
+    <a class="nav-item" href="index.html">
+      <span class="nav-icon">⌂</span>
+      <span>Dashboard</span>
+    </a>
+
+    <a class="nav-item" href="content.html">
+      <span class="nav-icon">▦</span>
+      <span>Content</span>
+    </a>
+
+    <a class="nav-item" href="pages.html">
+      <span class="nav-icon">▤</span>
+      <span>Pages</span>
+    </a>
+
+    <a class="nav-item" href="categories.html">
+      <span class="nav-icon">◈</span>
+      <span>Categories</span>
+    </a>
+
+    <a class="nav-item" href="tags.html">
+      <span class="nav-icon">#</span>
+      <span>Tags</span>
+    </a>
+
+
+    <div class="nav-section">CrowRules TV</div>
+
+    <a class="nav-item" href="shows.html">
+      <span class="nav-icon">▶</span>
+      <span>Shows</span>
+    </a>
+
+    <a class="nav-item" href="episodes.html">
+      <span class="nav-icon">▹</span>
+      <span>Episodes</span>
+    </a>
+
+    <a class="nav-item" href="movies.html">
+      <span class="nav-icon">▣</span>
+      <span>Movies</span>
+    </a>
+
+    <a class="nav-item" href="audio.html">
+      <span class="nav-icon">♫</span>
+      <span>Audio</span>
+    </a>
+
+    <a class="nav-item" href="articles.html">
+      <span class="nav-icon">▧</span>
+      <span>Articles</span>
+    </a>
+
+
+    <div class="nav-section">Broadcast</div>
+
+    <a class="nav-item" href="channels.html">
+      <span class="nav-icon">◉</span>
+      <span>Channels</span>
+    </a>
+
+    <a class="nav-item" href="schedule.html">
+      <span class="nav-icon">◷</span>
+      <span>Schedule</span>
+    </a>
+
+    <a class="nav-item" href="live.html">
+      <span class="nav-icon">●</span>
+      <span>Live</span>
+    </a>
+
+    <a class="nav-item" href="guide.html">
+      <span class="nav-icon">☷</span>
+      <span>TV Guide</span>
+    </a>
+
+
+    <div class="nav-section">People & Members</div>
+
+    <a class="nav-item" href="members.html">
+      <span class="nav-icon">♙</span>
+      <span>Members</span>
+    </a>
+
+    <a class="nav-item" href="community.html">
+      <span class="nav-icon">♧</span>
+      <span>Community</span>
+    </a>
+
+    <a class="nav-item" href="creators.html">
+      <span class="nav-icon">✦</span>
+      <span>Creators</span>
+    </a>
+
+    <a class="nav-item active" href="artists.html">
+      <span class="nav-icon">♪</span>
+      <span>Artists</span>
+    </a>
+
+
+    <div class="nav-section">CrowRules Network</div>
+
+    <a class="nav-item" href="records.html">
+      <span class="nav-icon">◉</span>
+      <span>CrowRules Records</span>
+    </a>
+
+    <a class="nav-item" href="sports.html">
+      <span class="nav-icon">◇</span>
+      <span>Sports</span>
+    </a>
+
+    <a class="nav-item" href="memorials.html">
+      <span class="nav-icon">✝</span>
+      <span>Memorials</span>
+    </a>
+
+    <a class="nav-item" href="awards.html">
+      <span class="nav-icon">★</span>
+      <span>Awards</span>
+    </a>
+
+    <a class="nav-item" href="holidays.html">
+      <span class="nav-icon">✧</span>
+      <span>Holidays</span>
+    </a>
+
+    <a class="nav-item" href="publishing.html">
+      <span class="nav-icon">▰</span>
+      <span>Publishing</span>
+    </a>
+
+    <a class="nav-item" href="studios.html">
+      <span class="nav-icon">▰</span>
+      <span>Studios</span>
+    </a>
+
+
+    <div class="nav-section">Business</div>
+
+    <a class="nav-item" href="donations.html">
+      <span class="nav-icon">$</span>
+      <span>Donations</span>
+    </a>
+
+    <a class="nav-item" href="shop.html">
+      <span class="nav-icon">□</span>
+      <span>Shop</span>
+    </a>
+
+    <a class="nav-item" href="partners.html">
+      <span class="nav-icon">∞</span>
+      <span>Partners</span>
+    </a>
+
+
+    <div class="nav-section">System</div>
+
+    <a class="nav-item" href="analytics.html">
+      <span class="nav-icon">⌁</span>
+      <span>Analytics</span>
+    </a>
+
+    <a class="nav-item" href="moderation.html">
+      <span class="nav-icon">⚑</span>
+      <span>Moderation</span>
+    </a>
+
+    <a class="nav-item" href="logs.html">
+      <span class="nav-icon">≡</span>
+      <span>Logs</span>
+    </a>
+
+    <a class="nav-item" href="notifications.html">
+      <span class="nav-icon">♢</span>
+      <span>Notifications</span>
+    </a>
+
+    <a class="nav-item" href="activity.html">
+      <span class="nav-icon">◌</span>
+      <span>Activity</span>
+    </a>
+
+    <a class="nav-item" href="media.html">
+      <span class="nav-icon">▧</span>
+      <span>Media Library</span>
+    </a>
+
+    <a class="nav-item" href="database.html">
+      <span class="nav-icon">▤</span>
+      <span>Database</span>
+    </a>
+
+    <a class="nav-item" href="settings.html">
+      <span class="nav-icon">⚙</span>
+      <span>Settings</span>
+    </a>
+
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="admin-user">
+      <div class="avatar" id="userAvatar">CR</div>
+
+      <div class="user-info">
+        <div class="user-name" id="userName">Administrator</div>
+        <div class="user-role">Administrator</div>
       </div>
+
+      <button
+        class="signout-mini"
+        id="signOutBtn"
+        title="Sign out"
+        aria-label="Sign out">
+        ⇥
+      </button>
+    </div>
+  </div>
+
+</aside>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+
+<!-- ======================================================
+     MAIN
+======================================================= -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="top-left">
+
+      <button
+        class="mobile-menu"
+        id="mobileMenu"
+        aria-label="Open menu">
+        ☰
+      </button>
+
+      <div class="page-location">
+        Admin / <strong>Artists</strong>
+      </div>
+
     </div>
 
-    <div class="nav-title">Command Center</div>
+    <div class="top-actions">
 
-    <nav class="nav">
-      <a href="index.html"><span class="nav-icon">⌂</span>Dashboard</a>
-      <a href="content.html"><span class="nav-icon">◈</span>Content</a>
-      <a href="pages.html"><span class="nav-icon">▤</span>Pages</a>
-      <a href="categories.html"><span class="nav-icon">◫</span>Categories</a>
-      <a href="tags.html"><span class="nav-icon">#</span>Tags</a>
-      <a href="shows.html"><span class="nav-icon">▣</span>Shows</a>
-      <a href="episodes.html"><span class="nav-icon">▶</span>Episodes</a>
-      <a href="movies.html"><span class="nav-icon">▰</span>Movies</a>
-      <a href="audio.html"><span class="nav-icon">♫</span>Audio</a>
-      <a href="articles.html"><span class="nav-icon">✎</span>Articles</a>
-    </nav>
+      <div class="db-status" title="Supabase database connection">
+        <span class="status-dot" id="dbDot"></span>
+        <span id="dbStatusText">Checking database</span>
+      </div>
 
-    <div class="nav-title">Broadcast</div>
-
-    <nav class="nav">
-      <a href="channels.html"><span class="nav-icon">◉</span>Channels</a>
-      <a href="schedule.html"><span class="nav-icon">◷</span>Schedule</a>
-      <a href="live.html"><span class="nav-icon">●</span>Live</a>
-      <a href="guide.html"><span class="nav-icon">☷</span>TV Guide</a>
-    </nav>
-
-    <div class="nav-title">People</div>
-
-    <nav class="nav">
-      <a href="members.html"><span class="nav-icon">♙</span>Members</a>
-      <a href="community.html"><span class="nav-icon">♧</span>Community</a>
-      <a href="creators.html"><span class="nav-icon">✦</span>Creators</a>
-    </nav>
-
-    <div class="nav-title">CrowRules Network</div>
-
-    <nav class="nav">
-      <a class="active" href="artists.html"><span class="nav-icon">♫</span>Artists</a>
-      <a href="records.html"><span class="nav-icon">◉</span>Records</a>
-      <a href="sports.html"><span class="nav-icon">◇</span>Sports</a>
-      <a href="memorials.html"><span class="nav-icon">✧</span>Memorials</a>
-      <a href="awards.html"><span class="nav-icon">★</span>Awards</a>
-    </nav>
-
-    <div class="nav-title">System</div>
-
-    <nav class="nav">
-      <a href="analytics.html"><span class="nav-icon">⌁</span>Analytics</a>
-      <a href="moderation.html"><span class="nav-icon">⚠</span>Moderation</a>
-      <a href="logs.html"><span class="nav-icon">≡</span>Logs</a>
-      <a href="notifications.html"><span class="nav-icon">♢</span>Notifications</a>
-      <a href="activity.html"><span class="nav-icon">◌</span>Activity</a>
-      <a href="settings.html"><span class="nav-icon">⚙</span>Settings</a>
-    </nav>
-
-    <div class="sidebar-footer">
-      CrowRules Entertainment<br>
-      Main Administration System<br>
-      Artist Management
     </div>
 
-  </aside>
+  </header>
 
-  <!-- =========================
-       MAIN
-  ========================== -->
 
-  <main class="main">
+  <div class="content">
 
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="menu-btn" id="menuBtn">☰</button>
+    <!-- HERO -->
 
-        <div class="status-dot"></div>
+    <section class="hero">
 
-        <div class="crumb">
-          CrowRules Network / <b>Artists</b>
+      <div class="hero-label">CrowRules Records / People</div>
+
+      <h1>Artist Command Center</h1>
+
+      <p>
+        Manage the CrowRules Entertainment artist registry, profiles,
+        genres, artist types, locations, websites, social profiles,
+        biographies, featured status, and publication state.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary" id="addArtistBtn">
+          + Add Artist
+        </button>
+
+        <button class="btn" id="refreshBtn">
+          ↻ Refresh
+        </button>
+
+        <button class="btn" id="exportBtn">
+          ↓ Export CSV
+        </button>
+      </div>
+
+    </section>
+
+
+    <!-- STATS -->
+
+    <section class="stats">
+
+      <div class="stat">
+        <div class="stat-label">Total Artists</div>
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-meta">All registry records</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Active</div>
+        <div class="stat-value" id="statActive">0</div>
+        <div class="stat-meta">Currently active</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Featured</div>
+        <div class="stat-value" id="statFeatured">0</div>
+        <div class="stat-meta">Homepage / spotlight</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Genres</div>
+        <div class="stat-value" id="statGenres">0</div>
+        <div class="stat-meta">Unique genres</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">Artist Types</div>
+        <div class="stat-value" id="statTypes">0</div>
+        <div class="stat-meta">Unique classifications</div>
+      </div>
+
+    </section>
+
+
+    <!-- FEATURED -->
+
+    <section class="panel">
+
+      <div class="panel-head">
+
+        <div>
+          <div class="panel-title">Featured Artists</div>
+          <div class="panel-sub">
+            Artists currently marked as featured in Supabase.
+          </div>
+        </div>
+
+        <div class="panel-actions">
+          <button class="btn btn-sm" id="featuredRefreshBtn">
+            Refresh
+          </button>
+        </div>
+
+      </div>
+
+      <div id="featuredContainer">
+        <div class="loading">
+          <div class="spinner"></div>
+          Loading featured artists…
         </div>
       </div>
 
-      <div class="clock" id="clock">SYSTEM TIME --:--:--</div>
-    </header>
+    </section>
 
-    <div class="content">
 
-      <!-- HERO -->
+    <!-- REGISTRY -->
 
-      <section class="hero">
+    <section class="panel">
 
-        <div class="eyebrow">CrowRules Records / Artist Management</div>
+      <div class="panel-head">
 
-        <h1>Artist Command Center</h1>
+        <div>
+          <div class="panel-title">Artist Registry</div>
+          <div class="panel-sub">
+            Search and manage all CrowRules Entertainment artist records.
+          </div>
+        </div>
 
-        <p>
-          Manage CrowRules Records artists, performers, musicians, producers,
-          groups, profiles, releases and artist visibility from one central
-          administration system.
-        </p>
-
-        <div class="hero-actions">
-          <button class="btn primary" id="newArtistBtn">
+        <div class="panel-actions">
+          <button class="btn btn-sm btn-primary" id="addArtistBtn2">
             + New Artist
           </button>
-
-          <button class="btn cyan" id="featuredBtn">
-            Featured Artists
-          </button>
-
-          <button class="btn" id="exportBtn">
-            Export Registry
-          </button>
         </div>
 
-      </section>
+      </div>
 
-      <!-- STATS -->
 
-      <section class="stats">
+      <div class="toolbar">
 
-        <div class="stat">
-          <div class="stat-label">Total Artists</div>
-          <div class="stat-value">36</div>
-          <div class="stat-meta">Across CrowRules Records</div>
-          <div class="stat-accent"></div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Active</div>
-          <div class="stat-value">29</div>
-          <div class="stat-meta">Currently publishing</div>
-          <div class="stat-accent"></div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Featured</div>
-          <div class="stat-value">12</div>
-          <div class="stat-meta">Homepage / Records spotlight</div>
-          <div class="stat-accent"></div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Releases</div>
-          <div class="stat-value">84</div>
-          <div class="stat-meta">Albums, EPs & singles</div>
-          <div class="stat-accent"></div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-label">Streams</div>
-          <div class="stat-value">1.8M</div>
-          <div class="stat-meta">All-time network plays</div>
-          <div class="stat-accent"></div>
-        </div>
-
-      </section>
-
-      <!-- TOOLBAR -->
-
-      <section class="toolbar">
-
-        <div class="search">
-          <span class="search-icon">⌕</span>
+        <div class="search-box">
           <input
-            id="search"
+            class="input"
+            id="searchInput"
             type="search"
-            placeholder="Search artists, genres, locations..."
-          >
+            placeholder="Search artist name, slug, genre, type, location…">
         </div>
 
-        <select class="filter" id="statusFilter">
-          <option value="">All Statuses</option>
-          <option value="active">Active</option>
-          <option value="draft">Draft</option>
-          <option value="archived">Archived</option>
-        </select>
-
-        <select class="filter" id="typeFilter">
-          <option value="">All Types</option>
-          <option value="solo">Solo Artist</option>
-          <option value="group">Group</option>
-          <option value="producer">Producer</option>
-          <option value="dj">DJ</option>
-          <option value="podcast">Podcast Artist</option>
-        </select>
-
-        <select class="filter" id="featuredFilter">
-          <option value="">Featured: All</option>
-          <option value="yes">Featured</option>
-          <option value="no">Not Featured</option>
-        </select>
-
-        <button class="btn" id="resetBtn">Reset</button>
-
-      </section>
-
-      <!-- FEATURED -->
-
-      <section class="section" id="featuredSection">
-
-        <div class="section-head">
-          <div>
-            <h2>Featured Artists</h2>
-            <p>Current CrowRules Records artist spotlight</p>
-          </div>
-
-          <button class="btn" id="manageFeaturedBtn">
-            Manage Featured
-          </button>
-        </div>
-
-        <div class="featured-grid">
-
-          <article
-            class="artist-card"
-            data-name="Neon Raven"
-            data-type="solo"
-            data-status="active"
-            data-featured="yes"
-          >
-            <div class="artist-image">
-              <div class="artist-placeholder">NR</div>
-              <div class="featured-badge">Featured</div>
-            </div>
-
-            <div class="artist-info">
-              <div class="artist-name">Neon Raven</div>
-              <div class="artist-type">Solo Artist</div>
-
-              <div class="artist-meta">
-                <span>Electronic</span>
-                <span>Seattle, WA</span>
-              </div>
-
-              <div class="artist-actions">
-                <button class="small-btn view-btn">View</button>
-                <button class="small-btn edit-btn">Edit</button>
-              </div>
-            </div>
-          </article>
-
-          <article
-            class="artist-card"
-            data-name="Tacoma Static"
-            data-type="group"
-            data-status="active"
-            data-featured="yes"
-          >
-            <div class="artist-image">
-              <div class="artist-placeholder">TS</div>
-              <div class="featured-badge">Featured</div>
-            </div>
-
-            <div class="artist-info">
-              <div class="artist-name">Tacoma Static</div>
-              <div class="artist-type">Group</div>
-
-              <div class="artist-meta">
-                <span>Alternative</span>
-                <span>Tacoma, WA</span>
-              </div>
-
-              <div class="artist-actions">
-                <button class="small-btn view-btn">View</button>
-                <button class="small-btn edit-btn">Edit</button>
-              </div>
-            </div>
-          </article>
-
-          <article
-            class="artist-card"
-            data-name="Void Signal"
-            data-type="producer"
-            data-status="active"
-            data-featured="yes"
-          >
-            <div class="artist-image">
-              <div class="artist-placeholder">VS</div>
-              <div class="featured-badge">Featured</div>
-            </div>
-
-            <div class="artist-info">
-              <div class="artist-name">Void Signal</div>
-              <div class="artist-type">Producer</div>
-
-              <div class="artist-meta">
-                <span>Ambient</span>
-                <span>PNW</span>
-              </div>
-
-              <div class="artist-actions">
-                <button class="small-btn view-btn">View</button>
-                <button class="small-btn edit-btn">Edit</button>
-              </div>
-            </div>
-          </article>
-
-          <article
-            class="artist-card"
-            data-name="The Crow Collective"
-            data-type="group"
-            data-status="active"
-            data-featured="yes"
-          >
-            <div class="artist-image">
-              <div class="artist-placeholder">CC</div>
-              <div class="featured-badge">Featured</div>
-            </div>
-
-            <div class="artist-info">
-              <div class="artist-name">The Crow Collective</div>
-              <div class="artist-type">Group</div>
-
-              <div class="artist-meta">
-                <span>Experimental</span>
-                <span>Tacoma, WA</span>
-              </div>
-
-              <div class="artist-actions">
-                <button class="small-btn view-btn">View</button>
-                <button class="small-btn edit-btn">Edit</button>
-              </div>
-            </div>
-          </article>
-
-        </div>
-
-      </section>
-
-      <!-- REGISTRY -->
-
-      <section class="section">
-
-        <div class="section-head">
-          <div>
-            <h2>Artist Registry</h2>
-            <p>Master artist database and publishing status</p>
-          </div>
-
-          <span id="resultCount" style="color:#666671;font-size:9px;">
-            8 artists shown
-          </span>
-        </div>
-
-        <div class="registry">
-
-          <div class="table-wrap">
-
-            <table id="artistTable">
-
-              <thead>
-                <tr>
-                  <th>Artist</th>
-                  <th>Type</th>
-                  <th>Genre</th>
-                  <th>Releases</th>
-                  <th>Status</th>
-                  <th>Featured</th>
-                  <th>Updated</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-
-                <tr
-                  data-name="Neon Raven"
-                  data-type="solo"
-                  data-status="active"
-                  data-featured="yes"
-                >
-                  <td>
-                    <div class="artist-cell">
-                      <div class="avatar">NR</div>
-                      <div>
-                        <strong>Neon Raven</strong>
-                        <span>Seattle, Washington</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="type-pill">Solo Artist</span></td>
-                  <td>Electronic</td>
-                  <td>14</td>
-
-                  <td>
-                    <span class="badge active">Active</span>
-                  </td>
-
-                  <td>
-                    <span class="badge featured">Featured</span>
-                  </td>
-
-                  <td>Sep 06, 2026</td>
-
-                  <td>
-                    <div class="row-actions">
-                      <button class="icon-btn view-btn">↗</button>
-                      <button class="icon-btn edit-btn">✎</button>
-                      <button class="icon-btn delete delete-btn">×</button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr
-                  data-name="Tacoma Static"
-                  data-type="group"
-                  data-status="active"
-                  data-featured="yes"
-                >
-                  <td>
-                    <div class="artist-cell">
-                      <div class="avatar">TS</div>
-                      <div>
-                        <strong>Tacoma Static</strong>
-                        <span>Tacoma, Washington</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="type-pill">Group</span></td>
-                  <td>Alternative</td>
-                  <td>9</td>
-
-                  <td><span class="badge active">Active</span></td>
-
-                  <td><span class="badge featured">Featured</span></td>
-
-                  <td>Sep 05, 2026</td>
-
-                  <td>
-                    <div class="row-actions">
-                      <button class="icon-btn view-btn">↗</button>
-                      <button class="icon-btn edit-btn">✎</button>
-                      <button class="icon-btn delete delete-btn">×</button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr
-                  data-name="Void Signal"
-                  data-type="producer"
-                  data-status="active"
-                  data-featured="yes"
-                >
-                  <td>
-                    <div class="artist-cell">
-                      <div class="avatar">VS</div>
-                      <div>
-                        <strong>Void Signal</strong>
-                        <span>Pacific Northwest</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="type-pill">Producer</span></td>
-                  <td>Ambient</td>
-                  <td>18</td>
-
-                  <td><span class="badge active">Active</span></td>
-
-                  <td><span class="badge featured">Featured</span></td>
-
-                  <td>Sep 04, 2026</td>
-
-                  <td>
-                    <div class="row-actions">
-                      <button class="icon-btn view-btn">↗</button>
-                      <button class="icon-btn edit-btn">✎</button>
-                      <button class="icon-btn delete delete-btn">×</button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr
-                  data-name="The Crow Collective"
-                  data-type="group"
-                  data-status="active"
-                  data-featured="yes"
-                >
-                  <td>
-                    <div class="artist-cell">
-                      <div class="avatar">CC</div>
-                      <div>
-                        <strong>The Crow Collective</strong>
-                        <span>Tacoma, Washington</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="type-pill">Group</span></td>
-                  <td>Experimental</td>
-                  <td>11</td>
-
-                  <td><span class="badge active">Active</span></td>
-
-                  <td><span class="badge featured">Featured</span></td>
-
-                  <td>Sep 03, 2026</td>
-
-                  <td>
-                    <div class="row-actions">
-                      <button class="icon-btn view-btn">↗</button>
-                      <button class="icon-btn edit-btn">✎</button>
-                      <button class="icon-btn delete delete-btn">×</button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr
-                  data-name="Midnight Circuit"
-                  data-type="dj"
-                  data-status="active"
-                  data-featured="no"
-                >
-                  <td>
-                    <div class="artist-cell">
-                      <div class="avatar">MC</div>
-                      <div>
-                        <strong>Midnight Circuit</strong>
-                        <span>Tacoma, Washington</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="type-pill">DJ</span></td>
-                  <td>House</td>
-                  <td>7</td>
-
-                  <td><span class="badge active">Active</span></td>
-
-                  <td>—</td>
-
-                  <td>Sep 01, 2026</td>
-
-                  <td>
-                    <div class="row-actions">
-                      <button class="icon-btn view-btn">↗</button>
-                      <button class="icon-btn edit-btn">✎</button>
-                      <button class="icon-btn delete delete-btn">×</button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr
-                  data-name="Rain City Echo"
-                  data-type="solo"
-                  data-status="active"
-                  data-featured="no"
-                >
-                  <td>
-                    <div class="artist-cell">
-                      <div class="avatar">RE</div>
-                      <div>
-                        <strong>Rain City Echo</strong>
-                        <span>Seattle, Washington</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="type-pill">Solo Artist</span></td>
-                  <td>Indie</td>
-                  <td>6</td>
-
-                  <td><span class="badge active">Active</span></td>
-
-                  <td>—</td>
-
-                  <td>Aug 30, 2026</td>
-
-                  <td>
-                    <div class="row-actions">
-                      <button class="icon-btn view-btn">↗</button>
-                      <button class="icon-btn edit-btn">✎</button>
-                      <button class="icon-btn delete delete-btn">×</button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr
-                  data-name="Static Angels"
-                  data-type="group"
-                  data-status="draft"
-                  data-featured="no"
-                >
-                  <td>
-                    <div class="artist-cell">
-                      <div class="avatar">SA</div>
-                      <div>
-                        <strong>Static Angels</strong>
-                        <span>Olympia, Washington</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="type-pill">Group</span></td>
-                  <td>Rock</td>
-                  <td>2</td>
-
-                  <td><span class="badge draft">Draft</span></td>
-
-                  <td>—</td>
-
-                  <td>Aug 28, 2026</td>
-
-                  <td>
-                    <div class="row-actions">
-                      <button class="icon-btn view-btn">↗</button>
-                      <button class="icon-btn edit-btn">✎</button>
-                      <button class="icon-btn delete delete-btn">×</button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr
-                  data-name="Echoes After Dark"
-                  data-type="solo"
-                  data-status="archived"
-                  data-featured="no"
-                >
-                  <td>
-                    <div class="artist-cell">
-                      <div class="avatar">EA</div>
-                      <div>
-                        <strong>Echoes After Dark</strong>
-                        <span>Washington</span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td><span class="type-pill">Solo Artist</span></td>
-                  <td>Darkwave</td>
-                  <td>5</td>
-
-                  <td><span class="badge archived">Archived</span></td>
-
-                  <td>—</td>
-
-                  <td>Aug 20, 2026</td>
-
-                  <td>
-                    <div class="row-actions">
-                      <button class="icon-btn view-btn">↗</button>
-                      <button class="icon-btn edit-btn">✎</button>
-                      <button class="icon-btn delete delete-btn">×</button>
-                    </div>
-                  </td>
-                </tr>
-
-              </tbody>
-
-            </table>
-
-          </div>
-
-          <div class="empty" id="emptyState">
-            <strong>No artists found</strong>
-            Try changing your search or filters.
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- LOWER GRID -->
-
-      <section class="section lower-grid">
-
-        <div class="panel">
-
-          <div class="panel-head">
-            <h3>Recent Artist Activity</h3>
-            <span>LIVE LOG</span>
-          </div>
-
-          <div class="activity">
-
-            <div class="activity-item">
-              <div class="activity-icon">+</div>
-              <div class="activity-text">
-                <strong>Neon Raven</strong> profile updated with new biography.
-                <span class="activity-time">18 minutes ago</span>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon">♫</div>
-              <div class="activity-text">
-                New release assigned to <strong>Tacoma Static</strong>.
-                <span class="activity-time">42 minutes ago</span>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon">★</div>
-              <div class="activity-text">
-                <strong>Void Signal</strong> promoted to Featured Artists.
-                <span class="activity-time">1 hour ago</span>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <div class="activity-icon">✎</div>
-              <div class="activity-text">
-                <strong>Static Angels</strong> artist profile saved as draft.
-                <span class="activity-time">3 hours ago</span>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="panel">
-
-          <div class="panel-head">
-            <h3>Artist Breakdown</h3>
-            <span>36 TOTAL</span>
-          </div>
-
-          <div class="breakdown">
-
-            <div class="metric">
-              <div class="metric-top">
-                <span>Solo Artists</span>
-                <strong>17 / 36</strong>
-              </div>
-              <div class="bar">
-                <i style="width:47%"></i>
-              </div>
-            </div>
-
-            <div class="metric">
-              <div class="metric-top">
-                <span>Groups</span>
-                <strong>9 / 36</strong>
-              </div>
-              <div class="bar">
-                <i style="width:25%"></i>
-              </div>
-            </div>
-
-            <div class="metric">
-              <div class="metric-top">
-                <span>Producers</span>
-                <strong>5 / 36</strong>
-              </div>
-              <div class="bar">
-                <i style="width:14%"></i>
-              </div>
-            </div>
-
-            <div class="metric">
-              <div class="metric-top">
-                <span>DJs</span>
-                <strong>3 / 36</strong>
-              </div>
-              <div class="bar">
-                <i style="width:8%"></i>
-              </div>
-            </div>
-
-            <div class="metric">
-              <div class="metric-top">
-                <span>Other</span>
-                <strong>2 / 36</strong>
-              </div>
-              <div class="bar">
-                <i style="width:6%"></i>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </div>
-
-  </main>
-
-</div>
-
-<!-- =========================
-     ARTIST MODAL
-========================== -->
-
-<div class="modal" id="artistModal">
-
-  <div class="modal-box">
-
-    <div class="modal-head">
-      <h3 id="modalTitle">Create Artist</h3>
-      <button class="close" id="closeModal">×</button>
-    </div>
-
-    <form class="form" id="artistForm">
-
-      <div class="form-grid">
-
-        <div class="field">
-          <label>Artist Name</label>
-          <input
-            id="artistName"
-            type="text"
-            required
-            placeholder="Artist or group name"
-          >
-        </div>
-
-        <div class="field">
-          <label>Artist Type</label>
-          <select id="artistType">
-            <option value="solo">Solo Artist</option>
-            <option value="group">Group</option>
-            <option value="producer">Producer</option>
-            <option value="dj">DJ</option>
-            <option value="podcast">Podcast Artist</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Genre</label>
-          <input
-            id="artistGenre"
-            type="text"
-            placeholder="Electronic, Rock, Hip-Hop..."
-          >
-        </div>
-
-        <div class="field">
-          <label>Location</label>
-          <input
-            id="artistLocation"
-            type="text"
-            placeholder="Tacoma, Washington"
-          >
-        </div>
-
-        <div class="field">
-          <label>Status</label>
-          <select id="artistStatus">
+        <div class="filter">
+          <select class="select" id="statusFilter">
+            <option value="">All Statuses</option>
             <option value="active">Active</option>
             <option value="draft">Draft</option>
             <option value="archived">Archived</option>
           </select>
         </div>
 
-        <div class="field">
-          <label>Slug</label>
-          <input
-            id="artistSlug"
-            type="text"
-            placeholder="artist-name"
-          >
+        <div class="filter">
+          <select class="select" id="featuredFilter">
+            <option value="">All Artists</option>
+            <option value="featured">Featured</option>
+            <option value="standard">Standard</option>
+          </select>
         </div>
 
-        <div class="field full">
-          <label>Profile Image URL</label>
-          <input
-            id="artistImage"
-            type="url"
-            placeholder="https://..."
-          >
-        </div>
+      </div>
 
-        <div class="field full">
-          <label>Biography</label>
-          <textarea
-            id="artistBio"
-            placeholder="Artist biography..."
-          ></textarea>
-        </div>
 
-        <div class="field">
-          <label>Website</label>
-          <input
-            id="artistWebsite"
-            type="url"
-            placeholder="https://..."
-          >
-        </div>
+      <div class="table-wrap">
 
-        <div class="field">
-          <label>Social / Profile URL</label>
-          <input
-            id="artistSocial"
-            type="url"
-            placeholder="https://..."
-          >
-        </div>
+        <table>
 
-        <div class="field full">
-          <label>Publishing</label>
+          <thead>
+            <tr>
+              <th>Artist</th>
+              <th>Type</th>
+              <th>Genre</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>Featured</th>
+              <th>Links</th>
+              <th>Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
 
-          <label class="checkbox">
-            <input id="artistFeatured" type="checkbox">
-            Feature this artist across CrowRules Records
-          </label>
+          <tbody id="artistTableBody">
+
+            <tr>
+              <td colspan="9">
+                <div class="loading">
+                  <div class="spinner"></div>
+                  Loading artists…
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+
+<!-- ======================================================
+     ARTIST MODAL
+======================================================= -->
+
+<div class="modal-backdrop hidden" id="artistModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title" id="modalTitle">
+        Add Artist
+      </div>
+
+      <button
+        class="modal-close"
+        id="modalClose"
+        aria-label="Close">
+        ×
+      </button>
+
+    </div>
+
+
+    <form id="artistForm">
+
+      <div class="modal-body">
+
+        <input type="hidden" id="artistId">
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label for="artistName">Artist Name *</label>
+            <input
+              class="input"
+              id="artistName"
+              required
+              maxlength="200"
+              placeholder="Artist or group name">
+          </div>
+
+
+          <div class="field">
+            <label for="artistSlug">Slug *</label>
+            <input
+              class="input"
+              id="artistSlug"
+              required
+              maxlength="220"
+              placeholder="artist-name">
+          </div>
+
+
+          <div class="field">
+            <label for="artistType">Artist Type</label>
+
+            <select class="select" id="artistType">
+
+              <option value="">Select type</option>
+
+              <option value="Solo Artist">
+                Solo Artist
+              </option>
+
+              <option value="Band">
+                Band
+              </option>
+
+              <option value="Group">
+                Group
+              </option>
+
+              <option value="Duo">
+                Duo
+              </option>
+
+              <option value="DJ">
+                DJ
+              </option>
+
+              <option value="Producer">
+                Producer
+              </option>
+
+              <option value="Singer">
+                Singer
+              </option>
+
+              <option value="Songwriter">
+                Songwriter
+              </option>
+
+              <option value="Musician">
+                Musician
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+            <label for="artistGenre">Genre</label>
+
+            <input
+              class="input"
+              id="artistGenre"
+              maxlength="120"
+              placeholder="Rock, Hip-Hop, Electronic, etc.">
+          </div>
+
+
+          <div class="field">
+            <label for="artistLocation">Location</label>
+
+            <input
+              class="input"
+              id="artistLocation"
+              maxlength="200"
+              placeholder="Tacoma, Washington">
+          </div>
+
+
+          <div class="field">
+            <label for="artistStatus">Status</label>
+
+            <select class="select" id="artistStatus">
+
+              <option value="active">
+                Active
+              </option>
+
+              <option value="draft">
+                Draft
+              </option>
+
+              <option value="archived">
+                Archived
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+            <label for="artistImage">Image URL</label>
+
+            <input
+              class="input"
+              id="artistImage"
+              type="url"
+              maxlength="1000"
+              placeholder="https://…">
+          </div>
+
+
+          <div class="field">
+            <label for="artistWebsite">Website URL</label>
+
+            <input
+              class="input"
+              id="artistWebsite"
+              type="url"
+              maxlength="1000"
+              placeholder="https://artistwebsite.com">
+          </div>
+
+
+          <div class="field">
+            <label for="artistSocial">Social URL</label>
+
+            <input
+              class="input"
+              id="artistSocial"
+              type="url"
+              maxlength="1000"
+              placeholder="https://instagram.com/…">
+          </div>
+
+
+          <div class="field checkbox-field">
+
+            <input
+              id="artistFeatured"
+              type="checkbox">
+
+            <label for="artistFeatured">
+              Featured Artist
+            </label>
+
+          </div>
+
+
+          <div class="field full">
+
+            <label for="artistBio">
+              Biography
+            </label>
+
+            <textarea
+              class="textarea"
+              id="artistBio"
+              maxlength="10000"
+              placeholder="Artist biography, background, credits, and additional information…"></textarea>
+
+          </div>
 
         </div>
 
       </div>
 
-    </form>
 
-    <div class="modal-foot">
-      <button class="btn" id="cancelModal">Cancel</button>
-      <button class="btn primary" id="saveArtist">Save Artist</button>
-    </div>
+      <div class="modal-foot">
+
+        <button
+          type="button"
+          class="btn"
+          id="cancelBtn">
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="saveBtn">
+          Save Artist
+        </button>
+
+      </div>
+
+    </form>
 
   </div>
 
 </div>
 
-<!-- TOAST -->
 
-<div class="toast" id="toast">
-  <strong>CROWRULES ADMIN</strong>
-  <span id="toastMessage">Action completed.</span>
-</div>
+<!-- ======================================================
+     TOASTS
+======================================================= -->
+
+<div class="toast-stack" id="toastStack"></div>
+
 
 <script>
-/* ==========================================================
-   CROWRULES ARTISTS ADMIN
-   Supabase-ready architecture
+/* =========================================================
+   CROWRULES ENTERTAINMENT
+   ARTISTS ADMIN
+   Supabase-connected
+========================================================= */
 
-   Suggested canonical table:
+const SUPABASE_URL =
+  window.CROWRULES_SUPABASE_URL ||
+  "https://cevylpnoexugwgygvtgu.supabase.co";
 
-   artists
-   ----------------------------------------------------------
-   id
-   name
-   slug
-   artist_type
-   genre
-   location
-   biography
-   image_url
-   website_url
-   social_url
-   status
-   featured
-   release_count
-   stream_count
-   created_at
-   updated_at
+const SUPABASE_KEY =
+  window.CROWRULES_SUPABASE_ANON_KEY ||
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
 
-   IMPORTANT:
-   Inspect the existing Supabase schema before connecting.
-   Do not blindly create duplicate artist tables.
+const TABLE_NAME = "artists";
 
-   Never place a Supabase service-role key in this file.
-========================================================== */
+/*
+ * Keep the browser on the public/publishable Supabase key.
+ * Never place a service_role/secret key in this file.
+ */
 
-const $ = id => document.getElementById(id);
+const { createClient } =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
-/* =========================
-   CLOCK
-========================= */
 
-function updateClock(){
-  const now = new Date();
+/* =========================================================
+   STATE
+========================================================= */
 
-  const date = now.toLocaleDateString(undefined,{
-    month:"short",
-    day:"2-digit",
-    year:"numeric"
-  });
+let artists = [];
+let editingId = null;
+let saving = false;
 
-  const time = now.toLocaleTimeString(undefined,{
-    hour:"2-digit",
-    minute:"2-digit",
-    second:"2-digit"
-  });
 
-  $("clock").textContent =
-    "SYSTEM TIME " + date.toUpperCase() + " " + time;
-}
+/* =========================================================
+   DOM
+========================================================= */
 
-updateClock();
-setInterval(updateClock,1000);
+const $ = id =>
+  document.getElementById(id);
 
-/* =========================
-   MOBILE MENU
-========================= */
+const artistModal =
+  $("artistModal");
 
-$("menuBtn").addEventListener("click",()=>{
-  $("sidebar").classList.toggle("open");
-});
+const artistForm =
+  $("artistForm");
 
-/* =========================
-   MODAL
-========================= */
+const artistTableBody =
+  $("artistTableBody");
 
-let editingArtist = null;
+const featuredContainer =
+  $("featuredContainer");
 
-function openModal(artist=null){
+const searchInput =
+  $("searchInput");
 
-  editingArtist = artist;
+const statusFilter =
+  $("statusFilter");
 
-  $("modalTitle").textContent =
-    artist ? "Edit Artist" : "Create Artist";
+const featuredFilter =
+  $("featuredFilter");
 
-  if(artist){
-    $("artistName").value = artist.name || "";
-    $("artistType").value = artist.type || "solo";
-    $("artistGenre").value = artist.genre || "";
-    $("artistLocation").value = artist.location || "";
-    $("artistStatus").value = artist.status || "active";
-    $("artistSlug").value = artist.slug || "";
-    $("artistImage").value = artist.image || "";
-    $("artistBio").value = artist.bio || "";
-    $("artistWebsite").value = artist.website || "";
-    $("artistSocial").value = artist.social || "";
-    $("artistFeatured").checked = artist.featured === "yes";
-  }else{
-    $("artistForm").reset();
-    $("artistStatus").value = "active";
-  }
 
-  $("artistModal").classList.add("show");
-  setTimeout(()=>$("artistName").focus(),50);
-}
-
-function closeModal(){
-  $("artistModal").classList.remove("show");
-  editingArtist = null;
-}
-
-$("newArtistBtn").addEventListener("click",()=>openModal());
-
-$("closeModal").addEventListener("click",closeModal);
-
-$("cancelModal").addEventListener("click",closeModal);
-
-$("artistModal").addEventListener("click",e=>{
-  if(e.target === $("artistModal")){
-    closeModal();
-  }
-});
-
-document.addEventListener("keydown",e=>{
-  if(e.key === "Escape"){
-    closeModal();
-  }
-});
-
-/* =========================
-   AUTO SLUG
-========================= */
-
-$("artistName").addEventListener("input",()=>{
-
-  if(editingArtist) return;
-
-  $("artistSlug").value =
-    $("artistName").value
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g,"-")
-      .replace(/^-+|-+$/g,"");
-});
-
-/* =========================
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
-let toastTimer;
+function toast(
+  title,
+  message = "",
+  type = "success"
+){
 
-function toast(message){
+  const stack =
+    $("toastStack");
 
-  $("toastMessage").textContent = message;
+  const item =
+    document.createElement("div");
 
-  $("toast").classList.add("show");
+  item.className =
+    `toast ${type}`;
 
-  clearTimeout(toastTimer);
+  item.innerHTML = `
+    <div>
+      <div class="toast-title">
+        ${escapeHtml(title)}
+      </div>
 
-  toastTimer = setTimeout(()=>{
-    $("toast").classList.remove("show");
-  },3000);
+      ${
+        message
+          ? `<div class="toast-message">
+               ${escapeHtml(message)}
+             </div>`
+          : ""
+      }
+    </div>
+  `;
+
+  stack.appendChild(item);
+
+  setTimeout(() => {
+
+    item.style.opacity = "0";
+    item.style.transform = "translateY(8px)";
+
+    setTimeout(() =>
+      item.remove(),
+      220
+    );
+
+  }, 4500);
 }
 
-/* =========================
-   FILTERING
-========================= */
 
-const search = $("search");
-const statusFilter = $("statusFilter");
-const typeFilter = $("typeFilter");
-const featuredFilter = $("featuredFilter");
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
-function filterArtists(){
+function escapeHtml(value){
 
-  const query =
-    search.value.trim().toLowerCase();
-
-  const status =
-    statusFilter.value;
-
-  const type =
-    typeFilter.value;
-
-  const featured =
-    featuredFilter.value;
-
-  let visible = 0;
-
-  document
-    .querySelectorAll("#artistTable tbody tr")
-    .forEach(row=>{
-
-      const name =
-        (row.dataset.name || "").toLowerCase();
-
-      const rowStatus =
-        row.dataset.status || "";
-
-      const rowType =
-        row.dataset.type || "";
-
-      const rowFeatured =
-        row.dataset.featured || "";
-
-      const matchesSearch =
-        !query ||
-        name.includes(query) ||
-        row.textContent.toLowerCase().includes(query);
-
-      const matchesStatus =
-        !status ||
-        rowStatus === status;
-
-      const matchesType =
-        !type ||
-        rowType === type;
-
-      const matchesFeatured =
-        !featured ||
-        rowFeatured === featured;
-
-      const show =
-        matchesSearch &&
-        matchesStatus &&
-        matchesType &&
-        matchesFeatured;
-
-      row.style.display =
-        show ? "" : "none";
-
-      if(show) visible++;
-    });
-
-  $("resultCount").textContent =
-    visible + " artist" + (visible===1 ? "" : "s") + " shown";
-
-  $("emptyState").style.display =
-    visible ? "none" : "block";
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-search.addEventListener("input",filterArtists);
-statusFilter.addEventListener("change",filterArtists);
-typeFilter.addEventListener("change",filterArtists);
-featuredFilter.addEventListener("change",filterArtists);
 
-$("resetBtn").addEventListener("click",()=>{
+/* =========================================================
+   SLUG
+========================================================= */
 
-  search.value = "";
-  statusFilter.value = "";
-  typeFilter.value = "";
-  featuredFilter.value = "";
+function slugify(value){
 
-  filterArtists();
-
-  toast("Artist filters reset.");
-});
-
-/* =========================
-   FEATURED BUTTONS
-========================= */
-
-$("featuredBtn").addEventListener("click",()=>{
-
-  featuredFilter.value = "yes";
-
-  filterArtists();
-
-  window.scrollTo({
-    top:$("artistTable").offsetTop - 120,
-    behavior:"smooth"
-  });
-
-  toast("Showing featured artists.");
-});
-
-$("manageFeaturedBtn").addEventListener("click",()=>{
-
-  featuredFilter.value = "yes";
-
-  filterArtists();
-
-  toast("Featured artist filter enabled.");
-});
-
-/* =========================
-   ROW ACTIONS
-========================= */
-
-function getArtistFromRow(row){
-
-  return {
-    name:row.dataset.name,
-    type:row.dataset.type,
-    status:row.dataset.status,
-    featured:row.dataset.featured
-  };
+  return String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-+|-+$/g,"")
+    .slice(0,220);
 }
 
-document.querySelectorAll(".view-btn").forEach(btn=>{
 
-  btn.addEventListener("click",e=>{
+/* =========================================================
+   INITIALS
+========================================================= */
 
-    const card =
-      e.currentTarget.closest(".artist-card");
+function initials(name){
 
-    const row =
-      e.currentTarget.closest("tr");
+  const parts =
+    String(name || "CR")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
 
-    const source =
-      card || row;
+  if(!parts.length){
+    return "CR";
+  }
 
-    const name =
-      source.dataset.name ||
-      source.querySelector(".artist-name")?.textContent ||
-      "Artist";
+  if(parts.length === 1){
+    return parts[0]
+      .slice(0,2)
+      .toUpperCase();
+  }
 
-    toast("Opening artist profile: " + name);
-  });
+  return (
+    parts[0][0] +
+    parts[parts.length - 1][0]
+  ).toUpperCase();
+}
 
-});
 
-document.querySelectorAll(".edit-btn").forEach(btn=>{
+/* =========================================================
+   DATE
+========================================================= */
 
-  btn.addEventListener("click",e=>{
+function formatDate(value){
 
-    const card =
-      e.currentTarget.closest(".artist-card");
+  if(!value){
+    return "—";
+  }
 
-    const row =
-      e.currentTarget.closest("tr");
+  const date =
+    new Date(value);
 
-    const source =
-      card || row;
+  if(Number.isNaN(date.getTime())){
+    return "—";
+  }
 
-    const artist =
-      getArtistFromRow(source);
-
-    openModal(artist);
-  });
-
-});
-
-document.querySelectorAll(".delete-btn").forEach(btn=>{
-
-  btn.addEventListener("click",e=>{
-
-    const row =
-      e.currentTarget.closest("tr");
-
-    const name =
-      row.dataset.name || "this artist";
-
-    const confirmed =
-      confirm(
-        "Archive " +
-        name +
-        "?\n\nThis demo interface does not delete database records."
-      );
-
-    if(confirmed){
-      toast(name + " marked for archival.");
+  return new Intl.DateTimeFormat(
+    undefined,
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric"
     }
-  });
+  ).format(date);
+}
 
-});
 
-/* =========================
-   SAVE ARTIST
-========================= */
+/* =========================================================
+   DB STATUS
+========================================================= */
 
-$("saveArtist").addEventListener("click",()=>{
+function setDatabaseStatus(
+  state,
+  text
+){
 
-  const name =
-    $("artistName").value.trim();
+  const dot =
+    $("dbDot");
 
-  if(!name){
-    toast("Artist name is required.");
-    $("artistName").focus();
+  const label =
+    $("dbStatusText");
+
+  dot.className =
+    "status-dot";
+
+  if(state === "online"){
+    dot.classList.add("online");
+  }
+
+  if(state === "error"){
+    dot.classList.add("error");
+  }
+
+  label.textContent =
+    text;
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+async function loadSession(){
+
+  const {
+    data,
+    error
+  } = await supabase.auth.getSession();
+
+  if(error){
+    console.warn(
+      "Supabase session error:",
+      error
+    );
+    return null;
+  }
+
+  return data.session;
+}
+
+
+async function loadUser(){
+
+  const session =
+    await loadSession();
+
+  if(!session){
+    $("userName").textContent =
+      "Administrator";
+
+    $("userAvatar").textContent =
+      "CR";
+
     return;
   }
+
+  const user =
+    session.user;
+
+  const email =
+    user.email ||
+    "Administrator";
+
+  $("userName").textContent =
+    email;
+
+  $("userAvatar").textContent =
+    initials(email);
+}
+
+
+supabase.auth.onAuthStateChange(
+  (_event, session) => {
+
+    if(session){
+
+      const email =
+        session.user?.email ||
+        "Administrator";
+
+      $("userName").textContent =
+        email;
+
+      $("userAvatar").textContent =
+        initials(email);
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   LOAD ARTISTS
+========================================================= */
+
+async function loadArtists(){
+
+  setDatabaseStatus(
+    "offline",
+    "Loading"
+  );
+
+  artistTableBody.innerHTML = `
+    <tr>
+      <td colspan="9">
+        <div class="loading">
+          <div class="spinner"></div>
+          Loading artist registry…
+        </div>
+      </td>
+    </tr>
+  `;
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from(TABLE_NAME)
+    .select(`
+      id,
+      artist_key,
+      name,
+      slug,
+      artist_type,
+      genre,
+      location,
+      bio,
+      image_url,
+      website_url,
+      social_url,
+      status,
+      is_featured,
+      created_at,
+      updated_at
+    `)
+    .order("name",{ascending:true});
+
+  if(error){
+
+    console.error(
+      "Artists load error:",
+      error
+    );
+
+    setDatabaseStatus(
+      "error",
+      "Database Error"
+    );
+
+    artistTableBody.innerHTML = `
+      <tr>
+        <td colspan="9">
+          <div class="empty">
+            <div class="empty-icon">⚠</div>
+
+            <div class="empty-title">
+              Unable to load artists
+            </div>
+
+            <div class="empty-copy">
+              ${escapeHtml(
+                error.message ||
+                "Supabase returned an unknown error."
+              )}
+              <br><br>
+              Check the Artists table RLS policies and
+              authenticated administrator permissions.
+            </div>
+          </div>
+        </td>
+      </tr>
+    `;
+
+    featuredContainer.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">⚠</div>
+        <div class="empty-title">
+          Featured artists unavailable
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+  artists =
+    Array.isArray(data)
+      ? data
+      : [];
+
+  setDatabaseStatus(
+    "online",
+    "Supabase Online"
+  );
+
+  updateStats();
+  renderArtists();
+  renderFeatured();
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+  const total =
+    artists.length;
+
+  const active =
+    artists.filter(
+      artist =>
+        String(artist.status || "")
+          .toLowerCase() === "active"
+    ).length;
+
+  const featured =
+    artists.filter(
+      artist =>
+        artist.is_featured === true
+    ).length;
+
+  const genres =
+    new Set(
+      artists
+        .map(a =>
+          String(a.genre || "")
+            .trim()
+            .toLowerCase()
+        )
+        .filter(Boolean)
+    ).size;
+
+  const types =
+    new Set(
+      artists
+        .map(a =>
+          String(a.artist_type || "")
+            .trim()
+            .toLowerCase()
+        )
+        .filter(Boolean)
+    ).size;
+
+  $("statTotal").textContent =
+    total;
+
+  $("statActive").textContent =
+    active;
+
+  $("statFeatured").textContent =
+    featured;
+
+  $("statGenres").textContent =
+    genres;
+
+  $("statTypes").textContent =
+    types;
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+function getFilteredArtists(){
+
+  const search =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+  const status =
+    statusFilter.value
+      .trim()
+      .toLowerCase();
+
+  const featured =
+    featuredFilter.value
+      .trim()
+      .toLowerCase();
+
+  return artists.filter(
+    artist => {
+
+      const haystack = [
+        artist.name,
+        artist.slug,
+        artist.artist_type,
+        artist.genre,
+        artist.location,
+        artist.bio
+      ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+      if(
+        search &&
+        !haystack.includes(search)
+      ){
+        return false;
+      }
+
+      if(
+        status &&
+        String(artist.status || "")
+          .toLowerCase() !== status
+      ){
+        return false;
+      }
+
+      if(
+        featured === "featured" &&
+        artist.is_featured !== true
+      ){
+        return false;
+      }
+
+      if(
+        featured === "standard" &&
+        artist.is_featured === true
+      ){
+        return false;
+      }
+
+      return true;
+    }
+  );
+}
+
+
+/* =========================================================
+   RENDER TABLE
+========================================================= */
+
+function renderArtists(){
+
+  const filtered =
+    getFilteredArtists();
+
+  if(!filtered.length){
+
+    artistTableBody.innerHTML = `
+      <tr>
+        <td colspan="9">
+          <div class="empty">
+
+            <div class="empty-icon">
+              ♪
+            </div>
+
+            <div class="empty-title">
+              No artists found
+            </div>
+
+            <div class="empty-copy">
+              ${
+                artists.length
+                  ? "Try changing your search or filters."
+                  : "Your artist registry is currently empty. Add your first artist to begin."
+              }
+            </div>
+
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  artistTableBody.innerHTML =
+    filtered
+      .map(artist => {
+
+        const status =
+          String(
+            artist.status || "draft"
+          ).toLowerCase();
+
+        const statusClass =
+          ["active","draft","archived"]
+            .includes(status)
+              ? status
+              : "";
+
+        const image =
+          artist.image_url
+            ? `
+              <img
+                class="artist-image"
+                src="${escapeHtml(artist.image_url)}"
+                alt="${escapeHtml(artist.name)}"
+                loading="lazy"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='grid';">
+              <div
+                class="artist-image artist-placeholder"
+                style="display:none">
+                ${escapeHtml(initials(artist.name))}
+              </div>
+            `
+            : `
+              <div class="artist-image artist-placeholder">
+                ${escapeHtml(initials(artist.name))}
+              </div>
+            `;
+
+        const website =
+          artist.website_url
+            ? `<a
+                href="${escapeHtml(artist.website_url)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-sm"
+              >WEB</a>`
+            : "";
+
+        const social =
+          artist.social_url
+            ? `<a
+                href="${escapeHtml(artist.social_url)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-sm"
+              >SOCIAL</a>`
+            : "";
+
+        return `
+          <tr>
+
+            <td>
+
+              <div class="artist-cell">
+
+                ${image}
+
+                <div>
+
+                  <div class="artist-name">
+                    ${escapeHtml(
+                      artist.name || "Unnamed Artist"
+                    )}
+                  </div>
+
+                  <div class="artist-slug">
+                    /${escapeHtml(
+                      artist.slug || ""
+                    )}
+                  </div>
+
+                </div>
+
+              </div>
+
+            </td>
+
+
+            <td>
+              ${
+                artist.artist_type
+                  ? escapeHtml(
+                      artist.artist_type
+                    )
+                  : "—"
+              }
+            </td>
+
+
+            <td>
+              ${
+                artist.genre
+                  ? escapeHtml(
+                      artist.genre
+                    )
+                  : "—"
+              }
+            </td>
+
+
+            <td>
+              ${
+                artist.location
+                  ? escapeHtml(
+                      artist.location
+                    )
+                  : "—"
+              }
+            </td>
+
+
+            <td>
+              <span class="badge ${statusClass}">
+                ${escapeHtml(status)}
+              </span>
+            </td>
+
+
+            <td>
+              ${
+                artist.is_featured
+                  ? `
+                    <span class="badge featured">
+                      Featured
+                    </span>
+                  `
+                  : `
+                    <span class="badge">
+                      Standard
+                    </span>
+                  `
+              }
+            </td>
+
+
+            <td>
+
+              <div class="actions">
+
+                ${website}
+                ${social}
+
+              </div>
+
+            </td>
+
+
+            <td>
+              ${escapeHtml(
+                formatDate(
+                  artist.updated_at
+                )
+              )}
+            </td>
+
+
+            <td>
+
+              <div class="actions">
+
+                <button
+                  class="btn btn-sm"
+                  onclick="editArtist('${escapeHtml(artist.id)}')">
+                  Edit
+                </button>
+
+                <button
+                  class="btn btn-sm btn-danger"
+                  onclick="archiveArtist('${escapeHtml(artist.id)}')">
+                  Archive
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+        `;
+
+      })
+      .join("");
+}
+
+
+/* =========================================================
+   FEATURED
+========================================================= */
+
+function renderFeatured(){
+
+  const featured =
+    artists
+      .filter(
+        artist =>
+          artist.is_featured === true
+      )
+      .slice(0,8);
+
+  if(!featured.length){
+
+    featuredContainer.innerHTML = `
+      <div class="empty">
+
+        <div class="empty-icon">
+          ★
+        </div>
+
+        <div class="empty-title">
+          No featured artists
+        </div>
+
+        <div class="empty-copy">
+          Mark an artist as featured to display them here.
+        </div>
+
+      </div>
+    `;
+
+    return;
+  }
+
+  const grid =
+    document.createElement("div");
+
+  grid.className =
+    "featured-grid";
+
+  grid.innerHTML =
+    featured
+      .map(artist => {
+
+        const image =
+          artist.image_url
+            ? `
+              <img
+                class="featured-image"
+                src="${escapeHtml(artist.image_url)}"
+                alt="${escapeHtml(artist.name)}"
+                loading="lazy">
+            `
+            : `
+              <div
+                class="featured-image artist-placeholder">
+                ${escapeHtml(
+                  initials(artist.name)
+                )}
+              </div>
+            `;
+
+        return `
+          <div class="featured-card">
+
+            ${image}
+
+            <div class="featured-info">
+
+              <div class="featured-name">
+                ${escapeHtml(
+                  artist.name
+                )}
+              </div>
+
+              <div class="featured-meta">
+
+                ${
+                  artist.artist_type
+                    ? escapeHtml(
+                        artist.artist_type
+                      )
+                    : ""
+                }
+
+                ${
+                  artist.genre
+                    ? " · " +
+                      escapeHtml(
+                        artist.genre
+                      )
+                    : ""
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+        `;
+
+      })
+      .join("");
+
+  featuredContainer.innerHTML = "";
+
+  featuredContainer.appendChild(grid);
+}
+
+
+/* =========================================================
+   OPEN MODAL
+========================================================= */
+
+function openArtistModal(
+  artist = null
+){
+
+  editingId =
+    artist?.id || null;
+
+  $("modalTitle").textContent =
+    artist
+      ? "Edit Artist"
+      : "Add Artist";
+
+  $("artistId").value =
+    artist?.id || "";
+
+  $("artistName").value =
+    artist?.name || "";
+
+  $("artistSlug").value =
+    artist?.slug || "";
+
+  $("artistType").value =
+    artist?.artist_type || "";
+
+  $("artistGenre").value =
+    artist?.genre || "";
+
+  $("artistLocation").value =
+    artist?.location || "";
+
+  $("artistStatus").value =
+    artist?.status || "active";
+
+  $("artistImage").value =
+    artist?.image_url || "";
+
+  $("artistWebsite").value =
+    artist?.website_url || "";
+
+  $("artistSocial").value =
+    artist?.social_url || "";
+
+  $("artistFeatured").checked =
+    artist?.is_featured === true;
+
+  $("artistBio").value =
+    artist?.bio || "";
+
+  artistModal.classList.remove(
+    "hidden"
+  );
+
+  document.body.style.overflow =
+    "hidden";
+
+  setTimeout(() =>
+    $("artistName").focus(),
+    50
+  );
+}
+
+
+function closeArtistModal(){
+
+  if(saving){
+    return;
+  }
+
+  artistModal.classList.add(
+    "hidden"
+  );
+
+  document.body.style.overflow =
+    "";
+
+  editingId =
+    null;
+
+  artistForm.reset();
+
+  $("artistStatus").value =
+    "active";
+}
+
+
+/* =========================================================
+   ADD ARTIST
+========================================================= */
+
+function addArtist(){
+
+  openArtistModal();
+
+}
+
+
+/* =========================================================
+   EDIT ARTIST
+========================================================= */
+
+function editArtist(id){
+
+  const artist =
+    artists.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if(!artist){
+
+    toast(
+      "Artist not found",
+      "The selected artist is no longer in the current registry.",
+      "error"
+    );
+
+    return;
+  }
+
+  openArtistModal(
+    artist
+  );
+}
+
+
+/* =========================================================
+   SAVE ARTIST
+========================================================= */
+
+async function saveArtist(
+  event
+){
+
+  event.preventDefault();
+
+  if(saving){
+    return;
+  }
+
+  const name =
+    $("artistName")
+      .value
+      .trim();
+
+  let slug =
+    $("artistSlug")
+      .value
+      .trim();
+
+  if(!name){
+
+    toast(
+      "Artist name required",
+      "Enter an artist name before saving.",
+      "error"
+    );
+
+    return;
+  }
+
+  if(!slug){
+    slug =
+      slugify(name);
+  }
+
+  if(!slug){
+
+    toast(
+      "Slug required",
+      "Enter a valid artist slug.",
+      "error"
+    );
+
+    return;
+  }
+
+  /*
+   * These fields match the current public.artists
+   * schema:
+   *
+   * id
+   * artist_key
+   * name
+   * slug
+   * bio
+   * image_url
+   * website_url
+   * status
+   * is_featured
+   * created_at
+   * updated_at
+   * artist_type
+   * genre
+   * location
+   * social_url
+   */
 
   const payload = {
 
     name,
 
-    slug:
-      $("artistSlug").value.trim(),
+    slug,
 
     artist_type:
-      $("artistType").value,
+      $("artistType")
+        .value
+        .trim() || null,
 
     genre:
-      $("artistGenre").value.trim(),
+      $("artistGenre")
+        .value
+        .trim() || null,
 
     location:
-      $("artistLocation").value.trim(),
+      $("artistLocation")
+        .value
+        .trim() || null,
 
-    status:
-      $("artistStatus").value,
+    bio:
+      $("artistBio")
+        .value
+        .trim() || null,
 
     image_url:
-      $("artistImage").value.trim(),
-
-    biography:
-      $("artistBio").value.trim(),
+      $("artistImage")
+        .value
+        .trim() || null,
 
     website_url:
-      $("artistWebsite").value.trim(),
+      $("artistWebsite")
+        .value
+        .trim() || null,
 
     social_url:
-      $("artistSocial").value.trim(),
+      $("artistSocial")
+        .value
+        .trim() || null,
 
-    featured:
-      $("artistFeatured").checked
+    status:
+      $("artistStatus")
+        .value
+        .trim() || "active",
 
+    is_featured:
+      $("artistFeatured")
+        .checked
   };
 
-  console.log(
-    "CrowRules artist payload:",
-    payload
-  );
+  saving =
+    true;
 
-  /*
-    Supabase example after schema verification:
+  const button =
+    $("saveBtn");
 
-    const { data, error } = await supabase
-      .from("artists")
-      .insert(payload)
-      .select()
-      .single();
+  button.disabled =
+    true;
 
-    For edits:
+  button.textContent =
+    "Saving…";
 
-    const { data, error } = await supabase
-      .from("artists")
-      .update(payload)
-      .eq("id", artistId)
-      .select()
-      .single();
+  try{
 
-    Adapt the column names to your existing schema.
-  */
+    let result;
 
-  closeModal();
+    if(editingId){
+
+      result =
+        await supabase
+          .from(TABLE_NAME)
+          .update(payload)
+          .eq("id",editingId)
+          .select()
+          .single();
+
+    }else{
+
+      /*
+       * artist_key is required by the current schema.
+       * Generate a stable key only for new records.
+       */
+
+      payload.artist_key =
+        slugify(
+          name +
+          "-" +
+          Math.random()
+            .toString(36)
+            .slice(2,8)
+        );
+
+      result =
+        await supabase
+          .from(TABLE_NAME)
+          .insert(payload)
+          .select()
+          .single();
+    }
+
+    if(result.error){
+
+      throw result.error;
+    }
+
+    closeArtistModal();
+
+    toast(
+      editingId
+        ? "Artist updated"
+        : "Artist created",
+      `${name} was saved successfully.`
+    );
+
+    await loadArtists();
+
+  }catch(error){
+
+    console.error(
+      "Save artist error:",
+      error
+    );
+
+    let message =
+      error?.message ||
+      "Unable to save the artist.";
+
+    if(
+      /permission denied/i
+        .test(message)
+    ){
+
+      message =
+        "Supabase denied access to the artists table. Check the authenticated administrator RLS policy.";
+    }
+
+    if(
+      /duplicate|unique/i
+        .test(message)
+    ){
+
+      message =
+        "That artist name, slug, or artist key may already exist.";
+    }
+
+    toast(
+      "Saving artist failed",
+      message,
+      "error"
+    );
+
+  }finally{
+
+    saving =
+      false;
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "Save Artist";
+  }
+}
+
+
+/* =========================================================
+   ARCHIVE
+========================================================= */
+
+async function archiveArtist(id){
+
+  const artist =
+    artists.find(
+      item =>
+        String(item.id) ===
+        String(id)
+    );
+
+  if(!artist){
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      `Archive "${artist.name}"?\n\nThe artist will remain in Supabase but their status will be changed to archived.`
+    );
+
+  if(!confirmed){
+    return;
+  }
+
+  const {
+    error
+  } = await supabase
+    .from(TABLE_NAME)
+    .update({
+      status:"archived",
+      is_featured:false
+    })
+    .eq("id",id);
+
+  if(error){
+
+    console.error(
+      "Archive artist error:",
+      error
+    );
+
+    toast(
+      "Archive failed",
+      error.message ||
+      "Unable to archive artist.",
+      "error"
+    );
+
+    return;
+  }
 
   toast(
-    editingArtist
-      ? "Artist update saved."
-      : "Artist created successfully."
+    "Artist archived",
+    `${artist.name} has been archived.`
   );
-});
 
-/* =========================
-   EXPORT
-========================= */
+  await loadArtists();
+}
 
-$("exportBtn").addEventListener("click",()=>{
 
-  const rows =
-    [...document.querySelectorAll("#artistTable tbody tr")]
-      .filter(row=>row.style.display !== "none");
+/* =========================================================
+   EXPORT CSV
+========================================================= */
 
-  const data = rows.map(row=>{
+function csvEscape(value){
 
-    const cells =
-      [...row.querySelectorAll("td")];
+  const text =
+    String(value ?? "");
 
-    return {
-      artist:
-        row.dataset.name,
+  return `"${text.replaceAll('"','""')}"`;
+}
 
-      type:
-        cells[1]?.innerText.trim(),
 
-      genre:
-        cells[2]?.innerText.trim(),
+function exportCSV(){
 
-      releases:
-        cells[3]?.innerText.trim(),
+  if(!artists.length){
 
-      status:
-        cells[4]?.innerText.trim(),
+    toast(
+      "Nothing to export",
+      "There are no artist records to export.",
+      "error"
+    );
 
-      featured:
-        cells[5]?.innerText.trim(),
+    return;
+  }
 
-      updated:
-        cells[6]?.innerText.trim()
-    };
-  });
+  const columns = [
+
+    "artist_key",
+    "name",
+    "slug",
+    "artist_type",
+    "genre",
+    "location",
+    "bio",
+    "image_url",
+    "website_url",
+    "social_url",
+    "status",
+    "is_featured",
+    "created_at",
+    "updated_at"
+
+  ];
+
+  const rows = [
+
+    columns.map(csvEscape).join(","),
+
+    ...artists.map(
+      artist =>
+        columns
+          .map(
+            column =>
+              csvEscape(
+                artist[column]
+              )
+          )
+          .join(",")
+    )
+
+  ];
 
   const blob =
     new Blob(
-      [JSON.stringify(data,null,2)],
-      {type:"application/json"}
+      [
+        rows.join("\n")
+      ],
+      {
+        type:
+          "text/csv;charset=utf-8"
+      }
     );
 
   const url =
     URL.createObjectURL(blob);
 
-  const a =
+  const anchor =
     document.createElement("a");
 
-  a.href = url;
-  a.download =
-    "crowrules-artists-" +
-    new Date().toISOString().slice(0,10) +
-    ".json";
+  anchor.href =
+    url;
 
-  document.body.appendChild(a);
+  anchor.download =
+    `crowrules-artists-${new Date()
+      .toISOString()
+      .slice(0,10)}.csv`;
 
-  a.click();
+  document.body.appendChild(
+    anchor
+  );
 
-  a.remove();
+  anchor.click();
 
-  URL.revokeObjectURL(url);
+  anchor.remove();
 
-  toast("Artist registry exported.");
-});
+  URL.revokeObjectURL(
+    url
+  );
 
-/* =========================
-   SUPABASE CONFIG HOOK
-========================= */
+  toast(
+    "CSV exported",
+    `${artists.length} artist records exported.`
+  );
+}
 
-/*
-  Configure these values from your secure deployment
-  environment or existing CrowRules configuration.
 
-  Example:
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-  window.CROWRULES_SUPABASE_URL =
-    "https://YOURPROJECT.supabase.co";
+function toggleSidebar(){
 
-  window.CROWRULES_SUPABASE_ANON_KEY =
-    "YOUR_ANON_OR_PUBLISHABLE_KEY";
+  $("sidebar")
+    .classList
+    .toggle("open");
 
-  Then load:
+  $("sidebarOverlay")
+    .classList
+    .toggle("show");
+}
 
-  https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2
 
-  Do NOT place a service-role key in this HTML file.
-*/
+function closeSidebar(){
 
-/*
-  Recommended future artist architecture:
+  $("sidebar")
+    .classList
+    .remove("open");
 
-  artists
-  ├── artist profiles
-  ├── biographies
-  ├── genre
-  ├── locations
-  ├── featured state
-  └── publishing status
+  $("sidebarOverlay")
+    .classList
+    .remove("show");
+}
 
-  artist_releases
-  ├── artist_id
-  ├── release_id
-  └── role
 
-  artist_members
-  ├── artist_id
-  ├── member_id
-  └── role
+/* =========================================================
+   SIGN OUT
+========================================================= */
 
-  artist_social_links
-  ├── artist_id
-  ├── platform
-  └── url
+async function signOut(){
 
-  artist_stats
-  ├── artist_id
-  ├── streams
-  ├── views
-  └── followers
+  const confirmed =
+    window.confirm(
+      "Sign out of CrowRules Entertainment Admin?"
+    );
 
-  Before creating these tables, inspect the current
-  CrowRules Records schema so existing tables are reused.
-*/
+  if(!confirmed){
+    return;
+  }
 
-filterArtists();
+  const {
+    error
+  } =
+    await supabase.auth.signOut();
+
+  if(error){
+
+    toast(
+      "Sign out failed",
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  toast(
+    "Signed out",
+    "Your Supabase session has been closed."
+  );
+
+  /*
+   * Do not force a redirect here because the existing
+   * CrowRules admin authentication shell may handle
+   * session routing.
+   */
+
+}
+
+
+/* =========================================================
+   EVENT LISTENERS
+========================================================= */
+
+$("addArtistBtn")
+  .addEventListener(
+    "click",
+    addArtist
+  );
+
+$("addArtistBtn2")
+  .addEventListener(
+    "click",
+    addArtist
+  );
+
+$("refreshBtn")
+  .addEventListener(
+    "click",
+    loadArtists
+  );
+
+$("featuredRefreshBtn")
+  .addEventListener(
+    "click",
+    loadArtists
+  );
+
+$("exportBtn")
+  .addEventListener(
+    "click",
+    exportCSV
+  );
+
+$("modalClose")
+  .addEventListener(
+    "click",
+    closeArtistModal
+  );
+
+$("cancelBtn")
+  .addEventListener(
+    "click",
+    closeArtistModal
+  );
+
+artistForm
+  .addEventListener(
+    "submit",
+    saveArtist
+  );
+
+searchInput
+  .addEventListener(
+    "input",
+    renderArtists
+  );
+
+statusFilter
+  .addEventListener(
+    "change",
+    renderArtists
+  );
+
+featuredFilter
+  .addEventListener(
+    "change",
+    renderArtists
+  );
+
+$("mobileMenu")
+  .addEventListener(
+    "click",
+    toggleSidebar
+  );
+
+$("sidebarOverlay")
+  .addEventListener(
+    "click",
+    closeSidebar
+  );
+
+$("signOutBtn")
+  .addEventListener(
+    "click",
+    signOut
+  );
+
+
+/* =========================================================
+   NAME → SLUG
+========================================================= */
+
+$("artistName")
+  .addEventListener(
+    "input",
+    event => {
+
+      if(editingId){
+        return;
+      }
+
+      $("artistSlug").value =
+        slugify(
+          event.target.value
+        );
+
+    }
+  );
+
+
+/* =========================================================
+   MODAL ESCAPE
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key === "Escape" &&
+      !artistModal.classList.contains(
+        "hidden"
+      )
+    ){
+
+      closeArtistModal();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+async function initialize(){
+
+  await loadUser();
+
+  await loadArtists();
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initialize();
+
 </script>
 
 </body>
