@@ -1,3089 +1,2437 @@
-/* =========================================================
-   CrowRules Entertainment
-   Admin OS v2.0
-   Supabase-powered Administration Engine
-   =========================================================
+/* ============================================================
+   CROWRULES ENTERTAINMENT
+   ADMIN COMMAND CENTER
+   Supabase-connected administration
+============================================================ */
 
-   SECURITY
-   ---------------------------------------------------------
-   Browser code may contain ONLY:
-     • Supabase project URL
-     • Supabase Publishable key
-
-   NEVER place:
-     • service_role
-     • sb_secret_*
-     • database passwords
-     • Stripe secret keys
-     • other server secrets
-
-   Privileged mutations should be handled by protected
-   Supabase Edge Functions.
-
-   ========================================================= */
-
-(() => {
-  'use strict';
-
-  /* =======================================================
-     CONFIGURATION
-     ======================================================= */
-
-  const SUPABASE_URL =
-    'https://zauxdqyssratvzmomozf.supabase.co';
-
-  const SUPABASE_CDN =
-    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-
-  const KEY_STORAGE =
-    'crowrules_supabase_publishable_key';
-
-  const REFRESH_INTERVAL =
-    60 * 1000;
-
-  const APP_NAME =
-    'CrowRules Admin OS';
-
-  const APP_VERSION =
-    '2.0.0';
+"use strict";
 
 
-  /* =======================================================
-     STATE
-     ======================================================= */
+/* ============================================================
+   SUPABASE CONFIGURATION
+============================================================ */
 
-  let supabaseClient = null;
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
 
-  let currentUser = null;
-
-  let currentSession = null;
-
-  let supabaseReady = false;
-
-  let realtimeChannel = null;
-
-  let refreshTimer = null;
-
-  let isRefreshing = false;
-
-  let lastRefresh = null;
-
-  let connectionState = 'initializing';
-
-  let diagnostics = [];
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
 
 
-  /* =======================================================
-     NAVIGATION
-     ======================================================= */
+/* ============================================================
+   SUPABASE CLIENT
+============================================================ */
 
-  const pages = [
-    ['index.html', 'Command Center'],
-
-    ['notifications.html', 'Notifications'],
-    ['activity.html', 'Activity'],
-
-    ['content.html', 'Content'],
-    ['episodes.html', 'Episodes'],
-    ['shows.html', 'Shows'],
-    ['media.html', 'Media Library'],
-    ['youtube.html', 'YouTube'],
-    ['live-events.html', 'Live Events'],
-
-    ['members.html', 'Members'],
-    ['creators.html', 'Creators'],
-    ['collaborators.html', 'Collaborators'],
-    ['staff.html', 'Staff & Volunteers'],
-    ['podcasters.html', 'Podcasters'],
-
-    ['dream-library.html', 'Dream Library'],
-    ['dream-projects.html', 'Dream Projects'],
-    ['creative-rooms.html', 'Creative Rooms'],
-    ['agreements.html', 'Agreements & Rights'],
-    ['earnings.html', 'Earnings'],
-    ['pitch-room.html', 'Pitch Room'],
-
-    ['sports.html', 'Sports'],
-    ['podcasting.html', 'Podcasting'],
-    ['tv.html', 'Universal TV'],
-    ['yearbooks.html', 'Yearbooks'],
-    ['records.html', 'Records'],
-    ['studios.html', 'Studios'],
-    ['spectrum-awards.html', 'Spectrum Awards'],
-    ['crowspace.html', 'CrowSpace'],
-
-    ['business.html', 'Business & Finance'],
-    ['analytics.html', 'Analytics']
-  ];
-
-
-  const groups = [
-    [
-      'OPERATIONS',
-      [
-        'index.html',
-        'notifications.html',
-        'activity.html'
-      ]
-    ],
-
-    [
-      'CONTENT',
-      [
-        'content.html',
-        'episodes.html',
-        'shows.html',
-        'media.html',
-        'youtube.html',
-        'live-events.html'
-      ]
-    ],
-
-    [
-      'PEOPLE',
-      [
-        'members.html',
-        'creators.html',
-        'collaborators.html',
-        'staff.html',
-        'podcasters.html'
-      ]
-    ],
-
-    [
-      'DREAMSCAPES',
-      [
-        'dream-library.html',
-        'dream-projects.html',
-        'creative-rooms.html',
-        'agreements.html',
-        'earnings.html',
-        'pitch-room.html'
-      ]
-    ],
-
-    [
-      'DIVISIONS',
-      [
-        'sports.html',
-        'podcasting.html',
-        'tv.html',
-        'yearbooks.html',
-        'records.html',
-        'studios.html',
-        'spectrum-awards.html',
-        'crowspace.html'
-      ]
-    ],
-
-    [
-      'BUSINESS',
-      [
-        'business.html',
-        'analytics.html'
-      ]
-    ]
-  ];
-
-
-  /* =======================================================
-     PAGE DEFINITIONS
-     ======================================================= */
-
-  const pageDefinitions = {
-
-    'index.html': {
-      title: 'Command Center',
-      description:
-        'Executive overview of CrowRules Entertainment administration.',
-      metrics: [
-        ['Members', 'cr_members'],
-        ['Content', 'cr_content'],
-        ['Podcaster Applications', 'cr_podcaster_applications'],
-        ['Suggestions', 'cr_member_suggestions']
-      ]
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: "pkce"
     },
 
-    'notifications.html': {
-      title: 'Notifications',
-      description:
-        'Alerts, approvals, reminders, and system notices.',
-      metrics: [
-        ['Suggestions', 'cr_member_suggestions'],
-        ['Podcaster Applications', 'cr_podcaster_applications']
-      ]
-    },
-
-    'activity.html': {
-      title: 'Activity',
-      description:
-        'Recent platform and administrative activity.',
-      metrics: [
-        ['Members', 'cr_members'],
-        ['Content', 'cr_content'],
-        ['Watch History', 'cr_member_watch_history'],
-        ['Engagement', 'cr_member_engagement_ledger']
-      ]
-    },
-
-    'content.html': {
-      title: 'Content',
-      description:
-        'Manage published and developing CrowRules content.',
-      metrics: [
-        ['Content', 'cr_content'],
-        ['Episodes', 'tacoma_nights_episodes'],
-        ['Back Deck Episodes', 'back_deck_episodes']
-      ]
-    },
-
-    'episodes.html': {
-      title: 'Episodes',
-      description:
-        'Episode production and release control.',
-      metrics: [
-        ['Tacoma Nights', 'tacoma_nights_episodes'],
-        ['Back Deck Live', 'back_deck_episodes']
-      ]
-    },
-
-    'shows.html': {
-      title: 'Shows',
-      description:
-        'Shows, series, seasons, and programming.',
-      metrics: [
-        ['Content', 'cr_content'],
-        ['Tacoma Nights Episodes', 'tacoma_nights_episodes'],
-        ['Back Deck Episodes', 'back_deck_episodes']
-      ]
-    },
-
-    'media.html': {
-      title: 'Media Library',
-      description:
-        'Media assets, artwork, video, and production files.',
-      metrics: [
-        ['Content', 'cr_content']
-      ]
-    },
-
-    'youtube.html': {
-      title: 'YouTube',
-      description:
-        'YouTube publishing and channel operations.',
-      metrics: [
-        ['Content', 'cr_content'],
-        ['Episodes', 'tacoma_nights_episodes']
-      ]
-    },
-
-    'live-events.html': {
-      title: 'Live Events',
-      description:
-        'Live broadcasts and event control.',
-      metrics: [
-        ['Content', 'cr_content']
-      ]
-    },
-
-    'members.html': {
-      title: 'Members',
-      description:
-        'Member accounts and community administration.',
-      metrics: [
-        ['Members', 'cr_members'],
-        ['Profiles', 'cr_profiles'],
-        ['Watch History', 'cr_member_watch_history']
-      ]
-    },
-
-    'creators.html': {
-      title: 'Creators',
-      description:
-        'Creator profiles, submissions, and relationships.',
-      metrics: [
-        ['Profiles', 'cr_profiles'],
-        ['Content', 'cr_content'],
-        ['Suggestions', 'cr_member_suggestions']
-      ]
-    },
-
-    'collaborators.html': {
-      title: 'Collaborators',
-      description:
-        'Writers, artists, filmmakers, designers, and partners.',
-      metrics: [
-        ['Profiles', 'cr_profiles'],
-        ['Content', 'cr_content']
-      ]
-    },
-
-    'staff.html': {
-      title: 'Staff & Volunteers',
-      description:
-        'CrowRules team and volunteer administration.',
-      metrics: [
-        ['Profiles', 'cr_profiles'],
-        ['Members', 'cr_members']
-      ]
-    },
-
-    'podcasters.html': {
-      title: 'Podcasters',
-      description:
-        'Podcaster applications and podcast operations.',
-      metrics: [
-        ['Applications', 'cr_podcaster_applications'],
-        ['Members', 'cr_members'],
-        ['Content', 'cr_content']
-      ]
-    },
-
-    'dream-library.html': {
-      title: 'Dream Library',
-      description:
-        'The central CrowRules Dreamscapes idea library.',
-      metrics: [
-        ['Suggestions', 'cr_member_suggestions'],
-        ['Creators', 'cr_profiles'],
-        ['Content', 'cr_content']
-      ]
-    },
-
-    'dream-projects.html': {
-      title: 'Dream Projects',
-      description:
-        'Projects developed from Dreamscapes ideas.',
-      metrics: [
-        ['Content', 'cr_content'],
-        ['Suggestions', 'cr_member_suggestions']
-      ]
-    },
-
-    'creative-rooms.html': {
-      title: 'Creative Rooms',
-      description:
-        'Collaborative rooms for developing stories and worlds.',
-      metrics: [
-        ['Content', 'cr_content'],
-        ['Profiles', 'cr_profiles']
-      ]
-    },
-
-    'agreements.html': {
-      title: 'Agreements & Rights',
-      description:
-        'Creator rights, agreements, releases, and documentation.',
-      metrics: [
-        ['Profiles', 'cr_profiles'],
-        ['Suggestions', 'cr_member_suggestions']
-      ]
-    },
-
-    'earnings.html': {
-      title: 'Earnings',
-      description:
-        'Creator participation, revenue, and payout tracking.',
-      metrics: [
-        ['Creators', 'cr_profiles'],
-        ['Content', 'cr_content']
-      ]
-    },
-
-    'pitch-room.html': {
-      title: 'Pitch Room',
-      description:
-        'Internal pitch development and decision workflow.',
-      metrics: [
-        ['Suggestions', 'cr_member_suggestions'],
-        ['Content', 'cr_content']
-      ]
-    },
-
-    'sports.html': {
-      title: 'Sports',
-      description:
-        'CrowRules Sports operations and Pick Em administration.',
-      metrics: [
-        ['Sports Games', 'sports_games'],
-        ['Sports Leagues', 'sports_leagues']
-      ]
-    },
-
-    'podcasting.html': {
-      title: 'Podcasting',
-      description:
-        'CrowRules Podcasting branch administration.',
-      metrics: [
-        ['Applications', 'cr_podcaster_applications'],
-        ['Content', 'cr_content']
-      ],
-      launch: '2027'
-    },
-
-    'tv.html': {
-      title: 'Universal TV',
-      description:
-        'CrowRules Universal TV 24/7 network control.',
-      metrics: [
-        ['Content', 'cr_content'],
-        ['Live Events', 'cr_content']
-      ]
-    },
-
-    'yearbooks.html': {
-      title: 'Yearbooks',
-      description:
-        'CrowRules Video School Yearbook operations.',
-      metrics: [
-        ['Content', 'cr_content']
-      ],
-      launch: '2029'
-    },
-
-    'records.html': {
-      title: 'Records',
-      description:
-        'CrowRules Records administration.',
-      metrics: [
-        ['Content', 'cr_content'],
-        ['Creators', 'cr_profiles']
-      ],
-      launch: '2031'
-    },
-
-    'studios.html': {
-      title: 'Studios',
-      description:
-        'CrowRules Studios production operations.',
-      metrics: [
-        ['Content', 'cr_content'],
-        ['Profiles', 'cr_profiles']
-      ],
-      launch: '2031'
-    },
-
-    'spectrum-awards.html': {
-      title: 'Spectrum Awards',
-      description:
-        'Spectrum Awards planning and administration.',
-      metrics: [
-        ['Content', 'cr_content'],
-        ['Members', 'cr_members']
-      ],
-      launch: '2029'
-    },
-
-    'crowspace.html': {
-      title: 'CrowSpace',
-      description:
-        'CrowSpace social platform administration.',
-      metrics: [
-        ['Members', 'cr_members'],
-        ['Content', 'cr_content']
-      ],
-      launch: '2028'
-    },
-
-    'business.html': {
-      title: 'Business & Finance',
-      description:
-        'Business, finance, sponsorships, donations, and campaigns.',
-      metrics: [
-        ['Members', 'cr_members'],
-        ['Content', 'cr_content']
-      ]
-    },
-
-    'analytics.html': {
-      title: 'Analytics',
-      description:
-        'Cross-platform analytics and performance reporting.',
-      metrics: [
-        ['Watch History', 'cr_member_watch_history'],
-        ['Engagement', 'cr_member_engagement_ledger'],
-        ['Members', 'cr_members']
-      ]
-    }
-
-  };
-
-
-  /* =======================================================
-     UTILITIES
-     ======================================================= */
-
-  function escapeHtml(value) {
-    return String(value ?? '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-
-  function formatNumber(value) {
-    if (
-      value === null ||
-      value === undefined ||
-      value === ''
-    ) {
-      return '—';
-    }
-
-    const number = Number(value);
-
-    if (!Number.isFinite(number)) {
-      return String(value);
-    }
-
-    return number.toLocaleString();
-  }
-
-
-  function formatDate(value) {
-    if (!value) {
-      return 'Unknown';
-    }
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) {
-      return String(value);
-    }
-
-    return date.toLocaleString();
-  }
-
-
-  function currentPage() {
-    return (
-      location.pathname
-        .split('/')
-        .pop() ||
-      'index.html'
-    );
-  }
-
-
-  function pageDefinition() {
-    return (
-      pageDefinitions[currentPage()] ||
-      pageDefinitions['index.html']
-    );
-  }
-
-
-  function recordDiagnostic(
-    type,
-    message,
-    details = null
-  ) {
-    diagnostics.unshift({
-      time: new Date().toISOString(),
-      type,
-      message,
-      details
-    });
-
-    diagnostics =
-      diagnostics.slice(0, 100);
-
-    updateDiagnosticsUI();
-  }
-
-
-  /* =======================================================
-     SUPABASE KEY
-     ======================================================= */
-
-  function getPublishableKey() {
-
-    if (
-      window.CROWRULES_SUPABASE_PUBLISHABLE_KEY
-    ) {
-      return String(
-        window.CROWRULES_SUPABASE_PUBLISHABLE_KEY
-      ).trim();
-    }
-
-    try {
-      const stored =
-        localStorage.getItem(
-          KEY_STORAGE
-        );
-
-      if (stored) {
-        return stored.trim();
+    global: {
+      headers: {
+        "x-crowrules-client":
+          "crowrules-admin"
       }
-    } catch (error) {
-      console.warn(
-        '[CrowRules Admin] localStorage unavailable.',
-        error
-      );
-    }
-
-    return '';
-  }
-
-
-  function isUnsafeKey(key) {
-
-    const value =
-      String(key || '')
-        .trim()
-        .toLowerCase();
-
-    return (
-      value.startsWith('sb_secret_') ||
-      value.includes('service_role') ||
-      value.startsWith('eyj')
-    );
-  }
-
-
-  /* =======================================================
-     SUPABASE LIBRARY
-     ======================================================= */
-
-  function loadSupabaseLibrary() {
-
-    return new Promise(
-      (resolve, reject) => {
-
-        if (
-          window.supabase &&
-          typeof window.supabase.createClient ===
-            'function'
-        ) {
-          resolve(window.supabase);
-          return;
-        }
-
-        const existing =
-          document.querySelector(
-            'script[data-crowrules-supabase]'
-          );
-
-        if (existing) {
-
-          existing.addEventListener(
-            'load',
-            () => {
-
-              if (
-                window.supabase &&
-                typeof window.supabase
-                  .createClient ===
-                  'function'
-              ) {
-                resolve(window.supabase);
-              } else {
-                reject(
-                  new Error(
-                    'Supabase library loaded without createClient.'
-                  )
-                );
-              }
-
-            }
-          );
-
-          existing.addEventListener(
-            'error',
-            () => {
-              reject(
-                new Error(
-                  'Supabase library failed to load.'
-                )
-              );
-            }
-          );
-
-          return;
-        }
-
-
-        const script =
-          document.createElement(
-            'script'
-          );
-
-        script.src =
-          SUPABASE_CDN;
-
-        script.async = true;
-
-        script.dataset.crowrulesSupabase =
-          'true';
-
-        script.onload = () => {
-
-          if (
-            window.supabase &&
-            typeof window.supabase
-              .createClient ===
-              'function'
-          ) {
-            resolve(
-              window.supabase
-            );
-          } else {
-            reject(
-              new Error(
-                'Supabase JS loaded, but createClient is unavailable.'
-              )
-            );
-          }
-
-        };
-
-        script.onerror = () => {
-          reject(
-            new Error(
-              'Unable to load Supabase JS from CDN.'
-            )
-          );
-        };
-
-        document.head.appendChild(
-          script
-        );
-      }
-    );
-  }
-
-
-  /* =======================================================
-     INITIALIZE SUPABASE
-     ======================================================= */
-
-  async function initializeSupabase() {
-
-    connectionState =
-      'loading';
-
-    updateConnectionIndicator();
-
-
-    const key =
-      getPublishableKey();
-
-
-    if (!key) {
-
-      connectionState =
-        'missing-key';
-
-      recordDiagnostic(
-        'warning',
-        'Supabase Publishable key has not been configured.'
-      );
-
-      updateConnectionIndicator();
-
-      return false;
-    }
-
-
-    if (isUnsafeKey(key)) {
-
-      connectionState =
-        'unsafe-key';
-
-      recordDiagnostic(
-        'error',
-        'Unsafe Supabase key rejected. Use a Publishable key only.'
-      );
-
-      updateConnectionIndicator();
-
-      return false;
-    }
-
-
-    try {
-
-      const sdk =
-        await loadSupabaseLibrary();
-
-
-      supabaseClient =
-        sdk.createClient(
-          SUPABASE_URL,
-          key,
-          {
-            auth: {
-              autoRefreshToken: true,
-              persistSession: true,
-              detectSessionInUrl: true
-            }
-          }
-        );
-
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient
-          .auth
-          .getSession();
-
-
-      if (error) {
-
-        recordDiagnostic(
-          'error',
-          'Unable to retrieve Supabase session.',
-          error.message
-        );
-
-      }
-
-
-      currentSession =
-        data?.session ||
-        null;
-
-      currentUser =
-        currentSession?.user ||
-        null;
-
-
-      supabaseClient
-        .auth
-        .onAuthStateChange(
-          (_event, session) => {
-
-            currentSession =
-              session ||
-              null;
-
-            currentUser =
-              session?.user ||
-              null;
-
-            updateConnectionIndicator();
-
-            updateUserPanel();
-
-            refreshPageData();
-
-          }
-        );
-
-
-      supabaseReady =
-        true;
-
-      connectionState =
-        'connected';
-
-
-      recordDiagnostic(
-        'success',
-        'Supabase client initialized.'
-      );
-
-
-      updateConnectionIndicator();
-
-      return true;
-
-    } catch (error) {
-
-      supabaseReady =
-        false;
-
-      connectionState =
-        'error';
-
-
-      recordDiagnostic(
-        'error',
-        'Supabase initialization failed.',
-        error.message
-      );
-
-
-      updateConnectionIndicator();
-
-      return false;
     }
   }
+);
 
 
-  /* =======================================================
-     SAFE TABLE COUNT
-     ======================================================= */
+/* ============================================================
+   STATE
+============================================================ */
 
-  async function countTable(
-    table
-  ) {
+const state = {
 
-    if (
-      !supabaseClient
-    ) {
-      return {
-        count: null,
-        error:
-          'Supabase is not initialized.'
-      };
-    }
+  user: null,
 
+  session: null,
 
-    try {
+  bootstrap: null,
 
-      const result =
-        await supabaseClient
-          .from(table)
-          .select('*', {
-            count: 'exact',
-            head: true
-          });
+  currentPage: "dashboard",
+
+  navigation: [],
+
+  settings: {},
+
+  roles: [],
+
+  initialized: false
+
+};
 
 
-      if (result.error) {
+/* ============================================================
+   DEFAULT NAVIGATION
+============================================================ */
 
-        return {
-          count: null,
-          error:
-            result.error.message
-        };
-      }
+const DEFAULT_NAVIGATION = [
 
+  {
+    section: "Command Center",
+    label: "Dashboard",
+    href: "dashboard",
+    icon: "⌂"
+  },
 
-      return {
-        count:
-          result.count ?? 0,
-        error:
-          null
-      };
+  {
+    section: "Command Center",
+    label: "Notifications",
+    href: "notifications",
+    icon: "♢"
+  },
 
-    } catch (error) {
+  {
+    section: "Command Center",
+    label: "Activity",
+    href: "activity",
+    icon: "◌"
+  },
 
-      return {
-        count: null,
-        error:
-          error.message
-      };
-    }
+  {
+    section: "Content",
+    label: "Content",
+    href: "content",
+    icon: "▣"
+  },
+
+  {
+    section: "Content",
+    label: "Episodes",
+    href: "episodes",
+    icon: "▶"
+  },
+
+  {
+    section: "Content",
+    label: "Shows",
+    href: "shows",
+    icon: "▤"
+  },
+
+  {
+    section: "Content",
+    label: "Media",
+    href: "media",
+    icon: "▧"
+  },
+
+  {
+    section: "Content",
+    label: "YouTube",
+    href: "youtube",
+    icon: "▷"
+  },
+
+  {
+    section: "Live",
+    label: "Live Events",
+    href: "live-events",
+    icon: "●"
+  },
+
+  {
+    section: "People",
+    label: "Members",
+    href: "members",
+    icon: "♙"
+  },
+
+  {
+    section: "People",
+    label: "Creators",
+    href: "creators",
+    icon: "✦"
+  },
+
+  {
+    section: "People",
+    label: "Staff",
+    href: "staff",
+    icon: "♟"
+  },
+
+  {
+    section: "Dreamscapes",
+    label: "Dreams",
+    href: "dreams",
+    icon: "✧"
+  },
+
+  {
+    section: "Dreamscapes",
+    label: "Agreements",
+    href: "agreements",
+    icon: "▱"
+  },
+
+  {
+    section: "Dreamscapes",
+    label: "Rights",
+    href: "rights",
+    icon: "◇"
+  },
+
+  {
+    section: "Television",
+    label: "CrowRules TV",
+    href: "tv",
+    icon: "▣"
+  },
+
+  {
+    section: "Television",
+    label: "TV Schedule",
+    href: "tv-schedule",
+    icon: "◷"
+  },
+
+  {
+    section: "Projects",
+    label: "Yearbooks",
+    href: "yearbooks",
+    icon: "▤"
+  },
+
+  {
+    section: "Projects",
+    label: "Records",
+    href: "records",
+    icon: "◉"
+  },
+
+  {
+    section: "Projects",
+    label: "Studios",
+    href: "studios",
+    icon: "▥"
+  },
+
+  {
+    section: "Projects",
+    label: "CrowSpace",
+    href: "crowspace",
+    icon: "◎"
+  },
+
+  {
+    section: "Business",
+    label: "Business",
+    href: "business",
+    icon: "◆"
+  },
+
+  {
+    section: "Business",
+    label: "Analytics",
+    href: "analytics",
+    icon: "⌁"
+  },
+
+  {
+    section: "System",
+    label: "Settings",
+    href: "settings",
+    icon: "⚙"
   }
 
+];
 
-  /* =======================================================
-     SAFE RECENT RECORDS
-     ======================================================= */
 
-  async function recentRecords(
-    table,
-    limit = 5
-  ) {
+/* ============================================================
+   DOM HELPERS
+============================================================ */
 
-    if (
-      !supabaseClient
-    ) {
-      return {
-        rows: [],
-        error:
-          'Supabase is not initialized.'
-      };
-    }
+const $ = selector =>
+  document.querySelector(selector);
 
 
-    try {
+const $$ = selector =>
+  [...document.querySelectorAll(selector)];
 
-      /*
-       Do NOT assume created_at exists.
 
-       This prevents the same type of error that
-       previously affected Dreamscapes administration.
-      */
+/* ============================================================
+   INITIALIZATION
+============================================================ */
 
-      const result =
-        await supabaseClient
-          .from(table)
-          .select('*')
-          .limit(limit);
+document.addEventListener(
+  "DOMContentLoaded",
+  initialize
+);
 
 
-      if (result.error) {
+async function initialize() {
 
-        return {
-          rows: [],
-          error:
-            result.error.message
-        };
-      }
+  $("#current-year").textContent =
+    new Date().getFullYear();
 
+  setupEvents();
 
-      return {
-        rows:
-          result.data || [],
-        error:
-          null
-      };
+  setConnectionStatus(
+    "Checking authentication..."
+  );
 
-    } catch (error) {
+  const {
+    data,
+    error
+  } = await db.auth.getSession();
 
-      return {
-        rows: [],
-        error:
-          error.message
-      };
-    }
-  }
+  if (error) {
 
-
-  /* =======================================================
-     DASHBOARD DATA
-     ======================================================= */
-
-  async function loadDashboardData() {
-
-    if (
-      !supabaseReady ||
-      !supabaseClient
-    ) {
-      return;
-    }
-
-
-    if (isRefreshing) {
-      return;
-    }
-
-
-    isRefreshing = true;
-
-
-    try {
-
-      const definition =
-        pageDefinition();
-
-
-      const metricResults =
-        await Promise.all(
-          (
-            definition.metrics ||
-            []
-          ).map(
-            async ([label, table]) => {
-
-              const result =
-                await countTable(
-                  table
-                );
-
-              return {
-                label,
-                table,
-                ...result
-              };
-            }
-          )
-        );
-
-
-      renderMetrics(
-        metricResults
-      );
-
-
-      await loadRecentActivity();
-
-
-      lastRefresh =
-        new Date();
-
-
-      updateLastRefresh();
-
-
-      recordDiagnostic(
-        'success',
-        'Dashboard data refreshed.'
-      );
-
-    } catch (error) {
-
-      recordDiagnostic(
-        'error',
-        'Dashboard refresh failed.',
-        error.message
-      );
-
-    } finally {
-
-      isRefreshing =
-        false;
-    }
-  }
-
-
-  async function refreshPageData() {
-
-    if (!supabaseReady) {
-      return;
-    }
-
-    await loadDashboardData();
-  }
-
-
-  /* =======================================================
-     METRIC UI
-     ======================================================= */
-
-  function renderMetrics(
-    results
-  ) {
-
-    const container =
-      document.getElementById(
-        'adminMetrics'
-      );
-
-
-    if (!container) {
-      return;
-    }
-
-
-    container.innerHTML =
-      results.map(
-        result => {
-
-          const value =
-            result.error
-              ? '—'
-              : formatNumber(
-                  result.count
-                );
-
-
-          const status =
-            result.error
-              ? 'Unavailable'
-              : 'Live';
-
-
-          return `
-            <article class="admin-metric">
-              <div class="admin-metric-label">
-                ${escapeHtml(result.label)}
-              </div>
-
-              <div class="admin-metric-value">
-                ${escapeHtml(value)}
-              </div>
-
-              <div class="admin-metric-status">
-                ${escapeHtml(status)}
-              </div>
-
-              ${
-                result.error
-                  ? `
-                    <div class="admin-metric-error">
-                      ${escapeHtml(result.error)}
-                    </div>
-                  `
-                  : ''
-              }
-            </article>
-          `;
-        }
-      ).join('');
-  }
-
-
-  /* =======================================================
-     RECENT ACTIVITY
-     ======================================================= */
-
-  async function loadRecentActivity() {
-
-    const container =
-      document.getElementById(
-        'recentRecords'
-      );
-
-
-    if (!container) {
-      return;
-    }
-
-
-    if (
-      !supabaseReady
-    ) {
-
-      container.innerHTML = `
-        <div class="admin-empty">
-          Connect Supabase to load recent records.
-        </div>
-      `;
-
-      return;
-    }
-
-
-    const sources = [
-      'cr_content',
-      'cr_member_suggestions',
-      'cr_podcaster_applications'
-    ];
-
-
-    const results = [];
-
-
-    for (
-      const table of sources
-    ) {
-
-      const result =
-        await recentRecords(
-          table,
-          5
-        );
-
-
-      if (
-        result.error
-      ) {
-
-        recordDiagnostic(
-          'warning',
-          `Unable to read ${table}.`,
-          result.error
-        );
-
-        continue;
-      }
-
-
-      result.rows.forEach(
-        row => {
-
-          results.push({
-            table,
-            row
-          });
-
-        }
-      );
-    }
-
-
-    results.sort(
-      (a, b) => {
-
-        const ad =
-          extractDate(
-            a.row
-          );
-
-        const bd =
-          extractDate(
-            b.row
-          );
-
-        return (
-          bd - ad
-        );
-      }
+    showAuthError(
+      error.message
     );
 
-
-    const limited =
-      results.slice(
-        0,
-        12
-      );
-
-
-    if (
-      !limited.length
-    ) {
-
-      container.innerHTML = `
-        <div class="admin-empty">
-          No accessible recent records were returned.
-        </div>
-      `;
-
-      return;
-    }
-
-
-    container.innerHTML =
-      limited.map(
-        item => {
-
-          const title =
-            extractRecordTitle(
-              item.row
-            );
-
-          const date =
-            extractDate(
-              item.row
-            );
-
-
-          return `
-            <article class="admin-record">
-              <div class="admin-record-source">
-                ${escapeHtml(item.table)}
-              </div>
-
-              <div class="admin-record-title">
-                ${escapeHtml(title)}
-              </div>
-
-              <div class="admin-record-date">
-                ${escapeHtml(
-                  date
-                    ? formatDate(date)
-                    : 'Date unavailable'
-                )}
-              </div>
-            </article>
-          `;
-        }
-      ).join('');
+    return;
   }
 
+  if (data.session) {
 
-  function extractDate(
-    row
-  ) {
-
-    if (!row || typeof row !== 'object') {
-      return null;
-    }
-
-
-    const possible =
-      [
-        'created_at',
-        'updated_at',
-        'published_at',
-        'submitted_at',
-        'scheduled_at',
-        'date',
-        'timestamp'
-      ];
-
-
-    for (
-      const key of possible
-    ) {
-
-      if (
-        row[key]
-      ) {
-
-        const date =
-          new Date(
-            row[key]
-          );
-
-
-        if (
-          !Number.isNaN(
-            date.getTime()
-          )
-        ) {
-          return date.toISOString();
-        }
-      }
-    }
-
-
-    return null;
-  }
-
-
-  function extractRecordTitle(
-    row
-  ) {
-
-    if (!row || typeof row !== 'object') {
-      return 'Record';
-    }
-
-
-    const keys =
-      [
-        'title',
-        'name',
-        'display_name',
-        'full_name',
-        'subject',
-        'email',
-        'slug',
-        'id'
-      ];
-
-
-    for (
-      const key of keys
-    ) {
-
-      if (
-        row[key] !== undefined &&
-        row[key] !== null &&
-        String(row[key]).trim()
-      ) {
-
-        return String(
-          row[key]
-        );
-      }
-    }
-
-
-    return 'Record';
-  }
-
-
-  /* =======================================================
-     NAVIGATION RENDER
-     ======================================================= */
-
-  function renderNavigation() {
-
-    const existing =
-      document.querySelector(
-        '.crowrules-admin-sidebar'
-      );
-
-
-    if (existing) {
-      existing.remove();
-    }
-
-
-    const path =
-      currentPage();
-
-
-    const sidebar =
-      document.createElement(
-        'aside'
-      );
-
-
-    sidebar.className =
-      'crowrules-admin-sidebar';
-
-
-    sidebar.innerHTML = `
-      <div class="admin-brand">
-        <div class="admin-brand-main">
-          CROW<span>RULES</span>
-        </div>
-
-        <div class="admin-brand-sub">
-          ADMIN OS ${APP_VERSION}
-        </div>
-      </div>
-
-      <div
-        class="admin-connection"
-        id="connectionPanel">
-
-        <div
-          class="admin-connection-dot"
-          id="connectionDot">
-        </div>
-
-        <div>
-          <div class="admin-connection-title">
-            SUPABASE
-          </div>
-
-          <div
-            class="admin-connection-text"
-            id="connectionText">
-            Initializing...
-          </div>
-        </div>
-
-      </div>
-
-      <nav class="admin-navigation">
-
-        ${groups.map(
-          ([group, items]) => `
-
-            <div class="admin-nav-group">
-              ${escapeHtml(group)}
-            </div>
-
-            ${items.map(
-              file => {
-
-                const page =
-                  pages.find(
-                    item =>
-                      item[0] === file
-                  );
-
-                const label =
-                  page
-                    ? page[1]
-                    : file;
-
-
-                return `
-                  <a
-                    class="admin-nav-link ${
-                      file === path
-                        ? 'active'
-                        : ''
-                    }"
-                    href="${escapeHtml(file)}">
-
-                    ${escapeHtml(label)}
-
-                  </a>
-                `;
-              }
-            ).join('')}
-
-          `
-        ).join('')}
-
-      </nav>
-
-      <div class="admin-sidebar-footer">
-
-        <button
-          type="button"
-          class="admin-nav-button"
-          onclick="CrowRulesAdmin.configureSupabase()">
-
-          Configure Supabase
-
-        </button>
-
-        <button
-          type="button"
-          class="admin-nav-button"
-          onclick="CrowRulesAdmin.refresh()">
-
-          Refresh Data
-
-        </button>
-
-        ${
-          currentUser
-            ? `
-              <button
-                type="button"
-                class="admin-nav-button"
-                onclick="CrowRulesAdmin.signOut()">
-
-                Sign Out
-
-              </button>
-            `
-            : ''
-        }
-
-      </div>
-    `;
-
-
-    document.body.prepend(
-      sidebar
-    );
-  }
-
-
-  /* =======================================================
-     PAGE RENDER
-     ======================================================= */
-
-  function renderPage() {
-
-    const definition =
-      pageDefinition();
-
-
-    let main =
-      document.querySelector(
-        'main'
-      );
-
-
-    if (!main) {
-
-      main =
-        document.createElement(
-          'main'
-        );
-
-      document.body.appendChild(
-        main
-      );
-    }
-
-
-    main.innerHTML = `
-
-      <div class="admin-page">
-
-        <header class="admin-header">
-
-          <div>
-
-            <div class="admin-eyebrow">
-              CROWRULES ENTERTAINMENT
-              • ADMINISTRATION
-            </div>
-
-            <h1 class="admin-title">
-              ${escapeHtml(
-                definition.title
-              )}
-            </h1>
-
-            <p class="admin-subtitle">
-              ${escapeHtml(
-                definition.description
-              )}
-            </p>
-
-          </div>
-
-          <div class="admin-header-actions">
-
-            <button
-              type="button"
-              class="admin-action"
-              onclick="CrowRulesAdmin.refresh()">
-
-              Refresh
-
-            </button>
-
-            <button
-              type="button"
-              class="admin-action"
-              onclick="CrowRulesAdmin.openDiagnostics()">
-
-              Diagnostics
-
-            </button>
-
-          </div>
-
-        </header>
-
-
-        <section
-          class="admin-status-bar"
-          id="adminStatusBar">
-
-          <div>
-            <strong>System:</strong>
-            <span id="systemStatus">
-              Initializing
-            </span>
-          </div>
-
-          <div>
-            <strong>User:</strong>
-            <span id="adminUser">
-              Not signed in
-            </span>
-          </div>
-
-          <div>
-            <strong>Last Refresh:</strong>
-            <span id="lastRefresh">
-              Never
-            </span>
-          </div>
-
-        </section>
-
-
-        <section
-          class="admin-metrics"
-          id="adminMetrics">
-
-          <div class="admin-loading">
-            Loading live data...
-          </div>
-
-        </section>
-
-
-        ${
-          definition.launch
-            ? `
-              <section class="admin-launch-card">
-
-                <div class="admin-launch-label">
-                  PLANNED LAUNCH
-                </div>
-
-                <div class="admin-launch-year">
-                  ${escapeHtml(
-                    definition.launch
-                  )}
-                </div>
-
-              </section>
-            `
-            : ''
-        }
-
-
-        <section class="admin-workspace">
-
-          <div class="admin-panel">
-
-            <div class="admin-panel-header">
-
-              <div>
-                <div class="admin-panel-kicker">
-                  LIVE DATA
-                </div>
-
-                <h2>
-                  Recent Records
-                </h2>
-              </div>
-
-            </div>
-
-            <div
-              id="recentRecords"
-              class="admin-records">
-
-              <div class="admin-empty">
-                Loading...
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="admin-panel">
-
-            <div class="admin-panel-header">
-
-              <div>
-                <div class="admin-panel-kicker">
-                  SYSTEM
-                </div>
-
-                <h2>
-                  Administration Status
-                </h2>
-              </div>
-
-            </div>
-
-            <div
-              id="systemOverview"
-              class="admin-system-overview">
-
-              <div>
-                Supabase:
-                <strong id="systemSupabase">
-                  Checking...
-                </strong>
-              </div>
-
-              <div>
-                Authentication:
-                <strong id="systemAuth">
-                  Checking...
-                </strong>
-              </div>
-
-              <div>
-                Realtime:
-                <strong id="systemRealtime">
-                  Standby
-                </strong>
-              </div>
-
-              <div>
-                Automatic Refresh:
-                <strong>
-                  60 seconds
-                </strong>
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        <section
-          id="diagnosticsPanel"
-          class="admin-panel admin-diagnostics"
-          hidden>
-
-          <div class="admin-panel-header">
-
-            <div>
-              <div class="admin-panel-kicker">
-                DIAGNOSTICS
-              </div>
-
-              <h2>
-                System Diagnostics
-              </h2>
-            </div>
-
-            <button
-              type="button"
-              class="admin-action"
-              onclick="CrowRulesAdmin.clearDiagnostics()">
-
-              Clear
-
-            </button>
-
-          </div>
-
-          <div
-            id="diagnosticsList"
-            class="admin-diagnostics-list">
-          </div>
-
-        </section>
-
-
-        <footer class="admin-footer">
-
-          <span>
-            ${APP_NAME}
-            v${APP_VERSION}
-          </span>
-
-          <span>
-            CrowRules Entertainment
-          </span>
-
-        </footer>
-
-      </div>
-    `;
-
-
-    updateUserPanel();
-
-    updateConnectionIndicator();
-
-    updateLastRefresh();
-
-    updateDiagnosticsUI();
-  }
-
-
-  /* =======================================================
-     CONNECTION UI
-     ======================================================= */
-
-  function updateConnectionIndicator() {
-
-    const dot =
-      document.getElementById(
-        'connectionDot'
-      );
-
-
-    const text =
-      document.getElementById(
-        'connectionText'
-      );
-
-
-    const systemStatus =
-      document.getElementById(
-        'systemStatus'
-      );
-
-
-    const systemSupabase =
-      document.getElementById(
-        'systemSupabase'
-      );
-
-
-    if (dot) {
-
-      dot.className =
-        'admin-connection-dot ' +
-        connectionState;
-    }
-
-
-    let label =
-      'Initializing';
-
-
-    switch (
-      connectionState
-    ) {
-
-      case 'connected':
-        label =
-          'Connected';
-        break;
-
-      case 'loading':
-        label =
-          'Connecting...';
-        break;
-
-      case 'missing-key':
-        label =
-          'Key Required';
-        break;
-
-      case 'unsafe-key':
-        label =
-          'Unsafe Key';
-        break;
-
-      case 'error':
-        label =
-          'Connection Error';
-        break;
-
-      default:
-        label =
-          'Standby';
-    }
-
-
-    if (text) {
-      text.textContent =
-        label;
-    }
-
-
-    if (systemStatus) {
-      systemStatus.textContent =
-        label;
-    }
-
-
-    if (systemSupabase) {
-      systemSupabase.textContent =
-        label;
-    }
-  }
-
-
-  /* =======================================================
-     USER UI
-     ======================================================= */
-
-  function updateUserPanel() {
-
-    const user =
-      document.getElementById(
-        'adminUser'
-      );
-
-
-    const auth =
-      document.getElementById(
-        'systemAuth'
-      );
-
-
-    if (!currentUser) {
-
-      if (user) {
-        user.textContent =
-          'Not signed in';
-      }
-
-      if (auth) {
-        auth.textContent =
-          'Not signed in';
-      }
-
-      return;
-    }
-
-
-    const email =
-      currentUser.email ||
-      currentUser.id ||
-      'Authenticated';
-
-
-    if (user) {
-      user.textContent =
-        email;
-    }
-
-
-    if (auth) {
-      auth.textContent =
-        'Authenticated';
-    }
-  }
-
-
-  function updateLastRefresh() {
-
-    const element =
-      document.getElementById(
-        'lastRefresh'
-      );
-
-
-    if (!element) {
-      return;
-    }
-
-
-    element.textContent =
-      lastRefresh
-        ? formatDate(
-            lastRefresh
-          )
-        : 'Never';
-  }
-
-
-  /* =======================================================
-     AUTHENTICATION
-     ======================================================= */
-
-  async function signIn() {
-
-    if (!supabaseClient) {
-
-      showToast(
-        'Configure Supabase first.',
-        'warning'
-      );
-
-      return;
-    }
-
-
-    const email =
-      window.prompt(
-        'CrowRules Admin email:'
-      );
-
-
-    if (!email) {
-      return;
-    }
-
-
-    const password =
-      window.prompt(
-        'CrowRules Admin password:'
-      );
-
-
-    if (!password) {
-      return;
-    }
-
-
-    try {
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient
-          .auth
-          .signInWithPassword({
-            email:
-              email.trim(),
-            password
-          });
-
-
-      if (error) {
-
-        recordDiagnostic(
-          'error',
-          'Admin sign-in failed.',
-          error.message
-        );
-
-        showToast(
-          error.message,
-          'error'
-        );
-
-        return;
-      }
-
-
-      currentSession =
-        data.session;
-
-      currentUser =
-        data.user;
-
-
-      updateUserPanel();
-
-      renderNavigation();
-
-      updateConnectionIndicator();
-
-      showToast(
-        'Signed in successfully.',
-        'success'
-      );
-
-
-      await refreshPageData();
-
-    } catch (error) {
-
-      recordDiagnostic(
-        'error',
-        'Sign-in exception.',
-        error.message
-      );
-
-      showToast(
-        error.message,
-        'error'
-      );
-    }
-  }
-
-
-  async function signOut() {
-
-    if (
-      !supabaseClient
-    ) {
-      return;
-    }
-
-
-    try {
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .auth
-          .signOut();
-
-
-      if (error) {
-
-        showToast(
-          error.message,
-          'error'
-        );
-
-        return;
-      }
-
-
-      currentUser =
-        null;
-
-      currentSession =
-        null;
-
-
-      renderNavigation();
-
-      updateUserPanel();
-
-      showToast(
-        'Signed out.',
-        'success'
-      );
-
-    } catch (error) {
-
-      showToast(
-        error.message,
-        'error'
-      );
-    }
-  }
-
-
-  /* =======================================================
-     SUPABASE CONFIGURATION
-     ======================================================= */
-
-  function configureSupabase() {
-
-    const current =
-      getPublishableKey();
-
-
-    const key =
-      window.prompt(
-        'Enter your Supabase Publishable key (sb_publishable_...).',
-        current
-      );
-
-
-    if (
-      key === null
-    ) {
-      return;
-    }
-
-
-    const clean =
-      key.trim();
-
-
-    if (!clean) {
-
-      showToast(
-        'No key entered.',
-        'warning'
-      );
-
-      return;
-    }
-
-
-    if (
-      isUnsafeKey(clean)
-    ) {
-
-      showToast(
-        'Rejected. Use a Supabase Publishable key, not service_role, sb_secret, or a JWT secret.',
-        'error'
-      );
-
-      return;
-    }
-
-
-    if (
-      !clean.startsWith(
-        'sb_publishable_'
-      )
-    ) {
-
-      showToast(
-        'That does not look like a Supabase Publishable key.',
-        'warning'
-      );
-
-      return;
-    }
-
-
-    try {
-
-      localStorage.setItem(
-        KEY_STORAGE,
-        clean
-      );
-
-    } catch (error) {
-
-      showToast(
-        'Unable to save the key in this browser.',
-        'error'
-      );
-
-      return;
-    }
-
-
-    showToast(
-      'Supabase configuration saved. Reloading...',
-      'success'
-    );
-
-
-    setTimeout(
-      () => {
-        location.reload();
-      },
-      700
-    );
-  }
-
-
-  /* =======================================================
-     REALTIME
-     ======================================================= */
-
-  async function initializeRealtime() {
-
-    if (
-      !supabaseClient
-    ) {
-      return;
-    }
-
-
-    try {
-
-      if (
-        realtimeChannel
-      ) {
-
-        await supabaseClient
-          .removeChannel(
-            realtimeChannel
-          );
-      }
-
-
-      realtimeChannel =
-        supabaseClient
-          .channel(
-            'crowrules-admin-live'
-          )
-          .on(
-            'postgres_changes',
-            {
-              event: '*',
-              schema: 'public',
-              table: 'cr_content'
-            },
-            () => {
-
-              recordDiagnostic(
-                'info',
-                'Live content change detected.'
-              );
-
-              refreshPageData();
-            }
-          )
-          .subscribe(
-            status => {
-
-              const element =
-                document.getElementById(
-                  'systemRealtime'
-                );
-
-
-              if (!element) {
-                return;
-              }
-
-
-              if (
-                status ===
-                'SUBSCRIBED'
-              ) {
-
-                element.textContent =
-                  'Connected';
-
-                recordDiagnostic(
-                  'success',
-                  'Realtime channel connected.'
-                );
-
-              } else {
-
-                element.textContent =
-                  status;
-              }
-            }
-          );
-
-    } catch (error) {
-
-      const element =
-        document.getElementById(
-          'systemRealtime'
-        );
-
-
-      if (element) {
-        element.textContent =
-          'Unavailable';
-      }
-
-
-      recordDiagnostic(
-        'warning',
-        'Realtime is unavailable or not enabled for the selected table.',
-        error.message
-      );
-    }
-  }
-
-
-  /* =======================================================
-     AUTOMATIC REFRESH
-     ======================================================= */
-
-  function startAutoRefresh() {
-
-    if (
-      refreshTimer
-    ) {
-      clearInterval(
-        refreshTimer
-      );
-    }
-
-
-    refreshTimer =
-      setInterval(
-        () => {
-
-          refreshPageData();
-
-        },
-        REFRESH_INTERVAL
-      );
-  }
-
-
-  /* =======================================================
-     DIAGNOSTICS
-     ======================================================= */
-
-  function updateDiagnosticsUI() {
-
-    const list =
-      document.getElementById(
-        'diagnosticsList'
-      );
-
-
-    if (!list) {
-      return;
-    }
-
-
-    if (
-      !diagnostics.length
-    ) {
-
-      list.innerHTML = `
-        <div class="admin-empty">
-          No diagnostics recorded.
-        </div>
-      `;
-
-      return;
-    }
-
-
-    list.innerHTML =
-      diagnostics.map(
-        item => `
-
-          <div class="admin-diagnostic ${escapeHtml(item.type)}">
-
-            <div class="admin-diagnostic-time">
-              ${escapeHtml(
-                formatDate(
-                  item.time
-                )
-              )}
-            </div>
-
-            <div class="admin-diagnostic-message">
-              ${escapeHtml(
-                item.message
-              )}
-            </div>
-
-            ${
-              item.details
-                ? `
-                  <pre class="admin-diagnostic-details">${escapeHtml(
-                    typeof item.details ===
-                    'string'
-                      ? item.details
-                      : JSON.stringify(
-                          item.details,
-                          null,
-                          2
-                        )
-                  )}</pre>
-                `
-                : ''
-            }
-
-          </div>
-
-        `
-      ).join('');
-  }
-
-
-  function openDiagnostics() {
-
-    const panel =
-      document.getElementById(
-        'diagnosticsPanel'
-      );
-
-
-    if (!panel) {
-      return;
-    }
-
-
-    panel.hidden =
-      !panel.hidden;
-
-
-    if (!panel.hidden) {
-
-      panel.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  }
-
-
-  function clearDiagnostics() {
-
-    diagnostics =
-      [];
-
-    updateDiagnosticsUI();
-  }
-
-
-  /* =======================================================
-     TOAST
-     ======================================================= */
-
-  function showToast(
-    message,
-    type = 'info'
-  ) {
-
-    let container =
-      document.getElementById(
-        'crowrulesToastContainer'
-      );
-
-
-    if (!container) {
-
-      container =
-        document.createElement(
-          'div'
-        );
-
-      container.id =
-        'crowrulesToastContainer';
-
-      container.className =
-        'crowrules-toast-container';
-
-      document.body.appendChild(
-        container
-      );
-    }
-
-
-    const toast =
-      document.createElement(
-        'div'
-      );
-
-
-    toast.className =
-      `crowrules-toast ${type}`;
-
-
-    toast.textContent =
-      message;
-
-
-    container.appendChild(
-      toast
-    );
-
-
-    setTimeout(
-      () => {
-
-        toast.remove();
-
-      },
-      4500
-    );
-  }
-
-
-  /* =======================================================
-     GLOBAL SEARCH
-     ======================================================= */
-
-  async function globalSearch(
-    query
-  ) {
-
-    const term =
-      String(
-        query || ''
-      ).trim();
-
-
-    if (
-      !term
-    ) {
-
-      showToast(
-        'Enter something to search.',
-        'warning'
-      );
-
-      return [];
-    }
-
-
-    if (
-      !supabaseClient
-    ) {
-
-      showToast(
-        'Supabase is not configured.',
-        'warning'
-      );
-
-      return [];
-    }
-
-
-    const tables = [
-      'cr_members',
-      'cr_profiles',
-      'cr_content',
-      'cr_member_suggestions',
-      'cr_podcaster_applications'
-    ];
-
-
-    const results = [];
-
-
-    for (
-      const table of tables
-    ) {
-
-      try {
-
-        const response =
-          await supabaseClient
-            .from(table)
-            .select('*')
-            .limit(10);
-
-
-        if (
-          response.error ||
-          !response.data
-        ) {
-          continue;
-        }
-
-
-        response.data.forEach(
-          row => {
-
-            const text =
-              JSON.stringify(
-                row
-              ).toLowerCase();
-
-
-            if (
-              text.includes(
-                term.toLowerCase()
-              )
-            ) {
-
-              results.push({
-                table,
-                row
-              });
-            }
-
-          }
-        );
-
-      } catch {
-        /* Intentionally ignore inaccessible tables. */
-      }
-    }
-
-
-    return results.slice(
-      0,
-      50
-    );
-  }
-
-
-  /* =======================================================
-     PRIVILEGED OPERATION PLACEHOLDERS
-     ======================================================= */
-
-  async function invokeProtectedFunction(
-    functionName,
-    payload = {}
-  ) {
-
-    if (
-      !supabaseClient
-    ) {
-
-      throw new Error(
-        'Supabase is not initialized.'
-      );
-    }
-
-
-    if (
-      !currentSession
-    ) {
-
-      throw new Error(
-        'Authentication is required.'
-      );
-    }
-
-
-    /*
-      Privileged operations should go through
-      Edge Functions protected by JWT/RLS/server-side
-      authorization.
-
-      This keeps service_role credentials OUT of
-      browser JavaScript.
-    */
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .functions
-        .invoke(
-          functionName,
-          {
-            body: payload
-          }
-        );
-
-
-    if (error) {
-      throw error;
-    }
-
-
-    return data;
-  }
-
-
-  /* =======================================================
-     PAGE ACTIONS
-     ======================================================= */
-
-  async function refresh() {
-
-    showToast(
-      'Refreshing CrowRules Admin...',
-      'info'
-    );
-
-
-    await refreshPageData();
-
-
-    showToast(
-      'Admin data refreshed.',
-      'success'
-    );
-  }
-
-
-  async function healthCheck() {
-
-    const tables = [
-      'cr_members',
-      'cr_profiles',
-      'cr_content'
-    ];
-
-
-    const results = [];
-
-
-    for (
-      const table of tables
-    ) {
-
-      const result =
-        await countTable(
-          table
-        );
-
-
-      results.push({
-        table,
-        ...result
-      });
-    }
-
-
-    return results;
-  }
-
-
-  /* =======================================================
-     EXPORT DATA
-     ======================================================= */
-
-  async function exportCurrentData() {
-
-    const definition =
-      pageDefinition();
-
-
-    const output = [];
-
-
-    for (
-      const [, table] of
-        definition.metrics || []
-    ) {
-
-      const result =
-        await recentRecords(
-          table,
-          100
-        );
-
-
-      if (
-        !result.error
-      ) {
-
-        output.push({
-          table,
-          records:
-            result.rows
-        });
-      }
-    }
-
-
-    const blob =
-      new Blob(
-        [
-          JSON.stringify(
-            {
-              exported_at:
-                new Date().toISOString(),
-              page:
-                currentPage(),
-              data:
-                output
-            },
-            null,
-            2
-          )
-        ],
-        {
-          type:
-            'application/json'
-        }
-      );
-
-
-    const url =
-      URL.createObjectURL(
-        blob
-      );
-
-
-    const link =
-      document.createElement(
-        'a'
-      );
-
-
-    link.href =
-      url;
-
-    link.download =
-      `crowrules-admin-${currentPage().replace(
-        '.html',
-        ''
-      )}-${Date.now()}.json`;
-
-
-    link.click();
-
-
-    URL.revokeObjectURL(
-      url
-    );
-  }
-
-
-  /* =======================================================
-     BOOT
-     ======================================================= */
-
-  async function boot() {
-
-    try {
-
-      renderNavigation();
-
-      renderPage();
-
-
-      const initialized =
-        await initializeSupabase();
-
-
-      if (!initialized) {
-
-        showToast(
-          'Supabase needs configuration before live data can load.',
-          'warning'
-        );
-
-        return;
-      }
-
-
-      updateUserPanel();
-
-
-      await loadDashboardData();
-
-
-      await initializeRealtime();
-
-
-      startAutoRefresh();
-
-
-      recordDiagnostic(
-        'success',
-        'CrowRules Admin OS boot completed.'
-      );
-
-
-    } catch (error) {
-
-      recordDiagnostic(
-        'error',
-        'Admin OS boot failure.',
-        error.message
-      );
-
-
-      console.error(
-        '[CrowRules Admin]',
-        error
-      );
-    }
-  }
-
-
-  /* =======================================================
-     PUBLIC API
-     ======================================================= */
-
-  window.CrowRulesAdmin = {
-
-    version:
-      APP_VERSION,
-
-    client:
-      () => supabaseClient,
-
-    user:
-      () => currentUser,
-
-    session:
-      () => currentSession,
-
-    refresh,
-
-    signIn,
-
-    signOut,
-
-    configureSupabase,
-
-    openDiagnostics,
-
-    clearDiagnostics,
-
-    healthCheck,
-
-    globalSearch,
-
-    exportCurrentData,
-
-    invokeProtectedFunction,
-
-    countTable,
-
-    recentRecords
-
-  };
-
-
-  /* =======================================================
-     START
-     ======================================================= */
-
-  if (
-    document.readyState ===
-    'loading'
-  ) {
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      boot
+    await handleAuthenticatedSession(
+      data.session
     );
 
   } else {
 
-    boot();
+    showAuthScreen();
+
   }
 
-})();
+
+  db.auth.onAuthStateChange(
+    async (event, session) => {
+
+      if (
+        event === "SIGNED_IN" ||
+        event === "INITIAL_SESSION" ||
+        event === "TOKEN_REFRESHED"
+      ) {
+
+        if (session) {
+
+          await handleAuthenticatedSession(
+            session
+          );
+
+        }
+
+      }
+
+
+      if (event === "SIGNED_OUT") {
+
+        resetApplication();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   EVENTS
+============================================================ */
+
+function setupEvents() {
+
+  $("#google-login")
+    ?.addEventListener(
+      "click",
+      signInWithGoogle
+    );
+
+
+  $("#denied-signout")
+    ?.addEventListener(
+      "click",
+      signOut
+    );
+
+
+  $("#sidebar-signout")
+    ?.addEventListener(
+      "click",
+      signOut
+    );
+
+
+  $("#refresh-button")
+    ?.addEventListener(
+      "click",
+      refreshCurrentPage
+    );
+
+
+  $("#notification-button")
+    ?.addEventListener(
+      "click",
+      () => navigate("notifications")
+    );
+
+
+  $("#mobile-menu")
+    ?.addEventListener(
+      "click",
+      openSidebar
+    );
+
+
+  $("#mobile-close")
+    ?.addEventListener(
+      "click",
+      closeSidebar
+    );
+
+
+  $("#sidebar-overlay")
+    ?.addEventListener(
+      "click",
+      closeSidebar
+    );
+
+}
+
+
+/* ============================================================
+   GOOGLE LOGIN
+============================================================ */
+
+async function signInWithGoogle() {
+
+  const button =
+    $("#google-login");
+
+  if (button) {
+
+    button.disabled = true;
+
+    button.innerHTML =
+      "Connecting...";
+
+  }
+
+
+  const redirectTo =
+    window.location.href.split("#")[0];
+
+
+  const {
+    error
+  } = await db.auth.signInWithOAuth({
+
+    provider: "google",
+
+    options: {
+      redirectTo
+    }
+
+  });
+
+
+  if (error) {
+
+    showAuthError(
+      error.message
+    );
+
+    if (button) {
+
+      button.disabled = false;
+
+      button.innerHTML =
+        '<span class="google-icon">G</span> Continue with Google';
+
+    }
+
+  }
+
+}
+
+
+/* ============================================================
+   SESSION
+============================================================ */
+
+async function handleAuthenticatedSession(
+  session
+) {
+
+  state.session = session;
+
+  state.user =
+    session.user;
+
+  updateUserInterface();
+
+  showLoading(
+    "Verifying CrowRules admin access..."
+  );
+
+
+  const result =
+    await loadBootstrap();
+
+
+  hideLoading();
+
+
+  if (!result.ok) {
+
+    showAuthError(
+      result.error
+    );
+
+    return;
+  }
+
+
+  if (
+    !result.data ||
+    result.data.is_admin !== true
+  ) {
+
+    showDeniedScreen();
+
+    return;
+  }
+
+
+  state.initialized = true;
+
+  showAdminApplication();
+
+  renderNavigation();
+
+  await navigate(
+    state.currentPage
+  );
+
+}
+
+
+/* ============================================================
+   BOOTSTRAP
+============================================================ */
+
+async function loadBootstrap() {
+
+  const {
+    data,
+    error
+  } = await db.rpc(
+    "crowrules_admin_bootstrap"
+  );
+
+
+  if (error) {
+
+    console.error(
+      "Bootstrap error:",
+      error
+    );
+
+    return {
+      ok: false,
+      error: error.message
+    };
+
+  }
+
+
+  state.bootstrap =
+    data || {};
+
+  state.navigation =
+    normalizeNavigation(
+      data?.navigation
+    );
+
+  state.settings =
+    data?.settings || {};
+
+  state.roles =
+    data?.roles || [];
+
+
+  setConnectionStatus(
+    "Supabase Connected"
+  );
+
+
+  return {
+    ok: true,
+    data
+  };
+
+}
+
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+function normalizeNavigation(
+  navigation
+) {
+
+  if (
+    Array.isArray(navigation) &&
+    navigation.length
+  ) {
+
+    return navigation
+      .filter(item =>
+        item.is_active !== false
+      )
+      .map(item => ({
+
+        section:
+          item.section || "Administration",
+
+        label:
+          item.label || "Untitled",
+
+        href:
+          item.href || "#",
+
+        icon:
+          item.icon || "•",
+
+        badge:
+          item.badge || null
+
+      }));
+
+  }
+
+
+  return DEFAULT_NAVIGATION;
+
+}
+
+
+function renderNavigation() {
+
+  const container =
+    $("#admin-navigation");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  let currentSection = "";
+
+
+  state.navigation.forEach(
+    item => {
+
+      if (
+        item.section !== currentSection
+      ) {
+
+        currentSection =
+          item.section;
+
+        const section =
+          document.createElement("div");
+
+        section.className =
+          "nav-section";
+
+        section.textContent =
+          currentSection;
+
+        container.appendChild(
+          section
+        );
+
+      }
+
+
+      const button =
+        document.createElement("button");
+
+      button.type = "button";
+
+      button.className =
+        "nav-item";
+
+      button.dataset.page =
+        normalizePage(
+          item.href
+        );
+
+
+      button.innerHTML = `
+
+        <span class="nav-icon">
+          ${escapeHtml(item.icon)}
+        </span>
+
+        <span class="nav-label">
+          ${escapeHtml(item.label)}
+        </span>
+
+        ${
+          item.badge
+            ? `<span class="nav-badge">
+                 ${escapeHtml(item.badge)}
+               </span>`
+            : ""
+        }
+
+      `;
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          navigate(
+            button.dataset.page
+          );
+
+          closeSidebar();
+
+        }
+      );
+
+
+      container.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   ROUTING
+============================================================ */
+
+async function navigate(page) {
+
+  state.currentPage =
+    normalizePage(page);
+
+
+  $$(".nav-item")
+    .forEach(item => {
+
+      item.classList.toggle(
+        "active",
+        item.dataset.page ===
+          state.currentPage
+      );
+
+    });
+
+
+  const titles = {
+
+    dashboard:
+      "Command Center",
+
+    notifications:
+      "Notifications",
+
+    activity:
+      "Activity",
+
+    content:
+      "Content",
+
+    episodes:
+      "Episodes",
+
+    shows:
+      "Shows",
+
+    media:
+      "Media",
+
+    youtube:
+      "YouTube",
+
+    "live-events":
+      "Live Events",
+
+    members:
+      "Members",
+
+    creators:
+      "Creators",
+
+    staff:
+      "Staff",
+
+    dreams:
+      "Dreams",
+
+    agreements:
+      "Agreements",
+
+    rights:
+      "Rights",
+
+    tv:
+      "CrowRules TV",
+
+    "tv-schedule":
+      "TV Schedule",
+
+    yearbooks:
+      "Yearbooks",
+
+    records:
+      "Records",
+
+    studios:
+      "Studios",
+
+    crowspace:
+      "CrowSpace",
+
+    business:
+      "Business",
+
+    analytics:
+      "Analytics",
+
+    settings:
+      "Settings"
+
+  };
+
+
+  const title =
+    titles[state.currentPage] ||
+    "Command Center";
+
+
+  $("#page-title")
+    .textContent =
+      title;
+
+
+  $("#page-breadcrumb")
+    .textContent =
+      `CrowRules / ${title}`;
+
+
+  const content =
+    $("#page-content");
+
+
+  content.innerHTML =
+    loadingTemplate();
+
+
+  switch (
+    state.currentPage
+  ) {
+
+    case "dashboard":
+
+      await renderDashboard();
+
+      break;
+
+
+    case "notifications":
+
+      await renderNotifications();
+
+      break;
+
+
+    case "activity":
+
+      await renderActivity();
+
+      break;
+
+
+    case "settings":
+
+      renderSettings();
+
+      break;
+
+
+    default:
+
+      renderModulePage(
+        state.currentPage,
+        title
+      );
+
+      break;
+
+  }
+
+}
+
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+
+async function renderDashboard() {
+
+  const content =
+    $("#page-content");
+
+
+  let activity = [];
+
+  let notifications = [];
+
+
+  /*
+   * The dashboard first attempts the protected
+   * admin RPCs. If those RPCs have not yet been
+   * created, the page still renders safely.
+   */
+
+  try {
+
+    const activityResult =
+      await db.rpc(
+        "crowrules_admin_activity",
+        {
+          p_limit: 8
+        }
+      );
+
+
+    if (
+      !activityResult.error &&
+      Array.isArray(
+        activityResult.data
+      )
+    ) {
+
+      activity =
+        activityResult.data;
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "Activity RPC unavailable:",
+      error
+    );
+
+  }
+
+
+  try {
+
+    const notificationResult =
+      await db.rpc(
+        "crowrules_admin_notifications",
+        {
+          p_limit: 8
+        }
+      );
+
+
+    if (
+      !notificationResult.error &&
+      Array.isArray(
+        notificationResult.data
+      )
+    ) {
+
+      notifications =
+        notificationResult.data;
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "Notification RPC unavailable:",
+      error
+    );
+
+  }
+
+
+  content.innerHTML = `
+
+    <div class="page-header">
+
+      <div>
+
+        <h2>
+          Command Center
+        </h2>
+
+        <p>
+          Welcome back to the CrowRules Entertainment
+          administrative control center.
+        </p>
+
+      </div>
+
+      <button
+        class="btn btn-secondary"
+        id="dashboard-refresh"
+      >
+        Refresh Dashboard
+      </button>
+
+    </div>
+
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <div class="stat-label">
+          Admin Status
+        </div>
+
+        <div class="stat-value">
+          ACTIVE
+        </div>
+
+        <div class="stat-meta">
+          CrowRules administrator
+        </div>
+      </div>
+
+
+      <div class="stat-card">
+        <div class="stat-label">
+          Navigation Modules
+        </div>
+
+        <div class="stat-value">
+          ${state.navigation.length}
+        </div>
+
+        <div class="stat-meta">
+          Active command center modules
+        </div>
+      </div>
+
+
+      <div class="stat-card">
+        <div class="stat-label">
+          Notifications
+        </div>
+
+        <div class="stat-value">
+          ${notifications.length}
+        </div>
+
+        <div class="stat-meta">
+          Latest administrator notifications
+        </div>
+      </div>
+
+
+      <div class="stat-card">
+        <div class="stat-label">
+          Activity
+        </div>
+
+        <div class="stat-value">
+          ${activity.length}
+        </div>
+
+        <div class="stat-meta">
+          Recent administrative events
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+      <section class="panel">
+
+        <div class="panel-header">
+
+          <div class="panel-title">
+            Recent Activity
+          </div>
+
+          <button
+            class="btn btn-secondary"
+            id="view-activity"
+          >
+            View All
+          </button>
+
+        </div>
+
+        <div class="panel-body">
+
+          ${
+            activity.length
+              ? activity
+                  .map(renderActivityItem)
+                  .join("")
+              : emptyTemplate(
+                  "No recent activity available."
+                )
+          }
+
+        </div>
+
+      </section>
+
+
+      <section class="panel">
+
+        <div class="panel-header">
+
+          <div class="panel-title">
+            Notifications
+          </div>
+
+          <button
+            class="btn btn-secondary"
+            id="view-notifications"
+          >
+            View All
+          </button>
+
+        </div>
+
+        <div class="panel-body">
+
+          ${
+            notifications.length
+              ? notifications
+                  .map(
+                    renderNotificationItem
+                  )
+                  .join("")
+              : emptyTemplate(
+                  "No notifications available."
+                )
+          }
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <section
+      class="panel"
+      style="margin-top:20px;"
+    >
+
+      <div class="panel-header">
+
+        <div class="panel-title">
+          CrowRules Modules
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="module-grid">
+
+          ${state.navigation
+            .filter(
+              item =>
+                item.href !== "dashboard"
+            )
+            .slice(0, 12)
+            .map(
+              item => `
+
+                <button
+                  class="module-card"
+                  data-module="${escapeHtml(
+                    normalizePage(
+                      item.href
+                    )
+                  )}"
+                  style="
+                    text-align:left;
+                    color:inherit;
+                    cursor:pointer;
+                  "
+                >
+
+                  <div class="module-icon">
+                    ${escapeHtml(
+                      item.icon
+                    )}
+                  </div>
+
+                  <h3>
+                    ${escapeHtml(
+                      item.label
+                    )}
+                  </h3>
+
+                  <p>
+                    Open ${escapeHtml(
+                      item.label
+                    )} administration.
+                  </p>
+
+                </button>
+
+              `
+            )
+            .join("")}
+
+        </div>
+
+      </div>
+
+    </section>
+
+  `;
+
+
+  $("#dashboard-refresh")
+    ?.addEventListener(
+      "click",
+      refreshCurrentPage
+    );
+
+
+  $("#view-activity")
+    ?.addEventListener(
+      "click",
+      () => navigate("activity")
+    );
+
+
+  $("#view-notifications")
+    ?.addEventListener(
+      "click",
+      () => navigate("notifications")
+    );
+
+
+  $$(".module-card")
+    .forEach(card => {
+
+      card.addEventListener(
+        "click",
+        () =>
+          navigate(
+            card.dataset.module
+          )
+      );
+
+    });
+
+}
+
+
+/* ============================================================
+   ACTIVITY
+============================================================ */
+
+async function renderActivity() {
+
+  const content =
+    $("#page-content");
+
+
+  let activity = [];
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await db.rpc(
+      "crowrules_admin_activity",
+      {
+        p_limit: 100
+      }
+    );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    activity =
+      Array.isArray(data)
+        ? data
+        : [];
+
+  } catch (error) {
+
+    console.warn(
+      error
+    );
+
+  }
+
+
+  content.innerHTML = `
+
+    <div class="page-header">
+
+      <div>
+
+        <h2>
+          Administrative Activity
+        </h2>
+
+        <p>
+          Audit trail for CrowRules administrative actions.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <section class="panel">
+
+      <div class="panel-body">
+
+        ${
+          activity.length
+            ? `
+
+              <table class="data-table">
+
+                <thead>
+
+                  <tr>
+
+                    <th>Event</th>
+                    <th>Title</th>
+                    <th>Severity</th>
+                    <th>Source</th>
+                    <th>Created</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  ${activity
+                    .map(
+                      item => `
+
+                        <tr>
+
+                          <td>
+                            ${escapeHtml(
+                              item.event_type ||
+                              "event"
+                            )}
+                          </td>
+
+                          <td>
+                            ${escapeHtml(
+                              item.title ||
+                              "Untitled"
+                            )}
+                          </td>
+
+                          <td>
+                            ${escapeHtml(
+                              item.severity ||
+                              "info"
+                            )}
+                          </td>
+
+                          <td>
+                            ${escapeHtml(
+                              item.source ||
+                              "admin"
+                            )}
+                          </td>
+
+                          <td>
+                            ${formatDate(
+                              item.created_at
+                            )}
+                          </td>
+
+                        </tr>
+
+                      `
+                    )
+                    .join("")}
+
+                </tbody>
+
+              </table>
+
+            `
+            : emptyTemplate(
+                "No administrative activity found."
+              )
+        }
+
+      </div>
+
+    </section>
+
+  `;
+
+}
+
+
+/* ============================================================
+   NOTIFICATIONS
+============================================================ */
+
+async function renderNotifications() {
+
+  const content =
+    $("#page-content");
+
+
+  let notifications = [];
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await db.rpc(
+      "crowrules_admin_notifications",
+      {
+        p_limit: 100
+      }
+    );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    notifications =
+      Array.isArray(data)
+        ? data
+        : [];
+
+  } catch (error) {
+
+    console.warn(
+      error
+    );
+
+  }
+
+
+  content.innerHTML = `
+
+    <div class="page-header">
+
+      <div>
+
+        <h2>
+          Notifications
+        </h2>
+
+        <p>
+          CrowRules administrator notifications and alerts.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <section class="panel">
+
+      <div class="panel-body">
+
+        ${
+          notifications.length
+            ? notifications
+                .map(
+                  renderNotificationItem
+                )
+                .join("")
+            : emptyTemplate(
+                "No notifications found."
+              )
+        }
+
+      </div>
+
+    </section>
+
+  `;
+
+}
+
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+
+function renderSettings() {
+
+  const content =
+    $("#page-content");
+
+
+  const settingEntries =
+    Object.entries(
+      state.settings || {}
+    );
+
+
+  content.innerHTML = `
+
+    <div class="page-header">
+
+      <div>
+
+        <h2>
+          System Settings
+        </h2>
+
+        <p>
+          CrowRules administrator configuration.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div class="panel-title">
+          Supabase Connection
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>
+              Project
+            </label>
+
+            <input
+              class="form-control"
+              value="cevylpnoexugwgygvtgu"
+              readonly
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Connection
+            </label>
+
+            <input
+              class="form-control"
+              value="Connected"
+              readonly
+            >
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section
+      class="panel"
+      style="margin-top:20px;"
+    >
+
+      <div class="panel-header">
+
+        <div class="panel-title">
+          Database Settings
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        ${
+          settingEntries.length
+            ? `
+
+              <table class="data-table">
+
+                <thead>
+
+                  <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  ${settingEntries
+                    .map(
+                      ([key, value]) => `
+
+                        <tr>
+
+                          <td>
+                            ${escapeHtml(
+                              key
+                            )}
+                          </td>
+
+                          <td>
+                            ${escapeHtml(
+                              formatValue(
+                                value
+                              )
+                            )}
+                          </td>
+
+                        </tr>
+
+                      `
+                    )
+                    .join("")}
+
+                </tbody>
+
+              </table>
+
+            `
+            : emptyTemplate(
+                "No system settings returned by the admin bootstrap."
+              )
+        }
+
+      </div>
+
+    </section>
+
+  `;
+
+}
+
+
+/* ============================================================
+   MODULE PAGES
+============================================================ */
+
+function renderModulePage(
+  page,
+  title
+) {
+
+  const content =
+    $("#page-content");
+
+
+  const descriptions = {
+
+    content:
+      "Manage CrowRules content and publishing workflows.",
+
+    episodes:
+      "Manage episodes across CrowRules productions.",
+
+    shows:
+      "Manage CrowRules shows and production properties.",
+
+    media:
+      "Manage images, video, audio and other media assets.",
+
+    youtube:
+      "Manage CrowRules YouTube content and publishing.",
+
+    "live-events":
+      "Manage live broadcasts and scheduled events.",
+
+    members:
+      "Manage CrowRules members and community accounts.",
+
+    creators:
+      "Manage creators and creator profiles.",
+
+    staff:
+      "Manage staff and internal administration.",
+
+    dreams:
+      "Manage CrowRules Dreamscapes submissions and projects.",
+
+    agreements:
+      "Manage creator agreements and production documents.",
+
+    rights:
+      "Manage project rights, ownership and permissions.",
+
+    tv:
+      "Manage CrowRules TV channels and programming.",
+
+    "tv-schedule":
+      "Manage the CrowRules TV broadcast schedule.",
+
+    yearbooks:
+      "Manage CrowRules Yearbooks.",
+
+    records:
+      "Manage CrowRules Records.",
+
+    studios:
+      "Manage CrowRules Studios.",
+
+    crowspace:
+      "Manage CrowSpace.",
+
+    business:
+      "Manage business operations and partnerships.",
+
+    analytics:
+      "CrowRules performance and operational analytics."
+
+  };
+
+
+  const description =
+    descriptions[page] ||
+    "CrowRules Entertainment administration module.";
+
+
+  content.innerHTML = `
+
+    <div class="page-header">
+
+      <div>
+
+        <h2>
+          ${escapeHtml(title)}
+        </h2>
+
+        <p>
+          ${escapeHtml(description)}
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div class="panel-title">
+          ${escapeHtml(title)} Control Center
+        </div>
+
+      </div>
+
+      <div class="panel-body">
+
+        <div class="empty-state">
+
+          <div
+            style="
+              font-size:32px;
+              margin-bottom:15px;
+            "
+          >
+            ◈
+          </div>
+
+          <strong
+            style="
+              display:block;
+              color:var(--text);
+              margin-bottom:8px;
+            "
+          >
+            ${escapeHtml(title)}
+          </strong>
+
+          <div>
+            This module is connected to the
+            CrowRules Admin Command Center.
+          </div>
+
+          <div
+            style="
+              margin-top:10px;
+              color:var(--dim);
+            "
+          >
+            Database-specific CRUD screens can be
+            added here without changing the authentication
+            or administration framework.
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  `;
+
+}
+
+
+/* ============================================================
+   ACTIVITY TEMPLATE
+============================================================ */
+
+function renderActivityItem(
+  item
+) {
+
+  return `
+
+    <div class="activity-item">
+
+      <div class="activity-icon">
+        ◌
+      </div>
+
+      <div>
+
+        <div class="activity-title">
+          ${escapeHtml(
+            item.title ||
+            item.event_type ||
+            "Administrative Event"
+          )}
+        </div>
+
+        <div class="activity-description">
+          ${escapeHtml(
+            item.description ||
+            "CrowRules administrative activity."
+          )}
+        </div>
+
+        <div class="activity-time">
+          ${formatDate(
+            item.created_at
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   NOTIFICATION TEMPLATE
+============================================================ */
+
+function renderNotificationItem(
+  item
+) {
+
+  const unread =
+    item.is_read === false;
+
+
+  return `
+
+    <div
+      class="
+        notification-item
+        ${unread ? "notification-unread" : ""}
+      "
+    >
+
+      <div class="notification-title">
+
+        ${escapeHtml(
+          item.title ||
+          "CrowRules Notification"
+        )}
+
+      </div>
+
+      <div class="notification-message">
+
+        ${escapeHtml(
+          item.message ||
+          "No additional message."
+        )}
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   LOADING / EMPTY
+============================================================ */
+
+function loadingTemplate() {
+
+  return `
+
+    <div class="loading-state">
+
+      <div class="spinner"></div>
+
+      Loading...
+
+    </div>
+
+  `;
+
+}
+
+
+function emptyTemplate(
+  message
+) {
+
+  return `
+
+    <div class="empty-state">
+
+      ${escapeHtml(message)}
+
+    </div>
+
+  `;
+
+}
+
+
+/* ============================================================
+   USER UI
+============================================================ */
+
+function updateUserInterface() {
+
+  const user =
+    state.user;
+
+  if (!user) return;
+
+
+  const metadata =
+    user.user_metadata || {};
+
+
+  const name =
+    metadata.full_name ||
+    metadata.name ||
+    user.email ||
+    "CrowRules Admin";
+
+
+  const avatar =
+    metadata.avatar_url ||
+    metadata.picture ||
+    "";
+
+
+  $("#user-name").textContent =
+    name;
+
+
+  $("#user-email").textContent =
+    user.email || "";
+
+
+  $("#user-avatar").textContent =
+    name
+      .charAt(0)
+      .toUpperCase();
+
+
+  if (avatar) {
+
+    $("#user-avatar").style.backgroundImage =
+      `url("${avatar}")`;
+
+    $("#user-avatar").style.backgroundSize =
+      "cover";
+
+    $("#user-avatar").textContent =
+      "";
+
+  }
+
+
+  $("#denied-user-name")
+    .textContent =
+      name;
+
+
+  $("#denied-user-email")
+    .textContent =
+      user.email || "";
+
+}
+
+
+/* ============================================================
+   AUTH SCREENS
+============================================================ */
+
+function showAuthScreen() {
+
+  $("#auth-screen")
+    .classList.remove("hidden");
+
+  $("#denied-screen")
+    .classList.add("hidden");
+
+  $("#admin-app")
+    .classList.add("hidden");
+
+}
+
+
+function showDeniedScreen() {
+
+  $("#auth-screen")
+    .classList.add("hidden");
+
+  $("#admin-app")
+    .classList.add("hidden");
+
+  $("#denied-screen")
+    .classList.remove("hidden");
+
+}
+
+
+function showAdminApplication() {
+
+  $("#auth-screen")
+    .classList.add("hidden");
+
+  $("#denied-screen")
+    .classList.add("hidden");
+
+  $("#admin-app")
+    .classList.remove("hidden");
+
+}
+
+
+function resetApplication() {
+
+  state.user = null;
+
+  state.session = null;
+
+  state.bootstrap = null;
+
+  state.initialized = false;
+
+  showAuthScreen();
+
+  setConnectionStatus(
+    "Signed out"
+  );
+
+}
+
+
+/* ============================================================
+   SIGN OUT
+============================================================ */
+
+async function signOut() {
+
+  showLoading(
+    "Signing out..."
+  );
+
+
+  const {
+    error
+  } = await db.auth.signOut();
+
+
+  hideLoading();
+
+
+  if (error) {
+
+    showToast(
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   REFRESH
+============================================================ */
+
+async function refreshCurrentPage() {
+
+  showLoading(
+    "Refreshing CrowRules..."
+  );
+
+
+  await loadBootstrap();
+
+
+  hideLoading();
+
+
+  renderNavigation();
+
+
+  await navigate(
+    state.currentPage
+  );
+
+
+  showToast(
+    "CrowRules Admin refreshed.",
+    "success"
+  );
+
+}
+
+
+/* ============================================================
+   MOBILE SIDEBAR
+============================================================ */
+
+function openSidebar() {
+
+  $("#sidebar")
+    ?.classList.add("open");
+
+  $("#sidebar-overlay")
+    ?.classList.add("open");
+
+}
+
+
+function closeSidebar() {
+
+  $("#sidebar")
+    ?.classList.remove("open");
+
+  $("#sidebar-overlay")
+    ?.classList.remove("open");
+
+}
+
+
+/* ============================================================
+   CONNECTION STATUS
+============================================================ */
+
+function setConnectionStatus(
+  text
+) {
+
+  const element =
+    $("#connection-status");
+
+  if (element) {
+
+    element.textContent =
+      text;
+
+  }
+
+}
+
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+function showLoading(
+  message = "Loading..."
+) {
+
+  const loading =
+    $("#global-loading");
+
+
+  $("#loading-text")
+    .textContent =
+      message;
+
+
+  loading
+    .classList.remove("hidden");
+
+}
+
+
+function hideLoading() {
+
+  $("#global-loading")
+    .classList.add("hidden");
+
+}
+
+
+/* ============================================================
+   AUTH ERROR
+============================================================ */
+
+function showAuthError(
+  message
+) {
+
+  const element =
+    $("#auth-message");
+
+
+  if (!element) return;
+
+
+  element.textContent =
+    message || "Authentication error.";
+
+
+  element.style.color =
+    "var(--red)";
+
+}
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+function showToast(
+  message,
+  type = "info"
+) {
+
+  const container =
+    $("#toast-container");
+
+
+  const toast =
+    document.createElement("div");
+
+
+  toast.className =
+    `toast ${type}`;
+
+
+  toast.textContent =
+    message;
+
+
+  container.appendChild(
+    toast
+  );
+
+
+  setTimeout(
+    () => {
+
+      toast.remove();
+
+    },
+    4500
+  );
+
+}
+
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function normalizePage(
+  value
+) {
+
+  if (!value) {
+
+    return "dashboard";
+
+  }
+
+
+  let page =
+    String(value)
+      .trim()
+      .replace(/^#/, "")
+      .replace(/^\/+/, "");
+
+
+  if (
+    page === "" ||
+    page === "index.html"
+  ) {
+
+    return "dashboard";
+
+  }
+
+
+  if (
+    page.includes("/")
+  ) {
+
+    page =
+      page
+        .split("/")
+        .pop();
+
+  }
+
+
+  page =
+    page
+      .replace(".html", "")
+      .replace(/\s+/g, "-")
+      .toLowerCase();
+
+
+  return page || "dashboard";
+
+}
+
+
+function formatDate(
+  value
+) {
+
+  if (!value) {
+
+    return "—";
+
+  }
+
+
+  const date =
+    new Date(value);
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return "—";
+
+  }
+
+
+  return date.toLocaleString(
+    undefined,
+    {
+      dateStyle: "medium",
+      timeStyle: "short"
+    }
+  );
+
+}
+
+
+function formatValue(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
+
+  if (
+    typeof value === "object"
+  ) {
+
+    return JSON.stringify(
+      value
+    );
+
+  }
+
+
+  return String(value);
+
+}
+
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/* ============================================================
+   END
+============================================================ */
