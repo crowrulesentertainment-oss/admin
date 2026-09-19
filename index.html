@@ -8,136 +8,379 @@
     content="width=device-width, initial-scale=1, viewport-fit=cover"
   >
 
-  <meta
-    name="theme-color"
-    content="#050508"
-  >
-
-  <meta
-    name="color-scheme"
-    content="dark"
-  >
+  <meta name="theme-color" content="#050508">
+  <meta name="color-scheme" content="dark">
 
   <meta
     name="description"
     content="CrowRules Entertainment administrative command center."
   >
 
-  <meta
-    name="robots"
-    content="noindex,nofollow"
-  >
+  <meta name="robots" content="noindex,nofollow">
 
   <title>CrowRules Admin | Command Center</title>
 
-  <!-- =========================================================
-       CROWRULES ADMIN STYLES
-       ========================================================= -->
-
-  <link
-    rel="stylesheet"
-    href="assets/admin.css"
-  >
-
-  <!-- =========================================================
-       GOOGLE FONTS
-       ========================================================= -->
-
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   >
 
-  <!-- =========================================================
-       SUPABASE JAVASCRIPT CLIENT
-
-       IMPORTANT:
-       This is the browser-safe Supabase client.
-
-       NEVER put:
-       - service_role key
-       - secret key
-       - database password
-
-       in this file.
-       ========================================================= -->
-
+  <!-- Supabase -->
   <script
     src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"
   ></script>
 
+  <!-- CrowRules Admin CSS -->
+  <link rel="stylesheet" href="assets/admin.css">
 </head>
 
 <body>
 
-  <!-- =========================================================
-       CROWRULES ADMIN COMMAND CENTER
-       ========================================================= -->
+  <div id="app">
 
-  <main
-    id="app"
-    role="main"
-    aria-label="CrowRules Administration"
-  >
+    <!-- =========================================================
+         AUTH SCREEN
+    ========================================================== -->
 
-    <noscript>
+    <section id="auth-screen" class="screen auth-screen">
 
-      <section
-        style="
-          min-height:100vh;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          padding:2rem;
-          background:#050508;
-          color:#fff;
-          font-family:Arial,sans-serif;
-          text-align:center;
-        "
+      <div class="auth-card">
+
+        <div class="brand-mark">
+          <div class="brand-symbol">CR</div>
+
+          <div>
+            <div class="brand-name">CrowRules</div>
+            <div class="brand-subtitle">ENTERTAINMENT</div>
+          </div>
+        </div>
+
+        <div class="auth-divider"></div>
+
+        <h1>Command Center</h1>
+
+        <p class="auth-description">
+          Secure administration for the CrowRules Entertainment universe.
+        </p>
+
+        <button
+          id="google-login"
+          class="btn btn-primary btn-large"
+          type="button"
+        >
+          <span class="google-icon">G</span>
+          Continue with Google
+        </button>
+
+        <div
+          id="auth-message"
+          class="auth-message"
+          aria-live="polite"
+        ></div>
+
+        <div class="auth-footer">
+          <span class="status-dot"></span>
+          <span>Secure Admin Access</span>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         ACCESS DENIED
+    ========================================================== -->
+
+    <section
+      id="denied-screen"
+      class="screen denied-screen hidden"
+    >
+
+      <div class="denied-card">
+
+        <div class="denied-icon">!</div>
+
+        <h1>Access Restricted</h1>
+
+        <p>
+          Your CrowRules account is authenticated, but it does not have
+          administrative permissions.
+        </p>
+
+        <div class="user-preview">
+          <div id="denied-user-name">Authenticated User</div>
+          <div id="denied-user-email"></div>
+        </div>
+
+        <button
+          id="denied-signout"
+          class="btn btn-secondary"
+          type="button"
+        >
+          Sign Out
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         ADMIN APPLICATION
+    ========================================================== -->
+
+    <section
+      id="admin-app"
+      class="admin-app hidden"
+    >
+
+      <!-- MOBILE OVERLAY -->
+      <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+
+      <!-- =======================================================
+           SIDEBAR
+      ======================================================== -->
+
+      <aside
+        id="sidebar"
+        class="sidebar"
+        aria-label="CrowRules Administration Navigation"
       >
 
-        <div>
+        <div class="sidebar-header">
 
-          <h1>
-            CrowRules Admin
-          </h1>
+          <div class="brand-mark compact">
 
-          <p>
-            JavaScript is required to operate the
-            CrowRules administrative command center.
-          </p>
+            <div class="brand-symbol">CR</div>
 
-          <p>
-            Please enable JavaScript and reload this page.
-          </p>
+            <div>
+              <div class="brand-name">CrowRules</div>
+              <div class="brand-subtitle">ADMIN</div>
+            </div>
+
+          </div>
+
+          <button
+            id="mobile-close"
+            class="icon-button mobile-only"
+            type="button"
+            aria-label="Close navigation"
+          >
+            ×
+          </button>
 
         </div>
 
-      </section>
 
-    </noscript>
+        <div class="admin-status">
 
-  </main>
+          <span class="status-dot"></span>
 
-  <!-- =========================================================
-       CROWRULES ADMIN APPLICATION
-       ========================================================= -->
+          <div>
+            <strong>Command Center</strong>
+            <small id="connection-status">
+              Connecting...
+            </small>
+          </div>
 
-  <script
-    src="assets/admin.js"
-    defer
-  ></script>
+        </div>
+
+
+        <nav id="admin-navigation" class="admin-navigation">
+
+          <!-- Navigation generated by JavaScript -->
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+          <button
+            id="sidebar-signout"
+            class="sidebar-action"
+            type="button"
+          >
+            <span>⇥</span>
+            Sign Out
+          </button>
+
+          <div class="version">
+            CrowRules Admin v1.0
+          </div>
+
+        </div>
+
+      </aside>
+
+
+      <!-- =======================================================
+           MAIN
+      ======================================================== -->
+
+      <div class="main-area">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+          <div class="topbar-left">
+
+            <button
+              id="mobile-menu"
+              class="icon-button mobile-only"
+              type="button"
+              aria-label="Open navigation"
+            >
+              ☰
+            </button>
+
+            <div>
+
+              <div
+                id="page-breadcrumb"
+                class="breadcrumb"
+              >
+                CrowRules / Dashboard
+              </div>
+
+              <h1 id="page-title">
+                Command Center
+              </h1>
+
+            </div>
+
+          </div>
+
+
+          <div class="topbar-right">
+
+            <button
+              id="refresh-button"
+              class="icon-button"
+              type="button"
+              title="Refresh"
+              aria-label="Refresh"
+            >
+              ↻
+            </button>
+
+            <button
+              id="notification-button"
+              class="notification-button"
+              type="button"
+              aria-label="Notifications"
+            >
+              <span>♢</span>
+              <span
+                id="notification-count"
+                class="notification-badge hidden"
+              >
+                0
+              </span>
+            </button>
+
+
+            <div class="user-menu">
+
+              <div
+                id="user-avatar"
+                class="user-avatar"
+              >
+                C
+              </div>
+
+              <div class="user-info">
+
+                <strong id="user-name">
+                  CrowRules Admin
+                </strong>
+
+                <span id="user-email">
+                  Loading...
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             CONTENT
+        ====================================================== -->
+
+        <main
+          id="page-content"
+          class="page-content"
+        >
+
+          <!-- Dynamic page content -->
+
+        </main>
+
+
+        <!-- FOOTER -->
+
+        <footer class="main-footer">
+
+          <div>
+            © <span id="current-year"></span>
+            CrowRules Entertainment
+          </div>
+
+          <div>
+            The Next Chapter
+          </div>
+
+        </footer>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         GLOBAL TOAST
+    ========================================================== -->
+
+    <div
+      id="toast-container"
+      class="toast-container"
+      aria-live="polite"
+    ></div>
+
+
+    <!-- =========================================================
+         LOADING
+    ========================================================== -->
+
+    <div
+      id="global-loading"
+      class="global-loading hidden"
+    >
+
+      <div class="loading-ring"></div>
+
+      <div id="loading-text">
+        Loading CrowRules...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- CrowRules Admin JS -->
+  <script src="assets/admin.js"></script>
 
 </body>
 </html>
